@@ -32,6 +32,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         bool _UserSelExportStudentList = false;
         Workbook _wbStudentList;
         private MultiThreadBackgroundWorker<StudentRecord> _historyWorker, _inspectWorker;
+        private const string _NewLine = "\r\n"; // 小郭, 2013/12/25
 
         public GraduationPredictReportForm(List<StudentRecord> students)
         {
@@ -548,8 +549,9 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                     {
                         string details = string.Empty;
                         foreach (string detail in rd.Details)
-                            details += detail + ",";
-                        if (details.EndsWith(",")) details = details.Substring(0, details.Length - 1);
+                            details += detail + "," + _NewLine;   // 小郭, 2013/12/25
+                        if (details.EndsWith("," + _NewLine)) details = details.Substring(0, details.Length - ("," + _NewLine).Length); // 小郭, 2013/12/25
+                        
                         sheet1.Cells[rowIndex1, 4].PutValue(details);
                     }
                 }
@@ -585,8 +587,8 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
                     string details = string.Empty;
                     foreach (string detail in rd.Details)
-                        details += detail + ",";
-                    if (details.EndsWith(",")) details = details.Substring(0, details.Length - 1);
+                        details += detail + "," + _NewLine;   // 小郭, 2013/12/25
+                    if (details.EndsWith("," + _NewLine)) details = details.Substring(0, details.Length - ("," + _NewLine).Length); // 小郭, 2013/12/25
                     sheet.Cells[rowIndex, index + 3].PutValue(details);
                 }
 
@@ -641,13 +643,13 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
             // 檢查學業勾選
             Config.rpt_isCheckGraduateDomain = Config.rpt_isCheckSemesterDomain = false;
-
+            /* 小郭, 2013/12/25
             if (chCondition1.Checked == true || chCondition2.Checked == true)
                 Config.rpt_isCheckSemesterDomain = true;
 
             if (chConditionGr1.Checked)
                 Config.rpt_isCheckGraduateDomain = true;
-
+            */
             // 取得使用者選擇學年度學期
             int.TryParse(cboSchoolYear.Text, out UIConfig._UserSetSHSchoolYear);
             int.TryParse(cboSemester.Text, out UIConfig._UserSetSHSemester);
@@ -692,6 +694,9 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             // 檢查使用者是否有勾選，至少有勾一項才執行。
             if (conditions.Count > 0)
             {
+
+                Config.rpt_isCheckSemesterDomain = IsShowSemesterDomainSheet(); // 小郭, 2013/12/25
+                Config.rpt_isCheckGraduateDomain = IsShowGraduateDomainSheet(); // 小郭, 2013/12/25
 
                 IEvaluateFactory factory = new ConditionalEvaluateFactory(conditions);
                 Graduation.Instance.SetFactory(factory);
@@ -781,5 +786,46 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
         }
 
+        #region 判斷工作表是否出現
+        /// <summary>
+        /// 是否顯示"未達畢業標準學生-依畢業總平均"的工作表, 小郭, 2013/12/25
+        /// </summary>
+        private bool IsShowGraduateDomainSheet()
+        {
+            // 假如有勾選"學習領域畢業總平均成績符合規範。"
+            if (chConditionGr1.Checked && (!string.IsNullOrEmpty("" + chConditionGr1.Tag)))
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// 是否顯示"未達畢業標準學生"的工作表, 小郭, 2013/12/25
+        /// </summary>
+        private bool IsShowSemesterDomainSheet()
+        {
+            // 假如有勾選"各學期領域成績均符合規範。"
+            if (chCondition1.Checked && (!string.IsNullOrEmpty("" + chCondition1.Tag)))
+                return true;
+            // 假如有勾選"第六學期各領域成績符合規範。"
+            if (chCondition2.Checked && (!string.IsNullOrEmpty("" + chCondition2.Tag)))
+                return true;
+
+            // 只要"日常生活表現"其中一項有勾選就顯示
+            foreach (Control ctrl in gpDaily.Controls)
+            {
+                if (ctrl is System.Windows.Forms.CheckBox)
+                {
+                    System.Windows.Forms.CheckBox chk = ctrl as System.Windows.Forms.CheckBox;
+                    if (chk.Checked && !string.IsNullOrEmpty("" + chk.Tag))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+        #endregion
     }
 }
