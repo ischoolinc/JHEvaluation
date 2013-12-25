@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JHEvaluation.SemesterScoreContentItem", "JHEvaluation.SemesterScoreContentItem\JHEvaluation.SemesterScoreContentItem.csproj", "{A839362F-CAE9-4B83-B802-FD14596864E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JHEvaluation.SemesterScoreContentItem.Test", "JHEvaluation.SemesterScoreContentItem.Test\JHEvaluation.SemesterScoreContentItem.Test.csproj", "{2A43C57A-D3AA-45BE-B322-767D5121B95C}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://tfserver:8080/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = JHEvaluation.SemesterScoreContentItem\\JHEvaluation.SemesterScoreContentItem.csproj
+		SccProjectName1 = JHEvaluation.SemesterScoreContentItem
+		SccLocalPath1 = JHEvaluation.SemesterScoreContentItem
+		SccProjectUniqueName2 = JHEvaluation.SemesterScoreContentItem.Test\\JHEvaluation.SemesterScoreContentItem.Test.csproj
+		SccProjectName2 = JHEvaluation.SemesterScoreContentItem.Test
+		SccLocalPath2 = JHEvaluation.SemesterScoreContentItem.Test
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A839362F-CAE9-4B83-B802-FD14596864E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A839362F-CAE9-4B83-B802-FD14596864E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A839362F-CAE9-4B83-B802-FD14596864E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A839362F-CAE9-4B83-B802-FD14596864E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A43C57A-D3AA-45BE-B322-767D5121B95C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A43C57A-D3AA-45BE-B322-767D5121B95C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A43C57A-D3AA-45BE-B322-767D5121B95C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A43C57A-D3AA-45BE-B322-767D5121B95C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

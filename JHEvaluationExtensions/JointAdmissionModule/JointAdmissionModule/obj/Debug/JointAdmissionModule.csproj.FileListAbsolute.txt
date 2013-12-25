@@ -1,0 +1,19 @@
+D:\ischool\localmodules\JointAdmissionModule\JointAdmissionModule.dll
+D:\ischool\localmodules\JointAdmissionModule\JointAdmissionModule.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\bin\Debug\JointAdmissionModule.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\bin\Debug\JointAdmissionModule.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\ResolveAssemblyReference.cache
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.Properties.Resources.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.SetStudAddWeight.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.StudentScoreSummaryReport5.PrintForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.StudentScoreSummaryReport.AbsenceTypeForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.StudentScoreSummaryReport.Prc.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.StudentScoreSummaryReport.PrintForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.StudentScoreSummaryReport.PrintFormEnglish.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.StudentScoreSummaryReport_HsinChu.PrintForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.StudSemScoreRankPInput.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.UCSocreRankItem.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\GenerateResource.read.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\GenerateResource.write.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JointAdmissionModule\JointAdmissionModule\obj\Debug\JointAdmissionModule.pdb
