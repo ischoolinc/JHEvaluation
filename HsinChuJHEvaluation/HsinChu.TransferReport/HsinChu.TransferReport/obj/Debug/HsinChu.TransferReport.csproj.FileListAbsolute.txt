@@ -1,0 +1,15 @@
+D:\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\addmodules\HsinChuJHEvaluation_Beta\HsinChu.TransferReport.dll
+D:\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\addmodules\HsinChuJHEvaluation_Beta\HsinChu.TransferReport.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\ResolveAssemblyReference.cache
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.DomainPanel.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.DomainSetupForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.ConfigForm.PrintConfigForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.Properties.Resources.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.ConfigForm.SelectTypeForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.TransferReportForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\GenerateResource.read.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\GenerateResource.write.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\bin\debug\HsinChu.TransferReport.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\bin\debug\HsinChu.TransferReport.pdb

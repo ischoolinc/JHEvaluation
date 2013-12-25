@@ -1,0 +1,13 @@
+D:\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\addmodules\HsinChuJHEvaluation_Beta\HsinChu.MidTermTransferReport.dll
+D:\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\addmodules\HsinChuJHEvaluation_Beta\HsinChu.MidTermTransferReport.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\HsinChu.MidTermTransferReport\obj\Debug\ResolveAssemblyReference.cache
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\HsinChu.MidTermTransferReport\obj\Debug\HsinChu.MidTermTransferReport.PrintConfigForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\HsinChu.MidTermTransferReport\obj\Debug\HsinChu.MidTermTransferReport.SelectTypeForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\HsinChu.MidTermTransferReport\obj\Debug\HsinChu.MidTermTransferReport.MainForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\HsinChu.MidTermTransferReport\obj\Debug\HsinChu.MidTermTransferReport.Properties.Resources.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\HsinChu.MidTermTransferReport\obj\Debug\GenerateResource.read.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\HsinChu.MidTermTransferReport\obj\Debug\GenerateResource.write.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\HsinChu.MidTermTransferReport\obj\Debug\HsinChu.MidTermTransferReport.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\HsinChu.MidTermTransferReport\obj\Debug\HsinChu.MidTermTransferReport.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\bin\debug\HsinChu.MidTermTransferReport.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.MidTermTransferReport\bin\debug\HsinChu.MidTermTransferReport.pdb
