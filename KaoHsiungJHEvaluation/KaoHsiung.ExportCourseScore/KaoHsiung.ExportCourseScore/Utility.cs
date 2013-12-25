@@ -241,25 +241,31 @@ namespace KaoHsiung.ExportCourseScore
                     if (!string.IsNullOrWhiteSpace(strXML))
                     {
                         XElement elmRoot = XElement.Parse(strXML);
+                        #region 找出小考名稱
                         if (elmRoot.Element("Extension") != null)
                         {
-                            if (elmRoot.Element("Extension").Element("GradeItem") != null)
+                            foreach (XElement extension in elmRoot.Elements("Extension"))   // 小郭, 2013/12/25
                             {
-                                foreach (XElement elmName in elmRoot.Element("Extension").Element("GradeItem").Elements("Item"))
+                                if (extension.Attribute("Name").Value != "GradeItem") continue; // <Extension Name="GradeItem">, 小郭, 2013/12/25
+                                if (extension.Element("GradeItem") != null) // 小郭, 2013/12/25
                                 {
-                                    var eName = elmName.Attribute("Name").Value;
-                                    var eID = elmName.Attribute("SubExamID").Value;
-                                    decimal eWeight = 0m;
-                                    decimal.TryParse(elmName.Attribute("Weight").Value, out eWeight);
-                                    if (!retVal[key].ContainsKey(eName))
+                                    foreach (XElement elmName in extension.Element("GradeItem").Elements("Item"))   // 小郭, 2013/12/25
                                     {
-                                        retVal[key].Add(eName, new Dictionary<string, decimal>());
+                                        var eName = elmName.Attribute("Name").Value;
+                                        var eID = elmName.Attribute("SubExamID").Value;
+                                        decimal eWeight = 0m;
+                                        decimal.TryParse(elmName.Attribute("Weight").Value, out eWeight);
+                                        if (!retVal[key].ContainsKey(eName))
+                                        {
+                                            retVal[key].Add(eName, new Dictionary<string, decimal>());
+                                        }
+                                        if (!retVal[key][eName].ContainsKey(eID))
+                                            retVal[key][eName].Add(eID, eWeight);
                                     }
-                                    if (!retVal[key][eName].ContainsKey(eID))
-                                        retVal[key][eName].Add(eID, eWeight);
                                 }
                             }
                         }
+                        #endregion 找出小考名稱
                     }
                 }
             }
