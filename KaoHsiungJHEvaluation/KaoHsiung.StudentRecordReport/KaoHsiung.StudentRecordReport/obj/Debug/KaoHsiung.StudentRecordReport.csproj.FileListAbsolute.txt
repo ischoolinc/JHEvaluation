@@ -1,0 +1,15 @@
+D:\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\addmodules\KaoHsiungJHEvaluation_Beta\KaoHsiung.StudentRecordReport.dll
+D:\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\addmodules\KaoHsiungJHEvaluation_Beta\KaoHsiung.StudentRecordReport.pdb
+D:\FiscaAEAlpha\addmodules\KaoHsiungJHEvaluation_beta\KaoHsiung.StudentRecordReport.dll
+D:\FiscaAEAlpha\addmodules\KaoHsiungJHEvaluation_beta\KaoHsiung.StudentRecordReport.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\bin\debug\KaoHsiung.StudentRecordReport.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\bin\debug\KaoHsiung.StudentRecordReport.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\obj\Debug\ResolveAssemblyReference.cache
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\obj\Debug\KaoHsiung.StudentRecordReport.Forms.PrintConfigForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\obj\Debug\KaoHsiung.StudentRecordReport.Properties.Resources.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\obj\Debug\KaoHsiung.StudentRecordReport.Forms.SelectTypeForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\obj\Debug\KaoHsiung.StudentRecordReport.MainForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\obj\Debug\GenerateResource.read.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\obj\Debug\GenerateResource.write.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\obj\Debug\KaoHsiung.StudentRecordReport.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\obj\Debug\KaoHsiung.StudentRecordReport.pdb

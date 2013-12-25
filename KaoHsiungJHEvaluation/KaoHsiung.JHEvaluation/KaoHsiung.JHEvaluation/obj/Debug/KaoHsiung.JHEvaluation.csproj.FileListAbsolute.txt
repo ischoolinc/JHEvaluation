@@ -1,0 +1,13 @@
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\ResolveAssemblyReference.cache
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\KaoHsiung.JHEvaluation.EduAdminExtendControls.Ribbon.AssessmentSetupManager.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\KaoHsiung.JHEvaluation.EduAdminExtendControls.Ribbon.AssessmentSetupManagerControls.AssessmentNameEditor.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\KaoHsiung.JHEvaluation.CourseExtendControls.Ribbon.CheckSaveForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\KaoHsiung.JHEvaluation.CourseExtendControls.Ribbon.CourseScoreInputForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\KaoHsiung.JHEvaluation.EduAdminExtendControls.Ribbon.CourseScoreStatusForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\KaoHsiung.JHEvaluation.Properties.Resources.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItem.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls.CreateForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls.ScoreInputForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated.QuickInputSemesterScoreForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\GenerateResource.read.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation\obj\Debug\GenerateResource.write.1.tlog

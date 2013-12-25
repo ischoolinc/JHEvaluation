@@ -1,0 +1,13 @@
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport\obj\Debug\ResolveAssemblyReference.cache
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport\obj\Debug\KaoHsiung.StudentExamScoreReport.ConfigForm.PrintConfigForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport\obj\Debug\KaoHsiung.StudentExamScoreReport.ConfigForm.SelectTypeForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport\obj\Debug\KaoHsiung.StudentExamScoreReport.MainForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport\obj\Debug\KaoHsiung.StudentExamScoreReport.Properties.Resources.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport\obj\Debug\GenerateResource.read.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport\obj\Debug\GenerateResource.write.1.tlog
+D:\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\addmodules\KaoHsiungJHEvaluation_Beta\KaoHsiung.StudentExamScoreReport.dll
+D:\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\addmodules\KaoHsiungJHEvaluation_Beta\KaoHsiung.StudentExamScoreReport.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport\obj\Debug\KaoHsiung.StudentExamScoreReport.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport\obj\Debug\KaoHsiung.StudentExamScoreReport.pdb
+D:\FiscaAEAlpha\addmodules\KaoHsiungJHEvaluation_beta\KaoHsiung.StudentExamScoreReport.dll
+D:\FiscaAEAlpha\addmodules\KaoHsiungJHEvaluation_beta\KaoHsiung.StudentExamScoreReport.pdb

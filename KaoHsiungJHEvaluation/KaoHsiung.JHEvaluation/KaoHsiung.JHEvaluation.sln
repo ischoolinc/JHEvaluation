@@ -1,0 +1,101 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaoHsiung.JHEvaluation", "KaoHsiung.JHEvaluation\KaoHsiung.JHEvaluation.csproj", "{A42F7187-AF10-46DE-9B06-F46CF707C47C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaoHsiung.JHEvaluation.Data", "..\KaoHsiung.JHEvaluation.Data\KaoHsiung.JHEvaluation.Data\KaoHsiung.JHEvaluation.Data.csproj", "{CFF424F0-A793-4A66-AE37-6F7887AFDECC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaoHsiung.MidTermTransferReport", "..\KaoHsiung.MidTermTransferReport\KaoHsiung.MidTermTransferReport\KaoHsiung.MidTermTransferReport.csproj", "{D201B51A-BBD5-4AA0-A6EE-712B95914307}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaoHsiung.ReaderScoreImport", "..\KaoHsiung.ReaderScoreImport\KaoHsiung.ReaderScoreImport\KaoHsiung.ReaderScoreImport.csproj", "{80EA510D-77CC-4CF0-8EBB-CFA3DE45F8E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaoHsiung.StudentExamScoreReport", "..\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport\KaoHsiung.StudentExamScoreReport.csproj", "{B5245519-7B92-4F14-9CC3-240F3D67E27D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaoHsiung.StudentRecordReport", "..\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport\KaoHsiung.StudentRecordReport.csproj", "{94A863C3-C961-49E2-8345-7FBE063ADE25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaoHsiung.TransferReport", "..\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\KaoHsiung.TransferReport.csproj", "{05A715F9-645A-4E6A-81D2-95DDD02F472E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaoHsiung.ClassExamScoreReportV2", "..\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2.csproj", "{43B007C8-B358-436C-8698-0DEEA9295F16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaoHsiung.ClassExamScoreAvgComparison", "..\KaoHsiung.ClassExamScoreAvgComparison\KaoHsiung.ClassExamScoreAvgComparison\KaoHsiung.ClassExamScoreAvgComparison.csproj", "{DF8A09D4-BDD2-4A3A-9D30-849E19BC470D}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 10
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://tfserver.ischool.com.tw:8080/tfs/tfs2008
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = KaoHsiung.JHEvaluation\\KaoHsiung.JHEvaluation.csproj
+		SccProjectName1 = KaoHsiung.JHEvaluation
+		SccLocalPath1 = KaoHsiung.JHEvaluation
+		SccProjectUniqueName2 = ..\\KaoHsiung.JHEvaluation.Data\\KaoHsiung.JHEvaluation.Data\\KaoHsiung.JHEvaluation.Data.csproj
+		SccProjectName2 = ../KaoHsiung.JHEvaluation.Data/KaoHsiung.JHEvaluation.Data
+		SccLocalPath2 = ..\\KaoHsiung.JHEvaluation.Data\\KaoHsiung.JHEvaluation.Data
+		SccProjectUniqueName3 = ..\\KaoHsiung.MidTermTransferReport\\KaoHsiung.MidTermTransferReport\\KaoHsiung.MidTermTransferReport.csproj
+		SccProjectName3 = ../KaoHsiung.MidTermTransferReport/KaoHsiung.MidTermTransferReport
+		SccLocalPath3 = ..\\KaoHsiung.MidTermTransferReport\\KaoHsiung.MidTermTransferReport
+		SccProjectUniqueName4 = ..\\KaoHsiung.ReaderScoreImport\\KaoHsiung.ReaderScoreImport\\KaoHsiung.ReaderScoreImport.csproj
+		SccProjectName4 = ../KaoHsiung.ReaderScoreImport/KaoHsiung.ReaderScoreImport
+		SccLocalPath4 = ..\\KaoHsiung.ReaderScoreImport\\KaoHsiung.ReaderScoreImport
+		SccProjectUniqueName5 = ..\\KaoHsiung.StudentExamScoreReport\\KaoHsiung.StudentExamScoreReport\\KaoHsiung.StudentExamScoreReport.csproj
+		SccProjectName5 = ../KaoHsiung.StudentExamScoreReport/KaoHsiung.StudentExamScoreReport
+		SccLocalPath5 = ..\\KaoHsiung.StudentExamScoreReport\\KaoHsiung.StudentExamScoreReport
+		SccProjectUniqueName6 = ..\\KaoHsiung.StudentRecordReport\\KaoHsiung.StudentRecordReport\\KaoHsiung.StudentRecordReport.csproj
+		SccProjectName6 = ../KaoHsiung.StudentRecordReport/KaoHsiung.StudentRecordReport
+		SccLocalPath6 = ..\\KaoHsiung.StudentRecordReport\\KaoHsiung.StudentRecordReport
+		SccProjectUniqueName7 = ..\\KaoHsiung.TransferReport\\KaoHsiung.Tranfer.Report\\KaoHsiung.TransferReport.csproj
+		SccProjectName7 = ../KaoHsiung.TransferReport/KaoHsiung.Tranfer.Report
+		SccLocalPath7 = ..\\KaoHsiung.TransferReport\\KaoHsiung.Tranfer.Report
+		SccProjectUniqueName8 = ..\\KaoHsiung.ClassExamScoreReportV2\\KaoHsiung.ClassExamScoreReportV2\\KaoHsiung.ClassExamScoreReportV2.csproj
+		SccProjectName8 = ../KaoHsiung.ClassExamScoreReportV2/KaoHsiung.ClassExamScoreReportV2
+		SccLocalPath8 = ..\\KaoHsiung.ClassExamScoreReportV2\\KaoHsiung.ClassExamScoreReportV2
+		SccProjectUniqueName9 = ..\\KaoHsiung.ClassExamScoreAvgComparison\\KaoHsiung.ClassExamScoreAvgComparison\\KaoHsiung.ClassExamScoreAvgComparison.csproj
+		SccProjectName9 = ../KaoHsiung.ClassExamScoreAvgComparison/KaoHsiung.ClassExamScoreAvgComparison
+		SccLocalPath9 = ..\\KaoHsiung.ClassExamScoreAvgComparison\\KaoHsiung.ClassExamScoreAvgComparison
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A42F7187-AF10-46DE-9B06-F46CF707C47C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A42F7187-AF10-46DE-9B06-F46CF707C47C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A42F7187-AF10-46DE-9B06-F46CF707C47C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A42F7187-AF10-46DE-9B06-F46CF707C47C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFF424F0-A793-4A66-AE37-6F7887AFDECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFF424F0-A793-4A66-AE37-6F7887AFDECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFF424F0-A793-4A66-AE37-6F7887AFDECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFF424F0-A793-4A66-AE37-6F7887AFDECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D201B51A-BBD5-4AA0-A6EE-712B95914307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D201B51A-BBD5-4AA0-A6EE-712B95914307}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D201B51A-BBD5-4AA0-A6EE-712B95914307}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D201B51A-BBD5-4AA0-A6EE-712B95914307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80EA510D-77CC-4CF0-8EBB-CFA3DE45F8E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80EA510D-77CC-4CF0-8EBB-CFA3DE45F8E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80EA510D-77CC-4CF0-8EBB-CFA3DE45F8E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80EA510D-77CC-4CF0-8EBB-CFA3DE45F8E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5245519-7B92-4F14-9CC3-240F3D67E27D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5245519-7B92-4F14-9CC3-240F3D67E27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5245519-7B92-4F14-9CC3-240F3D67E27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5245519-7B92-4F14-9CC3-240F3D67E27D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94A863C3-C961-49E2-8345-7FBE063ADE25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94A863C3-C961-49E2-8345-7FBE063ADE25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94A863C3-C961-49E2-8345-7FBE063ADE25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94A863C3-C961-49E2-8345-7FBE063ADE25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A715F9-645A-4E6A-81D2-95DDD02F472E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A715F9-645A-4E6A-81D2-95DDD02F472E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A715F9-645A-4E6A-81D2-95DDD02F472E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A715F9-645A-4E6A-81D2-95DDD02F472E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43B007C8-B358-436C-8698-0DEEA9295F16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43B007C8-B358-436C-8698-0DEEA9295F16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43B007C8-B358-436C-8698-0DEEA9295F16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43B007C8-B358-436C-8698-0DEEA9295F16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF8A09D4-BDD2-4A3A-9D30-849E19BC470D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF8A09D4-BDD2-4A3A-9D30-849E19BC470D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF8A09D4-BDD2-4A3A-9D30-849E19BC470D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF8A09D4-BDD2-4A3A-9D30-849E19BC470D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

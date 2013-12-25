@@ -1,0 +1,13 @@
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\ResolveAssemblyReference.cache
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.ConfigForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.MainForm.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.Prc.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.Properties.Resources.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\GenerateResource.read.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\GenerateResource.write.1.tlog
+D:\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\addmodules\KaoHsiungJHEvaluation_Beta\KaoHsiung.ClassExamScoreReportV2.dll
+D:\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\addmodules\KaoHsiungJHEvaluation_Beta\KaoHsiung.ClassExamScoreReportV2.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.pdb
+D:\FiscaAEAlpha\addmodules\KaoHsiungJHEvaluation_beta\KaoHsiung.ClassExamScoreReportV2.dll
+D:\FiscaAEAlpha\addmodules\KaoHsiungJHEvaluation_beta\KaoHsiung.ClassExamScoreReportV2.pdb
