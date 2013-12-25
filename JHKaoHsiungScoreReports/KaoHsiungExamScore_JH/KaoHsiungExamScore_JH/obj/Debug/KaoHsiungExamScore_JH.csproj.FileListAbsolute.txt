@@ -1,0 +1,11 @@
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\bin\Debug\KaoHsiungExamScore_JH.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\bin\Debug\KaoHsiungExamScore_JH.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\ResolveAssemblyReference.cache
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.Properties.Resources.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\GenerateResource.read.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\GenerateResource.write.1.tlog
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.CloneConfigure.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.NewConfigure.resources
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.PrintForm.resources
