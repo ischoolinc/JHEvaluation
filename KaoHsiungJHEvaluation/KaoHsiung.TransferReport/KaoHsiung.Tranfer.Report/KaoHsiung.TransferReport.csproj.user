@@ -12,6 +12,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Project</StartAction>
-    <StartProgram>D:\FiscaAEAlpha\ischooldiag.exe</StartProgram>
+    <StartProgram>
+    </StartProgram>
   </PropertyGroup>
 </Project>
