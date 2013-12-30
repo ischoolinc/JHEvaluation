@@ -712,6 +712,9 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                         is_remove &= string.IsNullOrEmpty(value);
                         if (!string.IsNullOrEmpty(value))
                             record.Score = decimal.Parse(value);
+                        // 小郭, 2013/12/30
+                        else
+                            record.Score = null;
                     }
                     if (chInputAssignmentScore.Visible == true)
                     {
@@ -719,6 +722,9 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                         is_remove &= string.IsNullOrEmpty(value);
                         if (!string.IsNullOrEmpty(value))
                             record.AssignmentScore = decimal.Parse(value);
+                        // 小郭, 2013/12/30
+                        else
+                            record.AssignmentScore = null;
                     }
                     if (chInputText.Visible == true)
                     {

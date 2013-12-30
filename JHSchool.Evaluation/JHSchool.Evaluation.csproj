@@ -283,6 +283,7 @@
     <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\PrintConfigForm.Designer.cs">
       <DependentUpon>PrintConfigForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\StudentDomainResult.cs" />
     <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\StudentGraduationPredictData.cs" />
     <Compile Include="StudentExtendControls\SemesterScoreItem.cs">
       <SubType>UserControl</SubType>

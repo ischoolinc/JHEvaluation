@@ -175,6 +175,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 Dictionary<string, bool> passList = objs[0] as Dictionary<string, bool>;
                 EvaluationResult result = objs[1] as EvaluationResult;
 
+                StudentDomainResult.Clear();    // 小郭, 2013/12/30
                 Dictionary<string, bool> list = Graduation.Instance.Evaluate(e.Items);
                 foreach (string id in list.Keys)
                 {
@@ -606,6 +607,11 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 rowIndex++;
             }
             #endregion
+
+            // 產出"學習領域畢業總平均明細", 小郭, 2013/12/30
+            if (Config.rpt_isCheckGraduateDomain == true)
+                OutStudentDomainData(book, sorted);
+
             try
             {
 
@@ -827,5 +833,122 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             return false;
         }
         #endregion
+
+        /// <summary>
+        /// 產生"學習領域畢業總平均明細"工作表, 小郭, 2013/12/30
+        /// </summary>
+        /// <param name="wb"></param>
+        /// <param name="studList"></param>
+        private void OutStudentDomainData(Workbook wb, List<StudentRecord> studList)
+        {
+            Worksheet sheet = wb.Worksheets[wb.Worksheets.Add()];
+            sheet.Name = "學習領域畢業總平均明細";
+            int rowIndex = 0;
+            int columnIndex = 0;
+            
+            Cells cells = sheet.Cells;
+
+            #region 設定Style
+            Style styleNormal = wb.Styles[wb.Styles.Add()];
+            //Setting the line style of the top border
+            styleNormal.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the top border
+            styleNormal.Borders[BorderType.TopBorder].Color = Color.Black;
+            //Setting the line style of the bottom border
+            styleNormal.Borders[BorderType.BottomBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the bottom border
+            styleNormal.Borders[BorderType.BottomBorder].Color = Color.Black;
+            //Setting the line style of the left border
+            styleNormal.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the left border
+            styleNormal.Borders[BorderType.LeftBorder].Color = Color.Black;
+            //Setting the line style of the right border
+            styleNormal.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the right border
+            styleNormal.Borders[BorderType.RightBorder].Color = Color.Black;
+
+            Style styleRed = wb.Styles[wb.Styles.Add()];
+            styleRed.Copy(styleNormal);
+            styleRed.Font.Color = Color.Red;
+            #endregion 設定Style
+
+            #region 輸出標題
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "班級", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "座號", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "學號", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "姓名", styleNormal);
+            // 領域名稱
+            foreach (string domainName in StudentDomainResult._DomainNameList)
+            {
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, domainName, styleNormal);
+            }
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "不及格數", styleNormal);
+
+            #endregion 輸出標題
+
+            #region 輸出平均明細
+            foreach (StudentRecord student in studList)
+            {
+                rowIndex++;
+                columnIndex = 0;
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.Class.Name, styleNormal);      // 班級
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.SeatNo, styleNormal);          // 座號
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.StudentNumber, styleNormal);   // 學號
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.Name, styleNormal);            // 姓名
+                #region 輸出有資料的學生
+                if (StudentDomainResult._DomainResult.ContainsKey(student.ID))
+                {
+                    int failCnt = 0;
+                    foreach (string domainName in StudentDomainResult._DomainNameList)
+                    {
+                        if (StudentDomainResult._DomainResult[student.ID].ContainsKey(domainName))
+                        {
+                            if (StudentDomainResult._DomainResult[student.ID][domainName].isPass)
+                            {
+                                SetStudentDomainCell(cells, rowIndex, columnIndex++, StudentDomainResult._DomainResult[student.ID][domainName].domainScore, styleNormal);
+                            }
+                            else
+                            {
+                                SetStudentDomainCell(cells, rowIndex, columnIndex++, StudentDomainResult._DomainResult[student.ID][domainName].domainScore, styleRed);
+                                failCnt++;
+                            }
+                        }
+                        else
+                            SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
+                    }
+                    SetStudentDomainCell(cells, rowIndex, columnIndex++, "" + failCnt, styleNormal);
+                }
+                #endregion 輸出有資料的學生
+                else
+                {
+                    foreach (string domainName in StudentDomainResult._DomainNameList)
+                    {
+                        SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
+                    }
+                    SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
+                }
+            }
+            #endregion 輸出平均明細
+        }
+
+        /// <summary>
+        /// 設定每一個欄位的內容
+        /// </summary>
+        /// <param name="cells"></param>
+        /// <param name="rowIndex"></param>
+        /// <param name="columnIndex"></param>
+        /// <param name="value"></param>
+        /// <param name="style"></param>
+        private void SetStudentDomainCell(Cells cells, int rowIndex, int columnIndex, string value, Style style)
+        {
+            cells[rowIndex, columnIndex].PutValue(value);
+            cells[rowIndex, columnIndex].Style = style;
+        }
+        private void SetStudentDomainCell(Cells cells, int rowIndex, int columnIndex, decimal value, Style style)
+        {
+            cells[rowIndex, columnIndex].PutValue(String.Format("{0:0.##}", value));    // 小數點以下, 最多兩位
+            cells[rowIndex, columnIndex].Style = style;
+        }
     }
+
 }

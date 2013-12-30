@@ -5,6 +5,7 @@ using System.Text;
 using JHSchool.Data;
 using System.Xml;
 using K12.Data;
+using JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReportControls;
 
 namespace JHSchool.Evaluation.Calculation.GraduationConditions
 {
@@ -94,7 +95,8 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     foreach (string name in graduateDomainScoreDict.Keys)
                     {
                         decimal grScore = 0;
-                        if (graduateDomainCountDict[name] > 0)
+                        // if (graduateDomainCountDict[name] > 0)
+                        if (graduateDomainCreditDict[name] > 0) // 小郭, 2013/12/30
                         {
                             //// 算術平均
                             //grScore = graduateDomainScoreDict[name] / graduateDomainCountDict[name];
@@ -104,6 +106,9 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
                             if (grScore >= _score)
                                 passScoreList.Add(grScore);
+                            
+                            // 小郭, 2013/12/30
+                            StudentDomainResult.AddDomain(each.ID, name, grScore, grScore >= _score);
                         }
                     }
                     // 當及格數小於標準數，標示不符格畢業規範

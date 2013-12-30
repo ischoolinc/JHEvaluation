@@ -636,13 +636,23 @@ namespace KaoHsiung.JHEvaluation.CourseExtendControls.Ribbon
                         is_remove &= string.IsNullOrEmpty(value);
                         if (!string.IsNullOrEmpty(value))
                             record.Score = decimal.Parse(value);
+                        // 小郭, 2013/12/30
+                        else
+                            record.Score = null;
                     }
                     if (chInputEffort.Visible == true)
                     {
                         string value = "" + row.Cells[chInputEffort.Index].Value;
                         is_remove &= string.IsNullOrEmpty(value);
                         if (!string.IsNullOrEmpty(value))
+                        {
                             record.Effort = int.Parse(value);
+                            // 假如沒有分數, 努力程度就為空, 小郭, 2013/12/30
+                            if (!record.Score.HasValue)
+                                record.Effort = null;
+                        }
+                        else
+                            record.Effort = null;
                     }
                     if (chInputText.Visible == true)
                     {

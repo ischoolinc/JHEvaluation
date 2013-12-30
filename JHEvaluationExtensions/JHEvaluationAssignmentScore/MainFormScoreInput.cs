@@ -164,6 +164,7 @@ namespace JHEvaluation.AssignmentScore
         // 座號排序
         private static int SortStudSeatNo(StudentSCAtendScore x, StudentSCAtendScore y)
         {
+            /* 小郭, 2013/12/27, 排序方法改成跟"成績輸入"的一樣
             int intX, intY;
             if (x.SeatNo == null)
                 intX = 999;
@@ -175,6 +176,34 @@ namespace JHEvaluation.AssignmentScore
                 intY = y.SeatNo;
 
             return intX.CompareTo(intY);
+            */
+
+            if (x.ClassId != null && y.ClassId != null)
+            {
+                if (x.ClassId == y.ClassId)
+                {
+                    if (x.SeatNo != null && y.SeatNo != null)
+                    {
+                        if (x.SeatNo == y.SeatNo)
+                            return x.StudentNumber.CompareTo(y.StudentNumber);
+                        return x.SeatNo.CompareTo(y.SeatNo);
+                    }
+                    else if (x.SeatNo != null)
+                        return -1;
+                    else if (y.SeatNo != null)
+                        return 1;
+                    else
+                        return x.StudentNumber.CompareTo(y.StudentNumber);
+                }
+                else
+                    return x.ClassName.CompareTo(y.ClassName);
+            }
+            else if (x.ClassId != null && y.ClassId == null)
+                return -1;
+            else if (x.ClassId == null && y.ClassId != null)
+                return 1;
+            else
+                return x.StudentNumber.CompareTo(y.StudentNumber);
         }
 
         // 載入修課學生與成績到畫面
@@ -199,7 +228,11 @@ namespace JHEvaluation.AssignmentScore
                 StudentSCAtendScore sscas = new StudentSCAtendScore();
                 sscas.StudentID = studRec.ID;
                 if (studRec.Class != null)
+                {
                     sscas.ClassName = studRec.Class.Name;
+                    // 小郭, 2012/12/27
+                    sscas.ClassId = studRec.Class.ID;
+                }
                 if (studRec.SeatNo.HasValue)
                     sscas.SeatNo = studRec.SeatNo.Value;
                 sscas.Name = studRec.Name;

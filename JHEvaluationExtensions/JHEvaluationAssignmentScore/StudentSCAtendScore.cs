@@ -16,6 +16,10 @@ namespace JHEvaluation.AssignmentScore
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// 班級系統編號, 小郭, 2013/12/27
+        /// </summary>
+        public string ClassId { get; set; }
+        /// <summary>
         /// 班級名稱
         /// </summary>
         public string ClassName { get; set; }
