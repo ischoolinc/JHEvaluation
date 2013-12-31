@@ -631,9 +631,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                 switch (fieldName)
                 {
-                    //case "學號":
-                    //    fieldValue = student.StudentNumber;
-                    //    break;
+                    case "學號":
+                        fieldValue = student.StudentNumber;
+                        break;
                     //case "班級":
                     //    fieldValue = student.ClassName;
                     //    break;
