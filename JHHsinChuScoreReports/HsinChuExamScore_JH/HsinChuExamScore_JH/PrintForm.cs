@@ -637,6 +637,8 @@ namespace HsinChuExamScore_JH
                 foreach (DAO.ExamDomainScore eds in ses._ExamDomainScoreDict.Values)
                 {
                     string dmName = eds.DomainName;
+                    string dmNameF = eds.DomainName + "F";
+                    string dmNameA = eds.DomainName + "A";
                     //if (!dmClassDNList.Contains(dmName))
                     //    dmClassDNList.Add(dmName);
 
@@ -657,6 +659,22 @@ namespace HsinChuExamScore_JH
                         dmRClasssDict[ses.ClassID].Add(dmName, drc);
                     }
 
+                    // 班級F
+                    if (!dmRClasssDict[ses.ClassID].ContainsKey(dmNameF))
+                    {
+                        DAO.DomainRangeCount drc = new DAO.DomainRangeCount();
+                        drc.Name = dmNameF;
+                        dmRClasssDict[ses.ClassID].Add(dmNameF, drc);
+                    }
+
+                    // 班級A
+                    if (!dmRClasssDict[ses.ClassID].ContainsKey(dmNameA))
+                    {
+                        DAO.DomainRangeCount drc = new DAO.DomainRangeCount();
+                        drc.Name = dmNameA;
+                        dmRClasssDict[ses.ClassID].Add(dmNameA, drc);
+                    }
+
                     // 年級
                     if (!dmGradeDict[ses.GradeYear].ContainsKey(dmName))
                     {
@@ -665,9 +683,33 @@ namespace HsinChuExamScore_JH
                         dmGradeDict[ses.GradeYear].Add(dmName, drc);
                     }
 
+                    // 年級F
+                    if (!dmGradeDict[ses.GradeYear].ContainsKey(dmNameF))
+                    {
+                        DAO.DomainRangeCount drc = new DAO.DomainRangeCount();
+                        drc.Name = dmNameF;
+                        dmGradeDict[ses.GradeYear].Add(dmNameF, drc);
+                    }
+
+                    // 年級A
+                    if (!dmGradeDict[ses.GradeYear].ContainsKey(dmNameA))
+                    {
+                        DAO.DomainRangeCount drc = new DAO.DomainRangeCount();
+                        drc.Name = dmNameA;
+                        dmGradeDict[ses.GradeYear].Add(dmNameA, drc);
+                    }
+
                     // 放入成績(總成績)
                     dmRClasssDict[ses.ClassID][dmName].AddScore(eds.ScoreT);
                     dmGradeDict[ses.GradeYear][dmName].AddScore(eds.ScoreT);
+
+                    // 放入成績F
+                    dmRClasssDict[ses.ClassID][dmNameF].AddScore(eds.ScoreF);
+                    dmGradeDict[ses.GradeYear][dmNameF].AddScore(eds.ScoreF);
+
+                    // 放入成績A
+                    dmRClasssDict[ses.ClassID][dmNameA].AddScore(eds.ScoreA);
+                    dmGradeDict[ses.GradeYear][dmNameA].AddScore(eds.ScoreA);
                 }
             }
             #endregion
@@ -743,6 +785,8 @@ namespace HsinChuExamScore_JH
                 foreach (DAO.ExamSubjectScore ess in ses._ExamSubjectScoreDict.Values)
                 {
                     string subjName = ess.SubjectName;
+                    string subjNameF = ess.SubjectName + "F";
+                    string subjNameA = ess.SubjectName + "A";
                     //if (!subjClassDNList.Contains(subjName))
                     //    subjClassDNList.Add(subjName);
 
@@ -763,6 +807,22 @@ namespace HsinChuExamScore_JH
                         subjRClasssDict[ses.ClassID].Add(subjName, src);
                     }
 
+                    // 班級F
+                    if (!subjRClasssDict[ses.ClassID].ContainsKey(subjNameF))
+                    {
+                        DAO.SubjectRangeCount src = new DAO.SubjectRangeCount();
+                        src.Name = subjNameF;
+                        subjRClasssDict[ses.ClassID].Add(subjNameF, src);
+                    }
+
+                    // 班級A
+                    if (!subjRClasssDict[ses.ClassID].ContainsKey(subjNameA))
+                    {
+                        DAO.SubjectRangeCount src = new DAO.SubjectRangeCount();
+                        src.Name = subjNameA;
+                        subjRClasssDict[ses.ClassID].Add(subjNameA, src);
+                    }
+
                     // 年級
                     if (!subjGradeDict[ses.GradeYear].ContainsKey(subjName))
                     {
@@ -771,9 +831,33 @@ namespace HsinChuExamScore_JH
                         subjGradeDict[ses.GradeYear].Add(subjName, src);
                     }
 
+                    // 年級F
+                    if (!subjGradeDict[ses.GradeYear].ContainsKey(subjNameF))
+                    {
+                        DAO.SubjectRangeCount src = new DAO.SubjectRangeCount();
+                        src.Name = subjNameF;
+                        subjGradeDict[ses.GradeYear].Add(subjNameF, src);
+                    }
+
+                    // 年級A
+                    if (!subjGradeDict[ses.GradeYear].ContainsKey(subjNameA))
+                    {
+                        DAO.SubjectRangeCount src = new DAO.SubjectRangeCount();
+                        src.Name = subjNameA;
+                        subjGradeDict[ses.GradeYear].Add(subjNameA, src);
+                    }
+
                     // 放入成績(總成績)
                     subjRClasssDict[ses.ClassID][subjName].AddScore(ess.ScoreT);
                     subjGradeDict[ses.GradeYear][subjName].AddScore(ess.ScoreT);
+
+                    // 放入成績F
+                    subjRClasssDict[ses.ClassID][subjNameF].AddScore(ess.ScoreF);
+                    subjGradeDict[ses.GradeYear][subjNameF].AddScore(ess.ScoreF);
+
+                    // 放入成績A
+                    subjRClasssDict[ses.ClassID][subjNameA].AddScore(ess.ScoreA);
+                    subjGradeDict[ses.GradeYear][subjNameA].AddScore(ess.ScoreA);
                 }
             }
             #endregion
@@ -1026,9 +1110,27 @@ namespace HsinChuExamScore_JH
                                 , "地理"
                                 , "公民"));
                 Dictionary<string, string> colSubjMapDict = new Dictionary<string, string>();
+                Dictionary<string, string> colSubjMapDictF = new Dictionary<string, string>();
+                Dictionary<string, string> colSubjMapDictA = new Dictionary<string, string>();
+                List<string> listF = new List<string>();
+                List<string> listA = new List<string>();
+
                 int c1 = 1, g1 = 1;
                 foreach (string n1 in subjClassDNList)
                 {
+                    if (n1.Contains("F"))
+                    {
+                        string name = n1.Remove(n1.Length-1);
+                        listF.Add(name);
+                        continue;
+                    }
+                    if (n1.Contains("A"))
+                    {
+                        string name = n1.Remove(n1.Length - 1);
+                        listA.Add(name);
+                        continue;
+                    }
+
                     string sName1 = "s班級_科目名稱"+n1;
                     string sName2 = "s班級_科目名稱"+c1;
                     dt.Columns.Add(sName2);
@@ -1043,9 +1145,61 @@ namespace HsinChuExamScore_JH
                     }                    
                     c1++;
                 }
+
+                c1 = 1;
+                foreach (string n1 in listF)
+                {
+                    string sName1 = "sf班級_科目名稱" + n1;
+                    string sName2 = "sf班級_科目名稱" + c1;
+                    dt.Columns.Add(sName2);
+                    // 放入科目名稱
+                    colSubjMapDictF.Add(sName1, sName2);
+                    foreach (string n2 in li2)
+                    {
+                        string colName = "sf班級_" + n1 + "_" + n2;
+                        string colVal = "sf班級_" + "科目" + c1 + "_" + n2;
+                        colSubjMapDictF.Add(colName, colVal);
+                        dt.Columns.Add(colVal);
+                    }
+                    c1++;
+                }
+
+                c1 = 1;
+                foreach (string n1 in listA)
+                {
+                    string sName1 = "sa班級_科目名稱" + n1;
+                    string sName2 = "sa班級_科目名稱" + c1;
+                    dt.Columns.Add(sName2);
+                    // 放入科目名稱
+                    colSubjMapDictA.Add(sName1, sName2);
+                    foreach (string n2 in li2)
+                    {
+                        string colName = "sa班級_" + n1 + "_" + n2;
+                        string colVal = "sa班級_" + "科目" + c1 + "_" + n2;
+                        colSubjMapDictA.Add(colName, colVal);
+                        dt.Columns.Add(colVal);
+                    }
+                    c1++;
+                }
+
                 // 年級
+                listF.Clear();
+                listA.Clear();
                 foreach (string n1 in subjGradeDNList)
                 {
+                    if (n1.Contains("F"))
+                    {
+                        string name = n1.Remove(n1.Length - 1);
+                        listF.Add(name);
+                        continue;
+                    }
+                    if (n1.Contains("A"))
+                    {
+                        string name = n1.Remove(n1.Length - 1);
+                        listA.Add(name);
+                        continue;
+                    }
+
                     string gName1 = "s年級_科目名稱"+n1;
                     string gName2 = "s年級_科目名稱"+g1;
                     dt.Columns.Add(gName2);
@@ -1055,6 +1209,40 @@ namespace HsinChuExamScore_JH
                         string colName = "s年級_" + n1 + "_" + n2;
                         string colVal = "s年級_" + "科目"+g1 + "_" + n2;
                         colSubjMapDict.Add(colName, colVal);
+                        dt.Columns.Add(colVal);
+                    }
+                    g1++;
+                }
+
+                g1 = 1;
+                foreach (string n1 in listF)
+                {
+                    string gName1 = "sf年級_科目名稱" + n1;
+                    string gName2 = "sf年級_科目名稱" + g1;
+                    dt.Columns.Add(gName2);
+                    colSubjMapDictF.Add(gName1, gName2);
+                    foreach (string n2 in li2)
+                    {
+                        string colName = "sf年級_" + n1 + "_" + n2;
+                        string colVal = "sf年級_" + "科目" + g1 + "_" + n2;
+                        colSubjMapDictF.Add(colName, colVal);
+                        dt.Columns.Add(colVal);
+                    }
+                    g1++;
+                }
+
+                g1 = 1;
+                foreach (string n1 in listA)
+                {
+                    string gName1 = "sa年級_科目名稱" + n1;
+                    string gName2 = "sa年級_科目名稱" + g1;
+                    dt.Columns.Add(gName2);
+                    colSubjMapDictA.Add(gName1, gName2);
+                    foreach (string n2 in li2)
+                    {
+                        string colName = "sa年級_" + n1 + "_" + n2;
+                        string colVal = "sa年級_" + "科目" + g1 + "_" + n2;
+                        colSubjMapDictA.Add(colName, colVal);
                         dt.Columns.Add(colVal);
                     }
                     g1++;
@@ -1324,17 +1512,61 @@ namespace HsinChuExamScore_JH
                 {
                     foreach (KeyValuePair<string, DAO.SubjectRangeCount> data in subjRClasssDict[StudRec.RefClassID])
                     {
-                        string ssKey = "s班級_科目名稱" + data.Key;
+                        string ssKey = "";
+                        string name = "";
+                        if (data.Key.Contains("F"))
+                        {
+                            name = data.Key.Remove(data.Key.Length -1);
+                            ssKey = "sf班級_科目名稱" + name;
+                        }
+                        else if (data.Key.Contains("A"))
+                        {
+                            name = data.Key.Remove(data.Key.Length - 1);
+                            ssKey = "sa班級_科目名稱" + name;
+                        }
+                        else
+                        {
+                            name = data.Key;
+                            ssKey = "s班級_科目名稱" + name;
+                        }
+
                         if (colSubjMapDict.ContainsKey(ssKey))
-                            row[colSubjMapDict[ssKey]] = data.Key;
+                            row[colSubjMapDict[ssKey]] = name;
+
+                        if (colSubjMapDictF.ContainsKey(ssKey))
+                            row[colSubjMapDictF[ssKey]] = name;
+
+                        if (colSubjMapDictA.ContainsKey(ssKey))
+                            row[colSubjMapDictA[ssKey]] = name;
 
                         foreach (DAO.SubjectRangeCount.SubjectRangeType dtType in stypeList)
                         {
-                            sClassKey = "s班級_" + data.Key + "_" + dtType.ToString();
+                            if (data.Key.Contains("F"))
+                            {
+                                sClassKey = "sf班級_" + name + "_" + dtType.ToString();
+                            }
+                            else if (data.Key.Contains("A"))
+                            {
+                                sClassKey = "sa班級_" + name + "_" + dtType.ToString();
+                            }
+                            else
+                            {
+                                sClassKey = "s班級_" + name + "_" + dtType.ToString();
+                            }
+                            
                             if (colSubjMapDict.ContainsKey(sClassKey))
                             {
-                             //   row[sClassKey] = data.Value.GetRankCount(dtType);
                                 row[colSubjMapDict[sClassKey]] = data.Value.GetRankCount(dtType);
+                            }
+
+                            if (colSubjMapDictF.ContainsKey(sClassKey))
+                            {
+                                row[colSubjMapDictF[sClassKey]] = data.Value.GetRankCount(dtType);
+                            }
+
+                            if (colSubjMapDictA.ContainsKey(sClassKey))
+                            {
+                                row[colSubjMapDictA[sClassKey]] = data.Value.GetRankCount(dtType);
                             }
                         }
                     }
@@ -1351,18 +1583,64 @@ namespace HsinChuExamScore_JH
                 {
                     foreach (KeyValuePair<string, DAO.SubjectRangeCount> data in subjGradeDict[sgrY])
                     {
-                        string ssKey = "s年級_科目名稱" + data.Key;
+                        string ssKey = "";
+                        string name = "";
+
+                        if(data.Key.Contains("F"))
+                        {
+                            name = data.Key.Remove(data.Key.Length - 1);
+                            ssKey = "sf年級_科目名稱" + name;
+                        }
+                        else if (data.Key.Contains("A"))
+                        {
+                            name = data.Key.Remove(data.Key.Length - 1);
+                            ssKey = "sa年級_科目名稱" + name;
+                        }
+                        else
+                        {
+                            name = data.Key;
+                            ssKey = "s年級_科目名稱" + name;
+                        }
+
+
                         if (colSubjMapDict.ContainsKey(ssKey))
-                            row[colSubjMapDict[ssKey]] = data.Key;
+                            row[colSubjMapDict[ssKey]] = name;
+
+                        if (colSubjMapDictF.ContainsKey(ssKey))
+                            row[colSubjMapDictF[ssKey]] = name;
+
+                        if (colSubjMapDictA.ContainsKey(ssKey))
+                            row[colSubjMapDictA[ssKey]] = name;
 
 
                         foreach (DAO.SubjectRangeCount.SubjectRangeType dtType in stypeList)
                         {
-                            sGradeKey = "s年級_" + data.Key + "_" + dtType.ToString();
+                            if(data.Key.Contains("F"))
+                            {
+                                sGradeKey = "sf年級_" + name + "_" + dtType.ToString();
+                            }
+                            else if (data.Key.Contains("A"))
+                            {
+                                sGradeKey = "sa年級_" + name + "_" + dtType.ToString();
+                            }
+                            else
+                            {
+                                sGradeKey = "s年級_" + name + "_" + dtType.ToString();
+                            }
+
                             if (colSubjMapDict.ContainsKey(sGradeKey))
                             {
-                             //   row[sGradeKey] = data.Value.GetRankCount(dtType);
                                 row[colSubjMapDict[sGradeKey]] = data.Value.GetRankCount(dtType);
+                            }
+
+                            if (colSubjMapDictF.ContainsKey(sGradeKey))
+                            {
+                                row[colSubjMapDictF[sGradeKey]] = data.Value.GetRankCount(dtType);
+                            }
+
+                            if (colSubjMapDictA.ContainsKey(sGradeKey))
+                            {
+                                row[colSubjMapDictA[sGradeKey]] = data.Value.GetRankCount(dtType);
                             }
                         }
                     }
