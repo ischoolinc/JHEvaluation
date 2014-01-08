@@ -9,3 +9,13 @@ D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChuExamScore_JH\Hsi
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\GenerateResource.write.1.tlog
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.dll
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.pdb
+D:\GitHub2\PJ15\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\bin\Debug\HsinChuExamScore_JH.dll
+D:\GitHub2\PJ15\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\bin\Debug\HsinChuExamScore_JH.pdb
+D:\GitHub2\PJ15\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.csprojResolveAssemblyReference.cache
+D:\GitHub2\PJ15\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.CloneConfigure.resources
+D:\GitHub2\PJ15\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.NewConfigure.resources
+D:\GitHub2\PJ15\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.PrintForm.resources
+D:\GitHub2\PJ15\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.Properties.Resources.resources
+D:\GitHub2\PJ15\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.csproj.GenerateResource.Cache
+D:\GitHub2\PJ15\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.dll
+D:\GitHub2\PJ15\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.pdb

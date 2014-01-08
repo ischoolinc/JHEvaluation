@@ -715,6 +715,8 @@ namespace KaoHsiungExamScore_JH
                     // 放入成績
                     dmRClasssDict[ses.ClassID][dmName].AddScore(eds.Score);
                     dmGradeDict[ses.GradeYear][dmName].AddScore(eds.Score);
+
+                    
                 }
             }
 
