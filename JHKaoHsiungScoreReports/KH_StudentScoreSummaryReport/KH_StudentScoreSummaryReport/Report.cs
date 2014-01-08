@@ -158,6 +158,10 @@ namespace KH_StudentScoreSummaryReport
                     count++;
                 }
 
+                // 假如學年度學期非2的倍數, 在最後補上x年級
+                if (semesters.Count % 2 != 0)
+                    builder.Write(Util.GetGradeyearString(semesters[semesters.Count - 1].GradeYear.ToString()) + "年級");
+
                 builder.MoveTo(originParagraph);
                 (originParagraph.ParentNode as Cell).CellFormat.HorizontalMerge = CellMerge.First;
                 Paragraph nextParagrap = originParagraph;

@@ -454,7 +454,7 @@ namespace KH_StudentScoreSummaryReport
             if (e.Error == null)
             {
                 Document doc = e.Result as Document;
-                Util.Save(doc, "學生免試入學高中在校成績證明書", Preference.ConvertToPDF);
+                Util.Save(doc, "學生免試入學在校成績證明單", Preference.ConvertToPDF);
             }
             else
                 MsgBox.Show(e.Error.Message);
@@ -502,7 +502,7 @@ namespace KH_StudentScoreSummaryReport
         {
             ReportTemplate defaultTemplate = new ReportTemplate(Properties.Resources.高雄學生免試入學高中在校成績證明書, TemplateType.Word);
             TemplateSettingForm form = new TemplateSettingForm(Preference.Template, defaultTemplate);
-            form.DefaultFileName = "高雄學生免試入學高中在校成績證明書.doc";
+            form.DefaultFileName = "學生免試入學在校成績證明單.doc";
 
             if (form.ShowDialog() == DialogResult.OK)
             {
