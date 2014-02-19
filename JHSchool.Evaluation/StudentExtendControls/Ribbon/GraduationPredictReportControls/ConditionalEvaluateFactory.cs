@@ -60,12 +60,18 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 if (element != null && bool.Parse(element.GetAttribute("Checked")) && IsValid("AbsenceAmountEachFraction")) orDaily2.Add(new AbsenceAmountEachFractionEval(element));
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountLastFraction']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked")) && IsValid("AbsenceAmountLastFraction")) orDaily2.Add(new AbsenceAmountLastFractionEval(element));
+                //added by Cloud 2014.2.18
+                element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountAllFraction']");
+                if (element != null && bool.Parse(element.GetAttribute("Checked")) && IsValid("AbsenceAmountAllFraction")) orDaily2.Add(new AbsenceAmountAllFractionEval(element));
 
                 OrEval orDaily3 = new OrEval();
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DemeritAmountEach']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked")) && IsValid("DemeritAmountEach")) orDaily3.Add(new DemeritAmountEachEval(element));
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DemeritAmountLast']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked")) && IsValid("DemeritAmountLast")) orDaily3.Add(new DemeritAmountLastEval(element));
+                //added by Cloud 2014.2.18
+                element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DemeritAmountAll']");
+                if (element != null && bool.Parse(element.GetAttribute("Checked")) && IsValid("DemeritAmountAll")) orDaily3.Add(new DemeritAmountAllEval(element));
 
                 OrEval orDaily4 = new OrEval();
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DailyBehavior']");
@@ -79,7 +85,6 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 if (element != null && bool.Parse(element.GetAttribute("Checked")) && IsValid("AbsenceAmountGraduateFraction")) orDaily5.Add(new AbsenceAmountGraduateFractionEval(element));
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DemeritAmountGraduate']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked")) && IsValid("DemeritAmountGraduate")) orDaily5.Add(new DemeritAmountGraduateEval(element));
-
 
                 allAndEval.Add(orScore);
                 allAndEval.Add(orDaily1);

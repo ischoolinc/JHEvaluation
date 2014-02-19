@@ -157,5 +157,33 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             }
         }
 
+        private void lnkView_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "Word (*.doc)|*.doc";
+            if (saveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    Aspose.Words.Document doc = new Aspose.Words.Document(new MemoryStream(Properties.Resources.功能變數));
+                    doc.Save(saveDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MsgBox.Show("儲存失敗", ex.Message);
+                    return;
+                }
+
+                try
+                {
+                    System.Diagnostics.Process.Start(saveDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MsgBox.Show("開啟失敗", ex.Message);
+                    return;
+                }
+            }
+        }
     }
 }

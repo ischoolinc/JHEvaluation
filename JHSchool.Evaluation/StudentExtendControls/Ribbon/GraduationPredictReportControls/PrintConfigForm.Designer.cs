@@ -42,6 +42,7 @@
             this.btnSave = new DevComponents.DotNetBar.ButtonX();
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
             this.chkExportStuentList = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.lnkView = new System.Windows.Forms.LinkLabel();
             this.gp1.SuspendLayout();
             this.gp2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtDocDate)).BeginInit();
@@ -52,12 +53,13 @@
             this.gp1.BackColor = System.Drawing.Color.Transparent;
             this.gp1.CanvasColor = System.Drawing.SystemColors.Control;
             this.gp1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.gp1.Controls.Add(this.lnkView);
             this.gp1.Controls.Add(this.lnkRemove);
             this.gp1.Controls.Add(this.lnkUpload);
             this.gp1.Controls.Add(this.lnkDefault);
             this.gp1.Location = new System.Drawing.Point(12, 12);
             this.gp1.Name = "gp1";
-            this.gp1.Size = new System.Drawing.Size(290, 70);
+            this.gp1.Size = new System.Drawing.Size(370, 70);
             // 
             // 
             // 
@@ -137,7 +139,7 @@
             this.gp2.Controls.Add(this.labelX1);
             this.gp2.Location = new System.Drawing.Point(12, 97);
             this.gp2.Name = "gp2";
-            this.gp2.Size = new System.Drawing.Size(290, 149);
+            this.gp2.Size = new System.Drawing.Size(370, 149);
             // 
             // 
             // 
@@ -298,7 +300,7 @@
             this.btnSave.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnSave.BackColor = System.Drawing.Color.Transparent;
             this.btnSave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSave.Location = new System.Drawing.Point(160, 260);
+            this.btnSave.Location = new System.Drawing.Point(242, 258);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(67, 23);
             this.btnSave.TabIndex = 2;
@@ -310,7 +312,7 @@
             this.btnExit.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(235, 260);
+            this.btnExit.Location = new System.Drawing.Point(315, 258);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(67, 23);
             this.btnExit.TabIndex = 3;
@@ -333,16 +335,28 @@
             this.chkExportStuentList.TabIndex = 4;
             this.chkExportStuentList.Text = "另存學生清單(Excel)";
             // 
+            // lnkView
+            // 
+            this.lnkView.AutoSize = true;
+            this.lnkView.Location = new System.Drawing.Point(294, 15);
+            this.lnkView.Name = "lnkView";
+            this.lnkView.Size = new System.Drawing.Size(60, 17);
+            this.lnkView.TabIndex = 3;
+            this.lnkView.TabStop = true;
+            this.lnkView.Text = "功能變數";
+            this.lnkView.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkView_LinkClicked);
+            // 
             // PrintConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(312, 290);
+            this.ClientSize = new System.Drawing.Size(398, 290);
             this.Controls.Add(this.chkExportStuentList);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.gp2);
             this.Controls.Add(this.gp1);
+            this.DoubleBuffered = true;
             this.Name = "PrintConfigForm";
             this.Text = "列印設定";
             this.Load += new System.EventHandler(this.PrintConfigForm_Load);
@@ -371,5 +385,6 @@
         private DevComponents.DotNetBar.ButtonX btnSave;
         private DevComponents.DotNetBar.ButtonX btnExit;
         private DevComponents.DotNetBar.Controls.CheckBoxX chkExportStuentList;
+        private System.Windows.Forms.LinkLabel lnkView;
     }
 }

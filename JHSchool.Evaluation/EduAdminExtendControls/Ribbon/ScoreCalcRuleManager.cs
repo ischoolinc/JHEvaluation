@@ -52,6 +52,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 chkScore3,
                 chkDaily1,
                 chkDaily1b,
+                chkDaily1c,
                 chkDaily2,
                 chkDaily2b,
                 chkDaily2c,
@@ -59,7 +60,8 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 chkDaily3b,
                 chkDaily3c,
                 chkDaily4,
-                chkDaily4b
+                chkDaily4b,
+                chkDaily4c
                 ));
             DataListener.Add(new NumericUpDownSource(numDomain1));
             DataListener.Add(new NumericUpDownSource(numDomain2));
@@ -69,6 +71,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             DataListener.Add(new ComboBoxSource(cboDegree3, ComboBoxSource.ListenAttribute.Text));
             DataListener.Add(new NumericUpDownSource(numPeriod1));
             DataListener.Add(new NumericUpDownSource(numPeriod1b));
+            DataListener.Add(new NumericUpDownSource(numPeriod1c));
             DataListener.Add(new TextBoxSource(txtPeriod2));
             DataListener.Add(new TextBoxSource(txtPeriod2b));
             DataListener.Add(new TextBoxSource(txtPeriod2c));
@@ -106,6 +109,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             DataListener.Add(new TextBoxSource(txtSetAbsence1));
             DataListener.Add(new TextBoxSource(txtSetAbsence2));
             DataListener.Add(new TextBoxSource(txtSetAbsence1b));
+            DataListener.Add(new TextBoxSource(txtSetAbsence1c));
             DataListener.Add(new TextBoxSource(txtSetAbsence2b));
             DataListener.Add(new TextBoxSource(txtSetAbsence2c));
 
@@ -113,6 +117,8 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             DataListener.Add(new ComboBoxSource(cboPerformanceDegree1, ComboBoxSource.ListenAttribute.Text));
             DataListener.Add(new NumericUpDownSource(numTimes4b));
             DataListener.Add(new ComboBoxSource(cboPerformanceDegree1b, ComboBoxSource.ListenAttribute.Text));
+            DataListener.Add(new NumericUpDownSource(numTimes4c));
+            DataListener.Add(new ComboBoxSource(cboPerformanceDegree1c, ComboBoxSource.ListenAttribute.Text));
 
             #endregion
 
@@ -149,6 +155,9 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 cboPerformanceDegree1b.Items.Clear();
                 cboPerformanceDegree1b.DisplayMember = "Value";
                 cboPerformanceDegree1b.ValueMember = "Key";
+                cboPerformanceDegree1c.Items.Clear();
+                cboPerformanceDegree1c.DisplayMember = "Value";
+                cboPerformanceDegree1c.ValueMember = "Key";
                 ConfigData cd = School.Configuration["DLBehaviorConfig"];
                 XmlElement node = XmlHelper.LoadXml(cd["DailyBehavior"]);
 
@@ -157,12 +166,15 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                     KeyValuePair<string, string> pair = new KeyValuePair<string, string>(item.GetAttribute("Degree"), item.GetAttribute("Desc"));
                     cboPerformanceDegree1.Items.Add(pair);
                     cboPerformanceDegree1b.Items.Add(pair);
+                    cboPerformanceDegree1c.Items.Add(pair);
                 }
 
                 if (cboPerformanceDegree1.Items.Count > 0)
                     cboPerformanceDegree1.SelectedIndex = 0;
                 if (cboPerformanceDegree1b.Items.Count > 0)
                     cboPerformanceDegree1b.SelectedIndex = 0;
+                if (cboPerformanceDegree1c.Items.Count > 0)
+                    cboPerformanceDegree1c.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -404,6 +416,19 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             else
                 warning = true;
 
+            //added by Cloud 2014.2.13
+            element = helper.GetElement("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountAll']");
+            if (element != null)
+            {
+                chkDaily1c.Checked = bool.Parse(element.GetAttribute("Checked"));
+                numPeriod1c.Value = decimal.Parse(element.GetAttribute("節數"));
+                lblSetAbsence1c.Text = element.GetAttribute("假別");
+                txtSetAbsence1c.Text = lblSetAbsence1c.Text;
+            }
+            else
+                warning = true;
+            
+
             element = helper.GetElement("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountEachFraction']");
             if (element != null)
             {
@@ -427,7 +452,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 warning = true;
 
             // 2013/12/5 新增
-            element = helper.GetElement("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountGraduateFraction']");
+            element = helper.GetElement("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountAllFraction']");
             if (element != null)
             {
                 chkDaily2c.Checked = bool.Parse(element.GetAttribute("Checked"));
@@ -467,7 +492,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 warning = true;
 
             // 2013/12/5 新增
-            element = helper.GetElement("畢業條件/日常生活表現畢業條件/條件[@Type='DemeritAmountGraduate']");
+            element = helper.GetElement("畢業條件/日常生活表現畢業條件/條件[@Type='DemeritAmountAll']");
             if (element != null)
             {
                 chkDaily3c.Checked = bool.Parse(element.GetAttribute("Checked"));
@@ -515,6 +540,29 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                     if (pair.Key == degree)
                     {
                         cboPerformanceDegree1b.SelectedItem = pair;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                    warning = true;
+            }
+            else
+                warning = true;
+
+            //added by Cloud 2014.2.13
+            element = helper.GetElement("畢業條件/日常生活表現畢業條件/條件[@Type='DailyBehaviorAll']");
+            if (element != null) //<條件 Checked="False" Type="DailyBehavior" 項目="4" 表現程度="2"/>
+            {
+                chkDaily4c.Checked = bool.Parse(element.GetAttribute("Checked"));
+                numTimes4c.Value = decimal.Parse(element.GetAttribute("項目"));
+                string degree = element.GetAttribute("表現程度");
+                bool found = false;
+                foreach (KeyValuePair<string, string> pair in cboPerformanceDegree1c.Items)
+                {
+                    if (pair.Key == degree)
+                    {
+                        cboPerformanceDegree1c.SelectedItem = pair;
                         found = true;
                         break;
                     }
@@ -602,6 +650,15 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             if (lblSetAbsence1b.Text.EndsWith(")")) lblSetAbsence1b.Text = lblSetAbsence1b.Text.Substring(0, lblSetAbsence1b.Text.Length - 1);
             element.SetAttribute("假別", lblSetAbsence1b.Text);
 
+            //AbsenceAmountAll added by Cloud 2014.2.13
+            element = helper.AddElement("畢業條件/日常生活表現畢業條件", "條件");
+            element.SetAttribute("Checked", "" + chkDaily1c.Checked);
+            element.SetAttribute("Type", "AbsenceAmountAll");
+            element.SetAttribute("節數", "" + numPeriod1c.Value);
+            if (lblSetAbsence1c.Text.StartsWith("(")) lblSetAbsence1c.Text = lblSetAbsence1c.Text.Substring(1, lblSetAbsence1c.Text.Length - 1);
+            if (lblSetAbsence1c.Text.EndsWith(")")) lblSetAbsence1c.Text = lblSetAbsence1c.Text.Substring(0, lblSetAbsence1c.Text.Length - 1);
+            element.SetAttribute("假別", lblSetAbsence1c.Text);
+
             //AbsenceAmountEachFraction
             element = helper.AddElement("畢業條件/日常生活表現畢業條件", "條件");
             element.SetAttribute("Checked", "" + chkDaily2.Checked);
@@ -623,7 +680,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             //AbsenceAmountGraduateFraction (所有學期缺課節數合計未超過上課節數,2013/12/5,新增)
             element = helper.AddElement("畢業條件/日常生活表現畢業條件", "條件");
             element.SetAttribute("Checked", "" + chkDaily2c.Checked);
-            element.SetAttribute("Type", "AbsenceAmountGraduateFraction");
+            element.SetAttribute("Type", "AbsenceAmountAllFraction");
             element.SetAttribute("節數", txtPeriod2c.Text);
             if (lblSetAbsence2c.Text.StartsWith("(")) lblSetAbsence2c.Text = lblSetAbsence2c.Text.Substring(1, lblSetAbsence2c.Text.Length - 1);
             if (lblSetAbsence2c.Text.EndsWith(")")) lblSetAbsence2c.Text = lblSetAbsence2c.Text.Substring(0, lblSetAbsence2c.Text.Length - 1);
@@ -647,16 +704,14 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             element.SetAttribute("獎勵換算", GetMeritConversion1b());
             element.SetAttribute("懲戒換算", GetDemeritConversion1b());
 
-            //DemeritAmountGraduate (所有學期懲戒累計未超過,2013/12/5.新增)
+            //DemeritAmountAll (所有學期懲戒累計未超過,2013/12/5.新增)
             element = helper.AddElement("畢業條件/日常生活表現畢業條件", "條件");
             element.SetAttribute("Checked", "" + chkDaily3c.Checked);
-            element.SetAttribute("Type", "DemeritAmountGraduate");
+            element.SetAttribute("Type", "DemeritAmountAll");
             element.SetAttribute("大過", "" + numTimes3c.Value);
             element.SetAttribute("功過相抵", "" + rbCounterbalance1c.Checked);
             element.SetAttribute("獎勵換算", GetMeritConversion1c());
             element.SetAttribute("懲戒換算", GetDemeritConversion1c());
-
-
 
             //DailyBehavior
             //<條件 Checked="False" Type="DailyBehavior" 項目="4" 表現程度="2"/>
@@ -672,6 +727,13 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             element.SetAttribute("Type", "DailyBehaviorLast");
             element.SetAttribute("項目", "" + numTimes4b.Value);
             element.SetAttribute("表現程度", "" + ((KeyValuePair<string, string>)cboPerformanceDegree1b.SelectedItem).Key);
+
+            //DailyBehaviorAll
+            element = helper.AddElement("畢業條件/日常生活表現畢業條件", "條件");
+            element.SetAttribute("Checked", "" + chkDaily4c.Checked);
+            element.SetAttribute("Type", "DailyBehaviorAll");
+            element.SetAttribute("項目", "" + numTimes4c.Value);
+            element.SetAttribute("表現程度", "" + ((KeyValuePair<string, string>)cboPerformanceDegree1c.SelectedItem).Key);
 
             #endregion
 
@@ -882,6 +944,11 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             lblPeriod1b.Text = "(<" + numPeriod1b.Value + ")";
         }
 
+        private void numPeriod1c_ValueChanged(object sender, EventArgs e)
+        {
+            lblPeriod1c.Text = "(<" + numPeriod1c.Value + ")";
+        }
+
         private void numTimes3_ValueChanged(object sender, EventArgs e)
         {
             lblTimes3.Text = "(<" + numTimes3.Value + ")";
@@ -909,6 +976,17 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             {
                 lblSetAbsence1b.Text = form.Setting;
                 txtSetAbsence1b.Text = form.Setting;
+            }
+        }
+
+        //added by Cloud by 2014.2.13
+        private void btnSetAbsence1c_Click(object sender, EventArgs e)
+        {
+            PeriodAbsenceSelectionForm form = new PeriodAbsenceSelectionForm(lblSetAbsence1c.Text);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                lblSetAbsence1c.Text = form.Setting;
+                txtSetAbsence1c.Text = form.Setting;
             }
         }
 

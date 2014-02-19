@@ -225,6 +225,12 @@ namespace JHSchool.Evaluation.Calculation
             _factory = factory;
         }
 
+        //清除_instance
+        public void Reset()
+        {
+            _instance = null;
+        }
+
         public void TestDrive()
         {
             //List<StudentRecord> list = Student.Instance.SelectedList.GetInSchoolStudents();

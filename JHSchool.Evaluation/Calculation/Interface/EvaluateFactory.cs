@@ -33,30 +33,45 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orScore.Add(new LearnDomainEachEval(element));
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/學業成績畢業條件/條件[@Type='LearnDomainLast']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orScore.Add(new LearnDomainLastEval(element));
+                //added by Cloud 2014.2.13
+                element = (XmlElement)record.Content.SelectSingleNode("畢業條件/學業成績畢業條件/條件[@Type='GraduateDomain']");
+                if (element != null && bool.Parse(element.GetAttribute("Checked"))) orScore.Add(new LearnDomainAllEval(element));
 
                 OrEval orDaily1 = new OrEval();
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountEach']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily1.Add(new AbsenceAmountEachEval(element));
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountLast']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily1.Add(new AbsenceAmountLastEval(element));
+                //added by Cloud 2014.2.13
+                element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountAll']");
+                if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily1.Add(new AbsenceAmountAllEval(element));
 
                 OrEval orDaily2 = new OrEval();
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountEachFraction']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily2.Add(new AbsenceAmountEachFractionEval(element));
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountLastFraction']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily2.Add(new AbsenceAmountLastFractionEval(element));
+                //added by Cloud 2014.2.13
+                element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountAllFraction']");
+                if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily2.Add(new AbsenceAmountAllFractionEval(element));
 
                 OrEval orDaily3 = new OrEval();
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DemeritAmountEach']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily3.Add(new DemeritAmountEachEval(element));
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DemeritAmountLast']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily3.Add(new DemeritAmountLastEval(element));
+                //added by Cloud 2014.2.13
+                element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DemeritAmountAll']");
+                if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily3.Add(new DemeritAmountAllEval(element));
 
                 OrEval orDaily4 = new OrEval();
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DailyBehavior']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily4.Add(new DailyBehaviorEval(element));
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DailyBehaviorLast']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily4.Add(new DailyBehaviorLastEval(element));
+                //added by Cloud 2014.2.13
+                element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='DailyBehaviorAll']");
+                if (element != null && bool.Parse(element.GetAttribute("Checked"))) orDaily4.Add(new DailyBehaviorAllEval(element));
 
                 allAndEval.Add(orScore);
                 allAndEval.Add(orDaily1);

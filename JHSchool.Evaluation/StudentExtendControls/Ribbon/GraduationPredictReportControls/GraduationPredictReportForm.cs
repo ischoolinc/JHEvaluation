@@ -332,6 +332,9 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             foreach (StudentRecord StudRec in _students)
             {
                 if (!_result.ContainsKey(StudRec.ID)) continue;
+                
+                //處理年級為0的資料
+                List<ResultDetail> zeroGrades = new List<ResultDetail>();
 
                 StudentGraduationPredictData sgpd = new StudentGraduationPredictData();
 
@@ -355,7 +358,12 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                     {
                         if (int.TryParse(rd.GradeYear, out GrYear))
                         {
-                            if (GrYear == 0) continue;
+                            //if (GrYear == 0) continue;
+                            //後續處理
+                            if (GrYear == 0)
+                            {
+                                zeroGrades.Add(rd);
+                            }
 
                             // 組訊息
                             string Detail = "";
@@ -421,6 +429,11 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
                 sgpd.DocDate = UserSeldtDate;
 
+                foreach(ResultDetail rd in zeroGrades)
+                {
+                    sgpd.Text += string.Join(",", rd.Details);
+                }
+
                 StudentGraduationPredictDataList.Add(sgpd);
             }
 
@@ -449,6 +462,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 FieldData.Add("三上文字", sgpd.Text31);
                 FieldData.Add("三下文字", sgpd.Text32);
                 FieldData.Add("發文日期", sgpd.DocDate);
+                FieldData.Add("所有說明", sgpd.Text);
 
                 Aspose.Words.Document each = (Aspose.Words.Document)_template.Clone(true);
                 Aspose.Words.DocumentBuilder builder = new Aspose.Words.DocumentBuilder(each);
@@ -509,25 +523,120 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
             Workbook book = new Workbook();
             book.Open(new MemoryStream(Resources.未達畢業標準學生名冊template));
-            Worksheet sheet = book.Worksheets[0];
-            Worksheet sheet1 = book.Worksheets[1];
-            sheet.Name = "未達畢業標準學生";
-            sheet1.Name = "未達畢業標準學生-依畢業總平均";
+            //Worksheet sheet = book.Worksheets[0];
+            //Worksheet sheet1 = book.Worksheets[1];
+            //sheet.Name = "未達畢業標準學生";
+            //sheet1.Name = "未達畢業標準學生-依畢業總平均";
 
             Range temprow = tempsheet.Cells.CreateRange(3, 1, false);
 
-            sheet.Cells[0, 0].PutValue(School.DefaultSchoolYear + "學年度 " + School.ChineseName);
+            //sheet.Cells[0, 0].PutValue(School.DefaultSchoolYear + "學年度 " + School.ChineseName);
 
-            Range temprow1 = tempsheet1.Cells.CreateRange(3, 1, false);
+            //Range temprow1 = tempsheet1.Cells.CreateRange(3, 1, false);
+            Range temprow2 = tempsheet1.Cells.CreateRange(3, 1, false);
 
-            sheet1.Cells[0, 0].PutValue(School.DefaultSchoolYear + "學年度 " + School.ChineseName);
+            //sheet1.Cells[0, 0].PutValue(School.DefaultSchoolYear + "學年度 " + School.ChineseName);
 
-            int rowIndex = 3, rowIndex1 = 3; ;
+            book.Worksheets[0].Cells[0, 0].PutValue(School.DefaultSchoolYear + "學年度 " + School.ChineseName);
+            book.Worksheets[1].Cells[0, 0].PutValue(School.DefaultSchoolYear + "學年度 " + School.ChineseName);
+
+            //int rowIndex = 3, rowIndex1 = 3; ;
+            int rowIndex = 3;
+            int sheet2_Index = 3;
+
             List<StudentRecord> sorted = new List<StudentRecord>();
             foreach (StudentRecord stu in _students)
                 sorted.Add(stu);
             sorted.Sort();
 
+            foreach (StudentRecord stu in sorted)
+            {
+                if (!_result.ContainsKey(stu.ID)) continue;
+
+                //正常年級的清單
+                List<ResultDetail> regularGrades = new List<ResultDetail>();
+                //年級為0的清單
+                List<ResultDetail> zeroGrades = new List<ResultDetail>();
+
+                foreach (ResultDetail rd in _result[stu.ID])
+                {
+                    int gradeYear = int.Parse(rd.GradeYear);
+
+                    //分類result
+                    if (gradeYear == 0)
+                    {
+                        zeroGrades.Add(rd);
+                    }
+                    else
+                    {
+                        regularGrades.Add(rd);
+                    }
+                }
+
+                if (regularGrades.Count > 0)
+                {
+                    Worksheet sheet = book.Worksheets[0];
+                    sheet.Cells.CreateRange(rowIndex, 1, false).Copy(temprow);
+                    sheet.Cells.CreateRange(rowIndex, 1, false).CopyStyle(temprow);
+
+                    //學生資訊
+                    if (stu.Class != null) sheet.Cells[rowIndex, 0].PutValue(stu.Class.Name);
+                    sheet.Cells[rowIndex, 1].PutValue(stu.SeatNo);
+                    sheet.Cells[rowIndex, 2].PutValue(stu.StudentNumber);
+                    sheet.Cells[rowIndex, 3].PutValue(stu.Name);
+
+                    foreach (ResultDetail rd in regularGrades)
+                    {
+                        int gradeYear = int.Parse(rd.GradeYear);
+
+                        if (gradeYear > 6) gradeYear -= 6;
+
+                        int index = (gradeYear - 1) * 2 + int.Parse(rd.Semester);
+
+                        string details = string.Empty;
+                        foreach (string detail in rd.Details)
+                            details += detail + ",";
+                        if (details.EndsWith(",")) details = details.Substring(0, details.Length - 1);
+                        sheet.Cells[rowIndex, index + 3].PutValue(details);
+                    }
+
+                    rowIndex++;
+                }
+
+                if (zeroGrades.Count > 0)
+                {
+                    //處理年級為0的result
+                    foreach (ResultDetail rd in zeroGrades)
+                    {
+                        //學期也為0代表是所有學期
+                        if (rd.Semester == "0")
+                        {
+                            Worksheet sheet = book.Worksheets[1];
+                            sheet.Cells.CreateRange(sheet2_Index, 1, false).Copy(temprow2);
+                            sheet.Cells.CreateRange(sheet2_Index, 1, false).CopyStyle(temprow2);
+
+                            if (stu.Class != null) sheet.Cells[sheet2_Index, 0].PutValue(stu.Class.Name);
+                            sheet.Cells[sheet2_Index, 1].PutValue(stu.SeatNo);
+                            sheet.Cells[sheet2_Index, 2].PutValue(stu.StudentNumber);
+                            sheet.Cells[sheet2_Index, 3].PutValue(stu.Name);
+
+                            string val = "";
+                            foreach (string str in rd.Details)
+                            {
+                                val += str + ",";
+                            }
+                            if (val.EndsWith(",")) val = val.Substring(0, val.Length - 1);
+                            sheet.Cells[sheet2_Index, 4].PutValue(val);
+
+                        }
+                    }
+
+                    sheet2_Index++;
+                }
+            }
+
+            #region 小郭版
+            /*
             #region 處理畢業成績類類
             foreach (StudentRecord stu in sorted)
             {
@@ -552,7 +661,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                         foreach (string detail in rd.Details)
                             details += detail + "," + _NewLine;   // 小郭, 2013/12/25
                         if (details.EndsWith("," + _NewLine)) details = details.Substring(0, details.Length - ("," + _NewLine).Length); // 小郭, 2013/12/25
-                        
+
                         sheet1.Cells[rowIndex1, 4].PutValue(details);
                     }
                 }
@@ -579,8 +688,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 {
                     int gradeYear = int.Parse(rd.GradeYear);
 
-                    if (gradeYear == 0)
-                        continue;
+                    if (gradeYear == 0) continue;
 
                     if (gradeYear > 6) gradeYear -= 6;
 
@@ -606,6 +714,8 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
                 rowIndex++;
             }
+            #endregion
+            */
             #endregion
 
             // 產出"學習領域畢業總平均明細", 小郭, 2013/12/30
@@ -750,6 +860,21 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             for (int i = sc - 2; i <= sc + 2; i++) cboSchoolYear.Items.Add(i.ToString());
         }
 
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (Object each in gpScore.Controls)
+            {
+                if (each is System.Windows.Forms.CheckBox)
+                {
+                    System.Windows.Forms.CheckBox cb = each as System.Windows.Forms.CheckBox;
+                    if (cb.Text.Contains("領域"))
+                    {
+                        cb.Checked = checkBox1.Checked;
+                    }
+                }
+            }
+        }
+
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             foreach (Object each in gpDaily.Controls)
@@ -780,6 +905,21 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             }
         }
 
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (Object each in gpDaily.Controls)
+            {
+                if (each is System.Windows.Forms.CheckBox)
+                {
+                    System.Windows.Forms.CheckBox cb = each as System.Windows.Forms.CheckBox;
+                    if (cb.Text.Contains("所有學期"))
+                    {
+                        cb.Checked = checkBox4.Checked;
+                    }
+                }
+            }
+        }
+
         private void ExportDoctSetup_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // 樣板與列印設定
@@ -800,6 +940,12 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         {
             // 假如有勾選"學習領域畢業總平均成績符合規範。"
             if (chConditionGr1.Checked && (!string.IsNullOrEmpty("" + chConditionGr1.Tag)))
+                return true;
+
+            if (chCondition4c.Checked && (!string.IsNullOrEmpty("" + chCondition4c.Tag)))
+                return true;
+
+            if (chCondition5c.Checked && (!string.IsNullOrEmpty("" + chCondition5c.Tag)))
                 return true;
 
             return false;
@@ -845,7 +991,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             sheet.Name = "學習領域畢業總平均明細";
             int rowIndex = 0;
             int columnIndex = 0;
-            
+
             Cells cells = sheet.Cells;
 
             #region 設定Style
@@ -949,6 +1095,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             cells[rowIndex, columnIndex].PutValue(String.Format("{0:0.##}", value));    // 小數點以下, 最多兩位
             cells[rowIndex, columnIndex].Style = style;
         }
+
     }
 
 }

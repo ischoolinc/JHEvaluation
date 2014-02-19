@@ -57,6 +57,8 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
 
             InitializeWorkers();
 
+            //先清除Instance再做Refresh,否則會被預警報表所影響
+            Graduation.Instance.Reset();
             Graduation.Instance.Refresh();
         }
 
@@ -534,50 +536,137 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
             Workbook template = new Workbook();
             template.Open(new MemoryStream(Resources.未達畢業標準學生名冊template));
             Worksheet tempsheet = template.Worksheets[0];
+            Worksheet tempsheet2 = template.Worksheets[1];
 
             Workbook book = new Workbook();
             book.Open(new MemoryStream(Resources.未達畢業標準學生名冊template));
-            Worksheet sheet = book.Worksheets[0];
-            sheet.Name = "未達畢業標準學生";
+            //Worksheet sheet = book.Worksheets[0];
+            //sheet.Name = "未達畢業標準學生";
             Range temprow = tempsheet.Cells.CreateRange(3, 1, false);
+            Range temprow2 = tempsheet2.Cells.CreateRange(3, 1, false);
 
-            sheet.Cells[0, 0].PutValue(School.DefaultSchoolYear + "學年度 " + School.ChineseName);
+            book.Worksheets[0].Cells[0, 0].PutValue(School.DefaultSchoolYear + "學年度 " + School.ChineseName);
+            book.Worksheets[1].Cells[0, 0].PutValue(School.DefaultSchoolYear + "學年度 " + School.ChineseName);
 
             int rowIndex = 3;
+            int sheet2_Index = 3;
+
             List<StudentRecord> sorted = new List<StudentRecord>();
             foreach (string id in _result.Keys)
                 sorted.Add(Student.Instance.Items[id]);
             sorted.Sort();
 
+            
             foreach (StudentRecord stu in sorted)
             {
-                sheet.Cells.CreateRange(rowIndex, 1, false).Copy(temprow);
-                sheet.Cells.CreateRange(rowIndex, 1, false).CopyStyle(temprow);
+                if (!_result.ContainsKey(stu.ID)) continue;
 
-                if (stu.Class != null) sheet.Cells[rowIndex, 0].PutValue(stu.Class.Name);
-                sheet.Cells[rowIndex, 1].PutValue(stu.SeatNo);
-                sheet.Cells[rowIndex, 2].PutValue(stu.StudentNumber);
-                sheet.Cells[rowIndex, 3].PutValue(stu.Name);
+                //正常年級的清單
+                List<ResultDetail> regularGrades = new List<ResultDetail>();
+                //年級為0的清單
+                List<ResultDetail> zeroGrades = new List<ResultDetail>();
 
                 foreach (ResultDetail rd in _result[stu.ID])
                 {
                     int gradeYear = int.Parse(rd.GradeYear);
-                    
+
+                    //分類result
                     if (gradeYear == 0)
-                        continue;
-
-                    if (gradeYear > 6) gradeYear -= 6;
-
-                    int index = (gradeYear - 1) * 2 + int.Parse(rd.Semester);
-
-                    string details = string.Empty;
-                    foreach (string detail in rd.Details)
-                        details += detail + ",";
-                    if (details.EndsWith(",")) details = details.Substring(0, details.Length - 1);
-                    sheet.Cells[rowIndex, index + 3].PutValue(details);
+                    {
+                        zeroGrades.Add(rd);
+                    }
+                    else
+                    {
+                        regularGrades.Add(rd);
+                    }
                 }
 
-                rowIndex++;
+                if (regularGrades.Count > 0)
+                {
+                    Worksheet sheet = book.Worksheets[0];
+                    sheet.Cells.CreateRange(rowIndex, 1, false).Copy(temprow);
+                    sheet.Cells.CreateRange(rowIndex, 1, false).CopyStyle(temprow);
+
+                    //學生資訊
+                    if (stu.Class != null) sheet.Cells[rowIndex, 0].PutValue(stu.Class.Name);
+                    sheet.Cells[rowIndex, 1].PutValue(stu.SeatNo);
+                    sheet.Cells[rowIndex, 2].PutValue(stu.StudentNumber);
+                    sheet.Cells[rowIndex, 3].PutValue(stu.Name);
+
+                    foreach (ResultDetail rd in regularGrades)
+                    {
+                        int gradeYear = int.Parse(rd.GradeYear);
+
+                        if (gradeYear > 6) gradeYear -= 6;
+
+                        int index = (gradeYear - 1) * 2 + int.Parse(rd.Semester);
+
+                        string details = string.Empty;
+                        details += string.Join(",", rd.Details);
+                        //foreach (string detail in rd.Details)
+                            //details += detail + ",";
+                        //if (details.EndsWith(",")) details = details.Substring(0, details.Length - 1);
+                        sheet.Cells[rowIndex, index + 3].PutValue(details);
+                    }
+
+                    rowIndex++;
+                }
+
+                if(zeroGrades.Count > 0)
+                {
+                    //處理年級為0的result
+                    foreach (ResultDetail rd in zeroGrades)
+                    {
+                        //學期也為0代表是所有學期
+                        if (rd.Semester == "0")
+                        {
+                            Worksheet sheet = book.Worksheets[1];
+                            sheet.Cells.CreateRange(sheet2_Index, 1, false).Copy(temprow2);
+                            sheet.Cells.CreateRange(sheet2_Index, 1, false).CopyStyle(temprow2);
+
+                            if (stu.Class != null) sheet.Cells[sheet2_Index, 0].PutValue(stu.Class.Name);
+                            sheet.Cells[sheet2_Index, 1].PutValue(stu.SeatNo);
+                            sheet.Cells[sheet2_Index, 2].PutValue(stu.StudentNumber);
+                            sheet.Cells[sheet2_Index, 3].PutValue(stu.Name);
+
+                            string val = "";
+                            val += string.Join(",", rd.Details);
+                            //foreach (string str in rd.Details)
+                            //{
+                            //    val += str + ",";
+                            //}
+                            //if (val.EndsWith(",")) val = val.Substring(0, val.Length - 1);
+                            sheet.Cells[sheet2_Index, 4].PutValue(val);
+                        }
+                    }
+
+                    sheet2_Index++;
+                }
+                
+
+                //foreach (ResultDetail rd in _result[stu.ID])
+                //{
+                //    int gradeYear = int.Parse(rd.GradeYear);
+
+                //    //年級為0的後續再處理
+                //    if (gradeYear == 0)
+                //    {
+                //        zeroGrades.Add(rd);
+                //        continue;
+                //    }
+                        
+                //    if (gradeYear > 6) gradeYear -= 6;
+
+                //    int index = (gradeYear - 1) * 2 + int.Parse(rd.Semester);
+
+                //    string details = string.Empty;
+                //    foreach (string detail in rd.Details)
+                //        details += detail + ",";
+                //    if (details.EndsWith(",")) details = details.Substring(0, details.Length - 1);
+                //    sheet.Cells[rowIndex, index + 3].PutValue(details);
+                //}
+
+                
             }
 
             //sheet.AutoFitColumns();

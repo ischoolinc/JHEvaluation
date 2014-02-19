@@ -74,6 +74,14 @@
             this.numDomain1 = new System.Windows.Forms.NumericUpDown();
             this.gpDaily = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.groupPanel7 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.lblSetAbsence1c = new DevComponents.DotNetBar.LabelX();
+            this.btnSetAbsence1c = new DevComponents.DotNetBar.ButtonX();
+            this.txtSetAbsence1c = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.lblPeriod1c = new DevComponents.DotNetBar.LabelX();
+            this.labelX76 = new DevComponents.DotNetBar.LabelX();
+            this.numPeriod1c = new System.Windows.Forms.NumericUpDown();
+            this.labelX61 = new DevComponents.DotNetBar.LabelX();
+            this.chkDaily1c = new System.Windows.Forms.CheckBox();
             this.chkDaily1 = new System.Windows.Forms.CheckBox();
             this.chkDaily1b = new System.Windows.Forms.CheckBox();
             this.labelX17 = new DevComponents.DotNetBar.LabelX();
@@ -91,6 +99,12 @@
             this.lblPeriod1b = new DevComponents.DotNetBar.LabelX();
             this.numPeriod1 = new System.Windows.Forms.NumericUpDown();
             this.groupPanel8 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.labelX79 = new DevComponents.DotNetBar.LabelX();
+            this.numTimes4c = new System.Windows.Forms.NumericUpDown();
+            this.labelX78 = new DevComponents.DotNetBar.LabelX();
+            this.cboPerformanceDegree1c = new DevComponents.DotNetBar.Controls.ComboBoxEx();
+            this.labelX77 = new DevComponents.DotNetBar.LabelX();
+            this.chkDaily4c = new System.Windows.Forms.CheckBox();
             this.chkDaily4b = new System.Windows.Forms.CheckBox();
             this.cboPerformanceDegree1b = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.chkDaily4 = new System.Windows.Forms.CheckBox();
@@ -104,6 +118,13 @@
             this.numTimes4 = new System.Windows.Forms.NumericUpDown();
             this.labelX16 = new DevComponents.DotNetBar.LabelX();
             this.groupPanel6 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.chkDaily2c = new System.Windows.Forms.CheckBox();
+            this.labelX59 = new DevComponents.DotNetBar.LabelX();
+            this.labelX60 = new DevComponents.DotNetBar.LabelX();
+            this.txtSetAbsence2c = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.lblSetAbsence2c = new DevComponents.DotNetBar.LabelX();
+            this.txtPeriod2c = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.btnSetAbsence2c = new DevComponents.DotNetBar.ButtonX();
             this.chkDaily2 = new System.Windows.Forms.CheckBox();
             this.chkDaily2b = new System.Windows.Forms.CheckBox();
             this.labelX19 = new DevComponents.DotNetBar.LabelX();
@@ -119,6 +140,33 @@
             this.btnSetAbsence2b = new DevComponents.DotNetBar.ButtonX();
             this.txtPeriod2 = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.groupPanel2 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.chkDaily3c = new System.Windows.Forms.CheckBox();
+            this.numTimes3c = new System.Windows.Forms.NumericUpDown();
+            this.labelX62 = new DevComponents.DotNetBar.LabelX();
+            this.labelX63 = new DevComponents.DotNetBar.LabelX();
+            this.labelX64 = new DevComponents.DotNetBar.LabelX();
+            this.gpDaily3c = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.rbUseDemeritOnly1c = new System.Windows.Forms.RadioButton();
+            this.rbCounterbalance1c = new System.Windows.Forms.RadioButton();
+            this.labelX65 = new DevComponents.DotNetBar.LabelX();
+            this.labelX66 = new DevComponents.DotNetBar.LabelX();
+            this.labelX67 = new DevComponents.DotNetBar.LabelX();
+            this.numDbc2c = new System.Windows.Forms.NumericUpDown();
+            this.numDbc1c = new System.Windows.Forms.NumericUpDown();
+            this.numDab2c = new System.Windows.Forms.NumericUpDown();
+            this.numDab1c = new System.Windows.Forms.NumericUpDown();
+            this.numMbc2c = new System.Windows.Forms.NumericUpDown();
+            this.numMbc1c = new System.Windows.Forms.NumericUpDown();
+            this.numMab2c = new System.Windows.Forms.NumericUpDown();
+            this.numMab1c = new System.Windows.Forms.NumericUpDown();
+            this.labelX68 = new DevComponents.DotNetBar.LabelX();
+            this.labelX69 = new DevComponents.DotNetBar.LabelX();
+            this.labelX70 = new DevComponents.DotNetBar.LabelX();
+            this.labelX71 = new DevComponents.DotNetBar.LabelX();
+            this.labelX72 = new DevComponents.DotNetBar.LabelX();
+            this.labelX73 = new DevComponents.DotNetBar.LabelX();
+            this.labelX74 = new DevComponents.DotNetBar.LabelX();
+            this.labelX75 = new DevComponents.DotNetBar.LabelX();
             this.chkDaily3 = new System.Windows.Forms.CheckBox();
             this.chkDaily3b = new System.Windows.Forms.CheckBox();
             this.numTimes3 = new System.Windows.Forms.NumericUpDown();
@@ -218,40 +266,6 @@
             this.btnSave1 = new DevComponents.DotNetBar.ButtonX();
             this.lblName1 = new DevComponents.DotNetBar.LabelX();
             this.tabItem1 = new DevComponents.DotNetBar.TabItem(this.components);
-            this.chkDaily2c = new System.Windows.Forms.CheckBox();
-            this.labelX59 = new DevComponents.DotNetBar.LabelX();
-            this.labelX60 = new DevComponents.DotNetBar.LabelX();
-            this.txtSetAbsence2c = new DevComponents.DotNetBar.Controls.TextBoxX();
-            this.lblSetAbsence2c = new DevComponents.DotNetBar.LabelX();
-            this.txtPeriod2c = new DevComponents.DotNetBar.Controls.TextBoxX();
-            this.btnSetAbsence2c = new DevComponents.DotNetBar.ButtonX();
-            this.chkDaily3c = new System.Windows.Forms.CheckBox();
-            this.numTimes3c = new System.Windows.Forms.NumericUpDown();
-            this.labelX62 = new DevComponents.DotNetBar.LabelX();
-            this.labelX63 = new DevComponents.DotNetBar.LabelX();
-            this.labelX64 = new DevComponents.DotNetBar.LabelX();
-            this.gpDaily3c = new DevComponents.DotNetBar.Controls.GroupPanel();
-            this.rbUseDemeritOnly1c = new System.Windows.Forms.RadioButton();
-            this.rbCounterbalance1c = new System.Windows.Forms.RadioButton();
-            this.labelX65 = new DevComponents.DotNetBar.LabelX();
-            this.labelX66 = new DevComponents.DotNetBar.LabelX();
-            this.labelX67 = new DevComponents.DotNetBar.LabelX();
-            this.numDbc2c = new System.Windows.Forms.NumericUpDown();
-            this.numDbc1c = new System.Windows.Forms.NumericUpDown();
-            this.numDab2c = new System.Windows.Forms.NumericUpDown();
-            this.numDab1c = new System.Windows.Forms.NumericUpDown();
-            this.numMbc2c = new System.Windows.Forms.NumericUpDown();
-            this.numMbc1c = new System.Windows.Forms.NumericUpDown();
-            this.numMab2c = new System.Windows.Forms.NumericUpDown();
-            this.numMab1c = new System.Windows.Forms.NumericUpDown();
-            this.labelX68 = new DevComponents.DotNetBar.LabelX();
-            this.labelX69 = new DevComponents.DotNetBar.LabelX();
-            this.labelX70 = new DevComponents.DotNetBar.LabelX();
-            this.labelX71 = new DevComponents.DotNetBar.LabelX();
-            this.labelX72 = new DevComponents.DotNetBar.LabelX();
-            this.labelX73 = new DevComponents.DotNetBar.LabelX();
-            this.labelX74 = new DevComponents.DotNetBar.LabelX();
-            this.labelX75 = new DevComponents.DotNetBar.LabelX();
             this.panelEx1.SuspendLayout();
             this.itemPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
@@ -267,13 +281,25 @@
             ((System.ComponentModel.ISupportInitialize)(this.numDomain1)).BeginInit();
             this.gpDaily.SuspendLayout();
             this.groupPanel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPeriod1c)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPeriod1b)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPeriod1)).BeginInit();
             this.groupPanel8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimes4c)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes4b)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes4)).BeginInit();
             this.groupPanel6.SuspendLayout();
             this.groupPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimes3c)).BeginInit();
+            this.gpDaily3c.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numDbc2c)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDbc1c)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDab2c)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDab1c)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMbc2c)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMbc1c)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMab2c)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMab1c)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes3b)).BeginInit();
             this.gpDaily3.SuspendLayout();
@@ -308,16 +334,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupPanel5.SuspendLayout();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimes3c)).BeginInit();
-            this.gpDaily3c.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numDbc2c)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDbc1c)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDab2c)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDab1c)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMbc2c)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMbc1c)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMab2c)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMab1c)).BeginInit();
             this.SuspendLayout();
             // 
             // panelEx1
@@ -483,7 +499,7 @@
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(183, 0);
             this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedTabFont = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Bold);
+            this.tabControl1.SelectedTabFont = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold);
             this.tabControl1.SelectedTabIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(609, 516);
             this.tabControl1.Style = DevComponents.DotNetBar.eTabStripStyle.VS2005Document;
@@ -899,7 +915,7 @@
             this.gpDaily.Controls.Add(this.groupPanel2);
             this.gpDaily.Location = new System.Drawing.Point(12, 178);
             this.gpDaily.Name = "gpDaily";
-            this.gpDaily.Size = new System.Drawing.Size(565, 865);
+            this.gpDaily.Size = new System.Drawing.Size(565, 867);
             // 
             // 
             // 
@@ -937,6 +953,14 @@
             // 
             this.groupPanel7.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel7.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.groupPanel7.Controls.Add(this.lblSetAbsence1c);
+            this.groupPanel7.Controls.Add(this.btnSetAbsence1c);
+            this.groupPanel7.Controls.Add(this.txtSetAbsence1c);
+            this.groupPanel7.Controls.Add(this.lblPeriod1c);
+            this.groupPanel7.Controls.Add(this.labelX76);
+            this.groupPanel7.Controls.Add(this.numPeriod1c);
+            this.groupPanel7.Controls.Add(this.labelX61);
+            this.groupPanel7.Controls.Add(this.chkDaily1c);
             this.groupPanel7.Controls.Add(this.chkDaily1);
             this.groupPanel7.Controls.Add(this.chkDaily1b);
             this.groupPanel7.Controls.Add(this.labelX17);
@@ -956,7 +980,7 @@
             this.groupPanel7.DrawTitleBox = false;
             this.groupPanel7.Location = new System.Drawing.Point(3, 5);
             this.groupPanel7.Name = "groupPanel7";
-            this.groupPanel7.Size = new System.Drawing.Size(553, 110);
+            this.groupPanel7.Size = new System.Drawing.Size(553, 107);
             // 
             // 
             // 
@@ -987,6 +1011,123 @@
             this.groupPanel7.StyleMouseOver.Class = "";
             this.groupPanel7.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel7.TabIndex = 10;
+            // 
+            // lblSetAbsence1c
+            // 
+            // 
+            // 
+            // 
+            this.lblSetAbsence1c.BackgroundStyle.Class = "";
+            this.lblSetAbsence1c.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblSetAbsence1c.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSetAbsence1c.ForeColor = System.Drawing.Color.DarkOrange;
+            this.lblSetAbsence1c.Location = new System.Drawing.Point(114, 123);
+            this.lblSetAbsence1c.Name = "lblSetAbsence1c";
+            this.lblSetAbsence1c.Size = new System.Drawing.Size(400, 23);
+            this.lblSetAbsence1c.TabIndex = 15;
+            this.lblSetAbsence1c.Text = "一般(1):曠課";
+            this.lblSetAbsence1c.Visible = false;
+            // 
+            // btnSetAbsence1c
+            // 
+            this.btnSetAbsence1c.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnSetAbsence1c.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnSetAbsence1c.Location = new System.Drawing.Point(43, 124);
+            this.btnSetAbsence1c.Name = "btnSetAbsence1c";
+            this.btnSetAbsence1c.Size = new System.Drawing.Size(65, 20);
+            this.btnSetAbsence1c.TabIndex = 14;
+            this.btnSetAbsence1c.Text = "設定假別";
+            this.btnSetAbsence1c.Visible = false;
+            this.btnSetAbsence1c.Click += new System.EventHandler(this.btnSetAbsence1c_Click);
+            // 
+            // txtSetAbsence1c
+            // 
+            // 
+            // 
+            // 
+            this.txtSetAbsence1c.Border.Class = "TextBoxBorder";
+            this.txtSetAbsence1c.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtSetAbsence1c.Location = new System.Drawing.Point(518, 119);
+            this.txtSetAbsence1c.Name = "txtSetAbsence1c";
+            this.txtSetAbsence1c.Size = new System.Drawing.Size(20, 25);
+            this.txtSetAbsence1c.TabIndex = 13;
+            this.txtSetAbsence1c.Visible = false;
+            // 
+            // lblPeriod1c
+            // 
+            // 
+            // 
+            // 
+            this.lblPeriod1c.BackgroundStyle.Class = "";
+            this.lblPeriod1c.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblPeriod1c.Location = new System.Drawing.Point(394, 94);
+            this.lblPeriod1c.Name = "lblPeriod1c";
+            this.lblPeriod1c.Size = new System.Drawing.Size(53, 23);
+            this.lblPeriod1c.TabIndex = 12;
+            this.lblPeriod1c.Text = "(<50)";
+            this.lblPeriod1c.Visible = false;
+            // 
+            // labelX76
+            // 
+            // 
+            // 
+            // 
+            this.labelX76.BackgroundStyle.Class = "";
+            this.labelX76.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX76.Location = new System.Drawing.Point(270, 98);
+            this.labelX76.Name = "labelX76";
+            this.labelX76.Size = new System.Drawing.Size(125, 23);
+            this.labelX76.TabIndex = 11;
+            this.labelX76.Text = "節，符合畢業資格。";
+            this.labelX76.Visible = false;
+            // 
+            // numPeriod1c
+            // 
+            this.numPeriod1c.Location = new System.Drawing.Point(212, 96);
+            this.numPeriod1c.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.numPeriod1c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numPeriod1c.Name = "numPeriod1c";
+            this.numPeriod1c.Size = new System.Drawing.Size(52, 25);
+            this.numPeriod1c.TabIndex = 10;
+            this.numPeriod1c.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numPeriod1c.Visible = false;
+            this.numPeriod1c.ValueChanged += new System.EventHandler(this.numPeriod1c_ValueChanged);
+            // 
+            // labelX61
+            // 
+            // 
+            // 
+            // 
+            this.labelX61.BackgroundStyle.Class = "";
+            this.labelX61.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX61.Location = new System.Drawing.Point(31, 101);
+            this.labelX61.Name = "labelX61";
+            this.labelX61.Size = new System.Drawing.Size(179, 23);
+            this.labelX61.TabIndex = 9;
+            this.labelX61.Text = "所有學期缺課節數合計未超過";
+            this.labelX61.Visible = false;
+            // 
+            // chkDaily1c
+            // 
+            this.chkDaily1c.AutoSize = true;
+            this.chkDaily1c.Location = new System.Drawing.Point(10, 107);
+            this.chkDaily1c.Name = "chkDaily1c";
+            this.chkDaily1c.Size = new System.Drawing.Size(15, 14);
+            this.chkDaily1c.TabIndex = 8;
+            this.chkDaily1c.UseVisualStyleBackColor = true;
+            this.chkDaily1c.Visible = false;
             // 
             // chkDaily1
             // 
@@ -1065,7 +1206,7 @@
             // 
             this.lblSetAbsence1.BackgroundStyle.Class = "";
             this.lblSetAbsence1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblSetAbsence1.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSetAbsence1.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSetAbsence1.ForeColor = System.Drawing.Color.DarkOrange;
             this.lblSetAbsence1.Location = new System.Drawing.Point(111, 25);
             this.lblSetAbsence1.Name = "lblSetAbsence1";
@@ -1080,7 +1221,7 @@
             // 
             this.lblSetAbsence1b.BackgroundStyle.Class = "";
             this.lblSetAbsence1b.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblSetAbsence1b.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSetAbsence1b.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSetAbsence1b.ForeColor = System.Drawing.Color.DarkOrange;
             this.lblSetAbsence1b.Location = new System.Drawing.Point(111, 74);
             this.lblSetAbsence1b.Name = "lblSetAbsence1b";
@@ -1106,7 +1247,7 @@
             // 
             this.txtSetAbsence1b.Border.Class = "TextBoxBorder";
             this.txtSetAbsence1b.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSetAbsence1b.Location = new System.Drawing.Point(519, 73);
+            this.txtSetAbsence1b.Location = new System.Drawing.Point(519, 76);
             this.txtSetAbsence1b.Name = "txtSetAbsence1b";
             this.txtSetAbsence1b.Size = new System.Drawing.Size(20, 25);
             this.txtSetAbsence1b.TabIndex = 7;
@@ -1130,7 +1271,7 @@
             // 
             this.txtSetAbsence1.Border.Class = "TextBoxBorder";
             this.txtSetAbsence1.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSetAbsence1.Location = new System.Drawing.Point(519, 24);
+            this.txtSetAbsence1.Location = new System.Drawing.Point(519, 27);
             this.txtSetAbsence1.Name = "txtSetAbsence1";
             this.txtSetAbsence1.Size = new System.Drawing.Size(20, 25);
             this.txtSetAbsence1.TabIndex = 7;
@@ -1212,6 +1353,12 @@
             // 
             this.groupPanel8.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel8.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.groupPanel8.Controls.Add(this.labelX79);
+            this.groupPanel8.Controls.Add(this.numTimes4c);
+            this.groupPanel8.Controls.Add(this.labelX78);
+            this.groupPanel8.Controls.Add(this.cboPerformanceDegree1c);
+            this.groupPanel8.Controls.Add(this.labelX77);
+            this.groupPanel8.Controls.Add(this.chkDaily4c);
             this.groupPanel8.Controls.Add(this.chkDaily4b);
             this.groupPanel8.Controls.Add(this.cboPerformanceDegree1b);
             this.groupPanel8.Controls.Add(this.chkDaily4);
@@ -1225,9 +1372,9 @@
             this.groupPanel8.Controls.Add(this.numTimes4);
             this.groupPanel8.Controls.Add(this.labelX16);
             this.groupPanel8.DrawTitleBox = false;
-            this.groupPanel8.Location = new System.Drawing.Point(3, 760);
+            this.groupPanel8.Location = new System.Drawing.Point(3, 758);
             this.groupPanel8.Name = "groupPanel8";
-            this.groupPanel8.Size = new System.Drawing.Size(553, 74);
+            this.groupPanel8.Size = new System.Drawing.Size(553, 72);
             // 
             // 
             // 
@@ -1258,6 +1405,93 @@
             this.groupPanel8.StyleMouseOver.Class = "";
             this.groupPanel8.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel8.TabIndex = 10;
+            // 
+            // labelX79
+            // 
+            // 
+            // 
+            // 
+            this.labelX79.BackgroundStyle.Class = "";
+            this.labelX79.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX79.Location = new System.Drawing.Point(428, 72);
+            this.labelX79.Name = "labelX79";
+            this.labelX79.Size = new System.Drawing.Size(125, 23);
+            this.labelX79.TabIndex = 15;
+            this.labelX79.Text = "項，符合畢業資格。";
+            this.labelX79.Visible = false;
+            // 
+            // numTimes4c
+            // 
+            this.numTimes4c.Location = new System.Drawing.Point(385, 70);
+            this.numTimes4c.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numTimes4c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numTimes4c.Name = "numTimes4c";
+            this.numTimes4c.Size = new System.Drawing.Size(40, 25);
+            this.numTimes4c.TabIndex = 14;
+            this.numTimes4c.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numTimes4c.Visible = false;
+            // 
+            // labelX78
+            // 
+            // 
+            // 
+            // 
+            this.labelX78.BackgroundStyle.Class = "";
+            this.labelX78.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX78.Location = new System.Drawing.Point(337, 74);
+            this.labelX78.Name = "labelX78";
+            this.labelX78.Size = new System.Drawing.Size(48, 23);
+            this.labelX78.TabIndex = 13;
+            this.labelX78.Text = "未超過";
+            this.labelX78.Visible = false;
+            // 
+            // cboPerformanceDegree1c
+            // 
+            this.cboPerformanceDegree1c.DisplayMember = "Text";
+            this.cboPerformanceDegree1c.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboPerformanceDegree1c.FormattingEnabled = true;
+            this.cboPerformanceDegree1c.ItemHeight = 19;
+            this.cboPerformanceDegree1c.Location = new System.Drawing.Point(233, 68);
+            this.cboPerformanceDegree1c.Name = "cboPerformanceDegree1c";
+            this.cboPerformanceDegree1c.Size = new System.Drawing.Size(100, 25);
+            this.cboPerformanceDegree1c.TabIndex = 12;
+            this.cboPerformanceDegree1c.Visible = false;
+            // 
+            // labelX77
+            // 
+            // 
+            // 
+            // 
+            this.labelX77.BackgroundStyle.Class = "";
+            this.labelX77.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX77.Location = new System.Drawing.Point(32, 74);
+            this.labelX77.Name = "labelX77";
+            this.labelX77.Size = new System.Drawing.Size(206, 23);
+            this.labelX77.TabIndex = 11;
+            this.labelX77.Text = "所有學期日常行為表現指標經評定";
+            this.labelX77.Visible = false;
+            // 
+            // chkDaily4c
+            // 
+            this.chkDaily4c.AutoSize = true;
+            this.chkDaily4c.Location = new System.Drawing.Point(9, 78);
+            this.chkDaily4c.Name = "chkDaily4c";
+            this.chkDaily4c.Size = new System.Drawing.Size(15, 14);
+            this.chkDaily4c.TabIndex = 10;
+            this.chkDaily4c.UseVisualStyleBackColor = true;
+            this.chkDaily4c.Visible = false;
             // 
             // chkDaily4b
             // 
@@ -1451,7 +1685,7 @@
             this.groupPanel6.Controls.Add(this.btnSetAbsence2b);
             this.groupPanel6.Controls.Add(this.txtPeriod2);
             this.groupPanel6.DrawTitleBox = false;
-            this.groupPanel6.Location = new System.Drawing.Point(3, 120);
+            this.groupPanel6.Location = new System.Drawing.Point(3, 118);
             this.groupPanel6.Name = "groupPanel6";
             this.groupPanel6.Size = new System.Drawing.Size(553, 164);
             // 
@@ -1484,6 +1718,93 @@
             this.groupPanel6.StyleMouseOver.Class = "";
             this.groupPanel6.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel6.TabIndex = 10;
+            // 
+            // chkDaily2c
+            // 
+            this.chkDaily2c.AutoSize = true;
+            this.chkDaily2c.Location = new System.Drawing.Point(9, 108);
+            this.chkDaily2c.Name = "chkDaily2c";
+            this.chkDaily2c.Size = new System.Drawing.Size(15, 14);
+            this.chkDaily2c.TabIndex = 8;
+            this.chkDaily2c.UseVisualStyleBackColor = true;
+            // 
+            // labelX59
+            // 
+            // 
+            // 
+            // 
+            this.labelX59.BackgroundStyle.Class = "";
+            this.labelX59.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX59.Location = new System.Drawing.Point(31, 104);
+            this.labelX59.Name = "labelX59";
+            this.labelX59.Size = new System.Drawing.Size(233, 23);
+            this.labelX59.TabIndex = 11;
+            this.labelX59.Text = "所有學期缺課節數合計未超過上課節數";
+            // 
+            // labelX60
+            // 
+            // 
+            // 
+            // 
+            this.labelX60.BackgroundStyle.Class = "";
+            this.labelX60.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX60.Location = new System.Drawing.Point(310, 104);
+            this.labelX60.Name = "labelX60";
+            this.labelX60.Size = new System.Drawing.Size(126, 23);
+            this.labelX60.TabIndex = 10;
+            this.labelX60.Text = "，符合畢業資格。";
+            // 
+            // txtSetAbsence2c
+            // 
+            // 
+            // 
+            // 
+            this.txtSetAbsence2c.Border.Class = "TextBoxBorder";
+            this.txtSetAbsence2c.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtSetAbsence2c.Location = new System.Drawing.Point(518, 125);
+            this.txtSetAbsence2c.Name = "txtSetAbsence2c";
+            this.txtSetAbsence2c.Size = new System.Drawing.Size(20, 25);
+            this.txtSetAbsence2c.TabIndex = 14;
+            this.txtSetAbsence2c.Visible = false;
+            // 
+            // lblSetAbsence2c
+            // 
+            // 
+            // 
+            // 
+            this.lblSetAbsence2c.BackgroundStyle.Class = "";
+            this.lblSetAbsence2c.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblSetAbsence2c.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSetAbsence2c.ForeColor = System.Drawing.Color.DarkOrange;
+            this.lblSetAbsence2c.Location = new System.Drawing.Point(110, 128);
+            this.lblSetAbsence2c.Name = "lblSetAbsence2c";
+            this.lblSetAbsence2c.Size = new System.Drawing.Size(400, 23);
+            this.lblSetAbsence2c.TabIndex = 9;
+            this.lblSetAbsence2c.Text = "一般(1):事假,病假,曠課";
+            // 
+            // txtPeriod2c
+            // 
+            // 
+            // 
+            // 
+            this.txtPeriod2c.Border.Class = "TextBoxBorder";
+            this.txtPeriod2c.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPeriod2c.Location = new System.Drawing.Point(264, 103);
+            this.txtPeriod2c.Name = "txtPeriod2c";
+            this.txtPeriod2c.Size = new System.Drawing.Size(44, 25);
+            this.txtPeriod2c.TabIndex = 13;
+            this.txtPeriod2c.Text = "1/2";
+            // 
+            // btnSetAbsence2c
+            // 
+            this.btnSetAbsence2c.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnSetAbsence2c.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnSetAbsence2c.Location = new System.Drawing.Point(42, 129);
+            this.btnSetAbsence2c.Name = "btnSetAbsence2c";
+            this.btnSetAbsence2c.Size = new System.Drawing.Size(65, 20);
+            this.btnSetAbsence2c.TabIndex = 12;
+            this.btnSetAbsence2c.Text = "設定假別";
+            this.btnSetAbsence2c.Click += new System.EventHandler(this.btnSetAbsence2c_Click);
             // 
             // chkDaily2
             // 
@@ -1562,7 +1883,7 @@
             // 
             this.lblSetAbsence2.BackgroundStyle.Class = "";
             this.lblSetAbsence2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblSetAbsence2.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSetAbsence2.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSetAbsence2.ForeColor = System.Drawing.Color.DarkOrange;
             this.lblSetAbsence2.Location = new System.Drawing.Point(111, 25);
             this.lblSetAbsence2.Name = "lblSetAbsence2";
@@ -1590,7 +1911,7 @@
             // 
             this.lblSetAbsence2b.BackgroundStyle.Class = "";
             this.lblSetAbsence2b.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblSetAbsence2b.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSetAbsence2b.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSetAbsence2b.ForeColor = System.Drawing.Color.DarkOrange;
             this.lblSetAbsence2b.Location = new System.Drawing.Point(111, 75);
             this.lblSetAbsence2b.Name = "lblSetAbsence2b";
@@ -1684,7 +2005,7 @@
             this.groupPanel2.Controls.Add(this.gpDaily3);
             this.groupPanel2.Controls.Add(this.gpDaily3b);
             this.groupPanel2.DrawTitleBox = false;
-            this.groupPanel2.Location = new System.Drawing.Point(3, 290);
+            this.groupPanel2.Location = new System.Drawing.Point(3, 288);
             this.groupPanel2.Name = "groupPanel2";
             this.groupPanel2.Size = new System.Drawing.Size(553, 464);
             // 
@@ -1717,6 +2038,478 @@
             this.groupPanel2.StyleMouseOver.Class = "";
             this.groupPanel2.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel2.TabIndex = 10;
+            // 
+            // chkDaily3c
+            // 
+            this.chkDaily3c.AutoSize = true;
+            this.chkDaily3c.Location = new System.Drawing.Point(10, 310);
+            this.chkDaily3c.Name = "chkDaily3c";
+            this.chkDaily3c.Size = new System.Drawing.Size(15, 14);
+            this.chkDaily3c.TabIndex = 6;
+            this.chkDaily3c.UseVisualStyleBackColor = true;
+            this.chkDaily3c.CheckedChanged += new System.EventHandler(this.chkDaily3c_CheckedChanged);
+            // 
+            // numTimes3c
+            // 
+            this.numTimes3c.Location = new System.Drawing.Point(188, 305);
+            this.numTimes3c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numTimes3c.Name = "numTimes3c";
+            this.numTimes3c.Size = new System.Drawing.Size(45, 25);
+            this.numTimes3c.TabIndex = 7;
+            this.numTimes3c.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // labelX62
+            // 
+            // 
+            // 
+            // 
+            this.labelX62.BackgroundStyle.Class = "";
+            this.labelX62.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX62.Location = new System.Drawing.Point(32, 306);
+            this.labelX62.Name = "labelX62";
+            this.labelX62.Size = new System.Drawing.Size(152, 23);
+            this.labelX62.TabIndex = 9;
+            this.labelX62.Text = "所有學期懲戒累計未超過";
+            // 
+            // labelX63
+            // 
+            // 
+            // 
+            // 
+            this.labelX63.BackgroundStyle.Class = "";
+            this.labelX63.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX63.Location = new System.Drawing.Point(240, 306);
+            this.labelX63.Name = "labelX63";
+            this.labelX63.Size = new System.Drawing.Size(139, 23);
+            this.labelX63.TabIndex = 8;
+            this.labelX63.Text = "大過，符合畢業資格。";
+            // 
+            // labelX64
+            // 
+            // 
+            // 
+            // 
+            this.labelX64.BackgroundStyle.Class = "";
+            this.labelX64.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX64.Location = new System.Drawing.Point(377, 306);
+            this.labelX64.Name = "labelX64";
+            this.labelX64.Size = new System.Drawing.Size(49, 23);
+            this.labelX64.TabIndex = 10;
+            this.labelX64.Text = "(<3)";
+            // 
+            // gpDaily3c
+            // 
+            this.gpDaily3c.CanvasColor = System.Drawing.SystemColors.Control;
+            this.gpDaily3c.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.gpDaily3c.Controls.Add(this.rbUseDemeritOnly1c);
+            this.gpDaily3c.Controls.Add(this.rbCounterbalance1c);
+            this.gpDaily3c.Controls.Add(this.labelX65);
+            this.gpDaily3c.Controls.Add(this.labelX66);
+            this.gpDaily3c.Controls.Add(this.labelX67);
+            this.gpDaily3c.Controls.Add(this.numDbc2c);
+            this.gpDaily3c.Controls.Add(this.numDbc1c);
+            this.gpDaily3c.Controls.Add(this.numDab2c);
+            this.gpDaily3c.Controls.Add(this.numDab1c);
+            this.gpDaily3c.Controls.Add(this.numMbc2c);
+            this.gpDaily3c.Controls.Add(this.numMbc1c);
+            this.gpDaily3c.Controls.Add(this.numMab2c);
+            this.gpDaily3c.Controls.Add(this.numMab1c);
+            this.gpDaily3c.Controls.Add(this.labelX68);
+            this.gpDaily3c.Controls.Add(this.labelX69);
+            this.gpDaily3c.Controls.Add(this.labelX70);
+            this.gpDaily3c.Controls.Add(this.labelX71);
+            this.gpDaily3c.Controls.Add(this.labelX72);
+            this.gpDaily3c.Controls.Add(this.labelX73);
+            this.gpDaily3c.Controls.Add(this.labelX74);
+            this.gpDaily3c.Controls.Add(this.labelX75);
+            this.gpDaily3c.DrawTitleBox = false;
+            this.gpDaily3c.Enabled = false;
+            this.gpDaily3c.Location = new System.Drawing.Point(43, 330);
+            this.gpDaily3c.Name = "gpDaily3c";
+            this.gpDaily3c.Size = new System.Drawing.Size(496, 121);
+            // 
+            // 
+            // 
+            this.gpDaily3c.Style.BackColor = System.Drawing.Color.Transparent;
+            this.gpDaily3c.Style.BackColor2 = System.Drawing.Color.Transparent;
+            this.gpDaily3c.Style.BackColorGradientAngle = 90;
+            this.gpDaily3c.Style.BorderBottom = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.gpDaily3c.Style.BorderBottomWidth = 1;
+            this.gpDaily3c.Style.BorderColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
+            this.gpDaily3c.Style.BorderLeft = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.gpDaily3c.Style.BorderLeftWidth = 1;
+            this.gpDaily3c.Style.BorderRight = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.gpDaily3c.Style.BorderRightWidth = 1;
+            this.gpDaily3c.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.gpDaily3c.Style.BorderTopWidth = 1;
+            this.gpDaily3c.Style.Class = "";
+            this.gpDaily3c.Style.CornerDiameter = 4;
+            this.gpDaily3c.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
+            this.gpDaily3c.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
+            this.gpDaily3c.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.gpDaily3c.StyleMouseDown.Class = "";
+            this.gpDaily3c.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.gpDaily3c.StyleMouseOver.Class = "";
+            this.gpDaily3c.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.gpDaily3c.TabIndex = 11;
+            this.gpDaily3c.Text = "功過換算規則";
+            // 
+            // rbUseDemeritOnly1c
+            // 
+            this.rbUseDemeritOnly1c.AutoSize = true;
+            this.rbUseDemeritOnly1c.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(66)))), ((int)(((byte)(139)))));
+            this.rbUseDemeritOnly1c.Location = new System.Drawing.Point(342, 67);
+            this.rbUseDemeritOnly1c.Name = "rbUseDemeritOnly1c";
+            this.rbUseDemeritOnly1c.Size = new System.Drawing.Size(130, 21);
+            this.rbUseDemeritOnly1c.TabIndex = 5;
+            this.rbUseDemeritOnly1c.Text = "僅以懲戒進行累計";
+            this.rbUseDemeritOnly1c.UseVisualStyleBackColor = true;
+            // 
+            // rbCounterbalance1c
+            // 
+            this.rbCounterbalance1c.AutoSize = true;
+            this.rbCounterbalance1c.Checked = true;
+            this.rbCounterbalance1c.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(66)))), ((int)(((byte)(139)))));
+            this.rbCounterbalance1c.Location = new System.Drawing.Point(109, 67);
+            this.rbCounterbalance1c.Name = "rbCounterbalance1c";
+            this.rbCounterbalance1c.Size = new System.Drawing.Size(229, 21);
+            this.rbCounterbalance1c.TabIndex = 5;
+            this.rbCounterbalance1c.TabStop = true;
+            this.rbCounterbalance1c.Text = "功過相抵後進行累計(1嘉獎=1警告)";
+            this.rbCounterbalance1c.UseVisualStyleBackColor = true;
+            // 
+            // labelX65
+            // 
+            // 
+            // 
+            // 
+            this.labelX65.BackgroundStyle.Class = "";
+            this.labelX65.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX65.Location = new System.Drawing.Point(20, 66);
+            this.labelX65.Name = "labelX65";
+            this.labelX65.Size = new System.Drawing.Size(89, 23);
+            this.labelX65.TabIndex = 4;
+            this.labelX65.Text = "學期獎懲累計";
+            // 
+            // labelX66
+            // 
+            // 
+            // 
+            // 
+            this.labelX66.BackgroundStyle.Class = "";
+            this.labelX66.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX66.Location = new System.Drawing.Point(20, 33);
+            this.labelX66.Name = "labelX66";
+            this.labelX66.Size = new System.Drawing.Size(50, 23);
+            this.labelX66.TabIndex = 3;
+            this.labelX66.Text = "懲戒：";
+            // 
+            // labelX67
+            // 
+            // 
+            // 
+            // 
+            this.labelX67.BackgroundStyle.Class = "";
+            this.labelX67.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX67.Location = new System.Drawing.Point(20, 1);
+            this.labelX67.Name = "labelX67";
+            this.labelX67.Size = new System.Drawing.Size(50, 23);
+            this.labelX67.TabIndex = 3;
+            this.labelX67.Text = "獎勵：";
+            // 
+            // numDbc2c
+            // 
+            this.numDbc2c.Location = new System.Drawing.Point(387, 32);
+            this.numDbc2c.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numDbc2c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numDbc2c.Name = "numDbc2c";
+            this.numDbc2c.Size = new System.Drawing.Size(40, 25);
+            this.numDbc2c.TabIndex = 2;
+            this.numDbc2c.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // numDbc1c
+            // 
+            this.numDbc1c.Location = new System.Drawing.Point(280, 32);
+            this.numDbc1c.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numDbc1c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numDbc1c.Name = "numDbc1c";
+            this.numDbc1c.Size = new System.Drawing.Size(40, 25);
+            this.numDbc1c.TabIndex = 2;
+            this.numDbc1c.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // numDab2c
+            // 
+            this.numDab2c.Location = new System.Drawing.Point(184, 32);
+            this.numDab2c.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numDab2c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numDab2c.Name = "numDab2c";
+            this.numDab2c.Size = new System.Drawing.Size(40, 25);
+            this.numDab2c.TabIndex = 2;
+            this.numDab2c.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // numDab1c
+            // 
+            this.numDab1c.Location = new System.Drawing.Point(77, 32);
+            this.numDab1c.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numDab1c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numDab1c.Name = "numDab1c";
+            this.numDab1c.Size = new System.Drawing.Size(40, 25);
+            this.numDab1c.TabIndex = 2;
+            this.numDab1c.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // numMbc2c
+            // 
+            this.numMbc2c.Location = new System.Drawing.Point(387, 0);
+            this.numMbc2c.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numMbc2c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numMbc2c.Name = "numMbc2c";
+            this.numMbc2c.Size = new System.Drawing.Size(40, 25);
+            this.numMbc2c.TabIndex = 2;
+            this.numMbc2c.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // numMbc1c
+            // 
+            this.numMbc1c.Location = new System.Drawing.Point(280, 0);
+            this.numMbc1c.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numMbc1c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numMbc1c.Name = "numMbc1c";
+            this.numMbc1c.Size = new System.Drawing.Size(40, 25);
+            this.numMbc1c.TabIndex = 2;
+            this.numMbc1c.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // numMab2c
+            // 
+            this.numMab2c.Location = new System.Drawing.Point(184, 0);
+            this.numMab2c.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numMab2c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numMab2c.Name = "numMab2c";
+            this.numMab2c.Size = new System.Drawing.Size(40, 25);
+            this.numMab2c.TabIndex = 2;
+            this.numMab2c.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // numMab1c
+            // 
+            this.numMab1c.Location = new System.Drawing.Point(77, 0);
+            this.numMab1c.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numMab1c.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numMab1c.Name = "numMab1c";
+            this.numMab1c.Size = new System.Drawing.Size(40, 25);
+            this.numMab1c.TabIndex = 2;
+            this.numMab1c.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // labelX68
+            // 
+            // 
+            // 
+            // 
+            this.labelX68.BackgroundStyle.Class = "";
+            this.labelX68.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX68.Location = new System.Drawing.Point(431, 33);
+            this.labelX68.Name = "labelX68";
+            this.labelX68.Size = new System.Drawing.Size(50, 23);
+            this.labelX68.TabIndex = 1;
+            this.labelX68.Text = "警告。";
+            // 
+            // labelX69
+            // 
+            // 
+            // 
+            // 
+            this.labelX69.BackgroundStyle.Class = "";
+            this.labelX69.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX69.Location = new System.Drawing.Point(326, 33);
+            this.labelX69.Name = "labelX69";
+            this.labelX69.Size = new System.Drawing.Size(60, 23);
+            this.labelX69.TabIndex = 1;
+            this.labelX69.Text = "小過等於";
+            // 
+            // labelX70
+            // 
+            // 
+            // 
+            // 
+            this.labelX70.BackgroundStyle.Class = "";
+            this.labelX70.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX70.Location = new System.Drawing.Point(228, 33);
+            this.labelX70.Name = "labelX70";
+            this.labelX70.Size = new System.Drawing.Size(50, 23);
+            this.labelX70.TabIndex = 1;
+            this.labelX70.Text = "小過。";
+            // 
+            // labelX71
+            // 
+            // 
+            // 
+            // 
+            this.labelX71.BackgroundStyle.Class = "";
+            this.labelX71.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX71.Location = new System.Drawing.Point(123, 33);
+            this.labelX71.Name = "labelX71";
+            this.labelX71.Size = new System.Drawing.Size(60, 23);
+            this.labelX71.TabIndex = 1;
+            this.labelX71.Text = "大過等於";
+            // 
+            // labelX72
+            // 
+            // 
+            // 
+            // 
+            this.labelX72.BackgroundStyle.Class = "";
+            this.labelX72.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX72.Location = new System.Drawing.Point(431, 1);
+            this.labelX72.Name = "labelX72";
+            this.labelX72.Size = new System.Drawing.Size(50, 23);
+            this.labelX72.TabIndex = 1;
+            this.labelX72.Text = "嘉獎。";
+            // 
+            // labelX73
+            // 
+            // 
+            // 
+            // 
+            this.labelX73.BackgroundStyle.Class = "";
+            this.labelX73.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX73.Location = new System.Drawing.Point(326, 1);
+            this.labelX73.Name = "labelX73";
+            this.labelX73.Size = new System.Drawing.Size(60, 23);
+            this.labelX73.TabIndex = 1;
+            this.labelX73.Text = "小功等於";
+            // 
+            // labelX74
+            // 
+            // 
+            // 
+            // 
+            this.labelX74.BackgroundStyle.Class = "";
+            this.labelX74.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX74.Location = new System.Drawing.Point(228, 1);
+            this.labelX74.Name = "labelX74";
+            this.labelX74.Size = new System.Drawing.Size(50, 23);
+            this.labelX74.TabIndex = 1;
+            this.labelX74.Text = "小功。";
+            // 
+            // labelX75
+            // 
+            // 
+            // 
+            // 
+            this.labelX75.BackgroundStyle.Class = "";
+            this.labelX75.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX75.Location = new System.Drawing.Point(123, 1);
+            this.labelX75.Name = "labelX75";
+            this.labelX75.Size = new System.Drawing.Size(60, 23);
+            this.labelX75.TabIndex = 1;
+            this.labelX75.Text = "大功等於";
             // 
             // chkDaily3
             // 
@@ -2686,7 +3479,7 @@
             // 
             this.lblSaveWarning2.BackgroundStyle.Class = "";
             this.lblSaveWarning2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblSaveWarning2.Font = new System.Drawing.Font("Microsoft JhengHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSaveWarning2.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSaveWarning2.ForeColor = System.Drawing.Color.Red;
             this.lblSaveWarning2.Location = new System.Drawing.Point(452, 1);
             this.lblSaveWarning2.Name = "lblSaveWarning2";
@@ -2717,7 +3510,7 @@
             this.lblName2.BackgroundStyle.Class = "";
             this.lblName2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblName2.BorderType = DevComponents.DotNetBar.eBorderType.SingleLine;
-            this.lblName2.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblName2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblName2.Location = new System.Drawing.Point(5, 1);
             this.lblName2.Name = "lblName2";
             this.lblName2.Size = new System.Drawing.Size(78, 28);
@@ -3252,7 +4045,7 @@
             // 
             this.lblSaveWarning1.BackgroundStyle.Class = "";
             this.lblSaveWarning1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblSaveWarning1.Font = new System.Drawing.Font("Microsoft JhengHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSaveWarning1.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSaveWarning1.ForeColor = System.Drawing.Color.Red;
             this.lblSaveWarning1.Location = new System.Drawing.Point(452, 1);
             this.lblSaveWarning1.Name = "lblSaveWarning1";
@@ -3283,7 +4076,7 @@
             this.lblName1.BackgroundStyle.Class = "";
             this.lblName1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblName1.BorderType = DevComponents.DotNetBar.eBorderType.SingleLine;
-            this.lblName1.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblName1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblName1.Location = new System.Drawing.Point(5, 1);
             this.lblName1.Name = "lblName1";
             this.lblName1.Size = new System.Drawing.Size(78, 28);
@@ -3295,565 +4088,6 @@
             this.tabItem1.AttachedControl = this.tabControlPanel1;
             this.tabItem1.Name = "tabItem1";
             this.tabItem1.Text = "成績計算規則";
-            // 
-            // chkDaily2c
-            // 
-            this.chkDaily2c.AutoSize = true;
-            this.chkDaily2c.Location = new System.Drawing.Point(9, 108);
-            this.chkDaily2c.Name = "chkDaily2c";
-            this.chkDaily2c.Size = new System.Drawing.Size(15, 14);
-            this.chkDaily2c.TabIndex = 8;
-            this.chkDaily2c.UseVisualStyleBackColor = true;
-            // 
-            // labelX59
-            // 
-            // 
-            // 
-            // 
-            this.labelX59.BackgroundStyle.Class = "";
-            this.labelX59.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX59.Location = new System.Drawing.Point(31, 104);
-            this.labelX59.Name = "labelX59";
-            this.labelX59.Size = new System.Drawing.Size(233, 23);
-            this.labelX59.TabIndex = 11;
-            this.labelX59.Text = "所有學期缺課節數合計未超過上課節數";
-            // 
-            // labelX60
-            // 
-            // 
-            // 
-            // 
-            this.labelX60.BackgroundStyle.Class = "";
-            this.labelX60.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX60.Location = new System.Drawing.Point(310, 104);
-            this.labelX60.Name = "labelX60";
-            this.labelX60.Size = new System.Drawing.Size(126, 23);
-            this.labelX60.TabIndex = 10;
-            this.labelX60.Text = "，符合畢業資格。";
-            // 
-            // txtSetAbsence2c
-            // 
-            // 
-            // 
-            // 
-            this.txtSetAbsence2c.Border.Class = "TextBoxBorder";
-            this.txtSetAbsence2c.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSetAbsence2c.Location = new System.Drawing.Point(518, 125);
-            this.txtSetAbsence2c.Name = "txtSetAbsence2c";
-            this.txtSetAbsence2c.Size = new System.Drawing.Size(20, 25);
-            this.txtSetAbsence2c.TabIndex = 14;
-            this.txtSetAbsence2c.Visible = false;
-            // 
-            // lblSetAbsence2c
-            // 
-            // 
-            // 
-            // 
-            this.lblSetAbsence2c.BackgroundStyle.Class = "";
-            this.lblSetAbsence2c.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblSetAbsence2c.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lblSetAbsence2c.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblSetAbsence2c.Location = new System.Drawing.Point(110, 128);
-            this.lblSetAbsence2c.Name = "lblSetAbsence2c";
-            this.lblSetAbsence2c.Size = new System.Drawing.Size(400, 23);
-            this.lblSetAbsence2c.TabIndex = 9;
-            this.lblSetAbsence2c.Text = "一般(1):事假,病假,曠課";
-            // 
-            // txtPeriod2c
-            // 
-            // 
-            // 
-            // 
-            this.txtPeriod2c.Border.Class = "TextBoxBorder";
-            this.txtPeriod2c.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtPeriod2c.Location = new System.Drawing.Point(264, 103);
-            this.txtPeriod2c.Name = "txtPeriod2c";
-            this.txtPeriod2c.Size = new System.Drawing.Size(44, 25);
-            this.txtPeriod2c.TabIndex = 13;
-            this.txtPeriod2c.Text = "1/2";
-            // 
-            // btnSetAbsence2c
-            // 
-            this.btnSetAbsence2c.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnSetAbsence2c.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSetAbsence2c.Location = new System.Drawing.Point(42, 129);
-            this.btnSetAbsence2c.Name = "btnSetAbsence2c";
-            this.btnSetAbsence2c.Size = new System.Drawing.Size(65, 20);
-            this.btnSetAbsence2c.TabIndex = 12;
-            this.btnSetAbsence2c.Text = "設定假別";
-            this.btnSetAbsence2c.Click += new System.EventHandler(this.btnSetAbsence2c_Click);
-            // 
-            // chkDaily3c
-            // 
-            this.chkDaily3c.AutoSize = true;
-            this.chkDaily3c.Location = new System.Drawing.Point(10, 310);
-            this.chkDaily3c.Name = "chkDaily3c";
-            this.chkDaily3c.Size = new System.Drawing.Size(15, 14);
-            this.chkDaily3c.TabIndex = 6;
-            this.chkDaily3c.UseVisualStyleBackColor = true;
-            this.chkDaily3c.CheckedChanged += new System.EventHandler(this.chkDaily3c_CheckedChanged);
-            // 
-            // numTimes3c
-            // 
-            this.numTimes3c.Location = new System.Drawing.Point(188, 305);
-            this.numTimes3c.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numTimes3c.Name = "numTimes3c";
-            this.numTimes3c.Size = new System.Drawing.Size(45, 25);
-            this.numTimes3c.TabIndex = 7;
-            this.numTimes3c.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
-            // labelX62
-            // 
-            // 
-            // 
-            // 
-            this.labelX62.BackgroundStyle.Class = "";
-            this.labelX62.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX62.Location = new System.Drawing.Point(32, 306);
-            this.labelX62.Name = "labelX62";
-            this.labelX62.Size = new System.Drawing.Size(152, 23);
-            this.labelX62.TabIndex = 9;
-            this.labelX62.Text = "所有學期懲戒累計未超過";
-            // 
-            // labelX63
-            // 
-            // 
-            // 
-            // 
-            this.labelX63.BackgroundStyle.Class = "";
-            this.labelX63.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX63.Location = new System.Drawing.Point(240, 306);
-            this.labelX63.Name = "labelX63";
-            this.labelX63.Size = new System.Drawing.Size(139, 23);
-            this.labelX63.TabIndex = 8;
-            this.labelX63.Text = "大過，符合畢業資格。";
-            // 
-            // labelX64
-            // 
-            // 
-            // 
-            // 
-            this.labelX64.BackgroundStyle.Class = "";
-            this.labelX64.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX64.Location = new System.Drawing.Point(377, 306);
-            this.labelX64.Name = "labelX64";
-            this.labelX64.Size = new System.Drawing.Size(49, 23);
-            this.labelX64.TabIndex = 10;
-            this.labelX64.Text = "(<3)";
-            // 
-            // gpDaily3c
-            // 
-            this.gpDaily3c.CanvasColor = System.Drawing.SystemColors.Control;
-            this.gpDaily3c.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
-            this.gpDaily3c.Controls.Add(this.rbUseDemeritOnly1c);
-            this.gpDaily3c.Controls.Add(this.rbCounterbalance1c);
-            this.gpDaily3c.Controls.Add(this.labelX65);
-            this.gpDaily3c.Controls.Add(this.labelX66);
-            this.gpDaily3c.Controls.Add(this.labelX67);
-            this.gpDaily3c.Controls.Add(this.numDbc2c);
-            this.gpDaily3c.Controls.Add(this.numDbc1c);
-            this.gpDaily3c.Controls.Add(this.numDab2c);
-            this.gpDaily3c.Controls.Add(this.numDab1c);
-            this.gpDaily3c.Controls.Add(this.numMbc2c);
-            this.gpDaily3c.Controls.Add(this.numMbc1c);
-            this.gpDaily3c.Controls.Add(this.numMab2c);
-            this.gpDaily3c.Controls.Add(this.numMab1c);
-            this.gpDaily3c.Controls.Add(this.labelX68);
-            this.gpDaily3c.Controls.Add(this.labelX69);
-            this.gpDaily3c.Controls.Add(this.labelX70);
-            this.gpDaily3c.Controls.Add(this.labelX71);
-            this.gpDaily3c.Controls.Add(this.labelX72);
-            this.gpDaily3c.Controls.Add(this.labelX73);
-            this.gpDaily3c.Controls.Add(this.labelX74);
-            this.gpDaily3c.Controls.Add(this.labelX75);
-            this.gpDaily3c.DrawTitleBox = false;
-            this.gpDaily3c.Enabled = false;
-            this.gpDaily3c.Location = new System.Drawing.Point(43, 330);
-            this.gpDaily3c.Name = "gpDaily3c";
-            this.gpDaily3c.Size = new System.Drawing.Size(496, 121);
-            // 
-            // 
-            // 
-            this.gpDaily3c.Style.BackColor = System.Drawing.Color.Transparent;
-            this.gpDaily3c.Style.BackColor2 = System.Drawing.Color.Transparent;
-            this.gpDaily3c.Style.BackColorGradientAngle = 90;
-            this.gpDaily3c.Style.BorderBottom = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.gpDaily3c.Style.BorderBottomWidth = 1;
-            this.gpDaily3c.Style.BorderColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
-            this.gpDaily3c.Style.BorderLeft = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.gpDaily3c.Style.BorderLeftWidth = 1;
-            this.gpDaily3c.Style.BorderRight = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.gpDaily3c.Style.BorderRightWidth = 1;
-            this.gpDaily3c.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.gpDaily3c.Style.BorderTopWidth = 1;
-            this.gpDaily3c.Style.Class = "";
-            this.gpDaily3c.Style.CornerDiameter = 4;
-            this.gpDaily3c.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
-            this.gpDaily3c.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
-            this.gpDaily3c.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
-            // 
-            // 
-            // 
-            this.gpDaily3c.StyleMouseDown.Class = "";
-            this.gpDaily3c.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            // 
-            // 
-            // 
-            this.gpDaily3c.StyleMouseOver.Class = "";
-            this.gpDaily3c.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.gpDaily3c.TabIndex = 11;
-            this.gpDaily3c.Text = "功過換算規則";
-            // 
-            // rbUseDemeritOnly1c
-            // 
-            this.rbUseDemeritOnly1c.AutoSize = true;
-            this.rbUseDemeritOnly1c.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(66)))), ((int)(((byte)(139)))));
-            this.rbUseDemeritOnly1c.Location = new System.Drawing.Point(342, 67);
-            this.rbUseDemeritOnly1c.Name = "rbUseDemeritOnly1c";
-            this.rbUseDemeritOnly1c.Size = new System.Drawing.Size(130, 21);
-            this.rbUseDemeritOnly1c.TabIndex = 5;
-            this.rbUseDemeritOnly1c.Text = "僅以懲戒進行累計";
-            this.rbUseDemeritOnly1c.UseVisualStyleBackColor = true;
-            // 
-            // rbCounterbalance1c
-            // 
-            this.rbCounterbalance1c.AutoSize = true;
-            this.rbCounterbalance1c.Checked = true;
-            this.rbCounterbalance1c.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(66)))), ((int)(((byte)(139)))));
-            this.rbCounterbalance1c.Location = new System.Drawing.Point(109, 67);
-            this.rbCounterbalance1c.Name = "rbCounterbalance1c";
-            this.rbCounterbalance1c.Size = new System.Drawing.Size(229, 21);
-            this.rbCounterbalance1c.TabIndex = 5;
-            this.rbCounterbalance1c.TabStop = true;
-            this.rbCounterbalance1c.Text = "功過相抵後進行累計(1嘉獎=1警告)";
-            this.rbCounterbalance1c.UseVisualStyleBackColor = true;
-            // 
-            // labelX65
-            // 
-            // 
-            // 
-            // 
-            this.labelX65.BackgroundStyle.Class = "";
-            this.labelX65.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX65.Location = new System.Drawing.Point(20, 66);
-            this.labelX65.Name = "labelX65";
-            this.labelX65.Size = new System.Drawing.Size(89, 23);
-            this.labelX65.TabIndex = 4;
-            this.labelX65.Text = "學期獎懲累計";
-            // 
-            // labelX66
-            // 
-            // 
-            // 
-            // 
-            this.labelX66.BackgroundStyle.Class = "";
-            this.labelX66.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX66.Location = new System.Drawing.Point(20, 33);
-            this.labelX66.Name = "labelX66";
-            this.labelX66.Size = new System.Drawing.Size(50, 23);
-            this.labelX66.TabIndex = 3;
-            this.labelX66.Text = "懲戒：";
-            // 
-            // labelX67
-            // 
-            // 
-            // 
-            // 
-            this.labelX67.BackgroundStyle.Class = "";
-            this.labelX67.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX67.Location = new System.Drawing.Point(20, 1);
-            this.labelX67.Name = "labelX67";
-            this.labelX67.Size = new System.Drawing.Size(50, 23);
-            this.labelX67.TabIndex = 3;
-            this.labelX67.Text = "獎勵：";
-            // 
-            // numDbc2c
-            // 
-            this.numDbc2c.Location = new System.Drawing.Point(387, 32);
-            this.numDbc2c.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numDbc2c.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numDbc2c.Name = "numDbc2c";
-            this.numDbc2c.Size = new System.Drawing.Size(40, 25);
-            this.numDbc2c.TabIndex = 2;
-            this.numDbc2c.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
-            // numDbc1c
-            // 
-            this.numDbc1c.Location = new System.Drawing.Point(280, 32);
-            this.numDbc1c.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numDbc1c.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numDbc1c.Name = "numDbc1c";
-            this.numDbc1c.Size = new System.Drawing.Size(40, 25);
-            this.numDbc1c.TabIndex = 2;
-            this.numDbc1c.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // numDab2c
-            // 
-            this.numDab2c.Location = new System.Drawing.Point(184, 32);
-            this.numDab2c.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numDab2c.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numDab2c.Name = "numDab2c";
-            this.numDab2c.Size = new System.Drawing.Size(40, 25);
-            this.numDab2c.TabIndex = 2;
-            this.numDab2c.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
-            // numDab1c
-            // 
-            this.numDab1c.Location = new System.Drawing.Point(77, 32);
-            this.numDab1c.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numDab1c.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numDab1c.Name = "numDab1c";
-            this.numDab1c.Size = new System.Drawing.Size(40, 25);
-            this.numDab1c.TabIndex = 2;
-            this.numDab1c.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // numMbc2c
-            // 
-            this.numMbc2c.Location = new System.Drawing.Point(387, 0);
-            this.numMbc2c.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numMbc2c.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numMbc2c.Name = "numMbc2c";
-            this.numMbc2c.Size = new System.Drawing.Size(40, 25);
-            this.numMbc2c.TabIndex = 2;
-            this.numMbc2c.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
-            // numMbc1c
-            // 
-            this.numMbc1c.Location = new System.Drawing.Point(280, 0);
-            this.numMbc1c.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numMbc1c.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numMbc1c.Name = "numMbc1c";
-            this.numMbc1c.Size = new System.Drawing.Size(40, 25);
-            this.numMbc1c.TabIndex = 2;
-            this.numMbc1c.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // numMab2c
-            // 
-            this.numMab2c.Location = new System.Drawing.Point(184, 0);
-            this.numMab2c.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numMab2c.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numMab2c.Name = "numMab2c";
-            this.numMab2c.Size = new System.Drawing.Size(40, 25);
-            this.numMab2c.TabIndex = 2;
-            this.numMab2c.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
-            // numMab1c
-            // 
-            this.numMab1c.Location = new System.Drawing.Point(77, 0);
-            this.numMab1c.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numMab1c.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numMab1c.Name = "numMab1c";
-            this.numMab1c.Size = new System.Drawing.Size(40, 25);
-            this.numMab1c.TabIndex = 2;
-            this.numMab1c.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // labelX68
-            // 
-            // 
-            // 
-            // 
-            this.labelX68.BackgroundStyle.Class = "";
-            this.labelX68.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX68.Location = new System.Drawing.Point(431, 33);
-            this.labelX68.Name = "labelX68";
-            this.labelX68.Size = new System.Drawing.Size(50, 23);
-            this.labelX68.TabIndex = 1;
-            this.labelX68.Text = "警告。";
-            // 
-            // labelX69
-            // 
-            // 
-            // 
-            // 
-            this.labelX69.BackgroundStyle.Class = "";
-            this.labelX69.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX69.Location = new System.Drawing.Point(326, 33);
-            this.labelX69.Name = "labelX69";
-            this.labelX69.Size = new System.Drawing.Size(60, 23);
-            this.labelX69.TabIndex = 1;
-            this.labelX69.Text = "小過等於";
-            // 
-            // labelX70
-            // 
-            // 
-            // 
-            // 
-            this.labelX70.BackgroundStyle.Class = "";
-            this.labelX70.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX70.Location = new System.Drawing.Point(228, 33);
-            this.labelX70.Name = "labelX70";
-            this.labelX70.Size = new System.Drawing.Size(50, 23);
-            this.labelX70.TabIndex = 1;
-            this.labelX70.Text = "小過。";
-            // 
-            // labelX71
-            // 
-            // 
-            // 
-            // 
-            this.labelX71.BackgroundStyle.Class = "";
-            this.labelX71.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX71.Location = new System.Drawing.Point(123, 33);
-            this.labelX71.Name = "labelX71";
-            this.labelX71.Size = new System.Drawing.Size(60, 23);
-            this.labelX71.TabIndex = 1;
-            this.labelX71.Text = "大過等於";
-            // 
-            // labelX72
-            // 
-            // 
-            // 
-            // 
-            this.labelX72.BackgroundStyle.Class = "";
-            this.labelX72.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX72.Location = new System.Drawing.Point(431, 1);
-            this.labelX72.Name = "labelX72";
-            this.labelX72.Size = new System.Drawing.Size(50, 23);
-            this.labelX72.TabIndex = 1;
-            this.labelX72.Text = "嘉獎。";
-            // 
-            // labelX73
-            // 
-            // 
-            // 
-            // 
-            this.labelX73.BackgroundStyle.Class = "";
-            this.labelX73.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX73.Location = new System.Drawing.Point(326, 1);
-            this.labelX73.Name = "labelX73";
-            this.labelX73.Size = new System.Drawing.Size(60, 23);
-            this.labelX73.TabIndex = 1;
-            this.labelX73.Text = "小功等於";
-            // 
-            // labelX74
-            // 
-            // 
-            // 
-            // 
-            this.labelX74.BackgroundStyle.Class = "";
-            this.labelX74.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX74.Location = new System.Drawing.Point(228, 1);
-            this.labelX74.Name = "labelX74";
-            this.labelX74.Size = new System.Drawing.Size(50, 23);
-            this.labelX74.TabIndex = 1;
-            this.labelX74.Text = "小功。";
-            // 
-            // labelX75
-            // 
-            // 
-            // 
-            // 
-            this.labelX75.BackgroundStyle.Class = "";
-            this.labelX75.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX75.Location = new System.Drawing.Point(123, 1);
-            this.labelX75.Name = "labelX75";
-            this.labelX75.Size = new System.Drawing.Size(60, 23);
-            this.labelX75.TabIndex = 1;
-            this.labelX75.Text = "大功等於";
             // 
             // ScoreCalcRuleManager
             // 
@@ -3887,16 +4121,29 @@
             this.gpDaily.ResumeLayout(false);
             this.groupPanel7.ResumeLayout(false);
             this.groupPanel7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPeriod1c)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPeriod1b)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPeriod1)).EndInit();
             this.groupPanel8.ResumeLayout(false);
             this.groupPanel8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimes4c)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes4b)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes4)).EndInit();
             this.groupPanel6.ResumeLayout(false);
             this.groupPanel6.PerformLayout();
             this.groupPanel2.ResumeLayout(false);
             this.groupPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimes3c)).EndInit();
+            this.gpDaily3c.ResumeLayout(false);
+            this.gpDaily3c.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numDbc2c)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDbc1c)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDab2c)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDab1c)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMbc2c)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMbc1c)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMab2c)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMab1c)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes3b)).EndInit();
             this.gpDaily3.ResumeLayout(false);
@@ -3940,17 +4187,6 @@
             this.groupPanel5.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimes3c)).EndInit();
-            this.gpDaily3c.ResumeLayout(false);
-            this.gpDaily3c.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numDbc2c)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDbc1c)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDab2c)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDab1c)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMbc2c)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMbc1c)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMab2c)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMab1c)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4180,5 +4416,19 @@
         private DevComponents.DotNetBar.LabelX labelX73;
         private DevComponents.DotNetBar.LabelX labelX74;
         private DevComponents.DotNetBar.LabelX labelX75;
+        private DevComponents.DotNetBar.LabelX lblSetAbsence1c;
+        private DevComponents.DotNetBar.ButtonX btnSetAbsence1c;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtSetAbsence1c;
+        private DevComponents.DotNetBar.LabelX lblPeriod1c;
+        private DevComponents.DotNetBar.LabelX labelX76;
+        private System.Windows.Forms.NumericUpDown numPeriod1c;
+        private DevComponents.DotNetBar.LabelX labelX61;
+        private System.Windows.Forms.CheckBox chkDaily1c;
+        private DevComponents.DotNetBar.LabelX labelX77;
+        private DevComponents.DotNetBar.LabelX labelX79;
+        private System.Windows.Forms.NumericUpDown numTimes4c;
+        private DevComponents.DotNetBar.LabelX labelX78;
+        private DevComponents.DotNetBar.Controls.ComboBoxEx cboPerformanceDegree1c;
+        private System.Windows.Forms.CheckBox chkDaily4c;
     }
 }

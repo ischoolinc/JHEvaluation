@@ -5,9 +5,9 @@ using JHSchool.Evaluation.Mapping;
 namespace JHSchool.Evaluation.Calculation.GraduationConditions
 {
     /// <summary>
-    /// 判斷日常生活表現是否符合最後學期設定的條件
+    /// 判斷日常生活表現是否符合所有學期設定的條件
     /// </summary>
-    internal class DailyBehaviorLastEval : IEvaluative
+    internal class DailyBehaviorAllEval : IEvaluative
     {
         private EvaluationResult _result;
         private int _amount = 0;
@@ -24,7 +24,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
         /// ]]>
         /// </summary>
         /// <param name="element"></param>
-        public DailyBehaviorLastEval(XmlElement element)
+        public DailyBehaviorAllEval(XmlElement element)
         {
             _result = new EvaluationResult();
 
@@ -34,6 +34,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
             //<條件 Checked="False" Type="DailyBehavior" 表現程度="1" 項目="4"/>
 
             _mapper = new PerformanceDegreeMapper();
+
             _DescToDegree = new HelperClass.DespToDegree();
         }
 
@@ -123,10 +124,6 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 Dictionary<SemesterInfo, bool> semsHasRecord = new Dictionary<SemesterInfo, bool>();
                 foreach (SemesterInfo info in gyMapping.Keys)
                 {
-                    if (gyMapping.ContainsKey(info) &&
-                        !((gyMapping[info] == 3 || gyMapping[info] == 9) && info.Semester == 2))
-                        continue;
-
                     if (!counter.ContainsKey(info))
                     {
                         counter.Add(info, 0);
@@ -139,11 +136,6 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     SemesterInfo info = new SemesterInfo();
                     info.SchoolYear = record.SchoolYear;
                     info.Semester = record.Semester;
-
-                    if (gyMapping.ContainsKey(info) &&
-                        !((gyMapping[info] == 3 || gyMapping[info] == 9) && info.Semester == 2))
-                        continue;
-
                     foreach (XmlElement itemElement in record.TextScore.SelectNodes("DailyBehavior/Item"))
                     {
                         //<Item Degree="" Index="" Name="有禮貌"/>
@@ -163,23 +155,18 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 }
 
                 List<ResultDetail> resultList = new List<ResultDetail>();
+                int count = 0;
                 foreach (SemesterInfo info in counter.Keys)
                 {
-                    if (!gyMapping.ContainsKey(info)) continue;
-                    if (counter[info] >= _amount)
-                    {
-                        ResultDetail rd = new ResultDetail(student.ID, "" + gyMapping[info], "" + info.Semester);
-                        rd.AddMessage("日常行為不符合畢業規範");
-                        rd.AddDetail("日常行為不符合畢業規範(累計" + counter[info] + "項)");
-                        resultList.Add(rd);
-                    }
-                    else if (semsHasRecord[info] == false)
-                    {
-                        ResultDetail rd = new ResultDetail(student.ID, "" + gyMapping[info], "" + info.Semester);
-                        rd.AddMessage("日常行為表現資料缺漏");
-                        rd.AddDetail("日常行為表現資料缺漏");
-                        resultList.Add(rd);
-                    }
+                    count += counter[info];
+                }
+
+                if (count >= _amount)
+                {
+                    ResultDetail rd = new ResultDetail(student.ID, "0", "0");
+                    rd.AddMessage("日常行為不符合畢業規範");
+                    rd.AddDetail("日常行為不符合畢業規範(累計" + count + "項)");
+                    resultList.Add(rd);
                 }
 
                 if (resultList.Count > 0)

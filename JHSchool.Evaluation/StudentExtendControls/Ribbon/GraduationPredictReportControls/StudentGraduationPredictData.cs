@@ -89,5 +89,10 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         /// 發文日期
         /// </summary>
         public string DocDate { get; set; }
+
+        /// <summary>
+        /// 所有說明
+        /// </summary>
+        public string Text { get; set; }
     }
 }

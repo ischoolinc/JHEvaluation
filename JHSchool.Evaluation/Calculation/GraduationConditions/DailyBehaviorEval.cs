@@ -12,8 +12,11 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
         private EvaluationResult _result;
         private int _amount = 0;
         private int _degree = 0;
+        //日常生活表現分數對照
+        private HelperClass.DespToDegree _DescToDegree;
 
         private PerformanceDegreeMapper _mapper;
+
 
         /// <summary>
         /// XML參數建構式
@@ -32,6 +35,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
             //<條件 Checked="False" Type="DailyBehavior" 表現程度="1" 項目="4"/>
 
             _mapper = new PerformanceDegreeMapper();
+            _DescToDegree = new HelperClass.DespToDegree();
         }
 
         #region IEvaluative 成員
@@ -136,10 +140,13 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     {
                         //<Item Degree="" Index="" Name="有禮貌"/>
                         string name = itemElement.GetAttribute("Name");
-                        int degree = _mapper.GetDegreeByDescription(itemElement.GetAttribute("Degree"));
+                        int degree = _DescToDegree.GetDegree(itemElement.GetAttribute("Degree"));
 
                         if (counter.ContainsKey(info))
                         {
+                            //若回傳值是最小整數代表有誤
+                            if (degree == int.MinValue) continue;
+
                             if (degree <= _degree)
                                 counter[info]++;
                             semsHasRecord[info] = true;

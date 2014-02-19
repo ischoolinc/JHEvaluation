@@ -35,13 +35,17 @@
             this.chCondition5 = new System.Windows.Forms.CheckBox();
             this.chCondition6 = new System.Windows.Forms.CheckBox();
             this.gpScore = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.chConditionGr1 = new System.Windows.Forms.CheckBox();
             this.gpDaily = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.chCondition4c = new System.Windows.Forms.CheckBox();
+            this.chCondition5c = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.chCondition3b = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.chCondition4b = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chCondition6b = new System.Windows.Forms.CheckBox();
             this.chCondition5b = new System.Windows.Forms.CheckBox();
             this.btnPrint = new DevComponents.DotNetBar.ButtonX();
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
@@ -50,20 +54,18 @@
             this.cboSchoolYear = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.cboSemester = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.ExportDoctSetup = new System.Windows.Forms.LinkLabel();
-            this.gpDoc = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.checkExportDoc = new System.Windows.Forms.CheckBox();
             this.gpScore.SuspendLayout();
             this.gpDaily.SuspendLayout();
-            this.gpDoc.SuspendLayout();
             this.SuspendLayout();
             // 
             // chCondition1
             // 
             this.chCondition1.AutoSize = true;
             this.chCondition1.BackColor = System.Drawing.Color.Transparent;
-            this.chCondition1.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.chCondition1.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.chCondition1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.chCondition1.Location = new System.Drawing.Point(22, 11);
+            this.chCondition1.Location = new System.Drawing.Point(3, 30);
             this.chCondition1.Name = "chCondition1";
             this.chCondition1.Size = new System.Drawing.Size(196, 21);
             this.chCondition1.TabIndex = 1;
@@ -75,9 +77,9 @@
             // 
             this.chCondition2.AutoSize = true;
             this.chCondition2.BackColor = System.Drawing.Color.Transparent;
-            this.chCondition2.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.chCondition2.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.chCondition2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.chCondition2.Location = new System.Drawing.Point(22, 40);
+            this.chCondition2.Location = new System.Drawing.Point(247, 30);
             this.chCondition2.Name = "chCondition2";
             this.chCondition2.Size = new System.Drawing.Size(209, 21);
             this.chCondition2.TabIndex = 2;
@@ -89,9 +91,9 @@
             // 
             this.chCondition3.AutoSize = true;
             this.chCondition3.BackColor = System.Drawing.Color.Transparent;
-            this.chCondition3.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.chCondition3.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.chCondition3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.chCondition3.Location = new System.Drawing.Point(51, 33);
+            this.chCondition3.Location = new System.Drawing.Point(3, 31);
             this.chCondition3.Name = "chCondition3";
             this.chCondition3.Size = new System.Drawing.Size(209, 21);
             this.chCondition3.TabIndex = 4;
@@ -103,9 +105,9 @@
             // 
             this.chCondition4.AutoSize = true;
             this.chCondition4.BackColor = System.Drawing.Color.Transparent;
-            this.chCondition4.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.chCondition4.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.chCondition4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.chCondition4.Location = new System.Drawing.Point(51, 62);
+            this.chCondition4.Location = new System.Drawing.Point(3, 58);
             this.chCondition4.Name = "chCondition4";
             this.chCondition4.Size = new System.Drawing.Size(248, 21);
             this.chCondition4.TabIndex = 5;
@@ -117,9 +119,9 @@
             // 
             this.chCondition5.AutoSize = true;
             this.chCondition5.BackColor = System.Drawing.Color.Transparent;
-            this.chCondition5.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.chCondition5.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.chCondition5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.chCondition5.Location = new System.Drawing.Point(51, 91);
+            this.chCondition5.Location = new System.Drawing.Point(3, 85);
             this.chCondition5.Name = "chCondition5";
             this.chCondition5.Size = new System.Drawing.Size(183, 21);
             this.chCondition5.TabIndex = 6;
@@ -131,9 +133,9 @@
             // 
             this.chCondition6.AutoSize = true;
             this.chCondition6.BackColor = System.Drawing.Color.Transparent;
-            this.chCondition6.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.chCondition6.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.chCondition6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.chCondition6.Location = new System.Drawing.Point(51, 120);
+            this.chCondition6.Location = new System.Drawing.Point(3, 112);
             this.chCondition6.Name = "chCondition6";
             this.chCondition6.Size = new System.Drawing.Size(248, 21);
             this.chCondition6.TabIndex = 7;
@@ -146,13 +148,14 @@
             this.gpScore.BackColor = System.Drawing.Color.Transparent;
             this.gpScore.CanvasColor = System.Drawing.SystemColors.Control;
             this.gpScore.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.gpScore.Controls.Add(this.checkBox1);
             this.gpScore.Controls.Add(this.chConditionGr1);
             this.gpScore.Controls.Add(this.chCondition1);
             this.gpScore.Controls.Add(this.chCondition2);
-            this.gpScore.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.gpScore.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.gpScore.Location = new System.Drawing.Point(9, 48);
             this.gpScore.Name = "gpScore";
-            this.gpScore.Size = new System.Drawing.Size(346, 125);
+            this.gpScore.Size = new System.Drawing.Size(762, 78);
             // 
             // 
             // 
@@ -186,13 +189,26 @@
             this.gpScore.TabIndex = 0;
             this.gpScore.Text = "學業成績";
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
+            this.checkBox1.Location = new System.Drawing.Point(3, 3);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(105, 21);
+            this.checkBox1.TabIndex = 21;
+            this.checkBox1.Text = "勾選以下條件";
+            this.checkBox1.UseVisualStyleBackColor = false;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // chConditionGr1
             // 
             this.chConditionGr1.AutoSize = true;
             this.chConditionGr1.BackColor = System.Drawing.Color.Transparent;
-            this.chConditionGr1.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.chConditionGr1.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.chConditionGr1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.chConditionGr1.Location = new System.Drawing.Point(22, 69);
+            this.chConditionGr1.Location = new System.Drawing.Point(498, 30);
             this.chConditionGr1.Name = "chConditionGr1";
             this.chConditionGr1.Size = new System.Drawing.Size(235, 21);
             this.chConditionGr1.TabIndex = 3;
@@ -206,20 +222,23 @@
             this.gpDaily.BackColor = System.Drawing.Color.Transparent;
             this.gpDaily.CanvasColor = System.Drawing.SystemColors.Control;
             this.gpDaily.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.gpDaily.Controls.Add(this.checkBox4);
+            this.gpDaily.Controls.Add(this.chCondition4c);
+            this.gpDaily.Controls.Add(this.chCondition5c);
             this.gpDaily.Controls.Add(this.checkBox3);
             this.gpDaily.Controls.Add(this.chCondition3b);
             this.gpDaily.Controls.Add(this.checkBox2);
             this.gpDaily.Controls.Add(this.chCondition3);
             this.gpDaily.Controls.Add(this.chCondition4b);
             this.gpDaily.Controls.Add(this.chCondition4);
-            this.gpDaily.Controls.Add(this.checkBox1);
+            this.gpDaily.Controls.Add(this.chCondition6b);
             this.gpDaily.Controls.Add(this.chCondition6);
             this.gpDaily.Controls.Add(this.chCondition5b);
             this.gpDaily.Controls.Add(this.chCondition5);
-            this.gpDaily.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
-            this.gpDaily.Location = new System.Drawing.Point(9, 179);
+            this.gpDaily.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
+            this.gpDaily.Location = new System.Drawing.Point(9, 132);
             this.gpDaily.Name = "gpDaily";
-            this.gpDaily.Size = new System.Drawing.Size(346, 314);
+            this.gpDaily.Size = new System.Drawing.Size(763, 170);
             // 
             // 
             // 
@@ -253,12 +272,53 @@
             this.gpDaily.TabIndex = 3;
             this.gpDaily.Text = "日常生活表現";
             // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
+            this.checkBox4.Location = new System.Drawing.Point(498, 4);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(105, 21);
+            this.checkBox4.TabIndex = 20;
+            this.checkBox4.Text = "勾選以下條件";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            // 
+            // chCondition4c
+            // 
+            this.chCondition4c.AutoSize = true;
+            this.chCondition4c.BackColor = System.Drawing.Color.Transparent;
+            this.chCondition4c.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
+            this.chCondition4c.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
+            this.chCondition4c.Location = new System.Drawing.Point(498, 33);
+            this.chCondition4c.Name = "chCondition4c";
+            this.chCondition4c.Size = new System.Drawing.Size(261, 21);
+            this.chCondition4c.TabIndex = 17;
+            this.chCondition4c.Tag = "AbsenceAmountAllFraction";
+            this.chCondition4c.Text = "所有學期缺課節數超過總節數指定比例。";
+            this.chCondition4c.UseVisualStyleBackColor = false;
+            // 
+            // chCondition5c
+            // 
+            this.chCondition5c.AutoSize = true;
+            this.chCondition5c.BackColor = System.Drawing.Color.Transparent;
+            this.chCondition5c.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
+            this.chCondition5c.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
+            this.chCondition5c.Location = new System.Drawing.Point(498, 60);
+            this.chCondition5c.Name = "chCondition5c";
+            this.chCondition5c.Size = new System.Drawing.Size(196, 21);
+            this.chCondition5c.TabIndex = 18;
+            this.chCondition5c.Tag = "DemeritAmountAll";
+            this.chCondition5c.Text = "所有學期懲戒次數合計超次。";
+            this.chCondition5c.UseVisualStyleBackColor = false;
+            // 
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
             this.checkBox3.BackColor = System.Drawing.Color.Transparent;
             this.checkBox3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.checkBox3.Location = new System.Drawing.Point(22, 149);
+            this.checkBox3.Location = new System.Drawing.Point(247, 4);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(105, 21);
             this.checkBox3.TabIndex = 15;
@@ -270,9 +330,9 @@
             // 
             this.chCondition3b.AutoSize = true;
             this.chCondition3b.BackColor = System.Drawing.Color.Transparent;
-            this.chCondition3b.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.chCondition3b.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.chCondition3b.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.chCondition3b.Location = new System.Drawing.Point(51, 178);
+            this.chCondition3b.Location = new System.Drawing.Point(247, 31);
             this.chCondition3b.Name = "chCondition3b";
             this.chCondition3b.Size = new System.Drawing.Size(222, 21);
             this.chCondition3b.TabIndex = 4;
@@ -285,7 +345,7 @@
             this.checkBox2.AutoSize = true;
             this.checkBox2.BackColor = System.Drawing.Color.Transparent;
             this.checkBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.checkBox2.Location = new System.Drawing.Point(22, 4);
+            this.checkBox2.Location = new System.Drawing.Point(3, 4);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(105, 21);
             this.checkBox2.TabIndex = 14;
@@ -297,9 +357,9 @@
             // 
             this.chCondition4b.AutoSize = true;
             this.chCondition4b.BackColor = System.Drawing.Color.Transparent;
-            this.chCondition4b.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.chCondition4b.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.chCondition4b.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.chCondition4b.Location = new System.Drawing.Point(51, 207);
+            this.chCondition4b.Location = new System.Drawing.Point(247, 60);
             this.chCondition4b.Name = "chCondition4b";
             this.chCondition4b.Size = new System.Drawing.Size(261, 21);
             this.chCondition4b.TabIndex = 5;
@@ -307,27 +367,27 @@
             this.chCondition4b.Text = "第六學期缺課節數超過總節數指定比例。";
             this.chCondition4b.UseVisualStyleBackColor = false;
             // 
-            // checkBox1
+            // chCondition6b
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
-            this.checkBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.checkBox1.Location = new System.Drawing.Point(51, 265);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(261, 21);
-            this.checkBox1.TabIndex = 7;
-            this.checkBox1.Tag = "DailyBehaviorLast";
-            this.checkBox1.Text = "第六學期日常行為表現指標未符合標準。";
-            this.checkBox1.UseVisualStyleBackColor = false;
+            this.chCondition6b.AutoSize = true;
+            this.chCondition6b.BackColor = System.Drawing.Color.Transparent;
+            this.chCondition6b.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
+            this.chCondition6b.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
+            this.chCondition6b.Location = new System.Drawing.Point(247, 112);
+            this.chCondition6b.Name = "chCondition6b";
+            this.chCondition6b.Size = new System.Drawing.Size(261, 21);
+            this.chCondition6b.TabIndex = 7;
+            this.chCondition6b.Tag = "DailyBehaviorLast";
+            this.chCondition6b.Text = "第六學期日常行為表現指標未符合標準。";
+            this.chCondition6b.UseVisualStyleBackColor = false;
             // 
             // chCondition5b
             // 
             this.chCondition5b.AutoSize = true;
             this.chCondition5b.BackColor = System.Drawing.Color.Transparent;
-            this.chCondition5b.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
+            this.chCondition5b.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
             this.chCondition5b.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.chCondition5b.Location = new System.Drawing.Point(51, 236);
+            this.chCondition5b.Location = new System.Drawing.Point(247, 85);
             this.chCondition5b.Name = "chCondition5b";
             this.chCondition5b.Size = new System.Drawing.Size(196, 21);
             this.chCondition5b.TabIndex = 6;
@@ -340,8 +400,8 @@
             this.btnPrint.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPrint.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
-            this.btnPrint.Location = new System.Drawing.Point(197, 575);
+            this.btnPrint.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
+            this.btnPrint.Location = new System.Drawing.Point(615, 322);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
             this.btnPrint.TabIndex = 8;
@@ -353,8 +413,8 @@
             this.btnExit.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F);
-            this.btnExit.Location = new System.Drawing.Point(278, 575);
+            this.btnExit.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
+            this.btnExit.Location = new System.Drawing.Point(696, 322);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 9;
@@ -415,7 +475,7 @@
             // 
             this.ExportDoctSetup.AutoSize = true;
             this.ExportDoctSetup.BackColor = System.Drawing.Color.Transparent;
-            this.ExportDoctSetup.Location = new System.Drawing.Point(164, 12);
+            this.ExportDoctSetup.Location = new System.Drawing.Point(113, 325);
             this.ExportDoctSetup.Name = "ExportDoctSetup";
             this.ExportDoctSetup.Size = new System.Drawing.Size(99, 17);
             this.ExportDoctSetup.TabIndex = 14;
@@ -423,67 +483,25 @@
             this.ExportDoctSetup.Text = "樣板與列印設定";
             this.ExportDoctSetup.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ExportDoctSetup_LinkClicked);
             // 
-            // gpDoc
-            // 
-            this.gpDoc.BackColor = System.Drawing.Color.Transparent;
-            this.gpDoc.CanvasColor = System.Drawing.SystemColors.Control;
-            this.gpDoc.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
-            this.gpDoc.Controls.Add(this.checkExportDoc);
-            this.gpDoc.Controls.Add(this.ExportDoctSetup);
-            this.gpDoc.Location = new System.Drawing.Point(9, 499);
-            this.gpDoc.Name = "gpDoc";
-            this.gpDoc.Size = new System.Drawing.Size(346, 67);
-            // 
-            // 
-            // 
-            this.gpDoc.Style.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
-            this.gpDoc.Style.BackColorGradientAngle = 90;
-            this.gpDoc.Style.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
-            this.gpDoc.Style.BorderBottom = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.gpDoc.Style.BorderBottomWidth = 1;
-            this.gpDoc.Style.BorderColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
-            this.gpDoc.Style.BorderLeft = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.gpDoc.Style.BorderLeftWidth = 1;
-            this.gpDoc.Style.BorderRight = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.gpDoc.Style.BorderRightWidth = 1;
-            this.gpDoc.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.gpDoc.Style.BorderTopWidth = 1;
-            this.gpDoc.Style.Class = "";
-            this.gpDoc.Style.CornerDiameter = 4;
-            this.gpDoc.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
-            this.gpDoc.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
-            this.gpDoc.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
-            // 
-            // 
-            // 
-            this.gpDoc.StyleMouseDown.Class = "";
-            this.gpDoc.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            // 
-            // 
-            // 
-            this.gpDoc.StyleMouseOver.Class = "";
-            this.gpDoc.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.gpDoc.TabIndex = 16;
-            this.gpDoc.Text = "未達畢業標準通知單";
-            // 
             // checkExportDoc
             // 
             this.checkExportDoc.AutoSize = true;
             this.checkExportDoc.BackColor = System.Drawing.Color.Transparent;
             this.checkExportDoc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
-            this.checkExportDoc.Location = new System.Drawing.Point(51, 11);
+            this.checkExportDoc.Location = new System.Drawing.Point(15, 324);
             this.checkExportDoc.Name = "checkExportDoc";
             this.checkExportDoc.Size = new System.Drawing.Size(92, 21);
             this.checkExportDoc.TabIndex = 16;
             this.checkExportDoc.Text = "產生通知單";
-            this.checkExportDoc.UseVisualStyleBackColor = true;
+            this.checkExportDoc.UseVisualStyleBackColor = false;
             // 
             // GraduationPredictReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(364, 607);
-            this.Controls.Add(this.gpDoc);
+            this.ClientSize = new System.Drawing.Size(784, 354);
+            this.Controls.Add(this.ExportDoctSetup);
+            this.Controls.Add(this.checkExportDoc);
             this.Controls.Add(this.cboSemester);
             this.Controls.Add(this.cboSchoolYear);
             this.Controls.Add(this.labelX2);
@@ -501,9 +519,8 @@
             this.gpScore.PerformLayout();
             this.gpDaily.ResumeLayout(false);
             this.gpDaily.PerformLayout();
-            this.gpDoc.ResumeLayout(false);
-            this.gpDoc.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -526,12 +543,15 @@
         private System.Windows.Forms.CheckBox chCondition3b;
         private System.Windows.Forms.CheckBox chCondition4b;
         private System.Windows.Forms.CheckBox chCondition5b;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chCondition6b;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.LinkLabel ExportDoctSetup;
-        private DevComponents.DotNetBar.Controls.GroupPanel gpDoc;
         private System.Windows.Forms.CheckBox checkExportDoc;
         private System.Windows.Forms.CheckBox chConditionGr1;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox chCondition4c;
+        private System.Windows.Forms.CheckBox chCondition5c;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

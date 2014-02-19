@@ -219,9 +219,15 @@
     <Compile Include="Calculation\ErrorViewer.designer.cs">
       <DependentUpon>ErrorViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Calculation\GraduationConditions\AbsenceAmountAllEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\AbsenceAmountAllFractionEval.cs" />
     <Compile Include="Calculation\GraduationConditions\AbsenceAmountGraduateFractionEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\DailyBehaviorAllEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\DemeritAmountAllEval.cs" />
     <Compile Include="Calculation\GraduationConditions\DemeritAmountGraduateEval.cs" />
     <Compile Include="Calculation\GraduationConditions\GraduateDomainEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\LearnDomainAllEval.cs" />
+    <Compile Include="Calculation\HelperClass\DespToDegree.cs" />
     <Compile Include="Calculation\Interface\EvaluationResult.cs" />
     <Compile Include="Calculation\GraduationConditions\AbsenceAmountEachEval.cs" />
     <Compile Include="Calculation\GraduationConditions\AbsenceAmountEachFractionEval.cs" />
@@ -1076,6 +1082,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\loading.gif" />
+    <None Include="Resources\功能變數.doc" />
     <None Include="StudentExtendControls\Ribbon\Resources\未達畢業標準通知單樣板.doc" />
   </ItemGroup>
   <ItemGroup>
