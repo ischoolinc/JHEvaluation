@@ -56,6 +56,9 @@ namespace JHSchool.Evaluation.ImportExport.Course
                 #region 產生 Row Data
                 foreach (Data.JHCourseRecord course in courses)
                 {
+                    //Debug
+                    if (!scattends.ContainsKey(course.ID)) continue;
+
                     foreach (Data.JHSCAttendRecord record in scattends[course.ID])
                     {
                         RowData row = new RowData();
