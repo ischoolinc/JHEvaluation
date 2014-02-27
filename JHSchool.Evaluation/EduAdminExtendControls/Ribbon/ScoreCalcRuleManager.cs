@@ -879,7 +879,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             ScoreCalcRuleCreator creator = new ScoreCalcRuleCreator();
             if (creator.ShowDialog() == DialogResult.OK)
             {
-
+                
             }
         }
 

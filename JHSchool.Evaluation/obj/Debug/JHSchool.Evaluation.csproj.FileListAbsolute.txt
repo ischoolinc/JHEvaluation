@@ -147,7 +147,6 @@ C:\Dropbox\00-Work\iSchool\MyProjects\[除錯]國中成績通用模組\SourceCod
 C:\Dropbox\00-Work\iSchool\MyProjects\[除錯]國中成績通用模組\SourceCode\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.pdb
 D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\bin\Debug\JHSchool.Evaluation.dll
 D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\bin\Debug\JHSchool.Evaluation.pdb
-D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.csprojResolveAssemblyReference.cache
 D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.Calculation.ErrorViewer.resources
 D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.ClassExtendControls.ClassBaseInfoItem_Extend.resources
 D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.ClassExtendControls.Ribbon.CreateCoursesRelated.CreateClassCourseForm.resources
@@ -218,3 +217,4 @@ D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Eval
 D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.csproj.GenerateResource.Cache
 D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.dll
 D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.pdb
+D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.csprojResolveAssemblyReference.cache

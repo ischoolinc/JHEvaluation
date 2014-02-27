@@ -130,6 +130,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             }
 
             SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.FileName = "Template";
             saveDialog.Filter = "Word (*.doc)|*.doc";
             if (saveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -160,6 +161,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         private void lnkView_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.FileName = "合併欄位總表";
             saveDialog.Filter = "Word (*.doc)|*.doc";
             if (saveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {

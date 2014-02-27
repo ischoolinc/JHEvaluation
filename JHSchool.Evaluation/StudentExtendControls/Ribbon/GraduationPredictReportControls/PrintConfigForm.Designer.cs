@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.gp1 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.lnkView = new System.Windows.Forms.LinkLabel();
             this.lnkRemove = new System.Windows.Forms.LinkLabel();
             this.lnkUpload = new System.Windows.Forms.LinkLabel();
             this.lnkDefault = new System.Windows.Forms.LinkLabel();
@@ -42,7 +43,6 @@
             this.btnSave = new DevComponents.DotNetBar.ButtonX();
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
             this.chkExportStuentList = new DevComponents.DotNetBar.Controls.CheckBoxX();
-            this.lnkView = new System.Windows.Forms.LinkLabel();
             this.gp1.SuspendLayout();
             this.gp2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtDocDate)).BeginInit();
@@ -93,10 +93,21 @@
             this.gp1.TabIndex = 0;
             this.gp1.Text = "自訂範本";
             // 
+            // lnkView
+            // 
+            this.lnkView.AutoSize = true;
+            this.lnkView.Location = new System.Drawing.Point(262, 15);
+            this.lnkView.Name = "lnkView";
+            this.lnkView.Size = new System.Drawing.Size(86, 17);
+            this.lnkView.TabIndex = 3;
+            this.lnkView.TabStop = true;
+            this.lnkView.Text = "合併欄位總表";
+            this.lnkView.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkView_LinkClicked);
+            // 
             // lnkRemove
             // 
             this.lnkRemove.AutoSize = true;
-            this.lnkRemove.Location = new System.Drawing.Point(192, 15);
+            this.lnkRemove.Location = new System.Drawing.Point(170, 15);
             this.lnkRemove.Name = "lnkRemove";
             this.lnkRemove.Size = new System.Drawing.Size(86, 17);
             this.lnkRemove.TabIndex = 2;
@@ -107,7 +118,7 @@
             // lnkUpload
             // 
             this.lnkUpload.AutoSize = true;
-            this.lnkUpload.Location = new System.Drawing.Point(113, 15);
+            this.lnkUpload.Location = new System.Drawing.Point(104, 15);
             this.lnkUpload.Name = "lnkUpload";
             this.lnkUpload.Size = new System.Drawing.Size(60, 17);
             this.lnkUpload.TabIndex = 1;
@@ -118,7 +129,7 @@
             // lnkDefault
             // 
             this.lnkDefault.AutoSize = true;
-            this.lnkDefault.Location = new System.Drawing.Point(10, 15);
+            this.lnkDefault.Location = new System.Drawing.Point(12, 15);
             this.lnkDefault.Name = "lnkDefault";
             this.lnkDefault.Size = new System.Drawing.Size(86, 17);
             this.lnkDefault.TabIndex = 0;
@@ -334,17 +345,6 @@
             this.chkExportStuentList.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkExportStuentList.TabIndex = 4;
             this.chkExportStuentList.Text = "另存學生清單(Excel)";
-            // 
-            // lnkView
-            // 
-            this.lnkView.AutoSize = true;
-            this.lnkView.Location = new System.Drawing.Point(294, 15);
-            this.lnkView.Name = "lnkView";
-            this.lnkView.Size = new System.Drawing.Size(60, 17);
-            this.lnkView.TabIndex = 3;
-            this.lnkView.TabStop = true;
-            this.lnkView.Text = "功能變數";
-            this.lnkView.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkView_LinkClicked);
             // 
             // PrintConfigForm
             // 

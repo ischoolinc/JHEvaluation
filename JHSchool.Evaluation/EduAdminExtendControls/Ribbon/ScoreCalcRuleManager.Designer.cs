@@ -702,7 +702,7 @@
             this.numDomain3.Size = new System.Drawing.Size(45, 25);
             this.numDomain3.TabIndex = 5;
             this.numDomain3.Value = new decimal(new int[] {
-            3,
+            4,
             0,
             0,
             0});
@@ -1793,7 +1793,7 @@
             this.txtPeriod2c.Name = "txtPeriod2c";
             this.txtPeriod2c.Size = new System.Drawing.Size(44, 25);
             this.txtPeriod2c.TabIndex = 13;
-            this.txtPeriod2c.Text = "1/2";
+            this.txtPeriod2c.Text = "1/3";
             // 
             // btnSetAbsence2c
             // 

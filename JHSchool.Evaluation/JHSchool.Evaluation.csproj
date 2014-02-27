@@ -1112,7 +1112,6 @@
     <Content Include="CourseExtendControls\Ribbon\Resources\評量設定.png" />
     <None Include="Resources\預設努力程度對照表.xml" />
     <None Include="Resources\預設等第對照表.xml" />
-    <None Include="Resources\預設成績計算規則Content.xml" />
     <None Include="Resources\CourseIcon.png" />
     <None Include="Resources\college_64.png" />
     <None Include="Resources\calc_save_64.png" />
@@ -1194,6 +1193,7 @@
     <None Include="Resources\teacher_64.png" />
     <None Include="Resources\graduated_write_64.png" />
     <None Include="Resources\refresh_window_64.png" />
+    <None Include="Resources\預設成績計算規則Content.xml" />
     <Content Include="StuAdminExtendControls\Ribbon\ActivityRecord\Forms\ImportTables.xml" />
     <Content Include="StuAdminExtendControls\Ribbon\ActivityRecord\ImportTables.xml" />
     <Content Include="StuAdminExtendControls\Ribbon\ActivityRecord\Package.xml" />

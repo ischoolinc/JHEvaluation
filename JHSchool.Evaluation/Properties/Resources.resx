@@ -130,9 +130,6 @@
   <data name="warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\warning.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="預設成績計算規則Content" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\預設成績計算規則Content.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;big5</value>
-  </data>
   <data name="預設努力程度對照表" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\預設努力程度對照表.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;big5</value>
   </data>
@@ -192,5 +189,8 @@
   </data>
   <data name="功能變數" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\功能變數.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="預設成績計算規則Content" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\預設成績計算規則Content.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>
