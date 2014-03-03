@@ -229,7 +229,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 {
                     if (!gyMapping.ContainsKey(info)) continue;
                     if (!schoolDayMapping.ContainsKey(info)) continue;
-                    if (counter[info] >= schoolDayMapping[info])
+                    if (counter[info] > schoolDayMapping[info])
                     {
                         ResultDetail rd = new ResultDetail(student.ID, "" + gyMapping[info], "" + info.Semester);
                         rd.AddMessage("上課天數不足");

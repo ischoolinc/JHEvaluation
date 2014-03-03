@@ -37,8 +37,8 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         public GraduationPredictReportForm(List<StudentRecord> students)
         {
             InitializeComponent();
-            ReportName = "未達畢業標準通知單";
-            _rc = new ReportConfiguration(ReportName);
+            //ReportName = "未達畢業標準通知單";
+            //_rc = new ReportConfiguration(ReportName);
 
             _students = students;
             _errorList = new List<StudentRecord>();
@@ -46,10 +46,10 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             _result = new EvaluationResult();
             _doc = new Aspose.Words.Document();
 
-            if (_rc.Template == null)
-                _rc.Template = new ReportTemplate(Properties.Resources.未達畢業標準通知單樣板, TemplateType.Word);
+            //if (_rc.Template == null)
+            //    _rc.Template = new ReportTemplate(Properties.Resources.未達畢業標準通知單樣板, TemplateType.Word);
 
-            _template = _rc.Template.ToDocument();
+            //_template = _rc.Template.ToDocument();
 
             InitializeWorkers();
         }
@@ -756,6 +756,15 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         private void btnPrint_Click(object sender, EventArgs e)
         {
             _result.Clear();
+
+            //取得通知單樣板
+            ReportName = "未達畢業標準通知單";
+            _rc = new ReportConfiguration(ReportName);
+
+            if (_rc.Template == null)
+                _rc.Template = new ReportTemplate(Properties.Resources.未達畢業標準通知單樣板, TemplateType.Word);
+
+            _template = _rc.Template.ToDocument();
 
             // 檢查學業勾選
             Config.rpt_isCheckGraduateDomain = Config.rpt_isCheckSemesterDomain = false;
