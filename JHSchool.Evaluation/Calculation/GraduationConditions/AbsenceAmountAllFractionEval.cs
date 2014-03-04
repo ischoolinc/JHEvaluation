@@ -11,7 +11,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
     internal class AbsenceAmountAllFractionEval : IEvaluative
     {
         private EvaluationResult _result;
-        private Dictionary<string, decimal> _types, _typeWeight;
+        private Dictionary<string, decimal> _types, _typeWeight,_AvoidMapping;
         private Dictionary<string, int> _periodMapping;
         List<string> _SelectedType;
         private decimal _amount = 100;
@@ -100,6 +100,20 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
             //CONFIG_STRING
             //<條件 Checked="True" Type="AbsenceAmountEachFraction"
             //      假別="一般:事假,病假,曠課" 節數="1/2"/>
+
+            _AvoidMapping = new Dictionary<string, decimal>();
+            List<K12.Data.AbsenceMappingInfo> infoList = K12.Data.AbsenceMapping.SelectAll();
+            foreach (K12.Data.AbsenceMappingInfo each in infoList)
+            {
+                if (each.Noabsence)
+                {
+                    foreach (string type in _typeWeight.Keys)
+                    {
+                        _AvoidMapping.Add(type + ":" + each.Name, 0);
+                    }
+                }
+                    
+            }
         }
 
         #region IEvaluative 成員
@@ -110,45 +124,6 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
             Dictionary<string, bool> passList = new Dictionary<string, bool>();
 
-            //// 取得學生目前班級年級
-            //Dictionary<string, int> studGrYearDic = new Dictionary<string, int>();
-            //foreach (JHSchool.Data.JHStudentRecord stud in JHSchool.Data.JHStudent.SelectByIDs(list.AsKeyList()))
-            //{
-            //    if (stud.Class != null)
-            //        if (stud.Class.GradeYear.HasValue)
-            //            studGrYearDic.Add(stud.ID, stud.Class.GradeYear.Value);
-            //}
-
-            //bool checkInsShi = false;
-
-            //// 取得學生學期歷程
-            //Dictionary<string, JHSchool.Data.JHSemesterHistoryRecord> studentHistories = new Dictionary<string, JHSchool.Data.JHSemesterHistoryRecord>();
-            //foreach (JHSchool.Data.JHSemesterHistoryRecord rec in JHSchool.Data.JHSemesterHistory.SelectByStudentIDs(list.AsKeyList()))
-            //{
-            //    checkInsShi = true;
-            //    K12.Data.SemesterHistoryItem shi = new K12.Data.SemesterHistoryItem();
-            //    shi.SchoolYear = UIConfig._UserSetSHSchoolYear;
-            //    shi.Semester = UIConfig._UserSetSHSemester;
-            //    if (studGrYearDic.ContainsKey(rec.RefStudentID))
-            //        shi.GradeYear = studGrYearDic[rec.RefStudentID];
-
-            //    foreach (K12.Data.SemesterHistoryItem shiItem in rec.SemesterHistoryItems)
-            //        if (shiItem.SchoolYear == shi.SchoolYear && shiItem.Semester == shi.Semester)
-            //            checkInsShi = false;
-            //    if (checkInsShi)
-            //        rec.SemesterHistoryItems.Add(shi);
-
-            //    studentHistories.Add(rec.RefStudentID, rec);
-            //}
-
-
-            //Dictionary<string, List<Data.JHMoralScoreRecord>> morals = new Dictionary<string, List<JHSchool.Data.JHMoralScoreRecord>>();
-            //foreach (Data.JHMoralScoreRecord moral in Data.JHMoralScore.SelectByStudentIDs(list.AsKeyList()))
-            //{
-            //    if (!morals.ContainsKey(moral.RefStudentID))
-            //        morals.Add(moral.RefStudentID, new List<JHSchool.Data.JHMoralScoreRecord>());
-            //    morals[moral.RefStudentID].Add(moral);
-            //}
             Dictionary<string, List<AutoSummaryRecord>> morals = new Dictionary<string, List<AutoSummaryRecord>>();
             foreach (AutoSummaryRecord record in AutoSummary.Select(list.AsKeyList(), null))
             {
@@ -182,7 +157,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                             {
                                 newNum += num * _periodMapping[type] * _typeWeight[type];
                             }
-                            newNum = newNum * _amount / 100;
+                            //newNum = newNum * _amount / 100;
                             schoolDayMapping.Add(info, newNum);
 
                             //num *= _dayPeriod;
@@ -200,19 +175,16 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     info.SchoolYear = record.SchoolYear;
                     info.Semester = record.Semester;
 
-                    //foreach (XmlElement itemElement in record.Summary.SelectNodes("AttendanceStatistics/Absence"))
                     foreach (AbsenceCountRecord acRecord in record.AbsenceCounts)
                     {
-                        //string name = itemElement.GetAttribute("Name");
-                        //string periodType = itemElement.GetAttribute("PeriodType");
+                        //加總各項核可的假別數
+                        if (_AvoidMapping.ContainsKey(acRecord.PeriodType + ":" + acRecord.Name))
+                        {
+                            decimal weight = _typeWeight.ContainsKey(acRecord.PeriodType) ? _typeWeight[acRecord.PeriodType] : 0;
+                            _AvoidMapping[acRecord.PeriodType + ":" + acRecord.Name] += acRecord.Count * weight;
+                        }
 
                         if (!_types.ContainsKey(acRecord.PeriodType + ":" + acRecord.Name)) continue;
-
-                        //decimal count;
-                        //if (!decimal.TryParse(itemElement.GetAttribute("Count"), out count))
-                        //    count = 0;
-                        //else
-                        //    count *= _types[periodType + ":" + name];
 
                         if (!counter.ContainsKey(info))
                             counter.Add(info, 0);
@@ -233,6 +205,19 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 {
                     schoolDay += kvp.Value;
                 }
+
+                //循環要扣除的假別數
+                foreach (string elem in _AvoidMapping.Keys)
+                {
+                    //不是要count的假別就扣除總節數
+                    if (!_types.ContainsKey(elem))
+                    {
+                        schoolDay -= _AvoidMapping[elem];
+                    }
+                }
+
+                //總節數乘上設定比例
+                schoolDay *= _amount / 100;
 
                 if (count > schoolDay)
                 {
