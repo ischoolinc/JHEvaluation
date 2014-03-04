@@ -101,19 +101,6 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
             //<條件 Checked="True" Type="AbsenceAmountEachFraction"
             //      假別="一般:事假,病假,曠課" 節數="1/2"/>
 
-            _AvoidMapping = new Dictionary<string, decimal>();
-            List<K12.Data.AbsenceMappingInfo> infoList = K12.Data.AbsenceMapping.SelectAll();
-            foreach (K12.Data.AbsenceMappingInfo each in infoList)
-            {
-                if (each.Noabsence)
-                {
-                    foreach (string type in _typeWeight.Keys)
-                    {
-                        _AvoidMapping.Add(type + ":" + each.Name, 0);
-                    }
-                }
-                    
-            }
         }
 
         #region IEvaluative 成員
@@ -134,6 +121,19 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
             foreach (StudentRecord student in list)
             {
+                _AvoidMapping = new Dictionary<string, decimal>();
+                List<K12.Data.AbsenceMappingInfo> infoList = K12.Data.AbsenceMapping.SelectAll();
+                foreach (K12.Data.AbsenceMappingInfo each in infoList)
+                {
+                    if (each.Noabsence)
+                    {
+                        foreach (string type in _typeWeight.Keys)
+                        {
+                            _AvoidMapping.Add(type + ":" + each.Name, 0);
+                        }
+                    }
+                }
+
                 passList.Add(student.ID, true);
 
                 Dictionary<SemesterInfo, int> gyMapping = new Dictionary<SemesterInfo, int>();
