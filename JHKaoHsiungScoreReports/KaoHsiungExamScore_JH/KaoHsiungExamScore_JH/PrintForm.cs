@@ -488,24 +488,27 @@ namespace KaoHsiungExamScore_JH
             
             foreach (JHCourseRecord co in JHCourse.SelectBySchoolYearAndSemester(_SelSchoolYear, _SelSemester))
             {
-                CourseDict.Add(co.ID, co);
+                if (_SelSubjNameList.Contains(co.Subject))
+                    CourseDict.Add(co.ID, co);
             }
-            
+
             // 取得修課資料，主要取得平時成績 StudentID,CourseID
             Dictionary<string, decimal?> AssignmentScoreDict = new Dictionary<string, decimal?>();
-            foreach(JHSCAttendRecord rec in JHSCAttend.SelectByStudentIDAndCourseID(studIDAllList,CourseDict.Keys.ToList()))
-            {
-                if (!AssignmentScoreDict.ContainsKey(rec.ID))
-                    AssignmentScoreDict.Add(rec.ID, rec.OrdinarilyScore);
-            }
+            // 分課程取資料
+                foreach (JHSCAttendRecord rec in JHSCAttend.SelectByCourseIDs(CourseDict.Keys.ToArray()))
+                {
+                    if(studIDAllList.Contains(rec.RefStudentID))
+                    if (!AssignmentScoreDict.ContainsKey(rec.ID))
+                        AssignmentScoreDict.Add(rec.ID, rec.OrdinarilyScore);
+                }
+
             _bgWorkReport.ReportProgress(20);
             // 取評量成績
             Dictionary<string, List<KH.JHSCETakeRecord>> Score1Dict = new Dictionary<string, List<KH.JHSCETakeRecord>>();
-            foreach (JHSCETakeRecord record in JHSCETake.SelectByStudentAndCourse(studIDAllList,CourseDict.Keys.ToList()))
+            foreach (JHSCETakeRecord record in JHSCETake.SelectByCourseAndExam(CourseDict.Keys.ToList(),_SelExamID))
             {
-                if (record.RefExamID == _SelExamID)
+                if (studIDAllList.Contains(record.RefStudentID))
                 {
-
                     if (!Score1Dict.ContainsKey(record.RefStudentID))
                         Score1Dict.Add(record.RefStudentID, new List<KH.JHSCETakeRecord>());
 
@@ -684,11 +687,11 @@ namespace KaoHsiungExamScore_JH
                 foreach (DAO.ExamDomainScore eds in ses._ExamDomainScoreDict.Values)
                 {
                     string dmName = eds.DomainName;
-                    if (!dmClassDNList.Contains(dmName))
-                        dmClassDNList.Add(dmName);
+                    //if (!dmClassDNList.Contains(dmName))
+                    //    dmClassDNList.Add(dmName);
 
-                    if (!dmGradeDNList.Contains(dmName))
-                        dmGradeDNList.Add(dmName);
+                    //if (!dmGradeDNList.Contains(dmName))
+                    //    dmGradeDNList.Add(dmName);
 
                     if (!dmRClasssDict.ContainsKey(ses.ClassID))
                         dmRClasssDict.Add(ses.ClassID, new Dictionary<string, DAO.DomainRangeCount>());
@@ -785,11 +788,11 @@ namespace KaoHsiungExamScore_JH
                 foreach (DAO.ExamSubjectScore ess in ses._ExamSubjectScoreDict.Values)
                 {
                     string subjName = ess.SubjectName;
-                    if (!subjClassDNList.Contains(subjName))
-                        subjClassDNList.Add(subjName);
+                    //if (!subjClassDNList.Contains(subjName))
+                    //    subjClassDNList.Add(subjName);
 
-                    if (!subjGradeDNList.Contains(subjName))
-                        subjGradeDNList.Add(subjName);
+                    //if (!subjGradeDNList.Contains(subjName))
+                    //    subjGradeDNList.Add(subjName);
 
                     if (!subjRClasssDict.ContainsKey(ses.ClassID))
                         subjRClasssDict.Add(ses.ClassID, new Dictionary<string, DAO.SubjectRangeCount>());
@@ -981,8 +984,36 @@ namespace KaoHsiungExamScore_JH
                 foreach (string colName in Global.DTColumnsList())
                     dt.Columns.Add(colName);
 
+                // 取得年級
+                int grYear = 0;
+
+                if (ClassDict.ContainsKey(StudRec.RefClassID))
+                {
+                    if (ClassDict[StudRec.RefClassID].GradeYear.HasValue)
+                        grYear = ClassDict[StudRec.RefClassID].GradeYear.Value;
+                }
+
+
                 // 組距欄位
-                // 班級組距            
+                // 組距欄位
+                // 領域班級組距
+                dmClassDNList.Clear();
+                dmGradeDNList.Clear();
+
+                if (dmRClasssDict.ContainsKey(StudRec.RefClassID))
+                {
+                    foreach (string dnName in dmRClasssDict[StudRec.RefClassID].Keys)
+                        dmClassDNList.Add(dnName);
+                }
+
+                if (dmGradeDict.ContainsKey(grYear))
+                {
+                    foreach (string dnName in dmGradeDict[grYear].Keys)
+                        dmGradeDNList.Add(dnName);
+                }
+
+                dmClassDNList.Sort();
+                dmGradeDNList.Sort();
                 foreach (string n1 in dmClassDNList)
                 {
                     foreach (string n2 in li2)
@@ -1000,6 +1031,45 @@ namespace KaoHsiungExamScore_JH
                         dt.Columns.Add(colName);
                     }
                 }
+
+                // 科目
+                // 領域班級組距
+                subjClassDNList.Clear();
+                if (subjRClasssDict.ContainsKey(StudRec.RefClassID))
+                {
+                    foreach (string subjName in subjRClasssDict[StudRec.RefClassID].Keys)
+                        subjClassDNList.Add(subjName);
+                }
+                subjClassDNList.Sort(new StringComparer("國文"
+                                , "英文"
+                                , "數學"
+                                , "理化"
+                                , "生物"
+                                , "社會"
+                                , "物理"
+                                , "化學"
+                                , "歷史"
+                                , "地理"
+                                , "公民"));
+
+                subjGradeDNList.Clear();
+                if (subjGradeDict.ContainsKey(grYear))
+                {
+                    foreach (string subjName in subjGradeDict[grYear].Keys)
+                        subjGradeDNList.Add(subjName);
+                }
+
+                subjGradeDNList.Sort(new StringComparer("國文"
+                                , "英文"
+                                , "數學"
+                                , "理化"
+                                , "生物"
+                                , "社會"
+                                , "物理"
+                                , "化學"
+                                , "歷史"
+                                , "地理"
+                                , "公民"));
 
                 // 科目
                 // 領域班級組距
