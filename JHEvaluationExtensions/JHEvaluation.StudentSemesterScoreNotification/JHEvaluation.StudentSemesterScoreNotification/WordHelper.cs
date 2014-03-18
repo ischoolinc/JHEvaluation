@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Aspose.Words;
+using Aspose.Words.Tables;
+using Aspose.Words.Fonts;
+using System.IO;
 
 namespace JHEvaluation.StudentSemesterScoreNotification
 {
@@ -21,8 +24,10 @@ namespace JHEvaluation.StudentSemesterScoreNotification
 
         internal static void Write(Cell cell, Font font, params string[] words)
         {
+            Paragraph para = (Paragraph)cell.GetChild(NodeType.Paragraph, 0, true);
+            font = para.ParagraphBreakFont;
             cell.Paragraphs.Clear();
-
+            
             foreach (var word in words)
             {
                 cell.Paragraphs.Add(new Paragraph(cell.Document));

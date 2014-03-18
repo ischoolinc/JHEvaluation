@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Aspose.Words;
 using JHSchool.Data;
+using Aspose.Words.Tables;
 
 namespace KaoHsiung.StudentExamScoreReport.Processor
 {

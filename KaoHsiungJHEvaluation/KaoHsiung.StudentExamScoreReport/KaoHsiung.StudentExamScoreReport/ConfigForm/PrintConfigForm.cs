@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using Campus.Report;
 using FISCA.Presentation.Controls;
+using Aspose.Words;
 
 namespace KaoHsiung.StudentExamScoreReport.ConfigForm
 {
@@ -89,7 +90,9 @@ namespace KaoHsiung.StudentExamScoreReport.ConfigForm
             {
                 try
                 {
-                    Config.Template.ToDocument().Save(saveDialog.FileName);
+                    //Config.Template.ToDocument().Save(saveDialog.FileName);
+                    Document doc = new Document(new MemoryStream(Config.Template.ToBinary()));
+                    doc.Save(saveDialog.FileName, Aspose.Words.SaveFormat.Doc);
                 }
                 catch (Exception ex)
                 {

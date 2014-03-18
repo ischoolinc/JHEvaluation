@@ -8,6 +8,7 @@ using Campus.Report;
 using K12.Data;
 using JHSchool.Evaluation.Mapping;
 using FISCA.Presentation.Controls;
+using Aspose.Words.Tables;
 
 namespace JHEvaluation.StudentSemesterScoreNotification.Writers
 {
@@ -72,7 +73,6 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
             Table table = startCell.ParentRow.ParentTable;
             int rowCount = table.IndexOf(endCell.ParentRow) - table.IndexOf(startCell.ParentRow) + 1;
             Font font = builder.Font;
-
             #region 填入學習領域總成績
             if (_printLearnDomain)
             {
@@ -114,9 +114,9 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
                             if (ss.Domain == "語文")
                                 co++;
                         }
-                        if(co==0)
-                        if (!_domainsWithoutDetail.Contains(domin.Domain))
-                            _domainsWithoutDetail.Add(domin.Domain);
+                        if (co == 0)
+                            if (!_domainsWithoutDetail.Contains(domin.Domain))
+                                _domainsWithoutDetail.Add(domin.Domain);
                     }
                 }
             }
@@ -150,12 +150,12 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
             #region 填學期成績
             Cell currentCell = startCell;
             List<string> list = new List<string>(domainSubjects.Keys);
-            
+
             // 當只有領域成績
             if (list.Count == 0)
             {
                 foreach (var domain in SemesterScoreRecord.Domains.Values)
-                    list.Add(domain.Domain);            
+                    list.Add(domain.Domain);
             }
 
 
@@ -253,13 +253,15 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
             #region 填學習領域文字描述
             builder.MoveToMergeField("文字描述");
             Cell textCell = builder.CurrentParagraph.ParentNode as Cell;
-
+            Paragraph para = (Paragraph)textCell.GetChild(NodeType.Paragraph, 0, true);
+            font = para.ParagraphBreakFont;
             textCell.Paragraphs.Clear();
             foreach (string header in _domainText.Keys)
             {
                 if (string.IsNullOrEmpty(_domainText[header])) continue;
 
                 textCell.Paragraphs.Add(new Paragraph(doc));
+
                 Run run1 = new Run(doc);
                 run1.Font.Name = font.Name;
                 run1.Font.Size = font.Size;

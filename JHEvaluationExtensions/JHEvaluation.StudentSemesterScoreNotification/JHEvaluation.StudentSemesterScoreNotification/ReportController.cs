@@ -9,6 +9,8 @@ using Aspose.Words;
 using FISCA.Presentation.Controls;
 using FISCA.Presentation;
 using JHEvaluation.StudentSemesterScoreNotification.Writers;
+using System.IO;
+using System.Windows.Forms;
 
 namespace JHEvaluation.StudentSemesterScoreNotification
 {
@@ -45,7 +47,40 @@ namespace JHEvaluation.StudentSemesterScoreNotification
             }
 
             MotherForm.SetStatusBarMessage(Global.ReportName + "產生完成");
-            ReportSaver.SaveDocument(_doc, Global.ReportName);
+            //ReportSaver.SaveDocument(_doc, Global.ReportName);
+            string path = System.Windows.Forms.Application.StartupPath + "\\Reports\\" + Global.ReportName + ".doc";
+            int i = 1;
+            while(File.Exists(path))
+            {
+                path = System.Windows.Forms.Application.StartupPath + "\\Reports\\" + Global.ReportName + i + ".doc";
+                i++;
+            }
+
+            bool done = false;
+            try
+            {
+                _doc.Save(path, Aspose.Words.SaveFormat.Doc);
+                done = true;
+            }
+            catch
+            {
+                MsgBox.Show("檔案儲存失敗");
+            }
+
+            if (done)
+            {
+                if (DialogResult.OK == MessageBox.Show(path + "產生完成，是否立刻開啟？", "ischool", MessageBoxButtons.OKCancel))
+                {
+                    try
+                    {
+                        System.Diagnostics.Process.Start(path);
+                    }
+                    catch
+                    {
+                        MsgBox.Show(path + " 檔案開啟失敗");
+                    }
+                }
+            }
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
@@ -138,7 +173,9 @@ namespace JHEvaluation.StudentSemesterScoreNotification
                 byte[] tplBytes = (Global.Params["Mode"] == "KaoHsiung") ? Properties.Resources.高雄學期成績通知單樣板 : Properties.Resources.新竹學期成績通知單樣板;
                 Config.Template = new ReportTemplate(tplBytes, TemplateType.Word);
             }
-            _template = Config.Template.ToDocument();
+            //_template = Config.Template.ToDocument();
+            //Campus暫解
+            _template = new Document(new MemoryStream(Config.Template.ToBinary()));
             #endregion
 
             if (!_worker.IsBusy)

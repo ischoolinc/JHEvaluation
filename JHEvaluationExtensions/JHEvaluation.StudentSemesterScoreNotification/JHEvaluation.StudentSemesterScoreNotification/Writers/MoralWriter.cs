@@ -7,6 +7,7 @@ using Aspose.Words;
 using System.Xml;
 using Campus.Report;
 using JHSchool.Behavior.BusinessLogic;
+using Aspose.Words.Tables;
 
 namespace JHEvaluation.StudentSemesterScoreNotification.Writers
 {
@@ -51,7 +52,6 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
             double miniUnitWitdh;
             Table table;
             Font font;
-            
             #region 日常生活表現評量
 
             #region 處理日常生活表現評量的名稱
@@ -67,6 +67,7 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
 
             if (builder.MoveToMergeField("日常行為表現名稱"))
                 builder.Write(GetDLString("日常行為表現"));
+                
             //if ((XmlElement)textScore.SelectSingleNode("DailyBehavior") == null)
             //    ProcessItemNameIsNull(builder, "日常行為表現名稱", "日常行為表現");
             //else
@@ -190,6 +191,9 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
                 {
                     font = builder.Font;
                     Cell groupActivityCell = builder.CurrentParagraph.ParentNode as Cell;
+
+                    Paragraph para = (Paragraph)groupActivityCell.GetChild(NodeType.Paragraph, 0, true);
+                    font = para.ParagraphBreakFont;
                     groupActivityCell.Paragraphs.RemoveAt(0);
                     if (Global.DLBehaviorConfigItemNameDict.ContainsKey("團體活動表現"))
                     {
@@ -257,6 +261,8 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
                 {
                     font = builder.Font;
                     Cell publicServiceCell = builder.CurrentParagraph.ParentNode as Cell;
+                    Paragraph para = (Paragraph)publicServiceCell.GetChild(NodeType.Paragraph, 0, true);
+                    font = para.ParagraphBreakFont;
                     publicServiceCell.Paragraphs.Clear();
 
                     if (Global.DLBehaviorConfigItemNameDict.ContainsKey("公共服務表現"))
@@ -302,6 +308,8 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
                 {
                     font = builder.Font;
                     Cell schoolSpecialCell = builder.CurrentParagraph.ParentNode as Cell;
+                    Paragraph para = (Paragraph)schoolSpecialCell.GetChild(NodeType.Paragraph, 0, true);
+                    font = para.ParagraphBreakFont;
                     schoolSpecialCell.Paragraphs.Clear();
 
                     if (Global.DLBehaviorConfigItemNameDict.ContainsKey("校內外特殊表現"))
@@ -349,6 +357,9 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
                     string dailyLifeRecommendValue = string.Empty;
                     if (dailyLifeRecommend != null)
                         dailyLifeRecommendValue = dailyLifeRecommend.GetAttribute("Description");
+
+                    Paragraph para = (Paragraph)dailyLifeRecommendCell.GetChild(NodeType.Paragraph, 0, true);
+                    font = para.ParagraphBreakFont;
                     dailyLifeRecommendCell.Paragraphs.Clear();
                     dailyLifeRecommendCell.Paragraphs.Add(new Paragraph(doc));
                     Run run = new Run(doc);
@@ -371,6 +382,9 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
                     string otherRecommendValue = string.Empty;
                     if (otherRecommend != null)
                         otherRecommendValue = otherRecommend.GetAttribute("Description");
+
+                    Paragraph para = (Paragraph)otherRecommendCell.GetChild(NodeType.Paragraph, 0, true);
+                    font = para.ParagraphBreakFont;
                     otherRecommendCell.Paragraphs.Clear();
                     otherRecommendCell.Paragraphs.Add(new Paragraph(doc));
                     Run otherRecommendRun = new Run(doc);
@@ -388,6 +402,9 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Writers
                     string dailyLifeRecommendValue = string.Empty;
                     if (dailyLifeRecommend != null)
                         dailyLifeRecommendValue = dailyLifeRecommend.GetAttribute("Description");
+
+                    Paragraph para = (Paragraph)dailyLifeRecommendCell.GetChild(NodeType.Paragraph, 0, true);
+                    font = para.ParagraphBreakFont;
                     dailyLifeRecommendCell.Paragraphs.Clear();
                     dailyLifeRecommendCell.Paragraphs.Add(new Paragraph(doc));
                     Run dailyLifeRecommendRun = new Run(doc);

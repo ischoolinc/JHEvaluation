@@ -11,6 +11,9 @@ using JHSchool.Evaluation.Calculation;
 using KaoHsiung.JHEvaluation.Data;
 using KaoHsiung.StudentExamScoreReport.Processor;
 using System.Linq;
+using Aspose.Words.Tables;
+using System.IO;
+using System.Windows.Forms;
 
 namespace KaoHsiung.StudentExamScoreReport
 {
@@ -41,7 +44,8 @@ namespace KaoHsiung.StudentExamScoreReport
             _doc.Sections.Clear();
             if (_rc.Template == null)
                 _rc.Template = new ReportTemplate(Properties.Resources.評量成績通知單, TemplateType.Word);
-            _template = _rc.Template.ToDocument();
+            //_template = _rc.Template.ToDocument();
+            _template = new Document(new MemoryStream(_rc.Template.ToBinary()));
 
             _rowCount = GetRowCount(_template);
 
@@ -98,17 +102,88 @@ namespace KaoHsiung.StudentExamScoreReport
 
             bool pdf = _rc.GetBoolean("輸出成PDF格式", false);
 
+            //PDF及WORD儲存路徑
+            string path1 = System.Windows.Forms.Application.StartupPath + "\\Reports\\" + Global.ReportName + ".pdf";
+            string path2 = System.Windows.Forms.Application.StartupPath + "\\Reports\\" + Global.ReportName + ".doc";
+
+            //PDF重覆檔名判斷
+            int i = 1;
+            while (File.Exists(path1))
+            {
+                path1 = System.Windows.Forms.Application.StartupPath + "\\Reports\\" + Global.ReportName + i + ".pdf";
+                i++;
+            }
+
+            //WORD重覆檔名判斷
+            i = 1;
+            while (File.Exists(path2))
+            {
+                path2 = System.Windows.Forms.Application.StartupPath + "\\Reports\\" + Global.ReportName + i + ".doc";
+                i++;
+            }
 
             if (pdf)
             {
+                bool done = false;
                 MotherForm.SetStatusBarMessage("轉換成 PDF 格式中...");
-                ReportSaver.SaveDocument(_doc, Global.ReportName, ReportSaver.OutputType.PDF);
+                //ReportSaver.SaveDocument(_doc, Global.ReportName, ReportSaver.OutputType.PDF);
                 MotherForm.SetStatusBarMessage(Global.ReportName + "產生完成");
+
+                try
+                {
+                    _doc.Save(path1, Aspose.Words.SaveFormat.Pdf);
+                    done = true;
+                }
+                catch
+                {
+                    MsgBox.Show("檔案儲存失敗");
+                }
+
+                if (done)
+                {
+                    if (DialogResult.OK == MessageBox.Show(path1 + "產生完成，是否立刻開啟？", "ischool", MessageBoxButtons.OKCancel))
+                    {
+                        try
+                        {
+                            System.Diagnostics.Process.Start(path1);
+                        }
+                        catch
+                        {
+                            MsgBox.Show(path1 + " 檔案開啟失敗");
+                        }
+                    }
+                }
             }
             else
             {
+                bool done = false;
                 MotherForm.SetStatusBarMessage(Global.ReportName + "產生完成");
-                ReportSaver.SaveDocument(_doc, Global.ReportName);
+                //ReportSaver.SaveDocument(_doc, Global.ReportName);
+
+                try
+                {
+                    _doc.Save(path2, Aspose.Words.SaveFormat.Doc);
+                    done = true;
+                }
+                catch
+                {
+                    MsgBox.Show("檔案儲存失敗");
+                }
+
+                if (done)
+                {
+                    if (DialogResult.OK == MessageBox.Show(path2 + "產生完成，是否立刻開啟？", "ischool", MessageBoxButtons.OKCancel))
+                    {
+                        try
+                        {
+                            System.Diagnostics.Process.Start(path2);
+                        }
+                        catch
+                        {
+                            MsgBox.Show(path2 + " 檔案開啟失敗");
+                        }
+                    }
+                }
             }
         }
 
@@ -201,9 +276,9 @@ namespace KaoHsiung.StudentExamScoreReport
                 if (string.IsNullOrEmpty(record.Domain) && string.IsNullOrEmpty(record.Subject))
                     continue;
                 // 過濾使用者所選課程才放入
-                if(Global._selectCourseIDList.Contains(record.ID))
-                if (!courseCache.ContainsKey(record.ID))
-                    courseCache.Add(record.ID, record);
+                if (Global._selectCourseIDList.Contains(record.ID))
+                    if (!courseCache.ContainsKey(record.ID))
+                        courseCache.Add(record.ID, record);
             }
 
             //修課記錄
@@ -215,9 +290,9 @@ namespace KaoHsiung.StudentExamScoreReport
 
                 if (!scCache.ContainsKey(sc.RefStudentID))
                     scCache.Add(sc.RefStudentID, new List<string>());
-                
+
                 // 過濾使用者不選
-                if(Global._selectCourseIDList.Contains(sc.RefCourseID))
+                if (Global._selectCourseIDList.Contains(sc.RefCourseID))
                     scCache[sc.RefStudentID].Add(sc.RefCourseID);
             }
 
@@ -335,7 +410,7 @@ namespace KaoHsiung.StudentExamScoreReport
             }
             else
             {
-            // 預設文字評語不出現
+                // 預設文字評語不出現
                 Cell first = templateBuilder.CurrentParagraph.ParentNode as Cell;
                 double width1 = first.CellFormat.Width;
                 Table table = first.ParentRow.ParentTable;
@@ -548,18 +623,18 @@ namespace KaoHsiung.StudentExamScoreReport
             List<string> sid = (from stud in _config.Students select stud.ID).ToList();
             foreach (JHSCAttendRecord attend in JHSCAttend.SelectByStudentIDs(sid))
             {
-                if(attend.Course.SchoolYear.HasValue && attend.Course.Semester.HasValue )
-                if(attend.Course.SchoolYear == _config.SchoolYear && attend.Course.Semester==_config.Semester )
-                if (studCourseID.ContainsKey(attend.RefStudentID))
-                {
-                    studCourseID[attend.RefStudentID].Add(attend.RefCourseID);
-                }
-                else
-                {
-                    List<string> coid = new List<string>();
-                    coid.Add(attend.RefCourseID);
-                    studCourseID.Add(attend.RefStudentID, coid);                
-                }
+                if (attend.Course.SchoolYear.HasValue && attend.Course.Semester.HasValue)
+                    if (attend.Course.SchoolYear == _config.SchoolYear && attend.Course.Semester == _config.Semester)
+                        if (studCourseID.ContainsKey(attend.RefStudentID))
+                        {
+                            studCourseID[attend.RefStudentID].Add(attend.RefCourseID);
+                        }
+                        else
+                        {
+                            List<string> coid = new List<string>();
+                            coid.Add(attend.RefCourseID);
+                            studCourseID.Add(attend.RefStudentID, coid);
+                        }
             }
 
             // 取得學期歷程
@@ -617,13 +692,13 @@ namespace KaoHsiung.StudentExamScoreReport
 
                 // 過濾 courseCache studid
                 Dictionary<string, JHCourseRecord> courseCache1 = new Dictionary<string, JHCourseRecord>();
-                                               
-                foreach (KeyValuePair<string,JHCourseRecord> val in courseCache)
+
+                foreach (KeyValuePair<string, JHCourseRecord> val in courseCache)
                 {
                     // 從學生修課來對應到課程
-                    if(studCourseID.ContainsKey(student.ID))
-                    if(studCourseID[student.ID].Contains(val.Value.ID ))
-                        courseCache1.Add(val.Key, val.Value);
+                    if (studCourseID.ContainsKey(student.ID))
+                        if (studCourseID[student.ID].Contains(val.Value.ID))
+                            courseCache1.Add(val.Key, val.Value);
                 }
 
                 StudentExamScore examScore = new StudentExamScore(builder, _config, courseCache1);
@@ -647,12 +722,12 @@ namespace KaoHsiung.StudentExamScoreReport
                     // 科目加權平均
                     if (examScore.SubjAvgScore > 0)
                     {
-                        if(builder.MoveToMergeField("加權平均")==true)
+                        if (builder.MoveToMergeField("加權平均") == true)
                             builder.Write(examScore.SubjAvgScore.ToString());
                     }
                     else
                     {
-                        if(builder.MoveToMergeField("加權平均")==true )
+                        if (builder.MoveToMergeField("加權平均") == true)
                             builder.Write("");
                     }
                 }
@@ -661,12 +736,12 @@ namespace KaoHsiung.StudentExamScoreReport
                     // 領域加權平均
                     if (examScore.DomainAvgScore > 0)
                     {
-                        if(builder.MoveToMergeField("加權平均")==true )
+                        if (builder.MoveToMergeField("加權平均") == true)
                             builder.Write(examScore.DomainAvgScore.ToString());
                     }
                     else
                     {
-                        if(builder.MoveToMergeField("加權平均")==true )
+                        if (builder.MoveToMergeField("加權平均") == true)
                             builder.Write("");
                     }
                 }
@@ -724,7 +799,7 @@ namespace KaoHsiung.StudentExamScoreReport
             globalFieldName.Add("教務主任");
             globalFieldValue.Add(eduDirector);
 
-            
+
 
             globalFieldName.Add("校長");
             globalFieldValue.Add(chancellor);

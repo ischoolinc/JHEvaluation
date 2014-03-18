@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Aspose.Words;
 using System.Collections.Generic;
+using Aspose.Words.Tables;
 
 namespace KaoHsiung.StudentExamScoreReport
 {

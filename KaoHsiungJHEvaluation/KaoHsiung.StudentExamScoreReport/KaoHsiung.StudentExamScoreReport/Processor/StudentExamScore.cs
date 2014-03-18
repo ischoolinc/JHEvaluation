@@ -6,6 +6,7 @@ using JHSchool.Data;
 using JHSchool.Evaluation;
 using JHSchool.Evaluation.Calculation;
 using KaoHsiung.JHEvaluation.Data;
+using Aspose.Words.Tables;
 
 namespace KaoHsiung.StudentExamScoreReport.Processor
 {

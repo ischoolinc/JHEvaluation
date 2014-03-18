@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using JHEvaluation.StudentSemesterScoreNotification.Association.UDT;
 using Aspose.Words;
+using Aspose.Words.Tables;
 
 namespace JHEvaluation.StudentSemesterScoreNotification.Writers
 {

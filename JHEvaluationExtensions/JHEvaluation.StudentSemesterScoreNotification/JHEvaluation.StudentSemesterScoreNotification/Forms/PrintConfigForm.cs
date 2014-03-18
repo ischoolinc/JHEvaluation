@@ -10,6 +10,7 @@ using K12.Data.Configuration;
 using System.Xml;
 using Campus.Report;
 using System.IO;
+using Aspose.Words;
 
 namespace JHEvaluation.StudentSemesterScoreNotification.Forms
 {
@@ -79,8 +80,18 @@ namespace JHEvaluation.StudentSemesterScoreNotification.Forms
             saveDialog.Filter = "Word (*.doc)|*.doc";
             if (saveDialog.ShowDialog() == DialogResult.OK)
             {
-                _config.Template.ToDocument().Save(saveDialog.FileName);
-                System.Diagnostics.Process.Start(saveDialog.FileName);
+                //_config.Template.ToDocument().Save(saveDialog.FileName);
+                Document doc = new Document(new MemoryStream(_config.Template.ToBinary()));
+                try
+                {
+                    doc.Save(saveDialog.FileName, Aspose.Words.SaveFormat.Doc);
+                    System.Diagnostics.Process.Start(saveDialog.FileName);
+                }
+                catch
+                {
+                    MsgBox.Show("路徑無法存取，請確認檔案是否未正確關閉。");
+                }
+                
             }
         }
 
