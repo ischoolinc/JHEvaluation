@@ -13,10 +13,12 @@ using System.IO;
 using KaoHsiung.JHEvaluation.Data;
 using Aspose.Words;
 using JHSchool.Evaluation.Calculation;
+using Aspose.Words.Reporting;
+using Aspose.Words.Tables;
 
 namespace KaoHsiungExamScore_JH
 {
-    public partial class PrintForm : BaseForm
+    public partial class PrintForm : BaseForm, IFieldMergingCallback
     {
         private FISCA.UDT.AccessHelper _AccessHelper = new FISCA.UDT.AccessHelper();
 
@@ -30,7 +32,7 @@ namespace KaoHsiungExamScore_JH
         private List<string> absenceList = new List<string>();
         private List<string> _SelSubjNameList = new List<string>();
         private List<string> _SelAttendanceList = new List<string>();
-        
+
         private BackgroundWorker _bgWorkReport;
         private DocumentBuilder _builder;
         BackgroundWorker bkw;
@@ -69,7 +71,7 @@ namespace KaoHsiungExamScore_JH
         private string _SelExamID = "";
         private string _SelNotRankedFilter = "";
 
-        private List<ExamRecord> _exams=new List<ExamRecord>();
+        private List<ExamRecord> _exams = new List<ExamRecord>();
 
         private Dictionary<string, List<string>> _StudTagDict = new Dictionary<string, List<string>>();
 
@@ -78,7 +80,7 @@ namespace KaoHsiungExamScore_JH
 
         public PrintForm(List<string> StudIDList)
         {
-            InitializeComponent();            
+            InitializeComponent();
             _StudentIDList = StudIDList;
             bkw = new BackgroundWorker();
             bkw.DoWork += new DoWorkEventHandler(bkw_DoWork);
@@ -117,7 +119,7 @@ namespace KaoHsiungExamScore_JH
 
             if (int.TryParse(_DefalutSchoolYear, out i))
             {
-                for (int j = 5; j >0; j--)
+                for (int j = 5; j > 0; j--)
                 {
                     cboSchoolYear.Items.Add("" + (i - j));
                 }
@@ -193,7 +195,7 @@ namespace KaoHsiungExamScore_JH
 
             string userSelectConfigName = "";
             // 檢查畫面上是否有使用者選的
-            foreach(DAO.UDT_ScoreConfig conf in _UDTConfigList)
+            foreach (DAO.UDT_ScoreConfig conf in _UDTConfigList)
                 if (conf.Type == Global._UserConfTypeName)
                 {
                     userSelectConfigName = conf.Name;
@@ -218,13 +220,13 @@ namespace KaoHsiungExamScore_JH
 
         void bkw_DoWork(object sender, DoWorkEventArgs e)
         {
-            bkw.ReportProgress(1);            
+            bkw.ReportProgress(1);
             //試別清單
             _exams.Clear();
             _exams = K12.Data.Exam.SelectAll();
 
             // 檢查預設樣板是否存在
-            _UDTConfigList= DAO.UDTTransfer.GetDefaultConfigNameListByTableName(Global._UDTTableName);
+            _UDTConfigList = DAO.UDTTransfer.GetDefaultConfigNameListByTableName(Global._UDTTableName);
 
             // 沒有設定檔，建立預設設定檔
             if (_UDTConfigList.Count < 2)
@@ -238,14 +240,14 @@ namespace KaoHsiungExamScore_JH
                     cn.Semester = K12.Data.School.DefaultSemester;
                     DAO.UDT_ScoreConfig conf = new DAO.UDT_ScoreConfig();
                     conf.Name = name;
-                    conf.UDTTableName=Global._UDTTableName;
+                    conf.UDTTableName = Global._UDTTableName;
                     conf.ProjectName = Global._ProjectName;
                     conf.Type = Global._DefaultConfTypeName;
                     _UDTConfigList.Add(conf);
 
                     // 設預設樣板
                     switch (name)
-                    { 
+                    {
                         case "領域成績單":
                             cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_領域成績單));
                             break;
@@ -271,10 +273,10 @@ namespace KaoHsiungExamScore_JH
                     if (cn.Template == null)
                         cn.Template = new Document(new MemoryStream(Properties.Resources.高雄評量成績通知單樣板));
                     cn.Encode();
-                    cn.Save();    
+                    cn.Save();
                 }
                 if (_UDTConfigList.Count > 0)
-                    DAO.UDTTransfer.InsertConfigData(_UDTConfigList);             
+                    DAO.UDTTransfer.InsertConfigData(_UDTConfigList);
             }
             bkw.ReportProgress(20);
             // 取的設定資料
@@ -296,8 +298,8 @@ namespace KaoHsiungExamScore_JH
             }
             bkw.ReportProgress(80);
             // 所有有學生類別
-            _StudTagDict = Utility.GetStudentTagRefDict();           
-            
+            _StudTagDict = Utility.GetStudentTagRefDict();
+
             bkw.ReportProgress(100);
         }
 
@@ -320,8 +322,8 @@ namespace KaoHsiungExamScore_JH
                     //sb.AppendLine(string.Join(",",_ErrorList.ToArray()));
                     sb.AppendLine("1.樣板內科目合併欄位不足，請檢查樣板。");
                     sb.AppendLine("2.如果使用只有領域樣板，請忽略此訊息。");
-                    if(_ErrorDomainNameList.Count>0)
-                        sb.AppendLine(string.Join(",",_ErrorDomainNameList.ToArray()));
+                    if (_ErrorDomainNameList.Count > 0)
+                        sb.AppendLine(string.Join(",", _ErrorDomainNameList.ToArray()));
 
                     FISCA.Presentation.Controls.MsgBox.Show(sb.ToString(), "樣板內科目合併欄位不足", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
 
@@ -338,18 +340,18 @@ namespace KaoHsiungExamScore_JH
 
         // 載入學生所屬學年度學習的試別，科目，並排序
         private void LoadExamSubject()
-        {            
+        {
             // 取得該學年度學期所有學生的試別修課科目
-            _SelSchoolYear=_SelSemester=0;
+            _SelSchoolYear = _SelSemester = 0;
             int ss, sc;
             if (int.TryParse(cboSchoolYear.Text, out ss))
-                _SelSchoolYear = ss;            
+                _SelSchoolYear = ss;
 
-            if(int.TryParse(cboSemester.Text,out sc))
-                _SelSemester=sc;
+            if (int.TryParse(cboSemester.Text, out sc))
+                _SelSemester = sc;
 
             _ExamSubjectFull = Utility.GetExamSubjecList(_StudentIDList, _SelSchoolYear, _SelSemester);
-                        
+
             foreach (var list in _ExamSubjectFull.Values)
             {
                 #region 排序
@@ -412,7 +414,7 @@ namespace KaoHsiungExamScore_JH
             }
 
             // 不排名學生ID
-            List<string> notRankStudIDList = new List<string> ();
+            List<string> notRankStudIDList = new List<string>();
             if (_StudTagDict.ContainsKey(_SelNotRankedFilter))
                 notRankStudIDList.AddRange(_StudTagDict[_SelNotRankedFilter].ToArray());
 
@@ -426,7 +428,7 @@ namespace KaoHsiungExamScore_JH
             _bgWorkReport.ReportProgress(5);
             // 班級年級區分,沒有年級不處理
             Dictionary<int, List<StudentRecord>> studGradeDict = new Dictionary<int, List<StudentRecord>>();
-            List<string> studIDAllList =new List<string> ();
+            List<string> studIDAllList = new List<string>();
             foreach (StudentRecord studRec in Student.SelectAll())
             {
                 // 不排名學生ID
@@ -478,14 +480,14 @@ namespace KaoHsiungExamScore_JH
                 if (!calcCache.ContainsKey(record.ID))
                     calcCache.Add(record.ID, new ScoreCalculator(record));
             }
-            
+
             #endregion
 
 
 
             // 課程資料
             Dictionary<string, JHCourseRecord> CourseDict = new Dictionary<string, JHCourseRecord>();
-            
+
             foreach (JHCourseRecord co in JHCourse.SelectBySchoolYearAndSemester(_SelSchoolYear, _SelSemester))
             {
                 if (_SelSubjNameList.Contains(co.Subject))
@@ -495,17 +497,17 @@ namespace KaoHsiungExamScore_JH
             // 取得修課資料，主要取得平時成績 StudentID,CourseID
             Dictionary<string, decimal?> AssignmentScoreDict = new Dictionary<string, decimal?>();
             // 分課程取資料
-                foreach (JHSCAttendRecord rec in JHSCAttend.SelectByCourseIDs(CourseDict.Keys.ToArray()))
-                {
-                    if(studIDAllList.Contains(rec.RefStudentID))
+            foreach (JHSCAttendRecord rec in JHSCAttend.SelectByCourseIDs(CourseDict.Keys.ToArray()))
+            {
+                if (studIDAllList.Contains(rec.RefStudentID))
                     if (!AssignmentScoreDict.ContainsKey(rec.ID))
                         AssignmentScoreDict.Add(rec.ID, rec.OrdinarilyScore);
-                }
+            }
 
             _bgWorkReport.ReportProgress(20);
             // 取評量成績
             Dictionary<string, List<KH.JHSCETakeRecord>> Score1Dict = new Dictionary<string, List<KH.JHSCETakeRecord>>();
-            foreach (JHSCETakeRecord record in JHSCETake.SelectByCourseAndExam(CourseDict.Keys.ToList(),_SelExamID))
+            foreach (JHSCETakeRecord record in JHSCETake.SelectByCourseAndExam(CourseDict.Keys.ToList(), _SelExamID))
             {
                 if (studIDAllList.Contains(record.RefStudentID))
                 {
@@ -531,7 +533,7 @@ namespace KaoHsiungExamScore_JH
 
                 if (Score1Dict.ContainsKey(studID))
                 {
-                    if(!studExamScoreDict.ContainsKey(studID))
+                    if (!studExamScoreDict.ContainsKey(studID))
                         studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
 
                     foreach (KH.JHSCETakeRecord rec in Score1Dict[studID])
@@ -566,13 +568,13 @@ namespace KaoHsiungExamScore_JH
                                     if (StudCourseDict.ContainsKey(studID))
                                     {
                                         // 有修課才加入
-                                        if(StudCourseDict[studID].ContainsKey(SubjecName))
+                                        if (StudCourseDict[studID].ContainsKey(SubjecName))
                                             studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, ess);
                                     }
                                 }
                             }
                         }
-                    }                  
+                    }
                 }
                 if (StudCourseDict.ContainsKey(studID))
                 {
@@ -586,7 +588,7 @@ namespace KaoHsiungExamScore_JH
                     foreach (KeyValuePair<string, DAO.SubjectDomainName> data in StudCourseDict[studID])
                     {
                         // 濾過社團
-                        if(string.IsNullOrEmpty(data.Key))
+                        if (string.IsNullOrEmpty(data.Key))
                             continue;
 
                         // 畫面上沒有勾選跳過
@@ -595,7 +597,7 @@ namespace KaoHsiungExamScore_JH
 
                         // 加入有修課沒有成績空科目
                         if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(data.Key))
-                        {                            
+                        {
                             DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
                             ess.SubjectName = data.Key;
                             ess.DomainName = data.Value.DomainName;
@@ -607,7 +609,7 @@ namespace KaoHsiungExamScore_JH
 
                 // 計算領域成績
                 if (Score1Dict.ContainsKey(studID))
-                {                    
+                {
                     studExamScoreDict[studID].CalcSubjectToDomain();
                 }
             }
@@ -638,13 +640,13 @@ namespace KaoHsiungExamScore_JH
 
                         if (!studAllExamScoreDict.ContainsKey(studR.ID))
                             studAllExamScoreDict.Add(studR.ID, new DAO.StudExamScore(studentCalculator));
-                        
+
                         studAllExamScoreDict[studR.ID].GradeYear = gr;
                         studAllExamScoreDict[studR.ID].ClassID = studR.RefClassID;
 
                         foreach (KH.JHSCETakeRecord rec in Score1Dict[studR.ID])
                         {
-                            
+
                             if (rec.RefExamID == _SelExamID && CourseDict.ContainsKey(rec.RefCourseID))
                             {
                                 JHCourseRecord cr = CourseDict[rec.RefCourseID];
@@ -655,13 +657,13 @@ namespace KaoHsiungExamScore_JH
                                 // 畫面有勾選才計算
                                 if (_SelSubjNameList.Contains(cr.Subject))
                                 {
-                                    string dmName = cr.Domain;                                
+                                    string dmName = cr.Domain;
 
                                     if (!studAllExamScoreDict[studR.ID]._ExamSubjectScoreDict.ContainsKey(cr.Subject))
                                     {
                                         DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
                                         ess.DomainName = dmName;
-                                        ess.SubjectName = cr.Subject;                                        
+                                        ess.SubjectName = cr.Subject;
                                         // 評量分數
                                         ess.Score = rec.Score;
                                         // 平時成績
@@ -677,7 +679,7 @@ namespace KaoHsiungExamScore_JH
                         }
                         // 計算領域成績
                         studAllExamScoreDict[studR.ID].CalcSubjectToDomain();
-                    }                    
+                    }
                 }
             }
             _bgWorkReport.ReportProgress(50);
@@ -719,7 +721,7 @@ namespace KaoHsiungExamScore_JH
                     dmRClasssDict[ses.ClassID][dmName].AddScore(eds.Score);
                     dmGradeDict[ses.GradeYear][dmName].AddScore(eds.Score);
 
-                    
+
                 }
             }
 
@@ -825,7 +827,7 @@ namespace KaoHsiungExamScore_JH
             _bgWorkReport.ReportProgress(60);
 
             // 缺曠資料區間統計
-             _AttendanceDict = Utility.GetAttendanceCountByDate(StudRecList, _BeginDate, _EndDate);
+            _AttendanceDict = Utility.GetAttendanceCountByDate(StudRecList, _BeginDate, _EndDate);
 
             // 獎懲資料
             Dictionary<string, Dictionary<string, int>> DisciplineCountDict = Utility.GetDisciplineCountByDate(_StudentIDList, _BeginDate, _EndDate);
@@ -877,7 +879,7 @@ namespace KaoHsiungExamScore_JH
             subjLi.Add("科目評量分數");
             subjLi.Add("科目平時成績");
             subjLi.Add("科目文字描述");
-            
+
 
             List<string> subjColList = new List<string>();
             foreach (string dName in Global.DomainNameList())
@@ -886,7 +888,7 @@ namespace KaoHsiungExamScore_JH
                 {
                     foreach (string sName in subjLi)
                     {
-                        string key = dName + "_" + sName +i;
+                        string key = dName + "_" + sName + i;
                         subjColList.Add(key);
                     }
                 }
@@ -930,7 +932,7 @@ namespace KaoHsiungExamScore_JH
             #region 處理合併 DataTable 相關資料
             // 儲存資料用 Data Table
             DataTable dt = new DataTable();
-            
+
             //// 取得欄位
             //foreach (string colName in Global.DTColumnsList())
             //    dt.Columns.Add(colName);
@@ -1174,22 +1176,22 @@ namespace KaoHsiungExamScore_JH
 
 
                 // 傳入 ID當 Key
-               // row["缺曠紀錄"] = StudRec.ID;
+                // row["缺曠紀錄"] = StudRec.ID;
                 rowT["缺曠紀錄"] = StudRec.ID;
                 // 獎懲區間統計值
                 if (DisciplineCountDict.ContainsKey(StudRec.ID))
                 {
                     foreach (string str in Global.GetDisciplineNameList())
                     {
-                        string key=str+"區間統計";
+                        string key = str + "區間統計";
                         if (DisciplineCountDict[StudRec.ID].ContainsKey(str))
                             row[key] = DisciplineCountDict[StudRec.ID][str];
                     }
                 }
-                
+
                 // 處理成績套印
                 if (studExamScoreDict.ContainsKey(StudRec.ID))
-                { 
+                {
                     // 科目
                     int subj = 1;
                     Dictionary<string, int> dNameDict = new Dictionary<string, int>();
@@ -1218,11 +1220,11 @@ namespace KaoHsiungExamScore_JH
                         }
                         foreach (string item in subjLi)
                         {
-                            string key = ddname+ "_" + item + subj;                        
+                            string key = ddname + "_" + item + subj;
 
                             switch (item)
                             {
-                                case "科目名稱":                                    
+                                case "科目名稱":
                                     row[key] = ess.SubjectName;
                                     if (!_TemplateSubjectNameList.Contains(key))
                                     {
@@ -1235,7 +1237,7 @@ namespace KaoHsiungExamScore_JH
                                         row[key] = ess.Credit.Value;
                                     break;
                                 case "科目努力程度":
-                                    if(ess.Effort.HasValue)
+                                    if (ess.Effort.HasValue)
                                         row[key] = _EffortMapper.GetTextByCode(ess.Effort.Value);
                                     break;
                                 case "科目評量分數":
@@ -1253,7 +1255,7 @@ namespace KaoHsiungExamScore_JH
 
 
                         }
-                        
+
                     }
 
                     // 領域
@@ -1276,7 +1278,7 @@ namespace KaoHsiungExamScore_JH
                         if (eds.Score.HasValue)
                         {
                             row[key] = eds.Score.Value;
-                            row[keye] =  _EffortMapper.GetTextByScore(eds.Score.Value);
+                            row[keye] = _EffortMapper.GetTextByScore(eds.Score.Value);
                         }
                         // 權數
                         if (eds.Credit.HasValue)
@@ -1324,7 +1326,7 @@ namespace KaoHsiungExamScore_JH
                     {
                         foreach (DAO.DomainRangeCount.DomainRangeType dtType in dtypeList)
                         {
-                            kClassKey = "班級_" + data.Key +"_"+ dtType.ToString();
+                            kClassKey = "班級_" + data.Key + "_" + dtType.ToString();
                             row[kClassKey] = data.Value.GetRankCount(dtType);
                         }
                     }
@@ -1427,28 +1429,29 @@ namespace KaoHsiungExamScore_JH
                 dt.Rows.Add(row);
                 dtAtt.Rows.Add(rowT);
 
-              
+
 
 
                 // 處理固定欄位對應
-                Document doc1 = new Document();                
+                Document doc1 = new Document();
                 doc1.Sections.Clear();
-                
+
                 // 處理動態處理(缺曠)
                 Document docAtt = new Document();
                 docAtt.Sections.Clear();
                 docAtt.Sections.Add(docAtt.ImportNode(docTemplate.Sections[0], true));
-                
+
                 _builder = new DocumentBuilder(docAtt);
-                docAtt.MailMerge.MergeField += new Aspose.Words.Reporting.MergeFieldEventHandler(MailMerge_MergeField);
+                //docAtt.MailMerge.MergeField += new Aspose.Words.Reporting.MergeFieldEventHandler(MailMerge_MergeField);
+                docAtt.MailMerge.FieldMergingCallback = this;
                 docAtt.MailMerge.Execute(dtAtt);
 
-                doc1.Sections.Add(doc1.ImportNode(docAtt.Sections[0],true));
+                doc1.Sections.Add(doc1.ImportNode(docAtt.Sections[0], true));
                 doc1.MailMerge.Execute(dt);
                 doc1.MailMerge.RemoveEmptyParagraphs = true;
                 doc1.MailMerge.DeleteFields();
                 docList.Add(doc1);
-                
+
             }
 
             _bgWorkReport.ReportProgress(90);
@@ -1462,38 +1465,38 @@ namespace KaoHsiungExamScore_JH
             #region Word 合併列印
 
             doc.Sections.Clear();
-            foreach(Document doc1 in docList)
+            foreach (Document doc1 in docList)
                 doc.Sections.Add(doc.ImportNode(doc1.Sections[0], true));
 
             string reportNameW = "高雄評量成績單";
-                pathW = Path.Combine(System.Windows.Forms.Application.StartupPath + "\\Reports", "");
-                if (!Directory.Exists(pathW))
+            pathW = Path.Combine(System.Windows.Forms.Application.StartupPath + "\\Reports", "");
+            if (!Directory.Exists(pathW))
                 Directory.CreateDirectory(pathW);
-                pathW = Path.Combine(pathW, reportNameW + ".doc");
+            pathW = Path.Combine(pathW, reportNameW + ".doc");
 
-                if (File.Exists(pathW))
+            if (File.Exists(pathW))
+            {
+                int i = 1;
+                while (true)
                 {
-                    int i = 1;
-                    while (true)
+                    string newPathW = Path.GetDirectoryName(pathW) + "\\" + Path.GetFileNameWithoutExtension(pathW) + (i++) + Path.GetExtension(pathW);
+                    if (!File.Exists(newPathW))
                     {
-                        string newPathW = Path.GetDirectoryName(pathW) + "\\" + Path.GetFileNameWithoutExtension(pathW) + (i++) + Path.GetExtension(pathW);
-                        if (!File.Exists(newPathW))
-                        {
-                            pathW = newPathW;
-                            break;
-                        }
+                        pathW = newPathW;
+                        break;
                     }
                 }
+            }
 
-                try
-                {
-                    doc.Save(pathW, Aspose.Words.SaveFormat.Doc);
+            try
+            {
+                doc.Save(pathW, Aspose.Words.SaveFormat.Doc);
 
-                }
-                catch (Exception exow)
-                {
+            }
+            catch (Exception exow)
+            {
 
-                }
+            }
             doc = null;
             docList.Clear();
 
@@ -1502,101 +1505,101 @@ namespace KaoHsiungExamScore_JH
             _bgWorkReport.ReportProgress(100);
         }
 
-        void MailMerge_MergeField(object sender, Aspose.Words.Reporting.MergeFieldEventArgs e)
-        {
-            if (e.FieldName == "缺曠紀錄")
-            {
-                if (_builder.MoveToMergeField(e.FieldName))
-                {
-                    string sid = e.FieldValue.ToString();
+        //void MailMerge_MergeField(object sender, Aspose.Words.Reporting.MergeFieldEventArgs e)
+        //{
+        //    if (e.FieldName == "缺曠紀錄")
+        //    {
+        //        if (_builder.MoveToMergeField(e.FieldName))
+        //        {
+        //            string sid = e.FieldValue.ToString();
 
-                    Dictionary<string, int> dataDict = new Dictionary<string, int>();                   
-                 
-                        List<string> colNameList = new List<string>();
-                        if (_AttendanceDict.ContainsKey(sid))
-                            dataDict = _AttendanceDict[sid];
-                        //dataDict.Keys
-                        
-                        foreach (string name in _SelAttendanceList)
-                            colNameList.Add(name.Replace("_",""));
+        //            Dictionary<string, int> dataDict = new Dictionary<string, int>();                   
 
-                        //colNameList.Sort();
-                        int colCount=colNameList.Count;
+        //                List<string> colNameList = new List<string>();
+        //                if (_AttendanceDict.ContainsKey(sid))
+        //                    dataDict = _AttendanceDict[sid];
+        //                //dataDict.Keys
 
-                        if (colCount > 0)
-                        {
-                            Cell cell = _builder.CurrentParagraph.ParentNode as Cell;
-                            cell.CellFormat.LeftPadding = 0;
-                            cell.CellFormat.RightPadding = 0;
-                            double width = cell.CellFormat.Width;
-                            int columnCount = colCount;
-                            double miniUnitWitdh = width / (double)columnCount;
+        //                foreach (string name in _SelAttendanceList)
+        //                    colNameList.Add(name.Replace("_",""));
 
-                            Table table = _builder.StartTable();
+        //                //colNameList.Sort();
+        //                int colCount=colNameList.Count;
 
-                            //(table.ParentNode.ParentNode as Row).RowFormat.LeftIndent = 0;
-                            double p = _builder.RowFormat.LeftIndent;
-                            _builder.RowFormat.HeightRule = HeightRule.Exactly;
-                            _builder.RowFormat.Height = 18.0;
-                            _builder.RowFormat.LeftIndent = 0;
+        //                if (colCount > 0)
+        //                {
+        //                    Cell cell = _builder.CurrentParagraph.ParentNode as Cell;
+        //                    cell.CellFormat.LeftPadding = 0;
+        //                    cell.CellFormat.RightPadding = 0;
+        //                    double width = cell.CellFormat.Width;
+        //                    int columnCount = colCount;
+        //                    double miniUnitWitdh = width / (double)columnCount;
 
-                            // 缺曠名稱
-                            foreach (string name in colNameList)
-                            {
-                                Cell c1 = _builder.InsertCell();
-                                c1.CellFormat.Width = miniUnitWitdh;
-                                c1.CellFormat.WrapText = true;
-                                _builder.Write(name);                            
-                            }
-                            _builder.EndRow();
+        //                    Table table = _builder.StartTable();
 
-                            // 缺曠統計
-                            foreach (string name in colNameList)
-                            {
-                                Cell c1 = _builder.InsertCell();
-                                c1.CellFormat.Width = miniUnitWitdh;
-                                c1.CellFormat.WrapText = true;
-                                if (dataDict.ContainsKey(name)) 
-                                    _builder.Write(dataDict[name].ToString()); 
-                                else
-                                    _builder.Write("");
-                            }
-                            _builder.EndRow();                            
+        //                    //(table.ParentNode.ParentNode as Row).RowFormat.LeftIndent = 0;
+        //                    double p = _builder.RowFormat.LeftIndent;
+        //                    _builder.RowFormat.HeightRule = HeightRule.Exactly;
+        //                    _builder.RowFormat.Height = 18.0;
+        //                    _builder.RowFormat.LeftIndent = 0;
 
-                            _builder.EndTable();
+        //                    // 缺曠名稱
+        //                    foreach (string name in colNameList)
+        //                    {
+        //                        Cell c1 = _builder.InsertCell();
+        //                        c1.CellFormat.Width = miniUnitWitdh;
+        //                        c1.CellFormat.WrapText = true;
+        //                        _builder.Write(name);                            
+        //                    }
+        //                    _builder.EndRow();
 
-                            //去除表格四邊的線
-                            foreach (Cell c in table.FirstRow.Cells)
-                                c.CellFormat.Borders.Top.LineStyle = LineStyle.None;
+        //                    // 缺曠統計
+        //                    foreach (string name in colNameList)
+        //                    {
+        //                        Cell c1 = _builder.InsertCell();
+        //                        c1.CellFormat.Width = miniUnitWitdh;
+        //                        c1.CellFormat.WrapText = true;
+        //                        if (dataDict.ContainsKey(name)) 
+        //                            _builder.Write(dataDict[name].ToString()); 
+        //                        else
+        //                            _builder.Write("");
+        //                    }
+        //                    _builder.EndRow();                            
 
-                            foreach (Cell c in table.LastRow.Cells)
-                                c.CellFormat.Borders.Bottom.LineStyle = LineStyle.None;
+        //                    _builder.EndTable();
 
-                            foreach (Row r in table.Rows)
-                            {
-                                r.FirstCell.CellFormat.Borders.Left.LineStyle = LineStyle.None;
-                                r.LastCell.CellFormat.Borders.Right.LineStyle = LineStyle.None;
-                            }
+        //                    //去除表格四邊的線
+        //                    foreach (Cell c in table.FirstRow.Cells)
+        //                        c.CellFormat.Borders.Top.LineStyle = LineStyle.None;
 
-                            _builder.RowFormat.LeftIndent = p;
-                        }
-                   
-                }
-            }            
-        }
+        //                    foreach (Cell c in table.LastRow.Cells)
+        //                        c.CellFormat.Borders.Bottom.LineStyle = LineStyle.None;
+
+        //                    foreach (Row r in table.Rows)
+        //                    {
+        //                        r.FirstCell.CellFormat.Borders.Left.LineStyle = LineStyle.None;
+        //                        r.LastCell.CellFormat.Borders.Right.LineStyle = LineStyle.None;
+        //                    }
+
+        //                    _builder.RowFormat.LeftIndent = p;
+        //                }
+
+        //        }
+        //    }            
+        //}
 
         private void PrintForm_Load(object sender, EventArgs e)
         {
             DisSelect();
             _SelSchoolYear = int.Parse(K12.Data.School.DefaultSchoolYear);
             _SelSemester = int.Parse(K12.Data.School.DefaultSemester);
-            
+
             bkw.RunWorkerAsync();
         }
 
         private void LoadSubject()
         {
-            lvSubject.Items.Clear();            
+            lvSubject.Items.Clear();
             string ExamID = "";
             foreach (ExamRecord ex in _exams)
             {
@@ -1605,8 +1608,8 @@ namespace KaoHsiungExamScore_JH
                     ExamID = ex.ID;
                     break;
                 }
-            }            
-       
+            }
+
             if (_ExamSubjectFull.ContainsKey(ExamID))
             {
                 foreach (string subjName in _ExamSubjectFull[ExamID])
@@ -1741,7 +1744,7 @@ namespace KaoHsiungExamScore_JH
             else
             {
                 bool isEr = true;
-                foreach(ExamRecord ex in _exams)
+                foreach (ExamRecord ex in _exams)
                     if (ex.Name == cboExam.Text)
                     {
                         _SelExamID = ex.ID;
@@ -1760,16 +1763,16 @@ namespace KaoHsiungExamScore_JH
             _SelSubjNameList.Clear();
 
             SaveTemplate(null, null);
-            
+
             // 使用者勾選科目
-            foreach(string name in _Configure.PrintSubjectList)
+            foreach (string name in _Configure.PrintSubjectList)
                 _SelSubjNameList.Add(name);
-            
+
             // 缺曠
             foreach (string name in _Configure.PrintAttendanceList)
                 _SelAttendanceList.Add(name);
 
-            
+
             _BeginDate = dtBegin.Value;
             _EndDate = dtEnd.Value;
 
@@ -1801,9 +1804,9 @@ namespace KaoHsiungExamScore_JH
                 {
                     _Configure.ExamRecord = exm;
                     break;
-                }            
-            }            
-            
+                }
+            }
+
             // 科目
             foreach (ListViewItem item in lvSubject.Items)
             {
@@ -1821,7 +1824,7 @@ namespace KaoHsiungExamScore_JH
 
             if (_Configure.PrintAttendanceList == null)
                 _Configure.PrintAttendanceList = new List<string>();
-            
+
             _Configure.PrintAttendanceList.Clear();
             // 儲存缺曠選項
             foreach (DataGridViewRow drv in dgAttendanceData.Rows)
@@ -1831,10 +1834,10 @@ namespace KaoHsiungExamScore_JH
                     bool bl;
                     if (bool.TryParse(cell.Value.ToString(), out bl))
                     {
-                        if(bl)
+                        if (bl)
                             _Configure.PrintAttendanceList.Add(cell.Tag.ToString());
                     }
-                }                        
+                }
             }
 
 
@@ -1892,7 +1895,7 @@ namespace KaoHsiungExamScore_JH
                 conf.UDTTableName = Global._UDTTableName;
                 iList.Add(conf);
                 DAO.UDTTransfer.InsertConfigData(iList);
-            } 
+            }
             #endregion
         }
 
@@ -1926,14 +1929,14 @@ namespace KaoHsiungExamScore_JH
                 NewConfigure dialog = new NewConfigure();
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    
+
                     _Configure = new Configure();
                     _Configure.Name = dialog.ConfigName;
                     _Configure.Template = dialog.Template;
                     _Configure.SubjectLimit = dialog.SubjectLimit;
                     _Configure.SchoolYear = _DefalutSchoolYear;
                     _Configure.Semester = _DefaultSemester;
-                    if(_Configure.PrintAttendanceList == null)
+                    if (_Configure.PrintAttendanceList == null)
                         _Configure.PrintAttendanceList = new List<string>();
                     if (_Configure.PrintSubjectList == null)
                         _Configure.PrintSubjectList = new List<string>();
@@ -1949,7 +1952,7 @@ namespace KaoHsiungExamScore_JH
                                 break;
                             }
                         }
-                        
+
                     }
                     _ConfigureList.Add(_Configure);
                     cboConfigure.Items.Insert(cboConfigure.SelectedIndex, _Configure);
@@ -1976,7 +1979,7 @@ namespace KaoHsiungExamScore_JH
                     cboSemester.Text = _Configure.Semester;
                     if (_Configure.ExamRecord != null)
                     {
-                        int idx=0;
+                        int idx = 0;
                         foreach (string sitm in cboExam.Items)
                         {
                             if (sitm == _Configure.ExamRecord.Name)
@@ -1988,7 +1991,7 @@ namespace KaoHsiungExamScore_JH
                         }
 
                     }
-                   
+
                     // 解析科目
                     foreach (ListViewItem lvi in lvSubject.Items)
                     {
@@ -1997,7 +2000,7 @@ namespace KaoHsiungExamScore_JH
                             lvi.Checked = true;
                         }
                     }
-                    
+
                     // 解析缺曠
                     foreach (DataGridViewRow drv in dgAttendanceData.Rows)
                     {
@@ -2011,13 +2014,13 @@ namespace KaoHsiungExamScore_JH
                             if (_Configure.PrintAttendanceList.Contains(key))
                             {
                                 cell.Value = true;
-                            }                        
+                            }
                         }
                     }
 
 
                     // 開始與結束日期
-                    DateTime dtb, dte,dtee;
+                    DateTime dtb, dte, dtee;
                     if (DateTime.TryParse(_Configure.BeginDate, out dtb))
                         dtBegin.Value = dtb;
                     else
@@ -2040,10 +2043,10 @@ namespace KaoHsiungExamScore_JH
                     _Configure = null;
                     cboSchoolYear.SelectedIndex = -1;
                     cboSemester.SelectedIndex = -1;
-                    cboExam.SelectedIndex = -1;                    
-                  
+                    cboExam.SelectedIndex = -1;
+
                     // 開始與結束日期沒有預設值時給當天
-                    dtBegin.Value = dtEnd.Value = DateTime.Now;                   
+                    dtBegin.Value = dtEnd.Value = DateTime.Now;
                 }
             }
         }
@@ -2052,7 +2055,7 @@ namespace KaoHsiungExamScore_JH
         {
             // 當沒有設定檔
             if (_Configure == null) return;
-            
+
             lnkViewTemplate.Enabled = false;
             #region 儲存檔案
 
@@ -2162,11 +2165,96 @@ namespace KaoHsiungExamScore_JH
             {
                 foreach (DataGridViewCell cell in drv.Cells)
                 {
-                    if(cell.ColumnIndex !=0)
-                        cell.Value = chkAttendSelAll.Checked;                
+                    if (cell.ColumnIndex != 0)
+                        cell.Value = chkAttendSelAll.Checked;
                 }
             }
-        }    
+        }
 
+        void IFieldMergingCallback.FieldMerging(FieldMergingArgs e)
+        {
+            if (e.FieldName == "缺曠紀錄")
+            {
+                e.Text = "";
+                _builder.MoveToField(e.Field, false);
+                string sid = e.FieldValue.ToString();
+
+                Dictionary<string, int> dataDict = new Dictionary<string, int>();
+
+                List<string> colNameList = new List<string>();
+                if (_AttendanceDict.ContainsKey(sid))
+                    dataDict = _AttendanceDict[sid];
+                //dataDict.Keys
+
+                foreach (string name in _SelAttendanceList)
+                    colNameList.Add(name.Replace("_", ""));
+
+                //colNameList.Sort();
+                int colCount = colNameList.Count;
+
+                if (colCount > 0)
+                {
+                    Cell cell = _builder.CurrentParagraph.ParentNode as Cell;
+                    cell.CellFormat.LeftPadding = 0;
+                    cell.CellFormat.RightPadding = 0;
+                    double width = cell.CellFormat.Width;
+                    int columnCount = colCount;
+                    double miniUnitWitdh = width / (double)columnCount;
+
+                    Table table = _builder.StartTable();
+
+                    //(table.ParentNode.ParentNode as Row).RowFormat.LeftIndent = 0;
+                    double p = _builder.RowFormat.LeftIndent;
+                    _builder.RowFormat.HeightRule = HeightRule.Exactly;
+                    _builder.RowFormat.Height = 18.0;
+                    _builder.RowFormat.LeftIndent = 0;
+
+                    // 缺曠名稱
+                    foreach (string name in colNameList)
+                    {
+                        Cell c1 = _builder.InsertCell();
+                        c1.CellFormat.Width = miniUnitWitdh;
+                        c1.CellFormat.WrapText = true;
+                        _builder.Write(name);
+                    }
+                    _builder.EndRow();
+
+                    // 缺曠統計
+                    foreach (string name in colNameList)
+                    {
+                        Cell c1 = _builder.InsertCell();
+                        c1.CellFormat.Width = miniUnitWitdh;
+                        c1.CellFormat.WrapText = true;
+                        if (dataDict.ContainsKey(name))
+                            _builder.Write(dataDict[name].ToString());
+                        else
+                            _builder.Write("");
+                    }
+                    _builder.EndRow();
+
+                    _builder.EndTable();
+
+                    //去除表格四邊的線
+                    foreach (Cell c in table.FirstRow.Cells)
+                        c.CellFormat.Borders.Top.LineStyle = LineStyle.None;
+
+                    foreach (Cell c in table.LastRow.Cells)
+                        c.CellFormat.Borders.Bottom.LineStyle = LineStyle.None;
+
+                    foreach (Row r in table.Rows)
+                    {
+                        r.FirstCell.CellFormat.Borders.Left.LineStyle = LineStyle.None;
+                        r.LastCell.CellFormat.Borders.Right.LineStyle = LineStyle.None;
+                    }
+                    _builder.RowFormat.LeftIndent = p;
+                }
+            }
+        }
+
+        void IFieldMergingCallback.ImageFieldMerging(ImageFieldMergingArgs args)
+        {
+            //do nothing...
+        }
     }
+
 }

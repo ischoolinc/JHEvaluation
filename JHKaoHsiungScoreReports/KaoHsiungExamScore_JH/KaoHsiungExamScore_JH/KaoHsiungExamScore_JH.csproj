@@ -35,9 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Words, Version=4.4.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Aspose.Words.dll</HintPath>
+    <Reference Include="Aspose.Words_201402">
+      <HintPath>Library\Aspose.Words_201402.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
@@ -184,7 +183,9 @@
     <Content Include="Library\FISCA.UDT.xml" />
     <Content Include="Library\JHSchool.Data.dll" />
     <Content Include="Library\JHSchool.Data.pdb" />
-    <Content Include="Library\JHSchool.Data.xml" />
+    <Content Include="Library\JHSchool.Data.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Library\JHSchool.Evaluation.dll" />
     <Content Include="Library\JHSchool.Evaluation.pdb" />
     <Content Include="Library\K12.Data.dll" />
