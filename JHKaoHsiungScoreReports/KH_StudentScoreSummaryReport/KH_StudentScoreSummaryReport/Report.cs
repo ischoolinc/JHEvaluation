@@ -45,6 +45,7 @@ namespace KH_StudentScoreSummaryReport
         private const string StudSpcName4 = "政府派赴國外工作人員子女";
         private const string StudSpcName5 = "蒙藏生";
         private const string StudSpcName6 = "身心障礙生";
+        private const string StudSpcName7 = "資賦優異縮短修業年限學生";
 
         // 服務學習
         Dictionary<string, List<SLRecord>> _SLRecordDict = new Dictionary<string, List<SLRecord>>();
@@ -53,7 +54,7 @@ namespace KH_StudentScoreSummaryReport
         Dictionary<string, List<itemCount>> _itemCountDict = new Dictionary<string, List<itemCount>>();
 
         // 獎勵明細
-        Dictionary<string,List<JHMeritRecord>> _JHMeritRecordDict = new Dictionary<string,List<JHMeritRecord>> ();
+        Dictionary<string, List<JHMeritRecord>> _JHMeritRecordDict = new Dictionary<string, List<JHMeritRecord>>();
 
         // 體適能
         Dictionary<string, List<StudentFitnessRecord>> _StudentFitnessRecordDict = new Dictionary<string, List<StudentFitnessRecord>>();
@@ -65,7 +66,7 @@ namespace KH_StudentScoreSummaryReport
             {
                 return x.OrderString.CompareTo(y.OrderString);
             });
-            List<string> studenIDList = new List<string> ();
+            List<string> studenIDList = new List<string>();
             foreach (ReportStudent stud in students)
                 studenIDList.Add(stud.StudentID);
 
@@ -84,7 +85,7 @@ namespace KH_StudentScoreSummaryReport
             PrintSetting = printSetting;
 
             DetailDomain = new List<string>();
-                    
+
 
             DetailDomain.Add("彈性課程");
             DetailDomain.Add("");
@@ -95,8 +96,8 @@ namespace KH_StudentScoreSummaryReport
             List<string> sidList = (from xx in students select xx.StudentID).ToList();
             // 取得學生放在UDT的排名資料
             _StudRankData = UDTTransfer.GetDataFromUDTDict(sidList);
-     
-        }    
+
+        }
 
 
         public Document Print()
@@ -187,7 +188,7 @@ namespace KH_StudentScoreSummaryReport
                 Row template = builder.CurrentParagraph.ParentNode.ParentNode as Row;
                 Table table = template.ParentNode as Table;
 
-                
+
                 if (PrintSetting.ListMethod == ListMethod.DomainOnly)
                 {
                     #region 列印領域
@@ -228,7 +229,7 @@ namespace KH_StudentScoreSummaryReport
                         {
                             if (!ddName.Contains(strDomain))
                                 continue;
-                           
+
                             if (!Subj.Domains.Contains(strDomain)) continue;
 
                             SemesterDomainScore domain = semsscore.Domain[strDomain];
@@ -249,7 +250,7 @@ namespace KH_StudentScoreSummaryReport
                     //RowHeader lheader2 = new RowHeader(LearningDomainNameP, string.Empty);
                     //RowHeader lheader3 = new RowHeader(LearningDomainNameSpcAddP, string.Empty);
                     //RowHeader lheader4 = new RowHeader(CalcMessage, string.Empty);
-                    
+
                     //lheader.IsDomain = true;
                     //lheader1.IsDomain = true;
                     //lheader2.IsDomain = true;
@@ -277,7 +278,7 @@ namespace KH_StudentScoreSummaryReport
 
                         Row datarow = table.InsertBefore(template.Clone(true), current) as Row;
 
-                    
+
                         if (header.IsDomain)
                         {
                             if (hasGroup)
@@ -344,7 +345,7 @@ namespace KH_StudentScoreSummaryReport
                         }
                     }
                     #endregion
-              
+
                     #region 填資料
                     Row RatingRow = null;
                     // 用在加分後
@@ -353,7 +354,7 @@ namespace KH_StudentScoreSummaryReport
                     List<UserDefData> uddList = new List<UserDefData>();
                     if (_StudRankData.ContainsKey(student.StudentID))
                         uddList = _StudRankData[student.StudentID];
-                    
+
                     foreach (RowHeader header in indexHeaders)
                     {
                         SemesterDataCollection semesters = new SemesterDataCollection();
@@ -422,7 +423,7 @@ namespace KH_StudentScoreSummaryReport
                                 // 處理加分
                                 decimal sc = score.Value;
                                 if (student.AddWeight.HasValue)
-                                    sc = Math.Round(sc * student.AddWeight.Value, 2,MidpointRounding.AwayFromZero); ;
+                                    sc = Math.Round(sc * student.AddWeight.Value, 2, MidpointRounding.AwayFromZero); ;
 
                                 // 一般生填空白
                                 if (string.IsNullOrEmpty(student.SpcStudTypeName))
@@ -434,7 +435,7 @@ namespace KH_StudentScoreSummaryReport
                                 {
                                     // 特種身
                                     row.Cells[columnIndex * 3 + 2].Write(builder, sc + "");
-                                    row.Cells[columnIndex * 3 + 4].Write(builder, (Util.GetDegree(sc)));                                
+                                    row.Cells[columnIndex * 3 + 4].Write(builder, (Util.GetDegree(sc)));
                                 }
 
                                 if (PrintSetting.PrintRank || PrintSetting.PrintRankPercentage)
@@ -442,8 +443,8 @@ namespace KH_StudentScoreSummaryReport
                                     if (RatingRow != null)
                                     {
                                         RatingRowAdd = RatingRow.NextSibling as Row;
-                                       
-                                       
+
+
                                     }
                                 }
                             }
@@ -510,7 +511,7 @@ namespace KH_StudentScoreSummaryReport
                             //    scAddScore = student.AddWeight.Value * avgScore.Value;
                             //    RowSp.Cells[20].Write(builder, (double)scAddScore + "");
                             //    RowSp.Cells[21].Write(builder, Util.GetDegree(scAddScore));                               
-                            
+
                             //}
                         }
                     }
@@ -519,7 +520,7 @@ namespace KH_StudentScoreSummaryReport
                     decimal scAddScore = 0;
                     // 特種身分
                     int rrIdx = 0;
-                    foreach(RowHeader rh in indexHeaders)
+                    foreach (RowHeader rh in indexHeaders)
                     {
                         if (rh.Domain == LearningDomainNameSpcAdd)
                         {
@@ -528,14 +529,14 @@ namespace KH_StudentScoreSummaryReport
                         }
                     }
 
-                    if (student.AddWeight.HasValue && rrIdx >0)
+                    if (student.AddWeight.HasValue && rrIdx > 0)
                     {
                         // 顯示平均
                         if (student.Places.NS("年排名").Contains("學習領域"))
                         {
-                            scAddScore = Math.Round(student.Places.NS("年排名")["學習領域"].Score * student.AddWeight.Value,2,MidpointRounding.AwayFromZero);
+                            scAddScore = Math.Round(student.Places.NS("年排名")["學習領域"].Score * student.AddWeight.Value, 2, MidpointRounding.AwayFromZero);
                             table.Rows[rrIdx].Cells[21].Write(builder, (double)scAddScore + "");
-                            table.Rows[rrIdx].Cells[22].Write(builder, Util.GetDegree(scAddScore));                       
+                            table.Rows[rrIdx].Cells[22].Write(builder, Util.GetDegree(scAddScore));
                         }
 
 
@@ -544,7 +545,7 @@ namespace KH_StudentScoreSummaryReport
                     // 處理年排名與百分比
                     if (RatingRow != null)
                     {
-                        PlaceCollection places = student.Places.NS("年排名");                       
+                        PlaceCollection places = student.Places.NS("年排名");
 
                         foreach (SemesterData semsIndex in student.HeaderList.Keys)
                         {
@@ -575,34 +576,34 @@ namespace KH_StudentScoreSummaryReport
                             {
                                 if (semsIndex.SchoolYear <= student.LastEnterSchoolyear.Value)
                                 {
-                                   
-                                        bool clear = true;
-                                        
-                                        // 當有資料
-                                        foreach (UserDefData udd in (from data in uddList where data.SchoolYear== semsIndex.SchoolYear && data.Semester== semsIndex.Semester select data))
-                                                clear = false;
 
-                                        if (clear)
-                                        {
-                                            // 和異動同年同學期不動
-                                            if (semsIndex.SchoolYear == student.LastEnterSchoolyear && semsIndex.Semester == student.LastEnterSemester)
-                                                clear = false;
-                                        }
+                                    bool clear = true;
 
-                                        if (clear)
-                                        {
-                                            // 當同一學年第2學期，如果維持不清空
-                                            if (semsIndex.SchoolYear == student.LastEnterSchoolyear.Value && semsIndex.Semester == 2)
-                                                clear = false;
-                                        }
+                                    // 當有資料
+                                    foreach (UserDefData udd in (from data in uddList where data.SchoolYear == semsIndex.SchoolYear && data.Semester == semsIndex.Semester select data))
+                                        clear = false;
+
+                                    if (clear)
+                                    {
+                                        // 和異動同年同學期不動
+                                        if (semsIndex.SchoolYear == student.LastEnterSchoolyear && semsIndex.Semester == student.LastEnterSemester)
+                                            clear = false;
+                                    }
+
+                                    if (clear)
+                                    {
+                                        // 當同一學年第2學期，如果維持不清空
+                                        if (semsIndex.SchoolYear == student.LastEnterSchoolyear.Value && semsIndex.Semester == 2)
+                                            clear = false;
+                                    }
 
 
-                                        if (clear)
-                                        {
-                                            datacell.Write(builder, "");
-                                            UseRatingRank = false;
-                                        }
-                                   
+                                    if (clear)
+                                    {
+                                        datacell.Write(builder, "");
+                                        UseRatingRank = false;
+                                    }
+
                                 }
 
 
@@ -625,17 +626,17 @@ namespace KH_StudentScoreSummaryReport
                             }
 
                             // 使用即時運算排名與百分比
-                            if(UseRatingRank)
+                            if (UseRatingRank)
                                 if (places.Contains(placeKey))
-                                    datacell.Write(builder, GetPlaceString(places, placeKey));                                     
+                                    datacell.Write(builder, GetPlaceString(places, placeKey));
                         }
-                        
+
                         // 顯示平均
                         if (places.Contains("學習領域"))
                             RatingRow.Cells[21].Write(builder, GetPlaceString(places, "學習領域"));
                     }
 
-                    int? LevelAdd=null,PercentageAdd=null;
+                    int? LevelAdd = null, PercentageAdd = null;
                     // 處理年排名與百分比(加分後)
                     if (RatingRowAdd != null)
                     {
@@ -644,9 +645,9 @@ namespace KH_StudentScoreSummaryReport
                         foreach (SemesterData semsIndex in student.HeaderList.Keys)
                         {
                             SemesterData raw = student.HeaderList.GetSRaw(semsIndex);
-                            
+
                             if (raw == SemesterData.Empty) continue;
-                            
+
                             string placeKey = SLearningDomainParser.GetSemesterString(raw);
 
                             //if (!places.Contains(placeKey))
@@ -660,7 +661,7 @@ namespace KH_StudentScoreSummaryReport
                                 datacell.Write(builder, "");
                                 continue;
                             }
-                            int Level=1,Percentage=1;
+                            int Level = 1, Percentage = 1;
 
                             // 處理加分後
                             if (places.Contains(placeKey))
@@ -689,7 +690,7 @@ namespace KH_StudentScoreSummaryReport
                                     }
                                 }
                             }
-                            
+
 
                             bool UseRatingRank = true;
                             // 處理已有年排名(UDT)
@@ -767,9 +768,9 @@ namespace KH_StudentScoreSummaryReport
                                 {
                                     if (student.AddWeight.HasValue)
                                         datacell.Write(builder, GetPlaceString2(Level, Percentage));
-                                    else                                    
+                                    else
                                         datacell.Write(builder, GetPlaceString(places, placeKey));
-                                      
+
                                 }
                             }
 
@@ -783,14 +784,14 @@ namespace KH_StudentScoreSummaryReport
                         //if (places.Contains(LearningDomainNameSpcAddP))                            
                         //    RatingRowAdd.Cells[20].Write(builder, GetPlaceString(places, LearningDomainNameSpcAddP));
 
-                        
+
                         // 加分後
                         if (student.AddWeight.HasValue)
                         {
-                            decimal sc1=0;
+                            decimal sc1 = 0;
                             PercentageAdd = null; LevelAdd = null;
                             List<Place> PList = new List<Place>();
-                            if(places.Contains("學習領域"))
+                            if (places.Contains("學習領域"))
                                 sc1 = places["學習領域"].Score * student.AddWeight.Value;
                             if (DALTransfer.StudRankScoreDict.ContainsKey(student.GradeYear))
                             {
@@ -809,7 +810,7 @@ namespace KH_StudentScoreSummaryReport
                                         PercentageAdd = 1;
                                     }
                                 }
-                                if(LevelAdd.HasValue && PercentageAdd.HasValue )
+                                if (LevelAdd.HasValue && PercentageAdd.HasValue)
                                     RatingRowAdd.Cells[21].Write(builder, GetPlaceString2(LevelAdd.Value, PercentageAdd.Value));
                             }
                         }
@@ -817,7 +818,7 @@ namespace KH_StudentScoreSummaryReport
                     }
 
                     // 樂學計分方式
-                    if(RatingRowAdd !=null )
+                    if (RatingRowAdd != null)
                     {
                         //string str = "單一學期學習領域成績計分=100-(名次百分比)×100+1";
                         Row RowStr = RatingRowAdd.NextSibling as Row;
@@ -843,7 +844,7 @@ namespace KH_StudentScoreSummaryReport
                                 {
                                     if (udd.SchoolYear == semsIndex.SchoolYear && udd.Semester == semsIndex.Semester)
                                     {
-                                        if(student.AddWeight.HasValue )
+                                        if (student.AddWeight.HasValue)
                                             datacell.Write(builder, GetPlaceString3(udd.GradeRankPercentAdd));
                                         else
                                             datacell.Write(builder, GetPlaceString3(udd.GradeRankPercent));
@@ -853,7 +854,7 @@ namespace KH_StudentScoreSummaryReport
                             }
 
                             // 判斷轉入生
-                            if (student.LastEnterGradeYear.HasValue && student.LastEnterSchoolyear.HasValue )
+                            if (student.LastEnterGradeYear.HasValue && student.LastEnterSchoolyear.HasValue)
                             {
                                 if (semsIndex.SchoolYear <= student.LastEnterSchoolyear.Value)
                                 {
@@ -953,13 +954,13 @@ namespace KH_StudentScoreSummaryReport
                         //Place p;
                         //if (places.Contains("學習領域"))
                         //{
-                            //if (student.AddWeight.HasValue)
-                            //{
-                            //    if(PercentageAdd.HasValue )
-                            //        RowStr.Cells[20].Write(builder, GetPlaceString3(PercentageAdd.Value));
-                            //}
-                            //else
-                            //{
+                        //if (student.AddWeight.HasValue)
+                        //{
+                        //    if(PercentageAdd.HasValue )
+                        //        RowStr.Cells[20].Write(builder, GetPlaceString3(PercentageAdd.Value));
+                        //}
+                        //else
+                        //{
                         //        p = places["學習領域"];
                         //        RowStr.Cells[20].Write(builder, GetPlaceString3(p.Percentage));
                         //    //}
@@ -975,8 +976,8 @@ namespace KH_StudentScoreSummaryReport
                         bool hasGroup = !string.IsNullOrEmpty(Subj.GetDomainGroup(header.Domain));
                         string groupName = Subj.GetDomainGroup(header.Domain);
 
-                        Row row = table.Rows[header.Index + 3];                        
-                        
+                        Row row = table.Rows[header.Index + 3];
+
                         if (previousCellDomain == row.Cells[1].ToTxt())
                             row.Cells[1].CellFormat.VerticalMerge = CellMerge.Previous;
                         else
@@ -1001,8 +1002,8 @@ namespace KH_StudentScoreSummaryReport
                                 row.Cells[0].CellFormat.HorizontalMerge = CellMerge.First;
                                 row.Cells[1].CellFormat.HorizontalMerge = CellMerge.Previous;
 
-                                
-                                #endregion                            
+
+                                #endregion
                             }
                             else if (header.Domain == LearningDomainNameP)
                             {
@@ -1072,7 +1073,7 @@ namespace KH_StudentScoreSummaryReport
                                 }
 
                             }
-                            else if (header.Domain==CalcMessage)
+                            else if (header.Domain == CalcMessage)
                             {
                                 // 文字字串
                                 row.Cells[0].CellFormat.FitText = false;
@@ -1085,14 +1086,14 @@ namespace KH_StudentScoreSummaryReport
                                 Paragraph mp = lrow.Cells[2].Paragraphs[0];
                                 for (int i = 0; i < (3 * 6); i++)
                                 {
-                                   // if (i % 18 == 0)
-                                        if (i % 3 == 0)
-                                        {
-                                            (mp.ParentNode as Cell).CellFormat.HorizontalMerge = CellMerge.First;
-                                            (mp.ParentNode as Cell).CellFormat.FitText = false;
-                                        }
-                                        else
-                                            (mp.ParentNode as Cell).CellFormat.HorizontalMerge = CellMerge.Previous;
+                                    // if (i % 18 == 0)
+                                    if (i % 3 == 0)
+                                    {
+                                        (mp.ParentNode as Cell).CellFormat.HorizontalMerge = CellMerge.First;
+                                        (mp.ParentNode as Cell).CellFormat.FitText = false;
+                                    }
+                                    else
+                                        (mp.ParentNode as Cell).CellFormat.HorizontalMerge = CellMerge.Previous;
 
                                     mp = Util.NextCell(mp as Paragraph);
                                 }
@@ -1115,10 +1116,10 @@ namespace KH_StudentScoreSummaryReport
                         ccount++;
                     }
                     // 主要合併均衡學習
-                    for ( int i=(ccount+2); i > 3; i--)
+                    for (int i = (ccount + 2); i > 3; i--)
                     {
-                       table.Rows[i - 1].Cells[0].CellFormat.VerticalMerge = CellMerge.First;
-                       table.Rows[i].Cells[0].CellFormat.VerticalMerge = CellMerge.Previous;
+                        table.Rows[i - 1].Cells[0].CellFormat.VerticalMerge = CellMerge.First;
+                        table.Rows[i].Cells[0].CellFormat.VerticalMerge = CellMerge.Previous;
                     }
 
                     table.Rows[3].Cells[0].Write(builder, "均衡學習");
@@ -1398,10 +1399,10 @@ namespace KH_StudentScoreSummaryReport
                             }
                         }
                         else if (IsFlexible(header.Domain))
-                        {                            
-                            if (previousCellDomain == header.Domain)                                
+                        {
+                            if (previousCellDomain == header.Domain)
                                 row.Cells[1].CellFormat.VerticalMerge = CellMerge.Previous;
-                            
+
                             else
                                 row.Cells[1].CellFormat.VerticalMerge = CellMerge.First;
 
@@ -1416,7 +1417,7 @@ namespace KH_StudentScoreSummaryReport
                     }
                     #endregion
                 }
-         
+
                 template.NextSibling.Remove();
                 template.Remove();
                 #endregion
@@ -1465,7 +1466,7 @@ namespace KH_StudentScoreSummaryReport
                             DemeritC.Cells[Offset + ColumnIndex].Write(builder, GetString(xmldemerit.GetAttribute("C")));
                     }
 
-              
+
                 }
                 #endregion
             }
@@ -1524,7 +1525,7 @@ namespace KH_StudentScoreSummaryReport
                         {
                             if (rec.SchoolYear == each.SchoolYear && rec.Semester == each.Semester)
                             {
-                                hour = rec.Count;                                
+                                hour = rec.Count;
                             }
                         }
 
@@ -1544,13 +1545,13 @@ namespace KH_StudentScoreSummaryReport
             {
                 if (_JHMeritRecordDict.ContainsKey(student.StudentID))
                 {
-                    List<JHMeritRecord> dataList=(from data in _JHMeritRecordDict[student.StudentID] orderby data.SchoolYear,data.Semester,data.OccurDate select data).ToList();
-                    
+                    List<JHMeritRecord> dataList = (from data in _JHMeritRecordDict[student.StudentID] orderby data.SchoolYear, data.Semester, data.OccurDate select data).ToList();
+
                     #region 列印獎懲資料
                     // 檢查並動態新增 Table row
 
                     Row MeritCheckRow = builder.CurrentParagraph.ParentNode.ParentNode as Row;
-                    int addRowCount = _JHMeritRecordDict[student.StudentID].Count-3;
+                    int addRowCount = _JHMeritRecordDict[student.StudentID].Count - 3;
 
                     if (addRowCount > 0)
                     {
@@ -1560,8 +1561,8 @@ namespace KH_StudentScoreSummaryReport
                             MeritCheckRow.ParentTable.AppendChild(newRow);
                         }
                     }
-                    Row MeritRow = builder.CurrentParagraph.ParentNode.ParentNode as Row;                    
-                    int rowIdx=1;
+                    Row MeritRow = builder.CurrentParagraph.ParentNode.ParentNode as Row;
+                    int rowIdx = 1;
                     List<string> typeList = new List<string>();
                     List<int> cotList = new List<int>();
                     //學年度學期	類別	次數	事由
@@ -1577,19 +1578,19 @@ namespace KH_StudentScoreSummaryReport
                         typeList.Clear();
                         cotList.Clear();
 
-                        if (rec.MeritA.HasValue && rec.MeritA.Value>0)
-                        {                            
-                                typeList.Add("大功");
-                                cotList.Add(rec.MeritA.Value);
+                        if (rec.MeritA.HasValue && rec.MeritA.Value > 0)
+                        {
+                            typeList.Add("大功");
+                            cotList.Add(rec.MeritA.Value);
                         }
 
-                        if (rec.MeritB.HasValue && rec.MeritB.Value>0)
+                        if (rec.MeritB.HasValue && rec.MeritB.Value > 0)
                         {
                             typeList.Add("小功");
                             cotList.Add(rec.MeritB.Value);
                         }
 
-                        if (rec.MeritC.HasValue && rec.MeritC.Value>0)
+                        if (rec.MeritC.HasValue && rec.MeritC.Value > 0)
                         {
 
                             typeList.Add("嘉獎");
@@ -1602,20 +1603,20 @@ namespace KH_StudentScoreSummaryReport
                         //builder.Document.FirstSection.Body.Tables[2].Rows[rowIdx].Cells[3].Write(builder, rec.Reason);
                         //rowIdx++;
                         MeritRow.Cells[0].Write(builder, strSchoolYear);
-                        
-                        if(typeList.Count>0)
-                            MeritRow.Cells[1].Write(builder, string.Join(",",typeList.ToArray()));
+
+                        if (typeList.Count > 0)
+                            MeritRow.Cells[1].Write(builder, string.Join(",", typeList.ToArray()));
                         else
-                            MeritRow.Cells[1].Write(builder,"");
-                        
+                            MeritRow.Cells[1].Write(builder, "");
+
                         if (cotList.Count > 0)
                             MeritRow.Cells[2].Write(builder, string.Join(",", cotList.ToArray()));
                         else
                             MeritRow.Cells[2].Write(builder, "");
 
                         MeritRow.Cells[3].Write(builder, rec.Reason);
-                        MeritRow = MeritRow.NextSibling as Row; 
-                    }                 
+                        MeritRow = MeritRow.NextSibling as Row;
+                    }
                     #endregion
                 }
             }
@@ -1625,41 +1626,101 @@ namespace KH_StudentScoreSummaryReport
                 {
                     List<StudentFitnessRecord> recList = _StudentFitnessRecordDict[student.StudentID];
 
+                    Dictionary<int, StudentFitnessRecord> recordDic = new Dictionary<int, StudentFitnessRecord>();
+                    foreach (StudentFitnessRecord record in recList)
+                    {
+                        if (!recordDic.ContainsKey(record.SchoolYear))
+                        {
+                            recordDic.Add(record.SchoolYear, record);
+                        }
+                    }
+
                     #region 列印體適能
                     //坐姿體前彎
                     //立定跳遠
                     //仰臥起坐
                     //心肺適能
-                    SemesterDataCollection semesters = student.SHistory.GetGradeYearSemester().GetSemesters(PrintSetting.PrintSemesters);
+                    //SemesterDataCollection semesters = student.SHistory.GetGradeYearSemester().GetSemesters(PrintSetting.PrintSemesters);
+                    SemesterDataCollection semesters = student.SHistory.GetGradeYearSemester();
                     Row FitnessRowA = builder.CurrentParagraph.ParentNode.ParentNode as Row;
                     Row FitnessRowB = FitnessRowA.NextSibling as Row;
                     Row FitnessRowC = FitnessRowB.NextSibling as Row;
                     Row FitnessRowD = FitnessRowC.NextSibling as Row;
 
-                    int count = 0, offset = 2;
-
-                    List<int> SchoolYearList = new List<int>();
-                    // 取得學年度
+                    Dictionary<int, List<int>> schoolYearDic = new Dictionary<int, List<int>>();
+                    schoolYearDic.Add(1, new List<int>());
+                    schoolYearDic.Add(2, new List<int>());
+                    schoolYearDic.Add(3, new List<int>());
+                    schoolYearDic.Add(4, new List<int>());
+                    schoolYearDic.Add(5, new List<int>());
+                    schoolYearDic.Add(6, new List<int>());
                     foreach (SemesterData each in semesters)
                     {
-                        if(!SchoolYearList.Contains(each.SchoolYear))
-                            SchoolYearList.Add(each.SchoolYear);
+                        if ((each.GradeYear == 1 || each.GradeYear ==7) && each.Semester == 1)
+                            if (!schoolYearDic[1].Contains(each.SchoolYear))
+                                schoolYearDic[1].Add(each.SchoolYear);
+
+                        if ((each.GradeYear == 1 || each.GradeYear == 7) && each.Semester == 2)
+                            if (!schoolYearDic[2].Contains(each.SchoolYear))
+                                schoolYearDic[2].Add(each.SchoolYear);
+
+                        if ((each.GradeYear == 2 || each.GradeYear == 8) && each.Semester == 1)
+                            if (!schoolYearDic[3].Contains(each.SchoolYear))
+                                schoolYearDic[3].Add(each.SchoolYear);
+
+                        if ((each.GradeYear == 2 || each.GradeYear == 8) && each.Semester == 2)
+                            if (!schoolYearDic[4].Contains(each.SchoolYear))
+                                schoolYearDic[4].Add(each.SchoolYear);
+
+                        if ((each.GradeYear == 3 || each.GradeYear == 9) && each.Semester == 1)
+                            if (!schoolYearDic[5].Contains(each.SchoolYear))
+                                schoolYearDic[5].Add(each.SchoolYear);
+
+                        if ((each.GradeYear == 3 || each.GradeYear == 9) && each.Semester == 2)
+                            if (!schoolYearDic[6].Contains(each.SchoolYear))
+                                schoolYearDic[6].Add(each.SchoolYear);
                     }
 
-                    foreach (int sc in SchoolYearList)
+                    List<int> usedAlready = new List<int>();
+                    int count = 0, offset = 2;
+                    foreach (int i in PrintSetting.PrintSemesters)
                     {
-                        foreach (StudentFitnessRecord rec in recList.Where(x=>x.SchoolYear==sc))
+                        foreach (int schoolYear in schoolYearDic[i])
                         {
-                            FitnessRowA.Cells[count + offset].Write(builder, rec.SitAndReachDegree);
-                            FitnessRowB.Cells[count + offset].Write(builder, rec.StandingLongJumpDegree);
-                            FitnessRowC.Cells[count + offset].Write(builder, rec.SitUpDegree);
-                            FitnessRowD.Cells[count + offset].Write(builder, rec.CardiorespiratoryDegree);                                
+                            if (recordDic.ContainsKey(schoolYear) && !usedAlready.Contains(schoolYear))
+                            {
+                                StudentFitnessRecord rec = recordDic[schoolYear];
+                                FitnessRowA.Cells[count/2 + offset].Write(builder, rec.SitAndReachDegree);
+                                FitnessRowB.Cells[count/2 + offset].Write(builder, rec.StandingLongJumpDegree);
+                                FitnessRowC.Cells[count/2 + offset].Write(builder, rec.SitUpDegree);
+                                FitnessRowD.Cells[count/2 + offset].Write(builder, rec.CardiorespiratoryDegree);
+                                usedAlready.Add(schoolYear);
+                            }
                         }
-                        count ++;
+                        count++;
                     }
+                    //List<int> SchoolYearList = new List<int>();
+                    //// 取得學年度
+                    //foreach (SemesterData each in semesters)
+                    //{
+                    //    if (!SchoolYearList.Contains(each.SchoolYear))
+                    //        SchoolYearList.Add(each.SchoolYear);
+                    //}
+
+                    //foreach (int sc in SchoolYearList)
+                    //{
+                    //    foreach (StudentFitnessRecord rec in recList.Where(x=>x.SchoolYear==sc))
+                    //    {
+                    //        FitnessRowA.Cells[count + offset].Write(builder, rec.SitAndReachDegree);
+                    //        FitnessRowB.Cells[count + offset].Write(builder, rec.StandingLongJumpDegree);
+                    //        FitnessRowC.Cells[count + offset].Write(builder, rec.SitUpDegree);
+                    //        FitnessRowD.Cells[count + offset].Write(builder, rec.CardiorespiratoryDegree);                                
+                    //    }
+                    //    count ++;
+                    //}
                     #endregion
                 }
-            
+
             }
 
         }
@@ -1725,15 +1786,15 @@ namespace KH_StudentScoreSummaryReport
                 if (each.Domain == CalcMessage)
                 {
                     ldomain4 = each;
-                    continue;                
+                    continue;
                 }
 
-      
-                    if (each.IsDomain)
-                        domains.Add(each);
-                    else
-                        subjects.Add(each);
-               
+
+                if (each.IsDomain)
+                    domains.Add(each);
+                else
+                    subjects.Add(each);
+
             }
             domains.Sort(delegate(RowHeader x, RowHeader y)
             {
@@ -1759,9 +1820,9 @@ namespace KH_StudentScoreSummaryReport
 
         private string GetPlaceString(PlaceCollection places, string placeKey)
         {
-             Place place = places[placeKey];
+            Place place = places[placeKey];
             //decimal percentage = (100m * ((decimal)place.Level / (decimal)place.Radix));
-            
+
 
             ////小於1%的話，就是1%。
             //if (percentage < 1) percentage = 1;
@@ -1773,11 +1834,11 @@ namespace KH_StudentScoreSummaryReport
 
             if (PrintSetting.PrintRankPercentage)
                 result = place.Percentage + "%";
-                //result = Math.Round(percentage, 0, MidpointRounding.AwayFromZero) + "%";
+            //result = Math.Round(percentage, 0, MidpointRounding.AwayFromZero) + "%";
 
             if (PrintSetting.PrintRank && PrintSetting.PrintRankPercentage)
                 result = string.Format("{0}/{1}%", place.Level, place.Percentage);
-                //result = string.Format("{0}/{1}%", place.Level, Math.Round(percentage, 0, MidpointRounding.AwayFromZero));
+            //result = string.Format("{0}/{1}%", place.Level, Math.Round(percentage, 0, MidpointRounding.AwayFromZero));
 
             return result;
         }
@@ -1814,9 +1875,9 @@ namespace KH_StudentScoreSummaryReport
             int num = 0;
             // 公式：100-名次百分比+1
             num = 100 - Percentage + 1;
-            if (num >0)
+            if (num > 0)
                 result = string.Format("{0}", num);
-            
+
             return result;
         }
 
@@ -1934,41 +1995,41 @@ namespace KH_StudentScoreSummaryReport
                             fieldValue = student.TransUpdateDateStr;
                         break;
 
-                    case "特身名稱1":                        
+                    case "特身名稱1":
                         if (string.IsNullOrEmpty(student.SpcStudTypeName))
                         {
-                            fieldValue = "□"+StudSpcName1 ;
+                            fieldValue = "□" + StudSpcName1;
                         }
-                        else 
+                        else
                         {
-                            if (StudSpcName1.Trim() == student.SpcStudTypeName.Trim ())
+                            if (StudSpcName1.Trim() == student.SpcStudTypeName.Trim())
                                 fieldValue = "■" + StudSpcName1;
                             else
-                                fieldValue = "□"+StudSpcName1;
+                                fieldValue = "□" + StudSpcName1;
                         }
-                            break;
+                        break;
 
                     case "特身名稱2":
 
-                            if (string.IsNullOrEmpty(student.SpcStudTypeName))
-                            {
-                                fieldValue = "□"+StudSpcName2 ;
-                            }
+                        if (string.IsNullOrEmpty(student.SpcStudTypeName))
+                        {
+                            fieldValue = "□" + StudSpcName2;
+                        }
+                        else
+                        {
+                            if (StudSpcName2.Trim() == student.SpcStudTypeName.Trim())
+                                fieldValue = "■" + StudSpcName2;
                             else
-                            {
-                                if (StudSpcName2.Trim() == student.SpcStudTypeName.Trim())
-                                    fieldValue = "■" + StudSpcName2;
-                                else
-                                    fieldValue = "□" + StudSpcName2;
+                                fieldValue = "□" + StudSpcName2;
 
-                            }
+                        }
 
                         break;
 
                     case "特身名稱3":
                         if (string.IsNullOrEmpty(student.SpcStudTypeName))
                         {
-                            fieldValue = "□"+StudSpcName3;
+                            fieldValue = "□" + StudSpcName3;
                         }
                         else
                         {
@@ -1984,7 +2045,7 @@ namespace KH_StudentScoreSummaryReport
                     case "特身名稱4":
                         if (string.IsNullOrEmpty(student.SpcStudTypeName))
                         {
-                               fieldValue = "□"+StudSpcName4 ;
+                            fieldValue = "□" + StudSpcName4;
                         }
                         else
                         {
@@ -2000,7 +2061,7 @@ namespace KH_StudentScoreSummaryReport
                     case "特身名稱5":
                         if (string.IsNullOrEmpty(student.SpcStudTypeName))
                         {
-                            fieldValue = "□"+StudSpcName5 ;
+                            fieldValue = "□" + StudSpcName5;
                         }
                         else
                         {
@@ -2016,7 +2077,7 @@ namespace KH_StudentScoreSummaryReport
                     case "特身名稱6":
                         if (string.IsNullOrEmpty(student.SpcStudTypeName))
                         {
-                            fieldValue = "□"+StudSpcName6;
+                            fieldValue = "□" + StudSpcName6;
                         }
                         else
                         {
@@ -2029,6 +2090,21 @@ namespace KH_StudentScoreSummaryReport
 
                         break;
 
+                    case "特身名稱7":
+                        if (string.IsNullOrEmpty(student.SpcStudTypeName))
+                        {
+                            fieldValue = "□" + StudSpcName7;
+                        }
+                        else
+                        {
+                            if (StudSpcName7.Trim() == student.SpcStudTypeName.Trim())
+                                fieldValue = "■" + StudSpcName7;
+                            else
+                                fieldValue = "□" + StudSpcName7;
+
+                        }
+
+                        break;
                 }
 
                 return true;
