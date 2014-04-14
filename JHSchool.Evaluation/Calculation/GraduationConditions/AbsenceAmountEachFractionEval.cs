@@ -28,9 +28,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
         {
             _result = new EvaluationResult();
             _periodMapping = new Dictionary<string, int>();
-            _types = new Dictionary<string, decimal>();
-            _typeWeight = new Dictionary<string, decimal>();
-
+            
             foreach (JHPeriodMappingInfo info in JHSchool.Data.JHPeriodMapping.SelectAll())
             {
                 if (!_periodMapping.ContainsKey(info.Type))
@@ -38,6 +36,9 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 _periodMapping[info.Type]++;
             }
 
+            //統計假別
+            _types = new Dictionary<string, decimal>();
+            _typeWeight = new Dictionary<string, decimal>();
             _SelectedType = new List<string>();
             string types = element.GetAttribute("假別");
             foreach (string typeline in types.Split(';'))

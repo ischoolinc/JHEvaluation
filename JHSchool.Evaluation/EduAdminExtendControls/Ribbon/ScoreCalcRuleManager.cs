@@ -112,6 +112,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             DataListener.Add(new TextBoxSource(txtSetAbsence1c));
             DataListener.Add(new TextBoxSource(txtSetAbsence2b));
             DataListener.Add(new TextBoxSource(txtSetAbsence2c));
+            DataListener.Add(new TextBoxSource(txtSetAbsence2d));
 
             DataListener.Add(new NumericUpDownSource(numTimes4));
             DataListener.Add(new ComboBoxSource(cboPerformanceDegree1, ComboBoxSource.ListenAttribute.Text));
@@ -459,6 +460,8 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 txtPeriod2c.Text = element.GetAttribute("節數");
                 lblSetAbsence2c.Text = element.GetAttribute("假別");
                 txtSetAbsence2c.Text = lblSetAbsence2c.Text;
+                lblSetAbsence2d.Text = element.GetAttribute("核可假別");
+                txtSetAbsence2d.Text = lblSetAbsence2d.Text;
             }
             else
                 warning = true;
@@ -685,6 +688,10 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             if (lblSetAbsence2c.Text.StartsWith("(")) lblSetAbsence2c.Text = lblSetAbsence2c.Text.Substring(1, lblSetAbsence2c.Text.Length - 1);
             if (lblSetAbsence2c.Text.EndsWith(")")) lblSetAbsence2c.Text = lblSetAbsence2c.Text.Substring(0, lblSetAbsence2c.Text.Length - 1);
             element.SetAttribute("假別", lblSetAbsence2c.Text);
+
+            if (lblSetAbsence2d.Text.StartsWith("(")) lblSetAbsence2d.Text = lblSetAbsence2d.Text.Substring(1, lblSetAbsence2d.Text.Length - 1);
+            if (lblSetAbsence2d.Text.EndsWith(")")) lblSetAbsence2d.Text = lblSetAbsence2d.Text.Substring(0, lblSetAbsence2d.Text.Length - 1);
+            element.SetAttribute("核可假別", lblSetAbsence2d.Text);
 
             //DemeritAmountEach
             element = helper.AddElement("畢業條件/日常生活表現畢業條件", "條件");
@@ -1044,17 +1051,25 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
 
         private void btnSetAbsence2c_Click(object sender, EventArgs e)
         {
-            PeriodAbsenceSelectionForm form = new PeriodAbsenceSelectionForm(lblSetAbsence2c.Text);
+            PeriodAbsenceSelectionFormNew form = new PeriodAbsenceSelectionFormNew(lblSetAbsence2c.Text, txtSetAbsence2d.Text);
             if (form.ShowDialog() == DialogResult.OK)
             {
                 lblSetAbsence2c.Text = form.Setting;
                 txtSetAbsence2c.Text = form.Setting;
+                lblSetAbsence2d.Text = form.Setting2;
+                txtSetAbsence2d.Text = form.Setting2;
             }
         }
 
         private void chkDaily3c_CheckedChanged(object sender, EventArgs e)
         {
             gpDaily3c.Enabled = chkDaily3c.Checked;
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Talker talker = new Talker();
+            talker.ShowDialog();
         }
     }
 }

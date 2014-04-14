@@ -281,6 +281,18 @@
       <DependentUpon>StudinCourse.cs</DependentUpon>
     </Compile>
     <Compile Include="Class_ExtendMethod.cs" />
+    <Compile Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleRelated\PeriodAbsenceSelectionFormNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleRelated\PeriodAbsenceSelectionFormNew.Designer.cs">
+      <DependentUpon>PeriodAbsenceSelectionFormNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleRelated\Talker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleRelated\Talker.Designer.cs">
+      <DependentUpon>Talker.cs</DependentUpon>
+    </Compile>
     <Compile Include="StudentExtendControls\Ribbon\CheckStudentSemHistoryScoreRAT.cs" />
     <Compile Include="StudentExtendControls\Ribbon\Config.cs" />
     <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\PrintConfigForm.cs">
@@ -925,6 +937,10 @@
       <DependentUpon>PeriodAbsencePanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleRelated\PeriodAbsenceSelectionFormNew.resx">
+      <DependentUpon>PeriodAbsenceSelectionFormNew.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleRelated\PeriodAbsenceSelectionForm.resx">
       <DependentUpon>PeriodAbsenceSelectionForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -932,6 +948,9 @@
     <EmbeddedResource Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleRelated\ScoreCalcRuleCreator.resx">
       <DependentUpon>ScoreCalcRuleCreator.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleRelated\Talker.resx">
+      <DependentUpon>Talker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EduAdminExtendControls\Ribbon\ScoreMappingTable.resx">
       <DependentUpon>ScoreMappingTable.cs</DependentUpon>
