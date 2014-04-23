@@ -12,6 +12,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ScoreCalcRuleRelated
 {
     public partial class PeriodAbsencePanel : UserControl
     {
+        public EventHandler onDataChanged;
         private string _type;
         private EnhancedErrorProvider _error;
         public string Weight { get { return textBoxX1.Text; } set { textBoxX1.Text = value; } }
@@ -24,6 +25,12 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ScoreCalcRuleRelated
             _type = type;
             textBoxX1.Text = p;
 
+            if (_type == "核可假別")
+            {
+                textBoxX1.Visible = false;
+                labelX1.Visible = false;
+            }
+                
             groupPanel1.Text = type;
             flowPanel.Controls.Clear();
         }
@@ -36,6 +43,15 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ScoreCalcRuleRelated
                 CheckBox chk = new CheckBox();
                 chk.Text = absence;
                 chk.AutoSize = true;
+                if (_type == "核可假別")
+                {
+                    chk.Tag = "核可假別";
+                    chk.CheckedChanged += delegate
+                    {
+                        if (onDataChanged != null)
+                            onDataChanged(chk, new EventArgs());
+                    };
+                }
                 flowPanel.Controls.Add(chk);
             }
             flowPanel.ResumeLayout();

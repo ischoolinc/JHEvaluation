@@ -441,7 +441,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             Dictionary<string, object> FieldData = new Dictionary<string, object>();
 
             // 班座排序
-            StudentGraduationPredictDataList = (from data in StudentGraduationPredictDataList orderby data.ClassName, int.Parse(data.SeatNo) ascending select data).ToList();
+            StudentGraduationPredictDataList = (from data in StudentGraduationPredictDataList orderby data.ClassName, data.SeatNo.PadLeft(3,'0') ascending select data).ToList();
 
             foreach (StudentGraduationPredictData sgpd in StudentGraduationPredictDataList)
             {
@@ -1046,7 +1046,8 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             {
                 rowIndex++;
                 columnIndex = 0;
-                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.Class.Name, styleNormal);      // 班級
+                string className = student.Class != null ? student.Class.Name : "";
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, className, styleNormal);      // 班級
                 SetStudentDomainCell(cells, rowIndex, columnIndex++, student.SeatNo, styleNormal);          // 座號
                 SetStudentDomainCell(cells, rowIndex, columnIndex++, student.StudentNumber, styleNormal);   // 學號
                 SetStudentDomainCell(cells, rowIndex, columnIndex++, student.Name, styleNormal);            // 姓名
