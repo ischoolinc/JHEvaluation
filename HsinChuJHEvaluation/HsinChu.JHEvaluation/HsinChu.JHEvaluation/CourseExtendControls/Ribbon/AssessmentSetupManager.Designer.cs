@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AssessmentSetupManager));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataview = new DevComponents.DotNetBar.Controls.DataGridViewX();
             this.ExamID = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Weight = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,6 +62,12 @@
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lbl1 = new DevComponents.DotNetBar.LabelX();
+            this.labelX1 = new DevComponents.DotNetBar.LabelX();
+            this.ipt01 = new DevComponents.Editors.IntegerInput();
+            this.ipt02 = new DevComponents.Editors.IntegerInput();
+            this.labelX2 = new DevComponents.DotNetBar.LabelX();
+            this.labelX3 = new DevComponents.DotNetBar.LabelX();
             ((System.ComponentModel.ISupportInitialize)(this.dataview)).BeginInit();
             this.ipList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loading)).BeginInit();
@@ -69,6 +75,8 @@
             this.navigationPanePanel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.npLeft.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ipt01)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ipt02)).BeginInit();
             this.SuspendLayout();
             // 
             // dataview
@@ -76,14 +84,14 @@
             this.dataview.AllowUserToAddRows = false;
             this.dataview.AllowUserToResizeRows = false;
             this.dataview.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataview.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataview.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
             this.dataview.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataview.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ExamID,
@@ -95,21 +103,21 @@
             this.StartTime,
             this.EndTime,
             this.InputRequired});
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataview.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle18.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataview.DefaultCellStyle = dataGridViewCellStyle18;
             this.dataview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataview.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
             this.dataview.Location = new System.Drawing.Point(159, 37);
             this.dataview.Name = "dataview";
             this.dataview.RowHeadersWidth = 25;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataview.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataview.RowsDefaultCellStyle = dataGridViewCellStyle19;
             this.dataview.RowTemplate.Height = 24;
             this.dataview.Size = new System.Drawing.Size(622, 377);
             this.dataview.TabIndex = 2;
@@ -133,8 +141,8 @@
             // Weight
             // 
             this.Weight.DataPropertyName = "Weight";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Weight.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Weight.DefaultCellStyle = dataGridViewCellStyle17;
             this.Weight.HeaderText = "比重";
             this.Weight.Name = "Weight";
             this.Weight.Width = 50;
@@ -329,6 +337,12 @@
             // 
             this.peTemplateName1.CanvasColor = System.Drawing.SystemColors.Control;
             this.peTemplateName1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.peTemplateName1.Controls.Add(this.labelX3);
+            this.peTemplateName1.Controls.Add(this.labelX2);
+            this.peTemplateName1.Controls.Add(this.ipt02);
+            this.peTemplateName1.Controls.Add(this.ipt01);
+            this.peTemplateName1.Controls.Add(this.labelX1);
+            this.peTemplateName1.Controls.Add(this.lbl1);
             this.peTemplateName1.Controls.Add(this.lblIsDirty);
             this.peTemplateName1.Controls.Add(this.btnSave);
             this.peTemplateName1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -453,8 +467,8 @@
             // dataGridViewTextBoxColumn1
             // 
             this.dataGridViewTextBoxColumn1.DataPropertyName = "Weight";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle20;
             this.dataGridViewTextBoxColumn1.HeaderText = "比重";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.Width = 50;
@@ -473,6 +487,100 @@
             this.dataGridViewTextBoxColumn3.HeaderText = "結束時間";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             // 
+            // lbl1
+            // 
+            this.lbl1.AutoSize = true;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lbl1.Location = new System.Drawing.Point(118, 9);
+            this.lbl1.Name = "lbl1";
+            this.lbl1.Size = new System.Drawing.Size(60, 21);
+            this.lbl1.TabIndex = 5;
+            this.lbl1.Text = "定期比例";
+            // 
+            // labelX1
+            // 
+            this.labelX1.AutoSize = true;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX1.Location = new System.Drawing.Point(276, 9);
+            this.labelX1.Name = "labelX1";
+            this.labelX1.Size = new System.Drawing.Size(60, 21);
+            this.labelX1.TabIndex = 6;
+            this.labelX1.Text = "平時比例";
+            // 
+            // ipt01
+            // 
+            // 
+            // 
+            // 
+            this.ipt01.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.ipt01.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.ipt01.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.ipt01.Location = new System.Drawing.Point(181, 7);
+            this.ipt01.MaxValue = 100;
+            this.ipt01.MinValue = 0;
+            this.ipt01.Name = "ipt01";
+            this.ipt01.ShowUpDown = true;
+            this.ipt01.Size = new System.Drawing.Size(60, 25);
+            this.ipt01.TabIndex = 7;
+            this.ipt01.Value = 50;
+            this.ipt01.ValueChanged += new System.EventHandler(this.ipt01_ValueChanged);
+            // 
+            // ipt02
+            // 
+            // 
+            // 
+            // 
+            this.ipt02.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.ipt02.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.ipt02.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.ipt02.Location = new System.Drawing.Point(337, 7);
+            this.ipt02.MaxValue = 100;
+            this.ipt02.MinValue = 0;
+            this.ipt02.Name = "ipt02";
+            this.ipt02.ShowUpDown = true;
+            this.ipt02.Size = new System.Drawing.Size(60, 25);
+            this.ipt02.TabIndex = 8;
+            this.ipt02.Value = 50;
+            this.ipt02.ValueChanged += new System.EventHandler(this.ipt02_ValueChanged);
+            // 
+            // labelX2
+            // 
+            this.labelX2.AutoSize = true;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX2.Location = new System.Drawing.Point(244, 9);
+            this.labelX2.Name = "labelX2";
+            this.labelX2.Size = new System.Drawing.Size(19, 21);
+            this.labelX2.TabIndex = 9;
+            this.labelX2.Text = "%";
+            this.labelX2.TextAlignment = System.Drawing.StringAlignment.Center;
+            // 
+            // labelX3
+            // 
+            this.labelX3.AutoSize = true;
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX3.Location = new System.Drawing.Point(399, 9);
+            this.labelX3.Name = "labelX3";
+            this.labelX3.Size = new System.Drawing.Size(19, 21);
+            this.labelX3.TabIndex = 10;
+            this.labelX3.Text = "%";
+            this.labelX3.TextAlignment = System.Drawing.StringAlignment.Center;
+            // 
             // AssessmentSetupManager
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -481,6 +589,7 @@
             this.Controls.Add(this.expandableSplitter1);
             this.Controls.Add(this.peTemplateName1);
             this.Controls.Add(this.npLeft);
+            this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(600, 296);
             this.Name = "AssessmentSetupManager";
             this.Text = "評分樣版設定";
@@ -490,9 +599,12 @@
             this.ipList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loading)).EndInit();
             this.peTemplateName1.ResumeLayout(false);
+            this.peTemplateName1.PerformLayout();
             this.navigationPanePanel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.npLeft.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ipt01)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ipt02)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -528,6 +640,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn StartTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn EndTime;
         private System.Windows.Forms.DataGridViewCheckBoxColumn InputRequired;
+        private DevComponents.Editors.IntegerInput ipt02;
+        private DevComponents.Editors.IntegerInput ipt01;
+        private DevComponents.DotNetBar.LabelX labelX1;
+        private DevComponents.DotNetBar.LabelX lbl1;
+        private DevComponents.DotNetBar.LabelX labelX3;
+        private DevComponents.DotNetBar.LabelX labelX2;
 
     }
 }

@@ -20,6 +20,8 @@ using JHSchool.Evaluation;
 using HsinChu.JHEvaluation.CourseExtendControls.Ribbon.AssessmentSetupManagerControls;
 using JHSchool.Data;
 using HsinChu.JHEvaluation.Data;
+using FISCA.Data;
+using System.Xml.Linq;
 
 namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
 {
@@ -31,6 +33,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
         private BackgroundWorker _workder;
         private bool _has_deleted;
         private EnhancedErrorProvider _errors;
+        private bool _CheckSaveAssessmentSetup = false;
 
         public AssessmentSetupManager()
         {
@@ -190,28 +193,72 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
             set { _previous_item = value; }
         }
 
+        private void SaveAssessmentSetupToDB(string ID)
+        {
+            XElement elm = new XElement("Extension");
+            // 定期比例
+            elm.SetElementValue("ScorePercentage", ipt01.Value);
+            // 平時比例
+            elm.SetElementValue("AssignmentScorePercentage", ipt02.Value);
+            string query = "update exam_template set extension='" + elm.ToString() + "' where id=" + ID;
+            UpdateHelper uh = new UpdateHelper();
+            uh.Execute(query);
+        }
+
         private void SelectAssessmentSetup(ButtonItem item)
         {
             dataview.Rows.Clear();
-
+            
             //cboScoreSource.Enabled = (item != null);
             //txtStartTime.Enabled = (item != null);
             //txtEndTime.Enabled = (item != null);
-
+            ipt01.Tag = ipt02.Tag = null;
             if (item == null)
             {
+                
                 peTemplateName1.Text = string.Empty;
                 dataview.AllowUserToAddRows = false;
                 //panel1.Enabled = false;
-
+                ipt01.Enabled = ipt02.Enabled = false;
                 return;
             }
             else
             {
+                
                 AssessmentSetupRecord record = (item.Tag as AssessmentSetupRecord);
                 peTemplateName1.Text = record.Name;
                 dataview.AllowUserToAddRows = true;
                 //panel1.Enabled = true;
+                              
+
+                // 需要儲存樣版比例
+                if (_CheckSaveAssessmentSetup)
+                {
+                    SaveAssessmentSetupToDB(record.ID);
+                    _CheckSaveAssessmentSetup = false;
+                }
+
+                ipt01.Value = ipt02.Value = 50;
+                ipt01.Enabled = ipt02.Enabled = true;
+
+                // 取得比例
+                QueryHelper qh = new QueryHelper();
+                string selQuery = "select id,extension from exam_template where id=" + record.ID;
+                DataTable dt = qh.Select(selQuery);
+                string xmlStr = "<root>" + dt.Rows[0]["extension"].ToString() + "</root>";
+                XElement elmRoot = XElement.Parse(xmlStr);
+
+                if (elmRoot != null)
+                {
+                    if (elmRoot.Element("Extension") != null)
+                    {
+                        if (elmRoot.Element("Extension").Element("ScorePercentage") != null)
+                            ipt01.Value = int.Parse(elmRoot.Element("Extension").Element("ScorePercentage").Value);
+
+                        if (elmRoot.Element("Extension").Element("AssignmentScorePercentage") != null)
+                            ipt02.Value = int.Parse(elmRoot.Element("Extension").Element("AssignmentScorePercentage").Value);
+                    }
+                }               
 
                 foreach (var ae in JHAEInclude.SelectByAssessmentSetupID(record.ID))
                 {
@@ -239,7 +286,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
 
         private bool CanContinue()
         {
-            if (IsDirty())
+            if (IsDirty() || lblIsDirty.Visible)
             {
                 DialogResult dr = MsgBox.Show("您未儲存目前資料，是否要儲存？", Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
@@ -250,6 +297,10 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                 }
                 else if (dr == DialogResult.Yes)
                 {
+                    AssessmentSetupRecord rec = CurrentItem.Tag as AssessmentSetupRecord;
+                    if (rec != null)
+                        SaveAssessmentSetupToDB(rec.ID);
+                    
                     if (!SaveTemplate())
                     {
                         CurrentItem.RaiseClick();
@@ -365,6 +416,8 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
             else
                 peTemplateName1.Text = CurrentItem.Text;
 
+            ipt01.Tag = ipt01.Value;
+            ipt02.Tag = ipt02.Value;
         }
 
         private bool IsDirty()
@@ -650,6 +703,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
 
             if (SaveTemplate())
             {
+                _CheckSaveAssessmentSetup = true;
                 //ReloadTempalte(CurrentItem);
                 SelectAssessmentSetup(CurrentItem);
             }
@@ -827,6 +881,29 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
         private void dataview_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             ValidateGrid();
+        }
+
+        private void ipt01_ValueChanged(object sender, EventArgs e)
+        {
+            // 最多100
+            ipt02.Value = 100 - ipt01.Value;
+            
+            lblIsDirty.Visible = false;
+            if (ipt01.Tag != null)
+                if (ipt01.Value.ToString() != ipt01.Tag.ToString())
+                    lblIsDirty.Visible = true;
+            
+          
+        }
+
+        private void ipt02_ValueChanged(object sender, EventArgs e)
+        {
+            // 最多100
+            ipt01.Value = 100 - ipt02.Value;
+            lblIsDirty.Visible = false;
+            if (ipt02.Tag != null)
+                if (ipt02.Value.ToString() != ipt02.Tag.ToString())
+                    lblIsDirty.Visible = true;
         }
     }
 }

@@ -17,3 +17,18 @@ D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.JHEvaluation\Hs
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.pdb
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.JHEvaluation\HsinChu.JHEvaluation\bin\Debug\HsinChu.JHEvaluation.dll
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.JHEvaluation\HsinChu.JHEvaluation\bin\Debug\HsinChu.JHEvaluation.pdb
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\bin\Debug\HsinChu.JHEvaluation.dll
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\bin\Debug\HsinChu.JHEvaluation.pdb
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.CourseExtendControls.Ribbon.AssessmentSetupManager.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.CourseExtendControls.Ribbon.AssessmentSetupManagerControls.AssessmentNameEditor.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.CourseExtendControls.Ribbon.CheckSaveForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.CourseExtendControls.Ribbon.CourseScoreInputForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon.CourseScoreStatusForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.Properties.Resources.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItem.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItemRelated.CreateForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItemRelated.ScoreInputForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated.QuickInputSemesterScoreForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.csproj.GenerateResource.Cache
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.dll
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.JHEvaluation\HsinChu.JHEvaluation\obj\Debug\HsinChu.JHEvaluation.pdb
