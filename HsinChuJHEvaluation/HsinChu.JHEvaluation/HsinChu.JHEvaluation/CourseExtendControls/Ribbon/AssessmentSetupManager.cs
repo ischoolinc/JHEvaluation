@@ -199,7 +199,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
             // 定期比例
             elm.SetElementValue("ScorePercentage", ipt01.Value);
             // 平時比例
-            elm.SetElementValue("AssignmentScorePercentage", ipt02.Value);
+           
             string query = "update exam_template set extension='" + elm.ToString() + "' where id=" + ID;
             UpdateHelper uh = new UpdateHelper();
             uh.Execute(query);
@@ -212,14 +212,14 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
             //cboScoreSource.Enabled = (item != null);
             //txtStartTime.Enabled = (item != null);
             //txtEndTime.Enabled = (item != null);
-            ipt01.Tag = ipt02.Tag = null;
+            ipt01.Tag = null;
             if (item == null)
             {
                 
                 peTemplateName1.Text = string.Empty;
                 dataview.AllowUserToAddRows = false;
                 //panel1.Enabled = false;
-                ipt01.Enabled = ipt02.Enabled = false;
+                ipt01.Enabled = false;
                 return;
             }
             else
@@ -238,8 +238,8 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     _CheckSaveAssessmentSetup = false;
                 }
 
-                ipt01.Value = ipt02.Value = 50;
-                ipt01.Enabled = ipt02.Enabled = true;
+                ipt01.Value = 50;
+                ipt01.Enabled =true;
 
                 // 取得比例
                 QueryHelper qh = new QueryHelper();
@@ -254,9 +254,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     {
                         if (elmRoot.Element("Extension").Element("ScorePercentage") != null)
                             ipt01.Value = int.Parse(elmRoot.Element("Extension").Element("ScorePercentage").Value);
-
-                        if (elmRoot.Element("Extension").Element("AssignmentScorePercentage") != null)
-                            ipt02.Value = int.Parse(elmRoot.Element("Extension").Element("AssignmentScorePercentage").Value);
+                        
                     }
                 }               
 
@@ -416,8 +414,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
             else
                 peTemplateName1.Text = CurrentItem.Text;
 
-            ipt01.Tag = ipt01.Value;
-            ipt02.Tag = ipt02.Value;
+            ipt01.Tag = ipt01.Value;         
         }
 
         private bool IsDirty()
@@ -886,7 +883,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
         private void ipt01_ValueChanged(object sender, EventArgs e)
         {
             // 最多100
-            ipt02.Value = 100 - ipt01.Value;
+            lblpt02.Text = (100 - ipt01.Value) + " %";
             
             lblIsDirty.Visible = false;
             if (ipt01.Tag != null)
@@ -895,15 +892,6 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
             
           
         }
-
-        private void ipt02_ValueChanged(object sender, EventArgs e)
-        {
-            // 最多100
-            ipt01.Value = 100 - ipt02.Value;
-            lblIsDirty.Visible = false;
-            if (ipt02.Tag != null)
-                if (ipt02.Value.ToString() != ipt02.Tag.ToString())
-                    lblIsDirty.Visible = true;
-        }
+             
     }
 }

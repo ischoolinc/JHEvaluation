@@ -53,6 +53,10 @@
             this.btnAddNew = new DevComponents.DotNetBar.ButtonX();
             this.btnDelete = new DevComponents.DotNetBar.ButtonX();
             this.peTemplateName1 = new DevComponents.DotNetBar.PanelEx();
+            this.labelX2 = new DevComponents.DotNetBar.LabelX();
+            this.ipt01 = new DevComponents.Editors.IntegerInput();
+            this.labelX1 = new DevComponents.DotNetBar.LabelX();
+            this.lbl1 = new DevComponents.DotNetBar.LabelX();
             this.lblIsDirty = new DevComponents.DotNetBar.LabelX();
             this.btnSave = new DevComponents.DotNetBar.ButtonX();
             this.buttonItem4 = new DevComponents.DotNetBar.ButtonItem();
@@ -62,21 +66,15 @@
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lbl1 = new DevComponents.DotNetBar.LabelX();
-            this.labelX1 = new DevComponents.DotNetBar.LabelX();
-            this.ipt01 = new DevComponents.Editors.IntegerInput();
-            this.ipt02 = new DevComponents.Editors.IntegerInput();
-            this.labelX2 = new DevComponents.DotNetBar.LabelX();
-            this.labelX3 = new DevComponents.DotNetBar.LabelX();
+            this.lblpt02 = new DevComponents.DotNetBar.LabelX();
             ((System.ComponentModel.ISupportInitialize)(this.dataview)).BeginInit();
             this.ipList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loading)).BeginInit();
             this.peTemplateName1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ipt01)).BeginInit();
             this.navigationPanePanel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.npLeft.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ipt01)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ipt02)).BeginInit();
             this.SuspendLayout();
             // 
             // dataview
@@ -337,9 +335,8 @@
             // 
             this.peTemplateName1.CanvasColor = System.Drawing.SystemColors.Control;
             this.peTemplateName1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
-            this.peTemplateName1.Controls.Add(this.labelX3);
+            this.peTemplateName1.Controls.Add(this.lblpt02);
             this.peTemplateName1.Controls.Add(this.labelX2);
-            this.peTemplateName1.Controls.Add(this.ipt02);
             this.peTemplateName1.Controls.Add(this.ipt01);
             this.peTemplateName1.Controls.Add(this.labelX1);
             this.peTemplateName1.Controls.Add(this.lbl1);
@@ -358,6 +355,68 @@
             this.peTemplateName1.Style.MarginLeft = 15;
             this.peTemplateName1.TabIndex = 1;
             this.peTemplateName1.Text = "一般科目";
+            // 
+            // labelX2
+            // 
+            this.labelX2.AutoSize = true;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX2.Location = new System.Drawing.Point(244, 9);
+            this.labelX2.Name = "labelX2";
+            this.labelX2.Size = new System.Drawing.Size(19, 21);
+            this.labelX2.TabIndex = 9;
+            this.labelX2.Text = "%";
+            this.labelX2.TextAlignment = System.Drawing.StringAlignment.Center;
+            // 
+            // ipt01
+            // 
+            this.ipt01.BackColor = System.Drawing.Color.White;
+            // 
+            // 
+            // 
+            this.ipt01.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.ipt01.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.ipt01.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.ipt01.Location = new System.Drawing.Point(181, 7);
+            this.ipt01.MaxValue = 100;
+            this.ipt01.MinValue = 0;
+            this.ipt01.Name = "ipt01";
+            this.ipt01.ShowUpDown = true;
+            this.ipt01.Size = new System.Drawing.Size(60, 25);
+            this.ipt01.TabIndex = 7;
+            this.ipt01.Value = 50;
+            this.ipt01.ValueChanged += new System.EventHandler(this.ipt01_ValueChanged);
+            // 
+            // labelX1
+            // 
+            this.labelX1.AutoSize = true;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX1.Location = new System.Drawing.Point(278, 9);
+            this.labelX1.Name = "labelX1";
+            this.labelX1.Size = new System.Drawing.Size(60, 21);
+            this.labelX1.TabIndex = 6;
+            this.labelX1.Text = "平時比例";
+            // 
+            // lbl1
+            // 
+            this.lbl1.AutoSize = true;
+            // 
+            // 
+            // 
+            this.lbl1.BackgroundStyle.Class = "";
+            this.lbl1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lbl1.Location = new System.Drawing.Point(118, 9);
+            this.lbl1.Name = "lbl1";
+            this.lbl1.Size = new System.Drawing.Size(60, 21);
+            this.lbl1.TabIndex = 5;
+            this.lbl1.Text = "定期比例";
             // 
             // lblIsDirty
             // 
@@ -487,99 +546,21 @@
             this.dataGridViewTextBoxColumn3.HeaderText = "結束時間";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             // 
-            // lbl1
+            // lblpt02
             // 
-            this.lbl1.AutoSize = true;
-            // 
-            // 
-            // 
-            this.labelX1.BackgroundStyle.Class = "";
-            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lbl1.Location = new System.Drawing.Point(118, 9);
-            this.lbl1.Name = "lbl1";
-            this.lbl1.Size = new System.Drawing.Size(60, 21);
-            this.lbl1.TabIndex = 5;
-            this.lbl1.Text = "定期比例";
-            // 
-            // labelX1
-            // 
-            this.labelX1.AutoSize = true;
+            this.lblpt02.AutoSize = true;
+            this.lblpt02.BackColor = System.Drawing.Color.Transparent;
             // 
             // 
             // 
-            this.labelX1.BackgroundStyle.Class = "";
-            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(276, 9);
-            this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(60, 21);
-            this.labelX1.TabIndex = 6;
-            this.labelX1.Text = "平時比例";
-            // 
-            // ipt01
-            // 
-            // 
-            // 
-            // 
-            this.ipt01.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.ipt01.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.ipt01.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
-            this.ipt01.Location = new System.Drawing.Point(181, 7);
-            this.ipt01.MaxValue = 100;
-            this.ipt01.MinValue = 0;
-            this.ipt01.Name = "ipt01";
-            this.ipt01.ShowUpDown = true;
-            this.ipt01.Size = new System.Drawing.Size(60, 25);
-            this.ipt01.TabIndex = 7;
-            this.ipt01.Value = 50;
-            this.ipt01.ValueChanged += new System.EventHandler(this.ipt01_ValueChanged);
-            // 
-            // ipt02
-            // 
-            // 
-            // 
-            // 
-            this.ipt02.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.ipt02.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.ipt02.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
-            this.ipt02.Location = new System.Drawing.Point(337, 7);
-            this.ipt02.MaxValue = 100;
-            this.ipt02.MinValue = 0;
-            this.ipt02.Name = "ipt02";
-            this.ipt02.ShowUpDown = true;
-            this.ipt02.Size = new System.Drawing.Size(60, 25);
-            this.ipt02.TabIndex = 8;
-            this.ipt02.Value = 50;
-            this.ipt02.ValueChanged += new System.EventHandler(this.ipt02_ValueChanged);
-            // 
-            // labelX2
-            // 
-            this.labelX2.AutoSize = true;
-            // 
-            // 
-            // 
-            this.labelX2.BackgroundStyle.Class = "";
-            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(244, 9);
-            this.labelX2.Name = "labelX2";
-            this.labelX2.Size = new System.Drawing.Size(19, 21);
-            this.labelX2.TabIndex = 9;
-            this.labelX2.Text = "%";
-            this.labelX2.TextAlignment = System.Drawing.StringAlignment.Center;
-            // 
-            // labelX3
-            // 
-            this.labelX3.AutoSize = true;
-            // 
-            // 
-            // 
-            this.labelX3.BackgroundStyle.Class = "";
-            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX3.Location = new System.Drawing.Point(399, 9);
-            this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(19, 21);
-            this.labelX3.TabIndex = 10;
-            this.labelX3.Text = "%";
-            this.labelX3.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.lblpt02.BackgroundStyle.Class = "";
+            this.lblpt02.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblpt02.Location = new System.Drawing.Point(339, 9);
+            this.lblpt02.Name = "lblpt02";
+            this.lblpt02.Size = new System.Drawing.Size(37, 21);
+            this.lblpt02.TabIndex = 11;
+            this.lblpt02.Text = "50 %";
+            this.lblpt02.TextAlignment = System.Drawing.StringAlignment.Far;
             // 
             // AssessmentSetupManager
             // 
@@ -600,11 +581,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.loading)).EndInit();
             this.peTemplateName1.ResumeLayout(false);
             this.peTemplateName1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ipt01)).EndInit();
             this.navigationPanePanel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.npLeft.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ipt01)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ipt02)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -640,12 +620,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn StartTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn EndTime;
         private System.Windows.Forms.DataGridViewCheckBoxColumn InputRequired;
-        private DevComponents.Editors.IntegerInput ipt02;
         private DevComponents.Editors.IntegerInput ipt01;
         private DevComponents.DotNetBar.LabelX labelX1;
         private DevComponents.DotNetBar.LabelX lbl1;
-        private DevComponents.DotNetBar.LabelX labelX3;
         private DevComponents.DotNetBar.LabelX labelX2;
+        private DevComponents.DotNetBar.LabelX lblpt02;
 
     }
 }
