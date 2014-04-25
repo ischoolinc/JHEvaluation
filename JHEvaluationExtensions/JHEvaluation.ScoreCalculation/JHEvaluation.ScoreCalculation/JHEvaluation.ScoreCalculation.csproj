@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JHEvaluation.ScoreCalculation</RootNamespace>
     <AssemblyName>JHEvaluation.ScoreCalculation</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -67,63 +67,96 @@
   <ItemGroup>
     <Reference Include="Aspose.Cells, Version=4.3.0.0, Culture=neutral, PublicKeyToken=9a40d5a4b59e5256, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\CampusLibrary\Aspose.Cells.dll</HintPath>
+      <HintPath>Library\Aspose.Cells.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevComponents.DotNetBar2, Version=7.9.0.3, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
+    <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ischool\bin\Debug\DevComponents.DotNetBar2.dll</HintPath>
+      <HintPath>Library\DevComponents.DotNetBar2.dll</HintPath>
     </Reference>
-    <Reference Include="FISCA">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaOldKernel\FISCA.dll</HintPath>
+    <Reference Include="FISCA, Version=2.5.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="FISCA.Authentication">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaOldKernel\FISCA.Authentication.dll</HintPath>
+    <Reference Include="FISCA.Authentication, Version=1.9.0.18, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.Authentication.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="FISCA.Deployment">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaOldKernel\FISCA.Deployment.dll</HintPath>
+    <Reference Include="FISCA.Data, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="FISCA.LogAgent">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaOldKernel\FISCA.LogAgent.dll</HintPath>
+    <Reference Include="FISCA.Deployment, Version=1.0.0.13, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.Deployment.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="FISCA.Permission">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaOldKernel\FISCA.Permission.dll</HintPath>
+    <Reference Include="FISCA.Deployment.Administration, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.Deployment.Administration.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="FISCA.Presentation">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaOldKernel\FISCA.Presentation.dll</HintPath>
+    <Reference Include="FISCA.DSAClient, Version=1.0.1.16, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.DSAClient.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Framework">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaAE\modules\JHCore\Framework.dll</HintPath>
+    <Reference Include="FISCA.DSAUtil, Version=3.9.0.10, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.DSAUtil.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaAE\modules\JHCore\JHSchool.dll</HintPath>
+    <Reference Include="FISCA.LogAgent, Version=1.0.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.LogAgent.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Affair">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaAE\modules\JHCore\JHSchool.Affair.dll</HintPath>
+    <Reference Include="FISCA.Permission, Version=1.2.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.Permission.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Data">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaAE\modules\JHCore\JHSchool.Data.dll</HintPath>
+    <Reference Include="FISCA.Presentation, Version=1.1.0.19, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Evaluation">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaAE\modules\JHEvaluation\JHSchool.Evaluation.dll</HintPath>
+    <Reference Include="Framework, Version=1.0.0.10, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="K12.Data">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaAE\modules\JHCore\K12.Data.dll</HintPath>
+    <Reference Include="JHSchool, Version=1.0.3.15, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\JHSchool.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="K12.Presentation">
-      <HintPath>..\..\..\..\..\FiscaRuntime\FiscaAE\modules\JHCore\K12.Presentation.dll</HintPath>
+    <Reference Include="JHSchool.Affair, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\JHSchool.Affair.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JHSchool.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\JHSchool.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JHSchool.Evaluation, Version=1.0.3.18, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="K12.Data, Version=2.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\K12.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="K12.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\K12.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -339,6 +372,59 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\graduation_zoom_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Library\Aspose.Cells.dll" />
+    <Content Include="Library\Aspose.Cells.xml" />
+    <Content Include="Library\DevComponents.DotNetBar2.dll" />
+    <Content Include="Library\DevComponents.DotNetBar2.xml" />
+    <Content Include="Library\FISCA.Authentication.dll" />
+    <Content Include="Library\FISCA.Authentication.pdb" />
+    <Content Include="Library\FISCA.Authentication.xml" />
+    <Content Include="Library\FISCA.Data.dll" />
+    <Content Include="Library\FISCA.Data.pdb" />
+    <Content Include="Library\FISCA.Data.xml" />
+    <Content Include="Library\FISCA.Deployment.Administration.dll" />
+    <Content Include="Library\FISCA.Deployment.Administration.pdb" />
+    <Content Include="Library\FISCA.Deployment.Administration.xml" />
+    <Content Include="Library\FISCA.Deployment.dll" />
+    <Content Include="Library\FISCA.Deployment.pdb" />
+    <Content Include="Library\FISCA.Deployment.xml" />
+    <Content Include="Library\FISCA.dll" />
+    <Content Include="Library\FISCA.DSAClient.dll" />
+    <Content Include="Library\FISCA.DSAClient.pdb" />
+    <Content Include="Library\FISCA.DSAClient.xml" />
+    <Content Include="Library\FISCA.DSAUtil.dll" />
+    <Content Include="Library\FISCA.DSAUtil.pdb" />
+    <Content Include="Library\FISCA.DSAUtil.xml" />
+    <Content Include="Library\FISCA.LogAgent.dll" />
+    <Content Include="Library\FISCA.LogAgent.pdb" />
+    <Content Include="Library\FISCA.LogAgent.xml" />
+    <Content Include="Library\FISCA.pdb" />
+    <Content Include="Library\FISCA.Permission.dll" />
+    <Content Include="Library\FISCA.Permission.pdb" />
+    <Content Include="Library\FISCA.Permission.xml" />
+    <Content Include="Library\FISCA.Presentation.dll" />
+    <Content Include="Library\FISCA.Presentation.pdb" />
+    <Content Include="Library\FISCA.Presentation.xml" />
+    <Content Include="Library\FISCA.xml" />
+    <Content Include="Library\Framework.dll" />
+    <Content Include="Library\Framework.pdb" />
+    <Content Include="Library\JHSchool.Affair.dll" />
+    <Content Include="Library\JHSchool.Affair.pdb" />
+    <Content Include="Library\JHSchool.Data.dll" />
+    <Content Include="Library\JHSchool.Data.pdb" />
+    <Content Include="Library\JHSchool.Data.xml" />
+    <Content Include="Library\JHSchool.dll" />
+    <Content Include="Library\JHSchool.Evaluation.dll" />
+    <Content Include="Library\JHSchool.Evaluation.pdb" />
+    <Content Include="Library\JHSchool.pdb" />
+    <Content Include="Library\K12.Data.dll" />
+    <Content Include="Library\K12.Data.pdb" />
+    <Content Include="Library\K12.Data.xml" />
+    <Content Include="Library\K12.Presentation.dll" />
+    <Content Include="Library\K12.Presentation.pdb" />
+    <Content Include="Library\K12.Presentation.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

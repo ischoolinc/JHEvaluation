@@ -42,6 +42,10 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
             Attends = ReadCurrentSemesterAttend();
             List<JHSCETakeRecord> SCETakes = ReadSCETake();
 
+            // 取得新竹評量樣版設定
+            Util.ScorePercentageHSDict.Clear();
+            Util.ScorePercentageHSDict = Util.GetScorePercentageHS();
+
             //清除原有的資料。
             foreach (StudentScore each in Students.Values)
                 each.AttendScore.Clear();

@@ -128,22 +128,59 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
             }
             else if (Program.Mode == ModuleMode.HsinChu)
             {
-                decimal sum = 0, weight = 0;
+                // 預設取得比例
+                decimal ss = 50, sa = 50, sums = 0, suma = 0;
+
+                // 當不使用平時成績
+                if (aedata.UseAssignmentScore == false)
+                {
+                    sa = 0;ss = 100;
+                }
+
+                // 當不使用定期成績
+                if (aedata.UseScore == false)
+                {
+                    ss = 0; sa = 100;
+                }
+
+                // 使用系統內預設比例
+                if (Util.ScorePercentageHSDict.ContainsKey(aedata.RefAssessmentSetupID))
+                {
+                    ss = Util.ScorePercentageHSDict[aedata.RefAssessmentSetupID];
+                    sa = 100 - ss;
+                }
+                
 
                 if (aedata.UseScore && scedata.Score.HasValue)
                 {
-                    sum += scedata.Score.Value;
-                    weight++;
+                    sums = scedata.Score.Value *ss* 0.01M;
                 }
 
                 if (aedata.UseAssignmentScore && scedata.AssignmentScore.HasValue)
                 {
-                    sum += scedata.AssignmentScore.Value;
-                    weight++;
+                    suma = scedata.AssignmentScore.Value * sa * 0.01M;
                 }
 
-                if (weight > 0)
-                    Value = (sum / weight);
+                Value = sums + suma;
+
+                //// 原本作法
+                //decimal sum = 0, weight = 0;
+
+                //if (aedata.UseScore && scedata.Score.HasValue)
+                //{
+                //    sum += scedata.Score.Value;
+                //    weight++;
+                //}
+
+                //if (aedata.UseAssignmentScore && scedata.AssignmentScore.HasValue)
+                //{
+                //    sum += scedata.AssignmentScore.Value;
+                //    weight++;
+                //}
+
+                //if (weight > 0)
+                //    Value = (sum / weight);
+
             }
             else
                 throw new ArgumentException(string.Format("沒有此種縣市的處理方式({0})。", Program.Mode.ToString()));
@@ -221,6 +258,8 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
                 UseEffort = false;
                 UseAssignmentScore = false;
 
+                RefAssessmentSetupID = record.RefAssessmentSetupID;
+
                 XmlElement xmlrecord = record.ToXML();
 
                 #region 嘗試取得 UseAssignmentScore
@@ -249,6 +288,8 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
                 if (p == "是") return true;
                 else return false;
             }
+
+            public string RefAssessmentSetupID { get; private set; }
         }
         #endregion
     }

@@ -20,6 +20,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         public List<StudentScore> Calculate()
         {
             List<StudentScore> noneCalcs = new List<StudentScore>();
+
             foreach (StudentScore student in Students)
             {
                 if (student.AttendScore.Count <= 0)

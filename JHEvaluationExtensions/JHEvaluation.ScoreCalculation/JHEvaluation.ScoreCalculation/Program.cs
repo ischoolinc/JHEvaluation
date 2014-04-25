@@ -147,13 +147,13 @@ namespace JHEvaluation.ScoreCalculation
                 Mode = ModuleMode.HsinChu;  //新竹。
         }
 
-        private static void TestMode(DeployParameters dparams)
-        {
-            FISCA.Authentication.DSAServices.SetLicense(@"C:\Users\yaoming\Desktop\ischool.dir\SmartSchoolLicense.key");
-            FISCA.Authentication.DSAServices.Login("admin", "1234");
+        //private static void TestMode(DeployParameters dparams)
+        //{
+        //    FISCA.Authentication.DSAServices.SetLicense(@"C:\Users\yaoming\Desktop\ischool.dir\SmartSchoolLicense.key");
+        //    FISCA.Authentication.DSAServices.Login("admin", "1234");
 
-            new CalculationTest(dparams["Mode"]).ShowDialog();
-        }
+        //    new CalculationTest(dparams["Mode"]).ShowDialog();
+        //}
     }
 
     internal enum ModuleMode
