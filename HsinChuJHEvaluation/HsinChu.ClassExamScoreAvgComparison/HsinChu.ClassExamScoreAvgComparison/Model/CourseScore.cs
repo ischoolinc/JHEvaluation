@@ -35,7 +35,19 @@ namespace HsinChu.ClassExamScoreAvgComparison.Model
                 if (ae.UseScore && ae.UseAssignmentScore)
                 {
                     if (_score.HasValue && _assignment_score.HasValue)
-                        Score = (_score.Value + _assignment_score.Value) / 2m;
+                    {
+                        if (Global.ScorePercentageHSDict.ContainsKey(ae.RefAssessmentSetupID))
+                        {
+                            decimal ff =Global.ScorePercentageHSDict[ae.RefAssessmentSetupID];
+                            decimal f = _score.Value * ff * 0.01M;
+                            decimal a = _assignment_score.Value * (100 - ff) * 0.01M;
+                            Score = f + a;
+                        }
+                        else
+                            Score = _score.Value * 0.5M + _assignment_score.Value * 0.5M;
+
+                        //Score = (_score.Value + _assignment_score.Value) / 2m;
+                    }
                     else if (_score.HasValue) Score = _score;
                     else if (_assignment_score.HasValue) Score = _assignment_score;
                 }

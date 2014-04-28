@@ -317,6 +317,9 @@ namespace HsinChu.ClassExamScoreAvgComparison
             // TODO: 不確定排名是否接續
             rank.Sequence = false;
 
+            // 取得評量比例
+            Global.ScorePercentageHSDict = Global.GetScorePercentageHS();
+
             foreach (var ced in _data)
             {
                 //轉成 CourseScore
