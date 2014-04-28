@@ -293,9 +293,11 @@ namespace HsinChuExamScore_JH
             {
                 string id = dr["id"].ToString();
                 decimal sp = 50;
-                decimal.TryParse(dr["ScorePercentage"].ToString(), out sp);
-
-                returnData.Add(id, sp);
+                if(decimal.TryParse(dr["ScorePercentage"].ToString(), out sp))
+                    returnData.Add(id, sp);
+                else
+                    returnData.Add(id, 50);
+                
             }
             return returnData;
         }
