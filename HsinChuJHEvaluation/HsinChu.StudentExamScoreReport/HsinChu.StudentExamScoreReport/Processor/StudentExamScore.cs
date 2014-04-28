@@ -635,6 +635,8 @@ namespace HsinChu.StudentExamScoreReport.Processor
                 row.AddSubject(course.Subject);
 
             SubjectRow subjectRow = row.Subjects[course.Subject];
+            subjectRow.RefAssessmentSetupID = course.RefAssessmentSetupID;
+
             subjectRow.SetPeriodCredit(course.Period, course.Credit);
             subjectRow.Score = sce.Score;
             subjectRow.AssignmentScore = sce.AssignmentScore;
@@ -936,7 +938,19 @@ namespace HsinChu.StudentExamScoreReport.Processor
             get
             {
                 if (Score.HasValue && AssignmentScore.HasValue)
-                    return (Score + AssignmentScore) / 2;
+                {
+                    // 使用評量設定比例，如果沒有預設 50,50
+                    if (Utility.ScorePercentageHSDict.ContainsKey(RefAssessmentSetupID))
+                    {
+                        decimal f = Score.Value * Utility.ScorePercentageHSDict[RefAssessmentSetupID] * 0.01M;
+                        decimal a = AssignmentScore.Value * (100 - Utility.ScorePercentageHSDict[RefAssessmentSetupID]) * 0.01M;
+                        return f + a;
+                    }
+                    else
+                        return Score.Value * 0.5M + AssignmentScore.Value * 0.5M;
+
+                    //return (Score + AssignmentScore) / 2;
+                }
                 else if (Score.HasValue)
                     return Score.Value;
                 else if (AssignmentScore.HasValue)
@@ -965,5 +979,10 @@ namespace HsinChu.StudentExamScoreReport.Processor
 
         internal decimal Period { get { return _pc.Period; } }
         internal decimal Credit { get { return _pc.Credit; } }
+
+        /// <summary>
+        /// 評量樣版ID
+        /// </summary>
+        public string RefAssessmentSetupID { get; set; }
     }
 }

@@ -538,6 +538,11 @@ namespace HsinChu.StudentExamScoreReport
                     if (shi.SchoolYear == _config.SchoolYear && shi.Semester == _config.Semester)
                         if (!Config._StudSemesterHistoryItemDict.ContainsKey(shi.RefStudentID))
                             Config._StudSemesterHistoryItemDict.Add(shi.RefStudentID, shi);
+                        
+            // 取得評量比例
+            Utility.ScorePercentageHSDict.Clear();
+            Utility.ScorePercentageHSDict = Utility.GetScorePercentageHS();
+            
 
             #region 產生
             foreach (JHStudentRecord student in _config.Students)
