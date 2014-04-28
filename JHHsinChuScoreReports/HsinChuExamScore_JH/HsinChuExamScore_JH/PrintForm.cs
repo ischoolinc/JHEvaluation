@@ -468,7 +468,9 @@ namespace HsinChuExamScore_JH
             // 取得這次該修課程
             Dictionary<string, Dictionary<string,DAO.SubjectDomainName>> StudCourseDict = Utility.GetStudentSCAttendCourse(_StudentIDList, CourseDict.Keys.ToList(), _SelExamID);
 
-
+            // 取得評量設定比例
+            Dictionary<string,decimal> ScorePercentageHSDict = Utility.GetScorePercentageHS();
+            
             // 處理評量成績科目
             Dictionary<string, DAO.StudExamScore> studExamScoreDict = new Dictionary<string, DAO.StudExamScore>();
             foreach (string studID in _StudentIDList)
@@ -488,6 +490,7 @@ namespace HsinChuExamScore_JH
                         if (rec.RefExamID == _SelExamID && CourseDict.ContainsKey(rec.RefCourseID))
                         {
                             JHCourseRecord cr = CourseDict[rec.RefCourseID];                            
+                            
                             string SubjecName = cr.Subject;
 
                             // 勾選科目
@@ -502,8 +505,20 @@ namespace HsinChuExamScore_JH
                                     ess.ScoreF = rec.Score;
 
                                     if (ess.ScoreA.HasValue && ess.ScoreF.HasValue)
-                                        ess.ScoreT = (ess.ScoreA.Value + ess.ScoreF.Value) / 2;
+                                    {
+                                        if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
+                                        {
+                                            // 取得定期，評量由100-定期
+                                            decimal f=ScorePercentageHSDict[cr.RefAssessmentSetupID]*0.01M;
+                                            decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID])*0.01M;
+                                            ess.ScoreT = ess.ScoreA.Value * a + ess.ScoreF.Value * f;
+                                        }
+                                        else
+                                            ess.ScoreT = ess.ScoreA.Value * 0.5M + ess.ScoreF.Value * 0.5M; // 沒有設定預設50,50
 
+                                        // 原本
+                                        //ess.ScoreT = (ess.ScoreA.Value + ess.ScoreF.Value) / 2;
+                                    }
                                     if (ess.ScoreA.HasValue && ess.ScoreF.HasValue == false)
                                         ess.ScoreT = ess.ScoreA.Value;
 

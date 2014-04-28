@@ -278,5 +278,26 @@ namespace HsinChuExamScore_JH
             }
             return retVal;
         }
+
+        /// <summary>
+        /// 取得評量比例設定
+        /// </summary>
+        public static Dictionary<string, decimal> GetScorePercentageHS()
+        {
+            Dictionary<string, decimal> returnData = new Dictionary<string, decimal>();
+            FISCA.Data.QueryHelper qh1 = new FISCA.Data.QueryHelper();
+            string query1 = @"select id,CAST(regexp_replace( xpath_string(exam_template.extension,'/Extension/ScorePercentage'), '^$', '0') as integer) as ScorePercentage  from exam_template";
+            System.Data.DataTable dt1 = qh1.Select(query1);
+
+            foreach (System.Data.DataRow dr in dt1.Rows)
+            {
+                string id = dr["id"].ToString();
+                decimal sp = 50;
+                decimal.TryParse(dr["ScorePercentage"].ToString(), out sp);
+
+                returnData.Add(id, sp);
+            }
+            return returnData;
+        }
     }
 }
