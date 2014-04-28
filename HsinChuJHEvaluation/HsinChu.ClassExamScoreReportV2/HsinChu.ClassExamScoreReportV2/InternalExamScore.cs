@@ -22,6 +22,9 @@ namespace HsinChu.ClassExamScoreReportV2
             //類似學期成績的結構…
             Dictionary<string, InternalExamScoreRecord> dictStudentScores = new Dictionary<string, InternalExamScoreRecord>();
 
+            // 取得評量比例
+            Utilities.ScorePercentageHSDict = Utilities.GetScorePercentageHS();
+
             #region 取得及轉換評量科目成績
             int size = 200;
             int thread = 5;

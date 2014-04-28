@@ -84,6 +84,11 @@
       <HintPath>Library\FISCA.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="FISCA.Data, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\FISCA.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="FISCA.Deployment, Version=1.0.0.13, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\FISCA.Deployment.dll</HintPath>
@@ -208,6 +213,9 @@
     <Content Include="Library\Campus.dll" />
     <Content Include="Library\Campus.Report.dll" />
     <Content Include="Library\DevComponents.DotNetBar2.dll" />
+    <Content Include="Library\FISCA.Data.dll" />
+    <Content Include="Library\FISCA.Data.pdb" />
+    <Content Include="Library\FISCA.Data.xml" />
     <Content Include="Library\FISCA.Deployment.dll" />
     <Content Include="Library\FISCA.dll" />
     <Content Include="Library\FISCA.Presentation.dll" />

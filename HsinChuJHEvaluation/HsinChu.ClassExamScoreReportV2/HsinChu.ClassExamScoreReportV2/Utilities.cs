@@ -334,7 +334,20 @@ namespace HsinChu.ClassExamScoreReportV2
                 if (ae.UseScore && ae.UseAssignmentScore)
                 {
                     if (sce.Score.HasValue && sce.AssignmentScore.HasValue)
-                        Score = (sce.Score.Value + sce.AssignmentScore.Value) / 2m;
+                    {
+                        // 有評量比例
+                        if (Utilities.ScorePercentageHSDict.ContainsKey(ae.RefAssessmentSetupID))
+                        {
+                            decimal ff=Utilities.ScorePercentageHSDict[ae.RefAssessmentSetupID];
+
+                            decimal f = sce.Score.Value * ff * 0.01M;
+                            decimal a = sce.AssignmentScore.Value * (100 - ff) * 0.01M;
+                            return f + a;
+                        }
+                        else
+                            Score = sce.Score.Value * 0.5M + sce.AssignmentScore.Value * 0.5M;
+                        //Score = (sce.Score.Value + sce.AssignmentScore.Value) / 2m;
+                    }
                     else if (sce.Score.HasValue) Score = sce.Score;
                     else if (sce.AssignmentScore.HasValue) Score = sce.AssignmentScore;
                 }
@@ -346,5 +359,36 @@ namespace HsinChu.ClassExamScoreReportV2
 
             return Score;
         }
+
+        /// <summary>
+        /// 取得評量比例設定
+        /// </summary>
+        public static Dictionary<string, decimal> GetScorePercentageHS()
+        {
+            Dictionary<string, decimal> returnData = new Dictionary<string, decimal>();
+            FISCA.Data.QueryHelper qh1 = new FISCA.Data.QueryHelper();
+            string query1 = @"select id,CAST(regexp_replace( xpath_string(exam_template.extension,'/Extension/ScorePercentage'), '^$', '0') as integer) as ScorePercentage  from exam_template";
+            System.Data.DataTable dt1 = qh1.Select(query1);
+
+            foreach (System.Data.DataRow dr in dt1.Rows)
+            {
+                string id = dr["id"].ToString();
+                decimal sp = 50;
+                if (decimal.TryParse(dr["ScorePercentage"].ToString(), out sp))
+                {
+                    returnData.Add(id, sp);
+                }
+                else
+                    returnData.Add(id, 50);
+
+
+            }
+            return returnData;
+        }
+
+        /// <summary>
+        /// 評量比例暫存
+        /// </summary>
+        public static Dictionary<string, decimal> ScorePercentageHSDict = new Dictionary<string, decimal>();
     }
 }
