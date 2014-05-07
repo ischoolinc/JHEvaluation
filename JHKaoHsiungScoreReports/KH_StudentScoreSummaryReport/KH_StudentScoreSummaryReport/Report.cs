@@ -361,6 +361,10 @@ namespace KH_StudentScoreSummaryReport
                         Row row = table.Rows[header.Index + 3];
                         foreach (SemesterData semester in student.SHistory.GetGradeYearSemester().GetSemesters(PrintSetting.PrintSemesters))
                         {
+                            //避開三年級下學期
+                            if ((semester.GradeYear == 3 || semester.GradeYear == 9) && semester.Semester == 2) 
+                                continue;
+
                             SemesterData sysems = new SemesterData(0, semester.SchoolYear, semester.Semester);
                             semesters.Add(sysems);
 
@@ -1239,6 +1243,10 @@ namespace KH_StudentScoreSummaryReport
                         Row row = table.Rows[header.Index + 3];
                         foreach (SemesterData semester in student.SHistory.GetGradeYearSemester().GetSemesters(PrintSetting.PrintSemesters))
                         {
+                            //避開三年級下學期
+                            if ((semester.GradeYear == 3 || semester.GradeYear == 9) && semester.Semester == 2) 
+                                continue;
+
                             SemesterData sysems = new SemesterData(0, semester.SchoolYear, semester.Semester);
                             semesters.Add(sysems);
 
