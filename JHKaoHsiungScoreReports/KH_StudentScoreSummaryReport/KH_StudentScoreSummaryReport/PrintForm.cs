@@ -80,7 +80,7 @@ namespace KH_StudentScoreSummaryReport
         {
             //三下勾選時出現提醒成績不被計算
             if (chk3Down.Checked)
-                MsgBox.Show("「均衡學習」成績依規定只採計到9上，故9下成績不被計算。","iSchool");
+                MsgBox.Show("「均衡學習」成績依規定只採計到9上，故9下成績不被計算。","ischool");
 
             //Report.CheckExportFile = checkExportFile.Checked;
 
