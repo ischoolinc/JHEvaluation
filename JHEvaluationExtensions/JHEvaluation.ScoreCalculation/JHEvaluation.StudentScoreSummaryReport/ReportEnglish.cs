@@ -228,7 +228,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 string subjCName = header.Subject;
                 //string subjEName = Subj.GetSubjectEnglish(header.Subject);
                 string subjEName = _SubjDomainEngNameMapping.GetSubjectEngName(header.Subject);
-                
+
                 string subjString = header.Subject + (string.IsNullOrEmpty(subjEName) ? "" : " " + subjEName);
 
                 datarow.Cells[0].Write(builder, subjString);
@@ -286,10 +286,35 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     if (!score.HasValue) continue;
                     if (!weight.HasValue) weight = 0;
 
+                    //if (PrintScore)
+                    //    row.Cells[columnIndex + 2].Write(builder, score.Value + "");
+                    //else
+                    //    row.Cells[columnIndex + 2].Write(builder, Util.GetDegreeEnglish(score.Value));
                     if (PrintScore)
-                        row.Cells[columnIndex + 2].Write(builder, score.Value + "");
+                    {
+                        if (Global.ShowCredit)
+                        {
+                            row.Cells[columnIndex * 2 + 2].Write(builder, score.Value + "");
+                            row.Cells[columnIndex * 2 + 3].Write(builder, weight.Value + "");
+                        }
+                        else
+                        {
+                            row.Cells[columnIndex + 2].Write(builder, score.Value + "");
+                        }
+                    }
                     else
-                        row.Cells[columnIndex + 2].Write(builder, Util.GetDegreeEnglish(score.Value));
+                    {
+                        if (Global.ShowCredit)
+                        {
+                            row.Cells[columnIndex * 2 + 2].Write(builder, Util.GetDegreeEnglish(score.Value));
+                            row.Cells[columnIndex * 2 + 3].Write(builder, weight.Value + "");
+                        }
+                        else
+                        {
+                            row.Cells[columnIndex + 2].Write(builder, Util.GetDegreeEnglish(score.Value));
+                        }
+                    }
+
                 }
             }
             #endregion
@@ -466,10 +491,35 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     if (!score.HasValue) continue;
                     if (!weight.HasValue) weight = 0;
 
+                    //if (PrintScore)
+                    //    row.Cells[columnIndex + 2].Write(builder, score.Value + "");
+                    //else
+                    //    row.Cells[columnIndex + 2].Write(builder, Util.GetDegreeEnglish(score.Value));
+
                     if (PrintScore)
-                        row.Cells[columnIndex + 2].Write(builder, score.Value + "");
+                    {
+                        if (Global.ShowCredit)
+                        {
+                            row.Cells[columnIndex * 2 + 2].Write(builder, score.Value + "");
+                            row.Cells[columnIndex * 2 + 3].Write(builder, weight.Value + "");
+                        }
+                        else
+                        {
+                            row.Cells[columnIndex + 2].Write(builder, score.Value + "");
+                        }
+                    }
                     else
-                        row.Cells[columnIndex + 2].Write(builder, Util.GetDegreeEnglish(score.Value));
+                    {
+                        if (Global.ShowCredit)
+                        {
+                            row.Cells[columnIndex * 2 + 2].Write(builder, Util.GetDegreeEnglish(score.Value));
+                            row.Cells[columnIndex * 2 + 3].Write(builder, weight.Value + "");
+                        }
+                        else
+                        {
+                            row.Cells[columnIndex + 2].Write(builder, Util.GetDegreeEnglish(score.Value));
+                        }
+                    }
                 }
 
             }

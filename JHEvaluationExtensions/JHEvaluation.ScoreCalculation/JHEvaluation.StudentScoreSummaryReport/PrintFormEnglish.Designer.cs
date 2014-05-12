@@ -53,6 +53,7 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.rtnPDF = new System.Windows.Forms.RadioButton();
             this.rtnWord = new System.Windows.Forms.RadioButton();
+            this.chkCredit = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.groupPanel1.SuspendLayout();
             this.groupPanel2.SuspendLayout();
             this.groupPanel3.SuspendLayout();
@@ -66,7 +67,7 @@
             this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(272, 354);
+            this.btnExit.Location = new System.Drawing.Point(272, 363);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 4;
@@ -80,7 +81,7 @@
             this.btnPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPrint.Location = new System.Drawing.Point(191, 354);
+            this.btnPrint.Location = new System.Drawing.Point(191, 363);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
             this.btnPrint.TabIndex = 3;
@@ -189,7 +190,7 @@
             this.lnkAbsence.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkAbsence.AutoSize = true;
             this.lnkAbsence.BackColor = System.Drawing.Color.Transparent;
-            this.lnkAbsence.Location = new System.Drawing.Point(424, 290);
+            this.lnkAbsence.Location = new System.Drawing.Point(424, 299);
             this.lnkAbsence.Name = "lnkAbsence";
             this.lnkAbsence.Size = new System.Drawing.Size(60, 17);
             this.lnkAbsence.TabIndex = 2;
@@ -268,7 +269,7 @@
             this.lnkTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkTemplate.AutoSize = true;
             this.lnkTemplate.BackColor = System.Drawing.Color.Transparent;
-            this.lnkTemplate.Location = new System.Drawing.Point(12, 354);
+            this.lnkTemplate.Location = new System.Drawing.Point(12, 363);
             this.lnkTemplate.Name = "lnkTemplate";
             this.lnkTemplate.Size = new System.Drawing.Size(86, 17);
             this.lnkTemplate.TabIndex = 2;
@@ -281,7 +282,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(10, 228);
+            this.label1.Location = new System.Drawing.Point(12, 242);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(60, 17);
             this.label1.TabIndex = 5;
@@ -295,7 +296,7 @@
             // 
             this.txtEntranceDate.Border.Class = "";
             this.txtEntranceDate.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtEntranceDate.Location = new System.Drawing.Point(76, 224);
+            this.txtEntranceDate.Location = new System.Drawing.Point(78, 238);
             this.txtEntranceDate.Name = "txtEntranceDate";
             this.txtEntranceDate.Size = new System.Drawing.Size(159, 18);
             this.txtEntranceDate.TabIndex = 6;
@@ -306,7 +307,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(10, 259);
+            this.label2.Location = new System.Drawing.Point(12, 273);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(60, 17);
             this.label2.TabIndex = 5;
@@ -320,7 +321,7 @@
             // 
             this.txtGraduateDate.Border.Class = "TextBoxBorder";
             this.txtGraduateDate.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtGraduateDate.Location = new System.Drawing.Point(76, 255);
+            this.txtGraduateDate.Location = new System.Drawing.Point(78, 269);
             this.txtGraduateDate.Name = "txtGraduateDate";
             this.txtGraduateDate.Size = new System.Drawing.Size(159, 25);
             this.txtGraduateDate.TabIndex = 6;
@@ -331,7 +332,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(243, 225);
+            this.label3.Location = new System.Drawing.Point(245, 239);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(107, 17);
             this.label3.TabIndex = 7;
@@ -341,7 +342,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Location = new System.Drawing.Point(241, 259);
+            this.label4.Location = new System.Drawing.Point(243, 273);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(107, 17);
             this.label4.TabIndex = 7;
@@ -352,12 +353,13 @@
             this.groupPanel3.BackColor = System.Drawing.Color.Transparent;
             this.groupPanel3.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel3.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.groupPanel3.Controls.Add(this.chkCredit);
             this.groupPanel3.Controls.Add(this.rbPrintScore);
             this.groupPanel3.Controls.Add(this.rbPrintLevel);
             this.groupPanel3.DrawTitleBox = false;
             this.groupPanel3.Location = new System.Drawing.Point(12, 168);
             this.groupPanel3.Name = "groupPanel3";
-            this.groupPanel3.Size = new System.Drawing.Size(330, 42);
+            this.groupPanel3.Size = new System.Drawing.Size(330, 62);
             // 
             // 
             // 
@@ -420,7 +422,7 @@
             this.gpFormat.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.gpFormat.Controls.Add(this.panel6);
             this.gpFormat.DrawTitleBox = false;
-            this.gpFormat.Location = new System.Drawing.Point(12, 287);
+            this.gpFormat.Location = new System.Drawing.Point(13, 300);
             this.gpFormat.Name = "gpFormat";
             this.gpFormat.Size = new System.Drawing.Size(330, 55);
             // 
@@ -490,10 +492,24 @@
             this.rtnWord.Text = "Word (*.doc)";
             this.rtnWord.UseVisualStyleBackColor = true;
             // 
+            // chkCredit
+            // 
+            // 
+            // 
+            // 
+            this.chkCredit.BackgroundStyle.Class = "";
+            this.chkCredit.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.chkCredit.Location = new System.Drawing.Point(14, 27);
+            this.chkCredit.Name = "chkCredit";
+            this.chkCredit.Size = new System.Drawing.Size(100, 23);
+            this.chkCredit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.chkCredit.TabIndex = 3;
+            this.chkCredit.Text = "顯示學分數";
+            // 
             // PrintFormEnglish
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(359, 387);
+            this.ClientSize = new System.Drawing.Size(359, 396);
             this.Controls.Add(this.gpFormat);
             this.Controls.Add(this.groupPanel3);
             this.Controls.Add(this.label4);
@@ -554,5 +570,6 @@
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.RadioButton rtnPDF;
         private System.Windows.Forms.RadioButton rtnWord;
+        private DevComponents.DotNetBar.Controls.CheckBoxX chkCredit;
     }
 }
