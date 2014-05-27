@@ -77,7 +77,11 @@ namespace JointAdmissionModule
 
         protected override void OnSaveButtonClick(EventArgs e)
         {
-            Save();
+            if (FISCA.Permission.UserAcl.Current["JHSchool.Student.JointAdmissionModule"].Editable)
+                Save();
+            else
+                MessageBox.Show("此帳號無編輯權限...", "ischool");
+
             this.SaveButtonVisible = false;
             this.CancelButtonVisible = false;
 
