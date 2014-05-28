@@ -154,11 +154,22 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
                 if (aedata.UseScore && scedata.Score.HasValue)
                 {
                     sums = scedata.Score.Value *ss* 0.01M;
+
+                    // 當只有定期
+                    if (aedata.UseAssignmentScore == false)
+                    {
+                        sums = scedata.Score.Value * 100 * 0.01M;
+                    }
                 }
 
                 if (aedata.UseAssignmentScore && scedata.AssignmentScore.HasValue)
                 {
                     suma = scedata.AssignmentScore.Value * sa * 0.01M;
+                    // 當只有平時
+                    if (aedata.UseScore == false)
+                    {
+                        suma = scedata.AssignmentScore.Value * 100 * 0.01M;
+                    }
                 }
 
                 Value = sums + suma;
