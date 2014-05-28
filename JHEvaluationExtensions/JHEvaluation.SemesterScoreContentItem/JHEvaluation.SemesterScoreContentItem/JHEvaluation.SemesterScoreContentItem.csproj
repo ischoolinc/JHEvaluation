@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JHEvaluation.SemesterScoreContentItem</RootNamespace>
     <AssemblyName>JHEvaluation.SemesterScoreContentItem</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
     </StartupObject>
@@ -38,6 +38,7 @@
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,49 +60,67 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevComponents.DotNetBar2, Version=7.9.0.3, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
+    <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\DevComponents.DotNetBar2.dll</HintPath>
+      <HintPath>library\DevComponents.DotNetBar2.dll</HintPath>
     </Reference>
     <Reference Include="FISCA, Version=1.0.1.14, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\FISCA.dll</HintPath>
+      <HintPath>library\FISCA.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.Deployment, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\FISCA.Deployment.dll</HintPath>
+      <HintPath>library\FISCA.Deployment.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.LogAgent, Version=1.0.0.4, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\FISCA.LogAgent.dll</HintPath>
+      <HintPath>library\FISCA.LogAgent.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.Permission">
+      <HintPath>library\FISCA.Permission.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.Presentation, Version=1.0.2.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\FISCA.Presentation.dll</HintPath>
+      <HintPath>library\FISCA.Presentation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Framework, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ischool\bin\Debug\Framework.dll</HintPath>
+      <HintPath>library\Framework.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JHEvaluation.ScoreCalculation, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\JHEvaluation.ScoreCalculation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.Data, Version=1.0.2.26, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\JHSchool.Data.dll</HintPath>
+      <HintPath>library\JHSchool.Data.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.Evaluation, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ischool\bin\Debug\JHSchool.Evaluation.dll</HintPath>
+      <HintPath>library\JHSchool.Evaluation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.SF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="JHSchool.SF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>library\JHSchool.SF.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="K12.Data, Version=1.0.2.26, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\K12.Data.dll</HintPath>
+      <HintPath>library\K12.Data.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="K12.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\K12.Presentation.dll</HintPath>
+      <HintPath>library\K12.Presentation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

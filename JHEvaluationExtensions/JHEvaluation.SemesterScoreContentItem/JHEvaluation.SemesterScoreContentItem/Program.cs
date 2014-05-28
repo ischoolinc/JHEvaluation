@@ -18,7 +18,9 @@ namespace JHEvaluation.SemesterScoreContentItem
             Global.Params = ModuleLoader.GetDeployParametsers(typeof(Program), "Mode=KaoHsiung");
 
             //學生學期成績
-            K12.Presentation.NLDPanels.Student.AddDetailBulider(new DetailBulider<SemesterScoreItem>());
+            string key = "JHSchool.Student.Detail0050";
+            if (FISCA.Permission.UserAcl.Current[key].Editable || FISCA.Permission.UserAcl.Current[key].Viewable)
+                K12.Presentation.NLDPanels.Student.AddDetailBulider(new DetailBulider<SemesterScoreItem>());
 
             JHSchool.SF.Evaluation.SemesterScoreEditor.RegisterHandler(delegate(string studentId)
             {

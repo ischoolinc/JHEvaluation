@@ -20,7 +20,8 @@ namespace JointAdmissionModule
         {
             DeployModeSetup();
 
-            K12.Presentation.NLDPanels.Student.AddDetailBulider(new FISCA.Presentation.DetailBulider<UCSocreRankItem>());
+            if (FISCA.Permission.UserAcl.Current[PermissionCode].Editable || FISCA.Permission.UserAcl.Current[PermissionCode].Viewable)
+                K12.Presentation.NLDPanels.Student.AddDetailBulider(new FISCA.Presentation.DetailBulider<UCSocreRankItem>());
 
             Catalog detail = RoleAclSource.Instance["學生"]["資料項目"];
             detail.Add(new DetailItemFeature(PermissionCode, "學期成績排名與排名百分比"));           

@@ -9,6 +9,7 @@ using JHEvaluation.ScoreCalculation;
 using Campus.Rating;
 using JHSchool.Data;
 using Campus.Report;
+using System.IO;
 
 namespace JHEvaluation.StudentScoreSummaryReport
 {
@@ -44,6 +45,16 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
+            if (chkCredit.Checked)
+                Global.ShowCredit = true;
+            else
+                Global.ShowCredit = false;
+
+            if(Global.ShowCredit)
+                Preference = new ReportPreference(ConfigName, Properties.Resources.學生在校成績證明書_英文_權重);
+            else
+                Preference = new ReportPreference(ConfigName, Prc.學生在校成績證明書_英文);
+
             if (rbDomainOnly.Checked)
                 Preference.ListMethod = ListMethod.DomainOnly;
             else
