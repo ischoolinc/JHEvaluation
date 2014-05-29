@@ -293,3 +293,5 @@ D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchoo
 D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ScoreCalcRuleRelated.PeriodAbsenceSelectionFormNew.resources
 D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ScoreCalcRuleRelated.Talker.resources
 D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.csprojResolveAssemblyReference.cache
+D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ScoreCalcRuleRelated.PeriodAbsenceSelectionFormNew.resources
+D:\GitHub2\JHEvaluation\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ScoreCalcRuleRelated.Talker.resources
