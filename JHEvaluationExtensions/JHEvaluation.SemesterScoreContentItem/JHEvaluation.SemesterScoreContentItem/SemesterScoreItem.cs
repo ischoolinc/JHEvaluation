@@ -211,7 +211,11 @@ namespace JHEvaluation.SemesterScoreContentItem
 
         private void btnView_Click(object sender, EventArgs e)
         {
-            btnModify_Click(sender, e);
+            //btnModify_Click(sender, e);
+            if (listView.SelectedItems.Count <= 0) return;
+
+            SemesterScoreEditor form = new SemesterScoreEditor(JHStudent.SelectByID(PrimaryKey), listView.SelectedItems[0].Tag as JHSemesterScoreRecord, false);
+            form.ShowDialog();
         }
 
         //刪除

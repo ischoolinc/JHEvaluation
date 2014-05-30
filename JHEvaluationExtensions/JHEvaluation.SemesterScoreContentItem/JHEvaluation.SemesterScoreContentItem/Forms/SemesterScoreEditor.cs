@@ -18,6 +18,9 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
 {
     public partial class SemesterScoreEditor : BaseForm
     {
+        //可編輯狀態
+        bool _Editable = true;
+
         /// <summary>
         /// 學生所有學期成績記錄
         /// </summary>
@@ -111,6 +114,24 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
         public SemesterScoreEditor(JHStudentRecord student, JHSemesterScoreRecord record)
             : this(student)
         {
+            _isModifyMode = true;
+
+            _record = record;
+            cboSchoolYear.Text = "" + record.SchoolYear;
+            cboSemester.Text = "" + record.Semester;
+            cboSchoolYear.Enabled = cboSemester.Enabled = false;
+
+            FillScore(record);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// 檢視模式
+        /// </summary>
+        public SemesterScoreEditor(JHStudentRecord student, JHSemesterScoreRecord record, bool editable)
+            : this(student)
+        {
+            _Editable = editable;
             _isModifyMode = true;
 
             _record = record;
@@ -369,7 +390,8 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
         /// <param name="dgv"></param>
         private void EvaluateEnabled()
         {
-            btnSave.Enabled = gpSubject.Enabled = gpDomain.Enabled = _semesterIsValid;
+            if(_Editable)
+                btnSave.Enabled = gpSubject.Enabled = gpDomain.Enabled = _semesterIsValid;
         }
 
         /// <summary>
