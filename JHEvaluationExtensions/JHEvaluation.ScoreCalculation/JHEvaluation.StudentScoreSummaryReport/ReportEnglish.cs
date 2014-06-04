@@ -445,6 +445,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                     //把空白的領域當成「彈性課程」。
                     string domain = gn;
+                    string domainEName = _SubjDomainEngNameMapping.GetDomainEngName(domain);
+                    domain += string.IsNullOrWhiteSpace(domainEName) ? "" : "\n" + domainEName;
                     datarow.Cells[0].Write(builder, domain);
                     datarow.Cells[1].Write(builder, subjString);
                 }
