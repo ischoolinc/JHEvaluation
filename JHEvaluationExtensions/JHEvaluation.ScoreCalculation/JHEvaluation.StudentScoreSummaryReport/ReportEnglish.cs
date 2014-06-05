@@ -440,7 +440,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
                         gn = header.Domain;
 
                     string subjCName = header.Subject;
-                    string subjEName = Subj.GetSubjectEnglish(header.Subject);
+                    //string subjEName = Subj.GetSubjectEnglish(header.Subject);
+                    string subjEName = _SubjDomainEngNameMapping.GetSubjectEngName(header.Subject);
                     string subjString = header.Subject + (string.IsNullOrEmpty(subjEName) ? "" : "\n" + subjEName);
 
                     //把空白的領域當成「彈性課程」。
