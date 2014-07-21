@@ -11,3 +11,12 @@ D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JHEvaluation.Extensions
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JHEvaluation.Extensions\JHEvaluationAssignmentScore\obj\Debug\GenerateResource.write.1.tlog
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JHEvaluation.Extensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.dll
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\JHEvaluation.Extensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.pdb
+D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\bin\Debug\JHEvaluation.AssignmentScore.dll
+D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\bin\Debug\JHEvaluation.AssignmentScore.pdb
+D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.CourseScoreStatusForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.MainFormScoreInput.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.Properties.Resources.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.Resource1.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.csproj.GenerateResource.Cache
+D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.dll
+D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.pdb

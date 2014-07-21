@@ -18,7 +18,7 @@ namespace JHEvaluation.AssignmentScore.DAO
         public static void ProcesstCourseNameStudentBySchoolYearSemester(int SchoolYear, int Semester)
         {            
             QueryHelper qh = new QueryHelper();
-            string strQuery = "select course.id as courseid,course_name,sc_attend.id as scattendid from sc_attend inner join  student on sc_attend.ref_student_id=student.id inner join course on sc_attend.ref_course_id=course.id where student.status=1 and course.school_year="+SchoolYear+" and course.semester="+Semester+" order by course_name;";
+            string strQuery = "select course.id as courseid,course_name,sc_attend.id as scattendid from sc_attend inner join  student on sc_attend.ref_student_id=student.id inner join course on sc_attend.ref_course_id=course.id where course.subject <>'' and student.status=1 and course.school_year="+SchoolYear+" and course.semester="+Semester+" order by course_name;";
             DataTable dt = qh.Select(strQuery);
             
             _CourseIDNameDict.Clear();
