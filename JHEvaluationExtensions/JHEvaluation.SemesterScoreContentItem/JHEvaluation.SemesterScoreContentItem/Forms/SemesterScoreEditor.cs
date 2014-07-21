@@ -18,6 +18,9 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
 {
     public partial class SemesterScoreEditor : BaseForm
     {
+        //可編輯狀態
+        bool _Editable = true;
+
         /// <summary>
         /// 學生所有學期成績記錄
         /// </summary>
@@ -111,6 +114,24 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
         public SemesterScoreEditor(JHStudentRecord student, JHSemesterScoreRecord record)
             : this(student)
         {
+            _isModifyMode = true;
+
+            _record = record;
+            cboSchoolYear.Text = "" + record.SchoolYear;
+            cboSemester.Text = "" + record.Semester;
+            cboSchoolYear.Enabled = cboSemester.Enabled = false;
+
+            FillScore(record);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// 檢視模式
+        /// </summary>
+        public SemesterScoreEditor(JHStudentRecord student, JHSemesterScoreRecord record, bool editable)
+            : this(student)
+        {
+            _Editable = editable;
             _isModifyMode = true;
 
             _record = record;
@@ -369,7 +390,17 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
         /// <param name="dgv"></param>
         private void EvaluateEnabled()
         {
-            btnSave.Enabled = gpSubject.Enabled = gpDomain.Enabled = _semesterIsValid;
+            if (_Editable)
+            {
+                btnSave.Enabled = gpSubject.Enabled = gpDomain.Enabled = _semesterIsValid;
+            }
+            else
+            {
+                btnSave.Enabled = false;
+                gpSubject.Enabled = true;
+                gpDomain.Enabled = true;
+                _semesterIsValid = false;
+            }
         }
 
         /// <summary>
@@ -630,7 +661,7 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
         private void SemesterChanged(object sender)
         {
             if (_record != null) return;
- 
+
             int schoolYear = int.Parse(cboSchoolYear.Text);
             int semester = int.Parse(cboSemester.Text);
 
@@ -1091,101 +1122,101 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnPreCalcScore_Click(object sender, EventArgs e)
-        {           
-                #region 檢查成績年級及科目是否有錯誤
-                bool valid = true;
+        {
+            #region 檢查成績年級及科目是否有錯誤
+            bool valid = true;
 
-                int SubjHasDomainCount = 0;
+            int SubjHasDomainCount = 0;
 
-                dgvSubject.EndEdit();
-                foreach (DataGridViewRow row in dgvSubject.Rows)
+            dgvSubject.EndEdit();
+            foreach (DataGridViewRow row in dgvSubject.Rows)
+            {
+                // 檢查畫面上是否有科目的領域
+                if (row.Cells[chsDomain.Index].Value != null)
+                    if (row.Cells[chsDomain.Index].Value.ToString().Trim() != "")
+                        SubjHasDomainCount++;
+
+                if (row.IsNewRow) continue;
+                if (IsEmptyRow(row)) continue;
+                foreach (DataGridViewCell cell in row.Cells)
                 {
-                    // 檢查畫面上是否有科目的領域
-                    if (row.Cells[chsDomain.Index].Value != null)
-                        if (row.Cells[chsDomain.Index].Value.ToString().Trim() != "")
-                            SubjHasDomainCount++;
-                    
-                    if (row.IsNewRow) continue;
-                    if (IsEmptyRow(row)) continue;
-                    foreach (DataGridViewCell cell in row.Cells)
-                    {
-                        if (!string.IsNullOrEmpty(cell.ErrorText))
-                            valid = false;
-                    }
+                    if (!string.IsNullOrEmpty(cell.ErrorText))
+                        valid = false;
                 }
+            }
 
-                if (!valid) return;
-                #endregion
+            if (!valid) return;
+            #endregion
 
             // 是否只計算領域
-                bool OnlyCalcDomain = false;
-                if (dgvSubject.Rows.Count == 0 || SubjHasDomainCount == 0)
-                    OnlyCalcDomain = true;
-                else
-                    OnlyCalcDomain = false;
+            bool OnlyCalcDomain = false;
+            if (dgvSubject.Rows.Count == 0 || SubjHasDomainCount == 0)
+                OnlyCalcDomain = true;
+            else
+                OnlyCalcDomain = false;
 
 
-                #region 計算領域成績
-                StudentScore.SetClassMapping();
-                StudentScore studentScore = new StudentScore(_student);
+            #region 計算領域成績
+            StudentScore.SetClassMapping();
+            StudentScore studentScore = new StudentScore(_student);
 
-                JHSemesterScoreRecord tempRecord;
-                if (OnlyCalcDomain)
-                    tempRecord = GetSemesterScoreRecordFromDomainGrid();
-                else
-                    tempRecord = GetSemesterScoreRecordFromSubjectGrid();
+            JHSemesterScoreRecord tempRecord;
+            if (OnlyCalcDomain)
+                tempRecord = GetSemesterScoreRecordFromDomainGrid();
+            else
+                tempRecord = GetSemesterScoreRecordFromSubjectGrid();
 
-                SemesterScore semesterScore = new SemesterScore(tempRecord);
-                studentScore.SemestersScore.Add(SemesterData.Empty, semesterScore);
+            SemesterScore semesterScore = new SemesterScore(tempRecord);
+            studentScore.SemestersScore.Add(SemesterData.Empty, semesterScore);
 
-                List<StudentScore> students = new List<StudentScore>();
-                students.Add(studentScore);
+            List<StudentScore> students = new List<StudentScore>();
+            students.Add(studentScore);
 
-                //讀取計算規則
-                students.ReadCalculationRule(null);
-                //計算領域成績
-                students.CalcuateDomainSemesterScore(new string[] { });
+            //讀取計算規則
+            students.ReadCalculationRule(null);
+            //計算領域成績
+            students.CalcuateDomainSemesterScore(new string[] { });
 
-            
-                dgvDomain.SuspendLayout();
-                dgvDomain.Rows.Clear();
-                foreach (string domain in semesterScore.Domain)
-                {
-                    if (domain == "__彈性課程" || domain=="") continue;
 
-                    SemesterDomainScore domainScore = semesterScore.Domain[domain];
+            dgvDomain.SuspendLayout();
+            dgvDomain.Rows.Clear();
+            foreach (string domain in semesterScore.Domain)
+            {
+                if (domain == "__彈性課程" || domain == "") continue;
 
-                    string periodCredit = "";
-                    PeriodCredit pc = new PeriodCredit();
-                    if (pc.Parse(domainScore.Period + "/" + domainScore.Weight))
-                        periodCredit = pc.ToString();
+                SemesterDomainScore domainScore = semesterScore.Domain[domain];
 
-                    DataGridViewRow row = new DataGridViewRow();
-                    row.CreateCells(dgvDomain,
-                        domain,
-                        periodCredit,
-                        "" + domainScore.Value,
-                        "" + domainScore.Effort,
-                        domainScore.Text,
-                        string.Empty);
-                    dgvDomain.Rows.Add(row);
+                string periodCredit = "";
+                PeriodCredit pc = new PeriodCredit();
+                if (pc.Parse(domainScore.Period + "/" + domainScore.Weight))
+                    periodCredit = pc.ToString();
 
-                    if (domainScore.Value < 60)
-                        row.Cells[chdScore.Index].Style.ForeColor = Color.Red;
-                    if (domainScore.Value > 100 || domainScore.Value < 0)
-                        row.Cells[chdScore.Index].Style.ForeColor = Color.Green;
-                }
-                dgvDomain.ResumeLayout();
+                DataGridViewRow row = new DataGridViewRow();
+                row.CreateCells(dgvDomain,
+                    domain,
+                    periodCredit,
+                    "" + domainScore.Value,
+                    "" + domainScore.Effort,
+                    domainScore.Text,
+                    string.Empty);
+                dgvDomain.Rows.Add(row);
 
-                //排序領域
-                SortDomainGrid();
+                if (domainScore.Value < 60)
+                    row.Cells[chdScore.Index].Style.ForeColor = Color.Red;
+                if (domainScore.Value > 100 || domainScore.Value < 0)
+                    row.Cells[chdScore.Index].Style.ForeColor = Color.Green;
+            }
+            dgvDomain.ResumeLayout();
 
-                txtLearnDomainScore.Text = "" + semesterScore.LearnDomainScore;
-                txtCourseLearnScore.Text = "" + semesterScore.CourseLearnScore;
-                #endregion
+            //排序領域
+            SortDomainGrid();
+
+            txtLearnDomainScore.Text = "" + semesterScore.LearnDomainScore;
+            txtCourseLearnScore.Text = "" + semesterScore.CourseLearnScore;
+            #endregion
         }
 
-        
+
         /// <summary>
         /// 從畫面上讀取領域成績
         /// </summary>
@@ -1197,12 +1228,12 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             temp.SchoolYear = int.Parse(cboSchoolYear.Text);
             temp.Semester = int.Parse(cboSemester.Text);
 
-            
+
             foreach (DataGridViewRow row in dgvDomain.Rows)
             {
                 if (row.IsNewRow) continue;
                 if (IsEmptyRow(row)) continue;
-                
+
                 K12.Data.DomainScore dDomainScore = new K12.Data.DomainScore();
                 PeriodCredit pc = new PeriodCredit();
 
@@ -1219,7 +1250,7 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
 
                 temp.Domains.Add(dDomainScore.Domain, dDomainScore);
             }
-            return temp;        
+            return temp;
         }
 
         /// <summary>

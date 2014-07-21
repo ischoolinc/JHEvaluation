@@ -11,9 +11,10 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
     internal class AbsenceAmountAllFractionEval : IEvaluative
     {
         private EvaluationResult _result;
-        private Dictionary<string, decimal> _types, _typeWeight, _AvoidType;
+        private Dictionary<string, decimal> _types, _typeWeight, _AvoidDic;
         private Dictionary<string, int> _periodMapping;
         private decimal _amount = 100;
+        private List<string> _AvoidList;
 
         /// <summary>
         /// XML參數建構式
@@ -26,6 +27,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
         {
             _result = new EvaluationResult();
             _periodMapping = new Dictionary<string, int>();
+            _AvoidDic = new Dictionary<string, decimal>();
 
             foreach (JHPeriodMappingInfo info in JHSchool.Data.JHPeriodMapping.SelectAll())
             {
@@ -67,13 +69,13 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
             //核可假別
             string avoid_types = element.GetAttribute("核可假別");
-            _AvoidType = new Dictionary<string, decimal>();
+            _AvoidList = new List<string>();
 
             if (!string.IsNullOrWhiteSpace(avoid_types))
                 foreach (string absence in avoid_types.Split(','))
                 {
-                    if (!_AvoidType.ContainsKey(absence))
-                        _AvoidType.Add(absence, 0);
+                    if (!_AvoidList.Contains(absence))
+                        _AvoidList.Add(absence);
                 }
 
             string amount = element.GetAttribute("節數");
@@ -112,6 +114,15 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
             foreach (StudentRecord student in list)
             {
+                //核准假別的累積次數須歸零
+                _AvoidDic.Clear();
+                
+                foreach (string key in _AvoidList)
+                {
+                    if (!_AvoidDic.ContainsKey(key))
+                        _AvoidDic.Add(key, 0);
+                }
+
                 passList.Add(student.ID, true);
 
                 Dictionary<SemesterInfo, int> gyMapping = new Dictionary<SemesterInfo, int>();
@@ -152,9 +163,9 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     foreach (AbsenceCountRecord acRecord in record.AbsenceCounts)
                     {
                         //加總各項核定假別
-                        if (_AvoidType.ContainsKey(acRecord.Name))
+                        if (_AvoidDic.ContainsKey(acRecord.Name))
                         {
-                            _AvoidType[acRecord.Name] += acRecord.Count;
+                            _AvoidDic[acRecord.Name] += acRecord.Count;
                         }
 
                         if (!_types.ContainsKey(acRecord.PeriodType + ":" + acRecord.Name)) continue;
@@ -180,9 +191,9 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 }
 
                 //循環要扣除的假別數
-                foreach (string elem in _AvoidType.Keys)
+                foreach (string elem in _AvoidDic.Keys)
                 {
-                    schoolDay -= _AvoidType[elem];
+                    schoolDay -= _AvoidDic[elem];
                 }
 
                 //總節數乘上設定比例
