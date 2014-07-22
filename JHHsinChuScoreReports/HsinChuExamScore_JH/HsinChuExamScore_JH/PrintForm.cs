@@ -1445,17 +1445,30 @@ namespace HsinChuExamScore_JH
 
                 if (studExamScoreDict.ContainsKey(StudRec.ID))
                 {
-                    if (studExamScoreDict[StudRec.ID].GetDomainScoreA().HasValue)
-                        row["領域成績加權平均"] = studExamScoreDict[StudRec.ID].GetDomainScoreA().Value;
+                    if (studExamScoreDict[StudRec.ID].GetDomainScoreA(true).HasValue)
+                        row["領域成績加權平均"] = studExamScoreDict[StudRec.ID].GetDomainScoreA(true).Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAA().HasValue)
-                        row["科目平時評量加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAA().Value;
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAA(true).HasValue)
+                        row["科目平時評量加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAA(true).Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAF().HasValue)
-                        row["科目定期評量加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAF().Value;
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAF(true).HasValue)
+                        row["科目定期評量加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAF(true).Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAT().HasValue)
-                        row["科目總成績加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAT().Value;
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAT(true).HasValue)
+                        row["科目總成績加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAT(true).Value;
+
+
+                    if (studExamScoreDict[StudRec.ID].GetDomainScoreA(false).HasValue)
+                        row["領域成績加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetDomainScoreA(false).Value;
+
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAA(false).HasValue)
+                        row["科目平時評量加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAA(false).Value;
+
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAF(false).HasValue)
+                        row["科目定期評量加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAF(false).Value;
+
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAT(false).HasValue)
+                        row["科目總成績加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAT(false).Value;
                 }
 
                 // 處理領域組距相關

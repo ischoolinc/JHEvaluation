@@ -148,18 +148,37 @@ namespace HsinChuExamScore_JH.DAO
         /// 評量領域總成績加權平均
         /// </summary>
         /// <returns></returns>
-        public decimal? GetDomainScoreA()
+        public decimal? GetDomainScoreA(bool all)
         {
             decimal? score=null;
             decimal ss = 0;            
             decimal  cc = 0;
-            foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+            if (all)
             {
-                // 使用有成績計算加權
-                if (sc.ScoreT.HasValue && sc.Credit1.HasValue)
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
                 {
-                    ss += sc.ScoreT.Value * sc.Credit1.Value;
-                    cc += sc.Credit1.Value;
+                    // 使用有成績計算加權
+                    if (sc.ScoreT.HasValue && sc.Credit1.HasValue)
+                    {
+                        ss += sc.ScoreT.Value * sc.Credit1.Value;
+                        cc += sc.Credit1.Value;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName=="彈性課程")
+                        continue;
+
+                    // 使用有成績計算加權
+                    if (sc.ScoreT.HasValue && sc.Credit1.HasValue)
+                    {
+                        ss += sc.ScoreT.Value * sc.Credit1.Value;
+                        cc += sc.Credit1.Value;
+                    }
                 }
             }
 
@@ -173,18 +192,37 @@ namespace HsinChuExamScore_JH.DAO
         /// 評量科目定期評量加權平均
         /// </summary>
         /// <returns></returns>
-        public decimal? GetSubjectScoreAF()
+        public decimal? GetSubjectScoreAF(bool all)
         {
             decimal? score = null;
             decimal ss = 0;
             decimal cc = 0;
-            foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+
+            if (all)
             {
-                if (sc.ScoreF.HasValue && sc.Credit.HasValue)
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
                 {
-                    ss += sc.ScoreF.Value * sc.Credit.Value;
-                    cc += sc.Credit.Value;
+                    if (sc.ScoreF.HasValue && sc.Credit.HasValue)
+                    {
+                        ss += sc.ScoreF.Value * sc.Credit.Value;
+                        cc += sc.Credit.Value;
+                    }
                 }
+            }
+            else
+            {
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+   
+                    if (sc.ScoreF.HasValue && sc.Credit.HasValue)
+                    {
+                        ss += sc.ScoreF.Value * sc.Credit.Value;
+                        cc += sc.Credit.Value;
+                    }
+                }            
             }
 
             if (cc > 0)
@@ -197,18 +235,37 @@ namespace HsinChuExamScore_JH.DAO
         /// 評量科目平時評量加權平均
         /// </summary>
         /// <returns></returns>
-        public decimal? GetSubjectScoreAA()
+        public decimal? GetSubjectScoreAA(bool all)
         {
             decimal? score = null;
             decimal ss = 0;
             decimal cc = 0;
-            foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+
+            if (all)
             {
-                if (sc.ScoreA.HasValue && sc.Credit.HasValue)
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
                 {
-                    ss += sc.ScoreA.Value * sc.Credit.Value;
-                    cc += sc.Credit.Value;
+                    if (sc.ScoreA.HasValue && sc.Credit.HasValue)
+                    {
+                        ss += sc.ScoreA.Value * sc.Credit.Value;
+                        cc += sc.Credit.Value;
+                    }
                 }
+            }
+            else
+            {
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    if (sc.ScoreA.HasValue && sc.Credit.HasValue)
+                    {
+                        ss += sc.ScoreA.Value * sc.Credit.Value;
+                        cc += sc.Credit.Value;
+                    }
+                }            
             }
 
             if (cc > 0)
@@ -221,17 +278,36 @@ namespace HsinChuExamScore_JH.DAO
         /// 評量科目總成績加權平均
         /// </summary>
         /// <returns></returns>
-        public decimal? GetSubjectScoreAT()
+        public decimal? GetSubjectScoreAT(bool all)
         {
             decimal? score = null;
             decimal ss = 0;
             decimal cc = 0;
-            foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+
+            if (all)
             {
-                if (sc.ScoreT.HasValue)
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
                 {
-                    ss += sc.ScoreT.Value * sc.Credit.Value;
-                    cc += sc.Credit.Value;
+                    if (sc.ScoreT.HasValue)
+                    {
+                        ss += sc.ScoreT.Value * sc.Credit.Value;
+                        cc += sc.Credit.Value;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    if (sc.ScoreT.HasValue)
+                    {
+                        ss += sc.ScoreT.Value * sc.Credit.Value;
+                        cc += sc.Credit.Value;
+                    }
                 }
             }
 
