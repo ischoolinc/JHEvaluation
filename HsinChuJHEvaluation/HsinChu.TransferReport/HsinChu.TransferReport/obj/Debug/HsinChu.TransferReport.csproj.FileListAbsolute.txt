@@ -13,3 +13,15 @@ D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.pdb
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\bin\debug\HsinChu.TransferReport.dll
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\HsinChu.TransferReport\bin\debug\HsinChu.TransferReport.pdb
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\bin\Debug\HsinChu.TransferReport.dll
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\bin\Debug\HsinChu.TransferReport.pdb
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.DomainPanel.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.DomainSetupForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.ConfigForm.PrintConfigForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.Properties.Resources.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.ConfigForm.SelectTypeForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.TransferReportForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.csproj.GenerateResource.Cache
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.dll
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.pdb
+D:\GitProjModules\ischoolDesktop\JHEvaluation\HsinChuJHEvaluation\HsinChu.TransferReport\HsinChu.TransferReport\obj\Debug\HsinChu.TransferReport.csprojResolveAssemblyReference.cache
