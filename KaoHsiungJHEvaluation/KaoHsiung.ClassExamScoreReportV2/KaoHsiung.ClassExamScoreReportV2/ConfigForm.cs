@@ -2,6 +2,7 @@
 using FISCA.Presentation.Controls;
 using Campus.Report;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace KaoHsiung.ClassExamScoreReportV2
 {
@@ -44,6 +45,15 @@ namespace KaoHsiung.ClassExamScoreReportV2
             else if (config.PaperSize == "B4")
                 rbB4.Checked = true;
 
+            cbxNotRankTag.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            List<string> StudTagItemList = Utility.GetStudentTagList();
+            // 取得學生類別清單
+            cbxNotRankTag.Items.Clear();
+            cbxNotRankTag.Items.Add("");
+            foreach (string item in StudTagItemList)
+                cbxNotRankTag.Items.Add(item);
+
             RefreshCheckState();
         }
 
@@ -66,7 +76,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
                 if (!eachCtl.Enabled)
                     (eachCtl as RadioButton).Checked = false;
-            }
+            }            
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -94,6 +104,8 @@ namespace KaoHsiung.ClassExamScoreReportV2
             else
                 config.PaperSize = "B4";
 
+            config.NotRankTag = cbxNotRankTag.Text;
+
             config.Save();
             DialogResult = DialogResult.OK;
         }
@@ -103,5 +115,10 @@ namespace KaoHsiung.ClassExamScoreReportV2
             this.Close();
         }
         #endregion
+
+        private void ConfigForm_Load(object sender, EventArgs e)
+        {
+            cbxNotRankTag.Text = config.NotRankTag;
+        }
     }
 }

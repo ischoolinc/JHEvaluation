@@ -13,3 +13,15 @@ D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.TransferRepor
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.pdb
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.TransferReport\bin\debug\KaoHsiung.TransferReport.dll
 D:\TFS2010\ischoolteam\ischool_Junior with FISCA\Modules\KaoHsiung.TransferReport\bin\debug\KaoHsiung.TransferReport.pdb
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\bin\Debug\KaoHsiung.TransferReport.dll
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\bin\Debug\KaoHsiung.TransferReport.pdb
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.csprojResolveAssemblyReference.cache
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.ConfigForm.PrintConfigForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.DomainPanel.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.DomainSetupForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.Properties.Resources.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.SelectTypeForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.TransferReportForm.resources
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.csproj.GenerateResource.Cache
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.dll
+D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.TransferReport\KaoHsiung.Tranfer.Report\obj\Debug\KaoHsiung.TransferReport.pdb

@@ -116,11 +116,15 @@ namespace KaoHsiung.ClassExamScoreReportV2
             return dicstuds;
         }
 
-        public static List<ReportStudent> ToReportStudent(this IEnumerable<JHStudentRecord> srcStudents)
+        public static List<ReportStudent> ToReportStudent(this IEnumerable<JHStudentRecord> srcStudents,List<string> notInStudIDList)
         {
             List<ReportStudent> students = new List<ReportStudent>();
             foreach (JHStudentRecord each in srcStudents)
             {
+                // 不列入排名
+                if (notInStudIDList.Contains(each.ID))
+                    continue;
+
                 if (each.Status == StudentRecord.StudentStatus.一般 ||
                     each.Status == StudentRecord.StudentStatus.輟學)
                     students.Add(new ReportStudent(each));

@@ -81,10 +81,21 @@
             this.gpSubject.Style.BorderRightWidth = 1;
             this.gpSubject.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
             this.gpSubject.Style.BorderTopWidth = 1;
+            this.gpSubject.Style.Class = "";
             this.gpSubject.Style.CornerDiameter = 4;
             this.gpSubject.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
             this.gpSubject.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
             this.gpSubject.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.gpSubject.StyleMouseDown.Class = "";
+            this.gpSubject.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.gpSubject.StyleMouseOver.Class = "";
+            this.gpSubject.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.gpSubject.TabIndex = 6;
             this.gpSubject.Text = "科目";
             // 
@@ -116,6 +127,7 @@
             // 
             // 
             this.lvSubject.Border.Class = "ListViewBorder";
+            this.lvSubject.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSubject.CheckBoxes = true;
             this.lvSubject.Dock = System.Windows.Forms.DockStyle.Fill;
             listViewGroup1.Header = "Group1";
@@ -196,10 +208,21 @@
             this.groupPanel1.Style.BorderRightWidth = 1;
             this.groupPanel1.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
             this.groupPanel1.Style.BorderTopWidth = 1;
+            this.groupPanel1.Style.Class = "";
             this.groupPanel1.Style.CornerDiameter = 4;
             this.groupPanel1.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
             this.groupPanel1.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
             this.groupPanel1.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.groupPanel1.StyleMouseDown.Class = "";
+            this.groupPanel1.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.groupPanel1.StyleMouseOver.Class = "";
+            this.groupPanel1.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel1.TabIndex = 7;
             this.groupPanel1.Text = "領域";
             // 
@@ -231,6 +254,7 @@
             // 
             // 
             this.lvDomain.Border.Class = "ListViewBorder";
+            this.lvDomain.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvDomain.CheckBoxes = true;
             this.lvDomain.Dock = System.Windows.Forms.DockStyle.Fill;
             listViewGroup3.Header = "Group1";
@@ -263,6 +287,11 @@
             // labelX5
             // 
             this.labelX5.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX5.BackgroundStyle.Class = "";
+            this.labelX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX5.ForeColor = System.Drawing.SystemColors.ControlText;
             this.labelX5.Location = new System.Drawing.Point(176, 11);
             this.labelX5.Name = "labelX5";
@@ -285,6 +314,11 @@
             // labelX6
             // 
             this.labelX6.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX6.BackgroundStyle.Class = "";
+            this.labelX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX6.ForeColor = System.Drawing.SystemColors.ControlText;
             this.labelX6.Location = new System.Drawing.Point(12, 11);
             this.labelX6.Name = "labelX6";
@@ -295,6 +329,11 @@
             // labelX8
             // 
             this.labelX8.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX8.BackgroundStyle.Class = "";
+            this.labelX8.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX8.Location = new System.Drawing.Point(12, 43);
             this.labelX8.Name = "labelX8";
             this.labelX8.Size = new System.Drawing.Size(58, 23);
@@ -330,6 +369,7 @@
             this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.lnConfig);
             this.Controls.Add(this.gpSubject);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

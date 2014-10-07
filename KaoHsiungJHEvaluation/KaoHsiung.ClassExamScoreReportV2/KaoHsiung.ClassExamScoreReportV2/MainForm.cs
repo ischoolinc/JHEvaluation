@@ -87,7 +87,8 @@ namespace KaoHsiung.ClassExamScoreReportV2
             //準備相關學生、班級資料。
             ReportStudent.SetClassMapping(JHClass.SelectAll());
             SelectedClasses = JHClass.SelectByIDs(classes); //要列印成績單的班級清單。
-            AllStudents = JHStudent.SelectAll().ToReportStudent();
+
+       
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -104,8 +105,27 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
             //報表設定。
             Perference = new ReportPreference();
+            
+            // 讀取學生
+            ReloadAllStudent();
 
             FillCurrentSemesterData();
+        }
+
+        /// <summary>
+        /// 重新載入學生，當不排名類別設定後，學生可以即時反應
+        /// </summary>
+        private void ReloadAllStudent()
+        {
+            // 不列入排名學生ID
+            Utility.notRankStudentIDList.Clear();
+            AllStudents.Clear();
+
+            if (Perference.NotRankTag != null)
+                if (!string.IsNullOrEmpty(Perference.NotRankTag))
+                    Utility.notRankStudentIDList = Utility.GetNotRankStudentIDList(Perference.NotRankTag);
+
+            AllStudents = JHStudent.SelectAll().ToReportStudent(Utility.notRankStudentIDList);
         }
 
         private void FillCurrentSemesterData()
@@ -157,6 +177,10 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
         private void MasterWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+
+            // 重新讀取學生
+            ReloadAllStudent();
+
             //1.Goup By 可選擇的科目清單。
             //2.寫入成績資料到 ReportStudent 上。
 
@@ -226,7 +250,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
             //Group By 可選擇的科目清單。
             Dictionary<string, ReportStudent> dicSelectedStudents = JHStudent.SelectByClassIDs(
-                SelectedClasses.ToKeys()).ToReportStudent().ToDictionary();
+                SelectedClasses.ToKeys()).ToReportStudent(Utility.notRankStudentIDList).ToDictionary();
 
             // TODO: 這裡
             //foreach (JHSemesterScoreRecord eachScore in semsScores)

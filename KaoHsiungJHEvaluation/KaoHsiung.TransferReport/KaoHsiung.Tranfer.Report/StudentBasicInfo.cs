@@ -43,23 +43,28 @@ namespace KaoHsiung.TransferReport
                     if (Config._SLRDict[student.ID].ContainsKey(key))
                     {
                         string val = Config._SLRDict[student.ID][key];
-                        
-                        if (shi.GradeYear == 1 && shi.Semester == 1)
+
+                        int GradeYear = shi.GradeYear;
+
+                        if (GradeYear > 6)
+                            GradeYear -= 6;
+
+                        if (GradeYear == 1 && shi.Semester == 1)
                             _data["SLR1A"] = val;
 
-                        if (shi.GradeYear == 1 && shi.Semester == 2)
+                        if (GradeYear == 1 && shi.Semester == 2)
                             _data["SLR1B"] = val;
 
-                        if (shi.GradeYear == 2 && shi.Semester == 1)
+                        if (GradeYear == 2 && shi.Semester == 1)
                             _data["SLR2A"] = val;
 
-                        if (shi.GradeYear == 2 && shi.Semester == 2)
+                        if (GradeYear == 2 && shi.Semester == 2)
                             _data["SLR2B"] = val;
 
-                        if (shi.GradeYear == 3 && shi.Semester == 1)
+                        if (GradeYear == 3 && shi.Semester == 1)
                             _data["SLR3A"] = val;
 
-                        if (shi.GradeYear == 3 && shi.Semester == 2)
+                        if (GradeYear == 3 && shi.Semester == 2)
                             _data["SLR3B"] = val;
                     }
                 }            

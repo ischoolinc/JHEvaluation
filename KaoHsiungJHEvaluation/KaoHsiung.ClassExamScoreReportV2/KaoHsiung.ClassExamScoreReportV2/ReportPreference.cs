@@ -24,6 +24,8 @@ namespace KaoHsiung.ClassExamScoreReportV2
                 PrintItems.Add(item);
 
             PaperSize = _config.GetString("PaperSize", "A4");
+
+            NotRankTag = _config.GetString("NotRankTag", "");
         }
 
         /// <summary>
@@ -38,11 +40,17 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
         public string PaperSize { get; set; }
 
+        /// <summary>
+        /// 學生不排名類別
+        /// </summary>
+        public string NotRankTag { get; set; }
+
         public void Save()
         {
             _config.SetString("RankMethod", RankMethod);
             _config.SetString("PrintItems", string.Join(",", PrintItems.ToArray()));
             _config.SetString("PaperSize", PaperSize);
+            _config.SetString("NotRankTag", NotRankTag);
             _config.Save();
         }
     }
