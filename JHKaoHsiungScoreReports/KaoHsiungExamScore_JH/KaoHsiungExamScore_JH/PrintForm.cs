@@ -569,7 +569,16 @@ namespace KaoHsiungExamScore_JH
                                     {
                                         // 有修課才加入
                                         if (StudCourseDict[studID].ContainsKey(SubjecName))
+                                        {
+                                            // 依科目成績計算規則四捨五入
+                                            if (ess.AssignmentScore.HasValue)
+                                                ess.AssignmentScore = studentCalculator.ParseSubjectScore(ess.AssignmentScore.Value);
+
+                                            if (ess.Score.HasValue)
+                                                ess.Score = studentCalculator.ParseSubjectScore(ess.Score.Value);
+
                                             studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, ess);
+                                        }
                                     }
                                 }
                             }

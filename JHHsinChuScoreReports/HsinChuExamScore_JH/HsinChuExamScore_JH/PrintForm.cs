@@ -525,6 +525,16 @@ namespace HsinChuExamScore_JH
                                     if (ess.ScoreA.HasValue == false && ess.ScoreF.HasValue)
                                         ess.ScoreT = ess.ScoreF.Value;
 
+                                    // 依照成績計算規則科目方式處理進位
+                                    if(ess.ScoreA.HasValue)
+                                        ess.ScoreA = studentCalculator.ParseSubjectScore(ess.ScoreA.Value);
+
+                                    if (ess.ScoreF.HasValue)
+                                        ess.ScoreF = studentCalculator.ParseSubjectScore(ess.ScoreF.Value);
+
+                                    if (ess.ScoreT.HasValue)
+                                        ess.ScoreT = studentCalculator.ParseSubjectScore(ess.ScoreT.Value);
+
                                     ess.Text = rec.Text;
                                     ess.Credit = cr.Credit;
                                     studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, ess);
@@ -1372,7 +1382,7 @@ namespace HsinChuExamScore_JH
                         foreach (string item in subjLi)
                         {
                             string key = ddname + "_" + item + subj;
-
+                            
                             switch (item)
                             {
                                 case "科目名稱":
@@ -1437,6 +1447,8 @@ namespace HsinChuExamScore_JH
                         if (eds.ScoreA.HasValue)
                             row[keya] = eds.ScoreA.Value;
 
+
+                        
                         // 定期加權
                         if (eds.ScoreF.HasValue)
                             row[keyf] = eds.ScoreF.Value;
