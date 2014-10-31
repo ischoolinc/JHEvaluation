@@ -525,12 +525,14 @@ namespace HsinChuExamScore_JH
                                     if (ess.ScoreA.HasValue == false && ess.ScoreF.HasValue)
                                         ess.ScoreT = ess.ScoreF.Value;
 
-                                    // 依照成績計算規則科目方式處理進位
-                                    if(ess.ScoreA.HasValue)
-                                        ess.ScoreA = studentCalculator.ParseSubjectScore(ess.ScoreA.Value);
+                                    // 依照成績計算規則科目方式處理進位，只有總成績。
+                                    // 平時
+                                    //if(ess.ScoreA.HasValue)
+                                    //    ess.ScoreA = studentCalculator.ParseSubjectScore(ess.ScoreA.Value);
 
-                                    if (ess.ScoreF.HasValue)
-                                        ess.ScoreF = studentCalculator.ParseSubjectScore(ess.ScoreF.Value);
+                                    // 定期
+                                    //if (ess.ScoreF.HasValue)
+                                    //    ess.ScoreF = studentCalculator.ParseSubjectScore(ess.ScoreF.Value);
 
                                     if (ess.ScoreT.HasValue)
                                         ess.ScoreT = studentCalculator.ParseSubjectScore(ess.ScoreT.Value);
