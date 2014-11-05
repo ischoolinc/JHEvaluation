@@ -297,7 +297,9 @@ namespace HsinChu.ClassExamScoreReportV21
             #endregion
 
             #region 計算各類成績。
-            ScoreCalculator calculator = new ScoreCalculator(2, Utilities.SummaryToken);
+            //ScoreCalculator calculator = new ScoreCalculator(2, Utilities.SummaryToken);
+            // 進位到整數位
+            ScoreCalculator calculator = new ScoreCalculator(0, Utilities.SummaryToken);
             calculator.Subjects = selectedSubjects;
             calculator.Domains = selectedDomains;
 
