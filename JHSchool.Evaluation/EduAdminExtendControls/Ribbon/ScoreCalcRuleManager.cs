@@ -444,6 +444,10 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 {
                     numOfPeriod.Value = d;
                 }
+                else
+                {
+                    warning = true;
+                }
             }
             else
                 warning = true;
@@ -460,6 +464,10 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 if (decimal.TryParse(element.GetAttribute("每日節數"), out d))
                 {
                     numOfPeriod.Value = d;
+                }
+                else
+                {
+                    warning = true;
                 }
             }
             else
@@ -480,6 +488,10 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 if (decimal.TryParse(element.GetAttribute("每日節數"), out d))
                 {
                     numOfPeriod.Value = d;
+                }
+                else
+                {
+                    warning = true;
                 }
             }
             else
