@@ -118,6 +118,8 @@
             this.numTimes4 = new System.Windows.Forms.NumericUpDown();
             this.labelX16 = new DevComponents.DotNetBar.LabelX();
             this.groupPanel6 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.numOfPeriod = new System.Windows.Forms.NumericUpDown();
+            this.labelX80 = new DevComponents.DotNetBar.LabelX();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.txtSetAbsence2d = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.lblSetAbsence2d = new DevComponents.DotNetBar.LabelX();
@@ -269,8 +271,6 @@
             this.btnSave1 = new DevComponents.DotNetBar.ButtonX();
             this.lblName1 = new DevComponents.DotNetBar.LabelX();
             this.tabItem1 = new DevComponents.DotNetBar.TabItem(this.components);
-            this.labelX80 = new DevComponents.DotNetBar.LabelX();
-            this.numOfPeriod = new System.Windows.Forms.NumericUpDown();
             this.panelEx1.SuspendLayout();
             this.itemPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
@@ -294,6 +294,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numTimes4b)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes4)).BeginInit();
             this.groupPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numOfPeriod)).BeginInit();
             this.groupPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes3c)).BeginInit();
             this.gpDaily3c.SuspendLayout();
@@ -339,7 +340,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupPanel5.SuspendLayout();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numOfPeriod)).BeginInit();
             this.SuspendLayout();
             // 
             // panelEx1
@@ -1729,6 +1729,31 @@
             this.groupPanel6.StyleMouseOver.Class = "";
             this.groupPanel6.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel6.TabIndex = 10;
+            // 
+            // numOfPeriod
+            // 
+            this.numOfPeriod.Location = new System.Drawing.Point(101, 6);
+            this.numOfPeriod.Name = "numOfPeriod";
+            this.numOfPeriod.Size = new System.Drawing.Size(52, 25);
+            this.numOfPeriod.TabIndex = 19;
+            this.numOfPeriod.Value = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            // 
+            // labelX80
+            // 
+            // 
+            // 
+            // 
+            this.labelX80.BackgroundStyle.Class = "";
+            this.labelX80.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX80.Location = new System.Drawing.Point(9, 8);
+            this.labelX80.Name = "labelX80";
+            this.labelX80.Size = new System.Drawing.Size(98, 23);
+            this.labelX80.TabIndex = 18;
+            this.labelX80.Text = "每日上課節數";
             // 
             // linkLabel1
             // 
@@ -4139,31 +4164,6 @@
             this.tabItem1.Name = "tabItem1";
             this.tabItem1.Text = "成績計算規則";
             // 
-            // labelX80
-            // 
-            // 
-            // 
-            // 
-            this.labelX80.BackgroundStyle.Class = "";
-            this.labelX80.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX80.Location = new System.Drawing.Point(9, 8);
-            this.labelX80.Name = "labelX80";
-            this.labelX80.Size = new System.Drawing.Size(98, 23);
-            this.labelX80.TabIndex = 18;
-            this.labelX80.Text = "每日上課天數";
-            // 
-            // numOfPeriod
-            // 
-            this.numOfPeriod.Location = new System.Drawing.Point(101, 6);
-            this.numOfPeriod.Name = "numOfPeriod";
-            this.numOfPeriod.Size = new System.Drawing.Size(52, 25);
-            this.numOfPeriod.TabIndex = 19;
-            this.numOfPeriod.Value = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            // 
             // ScoreCalcRuleManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
@@ -4206,6 +4206,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numTimes4)).EndInit();
             this.groupPanel6.ResumeLayout(false);
             this.groupPanel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numOfPeriod)).EndInit();
             this.groupPanel2.ResumeLayout(false);
             this.groupPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTimes3c)).EndInit();
@@ -4262,7 +4263,6 @@
             this.groupPanel5.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numOfPeriod)).EndInit();
             this.ResumeLayout(false);
 
         }
