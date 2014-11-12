@@ -12,10 +12,10 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
     {
         private EvaluationResult _result;
         private Dictionary<string, decimal> _types,_typeWeight;
-        private Dictionary<string, int> _periodMapping;
+        //private Dictionary<string, int> _periodMapping;
         List<string> _SelectedType;
         private decimal _amount = 100;
-        private int _dayPeriod;
+        private decimal _dayPeriod;
 
         /// <summary>
         /// XML參數建構式
@@ -27,14 +27,20 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
         public AbsenceAmountEachFractionEval(XmlElement element)
         {
             _result = new EvaluationResult();
-            _periodMapping = new Dictionary<string, int>();
+            //_periodMapping = new Dictionary<string, int>();
             
-            foreach (JHPeriodMappingInfo info in JHSchool.Data.JHPeriodMapping.SelectAll())
-            {
-                if (!_periodMapping.ContainsKey(info.Type))
-                    _periodMapping.Add(info.Type, 0);
-                _periodMapping[info.Type]++;
-            }
+            //foreach (JHPeriodMappingInfo info in JHSchool.Data.JHPeriodMapping.SelectAll())
+            //{
+            //    if (!_periodMapping.ContainsKey(info.Type))
+            //        _periodMapping.Add(info.Type, 0);
+            //    _periodMapping[info.Type]++;
+            //}
+
+            //每日節數
+            _dayPeriod = 7;
+            decimal d;
+            if (decimal.TryParse(element.GetAttribute("每日節數"), out d))
+                _dayPeriod = d;
 
             //統計假別
             _types = new Dictionary<string, decimal>();
@@ -70,13 +76,6 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     }
                 }
                     
-            }
-
-            _dayPeriod = 0;
-            foreach (string type in _SelectedType)
-            {
-                if (_periodMapping.ContainsKey(type))
-                    _dayPeriod += _periodMapping[type];
             }
 
             //foreach (int gy in new List<int>(_gradeYearMapping.Keys))
@@ -180,10 +179,13 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
                             //設定臨界值
                             decimal count = 0;
-                            foreach(string type in _SelectedType)
-                            {
-                                count += num * _periodMapping[type] * _typeWeight[type];
-                            }
+
+                            count += num * _dayPeriod;
+                            //foreach(string type in _SelectedType)
+                            //{
+                            //    count += num * _periodMapping[type] * _typeWeight[type];
+                            //}
+
                             count = count * _amount / 100;
                             schoolDayMapping.Add(info, count);
                             //num *= _dayPeriod;

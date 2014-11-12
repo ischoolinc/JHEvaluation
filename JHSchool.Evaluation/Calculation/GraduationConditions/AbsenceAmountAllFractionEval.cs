@@ -12,9 +12,10 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
     {
         private EvaluationResult _result;
         private Dictionary<string, decimal> _types, _typeWeight, _AvoidDic;
-        private Dictionary<string, int> _periodMapping;
+        //private Dictionary<string, int> _periodMapping;
         private decimal _amount = 100;
         private List<string> _AvoidList;
+        private decimal _dayPeriod;
 
         /// <summary>
         /// XML參數建構式
@@ -26,15 +27,21 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
         public AbsenceAmountAllFractionEval(XmlElement element)
         {
             _result = new EvaluationResult();
-            _periodMapping = new Dictionary<string, int>();
             _AvoidDic = new Dictionary<string, decimal>();
 
-            foreach (JHPeriodMappingInfo info in JHSchool.Data.JHPeriodMapping.SelectAll())
-            {
-                if (!_periodMapping.ContainsKey(info.Type))
-                    _periodMapping.Add(info.Type, 0);
-                _periodMapping[info.Type]++;
-            }
+            //_periodMapping = new Dictionary<string, int>();
+            //foreach (JHPeriodMappingInfo info in JHSchool.Data.JHPeriodMapping.SelectAll())
+            //{
+            //    if (!_periodMapping.ContainsKey(info.Type))
+            //        _periodMapping.Add(info.Type, 0);
+            //    _periodMapping[info.Type]++;
+            //}
+
+            //每日節數
+            _dayPeriod = 7;
+            decimal d;
+            if (decimal.TryParse(element.GetAttribute("每日節數"), out d))
+                _dayPeriod = d;
 
             //統計假別
             _types = new Dictionary<string, decimal>();
@@ -142,10 +149,11 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
                             //設定臨界值
                             decimal newNum = 0;
-                            foreach (string type in _periodMapping.Keys)
-                            {
-                                newNum += num * _periodMapping[type];
-                            }
+                            newNum += num * _dayPeriod;
+                            //foreach (string type in _periodMapping.Keys)
+                            //{
+                            //    newNum += num * _periodMapping[type];
+                            //}
 
                             schoolDayMapping.Add(info, newNum);
                         }

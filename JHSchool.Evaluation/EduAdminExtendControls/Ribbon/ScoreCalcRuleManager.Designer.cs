@@ -118,6 +118,7 @@
             this.numTimes4 = new System.Windows.Forms.NumericUpDown();
             this.labelX16 = new DevComponents.DotNetBar.LabelX();
             this.groupPanel6 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.txtSetAbsence2d = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.lblSetAbsence2d = new DevComponents.DotNetBar.LabelX();
             this.chkDaily2c = new System.Windows.Forms.CheckBox();
@@ -268,7 +269,8 @@
             this.btnSave1 = new DevComponents.DotNetBar.ButtonX();
             this.lblName1 = new DevComponents.DotNetBar.LabelX();
             this.tabItem1 = new DevComponents.DotNetBar.TabItem(this.components);
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.labelX80 = new DevComponents.DotNetBar.LabelX();
+            this.numOfPeriod = new System.Windows.Forms.NumericUpDown();
             this.panelEx1.SuspendLayout();
             this.itemPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
@@ -337,6 +339,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupPanel5.SuspendLayout();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numOfPeriod)).BeginInit();
             this.SuspendLayout();
             // 
             // panelEx1
@@ -918,7 +921,7 @@
             this.gpDaily.Controls.Add(this.groupPanel2);
             this.gpDaily.Location = new System.Drawing.Point(12, 178);
             this.gpDaily.Name = "gpDaily";
-            this.gpDaily.Size = new System.Drawing.Size(565, 893);
+            this.gpDaily.Size = new System.Drawing.Size(565, 937);
             // 
             // 
             // 
@@ -1375,7 +1378,7 @@
             this.groupPanel8.Controls.Add(this.numTimes4);
             this.groupPanel8.Controls.Add(this.labelX16);
             this.groupPanel8.DrawTitleBox = false;
-            this.groupPanel8.Location = new System.Drawing.Point(3, 784);
+            this.groupPanel8.Location = new System.Drawing.Point(3, 827);
             this.groupPanel8.Name = "groupPanel8";
             this.groupPanel8.Size = new System.Drawing.Size(553, 72);
             // 
@@ -1666,6 +1669,8 @@
             // 
             this.groupPanel6.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel6.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.groupPanel6.Controls.Add(this.numOfPeriod);
+            this.groupPanel6.Controls.Add(this.labelX80);
             this.groupPanel6.Controls.Add(this.linkLabel1);
             this.groupPanel6.Controls.Add(this.txtSetAbsence2d);
             this.groupPanel6.Controls.Add(this.lblSetAbsence2d);
@@ -1693,7 +1698,7 @@
             this.groupPanel6.DrawTitleBox = false;
             this.groupPanel6.Location = new System.Drawing.Point(3, 118);
             this.groupPanel6.Name = "groupPanel6";
-            this.groupPanel6.Size = new System.Drawing.Size(553, 190);
+            this.groupPanel6.Size = new System.Drawing.Size(553, 233);
             // 
             // 
             // 
@@ -1725,6 +1730,17 @@
             this.groupPanel6.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel6.TabIndex = 10;
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(20, 199);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(86, 17);
+            this.linkLabel1.TabIndex = 17;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "核可假別說明";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // txtSetAbsence2d
             // 
             // 
@@ -1732,7 +1748,7 @@
             // 
             this.txtSetAbsence2d.Border.Class = "TextBoxBorder";
             this.txtSetAbsence2d.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSetAbsence2d.Location = new System.Drawing.Point(519, 153);
+            this.txtSetAbsence2d.Location = new System.Drawing.Point(518, 193);
             this.txtSetAbsence2d.Name = "txtSetAbsence2d";
             this.txtSetAbsence2d.Size = new System.Drawing.Size(20, 25);
             this.txtSetAbsence2d.TabIndex = 16;
@@ -1747,7 +1763,7 @@
             this.lblSetAbsence2d.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblSetAbsence2d.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSetAbsence2d.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblSetAbsence2d.Location = new System.Drawing.Point(110, 156);
+            this.lblSetAbsence2d.Location = new System.Drawing.Point(109, 196);
             this.lblSetAbsence2d.Name = "lblSetAbsence2d";
             this.lblSetAbsence2d.Size = new System.Drawing.Size(400, 23);
             this.lblSetAbsence2d.TabIndex = 15;
@@ -1756,7 +1772,7 @@
             // chkDaily2c
             // 
             this.chkDaily2c.AutoSize = true;
-            this.chkDaily2c.Location = new System.Drawing.Point(9, 107);
+            this.chkDaily2c.Location = new System.Drawing.Point(8, 147);
             this.chkDaily2c.Name = "chkDaily2c";
             this.chkDaily2c.Size = new System.Drawing.Size(15, 14);
             this.chkDaily2c.TabIndex = 8;
@@ -1769,7 +1785,7 @@
             // 
             this.labelX59.BackgroundStyle.Class = "";
             this.labelX59.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX59.Location = new System.Drawing.Point(31, 103);
+            this.labelX59.Location = new System.Drawing.Point(30, 143);
             this.labelX59.Name = "labelX59";
             this.labelX59.Size = new System.Drawing.Size(233, 23);
             this.labelX59.TabIndex = 11;
@@ -1782,7 +1798,7 @@
             // 
             this.labelX60.BackgroundStyle.Class = "";
             this.labelX60.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX60.Location = new System.Drawing.Point(310, 103);
+            this.labelX60.Location = new System.Drawing.Point(309, 143);
             this.labelX60.Name = "labelX60";
             this.labelX60.Size = new System.Drawing.Size(126, 23);
             this.labelX60.TabIndex = 10;
@@ -1795,7 +1811,7 @@
             // 
             this.txtSetAbsence2c.Border.Class = "TextBoxBorder";
             this.txtSetAbsence2c.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSetAbsence2c.Location = new System.Drawing.Point(519, 124);
+            this.txtSetAbsence2c.Location = new System.Drawing.Point(518, 164);
             this.txtSetAbsence2c.Name = "txtSetAbsence2c";
             this.txtSetAbsence2c.Size = new System.Drawing.Size(20, 25);
             this.txtSetAbsence2c.TabIndex = 14;
@@ -1810,7 +1826,7 @@
             this.lblSetAbsence2c.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblSetAbsence2c.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSetAbsence2c.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblSetAbsence2c.Location = new System.Drawing.Point(110, 127);
+            this.lblSetAbsence2c.Location = new System.Drawing.Point(109, 167);
             this.lblSetAbsence2c.Name = "lblSetAbsence2c";
             this.lblSetAbsence2c.Size = new System.Drawing.Size(400, 23);
             this.lblSetAbsence2c.TabIndex = 9;
@@ -1823,7 +1839,7 @@
             // 
             this.txtPeriod2c.Border.Class = "TextBoxBorder";
             this.txtPeriod2c.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtPeriod2c.Location = new System.Drawing.Point(264, 102);
+            this.txtPeriod2c.Location = new System.Drawing.Point(263, 142);
             this.txtPeriod2c.Name = "txtPeriod2c";
             this.txtPeriod2c.Size = new System.Drawing.Size(44, 25);
             this.txtPeriod2c.TabIndex = 13;
@@ -1833,7 +1849,7 @@
             // 
             this.btnSetAbsence2c.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnSetAbsence2c.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSetAbsence2c.Location = new System.Drawing.Point(42, 128);
+            this.btnSetAbsence2c.Location = new System.Drawing.Point(41, 168);
             this.btnSetAbsence2c.Name = "btnSetAbsence2c";
             this.btnSetAbsence2c.Size = new System.Drawing.Size(65, 20);
             this.btnSetAbsence2c.TabIndex = 12;
@@ -1843,7 +1859,7 @@
             // chkDaily2
             // 
             this.chkDaily2.AutoSize = true;
-            this.chkDaily2.Location = new System.Drawing.Point(10, 5);
+            this.chkDaily2.Location = new System.Drawing.Point(9, 45);
             this.chkDaily2.Name = "chkDaily2";
             this.chkDaily2.Size = new System.Drawing.Size(15, 14);
             this.chkDaily2.TabIndex = 0;
@@ -1852,7 +1868,7 @@
             // chkDaily2b
             // 
             this.chkDaily2b.AutoSize = true;
-            this.chkDaily2b.Location = new System.Drawing.Point(9, 56);
+            this.chkDaily2b.Location = new System.Drawing.Point(8, 96);
             this.chkDaily2b.Name = "chkDaily2b";
             this.chkDaily2b.Size = new System.Drawing.Size(15, 14);
             this.chkDaily2b.TabIndex = 0;
@@ -1865,7 +1881,7 @@
             // 
             this.labelX19.BackgroundStyle.Class = "";
             this.labelX19.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX19.Location = new System.Drawing.Point(32, 1);
+            this.labelX19.Location = new System.Drawing.Point(31, 41);
             this.labelX19.Name = "labelX19";
             this.labelX19.Size = new System.Drawing.Size(219, 23);
             this.labelX19.TabIndex = 2;
@@ -1878,7 +1894,7 @@
             // 
             this.labelX38.BackgroundStyle.Class = "";
             this.labelX38.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX38.Location = new System.Drawing.Point(31, 52);
+            this.labelX38.Location = new System.Drawing.Point(30, 92);
             this.labelX38.Name = "labelX38";
             this.labelX38.Size = new System.Drawing.Size(233, 23);
             this.labelX38.TabIndex = 2;
@@ -1891,7 +1907,7 @@
             // 
             this.labelX36.BackgroundStyle.Class = "";
             this.labelX36.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX36.Location = new System.Drawing.Point(311, 1);
+            this.labelX36.Location = new System.Drawing.Point(310, 41);
             this.labelX36.Name = "labelX36";
             this.labelX36.Size = new System.Drawing.Size(126, 23);
             this.labelX36.TabIndex = 2;
@@ -1904,7 +1920,7 @@
             // 
             this.labelX39.BackgroundStyle.Class = "";
             this.labelX39.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX39.Location = new System.Drawing.Point(310, 52);
+            this.labelX39.Location = new System.Drawing.Point(309, 92);
             this.labelX39.Name = "labelX39";
             this.labelX39.Size = new System.Drawing.Size(126, 23);
             this.labelX39.TabIndex = 2;
@@ -1919,7 +1935,7 @@
             this.lblSetAbsence2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblSetAbsence2.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSetAbsence2.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblSetAbsence2.Location = new System.Drawing.Point(111, 25);
+            this.lblSetAbsence2.Location = new System.Drawing.Point(110, 65);
             this.lblSetAbsence2.Name = "lblSetAbsence2";
             this.lblSetAbsence2.Size = new System.Drawing.Size(400, 23);
             this.lblSetAbsence2.TabIndex = 2;
@@ -1932,7 +1948,7 @@
             // 
             this.txtSetAbsence2b.Border.Class = "TextBoxBorder";
             this.txtSetAbsence2b.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSetAbsence2b.Location = new System.Drawing.Point(519, 73);
+            this.txtSetAbsence2b.Location = new System.Drawing.Point(518, 113);
             this.txtSetAbsence2b.Name = "txtSetAbsence2b";
             this.txtSetAbsence2b.Size = new System.Drawing.Size(20, 25);
             this.txtSetAbsence2b.TabIndex = 7;
@@ -1947,7 +1963,7 @@
             this.lblSetAbsence2b.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblSetAbsence2b.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSetAbsence2b.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblSetAbsence2b.Location = new System.Drawing.Point(110, 76);
+            this.lblSetAbsence2b.Location = new System.Drawing.Point(109, 116);
             this.lblSetAbsence2b.Name = "lblSetAbsence2b";
             this.lblSetAbsence2b.Size = new System.Drawing.Size(400, 23);
             this.lblSetAbsence2b.TabIndex = 2;
@@ -1960,7 +1976,7 @@
             // 
             this.txtSetAbsence2.Border.Class = "TextBoxBorder";
             this.txtSetAbsence2.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSetAbsence2.Location = new System.Drawing.Point(519, 22);
+            this.txtSetAbsence2.Location = new System.Drawing.Point(518, 62);
             this.txtSetAbsence2.Name = "txtSetAbsence2";
             this.txtSetAbsence2.Size = new System.Drawing.Size(20, 25);
             this.txtSetAbsence2.TabIndex = 7;
@@ -1970,7 +1986,7 @@
             // 
             this.btnSetAbsence2.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnSetAbsence2.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSetAbsence2.Location = new System.Drawing.Point(43, 26);
+            this.btnSetAbsence2.Location = new System.Drawing.Point(42, 66);
             this.btnSetAbsence2.Name = "btnSetAbsence2";
             this.btnSetAbsence2.Size = new System.Drawing.Size(65, 20);
             this.btnSetAbsence2.TabIndex = 3;
@@ -1984,7 +2000,7 @@
             // 
             this.txtPeriod2b.Border.Class = "TextBoxBorder";
             this.txtPeriod2b.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtPeriod2b.Location = new System.Drawing.Point(264, 51);
+            this.txtPeriod2b.Location = new System.Drawing.Point(263, 91);
             this.txtPeriod2b.Name = "txtPeriod2b";
             this.txtPeriod2b.Size = new System.Drawing.Size(44, 25);
             this.txtPeriod2b.TabIndex = 6;
@@ -1995,7 +2011,7 @@
             // 
             this.btnSetAbsence2b.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnSetAbsence2b.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSetAbsence2b.Location = new System.Drawing.Point(42, 77);
+            this.btnSetAbsence2b.Location = new System.Drawing.Point(41, 117);
             this.btnSetAbsence2b.Name = "btnSetAbsence2b";
             this.btnSetAbsence2b.Size = new System.Drawing.Size(65, 20);
             this.btnSetAbsence2b.TabIndex = 3;
@@ -2009,7 +2025,7 @@
             // 
             this.txtPeriod2.Border.Class = "TextBoxBorder";
             this.txtPeriod2.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtPeriod2.Location = new System.Drawing.Point(265, 0);
+            this.txtPeriod2.Location = new System.Drawing.Point(264, 40);
             this.txtPeriod2.Name = "txtPeriod2";
             this.txtPeriod2.Size = new System.Drawing.Size(44, 25);
             this.txtPeriod2.TabIndex = 6;
@@ -2039,7 +2055,7 @@
             this.groupPanel2.Controls.Add(this.gpDaily3);
             this.groupPanel2.Controls.Add(this.gpDaily3b);
             this.groupPanel2.DrawTitleBox = false;
-            this.groupPanel2.Location = new System.Drawing.Point(3, 314);
+            this.groupPanel2.Location = new System.Drawing.Point(3, 357);
             this.groupPanel2.Name = "groupPanel2";
             this.groupPanel2.Size = new System.Drawing.Size(553, 464);
             // 
@@ -4123,16 +4139,30 @@
             this.tabItem1.Name = "tabItem1";
             this.tabItem1.Text = "成績計算規則";
             // 
-            // linkLabel1
+            // labelX80
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(21, 159);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(86, 17);
-            this.linkLabel1.TabIndex = 17;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "核可假別說明";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // 
+            // 
+            this.labelX80.BackgroundStyle.Class = "";
+            this.labelX80.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX80.Location = new System.Drawing.Point(9, 8);
+            this.labelX80.Name = "labelX80";
+            this.labelX80.Size = new System.Drawing.Size(98, 23);
+            this.labelX80.TabIndex = 18;
+            this.labelX80.Text = "每日上課天數";
+            // 
+            // numOfPeriod
+            // 
+            this.numOfPeriod.Location = new System.Drawing.Point(101, 6);
+            this.numOfPeriod.Name = "numOfPeriod";
+            this.numOfPeriod.Size = new System.Drawing.Size(52, 25);
+            this.numOfPeriod.TabIndex = 19;
+            this.numOfPeriod.Value = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
             // 
             // ScoreCalcRuleManager
             // 
@@ -4232,6 +4262,7 @@
             this.groupPanel5.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numOfPeriod)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4478,5 +4509,7 @@
         private DevComponents.DotNetBar.Controls.TextBoxX txtSetAbsence2d;
         private DevComponents.DotNetBar.LabelX lblSetAbsence2d;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.NumericUpDown numOfPeriod;
+        private DevComponents.DotNetBar.LabelX labelX80;
     }
 }

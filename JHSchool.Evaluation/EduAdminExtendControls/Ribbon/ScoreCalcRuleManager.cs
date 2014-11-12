@@ -113,6 +113,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             DataListener.Add(new TextBoxSource(txtSetAbsence2b));
             DataListener.Add(new TextBoxSource(txtSetAbsence2c));
             DataListener.Add(new TextBoxSource(txtSetAbsence2d));
+            DataListener.Add(new NumericUpDownSource(numOfPeriod));
 
             DataListener.Add(new NumericUpDownSource(numTimes4));
             DataListener.Add(new ComboBoxSource(cboPerformanceDegree1, ComboBoxSource.ListenAttribute.Text));
@@ -428,8 +429,8 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             }
             else
                 warning = true;
-            
 
+            numOfPeriod.Value = 7;
             element = helper.GetElement("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountEachFraction']");
             if (element != null)
             {
@@ -437,6 +438,12 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 txtPeriod2.Text = element.GetAttribute("節數");
                 lblSetAbsence2.Text = element.GetAttribute("假別");
                 txtSetAbsence2.Text = lblSetAbsence2.Text;
+
+                decimal d;
+                if (decimal.TryParse(element.GetAttribute("每日節數"), out d))
+                {
+                    numOfPeriod.Value = d;
+                }
             }
             else
                 warning = true;
@@ -448,6 +455,12 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 txtPeriod2b.Text = element.GetAttribute("節數");
                 lblSetAbsence2b.Text = element.GetAttribute("假別");
                 txtSetAbsence2b.Text = lblSetAbsence2b.Text;
+
+                decimal d;
+                if (decimal.TryParse(element.GetAttribute("每日節數"), out d))
+                {
+                    numOfPeriod.Value = d;
+                }
             }
             else
                 warning = true;
@@ -462,6 +475,12 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 txtSetAbsence2c.Text = lblSetAbsence2c.Text;
                 lblSetAbsence2d.Text = element.GetAttribute("核可假別");
                 txtSetAbsence2d.Text = lblSetAbsence2d.Text;
+
+                decimal d;
+                if (decimal.TryParse(element.GetAttribute("每日節數"), out d))
+                {
+                    numOfPeriod.Value = d;
+                }
             }
             else
                 warning = true;
@@ -670,6 +689,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             if (lblSetAbsence2.Text.StartsWith("(")) lblSetAbsence2.Text = lblSetAbsence2.Text.Substring(1, lblSetAbsence2.Text.Length - 1);
             if (lblSetAbsence2.Text.EndsWith(")")) lblSetAbsence2.Text = lblSetAbsence2.Text.Substring(0, lblSetAbsence2.Text.Length - 1);
             element.SetAttribute("假別", lblSetAbsence2.Text);
+            element.SetAttribute("每日節數", numOfPeriod.Value + "");
 
             //AbsenceAmountLastFraction
             element = helper.AddElement("畢業條件/日常生活表現畢業條件", "條件");
@@ -679,6 +699,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             if (lblSetAbsence2b.Text.StartsWith("(")) lblSetAbsence2b.Text = lblSetAbsence2b.Text.Substring(1, lblSetAbsence2b.Text.Length - 1);
             if (lblSetAbsence2b.Text.EndsWith(")")) lblSetAbsence2b.Text = lblSetAbsence2b.Text.Substring(0, lblSetAbsence2b.Text.Length - 1);
             element.SetAttribute("假別", lblSetAbsence2b.Text);
+            element.SetAttribute("每日節數", numOfPeriod.Value + "");
 
             //AbsenceAmountGraduateFraction (所有學期缺課節數合計未超過上課節數,2013/12/5,新增)
             element = helper.AddElement("畢業條件/日常生活表現畢業條件", "條件");
@@ -692,6 +713,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             if (lblSetAbsence2d.Text.StartsWith("(")) lblSetAbsence2d.Text = lblSetAbsence2d.Text.Substring(1, lblSetAbsence2d.Text.Length - 1);
             if (lblSetAbsence2d.Text.EndsWith(")")) lblSetAbsence2d.Text = lblSetAbsence2d.Text.Substring(0, lblSetAbsence2d.Text.Length - 1);
             element.SetAttribute("核可假別", lblSetAbsence2d.Text);
+            element.SetAttribute("每日節數", numOfPeriod.Value + "");
 
             //DemeritAmountEach
             element = helper.AddElement("畢業條件/日常生活表現畢業條件", "條件");
