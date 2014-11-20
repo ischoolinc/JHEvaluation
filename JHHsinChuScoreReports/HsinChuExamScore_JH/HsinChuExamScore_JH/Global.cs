@@ -100,6 +100,14 @@ namespace HsinChuExamScore_JH
             retVal.Add("科目定期評量加權平均(不含彈性)");
             retVal.Add("科目平時評量加權平均(不含彈性)");
             retVal.Add("科目總成績加權平均(不含彈性)");
+            retVal.Add("領域成績加權總分");
+            retVal.Add("科目定期評量加權總分");
+            retVal.Add("科目平時評量加權總分");
+            retVal.Add("科目總成績加權總分");
+            retVal.Add("領域成績加權總分(不含彈性)");
+            retVal.Add("科目定期評量加權總分(不含彈性)");
+            retVal.Add("科目平時評量加權總分(不含彈性)");
+            retVal.Add("科目總成績加權總分(不含彈性)");
             // 獎懲名稱
             foreach (string str in GetDisciplineNameList())
                 retVal.Add(str + "區間統計");

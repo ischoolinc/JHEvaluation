@@ -316,5 +316,163 @@ namespace HsinChuExamScore_JH.DAO
 
             return score;
         }
+
+        /// <summary>
+        /// 評量領域總成績加權總分
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetDomainScoreS(bool all)
+        {
+            decimal? score = null;
+            decimal ss = 0;
+            if (all)
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 使用有成績計算加權
+                    if (sc.ScoreT.HasValue && sc.Credit1.HasValue)
+                    {
+                        ss += sc.ScoreT.Value * sc.Credit1.Value;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    // 使用有成績計算加權
+                    if (sc.ScoreT.HasValue && sc.Credit1.HasValue)
+                    {
+                        ss += sc.ScoreT.Value * sc.Credit1.Value;
+                    }
+                }
+            }
+
+            score = ss;
+
+            return score;
+        }
+
+        /// <summary>
+        /// 評量科目定期評量加權總分
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetSubjectScoreSF(bool all)
+        {
+            decimal? score = null;
+            decimal ss = 0;
+
+            if (all)
+            {
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+                {
+                    if (sc.ScoreF.HasValue && sc.Credit.HasValue)
+                    {
+                        ss += sc.ScoreF.Value * sc.Credit.Value;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    if (sc.ScoreF.HasValue && sc.Credit.HasValue)
+                    {
+                        ss += sc.ScoreF.Value * sc.Credit.Value;
+                    }
+                }
+            }
+
+            score = ss;
+
+            return score;
+        }
+
+        /// <summary>
+        /// 評量科目平時評量加權總分
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetSubjectScoreSA(bool all)
+        {
+            decimal? score = null;
+            decimal ss = 0;
+
+            if (all)
+            {
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+                {
+                    if (sc.ScoreA.HasValue && sc.Credit.HasValue)
+                    {
+                        ss += sc.ScoreA.Value * sc.Credit.Value;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    if (sc.ScoreA.HasValue && sc.Credit.HasValue)
+                    {
+                        ss += sc.ScoreA.Value * sc.Credit.Value;
+                    }
+                }
+            }
+
+            score = ss;
+
+            return score;
+        }
+
+        /// <summary>
+        /// 評量科目總成績加權總分
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetSubjectScoreST(bool all)
+        {
+            decimal? score = null;
+            decimal ss = 0;
+
+            if (all)
+            {
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+                {
+                    if (sc.ScoreT.HasValue)
+                    {
+                        ss += sc.ScoreT.Value * sc.Credit.Value;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    if (sc.ScoreT.HasValue)
+                    {
+                        ss += sc.ScoreT.Value * sc.Credit.Value;
+                    }
+                }
+            }
+
+            score = ss;
+
+            return score;
+        }
+
     }
 }
