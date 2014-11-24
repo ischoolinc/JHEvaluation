@@ -93,11 +93,6 @@
       <HintPath>library\Framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHEvaluation.ScoreCalculation, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>library\JHEvaluation.ScoreCalculation.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="JHSchool.Data, Version=1.0.2.26, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>library\JHSchool.Data.dll</HintPath>
@@ -112,11 +107,6 @@
       <HintPath>library\JHSchool.SF.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="K12.Data, Version=1.0.2.26, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>library\K12.Data.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="K12.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>library\K12.Presentation.dll</HintPath>
@@ -126,6 +116,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -148,11 +140,20 @@
     <Compile Include="Forms\SemesterScoreEditor.designer.cs">
       <DependentUpon>SemesterScoreEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SemesterScoreItemHelp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SemesterScoreItemHelp.Designer.cs">
+      <DependentUpon>SemesterScoreItemHelp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\SemesterScoreEditor.resx">
       <DependentUpon>SemesterScoreEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SemesterScoreItemHelp.resx">
+      <DependentUpon>SemesterScoreItemHelp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -245,6 +246,16 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\K12.Data\K12.Data.csproj">
+      <Project>{a03e2482-6ccf-4cb1-905f-f32cec4bfde0}</Project>
+      <Name>K12.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\JHEvaluation.ScoreCalculation\JHEvaluation.ScoreCalculation\JHEvaluation.ScoreCalculation.csproj">
+      <Project>{d4340a77-df5d-4017-b639-e9a48e169e76}</Project>
+      <Name>JHEvaluation.ScoreCalculation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

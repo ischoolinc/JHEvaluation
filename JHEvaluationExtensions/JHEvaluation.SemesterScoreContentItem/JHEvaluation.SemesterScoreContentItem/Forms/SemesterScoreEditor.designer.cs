@@ -29,19 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SemesterScoreEditor));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.gpDomain = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panelDomain = new System.Windows.Forms.Panel();
-            this.dgvDomain = new DevComponents.DotNetBar.Controls.DataGridViewX();
-            this.chdDomain = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
-            this.chdPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chdScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chdEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chdText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelScore = new DevComponents.DotNetBar.PanelEx();
             this.labelX4 = new DevComponents.DotNetBar.LabelX();
             this.txtCourseLearnScore = new DevComponents.DotNetBar.Controls.TextBoxX();
@@ -57,14 +51,6 @@
             this.lblStudentInfo = new DevComponents.DotNetBar.LabelX();
             this.gpSubject = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panelSubject = new System.Windows.Forms.Panel();
-            this.dgvSubject = new DevComponents.DotNetBar.Controls.DataGridViewX();
-            this.chsDomain = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
-            this.chsSubject = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
-            this.chsPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chsScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chsEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chsText = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chsComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblSaveWarning = new DevComponents.DotNetBar.LabelX();
             this.errorProvider = new Framework.EnhancedErrorProvider();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -74,6 +60,26 @@
             this.contextMenuStripDomain = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.DomainInsertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DomainDeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelX6 = new DevComponents.DotNetBar.LabelX();
+            this.txtCourseLearnScoreOrigin = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.labelX3 = new DevComponents.DotNetBar.LabelX();
+            this.txtLearnDomainScoreOrigin = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.dgvSubject = new DevComponents.DotNetBar.Controls.DataGridViewX();
+            this.chsDomain = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
+            this.chsSubject = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
+            this.chsPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsText = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvDomain = new DevComponents.DotNetBar.Controls.DataGridViewX();
+            this.chdDomain = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
+            this.chdPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chdScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chScoreOrigin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chScoreMakeup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chdEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chdText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -89,30 +95,31 @@
             this.dataGridViewTextBoxColumn13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.gpDomain.SuspendLayout();
             this.panelDomain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDomain)).BeginInit();
             this.panelScore.SuspendLayout();
             this.gpSubject.SuspendLayout();
             this.panelSubject.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSubject)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.contextMenuStripSubject.SuspendLayout();
             this.contextMenuStripDomain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSubject)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDomain)).BeginInit();
             this.SuspendLayout();
             // 
             // gpDomain
             // 
-            this.gpDomain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpDomain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gpDomain.BackColor = System.Drawing.Color.Transparent;
             this.gpDomain.CanvasColor = System.Drawing.SystemColors.Control;
             this.gpDomain.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.gpDomain.Controls.Add(this.panelDomain);
             this.gpDomain.Enabled = false;
-            this.gpDomain.Location = new System.Drawing.Point(9, 303);
+            this.gpDomain.Location = new System.Drawing.Point(6, 295);
             this.gpDomain.Name = "gpDomain";
-            this.gpDomain.Size = new System.Drawing.Size(680, 210);
+            this.gpDomain.Size = new System.Drawing.Size(680, 240);
             // 
             // 
             // 
@@ -128,10 +135,21 @@
             this.gpDomain.Style.BorderRightWidth = 1;
             this.gpDomain.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
             this.gpDomain.Style.BorderTopWidth = 1;
+            this.gpDomain.Style.Class = "";
             this.gpDomain.Style.CornerDiameter = 4;
             this.gpDomain.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
             this.gpDomain.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
             this.gpDomain.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.gpDomain.StyleMouseDown.Class = "";
+            this.gpDomain.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.gpDomain.StyleMouseOver.Class = "";
+            this.gpDomain.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.gpDomain.TabIndex = 10;
             this.gpDomain.Text = "學期領域成績";
             // 
@@ -142,93 +160,25 @@
             this.panelDomain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDomain.Location = new System.Drawing.Point(0, 0);
             this.panelDomain.Name = "panelDomain";
-            this.panelDomain.Size = new System.Drawing.Size(674, 183);
+            this.panelDomain.Size = new System.Drawing.Size(674, 213);
             this.panelDomain.TabIndex = 11;
-            // 
-            // dgvDomain
-            // 
-            this.dgvDomain.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.AliceBlue;
-            this.dgvDomain.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvDomain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvDomain.BackgroundColor = System.Drawing.Color.White;
-            this.dgvDomain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dgvDomain.ColumnHeadersHeight = 42;
-            this.dgvDomain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dgvDomain.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.chdDomain,
-            this.chdPeriodCredit,
-            this.chdScore,
-            this.chdEffort,
-            this.chdText});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvDomain.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvDomain.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.dgvDomain.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
-            this.dgvDomain.Location = new System.Drawing.Point(6, 3);
-            this.dgvDomain.MultiSelect = false;
-            this.dgvDomain.Name = "dgvDomain";
-            this.dgvDomain.RowHeadersWidth = 25;
-            this.dgvDomain.RowTemplate.Height = 24;
-            this.dgvDomain.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dgvDomain.Size = new System.Drawing.Size(662, 140);
-            this.dgvDomain.TabIndex = 12;
-            this.dgvDomain.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_CellMouseClick);
-            this.dgvDomain.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_RowsAdded);
-            this.dgvDomain.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
-            this.dgvDomain.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_RowHeaderMouseClick);
-            // 
-            // chdDomain
-            // 
-            this.chdDomain.HeaderText = "領域";
-            this.chdDomain.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chdDomain.Items")));
-            this.chdDomain.Name = "chdDomain";
-            this.chdDomain.Width = 110;
-            // 
-            // chdPeriodCredit
-            // 
-            this.chdPeriodCredit.HeaderText = "節數/權數";
-            this.chdPeriodCredit.Name = "chdPeriodCredit";
-            this.chdPeriodCredit.Width = 65;
-            // 
-            // chdScore
-            // 
-            this.chdScore.HeaderText = "成績";
-            this.chdScore.Name = "chdScore";
-            this.chdScore.Width = 60;
-            // 
-            // chdEffort
-            // 
-            this.chdEffort.HeaderText = "努力程度";
-            this.chdEffort.Name = "chdEffort";
-            this.chdEffort.Width = 59;
-            // 
-            // chdText
-            // 
-            this.chdText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.chdText.HeaderText = "文字描述";
-            this.chdText.Name = "chdText";
             // 
             // panelScore
             // 
             this.panelScore.CanvasColor = System.Drawing.SystemColors.Control;
             this.panelScore.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
-            this.panelScore.Controls.Add(this.labelX4);
+            this.panelScore.Controls.Add(this.txtCourseLearnScoreOrigin);
+            this.panelScore.Controls.Add(this.txtLearnDomainScoreOrigin);
             this.panelScore.Controls.Add(this.txtCourseLearnScore);
-            this.panelScore.Controls.Add(this.labelX5);
             this.panelScore.Controls.Add(this.btnPreCalcScore);
             this.panelScore.Controls.Add(this.txtLearnDomainScore);
+            this.panelScore.Controls.Add(this.labelX6);
+            this.panelScore.Controls.Add(this.labelX4);
+            this.panelScore.Controls.Add(this.labelX3);
+            this.panelScore.Controls.Add(this.labelX5);
             this.panelScore.Location = new System.Drawing.Point(6, 147);
             this.panelScore.Name = "panelScore";
-            this.panelScore.Size = new System.Drawing.Size(662, 33);
+            this.panelScore.Size = new System.Drawing.Size(662, 63);
             this.panelScore.Style.Alignment = System.Drawing.StringAlignment.Center;
             this.panelScore.Style.BackColor1.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
             this.panelScore.Style.BackColor2.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
@@ -241,9 +191,14 @@
             // labelX4
             // 
             this.labelX4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelX4.Location = new System.Drawing.Point(6, 5);
+            // 
+            // 
+            // 
+            this.labelX4.BackgroundStyle.Class = "";
+            this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX4.Location = new System.Drawing.Point(3, 5);
             this.labelX4.Name = "labelX4";
-            this.labelX4.Size = new System.Drawing.Size(174, 23);
+            this.labelX4.Size = new System.Drawing.Size(213, 23);
             this.labelX4.TabIndex = 14;
             this.labelX4.Text = "學習領域成績(七大學習領域)";
             // 
@@ -254,7 +209,8 @@
             // 
             // 
             this.txtCourseLearnScore.Border.Class = "TextBoxBorder";
-            this.txtCourseLearnScore.Location = new System.Drawing.Point(436, 4);
+            this.txtCourseLearnScore.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtCourseLearnScore.Location = new System.Drawing.Point(480, 4);
             this.txtCourseLearnScore.Name = "txtCourseLearnScore";
             this.txtCourseLearnScore.Size = new System.Drawing.Size(75, 25);
             this.txtCourseLearnScore.TabIndex = 17;
@@ -263,9 +219,14 @@
             // labelX5
             // 
             this.labelX5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelX5.Location = new System.Drawing.Point(274, 5);
+            // 
+            // 
+            // 
+            this.labelX5.BackgroundStyle.Class = "";
+            this.labelX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX5.Location = new System.Drawing.Point(295, 5);
             this.labelX5.Name = "labelX5";
-            this.labelX5.Size = new System.Drawing.Size(161, 23);
+            this.labelX5.Size = new System.Drawing.Size(190, 23);
             this.labelX5.TabIndex = 16;
             this.labelX5.Text = "課程學習成績(含彈性課程)";
             // 
@@ -275,9 +236,9 @@
             this.btnPreCalcScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPreCalcScore.BackColor = System.Drawing.Color.Transparent;
             this.btnPreCalcScore.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPreCalcScore.Location = new System.Drawing.Point(548, 4);
+            this.btnPreCalcScore.Location = new System.Drawing.Point(596, 5);
             this.btnPreCalcScore.Name = "btnPreCalcScore";
-            this.btnPreCalcScore.Size = new System.Drawing.Size(110, 25);
+            this.btnPreCalcScore.Size = new System.Drawing.Size(62, 53);
             this.btnPreCalcScore.TabIndex = 18;
             this.btnPreCalcScore.Text = "試算領域成績";
             this.btnPreCalcScore.Click += new System.EventHandler(this.btnPreCalcScore_Click);
@@ -289,7 +250,8 @@
             // 
             // 
             this.txtLearnDomainScore.Border.Class = "TextBoxBorder";
-            this.txtLearnDomainScore.Location = new System.Drawing.Point(181, 4);
+            this.txtLearnDomainScore.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtLearnDomainScore.Location = new System.Drawing.Point(201, 4);
             this.txtLearnDomainScore.Name = "txtLearnDomainScore";
             this.txtLearnDomainScore.Size = new System.Drawing.Size(75, 25);
             this.txtLearnDomainScore.TabIndex = 15;
@@ -322,6 +284,11 @@
             // labelX1
             // 
             this.labelX1.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.Location = new System.Drawing.Point(6, 7);
             this.labelX1.Name = "labelX1";
             this.labelX1.Size = new System.Drawing.Size(58, 23);
@@ -331,6 +298,11 @@
             // labelX2
             // 
             this.labelX2.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX2.Location = new System.Drawing.Point(140, 7);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(45, 23);
@@ -344,7 +316,7 @@
             this.btnSave.BackColor = System.Drawing.Color.Transparent;
             this.btnSave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
             this.btnSave.Enabled = false;
-            this.btnSave.Location = new System.Drawing.Point(530, 518);
+            this.btnSave.Location = new System.Drawing.Point(530, 541);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 25);
             this.btnSave.TabIndex = 20;
@@ -357,7 +329,7 @@
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
             this.btnClose.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnClose.Location = new System.Drawing.Point(611, 518);
+            this.btnClose.Location = new System.Drawing.Point(611, 541);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 25);
             this.btnClose.TabIndex = 21;
@@ -368,6 +340,11 @@
             // 
             this.lblStudentInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblStudentInfo.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblStudentInfo.BackgroundStyle.Class = "";
+            this.lblStudentInfo.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblStudentInfo.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblStudentInfo.Location = new System.Drawing.Point(375, 7);
             this.lblStudentInfo.Name = "lblStudentInfo";
@@ -378,9 +355,9 @@
             // 
             // gpSubject
             // 
-            this.gpSubject.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpSubject.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gpSubject.BackColor = System.Drawing.Color.Transparent;
             this.gpSubject.CanvasColor = System.Drawing.SystemColors.Control;
             this.gpSubject.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
@@ -388,7 +365,7 @@
             this.gpSubject.Enabled = false;
             this.gpSubject.Location = new System.Drawing.Point(6, 42);
             this.gpSubject.Name = "gpSubject";
-            this.gpSubject.Size = new System.Drawing.Size(680, 255);
+            this.gpSubject.Size = new System.Drawing.Size(680, 247);
             // 
             // 
             // 
@@ -404,10 +381,21 @@
             this.gpSubject.Style.BorderRightWidth = 1;
             this.gpSubject.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
             this.gpSubject.Style.BorderTopWidth = 1;
+            this.gpSubject.Style.Class = "";
             this.gpSubject.Style.CornerDiameter = 4;
             this.gpSubject.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
             this.gpSubject.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
             this.gpSubject.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.gpSubject.StyleMouseDown.Class = "";
+            this.gpSubject.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.gpSubject.StyleMouseOver.Class = "";
+            this.gpSubject.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.gpSubject.TabIndex = 7;
             this.gpSubject.Text = "學期科目成績";
             // 
@@ -417,16 +405,141 @@
             this.panelSubject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelSubject.Location = new System.Drawing.Point(0, 0);
             this.panelSubject.Name = "panelSubject";
-            this.panelSubject.Size = new System.Drawing.Size(674, 228);
+            this.panelSubject.Size = new System.Drawing.Size(674, 220);
             this.panelSubject.TabIndex = 8;
+            // 
+            // lblSaveWarning
+            // 
+            this.lblSaveWarning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblSaveWarning.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblSaveWarning.BackgroundStyle.BackColorGradientAngle = 90;
+            this.lblSaveWarning.BackgroundStyle.Class = "";
+            this.lblSaveWarning.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblSaveWarning.BackgroundStyle.TextAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Center;
+            this.lblSaveWarning.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSaveWarning.ForeColor = System.Drawing.Color.Red;
+            this.lblSaveWarning.Location = new System.Drawing.Point(455, 542);
+            this.lblSaveWarning.Name = "lblSaveWarning";
+            this.lblSaveWarning.Size = new System.Drawing.Size(72, 23);
+            this.lblSaveWarning.TabIndex = 19;
+            this.lblSaveWarning.Text = "尚未儲存";
+            this.lblSaveWarning.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.lblSaveWarning.Visible = false;
+            // 
+            // errorProvider
+            // 
+            this.errorProvider.BlinkRate = 0;
+            this.errorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+            this.errorProvider.ContainerControl = this;
+            // 
+            // contextMenuStripSubject
+            // 
+            this.contextMenuStripSubject.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SubjectInsertToolStripMenuItem,
+            this.SubjectDeleteToolStripMenuItem});
+            this.contextMenuStripSubject.Name = "contextMenuStrip";
+            this.contextMenuStripSubject.Size = new System.Drawing.Size(99, 48);
+            // 
+            // SubjectInsertToolStripMenuItem
+            // 
+            this.SubjectInsertToolStripMenuItem.Name = "SubjectInsertToolStripMenuItem";
+            this.SubjectInsertToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.SubjectInsertToolStripMenuItem.Text = "插入";
+            this.SubjectInsertToolStripMenuItem.Click += new System.EventHandler(this.SubjectInsertToolStripMenuItem_Click);
+            // 
+            // SubjectDeleteToolStripMenuItem
+            // 
+            this.SubjectDeleteToolStripMenuItem.Name = "SubjectDeleteToolStripMenuItem";
+            this.SubjectDeleteToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.SubjectDeleteToolStripMenuItem.Text = "刪除";
+            this.SubjectDeleteToolStripMenuItem.Click += new System.EventHandler(this.SubjectDeleteToolStripMenuItem_Click);
+            // 
+            // contextMenuStripDomain
+            // 
+            this.contextMenuStripDomain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DomainInsertToolStripMenuItem,
+            this.DomainDeleteToolStripMenuItem});
+            this.contextMenuStripDomain.Name = "contextMenuStrip";
+            this.contextMenuStripDomain.Size = new System.Drawing.Size(99, 48);
+            // 
+            // DomainInsertToolStripMenuItem
+            // 
+            this.DomainInsertToolStripMenuItem.Name = "DomainInsertToolStripMenuItem";
+            this.DomainInsertToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.DomainInsertToolStripMenuItem.Text = "插入";
+            this.DomainInsertToolStripMenuItem.Click += new System.EventHandler(this.DomainInsertToolStripMenuItem_Click);
+            // 
+            // DomainDeleteToolStripMenuItem
+            // 
+            this.DomainDeleteToolStripMenuItem.Name = "DomainDeleteToolStripMenuItem";
+            this.DomainDeleteToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.DomainDeleteToolStripMenuItem.Text = "刪除";
+            this.DomainDeleteToolStripMenuItem.Click += new System.EventHandler(this.DomainDeleteToolStripMenuItem_Click);
+            // 
+            // labelX6
+            // 
+            this.labelX6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            // 
+            // 
+            // 
+            this.labelX6.BackgroundStyle.Class = "";
+            this.labelX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX6.Location = new System.Drawing.Point(3, 34);
+            this.labelX6.Name = "labelX6";
+            this.labelX6.Size = new System.Drawing.Size(213, 23);
+            this.labelX6.TabIndex = 19;
+            this.labelX6.Text = "原始學習領域成績(七大學習領域)";
+            // 
+            // txtCourseLearnScoreOrigin
+            // 
+            this.txtCourseLearnScoreOrigin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            // 
+            // 
+            // 
+            this.txtCourseLearnScoreOrigin.Border.Class = "TextBoxBorder";
+            this.txtCourseLearnScoreOrigin.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtCourseLearnScoreOrigin.Location = new System.Drawing.Point(480, 33);
+            this.txtCourseLearnScoreOrigin.Name = "txtCourseLearnScoreOrigin";
+            this.txtCourseLearnScoreOrigin.Size = new System.Drawing.Size(75, 25);
+            this.txtCourseLearnScoreOrigin.TabIndex = 22;
+            // 
+            // labelX3
+            // 
+            this.labelX3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX3.Location = new System.Drawing.Point(295, 34);
+            this.labelX3.Name = "labelX3";
+            this.labelX3.Size = new System.Drawing.Size(190, 23);
+            this.labelX3.TabIndex = 21;
+            this.labelX3.Text = "原始課程學習成績(含彈性課程)";
+            // 
+            // txtLearnDomainScoreOrigin
+            // 
+            this.txtLearnDomainScoreOrigin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            // 
+            // 
+            // 
+            this.txtLearnDomainScoreOrigin.Border.Class = "TextBoxBorder";
+            this.txtLearnDomainScoreOrigin.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtLearnDomainScoreOrigin.Location = new System.Drawing.Point(201, 33);
+            this.txtLearnDomainScoreOrigin.Name = "txtLearnDomainScoreOrigin";
+            this.txtLearnDomainScoreOrigin.Size = new System.Drawing.Size(75, 25);
+            this.txtLearnDomainScoreOrigin.TabIndex = 20;
             // 
             // dgvSubject
             // 
             this.dgvSubject.AllowUserToResizeRows = false;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.AliceBlue;
             this.dgvSubject.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
-            this.dgvSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvSubject.BackgroundColor = System.Drawing.Color.White;
             this.dgvSubject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvSubject.ColumnHeadersHeight = 42;
@@ -454,12 +567,12 @@
             this.dgvSubject.Name = "dgvSubject";
             this.dgvSubject.RowHeadersWidth = 25;
             this.dgvSubject.RowTemplate.Height = 24;
-            this.dgvSubject.Size = new System.Drawing.Size(662, 221);
+            this.dgvSubject.Size = new System.Drawing.Size(662, 209);
             this.dgvSubject.TabIndex = 9;
-            this.dgvSubject.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_CellMouseClick);
-            this.dgvSubject.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_RowsAdded);
             this.dgvSubject.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
+            this.dgvSubject.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_CellMouseClick);
             this.dgvSubject.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_RowHeaderMouseClick);
+            this.dgvSubject.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_RowsAdded);
             // 
             // chsDomain
             // 
@@ -508,74 +621,91 @@
             this.chsComment.Name = "chsComment";
             this.chsComment.Width = 60;
             // 
-            // lblSaveWarning
+            // dgvDomain
             // 
-            this.lblSaveWarning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblSaveWarning.BackColor = System.Drawing.Color.Transparent;
+            this.dgvDomain.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.AliceBlue;
+            this.dgvDomain.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvDomain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvDomain.BackgroundColor = System.Drawing.Color.White;
+            this.dgvDomain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dgvDomain.ColumnHeadersHeight = 42;
+            this.dgvDomain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvDomain.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.chdDomain,
+            this.chdPeriodCredit,
+            this.chdScore,
+            this.chScoreOrigin,
+            this.chScoreMakeup,
+            this.chdEffort,
+            this.chdText});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvDomain.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvDomain.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
+            this.dgvDomain.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
+            this.dgvDomain.Location = new System.Drawing.Point(6, 3);
+            this.dgvDomain.MultiSelect = false;
+            this.dgvDomain.Name = "dgvDomain";
+            this.dgvDomain.RowHeadersWidth = 25;
+            this.dgvDomain.RowTemplate.Height = 24;
+            this.dgvDomain.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dgvDomain.Size = new System.Drawing.Size(662, 138);
+            this.dgvDomain.TabIndex = 12;
+            this.dgvDomain.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
+            this.dgvDomain.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_CellMouseClick);
+            this.dgvDomain.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_RowHeaderMouseClick);
+            this.dgvDomain.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_RowsAdded);
             // 
+            // chdDomain
             // 
+            this.chdDomain.HeaderText = "領域";
+            this.chdDomain.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chdDomain.Items")));
+            this.chdDomain.Name = "chdDomain";
+            this.chdDomain.Width = 110;
             // 
-            this.lblSaveWarning.BackgroundStyle.BackColorGradientAngle = 90;
-            this.lblSaveWarning.BackgroundStyle.TextAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Center;
-            this.lblSaveWarning.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lblSaveWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblSaveWarning.Location = new System.Drawing.Point(455, 519);
-            this.lblSaveWarning.Name = "lblSaveWarning";
-            this.lblSaveWarning.Size = new System.Drawing.Size(72, 23);
-            this.lblSaveWarning.TabIndex = 19;
-            this.lblSaveWarning.Text = "尚未儲存";
-            this.lblSaveWarning.TextAlignment = System.Drawing.StringAlignment.Center;
-            this.lblSaveWarning.Visible = false;
+            // chdPeriodCredit
             // 
-            // errorProvider
+            this.chdPeriodCredit.HeaderText = "節數/權數";
+            this.chdPeriodCredit.Name = "chdPeriodCredit";
+            this.chdPeriodCredit.Width = 65;
             // 
-            this.errorProvider.BlinkRate = 0;
-            this.errorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
-            this.errorProvider.ContainerControl = this;
+            // chdScore
             // 
-            // contextMenuStripSubject
+            this.chdScore.HeaderText = "成績";
+            this.chdScore.Name = "chdScore";
+            this.chdScore.Width = 60;
             // 
-            this.contextMenuStripSubject.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.SubjectInsertToolStripMenuItem,
-            this.SubjectDeleteToolStripMenuItem});
-            this.contextMenuStripSubject.Name = "contextMenuStrip";
-            this.contextMenuStripSubject.Size = new System.Drawing.Size(95, 48);
+            // chScoreOrigin
             // 
-            // SubjectInsertToolStripMenuItem
+            this.chScoreOrigin.HeaderText = "原始成績";
+            this.chScoreOrigin.Name = "chScoreOrigin";
+            this.chScoreOrigin.Width = 60;
             // 
-            this.SubjectInsertToolStripMenuItem.Name = "SubjectInsertToolStripMenuItem";
-            this.SubjectInsertToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
-            this.SubjectInsertToolStripMenuItem.Text = "插入";
-            this.SubjectInsertToolStripMenuItem.Click += new System.EventHandler(this.SubjectInsertToolStripMenuItem_Click);
+            // chScoreMakeup
             // 
-            // SubjectDeleteToolStripMenuItem
+            this.chScoreMakeup.HeaderText = "補考成績";
+            this.chScoreMakeup.Name = "chScoreMakeup";
+            this.chScoreMakeup.Width = 60;
             // 
-            this.SubjectDeleteToolStripMenuItem.Name = "SubjectDeleteToolStripMenuItem";
-            this.SubjectDeleteToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
-            this.SubjectDeleteToolStripMenuItem.Text = "刪除";
-            this.SubjectDeleteToolStripMenuItem.Click += new System.EventHandler(this.SubjectDeleteToolStripMenuItem_Click);
+            // chdEffort
             // 
-            // contextMenuStripDomain
+            this.chdEffort.HeaderText = "努力程度";
+            this.chdEffort.Name = "chdEffort";
+            this.chdEffort.Width = 59;
             // 
-            this.contextMenuStripDomain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.DomainInsertToolStripMenuItem,
-            this.DomainDeleteToolStripMenuItem});
-            this.contextMenuStripDomain.Name = "contextMenuStrip";
-            this.contextMenuStripDomain.Size = new System.Drawing.Size(95, 48);
+            // chdText
             // 
-            // DomainInsertToolStripMenuItem
-            // 
-            this.DomainInsertToolStripMenuItem.Name = "DomainInsertToolStripMenuItem";
-            this.DomainInsertToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
-            this.DomainInsertToolStripMenuItem.Text = "插入";
-            this.DomainInsertToolStripMenuItem.Click += new System.EventHandler(this.DomainInsertToolStripMenuItem_Click);
-            // 
-            // DomainDeleteToolStripMenuItem
-            // 
-            this.DomainDeleteToolStripMenuItem.Name = "DomainDeleteToolStripMenuItem";
-            this.DomainDeleteToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
-            this.DomainDeleteToolStripMenuItem.Text = "刪除";
-            this.DomainDeleteToolStripMenuItem.Click += new System.EventHandler(this.DomainDeleteToolStripMenuItem_Click);
+            this.chdText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.chdText.HeaderText = "文字描述";
+            this.chdText.Name = "chdText";
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -674,10 +804,23 @@
             this.dataGridViewTextBoxColumn15.Name = "dataGridViewTextBoxColumn15";
             this.dataGridViewTextBoxColumn15.Width = 60;
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.BackColor = System.Drawing.Color.Transparent;
+            this.linkLabel1.Location = new System.Drawing.Point(6, 548);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(34, 17);
+            this.linkLabel1.TabIndex = 22;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "說明";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // SemesterScoreEditor
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(692, 548);
+            this.ClientSize = new System.Drawing.Size(692, 571);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.lblSaveWarning);
             this.Controls.Add(this.gpSubject);
             this.Controls.Add(this.lblStudentInfo);
@@ -688,20 +831,22 @@
             this.Controls.Add(this.cboSemester);
             this.Controls.Add(this.cboSchoolYear);
             this.Controls.Add(this.gpDomain);
+            this.DoubleBuffered = true;
             this.Name = "SemesterScoreEditor";
             this.Text = "學期成績";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SemesterScoreEditor_FormClosing);
             this.gpDomain.ResumeLayout(false);
             this.panelDomain.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDomain)).EndInit();
             this.panelScore.ResumeLayout(false);
             this.gpSubject.ResumeLayout(false);
             this.panelSubject.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSubject)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.contextMenuStripSubject.ResumeLayout(false);
             this.contextMenuStripDomain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSubject)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDomain)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -754,13 +899,20 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn chsEffort;
         private System.Windows.Forms.DataGridViewTextBoxColumn chsText;
         private System.Windows.Forms.DataGridViewTextBoxColumn chsComment;
-        private JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn chdDomain;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chdPeriodCredit;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chdScore;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chdEffort;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chdText;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripDomain;
         private System.Windows.Forms.ToolStripMenuItem DomainInsertToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DomainDeleteToolStripMenuItem;
+        private Controls.DataGridViewComboBoxExColumn chdDomain;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chdPeriodCredit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chdScore;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chScoreOrigin;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chScoreMakeup;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chdEffort;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chdText;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtCourseLearnScoreOrigin;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtLearnDomainScoreOrigin;
+        private DevComponents.DotNetBar.LabelX labelX6;
+        private DevComponents.DotNetBar.LabelX labelX3;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
