@@ -27,7 +27,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
             Dictionary<string, List<JHSemesterScoreRecord>> semsDict = new Dictionary<string, List<JHSemesterScoreRecord>>();
 
             wizard.PackageLimit = 3000;
-            wizard.ImportableFields.AddRange("領域", "學年度", "學期", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記");
+            wizard.ImportableFields.AddRange("領域", "學年度", "學期", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記");
             //wizard.ImportableFields.AddRange("領域", "學年度", "學期", "權數", "節數", "分數評量", "文字描述", "註記");
             wizard.RequiredFields.AddRange("領域", "學年度", "學期");
 
@@ -109,7 +109,9 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 e.ErrorFields.Add(field, "必須填入1或2");
                             }
                             break;
-                        case "分數評量":
+                        case "成績":
+                        case "原始成績":
+                        case "補考成績":
                             if (value != "" && !decimal.TryParse(value, out d))
                             {
                                 inputFormatPass &= false;
@@ -302,7 +304,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                             //        hasChanged = true;
                                             //    }
                                             //    break;
-                                            case "分數評量":
+                                            case "成績":
                                                 if ("" + score.Score != value)
                                                 {
                                                     decimal d;
@@ -310,6 +312,28 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                                         score.Score = d;
                                                     else
                                                         score.Score = null;
+                                                    hasChanged = true;
+                                                }
+                                                break;
+                                            case "原始成績":
+                                                if ("" + score.ScoreOrigin != value)
+                                                {
+                                                    decimal d;
+                                                    if (decimal.TryParse(value, out d))
+                                                        score.ScoreOrigin = d;
+                                                    else
+                                                        score.ScoreOrigin = null;
+                                                    hasChanged = true;
+                                                }
+                                                break;
+                                            case "補考成績":
+                                                if ("" + score.ScoreMakeup != value)
+                                                {
+                                                    decimal d;
+                                                    if (decimal.TryParse(value, out d))
+                                                        score.ScoreMakeup = d;
+                                                    else
+                                                        score.ScoreMakeup = null;
                                                     hasChanged = true;
                                                 }
                                                 break;
@@ -392,7 +416,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 string domain = row["領域"];
                                 domainScore = new K12.Data.DomainScore();
                                 #region 建立newScore
-                                foreach (string field in new string[] { "領域", "科目", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記" })
+                                foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記" })
                                 {
                                     if (e.ImportFields.Contains(field))
                                     {
@@ -411,12 +435,26 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                             case "節數":
                                                 domainScore.Period = decimal.Parse(value);
                                                 break;
-                                            case "分數評量":
+                                            case "成績":
                                                 decimal d;
                                                 if (decimal.TryParse(value, out d))
                                                     domainScore.Score = d;
                                                 else
                                                     domainScore.Score = null;
+                                                break;
+                                            case "原始成績":
+                                                decimal d1;
+                                                if (decimal.TryParse(value, out d1))
+                                                    domainScore.ScoreOrigin = d1;
+                                                else
+                                                    domainScore.ScoreOrigin = null;
+                                                break;
+                                            case "補考成績":
+                                                decimal d2;
+                                                if (decimal.TryParse(value, out d2))
+                                                    domainScore.ScoreMakeup = d2;
+                                                else
+                                                    domainScore.ScoreMakeup = null;
                                                 break;
                                             case "努力程度":
                                                 int i;
@@ -465,7 +503,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
 
                             string domain = row["領域"];
                             domainScore = new K12.Data.DomainScore();
-                            foreach (string field in new string[] { "領域", "科目", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記" })
+                            foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記" })
                             {
                                 if (e.ImportFields.Contains(field))
                                 {
@@ -483,12 +521,27 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                         case "節數":
                                             domainScore.Period = decimal.Parse(value);
                                             break;
-                                        case "分數評量":
+                                        case "成績":
                                             decimal d;
                                             if (decimal.TryParse(value, out d))
                                                 domainScore.Score = d;
                                             else
                                                 domainScore.Score = null;
+                                            break;
+                                        case "原始成績":
+                                            decimal d1;
+                                            if (decimal.TryParse(value, out d1))
+                                                domainScore.ScoreOrigin = d1;
+                                            else
+                                                domainScore.ScoreOrigin = null;
+                                            break;
+
+                                        case "補考成績":
+                                            decimal d2;
+                                            if (decimal.TryParse(value, out d2))
+                                                domainScore.ScoreMakeup = d2;
+                                            else
+                                                domainScore.ScoreMakeup = null;
                                             break;
                                         case "努力程度":
                                             int i;
@@ -551,6 +604,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                         newRecord.CourseLearnScore = record.CourseLearnScore;
                     if (record.LearnDomainScore.HasValue)
                         newRecord.LearnDomainScore = record.LearnDomainScore;
+
+                    if (record.CourseLearnScoreOrigin.HasValue)
+                        newRecord.CourseLearnScoreOrigin = record.CourseLearnScoreOrigin;
+                    if (record.LearnDomainScoreOrigin.HasValue)
+                        newRecord.LearnDomainScoreOrigin = record.LearnDomainScoreOrigin;
                 }
 
                 foreach (var record in updateList)
@@ -573,6 +631,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                         newRecord.CourseLearnScore = record.CourseLearnScore;
                     if (record.LearnDomainScore.HasValue)
                         newRecord.LearnDomainScore = record.LearnDomainScore;
+
+                    if (record.CourseLearnScoreOrigin.HasValue)
+                        newRecord.CourseLearnScoreOrigin = record.CourseLearnScoreOrigin;
+                    if (record.LearnDomainScoreOrigin.HasValue)
+                        newRecord.LearnDomainScoreOrigin = record.LearnDomainScoreOrigin;
                 }
 
                 List<string> ids = new List<string>(id_Rows.Keys);

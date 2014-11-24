@@ -122,11 +122,6 @@
       <HintPath>library\JHSchool.SF.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="K12.Data, Version=1.9.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>library\K12.Data.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="K12.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>library\K12.Presentation.dll</HintPath>
@@ -321,7 +316,13 @@
   <ItemGroup>
     <None Include="Resources\notepad_level_64.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\K12.Data\K12.Data.csproj">
+      <Project>{a03e2482-6ccf-4cb1-905f-f32cec4bfde0}</Project>
+      <Name>K12.Data</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="library\Aspose.Cells.dll" />
     <Content Include="library\Aspose.Cells.xml" />
