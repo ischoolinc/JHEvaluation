@@ -102,9 +102,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                 // 檢查科目成績是否有成績，當有成績且成績的科目領域名稱非空白才計算
                 int CheckSubjDomainisNotNullCot = 0;
-                
+
                 // 檢查是否有非科目領域是空白的科目
-                foreach ( string str in jscores)
+                foreach (string str in jscores)
                 {
                     SemesterSubjectScore objSubj = jscores[str];
                     string strDomainName = objSubj.Domain.Trim();
@@ -117,7 +117,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     OnlyCalcDomainScore = true;
                 else
                     OnlyCalcDomainScore = false;
-                
+
 
                 if (OnlyCalcDomainScore == false)
                 {
@@ -152,8 +152,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                     #region 計算各領域加權平均。
 
+                    /* (2014/11/18 補考調整)調整為保留領域成績中的資訊，但是移除多的領域成績項目。 */
                     // 從科目算過來清空原來領域成績，以科目成績的領域為主
-                    dscores.Clear();
+                    //dscores.Clear();
 
                     foreach (string strDomain in domainTotal.Keys)
                     {
@@ -168,38 +169,49 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                         //將成績更新回學生。
                         SemesterDomainScore dscore = null;
-                        //if (dscores.Contains(strDomain))
-                        //    dscore = dscores[strDomain];
-                        //else
-                        //{
+                        if (dscores.Contains(strDomain))
+                            dscore = dscores[strDomain];
+                        else
+                        {
                             dscore = new SemesterDomainScore();
                             dscores.Add(strDomain, dscore);
-                        //}
+                        }
 
-                        dscore.Value = weightAvg;
+                        dscore.ScoreOrigin = weightAvg;
                         dscore.Weight = weight;
                         dscore.Period = period;
                         dscore.Text = text;
                         dscore.Effort = effortmap.GetCodeByScore(weightAvg);
+
+                        dscore.BetterScoreSelection(); //進行成績擇優。
+                    }
+
+                    foreach (var domainName in dscores.ToArray())
+                    {
+                        //如果新計算的領域成績中不包含在原領域清單中，就移除他。
+                        if (!domainTotal.ContainsKey(domainName))
+                            dscores.Remove(domainName);
                     }
                 }
                 else
-                { 
+                {
                     // 因為原本就會計算學期領域成績，所以不處理。
-      
                 }
-                
 
                 //計算課程學習成績。
-                decimal? result = CalcDomainWeightAvgScore(dscores, new UniqueSet<string>());
-                if (result.HasValue)
-                    semsscore.CourseLearnScore = rule.ParseLearnDomainScore(result.Value);
+                ScoreResult result = CalcDomainWeightAvgScore(dscores, new UniqueSet<string>());
+                if (result.Score.HasValue)
+                    semsscore.CourseLearnScore = rule.ParseLearnDomainScore(result.Score.Value);
+                if (result.ScoreOrigin.HasValue)
+                    semsscore.CourseLearnScoreOrigin = rule.ParseLearnDomainScore(result.ScoreOrigin.Value);
 
                 //計算學習領域成績。
                 result = CalcDomainWeightAvgScore(dscores, Util.VariableDomains);
-                if (result.HasValue)
-                    semsscore.LearnDomainScore = rule.ParseLearnDomainScore(result.Value);
-                #endregion
+                if (result.Score.HasValue)
+                    semsscore.LearnDomainScore = rule.ParseLearnDomainScore(result.Score.Value);
+                if (result.ScoreOrigin.HasValue)
+                    semsscore.LearnDomainScoreOrigin = rule.ParseLearnDomainScore(result.ScoreOrigin.Value);
+                    #endregion
             }
         }
 
@@ -214,7 +226,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 SemesterScore semsscore = student.SemestersScore[SemesterData.Empty];
                 SemesterDomainScoreCollection dscores = semsscore.Domain;
                 SemesterSubjectScoreCollection jscores = semsscore.Subject;
-                
+
                 Dictionary<string, string> domainText = new Dictionary<string, string>();
 
                 #region 總計各領域的總分、權重、節數。
@@ -276,32 +288,60 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                 #region 計算各領域加權平均。
                 //計算學習領域成績。
-                decimal? result = CalcDomainWeightAvgScore(dscores, Util.VariableDomains);
-                if (result.HasValue)
-                    semsscore.LearnDomainScore = rule.ParseLearnDomainScore(result.Value);
+                //decimal? result = CalcDomainWeightAvgScore(dscores, Util.VariableDomains);
+                ScoreResult result = CalcDomainWeightAvgScore(dscores, Util.VariableDomains); ;
+                if (result.Score.HasValue)
+                    semsscore.LearnDomainScore = rule.ParseLearnDomainScore(result.Score.Value);
+
+                if (result.ScoreOrigin.HasValue)
+                    semsscore.LearnDomainScoreOrigin = rule.ParseLearnDomainScore(result.ScoreOrigin.Value);
                 #endregion
+
             }
         }
 
-        private static decimal? CalcDomainWeightAvgScore(SemesterDomainScoreCollection dscores, UniqueSet<string> excludeItem)
+        private static ScoreResult CalcDomainWeightAvgScore(SemesterDomainScoreCollection dscores, UniqueSet<string> excludeItem)
         {
-            decimal Total = 0, Weight = 0;
+            decimal TotalScore = 0, TotalScoreOrigin = 0, TotalWeight = 0;
             foreach (string strDomain in dscores)
             {
                 if (excludeItem.Contains(strDomain.Trim())) continue;
 
                 SemesterDomainScore dscore = dscores[strDomain];
-
-                if (dscore.Value.HasValue && dscore.Weight.HasValue)
+                if (dscore.Value.HasValue && dscore.Weight.HasValue) //dscore.Value 是原來的結構。
                 {
-                    Total += (dscore.Value.Value * dscore.Weight.Value);
-                    Weight += dscore.Weight.Value;
+                    TotalScore += (dscore.Value.Value * dscore.Weight.Value); //擇優成績。
+
+                    if (dscore.ScoreOrigin.HasValue)
+                        TotalScoreOrigin += (dscore.ScoreOrigin.Value * dscore.Weight.Value); //原始成績。
+                    else
+                        TotalScoreOrigin += (dscore.Value.Value * dscore.Weight.Value); //將擇優當成原始。
+
+                    TotalWeight += dscore.Weight.Value; //比重不會因為哪種成績而不同。
                 }
             }
 
-            if (Weight <= 0) return null;
+            if (TotalWeight <= 0) return new ScoreResult(); //沒有成績。
 
-            return Total / Weight;
+            ScoreResult sr = new ScoreResult();
+
+            sr.Score = TotalScore / TotalWeight;
+            sr.ScoreOrigin = TotalScoreOrigin / TotalWeight;
+
+            return sr;
+        }
+
+        private class ScoreResult
+        {
+            /// <summary>
+            /// 成績，一般是擇優後的成績，大部份的報表都會使用此成績。
+            /// </summary>
+            public decimal? Score { get; set; }
+
+            /// <summary>
+            /// 原始成績，最原始的成績。
+            /// </summary>
+            public decimal? ScoreOrigin { get; set; }
         }
 
         private string GetDomainSubjectText(string subjName, string subjText)

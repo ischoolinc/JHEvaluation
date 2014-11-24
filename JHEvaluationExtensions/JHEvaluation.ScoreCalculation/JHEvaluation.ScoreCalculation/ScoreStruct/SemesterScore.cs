@@ -20,6 +20,8 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
             Semester = semester;
             CourseLog = new LogData("課程學習");
             LearningLog = new LogData("學習領域");
+            CourseOriginLog = new LogData("課程學習(原始)");
+            LearningOriginLog = new LogData("學習領域(原始)");
         }
 
         public SemesterScore(JHSemesterScoreRecord record)
@@ -45,6 +47,8 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
 
             CourseLearnScore = RawScore.CourseLearnScore;
             LearnDomainScore = RawScore.LearnDomainScore;
+            CourseLearnScoreOrigin = RawScore.CourseLearnScoreOrigin;
+            LearnDomainScoreOrigin = RawScore.LearnDomainScoreOrigin;
         }
 
         /// <summary>
@@ -107,6 +111,16 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         public decimal? CourseLearnScore { get; set; }
 
         /// <summary>
+        /// 學習領域原始成績。
+        /// </summary>
+        public decimal? LearnDomainScoreOrigin { get; set; }
+
+        /// <summary>
+        /// 課程學期原始成績。 
+        /// </summary>
+        public decimal? CourseLearnScoreOrigin { get; set; }
+
+        /// <summary>
         /// 課程學習。
         /// </summary>
         public LogData CourseLog { get; private set; }
@@ -115,5 +129,15 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         /// 學習領域。
         /// </summary>
         public LogData LearningLog { get; private set; }
+
+        /// <summary>
+        /// 課程學習(原始)。
+        /// </summary>
+        public LogData CourseOriginLog { get; private set; }
+
+        /// <summary>
+        /// 學習領域(原始)。
+        /// </summary>
+        public LogData LearningOriginLog { get; private set; }
     }
 }

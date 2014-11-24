@@ -92,9 +92,13 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     domainLog.Formater = subjLogFormater;
 
                     decimal? score = objSCDomain.Value.HasValue ? (decimal?)(double)objSCDomain.Value : null;
+                    decimal? scoreOrigin = objSCDomain.ScoreOrigin.HasValue ? (decimal?)(double)objSCDomain.ScoreOrigin : null;
+                    decimal? scoreMakeup = objSCDomain.ScoreMakeup.HasValue ? (decimal?)(double)objSCDomain.ScoreMakeup : null;
 
                     //記錄 Log
                     domainLog.Add(new LogData("成績", objJHDomain.Score + "", score + ""));
+                    domainLog.Add(new LogData("原始成績", objJHDomain.ScoreOrigin + "", scoreOrigin + ""));
+                    domainLog.Add(new LogData("補考成績", objJHDomain.ScoreMakeup + "", scoreMakeup + ""));
                     domainLog.Add(new LogData("權重", objJHDomain.Credit + "", objSCDomain.Weight + ""));
                     domainLog.Add(new LogData("節數", objJHDomain.Period + "", objSCDomain.Period + ""));
                     if (Program.Mode == ModuleMode.KaoHsiung)
@@ -103,6 +107,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     SCScore.Domain.Log.Add(domainLog);
 
                     objJHDomain.Score = score;
+                    objJHDomain.ScoreOrigin = scoreOrigin;
+                    objJHDomain.ScoreMakeup = scoreMakeup;
                     objJHDomain.Credit = objSCDomain.Weight;
                     objJHDomain.Period = objSCDomain.Period;
                     objJHDomain.Effort = objSCDomain.Effort;
@@ -118,9 +124,17 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 SCScore.CourseLog.Formater = domainLogFormater;
                 SCScore.CourseLog.OriginValue = JHScore.CourseLearnScore + "";
                 SCScore.CourseLog.NewValue = SCScore.CourseLearnScore + "";
+                SCScore.LearningOriginLog.Formater = domainLogFormater;
+                SCScore.LearningOriginLog.OriginValue = JHScore.CourseLearnScoreOrigin + "";
+                SCScore.LearningOriginLog.NewValue = SCScore.LearnDomainScoreOrigin + "";
+                SCScore.CourseOriginLog.Formater = domainLogFormater;
+                SCScore.CourseOriginLog.OriginValue = JHScore.CourseLearnScoreOrigin + "";
+                SCScore.CourseOriginLog.NewValue = SCScore.CourseLearnScoreOrigin + "";
 
                 JHScore.LearnDomainScore = SCScore.LearnDomainScore;
                 JHScore.CourseLearnScore = SCScore.CourseLearnScore;
+                JHScore.LearnDomainScoreOrigin = SCScore.LearnDomainScoreOrigin;
+                JHScore.CourseLearnScoreOrigin = SCScore.CourseLearnScoreOrigin;
 
                 //排序領域名稱。
                 Dictionary<string, DomainScore> orderDomain = new Dictionary<string, DomainScore>(JHScore.Domains);
@@ -136,7 +150,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
             addSpliter.Function = delegate(List<JHSemesterScoreRecord> part)
             {
                 // 加入檢查當科目與領域成績筆數0不新增
-                List<JHSemesterScoreRecord> insertPart= new List<JHSemesterScoreRecord> ();
+                List<JHSemesterScoreRecord> insertPart = new List<JHSemesterScoreRecord>();
 
                 foreach (JHSemesterScoreRecord rec in part)
                 {
@@ -147,7 +161,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     insertPart.Add(rec);
                 }
 
-                if(insertPart.Count >0)
+                if (insertPart.Count > 0)
                     JHSemesterScore.Insert(insertPart);
 
                 return new List<JHSemesterScoreRecord>();
