@@ -29,6 +29,14 @@ namespace KaoHsiung.StudentRecordReport
                 form.ShowDialog();
             };
 
+
+            string URL學籍表 = "ischool/國中系統/學生/報表/成績/學籍表";
+            FISCA.Features.Register(URL學籍表, arg =>
+            {
+                 MainForm form = new MainForm(EnterType.Student);
+                 form.ShowDialog();
+            });
+
             MenuButton mb2 = FISCA.Presentation.MotherForm.RibbonBarItems["班級", "資料統計"]["報表"]["成績相關報表"]["學籍表"];
             mb2.Enable = false;
             mb2.Click += delegate
