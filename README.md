@@ -12,15 +12,17 @@ JHHsinChuScoreReports(新竹國中成績報表模組，新增報表功能)
 JHKaoHsiungScoreReports(高雄國中成績報表模組，新增報表功能)
 
 HsinChuJHEvaluation(新竹國中成績模組，新竹特有功能畫面、計算、報表功能)
+
 KaoHsiungJHEvaluation(高雄國中成績模組，高雄特有功能畫面、計算、報表功能)
 
 
 
-<blockquote>
+
+#新增代碼可呼叫以下功能
 *轉學成績證明書
 ######FISCA.Features.Register("ischool/國中系統/學生/報表/成績/轉學證明書")
 *學籍表
 ######FISCA.Features.Register("ischool/國中系統/學生/報表/成績/學籍表")
 *期中轉學成績證明書
 ######FISCA.Features.Register("ischool/國中系統/學生/報表/成績/期中轉學證明書")
-<blockquote>
+
