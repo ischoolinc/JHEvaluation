@@ -28,6 +28,15 @@ namespace KaoHsiung.MidTermTransferReport
                 MainForm.Run();
             };
 
+
+            //高雄客製化功能,要透過Code來呼叫此功能
+            string URL期中轉學證明書 = "ischool/國中系統/學生/報表/成績/期中轉學證明書";
+            FISCA.Features.Register(URL期中轉學證明書, arg =>
+            {
+                 MainForm.Run();
+
+            });
+
             //要選學生才可以執行
             K12.Presentation.NLDPanels.Student.SelectedSourceChanged += delegate
             {

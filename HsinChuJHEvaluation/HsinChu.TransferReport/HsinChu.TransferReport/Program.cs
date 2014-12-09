@@ -27,6 +27,13 @@ namespace HsinChu.TransferReport
                 TransferReportForm form = new TransferReportForm();
                 form.ShowDialog();
             };
+
+            string URL轉學成績證明書 = "ischool/國中系統/學生/報表/成績/轉學證明書";
+            FISCA.Features.Register(URL轉學成績證明書, arg =>
+            {
+                 TransferReportForm form = new TransferReportForm();
+                 form.ShowDialog();
+            });
         }
     }
 }
