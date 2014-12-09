@@ -566,6 +566,7 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
                 domain.ScoreMakeup = string.IsNullOrEmpty("" + row.Cells[chScoreMakeup.Index].Value) ? null : (decimal?)decimal.Parse("" + row.Cells[chScoreMakeup.Index].Value);
                 domain.Effort = string.IsNullOrEmpty("" + row.Cells[chdEffort.Index].Value) ? null : (int?)int.Parse("" + row.Cells[chdEffort.Index].Value);
                 domain.Text = "" + row.Cells[chdText.Index].Value;
+                domain.Comment = "" + row.Cells[chdComment.Index].Value;
 
                 _record.Domains.Add(domain.Domain, domain);
             }
