@@ -192,10 +192,19 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         if (!domainTotal.ContainsKey(domainName))
                             dscores.Remove(domainName);
                     }
+                    #endregion
                 }
-                else
+                else //雖不需計算領域成績，但是仍然需要擇優運算。如果沒有原始成績，將成績當成原始成績運算。
                 {
-                    // 因為原本就會計算學期領域成績，所以不處理。
+                    foreach (var domain in dscores.ToArray())
+                    {
+                        SemesterDomainScore objDomain = dscores[domain];
+
+                        if (!objDomain.ScoreOrigin.HasValue)
+                            objDomain.ScoreOrigin = objDomain.Value;
+
+                        objDomain.BetterScoreSelection();
+                    }
                 }
 
                 //計算課程學習成績。
@@ -211,7 +220,6 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     semsscore.LearnDomainScore = rule.ParseLearnDomainScore(result.Score.Value);
                 if (result.ScoreOrigin.HasValue)
                     semsscore.LearnDomainScoreOrigin = rule.ParseLearnDomainScore(result.ScoreOrigin.Value);
-                    #endregion
             }
         }
 
