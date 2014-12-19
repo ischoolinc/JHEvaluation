@@ -71,15 +71,15 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
             if (attend.OrdinarilyEffort.HasValue)
             {
-                sum += attend.OrdinarilyEffort.Value;
-                weight++;
+                sum += (attend.OrdinarilyEffort.Value * 60);
+                weight += 60;
             }
 
             decimal? avgEffort = attend.Subscores.GetAverageEffort();
             if (avgEffort.HasValue)
             {
-                sum += avgEffort.Value;
-                weight++;
+                sum += (avgEffort.Value * 40);
+                weight += 40;
             }
 
             //如果權重小於零，代表兩個成績都沒有，就維持原來成績。
@@ -98,15 +98,15 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
             if (attend.OrdinarilyScore.HasValue)
             {
-                sum += attend.OrdinarilyScore.Value;
-                weight++;
+                sum += (attend.OrdinarilyScore.Value * 60);
+                weight += 60;
             }
 
             decimal? avgScore = attend.Subscores.GetWeightAverageScore();
             if (avgScore.HasValue)
             {
-                sum += avgScore.Value;
-                weight++;
+                sum += (avgScore.Value * 40);
+                weight += 40;
             }
 
             if (weight != 0)

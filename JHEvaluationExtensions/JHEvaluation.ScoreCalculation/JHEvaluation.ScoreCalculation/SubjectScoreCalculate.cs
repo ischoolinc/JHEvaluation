@@ -48,6 +48,19 @@ namespace JHEvaluation.ScoreCalculation
             //    }
             //}
 
+             // 103-1 與 之後的定期、平時計算比例不同。
+            if (Program.Mode == ModuleMode.KaoHsiung)
+            {
+                //因為評量計算比例調整，提示使用者。
+                SemesterData denySemesterData = new SemesterData(0, 102, 2);
+                SemesterData selectedSemesterData = new SemesterData(0, intSchoolYear.Value, intSemester.Value);
+                if (selectedSemesterData <= denySemesterData)
+                {
+                    MsgBox.Show("因評量計算比例在  103-1 之後有所調整，故暫不開放重新計算 102-2(含) 之前的成績。若須重新計算，請與我們聯絡。");
+                    return;
+                }
+            }
+
             DialogResult dr = MsgBox.Show("您確定要計算學生學期科目成績？", MessageBoxButtons.YesNo);
 
             if (dr == DialogResult.No) return;
