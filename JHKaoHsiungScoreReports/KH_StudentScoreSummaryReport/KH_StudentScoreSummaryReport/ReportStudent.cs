@@ -55,9 +55,12 @@ namespace KH_StudentScoreSummaryReport
         #region IStudent 成員
 
         public Campus.Rating.PlaceCollection Places { get; private set; }
-        
+
         #endregion
 
+        /// <summary>
+        /// 缺曠獎懲的 AutoSummary 資料。
+        /// </summary>
         public Dictionary<SemesterData, XmlElement> Summaries { get; private set; }
 
         /// <summary>
@@ -103,6 +106,26 @@ namespace KH_StudentScoreSummaryReport
         /// 學生ID
         /// </summary>
         public string StudentID { get; set; }
+
+        /// <summary>
+        /// 領域成績積分。
+        /// </summary>
+        public string CreditDomainScore { get; set; }
+
+        /// <summary>
+        /// 服務學習積分。
+        /// </summary>
+        public string CreditServiceLearning { get; set; }
+
+        /// <summary>
+        /// 體適能積分。
+        /// </summary>
+        public string CreditFitness { get; set; }
+
+        /// <summary>
+        /// 幹部積分。
+        /// </summary>
+        public string CreditCadre { get; set; }
     }
 
     internal class ReportHeaderList : Dictionary<SemesterData, int>

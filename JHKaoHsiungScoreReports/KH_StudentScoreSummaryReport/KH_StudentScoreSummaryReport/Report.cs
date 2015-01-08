@@ -9,6 +9,7 @@ using Aspose.Words;
 using Aspose.Words.Reporting;
 using Campus.Rating;
 using FISCA.Presentation.Controls;
+using FISCA.UDT;
 using JHEvaluation.ScoreCalculation;
 using JHEvaluation.ScoreCalculation.ScoreStruct;
 using JHSchool.Data;
@@ -82,10 +83,27 @@ namespace KH_StudentScoreSummaryReport
             // 取得體適能
             _StudentFitnessRecordDict = Util.GetStudentFitnessRecordDictByStudentIDList(studenIDList);
 
+            //載入積分資料。
+            AccessHelper access = new AccessHelper();
+            string sql = string.Format("ref_student_id in ({0})", students.ToPrimaryKeyStringList());
+            List<ExcessCredits> credits = access.Select<ExcessCredits>(sql);
+            Dictionary<string, ReportStudent> studentLookup = Students.ToDictionary(x => x.StudentID);
+            foreach (ExcessCredits credit in credits)
+            {
+                if (!studentLookup.ContainsKey(credit.StudentID + ""))
+                    continue;
+
+                ReportStudent rs = studentLookup[credit.StudentID + ""];
+
+                rs.CreditDomainScore = credit.Balanced;
+                rs.CreditServiceLearning = credit.Services;
+                rs.CreditFitness = credit.Fitness;
+                rs.CreditCadre = credit.Term;
+            }
+
             PrintSetting = printSetting;
 
             DetailDomain = new List<string>();
-
 
             DetailDomain.Add("彈性課程");
             DetailDomain.Add("");
@@ -115,10 +133,11 @@ namespace KH_StudentScoreSummaryReport
         private void MailMerge_MergeField(object sender, MergeFieldEventArgs e)
         {
             //不是 Fix 開頭的合併欄位不處理。
-            if (!e.FieldName.ToUpper().StartsWith("Fix".ToUpper())) return;
+            //不是「積分:」開頭的合併欄位不處理。
+            if (!e.FieldName.ToUpper().StartsWith("Fix".ToUpper()))
+                return;
 
             DocumentBuilder builder = new DocumentBuilder(e.Document);
-
             ReportStudent student = e.FieldValue as ReportStudent;
 
             //如果合併值不是 ReportStudent 就跳過...意思是有問題...。
@@ -362,7 +381,7 @@ namespace KH_StudentScoreSummaryReport
                         foreach (SemesterData semester in student.SHistory.GetGradeYearSemester().GetSemesters(PrintSetting.PrintSemesters))
                         {
                             //避開三年級下學期
-                            if ((semester.GradeYear == 3 || semester.GradeYear == 9) && semester.Semester == 2) 
+                            if ((semester.GradeYear == 3 || semester.GradeYear == 9) && semester.Semester == 2)
                                 continue;
 
                             SemesterData sysems = new SemesterData(0, semester.SchoolYear, semester.Semester);
@@ -1244,7 +1263,7 @@ namespace KH_StudentScoreSummaryReport
                         foreach (SemesterData semester in student.SHistory.GetGradeYearSemester().GetSemesters(PrintSetting.PrintSemesters))
                         {
                             //避開三年級下學期
-                            if ((semester.GradeYear == 3 || semester.GradeYear == 9) && semester.Semester == 2) 
+                            if ((semester.GradeYear == 3 || semester.GradeYear == 9) && semester.Semester == 2)
                                 continue;
 
                             SemesterData sysems = new SemesterData(0, semester.SchoolYear, semester.Semester);
@@ -1642,7 +1661,6 @@ namespace KH_StudentScoreSummaryReport
                             recordDic.Add(record.SchoolYear, record);
                         }
                     }
-
                     #region 列印體適能
                     //坐姿體前彎
                     //立定跳遠
@@ -1664,7 +1682,7 @@ namespace KH_StudentScoreSummaryReport
                     schoolYearDic.Add(6, new List<int>());
                     foreach (SemesterData each in semesters)
                     {
-                        if ((each.GradeYear == 1 || each.GradeYear ==7) && each.Semester == 1)
+                        if ((each.GradeYear == 1 || each.GradeYear == 7) && each.Semester == 1)
                             if (!schoolYearDic[1].Contains(each.SchoolYear))
                                 schoolYearDic[1].Add(each.SchoolYear);
 
@@ -1698,10 +1716,10 @@ namespace KH_StudentScoreSummaryReport
                             if (recordDic.ContainsKey(schoolYear) && !usedAlready.Contains(schoolYear))
                             {
                                 StudentFitnessRecord rec = recordDic[schoolYear];
-                                FitnessRowA.Cells[count/2 + offset].Write(builder, rec.SitAndReachDegree);
-                                FitnessRowB.Cells[count/2 + offset].Write(builder, rec.StandingLongJumpDegree);
-                                FitnessRowC.Cells[count/2 + offset].Write(builder, rec.SitUpDegree);
-                                FitnessRowD.Cells[count/2 + offset].Write(builder, rec.CardiorespiratoryDegree);
+                                FitnessRowA.Cells[count / 2 + offset].Write(builder, rec.SitAndReachDegree);
+                                FitnessRowB.Cells[count / 2 + offset].Write(builder, rec.StandingLongJumpDegree);
+                                FitnessRowC.Cells[count / 2 + offset].Write(builder, rec.SitUpDegree);
+                                FitnessRowD.Cells[count / 2 + offset].Write(builder, rec.CardiorespiratoryDegree);
                                 usedAlready.Add(schoolYear);
                             }
                         }
@@ -1728,9 +1746,7 @@ namespace KH_StudentScoreSummaryReport
                     //}
                     #endregion
                 }
-
             }
-
         }
 
         private void RefineDomain(SemesterSubjectScore subject)
@@ -1934,6 +1950,7 @@ namespace KH_StudentScoreSummaryReport
                 fieldValue = string.Empty;
                 ReportStudent student = Students[Index];
 
+                //「Fix:」開頭的欄位另外處理。
                 if (fieldName.ToUpper().StartsWith("Fix:".ToUpper()))
                 {
                     fieldValue = student;
@@ -2111,7 +2128,19 @@ namespace KH_StudentScoreSummaryReport
                                 fieldValue = "□" + StudSpcName7;
 
                         }
+                        break;
 
+                    case "積分:均衡學習":
+                        fieldValue = student.CreditDomainScore;
+                        break;
+                    case "積分:服務學習":
+                        fieldValue = student.CreditServiceLearning;
+                        break;
+                    case "積分:體適能":
+                        fieldValue = student.CreditFitness;
+                        break;
+                    case "積分:幹部任期":
+                        fieldValue = student.CreditCadre;
                         break;
                 }
 
@@ -2128,6 +2157,82 @@ namespace KH_StudentScoreSummaryReport
             public string TableName { get { return string.Empty; } }
 
             #endregion
+        }
+    }
+    #region 積分 UDT
+    /// <summary>
+    /// 比序績分主檔，在 ischoolJHWishBase 也有一個一樣的。
+    /// </summary>
+    [TableName("kh.enrolment_excess.credits")]
+    public class ExcessCredits : ActiveRecord
+    {
+        ///<summary>
+        /// 學生系統編號
+        ///</summary>
+        [Field(Field = "ref_student_id", Indexed = false)]
+        public int StudentID { get; set; }
+
+        ///<summary>
+        /// 均衡學習
+        ///</summary>
+        [Field(Field = "balanced", Indexed = false)]
+        public string Balanced { get; set; }
+
+        ///<summary>
+        /// 服務學習
+        ///</summary>
+        [Field(Field = "services", Indexed = false)]
+        public string Services { get; set; }
+
+        ///<summary>
+        /// 體適能
+        ///</summary>
+        [Field(Field = "fitness", Indexed = false)]
+        public string Fitness { get; set; }
+
+        ///<summary>
+        /// 競賽表現
+        ///</summary>
+        [Field(Field = "competition", Indexed = false)]
+        public string Competition { get; set; }
+
+        ///<summary>
+        /// 檢定證照
+        ///</summary>
+        [Field(Field = "verification", Indexed = false)]
+        public string Verification { get; set; }
+
+        ///<summary>
+        /// 獎勵紀錄
+        ///</summary>
+        [Field(Field = "merit", Indexed = false)]
+        public string Merit { get; set; }
+
+        ///<summary>
+        /// 幹部任期
+        ///</summary>
+        [Field(Field = "term", Indexed = false)]
+        public string Term { get; set; }
+
+        ///<summary>
+        /// 詳細資料
+        ///</summary>
+        [Field(Field = "detail", Indexed = false)]
+        public string Detail { get; set; }
+
+    }
+    #endregion
+
+    static class ReportStudentExt
+    {
+        public static string ToPrimaryKeyStringList(this List<ReportStudent> students)
+        {
+            List<string> pks = students.ConvertAll(x => x.StudentID);
+
+            if (pks.Count <= 0)
+                return string.Empty;
+            else
+                return "'" + string.Join("','", pks.ToArray()) + "'";
         }
     }
 }

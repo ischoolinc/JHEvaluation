@@ -219,8 +219,7 @@ namespace KH_StudentScoreSummaryReport
                     }
                 }
 
-
-
+                #region 註解掉的程式
                 //foreach (ReportStudent stud in RatingStudents)
                 //{
                 //-----------------
@@ -295,7 +294,9 @@ namespace KH_StudentScoreSummaryReport
                 //        }
                 //    }
                 //}
+                #endregion
 
+                #region Debug 用區斷
                 Workbook wb = new Workbook();
                 Dictionary<string, ReportStudent> students = RatingStudents.ToDictionary(x => x.Id);
                 int wstCot = 0;
@@ -385,6 +386,7 @@ namespace KH_StudentScoreSummaryReport
                 {
 
                 }
+                #endregion
 
                 if (Preference.FilterRankScope)
                 {
@@ -419,7 +421,6 @@ namespace KH_StudentScoreSummaryReport
             }
             else
             {
-
                 CalcStudents = PrintStudents.ToSC();
                 CalcStudents.ReadCalculationRule(this); //讀取成績計算規則。
 
@@ -444,8 +445,6 @@ namespace KH_StudentScoreSummaryReport
                 PrintStudents.ReadUpdateRecordDate(this);
 
                 e.Result = new Report(PrintStudents, Preference).Print();
-
-
 
                 Feedback("列印完成", -1);
             }
