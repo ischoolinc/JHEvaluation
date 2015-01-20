@@ -31,6 +31,10 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         {
             ScoreCalcRule.Instance.SyncAllBackground();
 
+            // 清存領域成績暫存區
+            TempData.tmpStudDomainScoreDict.Clear();
+            TempData.tmpStudDomainCreditDict.Clear();
+
             Dictionary<string, IEvaluative> evals = new Dictionary<string, IEvaluative>();
 
             foreach (ScoreCalcRuleRecord record in ScoreCalcRule.Instance.Items)

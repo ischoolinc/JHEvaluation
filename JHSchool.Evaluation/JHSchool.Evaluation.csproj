@@ -306,6 +306,7 @@
     <Compile Include="StudentExtendControls\SemesterScoreItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="TempData.cs" />
     <Compile Include="UIConfig.cs" />
     <Compile Include="CourseExtendControls\NavViewNode.cs" />
     <Compile Include="CourseExtendControls\Ribbon\AddCourse.cs">

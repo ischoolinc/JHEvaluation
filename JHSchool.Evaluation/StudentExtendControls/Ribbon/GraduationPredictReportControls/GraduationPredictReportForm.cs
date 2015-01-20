@@ -1039,6 +1039,13 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             }
             SetStudentDomainCell(cells, rowIndex, columnIndex++, "不及格數", styleNormal);
 
+            // 當有國語文、英語
+            if (TempData.tmpStudDomainCreditDict.Count > 0)
+            {
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, "語文(國語文)", styleNormal);
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, "語文(英語)", styleNormal);
+            }
+
             #endregion 輸出標題
 
             #region 輸出平均明細
@@ -1073,6 +1080,34 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                             SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
                     }
                     SetStudentDomainCell(cells, rowIndex, columnIndex++, "" + failCnt, styleNormal);
+
+                    if (TempData.tmpStudDomainCreditDict.Count > 0)
+                    {
+                        if (TempData.tmpStudDomainCreditDict.ContainsKey(student.ID))
+                        { 
+                            // 國語文
+                            if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("國語文"))
+                            {                                
+                                decimal sc = TempData.tmpStudDomainScoreDict[student.ID]["國語文"] / TempData.tmpStudDomainCreditDict[student.ID]["國語文"];
+                                if(sc>=60)
+                                    SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleNormal);
+                                else
+                                    SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleRed);
+                            }
+                            // 英語
+                            if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("英語"))
+                            {
+                                decimal sc = TempData.tmpStudDomainScoreDict[student.ID]["英語"] / TempData.tmpStudDomainCreditDict[student.ID]["英語"];
+
+                                if(sc>=60)
+                                    SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleNormal);
+                                else
+                                    SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleRed);
+                            }
+                                
+
+                        }
+                    }
                 }
                 #endregion 輸出有資料的學生
                 else

@@ -18,6 +18,10 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
             Dictionary<string, IEvaluative> evals = new Dictionary<string,IEvaluative>();
 
+            // 清存領域成績暫存區
+            TempData.tmpStudDomainScoreDict.Clear();
+            TempData.tmpStudDomainCreditDict.Clear();
+
             //針對每項成績計算規則建立實際的判斷介面
             foreach (ScoreCalcRuleRecord record in ScoreCalcRule.Instance.Items)
             {
