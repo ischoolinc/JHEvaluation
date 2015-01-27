@@ -129,50 +129,32 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
             else if (Program.Mode == ModuleMode.HsinChu)
             {
                 // 預設取得比例
-                decimal ss = 50, sa = 50, sums = 0, suma = 0;
-
-                // 當不使用平時成績
-                if (aedata.UseAssignmentScore == false)
-                {
-                    sa = 0;ss = 100;
-                }
-
-                // 當不使用定期成績
-                if (aedata.UseScore == false)
-                {
-                    ss = 0; sa = 100;
-                }
+                decimal scoreWeight = 50, assignmentWeight = 50;
+                decimal totalWeight = 0, totalScore = 0;
 
                 // 使用系統內預設比例
                 if (Util.ScorePercentageHSDict.ContainsKey(aedata.RefAssessmentSetupID))
                 {
-                    ss = Util.ScorePercentageHSDict[aedata.RefAssessmentSetupID];
-                    sa = 100 - ss;
+                    scoreWeight = Util.ScorePercentageHSDict[aedata.RefAssessmentSetupID];
+                    assignmentWeight = 100 - scoreWeight;
                 }
-                
 
                 if (aedata.UseScore && scedata.Score.HasValue)
                 {
-                    sums = scedata.Score.Value *ss* 0.01M;
-
-                    // 當只有定期
-                    if (aedata.UseAssignmentScore == false)
-                    {
-                        sums = scedata.Score.Value * 100 * 0.01M;
-                    }
+                    totalScore += scedata.Score.Value * scoreWeight;
+                    totalWeight += scoreWeight;
                 }
 
                 if (aedata.UseAssignmentScore && scedata.AssignmentScore.HasValue)
                 {
-                    suma = scedata.AssignmentScore.Value * sa * 0.01M;
-                    // 當只有平時
-                    if (aedata.UseScore == false)
-                    {
-                        suma = scedata.AssignmentScore.Value * 100 * 0.01M;
-                    }
+                    totalScore += scedata.AssignmentScore.Value * assignmentWeight;
+                    totalWeight += assignmentWeight;
                 }
 
-                Value = sums + suma;
+                if (totalWeight != 0)
+                    Value = totalScore / totalWeight;
+                else
+                    Value = null;
 
                 //// 原本作法
                 //decimal sum = 0, weight = 0;
