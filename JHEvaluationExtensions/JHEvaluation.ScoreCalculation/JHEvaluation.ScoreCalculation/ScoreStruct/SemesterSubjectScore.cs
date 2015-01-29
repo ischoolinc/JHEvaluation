@@ -11,6 +11,8 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
     /// </summary>
     public class SemesterSubjectScore : IScore
     {
+        private const decimal MakeupLimit = 60; //補考分數上限。
+
         public SemesterSubjectScore()
         {
             RawScore = null;
@@ -31,6 +33,9 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
             Value = score.Score;
             Domain = score.Domain;
             Weight = score.Credit;
+
+            ScoreOrigin = score.ScoreOrigin;
+            ScoreMakeup = score.ScoreMakeup;
         }
 
         public SubjectScore RawScore { get; private set; }
@@ -54,6 +59,24 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         /// 所屬領域。
         /// </summary>
         public string Domain { get; set; }
+
+        /// <summary>
+        /// 原始成績。
+        /// </summary>
+        public decimal? ScoreOrigin { get; set; }
+
+        /// <summary>
+        /// 補考成績。
+        /// </summary>
+        public decimal? ScoreMakeup { get; set; }
+
+        /// <summary>
+        /// 將最好的成績寫入 Value 屬性。
+        /// </summary>
+        public void BetterScoreSelection()
+        {
+            Value = SubjectScore.GetBetterScore(ScoreOrigin, ScoreMakeup);
+        }
 
         #region IScore 成員
 

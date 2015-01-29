@@ -17,7 +17,10 @@ namespace KaoHsiung.JHEvaluation.ImportExport
         {
             SmartSchool.API.PlugIn.VirtualCheckBox filterRepeat = new SmartSchool.API.PlugIn.VirtualCheckBox("自動略過重讀成績", true);
             wizard.Options.Add(filterRepeat);
-            wizard.ExportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記");
+            //wizard.ExportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記");
+            
+            //2015.1.27 Cloud新增
+            wizard.ExportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記");
             wizard.ExportPackage += delegate(object sender, SmartSchool.API.PlugIn.Export.ExportPackageEventArgs e)
             {
                 List<JHStudentRecord> students = JHStudent.SelectByIDs(e.List);
@@ -52,7 +55,12 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                         case "學期": row.Add(field, "" + record.Semester); break;
                                         case "權數": row.Add(field, "" + subject.Credit); break;
                                         case "節數": row.Add(field, "" + subject.Period); break;
-                                        case "分數評量": row.Add(field, "" + subject.Score); break;
+                                        //case "分數評量": row.Add(field, "" + subject.Score); break;
+                                        //2015.1.27 Cloud新增
+                                        case "成績": row.Add(field, "" + subject.Score); break;
+                                        case "原始成績": row.Add(field, "" + subject.ScoreOrigin); break;
+                                        case "補考成績": row.Add(field, "" + subject.ScoreMakeup); break;
+
                                         case "努力程度": row.Add(field, "" + subject.Effort); break;
                                         case "文字描述": row.Add(field, subject.Text); break;
                                         case "註記": row.Add(field, subject.Comment); break;
