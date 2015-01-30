@@ -68,6 +68,9 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             InitializeListener();
             InitializeEffortDegreeMapping();
 
+            btnPreSubjScore.Enabled = false;
+            btnPreCalcScore.Enabled = false;
+
             //如果是新竹市，將努力程度藏起來
             if (Global.Params["Mode"] == "HsinChu")
             {
@@ -417,7 +420,7 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
         {
             if (_Editable)
             {
-                btnSave.Enabled = gpSubject.Enabled = gpDomain.Enabled = _semesterIsValid;
+                btnPreSubjScore.Enabled = btnPreCalcScore.Enabled = btnSave.Enabled = gpSubject.Enabled = gpDomain.Enabled = _semesterIsValid;
             }
             else
             {
@@ -425,6 +428,9 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
                 gpSubject.Enabled = true;
                 gpDomain.Enabled = true;
                 _semesterIsValid = false;
+
+                btnPreSubjScore.Enabled = false;
+                btnPreCalcScore.Enabled = false;
             }
         }
 
@@ -1295,7 +1301,13 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             StudentScore.SetClassMapping();
             StudentScore studentScore = new StudentScore(_student);
 
-            JHSemesterScoreRecord tempRecord = JHSemesterScore.SelectBySchoolYearAndSemester(_student.ID, _record.SchoolYear, _record.Semester);
+            JHSemesterScoreRecord tempRecord;
+
+            if (_record == null)
+                tempRecord = new JHSemesterScoreRecord();
+            else
+                tempRecord = JHSemesterScore.SelectBySchoolYearAndSemester(_student.ID, _record.SchoolYear, _record.Semester);
+
             if (OnlyCalcDomain)
                 tempRecord = GetSemesterScoreRecordFromDomainGrid(tempRecord);
             else
@@ -1461,7 +1473,12 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             StudentScore.SetClassMapping();
             StudentScore studentScore = new StudentScore(_student);
 
-            JHSemesterScoreRecord tempRecord = JHSemesterScore.SelectBySchoolYearAndSemester(_student.ID, _record.SchoolYear, _record.Semester);
+            JHSemesterScoreRecord tempRecord;
+
+            if (_record == null)
+                tempRecord = new JHSemesterScoreRecord();
+            else 
+                tempRecord = JHSemesterScore.SelectBySchoolYearAndSemester(_student.ID, _record.SchoolYear, _record.Semester);
             
             tempRecord = GetSemesterScoreRecordFromSubjectGrid(tempRecord);
 
