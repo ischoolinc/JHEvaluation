@@ -1489,7 +1489,7 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             students.Add(studentScore);
 
             //計算課程成績
-            students.ReadAttendScore(_record.SchoolYear, _record.Semester, new string[] { }, null);
+            students.ReadAttendScore(int.Parse(cboSchoolYear.Text), int.Parse(cboSemester.Text), new string[] { }, null);
             students.SaveAttendScore(new string[] { }, null);
             //讀取計算規則
             students.ReadCalculationRule(null);

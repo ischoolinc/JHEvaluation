@@ -10,6 +10,8 @@ namespace HsinChu.JHEvaluation
 {
     class SetupStudent
     {
+        static EventHandler _eh = FISCA.InteractionService.PublishEvent("CalculationHelper.SaveSemesterScore");
+
         internal static void Init()
         {
             #region ContentItem 資料項目
@@ -63,6 +65,8 @@ namespace HsinChu.JHEvaluation
                 JHSchool.Evaluation.ImportExport.ImportStudentV2 wizard = new JHSchool.Evaluation.ImportExport.ImportStudentV2(importer.Text, importer.Image);
                 importer.InitializeImport(wizard);
                 wizard.ShowDialog();
+
+                _eh(null, EventArgs.Empty);
             };
             rbItemImport["成績相關匯入"]["匯入學期領域成績"].Enable = Framework.User.Acl["JHSchool.Student.Ribbon0191"].Executable;
             rbItemImport["成績相關匯入"]["匯入學期領域成績"].Click += delegate
@@ -71,6 +75,8 @@ namespace HsinChu.JHEvaluation
                 JHSchool.Evaluation.ImportExport.ImportStudentV2 wizard = new JHSchool.Evaluation.ImportExport.ImportStudentV2(importer.Text, importer.Image);
                 importer.InitializeImport(wizard);
                 wizard.ShowDialog();
+
+                _eh(null, EventArgs.Empty);
             };
             rbItemImport["成績相關匯入"]["匯入畢業成績"].Enable = Framework.User.Acl["JHSchool.Student.Ribbon0192"].Executable;
             rbItemImport["成績相關匯入"]["匯入畢業成績"].Click += delegate

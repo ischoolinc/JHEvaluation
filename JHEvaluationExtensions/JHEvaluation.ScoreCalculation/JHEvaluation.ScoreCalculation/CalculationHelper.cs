@@ -137,6 +137,9 @@ namespace JHEvaluation.ScoreCalculation
         public static void SaveSemesterScore(this List<StudentScore> students, IStatusReporter reporter)
         {
             new SemesterScoreSaver(students, GetReporter(reporter)).Save();
+
+            EventHandler eh = FISCA.InteractionService.PublishEvent("CalculationHelper.SaveSemesterScore");
+            eh(null, EventArgs.Empty);
         }
 
         /// <summary>
