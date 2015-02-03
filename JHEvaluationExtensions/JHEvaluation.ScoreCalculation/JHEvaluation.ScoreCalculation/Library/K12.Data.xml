@@ -8951,6 +8951,14 @@
             科目成績
             </summary>
         </member>
+        <member name="M:K12.Data.SubjectScore.GetBetterScore(System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>
+            擇優成績。 2015.1.27 Cloud新增
+            </summary>
+            <param name="scoreOrigin"></param>
+            <param name="scoreMakeup"></param>
+            <returns></returns>
+        </member>
         <member name="M:K12.Data.SubjectScore.#ctor">
             <summary>
             預設建構式
@@ -9012,8 +9020,29 @@
         </member>
         <member name="P:K12.Data.SubjectScore.Score">
             <summary>
-            百分比成績
+            百分比成績。
             </summary>
+        </member>
+        <member name="P:K12.Data.SubjectScore.ScoreOrigin">
+            <summary>
+            原始成績。 2015.1.27 Cloud新增
+            </summary>
+        </member>
+        <member name="P:K12.Data.SubjectScore.ScoreMakeup">
+            <summary>
+            補考成績。 2015.1.27 Cloud新增
+            </summary>
+        </member>
+        <member name="P:K12.Data.SubjectScore.MakeupLimit">
+            <summary>
+            補考的成績上限。 2015.1.27 Cloud新增
+            </summary>
+        </member>
+        <member name="P:K12.Data.SubjectScore.ScoreMakeupLimited">
+            <summary>
+            取得「受限」後的補考成績，一般上限是60分。 2015.1.27 Cloud新增
+            </summary>
+            <returns></returns>
         </member>
         <member name="P:K12.Data.SubjectScore.Effort">
             <summary>
