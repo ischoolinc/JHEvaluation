@@ -51,9 +51,14 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     subjLog.Formater = subjLogFormater;
 
                     decimal? score = objSCSubject.Value.HasValue ? (decimal?)(double)objSCSubject.Value : null;
+                    decimal? scoreOrigin = objSCSubject.ScoreOrigin.HasValue ? (decimal?)(double)objSCSubject.ScoreOrigin : null;
+                    decimal? scoreMakeup = objSCSubject.ScoreMakeup.HasValue ? (decimal?)(double)objSCSubject.ScoreMakeup : null;
 
                     //記錄 Log
                     subjLog.Add(new LogData("成績", objJHSubject.Score + "", score.ToString()));
+                    subjLog.Add(new LogData("原始成績", objJHSubject.ScoreOrigin + "", scoreOrigin.ToString()));
+                    subjLog.Add(new LogData("補考成績", objJHSubject.ScoreMakeup + "", scoreMakeup.ToString()));
+
                     subjLog.Add(new LogData("權重", objJHSubject.Credit + "", objSCSubject.Weight + ""));
                     subjLog.Add(new LogData("節數", objJHSubject.Period + "", objSCSubject.Period + ""));
                     if (Program.Mode == ModuleMode.KaoHsiung)
@@ -63,6 +68,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     SCScore.Subject.Log.Add(subjLog);
 
                     objJHSubject.Score = score;
+                    objJHSubject.ScoreOrigin = scoreOrigin;
+                    objJHSubject.ScoreMakeup = scoreMakeup;
+
                     objJHSubject.Credit = objSCSubject.Weight;
                     objJHSubject.Period = objSCSubject.Period;
                     objJHSubject.Effort = objSCSubject.Effort;

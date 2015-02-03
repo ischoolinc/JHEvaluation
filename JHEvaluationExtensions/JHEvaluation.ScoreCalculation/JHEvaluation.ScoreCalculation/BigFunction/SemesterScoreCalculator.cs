@@ -28,14 +28,29 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
             {
                 if (student.CalculationRule == null) continue; //沒有成績計算規則就不計算。
 
+                SCSemsScore Sems = student.SemestersScore[SemesterData.Empty];
+
+                //對全部的學期科目成績作一次擇優
+                foreach (string subject in Sems.Subject)
+                {
+                    if (Sems.Subject.Contains(subject))
+                    {
+                        SemesterSubjectScore sss = Sems.Subject[subject];
+
+                        //有原始或補考成績才做擇優
+                        if (sss.ScoreOrigin.HasValue || sss.ScoreMakeup.HasValue)
+                            sss.BetterScoreSelection();
+                    }
+                }
+
+                //處理修課課程
                 foreach (string subject in student.AttendScore)
                 {
                     if (!IsValidItem(subject)) continue; //慮掉不算的科目。
 
                     AttendScore attend = student.AttendScore[subject];
                     SemesterSubjectScore SemsSubj = null;
-                    SCSemsScore Sems = student.SemestersScore[SemesterData.Empty];
-
+                    
                     if (Sems.Subject.Contains(subject))
                         SemsSubj = Sems.Subject[subject];
                     else
@@ -47,12 +62,17 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         if (attend.Value.HasValue && attend.Weight.HasValue && attend.Period.HasValue)
                         {
                             decimal score = student.CalculationRule.ParseSubjectScore(attend.Value.Value); //進位處理。
-                            SemsSubj.Value = score;
+                            //SemsSubj.Value = score;
                             SemsSubj.Weight = attend.Weight.Value;
                             SemsSubj.Period = attend.Period.Value;
                             SemsSubj.Effort = attend.Effort;
                             SemsSubj.Text = attend.Text;
                             SemsSubj.Domain = attend.Domain;
+
+                            //填到原始成績
+                            SemsSubj.ScoreOrigin = score;
+                            //擇優成績
+                            SemsSubj.BetterScoreSelection();
                         }
                         else //資料不合理，保持原來的分數狀態。
                             continue;
@@ -90,6 +110,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                 //各領域分數加總。
                 Dictionary<string, decimal> domainTotal = new Dictionary<string, decimal>();
+                //各領域原始分數加總。
+                Dictionary<string, decimal> domainOriginTotal = new Dictionary<string, decimal>();
                 //各領域權重加總。
                 Dictionary<string, decimal> domainWeight = new Dictionary<string, decimal>();
                 //各領域節數加總。
@@ -134,15 +156,22 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                         if (objSubj.Value.HasValue && objSubj.Weight.HasValue && objSubj.Period.HasValue)
                         {
+                            if (!objSubj.ScoreOrigin.HasValue)
+                                objSubj.ScoreOrigin = objSubj.Value;
+
                             if (!domainTotal.ContainsKey(strDomain))
                             {
                                 domainTotal.Add(strDomain, 0);
+                                domainOriginTotal.Add(strDomain, 0);
                                 domainWeight.Add(strDomain, 0);
                                 domainPeriod.Add(strDomain, 0);
                                 domainText.Add(strDomain, string.Empty);
                             }
 
                             domainTotal[strDomain] += objSubj.Value.Value * objSubj.Weight.Value;
+                            //科目的原始成績加總
+                            domainOriginTotal[strDomain] += objSubj.ScoreOrigin.Value * objSubj.Weight.Value;
+
                             domainWeight[strDomain] += objSubj.Weight.Value;
                             domainPeriod[strDomain] += objSubj.Period.Value;
                             domainText[strDomain] += GetDomainSubjectText(strSubj, objSubj.Text);
@@ -159,6 +188,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     foreach (string strDomain in domainTotal.Keys)
                     {
                         decimal total = domainTotal[strDomain];
+                        decimal totalOrigin = domainOriginTotal[strDomain];
+
                         decimal weight = domainWeight[strDomain];
                         decimal period = domainPeriod[strDomain];
                         string text = string.Join(";", domainText[strDomain].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
@@ -166,6 +197,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         if (weight <= 0) continue; //沒有權重就不計算，保留原來的成績。
 
                         decimal weightAvg = rule.ParseDomainScore(total / weight);
+                        decimal weightOriginAvg = rule.ParseDomainScore(totalOrigin / weight);
 
                         //將成績更新回學生。
                         SemesterDomainScore dscore = null;
@@ -177,13 +209,17 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             dscores.Add(strDomain, dscore);
                         }
 
-                        dscore.ScoreOrigin = weightAvg;
+                        dscore.ScoreOrigin = weightOriginAvg;
                         dscore.Weight = weight;
                         dscore.Period = period;
                         dscore.Text = text;
                         dscore.Effort = effortmap.GetCodeByScore(weightAvg);
 
-                        dscore.BetterScoreSelection(); //進行成績擇優。
+                        //若有補考成績就進行擇優,否則就將科目的擇優平均帶入領域成績
+                        if (dscore.ScoreMakeup.HasValue)
+                            dscore.BetterScoreSelection(); //進行成績擇優。
+                        else
+                            dscore.Value = weightAvg;
                     }
 
                     foreach (var domainName in dscores.ToArray())
@@ -194,16 +230,14 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     }
                     #endregion
                 }
-                else //雖不需計算領域成績，但是仍然需要擇優運算。如果沒有原始成績，將成績當成原始成績運算。
+                else //雖不需計算領域成績，但是仍然需要擇優運算。如果有補考成績就擇優
                 {
                     foreach (var domain in dscores.ToArray())
                     {
                         SemesterDomainScore objDomain = dscores[domain];
 
-                        if (!objDomain.ScoreOrigin.HasValue)
-                            objDomain.ScoreOrigin = objDomain.Value;
-
-                        objDomain.BetterScoreSelection();
+                        if (objDomain.ScoreMakeup.HasValue)
+                            objDomain.BetterScoreSelection();
                     }
                 }
 

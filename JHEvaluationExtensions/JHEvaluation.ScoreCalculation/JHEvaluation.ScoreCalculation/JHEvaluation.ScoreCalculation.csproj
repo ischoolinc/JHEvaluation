@@ -149,7 +149,11 @@
       <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
       <Private>False</Private>
     </Reference>
+<<<<<<< HEAD
     <Reference Include="K12.Data, Version=2.0.0.7, Culture=neutral, processorArchitecture=MSIL">
+=======
+    <Reference Include="K12.Data, Version=2.0.0.8, Culture=neutral, processorArchitecture=MSIL">
+>>>>>>> 6b5a84e72c97ad194f5690be20d26ed703ca9f1d
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\K12.Data.dll</HintPath>
       <Private>False</Private>

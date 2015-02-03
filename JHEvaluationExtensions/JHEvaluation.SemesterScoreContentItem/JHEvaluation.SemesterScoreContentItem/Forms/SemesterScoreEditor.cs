@@ -68,6 +68,9 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             InitializeListener();
             InitializeEffortDegreeMapping();
 
+            btnPreSubjScore.Enabled = false;
+            btnPreCalcScore.Enabled = false;
+
             //如果是新竹市，將努力程度藏起來
             if (Global.Params["Mode"] == "HsinChu")
             {
@@ -339,6 +342,8 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
                     subject.Subject,
                     periodCredit,
                     "" + subject.Score,
+                    "" + subject.ScoreOrigin,
+                    "" + subject.ScoreMakeup,
                     "" + subject.Effort,
                     subject.Text,
                     subject.Comment);
@@ -348,6 +353,16 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
                     row.Cells[chsScore.Index].Style.ForeColor = Color.Red;
                 if (subject.Score > 100 || subject.Score < 0)
                     row.Cells[chsScore.Index].Style.ForeColor = Color.Green;
+
+                if (subject.ScoreOrigin < 60)
+                    row.Cells[chsScoreOrigin.Index].Style.ForeColor = Color.Red;
+                if (subject.ScoreOrigin > 100 || subject.ScoreOrigin < 0)
+                    row.Cells[chsScoreOrigin.Index].Style.ForeColor = Color.Green;
+
+                if (subject.ScoreMakeup < 60)
+                    row.Cells[chsScoreMakeup.Index].Style.ForeColor = Color.Red;
+                if (subject.ScoreMakeup > 100 || subject.ScoreMakeup < 0)
+                    row.Cells[chsScoreMakeup.Index].Style.ForeColor = Color.Green;
             }
             dgvSubject.ResumeLayout();
         }
@@ -405,7 +420,7 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
         {
             if (_Editable)
             {
-                btnSave.Enabled = gpSubject.Enabled = gpDomain.Enabled = _semesterIsValid;
+                btnPreSubjScore.Enabled = btnPreCalcScore.Enabled = btnSave.Enabled = gpSubject.Enabled = gpDomain.Enabled = _semesterIsValid;
             }
             else
             {
@@ -413,6 +428,9 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
                 gpSubject.Enabled = true;
                 gpDomain.Enabled = true;
                 _semesterIsValid = false;
+
+                btnPreSubjScore.Enabled = false;
+                btnPreCalcScore.Enabled = false;
             }
         }
 
@@ -535,7 +553,11 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
                 subject.Period = pc.Period;
                 subject.Credit = pc.Credit;
 
-                subject.Score = string.IsNullOrEmpty("" + row.Cells[chsScore.Index].Value) ? null : (decimal?)decimal.Parse("" + row.Cells[chsScore.Index].Value);
+                subject.Score = GetDecimalValue("" + row.Cells[chsScore.Index].Value);
+
+                subject.ScoreOrigin = GetDecimalValue("" + row.Cells[chsScoreOrigin.Index].Value);
+                subject.ScoreMakeup = GetDecimalValue("" + row.Cells[chsScoreMakeup.Index].Value);
+
                 subject.Effort = string.IsNullOrEmpty("" + row.Cells[chsEffort.Index].Value) ? null : (int?)int.Parse("" + row.Cells[chsEffort.Index].Value);
                 subject.Text = "" + row.Cells[chsText.Index].Value;
                 subject.Comment = "" + row.Cells[chsComment.Index].Value;
@@ -561,12 +583,14 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
                 domain.Period = pc.Period;
                 domain.Credit = pc.Credit;
 
-                domain.Score = string.IsNullOrEmpty("" + row.Cells[chdScore.Index].Value) ? null : (decimal?)decimal.Parse("" + row.Cells[chdScore.Index].Value);
-                domain.ScoreOrigin = string.IsNullOrEmpty("" + row.Cells[chScoreOrigin.Index].Value) ? null : (decimal?)decimal.Parse("" + row.Cells[chScoreOrigin.Index].Value);
-                domain.ScoreMakeup = string.IsNullOrEmpty("" + row.Cells[chScoreMakeup.Index].Value) ? null : (decimal?)decimal.Parse("" + row.Cells[chScoreMakeup.Index].Value);
+                domain.Score = GetDecimalValue("" + row.Cells[chdScore.Index].Value);
+                domain.ScoreOrigin = GetDecimalValue("" + row.Cells[chScoreOrigin.Index].Value);
+                domain.ScoreMakeup = GetDecimalValue("" + row.Cells[chScoreMakeup.Index].Value);
+
                 domain.Effort = string.IsNullOrEmpty("" + row.Cells[chdEffort.Index].Value) ? null : (int?)int.Parse("" + row.Cells[chdEffort.Index].Value);
                 domain.Text = "" + row.Cells[chdText.Index].Value;
-                domain.Comment = "" + row.Cells[chdComment.Index].Value;
+                //domain.Comment = "" + row.Cells[chdComment.Index].Value;
+                domain.Comment = "" + row.Cells[chMemo.Index].Value;
 
                 _record.Domains.Add(domain.Domain, domain);
             }
@@ -869,6 +893,56 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             }
             #endregion
 
+            #region 驗證原始成績欄位
+            if (cell.OwningColumn == chsScoreOrigin)
+            {
+                cell.ErrorText = string.Empty;
+                if (!string.IsNullOrEmpty("" + cell.Value))
+                {
+                    decimal d;
+                    if (!decimal.TryParse("" + cell.Value, out d))
+                        cell.ErrorText = "原始成績必須為數字";
+                    else
+                    {
+                        #region 不及格變紅色
+                        if (d < 60)
+                            cell.Style.ForeColor = Color.Red;
+                        else
+                            cell.Style.ForeColor = Color.Black;
+                        #endregion
+
+                        if (d > 100 || d < 0)
+                            cell.Style.ForeColor = Color.Green;
+                    }
+                }
+            }
+            #endregion
+
+            #region 驗證補考成績欄位
+            if (cell.OwningColumn == chsScoreMakeup)
+            {
+                cell.ErrorText = string.Empty;
+                if (!string.IsNullOrEmpty("" + cell.Value))
+                {
+                    decimal d;
+                    if (!decimal.TryParse("" + cell.Value, out d))
+                        cell.ErrorText = "補考成績必須為數字";
+                    else
+                    {
+                        #region 不及格變紅色
+                        if (d < 60)
+                            cell.Style.ForeColor = Color.Red;
+                        else
+                            cell.Style.ForeColor = Color.Black;
+                        #endregion
+
+                        if (d > 100 || d < 0)
+                            cell.Style.ForeColor = Color.Green;
+                    }
+                }
+            }
+            #endregion
+
             #region 驗證節數/權數欄位
             if (cell.OwningColumn == chsPeriodCredit)
             {
@@ -956,6 +1030,56 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
                             cell.OwningRow.Cells[chdEffort.Index].ErrorText = "";
                         }
                         #endregion
+                    }
+                }
+            }
+            #endregion
+
+            #region 驗證原始成績欄位
+            if (cell.OwningColumn == chScoreOrigin)
+            {
+                cell.ErrorText = string.Empty;
+                if (!string.IsNullOrEmpty("" + cell.Value))
+                {
+                    decimal d;
+                    if (!decimal.TryParse("" + cell.Value, out d))
+                        cell.ErrorText = "原始成績必須為數字";
+                    else
+                    {
+                        #region 不及格變紅色
+                        if (d < 60)
+                            cell.Style.ForeColor = Color.Red;
+                        else
+                            cell.Style.ForeColor = Color.Black;
+                        #endregion
+
+                        if (d > 100 || d < 0)
+                            cell.Style.ForeColor = Color.Green;
+                    }
+                }
+            }
+            #endregion
+
+            #region 驗證補考成績欄位
+            if (cell.OwningColumn == chScoreMakeup)
+            {
+                cell.ErrorText = string.Empty;
+                if (!string.IsNullOrEmpty("" + cell.Value))
+                {
+                    decimal d;
+                    if (!decimal.TryParse("" + cell.Value, out d))
+                        cell.ErrorText = "補考成績必須為數字";
+                    else
+                    {
+                        #region 不及格變紅色
+                        if (d < 60)
+                            cell.Style.ForeColor = Color.Red;
+                        else
+                            cell.Style.ForeColor = Color.Black;
+                        #endregion
+
+                        if (d > 100 || d < 0)
+                            cell.Style.ForeColor = Color.Green;
                     }
                 }
             }
@@ -1177,7 +1301,13 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             StudentScore.SetClassMapping();
             StudentScore studentScore = new StudentScore(_student);
 
-            JHSemesterScoreRecord tempRecord = JHSemesterScore.SelectBySchoolYearAndSemester(_student.ID, _record.SchoolYear, _record.Semester);
+            JHSemesterScoreRecord tempRecord;
+
+            if (_record == null)
+                tempRecord = new JHSemesterScoreRecord();
+            else
+                tempRecord = JHSemesterScore.SelectBySchoolYearAndSemester(_student.ID, _record.SchoolYear, _record.Semester);
+
             if (OnlyCalcDomain)
                 tempRecord = GetSemesterScoreRecordFromDomainGrid(tempRecord);
             else
@@ -1319,7 +1449,11 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
                 subject.Subject = "" + row.Cells[chsSubject.Index].Value;
                 subject.Period = pc.Period;
                 subject.Credit = pc.Credit;
-                subject.Score = decimal.Parse("" + row.Cells[chsScore.Index].Value);
+                subject.Score = GetDecimalValue("" + row.Cells[chsScore.Index].Value);
+
+                subject.ScoreOrigin = GetDecimalValue("" + row.Cells[chsScoreOrigin.Index].Value);
+                subject.ScoreMakeup = GetDecimalValue("" + row.Cells[chsScoreMakeup.Index].Value);
+
                 subject.Effort = int.TryParse("" + row.Cells[chsEffort.Index].Value, out i) ? (int?)i : null;
                 subject.Text = "" + row.Cells[chsText.Index].Value;
                 subject.Comment = "" + row.Cells[chsComment.Index].Value;
@@ -1332,6 +1466,77 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             new SemesterScoreItemHelp().ShowDialog();
+        }
+
+        private void btnPreSubjScore_Click(object sender, EventArgs e)
+        {
+            StudentScore.SetClassMapping();
+            StudentScore studentScore = new StudentScore(_student);
+
+            JHSemesterScoreRecord tempRecord;
+
+            if (_record == null)
+                tempRecord = new JHSemesterScoreRecord();
+            else 
+                tempRecord = JHSemesterScore.SelectBySchoolYearAndSemester(_student.ID, _record.SchoolYear, _record.Semester);
+            
+            tempRecord = GetSemesterScoreRecordFromSubjectGrid(tempRecord);
+
+            SemesterScore semesterScore = new SemesterScore(tempRecord);
+            studentScore.SemestersScore.Add(SemesterData.Empty, semesterScore);
+
+            List<StudentScore> students = new List<StudentScore>();
+            students.Add(studentScore);
+
+            //計算課程成績
+            students.ReadAttendScore(int.Parse(cboSchoolYear.Text), int.Parse(cboSemester.Text), new string[] { }, null);
+            students.SaveAttendScore(new string[] { }, null);
+            //讀取計算規則
+            students.ReadCalculationRule(null);
+            //計算科目成績
+            students.CalcuateSubjectSemesterScore(new string[] { });
+
+            dgvSubject.SuspendLayout();
+            dgvSubject.Rows.Clear();
+            foreach (string subject in semesterScore.Subject)
+            {
+                SemesterSubjectScore sss = semesterScore.Subject[subject];
+
+                string periodCredit = "";
+                PeriodCredit pc = new PeriodCredit();
+                if (pc.Parse(sss.Period + "/" + sss.Weight))
+                    periodCredit = pc.ToString();
+
+                DataGridViewRow row = new DataGridViewRow();
+                row.CreateCells(dgvSubject,
+                    sss.Domain,
+                    subject,
+                    periodCredit,
+                    "" + sss.Value,
+                    "" + sss.ScoreOrigin,
+                    "" + sss.ScoreMakeup,
+                    "" + sss.Effort,
+                    sss.Text,
+                    string.Empty);
+
+                dgvSubject.Rows.Add(row);
+
+                if (sss.Value < 60)
+                    row.Cells[chsScore.Index].Style.ForeColor = Color.Red;
+                if (sss.Value > 100 || sss.Value < 0)
+                    row.Cells[chsScore.Index].Style.ForeColor = Color.Green;
+
+                if (sss.ScoreOrigin < 60)
+                    row.Cells[chsScoreOrigin.Index].Style.ForeColor = Color.Red;
+                if (sss.ScoreOrigin > 100 || sss.ScoreOrigin < 0)
+                    row.Cells[chsScoreOrigin.Index].Style.ForeColor = Color.Green;
+
+                if (sss.ScoreMakeup < 60)
+                    row.Cells[chsScoreMakeup.Index].Style.ForeColor = Color.Red;
+                if (sss.ScoreMakeup > 100 || sss.ScoreMakeup < 0)
+                    row.Cells[chsScoreMakeup.Index].Style.ForeColor = Color.Green;
+            }
+            dgvSubject.ResumeLayout();
         }
 
         //private void btnCalSubjScore_Click(object sender, EventArgs e)

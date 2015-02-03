@@ -31,12 +31,20 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SemesterScoreEditor));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SemesterScoreEditor));
             this.gpDomain = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panelDomain = new System.Windows.Forms.Panel();
             this.dgvDomain = new DevComponents.DotNetBar.Controls.DataGridViewX();
+            this.chdDomain = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
+            this.chdPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chdScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chScoreOrigin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chScoreMakeup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chdEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chdText = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chMemo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelScore = new DevComponents.DotNetBar.PanelEx();
             this.txtCourseLearnScoreOrigin = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.txtLearnDomainScoreOrigin = new DevComponents.DotNetBar.Controls.TextBoxX();
@@ -61,6 +69,8 @@
             this.chsSubject = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
             this.chsPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chsScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsScoreOrigin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsScoreMakeup = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chsEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chsText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chsComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -89,14 +99,7 @@
             this.dataGridViewTextBoxColumn14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.chdDomain = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
-            this.chdPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chdScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chScoreOrigin = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chScoreMakeup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chdEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chdText = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chdComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnPreSubjScore = new DevComponents.DotNetBar.ButtonX();
             this.gpDomain.SuspendLayout();
             this.panelDomain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDomain)).BeginInit();
@@ -184,7 +187,7 @@
             this.chScoreMakeup,
             this.chdEffort,
             this.chdText,
-            this.chdComment});
+            this.chMemo});
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -208,6 +211,55 @@
             this.dgvDomain.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_RowHeaderMouseClick);
             this.dgvDomain.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_RowsAdded);
             // 
+            // chdDomain
+            // 
+            this.chdDomain.HeaderText = "領域";
+            this.chdDomain.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chdDomain.Items")));
+            this.chdDomain.Name = "chdDomain";
+            this.chdDomain.Width = 110;
+            // 
+            // chdPeriodCredit
+            // 
+            this.chdPeriodCredit.HeaderText = "節數/權數";
+            this.chdPeriodCredit.Name = "chdPeriodCredit";
+            this.chdPeriodCredit.Width = 65;
+            // 
+            // chdScore
+            // 
+            this.chdScore.HeaderText = "成績";
+            this.chdScore.Name = "chdScore";
+            this.chdScore.Width = 60;
+            // 
+            // chScoreOrigin
+            // 
+            this.chScoreOrigin.HeaderText = "原始成績";
+            this.chScoreOrigin.Name = "chScoreOrigin";
+            this.chScoreOrigin.Width = 60;
+            // 
+            // chScoreMakeup
+            // 
+            this.chScoreMakeup.HeaderText = "補考成績";
+            this.chScoreMakeup.Name = "chScoreMakeup";
+            this.chScoreMakeup.Width = 60;
+            // 
+            // chdEffort
+            // 
+            this.chdEffort.HeaderText = "努力程度";
+            this.chdEffort.Name = "chdEffort";
+            this.chdEffort.Width = 59;
+            // 
+            // chdText
+            // 
+            this.chdText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.chdText.HeaderText = "文字描述";
+            this.chdText.Name = "chdText";
+            // 
+            // chMemo
+            // 
+            this.chMemo.HeaderText = "註記";
+            this.chMemo.Name = "chMemo";
+            this.chMemo.Width = 60;
+            // 
             // panelScore
             // 
             this.panelScore.CanvasColor = System.Drawing.SystemColors.Control;
@@ -215,7 +267,6 @@
             this.panelScore.Controls.Add(this.txtCourseLearnScoreOrigin);
             this.panelScore.Controls.Add(this.txtLearnDomainScoreOrigin);
             this.panelScore.Controls.Add(this.txtCourseLearnScore);
-            this.panelScore.Controls.Add(this.btnPreCalcScore);
             this.panelScore.Controls.Add(this.txtLearnDomainScore);
             this.panelScore.Controls.Add(this.labelX6);
             this.panelScore.Controls.Add(this.labelX4);
@@ -279,9 +330,9 @@
             this.btnPreCalcScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPreCalcScore.BackColor = System.Drawing.Color.Transparent;
             this.btnPreCalcScore.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPreCalcScore.Location = new System.Drawing.Point(596, 5);
+            this.btnPreCalcScore.Location = new System.Drawing.Point(150, 538);
             this.btnPreCalcScore.Name = "btnPreCalcScore";
-            this.btnPreCalcScore.Size = new System.Drawing.Size(62, 53);
+            this.btnPreCalcScore.Size = new System.Drawing.Size(98, 28);
             this.btnPreCalcScore.TabIndex = 18;
             this.btnPreCalcScore.Text = "試算領域成績";
             this.btnPreCalcScore.Click += new System.EventHandler(this.btnPreCalcScore_Click);
@@ -523,6 +574,8 @@
             this.chsSubject,
             this.chsPeriodCredit,
             this.chsScore,
+            this.chsScoreOrigin,
+            this.chsScoreMakeup,
             this.chsEffort,
             this.chsText,
             this.chsComment});
@@ -577,6 +630,18 @@
             this.chsScore.Name = "chsScore";
             this.chsScore.Width = 60;
             // 
+            // chsScoreOrigin
+            // 
+            this.chsScoreOrigin.HeaderText = "原始成績";
+            this.chsScoreOrigin.Name = "chsScoreOrigin";
+            this.chsScoreOrigin.Width = 60;
+            // 
+            // chsScoreMakeup
+            // 
+            this.chsScoreMakeup.HeaderText = "補考成績";
+            this.chsScoreMakeup.Name = "chsScoreMakeup";
+            this.chsScoreMakeup.Width = 60;
+            // 
             // chsEffort
             // 
             this.chsEffort.HeaderText = "努力程度";
@@ -585,9 +650,9 @@
             // 
             // chsText
             // 
+            this.chsText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.chsText.HeaderText = "文字描述";
             this.chsText.Name = "chsText";
-            this.chsText.Width = 175;
             // 
             // chsComment
             // 
@@ -775,60 +840,26 @@
             this.linkLabel1.Text = "說明";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // chdDomain
+            // btnPreSubjScore
             // 
-            this.chdDomain.HeaderText = "領域";
-            this.chdDomain.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chdDomain.Items")));
-            this.chdDomain.Name = "chdDomain";
-            this.chdDomain.Width = 110;
-            // 
-            // chdPeriodCredit
-            // 
-            this.chdPeriodCredit.HeaderText = "節數/權數";
-            this.chdPeriodCredit.Name = "chdPeriodCredit";
-            this.chdPeriodCredit.Width = 65;
-            // 
-            // chdScore
-            // 
-            this.chdScore.HeaderText = "成績";
-            this.chdScore.Name = "chdScore";
-            this.chdScore.Width = 60;
-            // 
-            // chScoreOrigin
-            // 
-            this.chScoreOrigin.HeaderText = "原始成績";
-            this.chScoreOrigin.Name = "chScoreOrigin";
-            this.chScoreOrigin.Width = 60;
-            // 
-            // chScoreMakeup
-            // 
-            this.chScoreMakeup.HeaderText = "補考成績";
-            this.chScoreMakeup.Name = "chScoreMakeup";
-            this.chScoreMakeup.Width = 60;
-            // 
-            // chdEffort
-            // 
-            this.chdEffort.HeaderText = "努力程度";
-            this.chdEffort.Name = "chdEffort";
-            this.chdEffort.Width = 59;
-            // 
-            // chdText
-            // 
-            this.chdText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.chdText.HeaderText = "文字描述";
-            this.chdText.Name = "chdText";
-            // 
-            // chMemo
-            // 
-            this.chdComment.HeaderText = "註記";
-            this.chdComment.Name = "chMemo";
-            this.chdComment.Width = 60;
+            this.btnPreSubjScore.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnPreSubjScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPreSubjScore.BackColor = System.Drawing.Color.Transparent;
+            this.btnPreSubjScore.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnPreSubjScore.Location = new System.Drawing.Point(46, 538);
+            this.btnPreSubjScore.Name = "btnPreSubjScore";
+            this.btnPreSubjScore.Size = new System.Drawing.Size(98, 28);
+            this.btnPreSubjScore.TabIndex = 23;
+            this.btnPreSubjScore.Text = "試算科目成績";
+            this.btnPreSubjScore.Click += new System.EventHandler(this.btnPreSubjScore_Click);
             // 
             // SemesterScoreEditor
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(692, 571);
+            this.Controls.Add(this.btnPreSubjScore);
             this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.btnPreCalcScore);
             this.Controls.Add(this.lblSaveWarning);
             this.Controls.Add(this.gpSubject);
             this.Controls.Add(this.lblStudentInfo);
@@ -900,13 +931,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripSubject;
         private System.Windows.Forms.ToolStripMenuItem SubjectInsertToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SubjectDeleteToolStripMenuItem;
-        private JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn chsDomain;
-        private JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn chsSubject;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chsPeriodCredit;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chsScore;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chsEffort;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chsText;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chsComment;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripDomain;
         private System.Windows.Forms.ToolStripMenuItem DomainInsertToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DomainDeleteToolStripMenuItem;
@@ -922,6 +946,17 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn chScoreMakeup;
         private System.Windows.Forms.DataGridViewTextBoxColumn chdEffort;
         private System.Windows.Forms.DataGridViewTextBoxColumn chdText;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chdComment;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn chdComment;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chMemo;
+        private Controls.DataGridViewComboBoxExColumn chsDomain;
+        private Controls.DataGridViewComboBoxExColumn chsSubject;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chsPeriodCredit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chsScore;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chsScoreOrigin;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chsScoreMakeup;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chsEffort;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chsText;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chsComment;
+        private DevComponents.DotNetBar.ButtonX btnPreSubjScore;
     }
 }

@@ -27,8 +27,12 @@ namespace KaoHsiung.JHEvaluation.ImportExport
             Dictionary<string, List<JHSemesterScoreRecord>> semsDict = new Dictionary<string, List<JHSemesterScoreRecord>>();
 
             wizard.PackageLimit = 3000;
-            wizard.ImportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記");
+            //wizard.ImportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記");
             //wizard.ImportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "分數評量", "文字描述", "註記");
+
+            //2015.1.27 Cloud新增
+            wizard.ImportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記");
+            
             wizard.RequiredFields.AddRange("領域", "科目", "學年度", "學期");
 
             wizard.ValidateStart += delegate(object sender, SmartSchool.API.PlugIn.Import.ValidateStartEventArgs e)
@@ -133,13 +137,42 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 e.ErrorFields.Add(field, "必須填入1或2");
                             }
                             break;
-                        case "分數評量":
+
+                        //case "分數評量":
+                        //    if (value != "" && !decimal.TryParse(value, out d))
+                        //    {
+                        //        inputFormatPass &= false;
+                        //        e.ErrorFields.Add(field, "必須填入空白或數值");
+                        //    }
+                        //    break;
+
+                        //2015.1.27 Cloud新增
+                        case "成績":
                             if (value != "" && !decimal.TryParse(value, out d))
                             {
                                 inputFormatPass &= false;
                                 e.ErrorFields.Add(field, "必須填入空白或數值");
                             }
                             break;
+
+                        //2015.1.27 Cloud新增
+                        case "原始成績":
+                            if (value != "" && !decimal.TryParse(value, out d))
+                            {
+                                inputFormatPass &= false;
+                                e.ErrorFields.Add(field, "必須填入空白或數值");
+                            }
+                            break;
+
+                        //2015.1.27 Cloud新增
+                        case "補考成績":
+                            if (value != "" && !decimal.TryParse(value, out d))
+                            {
+                                inputFormatPass &= false;
+                                e.ErrorFields.Add(field, "必須填入空白或數值");
+                            }
+                            break;
+
                         case "努力程度":
                             if (value != "" && !int.TryParse(value, out t))
                             {
@@ -357,7 +390,20 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                             //        hasChanged = true;
                                             //    }
                                             //    break;
-                                            case "分數評量":
+                                            //case "分數評量":
+                                            //    if ("" + score.Score != value)
+                                            //    {
+                                            //        decimal d;
+                                            //        if (decimal.TryParse(value, out d))
+                                            //            score.Score = d;
+                                            //        else
+                                            //            score.Score = null;
+                                            //        hasChanged = true;
+                                            //    }
+                                            //    break;
+
+                                            //2015.1.27 Cloud新增
+                                            case "成績":
                                                 if ("" + score.Score != value)
                                                 {
                                                     decimal d;
@@ -368,6 +414,33 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                                     hasChanged = true;
                                                 }
                                                 break;
+
+                                            //2015.1.27 Cloud新增
+                                            case "原始成績":
+                                                if ("" + score.ScoreOrigin != value)
+                                                {
+                                                    decimal d;
+                                                    if (decimal.TryParse(value, out d))
+                                                        score.ScoreOrigin = d;
+                                                    else
+                                                        score.ScoreOrigin = null;
+                                                    hasChanged = true;
+                                                }
+                                                break;
+
+                                            //2015.1.27 Cloud新增
+                                            case "補考成績":
+                                                if ("" + score.ScoreMakeup != value)
+                                                {
+                                                    decimal d;
+                                                    if (decimal.TryParse(value, out d))
+                                                        score.ScoreMakeup = d;
+                                                    else
+                                                        score.ScoreMakeup = null;
+                                                    hasChanged = true;
+                                                }
+                                                break;
+
                                             case "努力程度":
                                                 if ("" + score.Effort != value)
                                                 {
@@ -440,10 +513,13 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 //XmlElement newScore = doc.CreateElement("Subject");
                                 K12.Data.SubjectScore subjectScore = new K12.Data.SubjectScore();
                                 #region 建立newScore
-                                foreach (string field in new string[] { "領域", "科目", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記" })
+                                //foreach (string field in new string[] { "領域", "科目", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記" })
+                                foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記" })
                                 {
                                     if (e.ImportFields.Contains(field))
                                     {
+                                        decimal d;
+
                                         #region 填入科目資訊
                                         string value = row[field];
                                         switch (field)
@@ -462,13 +538,36 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                             case "節數":
                                                 subjectScore.Period = decimal.Parse(value);
                                                 break;
-                                            case "分數評量":
-                                                decimal d;
+                                            //case "分數評量":
+                                            //    decimal d;
+                                            //    if (decimal.TryParse(value, out d))
+                                            //        subjectScore.Score = d;
+                                            //    else
+                                            //        subjectScore.Score = null;
+                                            //    break;
+
+                                            //2015.1.27 Cloud新增
+                                            case "成績":
                                                 if (decimal.TryParse(value, out d))
                                                     subjectScore.Score = d;
                                                 else
                                                     subjectScore.Score = null;
                                                 break;
+                                            //2015.1.27 Cloud新增
+                                            case "原始成績":
+                                                if (decimal.TryParse(value, out d))
+                                                    subjectScore.ScoreOrigin = d;
+                                                else
+                                                    subjectScore.ScoreOrigin = null;
+                                                break;
+                                            //2015.1.27 Cloud新增
+                                            case "補考成績":
+                                                if (decimal.TryParse(value, out d))
+                                                    subjectScore.ScoreMakeup = d;
+                                                else
+                                                    subjectScore.ScoreMakeup = null;
+                                                break;
+
                                             case "努力程度":
                                                 int i;
                                                 if (int.TryParse(value, out i))
@@ -509,10 +608,13 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                         foreach (RowData row in insertNewSemesterScore[info])
                         {
                             K12.Data.SubjectScore subjectScore = new K12.Data.SubjectScore();
-                            foreach (string field in new string[] { "領域", "科目", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記" })
+                            //foreach (string field in new string[] { "領域", "科目", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記" })
+                            foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記" })
                             {
                                 if (e.ImportFields.Contains(field))
                                 {
+                                    decimal d;
+
                                     string value = row[field];
                                     switch (field)
                                     {
@@ -529,13 +631,36 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                         case "節數":
                                             subjectScore.Period = decimal.Parse(value);
                                             break;
-                                        case "分數評量":
-                                            decimal d;
+                                        //case "分數評量":
+                                        //    decimal d;
+                                        //    if (decimal.TryParse(value, out d))
+                                        //        subjectScore.Score = d;
+                                        //    else
+                                        //        subjectScore.Score = null;
+                                        //    break;
+
+                                        //2015.1.27 Cloud新增
+                                        case "成績":
                                             if (decimal.TryParse(value, out d))
                                                 subjectScore.Score = d;
                                             else
                                                 subjectScore.Score = null;
                                             break;
+                                        //2015.1.27 Cloud新增
+                                        case "原始成績":
+                                            if (decimal.TryParse(value, out d))
+                                                subjectScore.ScoreOrigin = d;
+                                            else
+                                                subjectScore.ScoreOrigin = null;
+                                            break;
+                                        //2015.1.27 Cloud新增
+                                        case "補考成績":
+                                            if (decimal.TryParse(value, out d))
+                                                subjectScore.ScoreMakeup = d;
+                                            else
+                                                subjectScore.ScoreMakeup = null;
+                                            break;
+
                                         case "努力程度":
                                             int i;
                                             if (int.TryParse(value, out i))

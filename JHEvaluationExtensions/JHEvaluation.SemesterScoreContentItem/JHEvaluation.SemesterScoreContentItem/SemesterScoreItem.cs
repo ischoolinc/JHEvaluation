@@ -12,6 +12,7 @@ using JHSchool.Data;
 using JHSchool;
 using JHEvaluation.SemesterScoreContentItem.Forms;
 using JHEvaluation.SemesterScoreContentItem.QuickAdd;
+using System.Threading;
 
 namespace JHEvaluation.SemesterScoreContentItem
 {
@@ -64,6 +65,10 @@ namespace JHEvaluation.SemesterScoreContentItem
                 _recordList = e.Result as List<JHSemesterScoreRecord>;
                 FillListView();
             };
+
+            FISCA.InteractionService.SubscribeEvent("CalculationHelper.SaveSemesterScore", (sender, args) => {
+                AfterSaveSemesterScore();
+            });
         }
 
         private void InitializeQuickAddButton()
@@ -259,6 +264,16 @@ namespace JHEvaluation.SemesterScoreContentItem
         {
             if (UserPermission.Editable)
                 btnModify_Click(null, null);
+        }
+
+        private void AfterSaveSemesterScore()
+        {
+            if (InvokeRequired)
+                Invoke(new Action(AfterSaveSemesterScore));
+            else
+            {
+                this.OnPrimaryKeyChanged(EventArgs.Empty);
+            }
         }
     }
 }
