@@ -3,39 +3,87 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using JHSchool.Data;
+using System.Xml.Linq;
+using System.Xml.XPath;
+using FISCA.Data;
+using K12.Data;
+using K12.Data.Configuration;
+using System.Data;
 
 namespace JHEvaluation.ScoreCalculation.SemesterHistory.DAL
 {
     class DALTransfer
     {
+
+
         /// <summary>
         /// 取得年級的上課天數
         /// </summary>
         /// <returns></returns>
         public static Dictionary<int, int> GetInSchoolDayByGardeYear()
         {
-            Dictionary<int, int> _InSchoolDay = new Dictionary<int, int>();
-            K12.Data.SchoolHolidayRecord shr = K12.Data.SchoolHoliday.SelectSchoolHolidayRecord();
-            if (shr != null)
-            {
-                if (shr.SchoolDayCountG1 != null)
-                {
-                    _InSchoolDay.Add(1, shr.SchoolDayCountG1);
-                    _InSchoolDay.Add(7, shr.SchoolDayCountG1);
-                }
+                string SchoolHodidayConfigString = "SCHOOL_HOLIDAY_CONFIG_STRING";
+                string configString = "CONFIG_STRING";   
 
-                if (shr.SchoolDayCountG2 != null)
+        ConfigData _CD;
+        DateTime _OldStartDate;
+        DateTime _OldEndDate;
+
+            Dictionary<int, int> _InSchoolDay = new Dictionary<int, int>();
+            
+            // 因為 K12.Data 有 Bug 改寫
+            //K12.Data.SchoolHolidayRecord shr = K12.Data.SchoolHoliday.SelectSchoolHolidayRecord();
+            //if (shr != null)
+            //{
+            //    if (shr.SchoolDayCountG1 != null)
+            //    {
+            //        _InSchoolDay.Add(1, shr.SchoolDayCountG1);
+            //        _InSchoolDay.Add(7, shr.SchoolDayCountG1);
+            //    }
+
+            //    if (shr.SchoolDayCountG2 != null)
+            //    {
+            //        _InSchoolDay.Add(2, shr.SchoolDayCountG2);
+            //        _InSchoolDay.Add(8, shr.SchoolDayCountG2);
+            //    }
+            //    if (shr.SchoolDayCountG3 != null)
+            //    {
+            //        _InSchoolDay.Add(3, shr.SchoolDayCountG3);
+            //        _InSchoolDay.Add(9, shr.SchoolDayCountG3);
+            //    }
+            //}
+
+            _CD = School.Configuration[SchoolHodidayConfigString];
+
+
+            //取得之前設定設定
+            XElement rootXml = null;
+            string xmlContent = _CD[configString];
+
+            if (!string.IsNullOrWhiteSpace(xmlContent))
+                rootXml = XElement.Parse(xmlContent);
+            else
+                rootXml = new XElement("SchoolHolidays");
+
+            // 國中讀取年級 1,2,3,7,8,9
+
+            for (int gr = 1; gr <= 9; gr++)
+            {
+                string key = "SchoolDayCountG" + gr;
+                if (rootXml.Element(key) != null)
                 {
-                    _InSchoolDay.Add(2, shr.SchoolDayCountG2);
-                    _InSchoolDay.Add(8, shr.SchoolDayCountG2);
-                }
-                if (shr.SchoolDayCountG3 != null)
-                {
-                    _InSchoolDay.Add(3, shr.SchoolDayCountG3);
-                    _InSchoolDay.Add(9, shr.SchoolDayCountG3);
+                    int days;
+                    if (int.TryParse(rootXml.Element(key).Value, out days))
+                    {
+                        if (!_InSchoolDay.ContainsKey(gr))
+                        {
+                            _InSchoolDay.Add(gr, days);
+                        }
+                    }
                 }
             }
-            return _InSchoolDay;
+
+                return _InSchoolDay;
         }
 
         /// <summary>
