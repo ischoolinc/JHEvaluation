@@ -1094,18 +1094,26 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                                 else
                                     SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleRed);
                             }
+                            else
+                                SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
+
                             // 英語
-                            if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("英語"))
+                            if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("英語") || TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("語文"))
                             {
-                                decimal sc = TempData.tmpStudDomainScoreDict[student.ID]["英語"] / TempData.tmpStudDomainCreditDict[student.ID]["英語"];
+                                decimal sc = 0;
+                                if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("英語"))
+                                    sc = TempData.tmpStudDomainScoreDict[student.ID]["英語"] / TempData.tmpStudDomainCreditDict[student.ID]["英語"];
+
+                                if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("語文"))
+                                    sc = TempData.tmpStudDomainScoreDict[student.ID]["語文"] / TempData.tmpStudDomainCreditDict[student.ID]["語文"];
 
                                 if(sc>=60)
                                     SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleNormal);
                                 else
                                     SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleRed);
                             }
-                                
-
+                            else
+                                SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
                         }
                     }
                 }
@@ -1117,6 +1125,12 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                         SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
                     }
                     SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
+
+                    if (TempData.tmpStudDomainCreditDict.Count > 0)
+                    {
+                        SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
+                        SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
+                    }
                 }
             }
             #endregion 輸出平均明細
