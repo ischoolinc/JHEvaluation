@@ -24,7 +24,7 @@ namespace JointAdmissionModule.StudentScoreSummaryReport
         public decimal? GetScore(ReportStudent student)
         {
             SemesterScore score = null;
-
+            
             foreach (SemesterData each in student.SHistory.GetGradeYearSemester())
             {
                 //// 處理轉入生之前不列入排名
@@ -75,7 +75,15 @@ namespace JointAdmissionModule.StudentScoreSummaryReport
                 return 0;
             else
                 if (score.LearnDomainScore.HasValue)
-                    return score.LearnDomainScore.Value;
+                {
+                    //return score.LearnDomainScore.Value;
+                    // 修改讀取成績計算規則
+                    if(student.CalculationRule==null)
+                        return score.LearnDomainScore.Value;
+                    else
+                        return student.CalculationRule.ParseLearnDomainScore(score.LearnDomainScore.Value);
+                }
+                    
                 else
                     return 0;
                     

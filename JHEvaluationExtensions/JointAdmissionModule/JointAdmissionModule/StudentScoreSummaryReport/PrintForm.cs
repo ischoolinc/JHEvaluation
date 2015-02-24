@@ -140,7 +140,8 @@ namespace JointAdmissionModule.StudentScoreSummaryReport
                 //List<ReportStudent> RatingStudents = Util.GetAllStudents();
                 List<ReportStudent> RatingStudents = Util.GetStudentsDef(NonStudentIDList);
 
-                RatingStudents.ToSC().ReadSemesterScore(this);
+                RatingStudents.ToSC().ReadCalculationRule(this);
+                RatingStudents.ToSC().ReadSemesterScore(this);                
                 RatingStudents.ToSC().ReadSemesterHistory(this);
 
                 List<IScoreParser<ReportStudent>> parsers = new List<IScoreParser<ReportStudent>>();

@@ -57,6 +57,7 @@ namespace JointAdmissionModule
             //if (Mode == ModuleMode.HsinChu)
             detail1.Add(new ReportFeature(PermissionCodeRpt_HsinChu, "高中高職免試入學成績證明"));
 
+            
             //註冊報表功能項目。
             if (Mode == ModuleMode.KaoHsiung)
             {
