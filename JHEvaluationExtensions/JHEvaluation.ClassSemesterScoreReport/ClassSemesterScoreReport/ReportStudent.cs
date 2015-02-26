@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using JHSchool.Data;
 using Campus.Rating;
+using JHSchool.Evaluation.Calculation;
 
 namespace JHEvaluation.ClassSemesterScoreReport
 {
@@ -31,14 +32,35 @@ namespace JHEvaluation.ClassSemesterScoreReport
             RefClassID = student.RefClassID;
             SeatNo = student.SeatNo + "";
             StudentNumber = student.StudentNumber;
+
+            string RuleID = "";
+            // 先使用學生
+            if (student.OverrideScoreCalcRuleID != null)
+            {
+                RuleID = student.OverrideScoreCalcRuleID;
+            }
+            else
+            {
+                if (Utility.tmpClassRuleIDDict.ContainsKey(RefClassID))
+                    RuleID = Utility.tmpClassRuleIDDict[RefClassID];
+            }
+
+            // 成績計算規則進位方式
+            if(RuleID!="")
+            if (Utility.tmpScoreCalculatorDict.ContainsKey(RuleID))
+                StudScoreCalculator = Utility.tmpScoreCalculatorDict[RuleID];
+          
         }
+
+        public ScoreCalculator StudScoreCalculator { get; private set; }
 
         public string Id { get; private set; }
 
         public string Name { get; private set; }
 
         public string RefClassID { get; private set; }
-
+                
+        
         public string ClassName
         {
             get

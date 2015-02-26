@@ -22,7 +22,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
             Catalog detail = RoleAclSource.Instance["班級"]["報表"];
             detail.Add(new ReportFeature(PermissionCode, "班級學期成績單"));
 
-            DeployParameters dparams = ModuleLoader.GetDeployParametsers(typeof(Program), "Mode=KaoHsiung");
+           DeployParameters dparams = ModuleLoader.GetDeployParametsers(typeof(Program), "Mode=KaoHsiung");
 
             //註冊報表功能項目。
             MenuButton mb = NLDPanels.Class.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["班級學期成績單"];

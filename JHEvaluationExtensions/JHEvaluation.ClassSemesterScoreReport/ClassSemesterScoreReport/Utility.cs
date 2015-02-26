@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using FISCA.Data;
 using System.Data;
-
+using K12.Data;
+using JHSchool.Data;
+using JHSchool.Evaluation.Calculation;
 
 namespace JHEvaluation.ClassSemesterScoreReport
 {
@@ -32,5 +34,38 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
             return retVal;
         }
+
+        /// <summary>
+        /// 儲存成績計算規則,ruleid,ScoreCalculator
+        /// </summary>
+        public static Dictionary<string, ScoreCalculator> tmpScoreCalculatorDict = new Dictionary<string, ScoreCalculator>();
+
+        /// <summary>
+        /// 取得成績計算規則轉成計算器
+        /// </summary>
+        public static void LoadtmpScoreCalculatorDict()
+        {
+            tmpScoreCalculatorDict.Clear();
+
+            foreach (JHScoreCalcRuleRecord rec in JHScoreCalcRule.SelectAll())
+            {
+                ScoreCalculator sc = new ScoreCalculator(rec);
+                if (sc != null)
+                {
+                    tmpScoreCalculatorDict.Add(rec.ID, sc);
+                }
+            }
+        }
+
+        public static Dictionary<string, string> tmpClassRuleIDDict = new Dictionary<string, string>();
+
+        public static void LoadtmpClassRuleIDDict()
+        {
+            tmpClassRuleIDDict.Clear();
+            foreach (JHClassRecord rec in JHClass.SelectAll())
+                if (rec.RefScoreCalcRuleID != null)
+                    tmpClassRuleIDDict.Add(rec.ID, rec.RefScoreCalcRuleID);
+        }
+ 
     }
 }

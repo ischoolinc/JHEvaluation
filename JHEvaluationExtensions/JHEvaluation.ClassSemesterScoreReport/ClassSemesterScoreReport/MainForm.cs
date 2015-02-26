@@ -255,8 +255,11 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
             #endregion
 
+           
+
+
             #region 計算各類成績。
-            ScoreCalculator calculator = new ScoreCalculator(2, Utilities.SummaryToken);
+            ScoreCalculatorP calculator = new ScoreCalculatorP(2, Utilities.SummaryToken);
             calculator.Subjects = selectedSubjects;
             calculator.Domains = selectedDomains;
 

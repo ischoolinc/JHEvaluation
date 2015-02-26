@@ -117,7 +117,7 @@
       <HintPath>libary\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Evaluation, Version=1.0.0.33, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JHSchool.Evaluation, Version=1.0.3.26, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>libary\JHSchool.Evaluation.dll</HintPath>
       <Private>False</Private>
@@ -140,7 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FunctionSpliter.cs" />
-    <Compile Include="ScoreCalculator.cs" />
+    <Compile Include="ScoreCalculatorP.cs" />
     <Compile Include="ConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>

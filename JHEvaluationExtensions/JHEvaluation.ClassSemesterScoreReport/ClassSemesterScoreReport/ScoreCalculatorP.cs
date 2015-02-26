@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Campus.Rating;
+using JHSchool.Evaluation.Calculation;
 
 namespace JHEvaluation.ClassSemesterScoreReport
 {
     /// <summary>
     /// 代表單一學期相關成績的運算邏輯。
     /// </summary>
-    internal class ScoreCalculator
+    internal class ScoreCalculatorP
     {
         private int RoundPosition { get; set; }
 
@@ -31,7 +32,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
         /// </summary>
         /// <param name="round">進位。</param>
         /// <param name="targetToken">完成計算後的成績儲存 Token。</param>
-        public ScoreCalculator(int round, string targetToken)
+        public ScoreCalculatorP(int round, string targetToken)
         {
             RoundPosition = round;
             TargetToken = targetToken;
@@ -72,15 +73,36 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
         private decimal 算術平均(ReportStudent student, ItemWeightCollection subjectWeight, ItemWeightCollection domainWeight)
         {
-            decimal sum = 0, weight = subjectWeight.Count + domainWeight.Count;
+            // 如果學生有成績計算規則使用學生，沒有使用預設2位。
+            if (student.StudScoreCalculator == null)
+            {
+                decimal sum = 0, weight = subjectWeight.Count + domainWeight.Count;
 
-            foreach (string scoreItem in subjectWeight.Keys)
-                sum += student.Scores[SubjectToken][scoreItem];
+                foreach (string scoreItem in subjectWeight.Keys)
+                    sum += student.Scores[SubjectToken][scoreItem];
 
-            foreach (string scoreItem in domainWeight.Keys)
-                sum += student.Scores[DomainToken][scoreItem];
+                foreach (string scoreItem in domainWeight.Keys)
+                    sum += student.Scores[DomainToken][scoreItem];
 
-            return Round(sum / weight);
+                return Round(sum / weight);
+            }
+            else
+            {
+                decimal sumS = 0, sumD = 0, avgS = 0, avgD = 0;
+                foreach (string scoreItem in subjectWeight.Keys)
+                    sumS += student.Scores[SubjectToken][scoreItem];
+
+                foreach (string scoreItem in domainWeight.Keys)
+                    sumD += student.Scores[DomainToken][scoreItem];
+
+                if (subjectWeight.Count > 0)
+                    avgS = student.StudScoreCalculator.ParseSubjectScore(sumS / subjectWeight.Count);
+
+                if (domainWeight.Count > 0)
+                    avgD = student.StudScoreCalculator.ParseDomainScore(sumD / domainWeight.Count);
+
+                return avgS + avgD;
+            }            
         }
 
         private decimal 合計總分(ReportStudent student, ItemWeightCollection subjectWeight, ItemWeightCollection domainWeight)
@@ -111,15 +133,37 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
         private decimal 加權平均(ReportStudent student, ItemWeightCollection subjectWeight, ItemWeightCollection domainWeight)
         {
-            decimal sum = 0, weight = subjectWeight.GetWeightSum() + domainWeight.GetWeightSum();
+            // 如果學生有成績計算規則使用學生，沒有使用預設2位。
+            if (student.StudScoreCalculator == null)
+            {
+                decimal sum = 0, weight = subjectWeight.GetWeightSum() + domainWeight.GetWeightSum();
 
-            foreach (string scoreItem in subjectWeight.Keys)
-                sum += (student.Scores[SubjectToken][scoreItem] * subjectWeight[scoreItem]);
+                foreach (string scoreItem in subjectWeight.Keys)
+                    sum += (student.Scores[SubjectToken][scoreItem] * subjectWeight[scoreItem]);
 
-            foreach (string scoreItem in domainWeight.Keys)
-                sum += (student.Scores[DomainToken][scoreItem] * domainWeight[scoreItem]);
+                foreach (string scoreItem in domainWeight.Keys)
+                    sum += (student.Scores[DomainToken][scoreItem] * domainWeight[scoreItem]);
 
-            return Round(sum / weight);
+                return Round(sum / weight);
+            }
+            else
+            {
+                decimal sumS = 0, sumD = 0, avgS = 0, avgD = 0, wS = subjectWeight.GetWeightSum(), wD = domainWeight.GetWeightSum();
+                foreach (string scoreItem in subjectWeight.Keys)
+                    sumS += (student.Scores[SubjectToken][scoreItem] * subjectWeight[scoreItem]);
+
+                foreach (string scoreItem in domainWeight.Keys)
+                    sumD += (student.Scores[DomainToken][scoreItem] * domainWeight[scoreItem]);
+
+                if (wS > 0)
+                    avgS = student.StudScoreCalculator.ParseSubjectScore(sumS/wS);
+
+                if (wD > 0)
+                    avgD = student.StudScoreCalculator.ParseDomainScore(sumD / wD);
+
+                return avgS + avgD;
+            }
+
         }
 
         private decimal Round(decimal score)

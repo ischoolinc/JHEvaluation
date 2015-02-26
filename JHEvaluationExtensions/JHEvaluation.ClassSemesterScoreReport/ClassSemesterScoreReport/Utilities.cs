@@ -9,6 +9,7 @@ using System;
 using Campus.Rating;
 using Aspose.Cells;
 using JHSchool.Evaluation;
+using JHSchool.Evaluation.Calculation;
 
 namespace JHEvaluation.ClassSemesterScoreReport
 {
@@ -118,8 +119,11 @@ namespace JHEvaluation.ClassSemesterScoreReport
         public static List<ReportStudent> ToReportStudent(this IEnumerable<JHStudentRecord> srcStudents)
         {
             List<ReportStudent> students = new List<ReportStudent>();
+
+            Utility.LoadtmpScoreCalculatorDict();
+            Utility.LoadtmpClassRuleIDDict();
             foreach (JHStudentRecord each in srcStudents)
-            {
+            { 
                 if (each.Status == StudentRecord.StudentStatus.一般 ||
                     each.Status == StudentRecord.StudentStatus.輟學)
                     students.Add(new ReportStudent(each));
