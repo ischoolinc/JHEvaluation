@@ -54,18 +54,12 @@ namespace JHEvaluation.StudentSemesterScoreReport
         private void InitSemester()
         {
             try
-            {
-                int count = 2;
+            {                
                 int schoolYear = int.Parse(K12.Data.School.DefaultSchoolYear);
                 int semester = int.Parse(K12.Data.School.DefaultSemester);
+                iptSchoolYear.Value = schoolYear;
+                iptSemester.Value = semester;
 
-                for (int i = count * -1; i <= count; i++)
-                    cboSchoolYear.Items.Add(schoolYear + i);
-                cboSemester.Items.Add(1);
-                cboSemester.Items.Add(2);
-
-                cboSchoolYear.SelectedIndex = count;
-                cboSemester.SelectedIndex = semester - 1;
             }
             catch (Exception ex)
             {
@@ -76,8 +70,8 @@ namespace JHEvaluation.StudentSemesterScoreReport
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-            _options.SchoolYear = (int)cboSchoolYear.SelectedItem;
-            _options.Semester = (int)cboSemester.SelectedItem;
+            _options.SchoolYear = iptSchoolYear.Value;
+            _options.Semester = iptSemester.Value;
             List<JHStudentRecord> students = new List<JHStudentRecord>();
 
             if (_PrintSource == PrintSource.學生)
@@ -135,6 +129,7 @@ namespace JHEvaluation.StudentSemesterScoreReport
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.MaximumSize = this.MinimumSize = this.Size;
             // 取得日常生活表現名稱
             Global.DLBehaviorConfigNameDict = Global.GetDLBehaviorConfigNameDict();
         }
