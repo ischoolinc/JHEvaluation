@@ -56,15 +56,10 @@ namespace KaoHsiung.MidTermTransferReport
             {
                 int schoolYear = int.Parse(School.DefaultSchoolYear);
                 int semester = int.Parse(School.DefaultSemester);
-                for (int i = -3; i <= 2; i++)
-                    cboSchoolYear.Items.Add(schoolYear + i);
-                cboSemester.Items.Add(1);
-                cboSemester.Items.Add(2);
 
-                //cboSchoolYear.SelectedIndex = 2;
-                //cboSemester.SelectedIndex = semester - 1;
-                cboSchoolYear.Text = schoolYear.ToString();
-                cboSemester.Text = semester.ToString();
+                iptSchoolYear.Value = schoolYear;
+                iptSemester.Value = semester;
+
             }
             catch (Exception ex)
             {
@@ -104,8 +99,8 @@ namespace KaoHsiung.MidTermTransferReport
             students.Sort(SortStudentByClassSeatNo);
             _config.Students =students;
 
-            _config.SchoolYear = (int)cboSchoolYear.SelectedItem;
-            _config.Semester = (int)cboSemester.SelectedItem;
+            _config.SchoolYear = iptSchoolYear.Value;
+            _config.Semester = iptSemester.Value;
             _config.Load();
             Report report = new Report(_config);
             report.Generate();
@@ -187,6 +182,11 @@ namespace KaoHsiung.MidTermTransferReport
                 _error.SetIconPadding(tb, -10);
                 _error.SetError(tb, "日期格式錯誤");
             }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
