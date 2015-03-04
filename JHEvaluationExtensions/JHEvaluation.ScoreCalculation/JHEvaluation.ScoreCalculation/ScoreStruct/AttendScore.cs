@@ -17,7 +17,8 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         </Extension>
          */
 
-        public AttendScore(JHSCAttendRecord attend, decimal? weight, decimal? period, bool toSemester, string domain)
+        //傳入學年度學期,判斷103-1以前的學年度5:5而以後6:4比例計算
+        public AttendScore(JHSCAttendRecord attend, decimal? weight, decimal? period, bool toSemester, string domain,int? schoolYear)
         {
             RawAttend = attend;
             Subscores = new TakeScoreCollection();
@@ -28,6 +29,7 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
             Text = attend.Text;
             ToSemester = toSemester;
             Domain = domain;
+            SchoolYear = schoolYear;
 
             OrdinarilyEffort = attend.OrdinarilyEffort;
             OrdinarilyScore = attend.OrdinarilyScore;
@@ -85,6 +87,11 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         public decimal? OrdinarilyScore { get; set; }
 
         public JHSCAttendRecord RawAttend { get; private set; }
+
+        /// <summary>
+        /// 學年度
+        /// </summary>
+        public int? SchoolYear { get; set; }
     }
 
     /// <summary>
