@@ -56,13 +56,9 @@ namespace JHEvaluation.StudentSemesterScoreNotification
                 int schoolYear = int.Parse(K12.Data.School.DefaultSchoolYear);
                 int semester = int.Parse(K12.Data.School.DefaultSemester);
 
-                for (int i = count * -1; i <= count; i++)
-                    cboSchoolYear.Items.Add(schoolYear + i);
-                cboSemester.Items.Add(1);
-                cboSemester.Items.Add(2);
-
-                cboSchoolYear.SelectedIndex = count;
-                cboSemester.SelectedIndex = semester - 1;
+                iptSchoolYear.Value = schoolYear;
+                iptSemester.Value = semester;
+             
             }
             catch (Exception ex)
             {
@@ -73,8 +69,8 @@ namespace JHEvaluation.StudentSemesterScoreNotification
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-            _options.SchoolYear = (int)cboSchoolYear.SelectedItem;
-            _options.Semester = (int)cboSemester.SelectedItem;
+            _options.SchoolYear = iptSchoolYear.Value;
+            _options.Semester = iptSemester.Value;
             List<JHStudentRecord> students=new List<JHStudentRecord>();
             // 讀取資料
             if(_PrintSource == PrintSource.學生 )
