@@ -65,8 +65,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                 string subjName = Course.Subject.Trim();
 
+                //傳入學年度,判斷103以前的學年度5:5而以後6:4比例計算
                 if (!Student.AttendScore.Contains(subjName))
-                    Student.AttendScore.Add(subjName, new AttendScore(Attend, Course.Credit, Course.Period, toSems, Course.Domain));
+                    Student.AttendScore.Add(subjName, new AttendScore(Attend, Course.Credit, Course.Period, toSems, Course.Domain, Course.SchoolYear));
             }
 
             foreach (JHSCETakeRecord take in SCETakes)

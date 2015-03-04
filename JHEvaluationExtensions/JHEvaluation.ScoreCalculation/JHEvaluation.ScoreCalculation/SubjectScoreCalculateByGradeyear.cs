@@ -66,8 +66,13 @@ namespace JHEvaluation.ScoreCalculation
                 SemesterData selectedSemesterData = new SemesterData(0, intSchoolYear.Value, intSemester.Value);
                 if (selectedSemesterData <= denySemesterData)
                 {
-                    MsgBox.Show("因評量計算比例在  103-1 之後有所調整，故暫不開放重新計算 102-2(含) 之前的成績。若須重新計算，請與我們聯絡。");
-                    return;
+                    //MsgBox.Show("因評量計算比例在  103-1 之後有所調整，故暫不開放重新計算 102-2(含) 之前的成績。若須重新計算，請與我們聯絡。");
+                    //return;
+
+                    if (MsgBox.Show("103-1以前的學年度學期將採計50:50評量計算比例(現行制度為60:40),確認繼續?", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+                    {
+                        return;
+                    }
                 }
             }
 

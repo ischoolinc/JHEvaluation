@@ -69,17 +69,26 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         {
             decimal sum = 0, weight = 0;
 
+            decimal ordinarilyWeight = 60, avgScoreWeight = 40;
+
+            //103學年度前的成績以50:50比例計算
+            if (attend.SchoolYear.HasValue && attend.SchoolYear.Value <= 102)
+            {
+                ordinarilyWeight = 50;
+                avgScoreWeight = 50;
+            }
+
             if (attend.OrdinarilyEffort.HasValue)
             {
-                sum += (attend.OrdinarilyEffort.Value * 60);
-                weight += 60;
+                sum += (attend.OrdinarilyEffort.Value * ordinarilyWeight);
+                weight += ordinarilyWeight;
             }
 
             decimal? avgEffort = attend.Subscores.GetAverageEffort();
             if (avgEffort.HasValue)
             {
-                sum += (avgEffort.Value * 40);
-                weight += 40;
+                sum += (avgEffort.Value * avgScoreWeight);
+                weight += avgScoreWeight;
             }
 
             //如果權重小於零，代表兩個成績都沒有，就維持原來成績。
@@ -96,17 +105,26 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         {
             decimal sum = 0, weight = 0;
 
+            decimal ordinarilyWeight = 60, avgScoreWeight = 40;
+
+            //103學年度前的成績以50:50比例計算
+            if (attend.SchoolYear.HasValue && attend.SchoolYear.Value <= 102)
+            {
+                ordinarilyWeight = 50;
+                avgScoreWeight = 50;
+            }
+
             if (attend.OrdinarilyScore.HasValue)
             {
-                sum += (attend.OrdinarilyScore.Value * 60);
-                weight += 60;
+                sum += (attend.OrdinarilyScore.Value * ordinarilyWeight);
+                weight += ordinarilyWeight;
             }
 
             decimal? avgScore = attend.Subscores.GetWeightAverageScore();
             if (avgScore.HasValue)
             {
-                sum += (avgScore.Value * 40);
-                weight += 40;
+                sum += (avgScore.Value * avgScoreWeight);
+                weight += avgScoreWeight;
             }
 
             if (weight != 0)
