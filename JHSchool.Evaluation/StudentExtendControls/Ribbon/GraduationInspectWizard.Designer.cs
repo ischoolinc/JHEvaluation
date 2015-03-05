@@ -37,18 +37,25 @@
             this.btnExport = new DevComponents.DotNetBar.ButtonX();
             this.intGradeYear = new DevComponents.Editors.IntegerInput();
             this.lblGradeYear = new DevComponents.DotNetBar.LabelX();
-            this.cboSemester = new DevComponents.DotNetBar.Controls.ComboBoxEx();
-            this.cboSchoolYear = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX2 = new DevComponents.DotNetBar.LabelX();
             this.labelX3 = new DevComponents.DotNetBar.LabelX();
             this.pic_loading = new System.Windows.Forms.PictureBox();
+            this.iptSchoolYear = new DevComponents.Editors.IntegerInput();
+            this.iptSemester = new DevComponents.Editors.IntegerInput();
             ((System.ComponentModel.ISupportInitialize)(this.intGradeYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic_loading)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).BeginInit();
             this.SuspendLayout();
             // 
             // labelX1
             // 
             this.labelX1.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.labelX1.Location = new System.Drawing.Point(10, 10);
             this.labelX1.Name = "labelX1";
@@ -59,6 +66,11 @@
             // lblMessage
             // 
             this.lblMessage.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblMessage.BackgroundStyle.Class = "";
+            this.lblMessage.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblMessage.Location = new System.Drawing.Point(10, 55);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(373, 81);
@@ -95,6 +107,11 @@
             // lblProgress
             // 
             this.lblProgress.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblProgress.BackgroundStyle.Class = "";
+            this.lblProgress.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblProgress.Location = new System.Drawing.Point(10, 102);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.Size = new System.Drawing.Size(373, 23);
@@ -105,6 +122,11 @@
             // progressBar
             // 
             this.progressBar.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.progressBar.BackgroundStyle.Class = "";
+            this.progressBar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.progressBar.Location = new System.Drawing.Point(10, 126);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(373, 23);
@@ -132,6 +154,7 @@
             // 
             // 
             this.intGradeYear.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.intGradeYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.intGradeYear.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
             this.intGradeYear.Location = new System.Drawing.Point(85, 61);
             this.intGradeYear.MaxValue = 9;
@@ -146,6 +169,11 @@
             // lblGradeYear
             // 
             this.lblGradeYear.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblGradeYear.BackgroundStyle.Class = "";
+            this.lblGradeYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblGradeYear.Location = new System.Drawing.Point(10, 62);
             this.lblGradeYear.Name = "lblGradeYear";
             this.lblGradeYear.Size = new System.Drawing.Size(75, 23);
@@ -153,32 +181,15 @@
             this.lblGradeYear.Text = "請選擇年級";
             this.lblGradeYear.Visible = false;
             // 
-            // cboSemester
-            // 
-            this.cboSemester.DisplayMember = "Text";
-            this.cboSemester.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cboSemester.FormattingEnabled = true;
-            this.cboSemester.ItemHeight = 19;
-            this.cboSemester.Location = new System.Drawing.Point(318, 13);
-            this.cboSemester.Name = "cboSemester";
-            this.cboSemester.Size = new System.Drawing.Size(65, 25);
-            this.cboSemester.TabIndex = 17;
-            // 
-            // cboSchoolYear
-            // 
-            this.cboSchoolYear.DisplayMember = "Text";
-            this.cboSchoolYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cboSchoolYear.FormattingEnabled = true;
-            this.cboSchoolYear.ItemHeight = 19;
-            this.cboSchoolYear.Location = new System.Drawing.Point(210, 13);
-            this.cboSchoolYear.Name = "cboSchoolYear";
-            this.cboSchoolYear.Size = new System.Drawing.Size(65, 25);
-            this.cboSchoolYear.TabIndex = 16;
-            // 
             // labelX2
             // 
             this.labelX2.BackColor = System.Drawing.Color.Transparent;
-            this.labelX2.Location = new System.Drawing.Point(285, 15);
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX2.Location = new System.Drawing.Point(294, 15);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(42, 23);
             this.labelX2.TabIndex = 15;
@@ -187,6 +198,11 @@
             // labelX3
             // 
             this.labelX3.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX3.Location = new System.Drawing.Point(136, 15);
             this.labelX3.Name = "labelX3";
             this.labelX3.Size = new System.Drawing.Size(75, 23);
@@ -203,14 +219,50 @@
             this.pic_loading.TabIndex = 18;
             this.pic_loading.TabStop = false;
             // 
+            // iptSchoolYear
+            // 
+            this.iptSchoolYear.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.iptSchoolYear.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.iptSchoolYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.iptSchoolYear.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.iptSchoolYear.Location = new System.Drawing.Point(210, 14);
+            this.iptSchoolYear.MaxValue = 999;
+            this.iptSchoolYear.MinValue = 1;
+            this.iptSchoolYear.Name = "iptSchoolYear";
+            this.iptSchoolYear.ShowUpDown = true;
+            this.iptSchoolYear.Size = new System.Drawing.Size(80, 25);
+            this.iptSchoolYear.TabIndex = 19;
+            this.iptSchoolYear.Value = 1;
+            // 
+            // iptSemester
+            // 
+            this.iptSemester.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.iptSemester.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.iptSemester.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.iptSemester.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.iptSemester.Location = new System.Drawing.Point(331, 14);
+            this.iptSemester.MaxValue = 2;
+            this.iptSemester.MinValue = 1;
+            this.iptSemester.Name = "iptSemester";
+            this.iptSemester.ShowUpDown = true;
+            this.iptSemester.Size = new System.Drawing.Size(61, 25);
+            this.iptSemester.TabIndex = 20;
+            this.iptSemester.Value = 1;
+            // 
             // GraduationInspectWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(392, 206);
+            this.ClientSize = new System.Drawing.Size(402, 208);
+            this.Controls.Add(this.iptSemester);
+            this.Controls.Add(this.iptSchoolYear);
             this.Controls.Add(this.pic_loading);
-            this.Controls.Add(this.cboSemester);
-            this.Controls.Add(this.cboSchoolYear);
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.labelX3);
             this.Controls.Add(this.intGradeYear);
@@ -222,13 +274,14 @@
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.labelX1);
-            this.MaximumSize = new System.Drawing.Size(400, 240);
-            this.MinimumSize = new System.Drawing.Size(400, 240);
+            this.DoubleBuffered = true;
             this.Name = "GraduationInspectWizard";
             this.Text = "畢業資格審查";
             this.Load += new System.EventHandler(this.GraduationInspectWizard_Load);
             ((System.ComponentModel.ISupportInitialize)(this.intGradeYear)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic_loading)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -244,11 +297,11 @@
         private DevComponents.DotNetBar.ButtonX btnExport;
         private DevComponents.Editors.IntegerInput intGradeYear;
         private DevComponents.DotNetBar.LabelX lblGradeYear;
-        private DevComponents.DotNetBar.Controls.ComboBoxEx cboSemester;
-        private DevComponents.DotNetBar.Controls.ComboBoxEx cboSchoolYear;
         private DevComponents.DotNetBar.LabelX labelX2;
         private DevComponents.DotNetBar.LabelX labelX3;
         private System.Windows.Forms.PictureBox pic_loading;
+        private DevComponents.Editors.IntegerInput iptSchoolYear;
+        private DevComponents.Editors.IntegerInput iptSemester;
 
     }
 }

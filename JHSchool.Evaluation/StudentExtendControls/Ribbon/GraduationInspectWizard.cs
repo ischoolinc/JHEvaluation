@@ -474,8 +474,8 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
         private void btnNext_Click(object sender, EventArgs e)
         {
             // 取得使用者選擇學年度學期
-            int.TryParse(cboSchoolYear.Text, out UIConfig._UserSetSHSchoolYear);
-            int.TryParse(cboSemester.Text, out UIConfig._UserSetSHSemester);
+            UIConfig._UserSetSHSchoolYear = iptSchoolYear.Value;
+            UIConfig._UserSetSHSemester = iptSemester.Value;
 
             if (UIConfig._UserSetSHSchoolYear == 0 || UIConfig._UserSetSHSemester == 0)
             {
@@ -688,17 +688,13 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
 
         private void GraduationInspectWizard_Load(object sender, EventArgs e)
         {
-            // 學期
-            cboSemester.MaxLength = 2;
-            cboSemester.MaxLength = 1;
-            cboSemester.Items.AddRange(new string[] { "1", "2" });
-            cboSemester.Text = School.DefaultSemester;
 
-            // 學年度
-            cboSchoolYear.Text = School.DefaultSchoolYear;
-            int sc;
-            int.TryParse(School.DefaultSchoolYear, out sc);
-            for (int i = sc - 2; i <= sc + 2; i++) cboSchoolYear.Items.Add(i.ToString());
+            this.MaximumSize = this.MinimumSize = this.Size;
+
+            int schoolYear = int.Parse(School.DefaultSchoolYear);
+            int semester = int.Parse(School.DefaultSemester);
+            iptSchoolYear.Value = schoolYear;
+            iptSemester.Value = semester;
 
         }
     }

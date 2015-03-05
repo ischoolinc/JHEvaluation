@@ -51,12 +51,14 @@
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.labelX2 = new DevComponents.DotNetBar.LabelX();
-            this.cboSchoolYear = new DevComponents.DotNetBar.Controls.ComboBoxEx();
-            this.cboSemester = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.ExportDoctSetup = new System.Windows.Forms.LinkLabel();
             this.checkExportDoc = new System.Windows.Forms.CheckBox();
+            this.iptSchoolYear = new DevComponents.Editors.IntegerInput();
+            this.iptSemester = new DevComponents.Editors.IntegerInput();
             this.gpScore.SuspendLayout();
             this.gpDaily.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).BeginInit();
             this.SuspendLayout();
             // 
             // chCondition1
@@ -449,28 +451,6 @@
             this.labelX2.TabIndex = 11;
             this.labelX2.Text = "學期";
             // 
-            // cboSchoolYear
-            // 
-            this.cboSchoolYear.DisplayMember = "Text";
-            this.cboSchoolYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cboSchoolYear.FormattingEnabled = true;
-            this.cboSchoolYear.ItemHeight = 19;
-            this.cboSchoolYear.Location = new System.Drawing.Point(88, 12);
-            this.cboSchoolYear.Name = "cboSchoolYear";
-            this.cboSchoolYear.Size = new System.Drawing.Size(65, 25);
-            this.cboSchoolYear.TabIndex = 12;
-            // 
-            // cboSemester
-            // 
-            this.cboSemester.DisplayMember = "Text";
-            this.cboSemester.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cboSemester.FormattingEnabled = true;
-            this.cboSemester.ItemHeight = 19;
-            this.cboSemester.Location = new System.Drawing.Point(216, 12);
-            this.cboSemester.Name = "cboSemester";
-            this.cboSemester.Size = new System.Drawing.Size(65, 25);
-            this.cboSemester.TabIndex = 13;
-            // 
             // ExportDoctSetup
             // 
             this.ExportDoctSetup.AutoSize = true;
@@ -495,15 +475,51 @@
             this.checkExportDoc.Text = "產生通知單";
             this.checkExportDoc.UseVisualStyleBackColor = false;
             // 
+            // iptSchoolYear
+            // 
+            this.iptSchoolYear.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.iptSchoolYear.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.iptSchoolYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.iptSchoolYear.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.iptSchoolYear.Location = new System.Drawing.Point(91, 13);
+            this.iptSchoolYear.MaxValue = 999;
+            this.iptSchoolYear.MinValue = 1;
+            this.iptSchoolYear.Name = "iptSchoolYear";
+            this.iptSchoolYear.ShowUpDown = true;
+            this.iptSchoolYear.Size = new System.Drawing.Size(80, 25);
+            this.iptSchoolYear.TabIndex = 17;
+            this.iptSchoolYear.Value = 1;
+            // 
+            // iptSemester
+            // 
+            this.iptSemester.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.iptSemester.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.iptSemester.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.iptSemester.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.iptSemester.Location = new System.Drawing.Point(219, 13);
+            this.iptSemester.MaxValue = 2;
+            this.iptSemester.MinValue = 1;
+            this.iptSemester.Name = "iptSemester";
+            this.iptSemester.ShowUpDown = true;
+            this.iptSemester.Size = new System.Drawing.Size(80, 25);
+            this.iptSemester.TabIndex = 18;
+            this.iptSemester.Value = 1;
+            // 
             // GraduationPredictReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 354);
+            this.Controls.Add(this.iptSemester);
+            this.Controls.Add(this.iptSchoolYear);
             this.Controls.Add(this.ExportDoctSetup);
             this.Controls.Add(this.checkExportDoc);
-            this.Controls.Add(this.cboSemester);
-            this.Controls.Add(this.cboSchoolYear);
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.labelX1);
             this.Controls.Add(this.btnExit);
@@ -519,6 +535,8 @@
             this.gpScore.PerformLayout();
             this.gpDaily.ResumeLayout(false);
             this.gpDaily.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -538,8 +556,6 @@
         private DevComponents.DotNetBar.ButtonX btnExit;
         private DevComponents.DotNetBar.LabelX labelX1;
         private DevComponents.DotNetBar.LabelX labelX2;
-        private DevComponents.DotNetBar.Controls.ComboBoxEx cboSchoolYear;
-        private DevComponents.DotNetBar.Controls.ComboBoxEx cboSemester;
         private System.Windows.Forms.CheckBox chCondition3b;
         private System.Windows.Forms.CheckBox chCondition4b;
         private System.Windows.Forms.CheckBox chCondition5b;
@@ -553,5 +569,7 @@
         private System.Windows.Forms.CheckBox chCondition4c;
         private System.Windows.Forms.CheckBox chCondition5c;
         private System.Windows.Forms.CheckBox checkBox1;
+        private DevComponents.Editors.IntegerInput iptSchoolYear;
+        private DevComponents.Editors.IntegerInput iptSemester;
     }
 }
