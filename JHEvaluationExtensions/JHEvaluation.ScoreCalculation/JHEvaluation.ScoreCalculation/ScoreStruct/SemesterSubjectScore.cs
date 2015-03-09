@@ -75,7 +75,13 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         /// </summary>
         public void BetterScoreSelection()
         {
-            Value = SubjectScore.GetBetterScore(ScoreOrigin, ScoreMakeup);
+            decimal? betterScore = SubjectScore.GetBetterScore(ScoreOrigin, ScoreMakeup);
+
+            decimal newScore = betterScore.HasValue ? betterScore.Value : 0;
+            decimal oldScore = Value.HasValue ? Value.Value : 0;
+
+            if (newScore > oldScore)
+                Value = newScore;
         }
 
         #region IScore 成員
