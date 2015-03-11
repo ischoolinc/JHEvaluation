@@ -80,7 +80,7 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
             decimal newScore = betterScore.HasValue ? betterScore.Value : 0;
             decimal oldScore = Value.HasValue ? Value.Value : 0;
 
-            if (newScore > oldScore)
+            if (newScore >= oldScore)
                 Value = newScore;
         }
 
