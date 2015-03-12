@@ -90,7 +90,16 @@ namespace JHEvaluation.ScoreCalculation
         public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
             IEnumerable<string> filterDomain)
         {
-            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null));
+            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null),false);
+        }
+
+        /// <summary>
+        /// 計算領域成績。(new)
+        /// </summary>
+        public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
+            IEnumerable<string> filterDomain,bool clearDomainScore)
+        {
+            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null), clearDomainScore);
         }
 
         /// <summary>
@@ -100,7 +109,17 @@ namespace JHEvaluation.ScoreCalculation
             IEnumerable<string> filterDomain,
             ScoreCalculator defaultRule)
         {
-            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule);
+            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule,false);
+        }
+
+        /// <summary>
+        /// 計算領域成績。(new)
+        /// </summary>
+        public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
+            IEnumerable<string> filterDomain,
+            ScoreCalculator defaultRule, bool clearDomainScore)
+        {
+            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule, clearDomainScore);
         }
 
         /// <summary>
@@ -116,7 +135,7 @@ namespace JHEvaluation.ScoreCalculation
         /// 計算學習領域成績
         /// </summary>
         public static void CalculateLearningDomainSemesterScore(this List<StudentScore> students,
-            IEnumerable<string> filterDomain,ScoreCalculator defaultRule)
+            IEnumerable<string> filterDomain, ScoreCalculator defaultRule)
         {
             new SemesterScoreCalculator(students, filterDomain).CalculateLearningDomainScore(defaultRule);
         }

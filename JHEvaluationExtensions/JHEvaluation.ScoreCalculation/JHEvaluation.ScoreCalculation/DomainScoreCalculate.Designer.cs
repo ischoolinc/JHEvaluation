@@ -33,6 +33,7 @@
             this.intSchoolYear = new DevComponents.Editors.IntegerInput();
             this.labelX3 = new DevComponents.DotNetBar.LabelX();
             this.labelX2 = new DevComponents.DotNetBar.LabelX();
+            this.chkClearDomainScore = new DevComponents.DotNetBar.Controls.CheckBoxX();
             ((System.ComponentModel.ISupportInitialize)(this.intSemester)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.intSchoolYear)).BeginInit();
             this.SuspendLayout();
@@ -57,6 +58,7 @@
             // 
             // 
             this.intSemester.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.intSemester.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.intSemester.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
             this.intSemester.Location = new System.Drawing.Point(224, 25);
             this.intSemester.Name = "intSemester";
@@ -71,6 +73,7 @@
             // 
             // 
             this.intSchoolYear.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.intSchoolYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.intSchoolYear.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
             this.intSchoolYear.Location = new System.Drawing.Point(80, 25);
             this.intSchoolYear.Name = "intSchoolYear";
@@ -81,6 +84,11 @@
             // labelX3
             // 
             this.labelX3.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX3.ForeColor = System.Drawing.SystemColors.ControlText;
             this.labelX3.Location = new System.Drawing.Point(184, 26);
             this.labelX3.Name = "labelX3";
@@ -91,6 +99,11 @@
             // labelX2
             // 
             this.labelX2.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.labelX2.Location = new System.Drawing.Point(27, 26);
             this.labelX2.Name = "labelX2";
@@ -98,16 +111,33 @@
             this.labelX2.TabIndex = 15;
             this.labelX2.Text = "學年度";
             // 
+            // chkClearDomainScore
+            // 
+            this.chkClearDomainScore.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.chkClearDomainScore.BackgroundStyle.Class = "";
+            this.chkClearDomainScore.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.chkClearDomainScore.Location = new System.Drawing.Point(27, 64);
+            this.chkClearDomainScore.Name = "chkClearDomainScore";
+            this.chkClearDomainScore.Size = new System.Drawing.Size(191, 23);
+            this.chkClearDomainScore.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.chkClearDomainScore.TabIndex = 19;
+            this.chkClearDomainScore.Text = "刪除全部領域成績並重算";
+            // 
             // DomainScoreCalculate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(330, 107);
+            this.Controls.Add(this.chkClearDomainScore);
             this.Controls.Add(this.intSemester);
             this.Controls.Add(this.intSchoolYear);
             this.Controls.Add(this.labelX3);
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.btnCalc);
+            this.DoubleBuffered = true;
             this.Name = "DomainScoreCalculate";
             this.Text = "學期領域成績計算";
             this.Load += new System.EventHandler(this.DomainScoreCalculate_Load);
@@ -124,5 +154,6 @@
         private DevComponents.Editors.IntegerInput intSchoolYear;
         private DevComponents.DotNetBar.LabelX labelX3;
         private DevComponents.DotNetBar.LabelX labelX2;
+        private DevComponents.DotNetBar.Controls.CheckBoxX chkClearDomainScore;
     }
 }

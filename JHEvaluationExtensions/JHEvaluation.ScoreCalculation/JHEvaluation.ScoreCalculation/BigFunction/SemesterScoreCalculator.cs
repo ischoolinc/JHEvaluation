@@ -94,7 +94,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         /// 計算領域成績
         /// </summary>
         /// <param name="defaultRule"></param>
-        public void CalculateDomainScore(ScoreCalculator defaultRule)
+        public void CalculateDomainScore(ScoreCalculator defaultRule,bool clearDomainScore)
         {
             EffortMap effortmap = new EffortMap(); //努力程度對照表。
 
@@ -222,11 +222,15 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             dscore.Value = weightAvg;
                     }
 
-                    foreach (var domainName in dscores.ToArray())
+                    //清除不應該存在領域成績
+                    if (clearDomainScore)
                     {
-                        //如果新計算的領域成績中不包含在原領域清單中，就移除他。
-                        if (!domainTotal.ContainsKey(domainName))
-                            dscores.Remove(domainName);
+                        foreach (var domainName in dscores.ToArray())
+                        {
+                            //如果新計算的領域成績中不包含在原領域清單中，就移除他。
+                            if (!domainTotal.ContainsKey(domainName))
+                                dscores.Remove(domainName);
+                        }
                     }
                     #endregion
                 }

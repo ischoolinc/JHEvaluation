@@ -18,6 +18,8 @@ namespace JHEvaluation.ScoreCalculation
         private int SchoolYear { get; set; }
         private int Semester { get; set; }
 
+        private bool _ClearDomainScore;
+
         public DomainScoreCalculateByGradeyear()
         {
             InitializeComponent();
@@ -46,6 +48,16 @@ namespace JHEvaluation.ScoreCalculation
 
         private void btnCalc_Click(object sender, EventArgs e)
         {
+            _ClearDomainScore = chkClearDomainScore.Checked;
+
+            if (_ClearDomainScore)
+            {
+                if (MsgBox.Show("確認要進行全部刪除並重新計算?", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             DialogResult dr = MsgBox.Show("您確定要計算學生學期領域成績？", MessageBoxButtons.YesNo);
 
             if (dr == DialogResult.No) return;
@@ -86,7 +98,7 @@ namespace JHEvaluation.ScoreCalculation
 
             if (RecalculateAll) Students.ClearDomainScore(SemesterData.Empty);
 
-            Students.CalcuateDomainSemesterScore(new string[] { });
+            Students.CalcuateDomainSemesterScore(new string[] { }, _ClearDomainScore);
             Students.SaveSemesterScore(this);
 
             //儲存 Log。
