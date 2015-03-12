@@ -84,14 +84,14 @@ namespace JHEvaluation.StudentScoreSummaryReport
         {
             DeployParameters dparams = ModuleLoader.GetDeployParametsers(typeof(Program), "Mode=KaoHsiung");
 
-            //if (dparams["Mode"].ToUpper() == "KaoHsiung".ToUpper())
-            //    Mode = ModuleMode.KaoHsiung; //高雄。
-            //else
-            //    Mode = ModuleMode.HsinChu;  //新竹。
+            if (dparams["Mode"].ToUpper() == "KaoHsiung".ToUpper())
+                Mode = ModuleMode.KaoHsiung; //高雄。
+            else
+                Mode = ModuleMode.HsinChu;  //新竹。
 
 //            Mode = ModuleMode.KaoHsiung; //高雄。
 
-            Mode = ModuleMode.HsinChu;  //新竹。
+            //Mode = ModuleMode.HsinChu;  //新竹。
         }
     }
 
