@@ -2,6 +2,7 @@
 using System.Xml;
 using JHSchool.Data;
 using System;
+using System.Linq;
 
 namespace JHSchool.Evaluation.Calculation.GraduationConditions
 {
@@ -61,6 +62,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
             //}
 
             //list.SyncSemesterScoreCache();
+
             Dictionary<string, List<Data.JHSemesterScoreRecord>> studentSemesterScoreCache = new Dictionary<string, List<JHSchool.Data.JHSemesterScoreRecord>>();
             foreach (Data.JHSemesterScoreRecord record in Data.JHSemesterScore.SelectByStudentIDs(list.AsKeyList()))
             {
@@ -68,6 +70,62 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     studentSemesterScoreCache.Add(record.RefStudentID, new List<JHSchool.Data.JHSemesterScoreRecord>());
                 studentSemesterScoreCache[record.RefStudentID].Add(record);
             }
+
+            #region 學期歷程
+            //學生能被承認的學年度學期對照
+            Dictionary<string, List<string>> studentSYSM = new Dictionary<string, List<string>>();
+            foreach (K12.Data.SemesterHistoryRecord shr in K12.Data.SemesterHistory.SelectByStudentIDs(list.Select(x => x.ID)))
+            {
+                if (!studentSYSM.ContainsKey(shr.RefStudentID))
+                    studentSYSM.Add(shr.RefStudentID, new List<string>());
+
+                Dictionary<string, K12.Data.SemesterHistoryItem> check = new Dictionary<string, K12.Data.SemesterHistoryItem>() { 
+                {"1a",null },
+                {"1b",null },
+                {"2a",null },
+                {"2b",null },
+                {"3a",null },
+                {"3b",null }
+                };
+
+                foreach (K12.Data.SemesterHistoryItem item in shr.SemesterHistoryItems)
+                {
+                    string grade = item.GradeYear + "";
+
+                    if (grade == "7") grade = "1";
+                    if (grade == "8") grade = "2";
+                    if (grade == "9") grade = "3";
+
+                    if (grade =="1" || grade == "2" || grade=="3")
+                    {
+                        string key = "";
+                        if (item.Semester == 1)
+                            key = grade + "a";
+                        else if (item.Semester == 2)
+                            key = grade + "b";
+                        else
+                            continue;
+
+                        //相同年級取較新的學年度
+                        if (check[key] == null)
+                            check[key] = item;
+                        else if(item.SchoolYear > check[key].SchoolYear)
+                            check[key] = item;
+                    }
+                }
+
+                foreach (string key in check.Keys)
+                {
+                    if (check[key] == null)
+                        continue;
+
+                    K12.Data.SemesterHistoryItem item = check[key];
+
+                    studentSYSM[shr.RefStudentID].Add(item.SchoolYear + "_" + item.Semester);
+                }
+            }
+
+            #endregion
 
             foreach (StudentRecord each in list)
             {
@@ -83,15 +141,19 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 Dictionary<string, decimal> Averages = new Dictionary<string, decimal>();
 
                 // 有成績學年度學期
-                List<string> hasSemsScoreSchoolYearSemester = new List<string>();
+                //List<string> hasSemsScoreSchoolYearSemester = new List<string>();
 
-                // 有學期成績
-                if (studentSemesterScoreCache.ContainsKey(each.ID))
+                // 有學期成績且有學期歷程
+                if (studentSemesterScoreCache.ContainsKey(each.ID) && studentSYSM.ContainsKey(each.ID))
                 {
                     #region 取得各學期領域成績
                     foreach (Data.JHSemesterScoreRecord record in studentSemesterScoreCache[each.ID])
                     {
-                        hasSemsScoreSchoolYearSemester.Add(record.SchoolYear.ToString() + record.Semester.ToString());
+                        //hasSemsScoreSchoolYearSemester.Add(record.SchoolYear.ToString() + record.Semester.ToString());
+                        string sysm = record.SchoolYear + "_" + record.Semester;
+
+                        if (!studentSYSM[each.ID].Contains(sysm))
+                            continue;
 
                         foreach (K12.Data.DomainScore domain in record.Domains.Values)
                         {
@@ -99,10 +161,11 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                             if(domain.Score.HasValue)
                             {
                                 string key = domain.Domain;
-                                if (key == "國語文" || key == "英語") key = "語文";
 
                                 //建立該領域
-                                if (!DomainScoreDic.ContainsKey(key)) DomainScoreDic.Add(key, new List<decimal>());
+                                if (!DomainScoreDic.ContainsKey(key)) 
+                                    DomainScoreDic.Add(key, new List<decimal>());
+
                                 //填入該領域成績
                                 DomainScoreDic[key].Add(domain.Score.Value);
                             }
@@ -113,24 +176,21 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
                 #region 計算各領域平均成績
                 //巡迴各領域
-                foreach (KeyValuePair<string, List<decimal>> kvp in DomainScoreDic)
+                foreach (string domainName in DomainScoreDic.Keys)
                 {
-                    //領域名稱
-                    string domain = kvp.Key;
                     //各領域初值為0
-                    if (!Averages.ContainsKey(domain)) Averages.Add(domain, 0);
+                    if (!Averages.ContainsKey(domainName)) 
+                        Averages.Add(domainName, 0);
 
                     //巡迴該領域的所有成績
-                    foreach (decimal score in kvp.Value)
+                    foreach (decimal score in DomainScoreDic[domainName])
                     {
                         //加總該領域成績
-                        Averages[domain] += score;
+                        Averages[domainName] += score;
                     }
 
-                    //計算該領域平均
-                    Averages[domain] /= kvp.Value.Count;
-                    //四捨五入
-                    Averages[domain] = Math.Round(Averages[domain], 2, MidpointRounding.AwayFromZero);
+                    //計算該領域平均並四捨五入
+                    Averages[domainName] = Math.Round(Averages[domainName] / DomainScoreDic[domainName].Count, 2, MidpointRounding.AwayFromZero);
                 }
                 #endregion
 
@@ -138,9 +198,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 foreach(string key in Averages.Keys)
                 {
                     if(Averages[key] >= _score)
-                    {
                         count++;
-                    }
                 }
 
                 if(count < _domain_count)
