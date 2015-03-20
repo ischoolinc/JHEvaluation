@@ -216,7 +216,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         dscore.Effort = effortmap.GetCodeByScore(weightAvg);
 
                         //若有補考成績就進行擇優,否則就將科目的擇優平均帶入領域成績
-                        if (dscore.ScoreMakeup.HasValue)
+                        if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
                             dscore.BetterScoreSelection(); //進行成績擇優。
                         else
                             dscore.Value = weightAvg;
@@ -234,16 +234,17 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     }
                     #endregion
                 }
-                else //雖不需計算領域成績，但是仍然需要擇優運算。如果有補考成績就擇優
-                {
+                
+                //else //雖不需計算領域成績，但是仍然需要擇優運算。如果有補考成績就擇優
+                //{
                     foreach (var domain in dscores.ToArray())
                     {
                         SemesterDomainScore objDomain = dscores[domain];
 
-                        if (objDomain.ScoreMakeup.HasValue)
+                        if (objDomain.ScoreOrigin.HasValue || objDomain.ScoreMakeup.HasValue)
                             objDomain.BetterScoreSelection();
                     }
-                }
+                //}
 
                 //計算課程學習成績。
                 ScoreResult result = CalcDomainWeightAvgScore(dscores, new UniqueSet<string>());
