@@ -37,9 +37,8 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orScore.Add(new LearnDomainEachEval(element));
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/學業成績畢業條件/條件[@Type='LearnDomainLast']");
                 if (element != null && bool.Parse(element.GetAttribute("Checked"))) orScore.Add(new LearnDomainLastEval(element));
-                //added by Cloud 2014.2.13
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/學業成績畢業條件/條件[@Type='GraduateDomain']");
-                if (element != null && bool.Parse(element.GetAttribute("Checked"))) orScore.Add(new LearnDomainAllEval(element));
+                if (element != null && bool.Parse(element.GetAttribute("Checked"))) orScore.Add(new GraduateDomainEval(element));
 
                 OrEval orDaily1 = new OrEval();
                 element = (XmlElement)record.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountEach']");

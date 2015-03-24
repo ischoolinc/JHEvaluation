@@ -51,11 +51,67 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 studentSemesterScoreCache[record.RefStudentID].Add(record);
             }
 
+            //學生能被承認的學年度學期對照
+            Dictionary<string, List<string>> studentSYSM = new Dictionary<string, List<string>>();
+
+            #region 學期歷程
+            foreach (K12.Data.SemesterHistoryRecord shr in K12.Data.SemesterHistory.SelectByStudentIDs(list.Select(x => x.ID)))
+            {
+                if (!studentSYSM.ContainsKey(shr.RefStudentID))
+                    studentSYSM.Add(shr.RefStudentID, new List<string>());
+
+                Dictionary<string, K12.Data.SemesterHistoryItem> check = new Dictionary<string, K12.Data.SemesterHistoryItem>() { 
+                {"1a",null },
+                {"1b",null },
+                {"2a",null },
+                {"2b",null },
+                {"3a",null },
+                {"3b",null }
+                };
+
+                foreach (K12.Data.SemesterHistoryItem item in shr.SemesterHistoryItems)
+                {
+                    string grade = item.GradeYear + "";
+
+                    if (grade == "7") grade = "1";
+                    if (grade == "8") grade = "2";
+                    if (grade == "9") grade = "3";
+
+                    if (grade == "1" || grade == "2" || grade == "3")
+                    {
+                        string key = "";
+                        if (item.Semester == 1)
+                            key = grade + "a";
+                        else if (item.Semester == 2)
+                            key = grade + "b";
+                        else
+                            continue;
+
+                        //相同年級取較新的學年度
+                        if (check[key] == null)
+                            check[key] = item;
+                        else if (item.SchoolYear > check[key].SchoolYear)
+                            check[key] = item;
+                    }
+                }
+
+                foreach (string key in check.Keys)
+                {
+                    if (check[key] == null)
+                        continue;
+
+                    K12.Data.SemesterHistoryItem item = check[key];
+
+                    studentSYSM[shr.RefStudentID].Add(item.SchoolYear + "_" + item.Semester);
+                }
+            }
+
+            #endregion
+
             foreach (StudentRecord each in list)
             {
                 List<ResultDetail> resultList = new List<ResultDetail>();
            
-
                 // 有學期成績
                 if (studentSemesterScoreCache.ContainsKey(each.ID))
                 {
@@ -68,6 +124,10 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     // 取得學生學生領域成績填入計算畢業成績用
                     foreach (JHSemesterScoreRecord record in studentSemesterScoreCache[each.ID])
                     {
+                        string key = record.SchoolYear + "_" + record.Semester;
+                        if (!studentSYSM.ContainsKey(each.ID) || !studentSYSM[each.ID].Contains(key))
+                            continue;
+
                         foreach (K12.Data.DomainScore domain in record.Domains.Values)
                         {
                             // 國語文、英語，轉成語文領域對應
@@ -125,7 +185,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                             //grScore = graduateDomainScoreDict[name] / graduateDomainCountDict[name];
 
                             // 加權平均,加權總分,加權學分
-                            grScore = graduateDomainScoreDict[name] / graduateDomainCreditDict[name];
+                            grScore = Math.Round(graduateDomainScoreDict[name] / graduateDomainCreditDict[name], 2, MidpointRounding.AwayFromZero);
 
                             if (grScore >= _score)
                                 passScoreList.Add(grScore);
