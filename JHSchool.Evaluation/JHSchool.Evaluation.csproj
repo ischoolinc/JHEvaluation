@@ -226,6 +226,7 @@
     <Compile Include="Calculation\GraduationConditions\DemeritAmountAllEval.cs" />
     <Compile Include="Calculation\GraduationConditions\DemeritAmountGraduateEval.cs" />
     <Compile Include="Calculation\GraduationConditions\GraduateDomainEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\GraduateDomainEval_backup.cs" />
     <Compile Include="Calculation\GraduationConditions\LearnDomainAllEval.cs" />
     <Compile Include="Calculation\HelperClass\DespToDegree.cs" />
     <Compile Include="Calculation\Interface\EvaluationResult.cs" />

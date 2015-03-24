@@ -115,85 +115,94 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 // 有學期成績
                 if (studentSemesterScoreCache.ContainsKey(each.ID))
                 {
-                    // 存放畢業領域成績
-                    Dictionary<string, decimal> graduateDomainScoreDict = new Dictionary<string, decimal>();
-                    Dictionary<string, decimal> graduateDomainCreditDict = new Dictionary<string, decimal>();
-                    Dictionary<string, int> graduateDomainCountDict = new Dictionary<string, int>();
                     // 存放符合標準畢業領域成績
                     List<decimal> passScoreList = new List<decimal>();
+
+                    //每個學期整理後的成績
+                    List<List<K12.Data.DomainScore>> GradeScoreList = new List<List<K12.Data.DomainScore>>();
+
                     // 取得學生學生領域成績填入計算畢業成績用
                     foreach (JHSemesterScoreRecord record in studentSemesterScoreCache[each.ID])
                     {
                         string key = record.SchoolYear + "_" + record.Semester;
+
+                        //只處理承認的學年度學期
                         if (!studentSYSM.ContainsKey(each.ID) || !studentSYSM[each.ID].Contains(key))
                             continue;
 
+                        //整理後的領域成績
+                        List<K12.Data.DomainScore> domainScoreList = new List<K12.Data.DomainScore>();
+
+                        K12.Data.DomainScore 語文 = new K12.Data.DomainScore();
+                        語文.Domain = "語文";
+                        
+                        decimal sum = 0;
+                        decimal credit = 0;
+
+                        //跑一遍領域成績
                         foreach (K12.Data.DomainScore domain in record.Domains.Values)
                         {
-                            // 國語文、英語，轉成語文領域對應
-                            string domainName = domain.Domain;
-
-                            if (domain.Domain == "國語文" || domain.Domain == "英語")
+                            //這三種挑出來處理
+                            if (domain.Domain == "國語文" || domain.Domain == "英語" || domain.Domain == "語文")
                             {
-                                domainName = "語文";
-
-                                // 處理高雄語文顯示
-                                // 加權總分
-                                if (!TempData.tmpStudDomainScoreDict.ContainsKey(record.RefStudentID))
-                                    TempData.tmpStudDomainScoreDict.Add(record.RefStudentID, new Dictionary<string, decimal>());
-
-                                if (!TempData.tmpStudDomainCreditDict.ContainsKey(record.RefStudentID))
-                                    TempData.tmpStudDomainCreditDict.Add(record.RefStudentID, new Dictionary<string, decimal>());
-
-                                if (!TempData.tmpStudDomainScoreDict[record.RefStudentID].ContainsKey(domain.Domain))
-                                    TempData.tmpStudDomainScoreDict[record.RefStudentID].Add(domain.Domain, 0);
-
-                                // 學分數
-                                if (!TempData.tmpStudDomainCreditDict[record.RefStudentID].ContainsKey(domain.Domain))
-                                    TempData.tmpStudDomainCreditDict[record.RefStudentID].Add(domain.Domain, 0);
-
                                 if (domain.Score.HasValue && domain.Credit.HasValue)
                                 {
-                                    TempData.tmpStudDomainScoreDict[record.RefStudentID][domain.Domain] += (domain.Score.Value * domain.Credit.Value);
-                                    TempData.tmpStudDomainCreditDict[record.RefStudentID][domain.Domain] += domain.Credit.Value;
+                                    sum += domain.Score.Value * domain.Credit.Value;
+                                    credit += domain.Credit.Value;
                                 }
-
                             }
-                            if (!graduateDomainScoreDict.ContainsKey(domainName))
-                            {
-                                graduateDomainScoreDict.Add(domainName, 0);
-                                graduateDomainCountDict.Add(domainName, 0);
-                                graduateDomainCreditDict.Add(domainName, 0);
-                            }
-                            if (domain.Score.HasValue && domain.Credit.HasValue)
-                            {
-                                graduateDomainScoreDict[domainName] += (domain.Score.Value*domain.Credit.Value);
-                                graduateDomainCreditDict[domainName] += domain.Credit.Value;
-                                graduateDomainCountDict[domainName]++;
-                            }
+                            else
+                                domainScoreList.Add(domain);
                         }
-                    }
 
-                    // 即時計算畢業成績並判斷是否符合
-                    foreach (string name in graduateDomainScoreDict.Keys)
-                    {
-                        decimal grScore = 0;
-                        // if (graduateDomainCountDict[name] > 0)
-                        if (graduateDomainCreditDict[name] > 0) // 小郭, 2013/12/30
+                        if (credit > 0)
                         {
-                            //// 算術平均
-                            //grScore = graduateDomainScoreDict[name] / graduateDomainCountDict[name];
+                            語文.Score = Math.Round(sum / credit, 2, MidpointRounding.AwayFromZero);
+                            語文.Credit = credit;
 
-                            // 加權平均,加權總分,加權學分
-                            grScore = Math.Round(graduateDomainScoreDict[name] / graduateDomainCreditDict[name], 2, MidpointRounding.AwayFromZero);
+                            domainScoreList.Add(語文);
+                        }
 
-                            if (grScore >= _score)
-                                passScoreList.Add(grScore);
-                            
-                            // 小郭, 2013/12/30
-                            StudentDomainResult.AddDomain(each.ID, name, grScore, grScore >= _score);
+                        //會被加入就代表承認了
+                        GradeScoreList.Add(domainScoreList);
+                    }
+
+                    Dictionary<string, decimal> domainScoreSum = new Dictionary<string, decimal>();
+                    Dictionary<string, decimal> domainScoreCount = new Dictionary<string, decimal>();
+
+                    foreach (List<K12.Data.DomainScore> scoreList in GradeScoreList)
+                    {
+                        foreach (K12.Data.DomainScore ds in scoreList)
+                        {
+                            string domainName = ds.Domain;
+
+                            if (!domainScoreSum.ContainsKey(domainName))
+                                domainScoreSum.Add(domainName, 0);
+                            if (!domainScoreCount.ContainsKey(domainName))
+                                domainScoreCount.Add(domainName, 0);
+
+                            if(ds.Score.HasValue)
+                            {
+                                domainScoreSum[domainName] += ds.Score.Value;
+                                //同一學期不會有相同領域名稱,可直接作++
+                                domainScoreCount[domainName]++;
+                            }
                         }
                     }
+
+                    foreach (string domainName in domainScoreCount.Keys)
+                    {
+                        if (domainScoreCount[domainName] > 0)
+                        {
+                            decimal grScore = Math.Round(domainScoreSum[domainName] / domainScoreCount[domainName], 2, MidpointRounding.AwayFromZero);
+
+                            if(grScore >= _score)
+                                passScoreList.Add(grScore);
+
+                            StudentDomainResult.AddDomain(each.ID, domainName, grScore, grScore >= _score);
+                        }
+                    }
+
                     // 當及格數小於標準數，標示不符格畢業規範
                     if (passScoreList.Count < _domain_count)
                     {
