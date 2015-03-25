@@ -1869,6 +1869,7 @@
             this.txtPeriod2c.Size = new System.Drawing.Size(44, 25);
             this.txtPeriod2c.TabIndex = 13;
             this.txtPeriod2c.Text = "1/3";
+            this.txtPeriod2c.TextChanged += new System.EventHandler(this.TextBoxPeriod_TextChanged);
             // 
             // btnSetAbsence2c
             // 
