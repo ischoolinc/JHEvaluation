@@ -209,6 +209,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             dscores.Add(strDomain, dscore);
                         }
 
+                        //先將算好的成績帶入領域成績,後面的擇優判斷才不會有問題
+                        dscore.Value = weightAvg;
                         dscore.ScoreOrigin = weightOriginAvg;
                         dscore.Weight = weight;
                         dscore.Period = period;
@@ -218,8 +220,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         //若有補考成績就進行擇優,否則就將科目的擇優平均帶入領域成績
                         if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
                             dscore.BetterScoreSelection(); //進行成績擇優。
-                        else
-                            dscore.Value = weightAvg;
+                        //else
+                            //dscore.Value = weightAvg;
                     }
 
                     //清除不應該存在領域成績
