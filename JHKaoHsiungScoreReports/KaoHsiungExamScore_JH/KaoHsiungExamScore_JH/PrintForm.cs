@@ -938,6 +938,11 @@ namespace KaoHsiungExamScore_JH
                     }
             }
 
+            #region 取得目前班級、座號、班導師
+            Dictionary<string, DAO.StudCST> StudCSTDict = Utility.GetStudentCSTByStudentIDList(_StudentIDList);
+
+            #endregion
+
             #region 處理合併 DataTable 相關資料
             // 儲存資料用 Data Table
             DataTable dt = new DataTable();
@@ -1172,6 +1177,14 @@ namespace KaoHsiungExamScore_JH
                 //    row["座號"] = StudRec.SeatNo.Value.ToString();
                 //else
                 //    row["座號"] = "";
+
+                // 預設先使用目前班級、座號、班導師 StudCSTDict
+                if (StudCSTDict.ContainsKey(StudRec.ID))
+                {
+                    row["班級"] = StudCSTDict[StudRec.ID].ClassName;
+                    row["座號"] = StudCSTDict[StudRec.ID].SeatNo;
+                    row["班導師"] = StudCSTDict[StudRec.ID].TeacherName;
+                }
 
                 // 使用學期歷程內的班級、座號、班導師
                 if (StudShiDict.ContainsKey(StudRec.ID))

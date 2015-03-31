@@ -286,5 +286,39 @@ namespace KaoHsiungExamScore_JH
             }
             return retVal;
         }
+
+        /// <summary>
+        /// 透過學生ID取得目前班級、座號、導師姓名
+        /// </summary>
+        /// <param name="StudentIDList"></param>
+        /// <returns></returns>
+        public static Dictionary<string, DAO.StudCST> GetStudentCSTByStudentIDList(List<string> StudentIDList)
+        {
+            Dictionary<string, DAO.StudCST> retVal = new Dictionary<string, DAO.StudCST>();
+
+            if (StudentIDList.Count > 0)
+            {
+                QueryHelper qh = new QueryHelper();
+                string strSQL = "select student.id as sid, class_name as classname,seat_no as seatno,teacher.teacher_name as teachername from student inner join class on student.ref_class_id=class.id inner join teacher on teacher.id=class.ref_teacher_id where student.id in(" + string.Join(",", StudentIDList.ToArray()) + ") order by class.class_name,student.seat_no;";
+
+                DataTable dt = qh.Select(strSQL);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string sid = dr["sid"].ToString();
+                    if (!retVal.ContainsKey(sid))
+                    {
+                        DAO.StudCST sc = new DAO.StudCST();
+                        sc.StudentID = sid;
+                        sc.ClassName = dr["classname"].ToString();
+                        sc.SeatNo = dr["seatno"].ToString();
+                        sc.TeacherName = dr["teachername"].ToString();
+                        retVal.Add(sid, sc);
+                    }
+                }
+            }
+
+            return retVal;
+        }
     }
 }
