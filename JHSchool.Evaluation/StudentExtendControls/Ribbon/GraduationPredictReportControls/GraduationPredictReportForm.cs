@@ -1093,14 +1093,11 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                                 SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
 
                             // 英語
-                            if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("英語") || TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("語文"))
+                            if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("英語"))
                             {
                                 decimal sc = 0;
                                 if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("英語"))
-                                    sc = TempData.tmpStudDomainScoreDict[student.ID]["英語"] / TempData.tmpStudDomainCreditDict[student.ID]["英語"];
-
-                                if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("語文"))
-                                    sc = TempData.tmpStudDomainScoreDict[student.ID]["語文"] / TempData.tmpStudDomainCreditDict[student.ID]["語文"];
+                                    sc = TempData.tmpStudDomainScoreDict[student.ID]["英語"] / TempData.tmpStudDomainCreditDict[student.ID]["英語"];                              
 
                                 if(sc>=60)
                                     SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleNormal);

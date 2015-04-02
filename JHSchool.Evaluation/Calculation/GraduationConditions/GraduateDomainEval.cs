@@ -149,6 +149,24 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                                 {
                                     sum += domain.Score.Value * domain.Credit.Value;
                                     credit += domain.Credit.Value;
+
+                                    //處理高雄語文顯示
+                                    //  加權總分
+                                    if (!TempData.tmpStudDomainScoreDict.ContainsKey(record.RefStudentID))
+                                        TempData.tmpStudDomainScoreDict.Add(record.RefStudentID, new Dictionary<string, decimal>());
+
+                                    if (!TempData.tmpStudDomainCreditDict.ContainsKey(record.RefStudentID))
+                                        TempData.tmpStudDomainCreditDict.Add(record.RefStudentID, new Dictionary<string, decimal>());
+
+                                    if (!TempData.tmpStudDomainScoreDict[record.RefStudentID].ContainsKey(domain.Domain))
+                                        TempData.tmpStudDomainScoreDict[record.RefStudentID].Add(domain.Domain, 0);
+
+                                    // 學分數
+                                    if (!TempData.tmpStudDomainCreditDict[record.RefStudentID].ContainsKey(domain.Domain))
+                                        TempData.tmpStudDomainCreditDict[record.RefStudentID].Add(domain.Domain, 0);
+
+                                    TempData.tmpStudDomainScoreDict[record.RefStudentID][domain.Domain] += (domain.Score.Value * domain.Credit.Value);
+                                    TempData.tmpStudDomainCreditDict[record.RefStudentID][domain.Domain] += domain.Credit.Value;
                                 }
                             }
                             else
