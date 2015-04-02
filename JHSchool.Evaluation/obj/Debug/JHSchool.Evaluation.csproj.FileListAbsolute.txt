@@ -294,7 +294,6 @@ D:\GitProjModules\ischoolDesktop\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSc
 D:\GitProjModules\ischoolDesktop\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.csproj.GenerateResource.Cache
 D:\GitProjModules\ischoolDesktop\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.dll
 D:\GitProjModules\ischoolDesktop\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.pdb
-D:\GitProjModules\ischoolDesktop\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.csprojResolveAssemblyReference.cache
 D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\bin\Debug\JHSchool.Evaluation.dll
 D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\bin\Debug\JHSchool.Evaluation.pdb
 D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.csprojResolveAssemblyReference.cache
