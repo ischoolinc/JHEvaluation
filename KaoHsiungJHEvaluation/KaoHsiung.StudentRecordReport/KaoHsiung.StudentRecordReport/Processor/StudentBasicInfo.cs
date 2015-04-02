@@ -116,7 +116,7 @@ namespace KaoHsiung.StudentRecordReport.Processor
             _data["畢業證書字號"] = number1;
             _data["修業證明書字號"] = number2;
             _data["照片"] = base64;
-            _data["簽呈"] = "承辦人員:" + Global.TransferName + tmpStr + "註冊組長:" + Global.RegManagerName + tmpStr + "教務主任:" + JHSchoolInfo.EduDirectorName +tmpStr+ "校長:" + JHSchoolInfo.ChancellorChineseName;
+            _data["簽呈"] = "承辦人員:" + Global.TransferName + tmpStr + "註冊組長:" + Global.RegManagerName + tmpStr + "教務主任:" + JHSchoolInfo.EduDirectorName + tmpStr + "校長:" + JHSchoolInfo.ChancellorChineseName;
             // 處理服務學習時數
             if (Global._SLRDict.ContainsKey(student.ID))
             {
@@ -127,22 +127,22 @@ namespace KaoHsiung.StudentRecordReport.Processor
                     {
                         string val = Global._SLRDict[student.ID][key];
 
-                        if (shi.GradeYear == 1 && shi.Semester == 1)
+                        if ((shi.GradeYear == 1 || shi.GradeYear == 7) && shi.Semester == 1)
                             _data["SLR1A"] = val;
 
-                        if (shi.GradeYear == 1 && shi.Semester == 2)
+                        if ((shi.GradeYear == 1 || shi.GradeYear == 7) && shi.Semester == 2)
                             _data["SLR1B"] = val;
 
-                        if (shi.GradeYear == 2 && shi.Semester == 1)
+                        if ((shi.GradeYear == 2 || shi.GradeYear == 8) && shi.Semester == 1)
                             _data["SLR2A"] = val;
 
-                        if (shi.GradeYear == 2 && shi.Semester == 2)
+                        if ((shi.GradeYear == 2 || shi.GradeYear == 8) && shi.Semester == 2)
                             _data["SLR2B"] = val;
 
-                        if (shi.GradeYear == 3 && shi.Semester == 1)
+                        if ((shi.GradeYear == 3 || shi.GradeYear == 9) && shi.Semester == 1)
                             _data["SLR3A"] = val;
 
-                        if (shi.GradeYear == 3 && shi.Semester == 2)
+                        if ((shi.GradeYear == 4 || shi.GradeYear == 9) && shi.Semester == 2)
                             _data["SLR3B"] = val;
                     }
                 }
@@ -178,7 +178,7 @@ namespace KaoHsiung.StudentRecordReport.Processor
             _data.Add("SLR2A", "0");
             _data.Add("SLR2B", "0");
             _data.Add("SLR3A", "0");
-            _data.Add("SLR3B", "0");         
+            _data.Add("SLR3B", "0");
             _names = new List<string>(_data.Keys);
         }
 
