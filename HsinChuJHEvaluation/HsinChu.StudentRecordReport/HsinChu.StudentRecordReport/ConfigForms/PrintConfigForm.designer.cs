@@ -60,7 +60,7 @@
             // 
             this.chkCredit.AutoSize = true;
             this.chkCredit.BackColor = System.Drawing.Color.Transparent;
-            this.chkCredit.Location = new System.Drawing.Point(171, 9);
+            this.chkCredit.Location = new System.Drawing.Point(186, 9);
             this.chkCredit.Name = "chkCredit";
             this.chkCredit.Size = new System.Drawing.Size(79, 21);
             this.chkCredit.TabIndex = 9;
@@ -71,7 +71,7 @@
             // 
             this.chkPeriod.AutoSize = true;
             this.chkPeriod.BackColor = System.Drawing.Color.Transparent;
-            this.chkPeriod.Location = new System.Drawing.Point(67, 9);
+            this.chkPeriod.Location = new System.Drawing.Point(82, 9);
             this.chkPeriod.Name = "chkPeriod";
             this.chkPeriod.Size = new System.Drawing.Size(79, 21);
             this.chkPeriod.TabIndex = 8;
@@ -87,7 +87,7 @@
             this.gpDomainSubject.DrawTitleBox = false;
             this.gpDomainSubject.Location = new System.Drawing.Point(7, 8);
             this.gpDomainSubject.Name = "gpDomainSubject";
-            this.gpDomainSubject.Size = new System.Drawing.Size(322, 139);
+            this.gpDomainSubject.Size = new System.Drawing.Size(352, 139);
             // 
             // 
             // 
@@ -131,7 +131,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(316, 112);
+            this.panel1.Size = new System.Drawing.Size(346, 112);
             this.panel1.TabIndex = 12;
             // 
             // rbSubject
@@ -188,7 +188,7 @@
             this.btnSave.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnSave.BackColor = System.Drawing.Color.Transparent;
             this.btnSave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSave.Location = new System.Drawing.Point(187, 366);
+            this.btnSave.Location = new System.Drawing.Point(214, 376);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 12;
@@ -200,7 +200,7 @@
             this.btnClose.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
             this.btnClose.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnClose.Location = new System.Drawing.Point(269, 366);
+            this.btnClose.Location = new System.Drawing.Point(299, 376);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(60, 23);
             this.btnClose.TabIndex = 12;
@@ -216,7 +216,7 @@
             this.gpPC.DrawTitleBox = false;
             this.gpPC.Location = new System.Drawing.Point(7, 153);
             this.gpPC.Name = "gpPC";
-            this.gpPC.Size = new System.Drawing.Size(322, 66);
+            this.gpPC.Size = new System.Drawing.Size(352, 66);
             // 
             // 
             // 
@@ -258,7 +258,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(316, 39);
+            this.panel2.Size = new System.Drawing.Size(346, 39);
             this.panel2.TabIndex = 12;
             // 
             // gpText
@@ -270,7 +270,7 @@
             this.gpText.DrawTitleBox = false;
             this.gpText.Location = new System.Drawing.Point(7, 225);
             this.gpText.Name = "gpText";
-            this.gpText.Size = new System.Drawing.Size(322, 66);
+            this.gpText.Size = new System.Drawing.Size(352, 66);
             // 
             // 
             // 
@@ -311,14 +311,14 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(316, 39);
+            this.panel3.Size = new System.Drawing.Size(346, 39);
             this.panel3.TabIndex = 12;
             // 
             // chkText
             // 
             this.chkText.AutoSize = true;
             this.chkText.BackColor = System.Drawing.Color.Transparent;
-            this.chkText.Location = new System.Drawing.Point(106, 9);
+            this.chkText.Location = new System.Drawing.Point(121, 9);
             this.chkText.Name = "chkText";
             this.chkText.Size = new System.Drawing.Size(105, 21);
             this.chkText.TabIndex = 8;
@@ -334,7 +334,7 @@
             this.groupPanel1.DrawTitleBox = false;
             this.groupPanel1.Location = new System.Drawing.Point(7, 294);
             this.groupPanel1.Name = "groupPanel1";
-            this.groupPanel1.Size = new System.Drawing.Size(322, 66);
+            this.groupPanel1.Size = new System.Drawing.Size(352, 70);
             // 
             // 
             // 
@@ -375,35 +375,35 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(316, 39);
+            this.panel4.Size = new System.Drawing.Size(346, 43);
             this.panel4.TabIndex = 12;
             // 
             // checkBoxX1
             // 
-            this.checkBoxX1.AutoSize = true;
             // 
             // 
             // 
             this.checkBoxX1.BackgroundStyle.Class = "";
             this.checkBoxX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.checkBoxX1.Location = new System.Drawing.Point(18, 8);
+            this.checkBoxX1.Location = new System.Drawing.Point(5, 3);
             this.checkBoxX1.Name = "checkBoxX1";
-            this.checkBoxX1.Size = new System.Drawing.Size(281, 21);
+            this.checkBoxX1.Size = new System.Drawing.Size(336, 33);
             this.checkBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.checkBoxX1.TabIndex = 0;
-            this.checkBoxX1.Text = "使用單檔列印(檔名：學號_班級_座號_姓名)";
+            this.checkBoxX1.Text = "使用單檔列印(檔名：學號_身分證_班級_座號_姓名)";
             this.checkBoxX1.TextColor = System.Drawing.Color.Black;
             // 
             // PrintConfigForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(337, 394);
+            this.ClientSize = new System.Drawing.Size(363, 408);
             this.Controls.Add(this.groupPanel1);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.gpText);
             this.Controls.Add(this.gpPC);
             this.Controls.Add(this.gpDomainSubject);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(345, 367);
             this.Name = "PrintConfigForm";
@@ -419,7 +419,6 @@
             this.panel3.PerformLayout();
             this.groupPanel1.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
             this.ResumeLayout(false);
 
         }

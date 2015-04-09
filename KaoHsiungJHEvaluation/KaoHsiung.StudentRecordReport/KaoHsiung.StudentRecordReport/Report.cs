@@ -290,6 +290,8 @@ namespace KaoHsiung.StudentRecordReport
                     string fileName = "";
                     fileName = student.StudentNumber;
 
+                    fileName += "_" + student.IDNumber;
+
                     if (!string.IsNullOrEmpty(student.RefClassID))
                         fileName += "_" + student.Class.Name;
                     else

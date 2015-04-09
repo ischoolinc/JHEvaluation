@@ -73,22 +73,22 @@ namespace HsinChu.StudentRecordReport
                     {
                         string val = Global._SLRDict[student.ID][key];
 
-                        if (shi.GradeYear == 1 && shi.Semester == 1)
+                        if ((shi.GradeYear == 1 || shi.GradeYear == 7) && shi.Semester == 1)
                             _data["SLR1A"] = val;
 
-                        if (shi.GradeYear == 1 && shi.Semester == 2)
+                        if ((shi.GradeYear == 1 || shi.GradeYear == 7) && shi.Semester == 2)
                             _data["SLR1B"] = val;
 
-                        if (shi.GradeYear == 2 && shi.Semester == 1)
+                        if ((shi.GradeYear == 2 || shi.GradeYear == 8) && shi.Semester == 1)
                             _data["SLR2A"] = val;
 
-                        if (shi.GradeYear == 2 && shi.Semester == 2)
+                        if ((shi.GradeYear == 2 || shi.GradeYear == 8) && shi.Semester == 2)
                             _data["SLR2B"] = val;
 
-                        if (shi.GradeYear == 3 && shi.Semester == 1)
+                        if ((shi.GradeYear == 3 || shi.GradeYear == 9) && shi.Semester == 1)
                             _data["SLR3A"] = val;
 
-                        if (shi.GradeYear == 3 && shi.Semester == 2)
+                        if ((shi.GradeYear == 3 || shi.GradeYear == 9) && shi.Semester == 2)
                             _data["SLR3B"] = val;
                     }
                 }

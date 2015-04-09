@@ -142,7 +142,7 @@ namespace KaoHsiung.StudentRecordReport.Processor
                         if ((shi.GradeYear == 3 || shi.GradeYear == 9) && shi.Semester == 1)
                             _data["SLR3A"] = val;
 
-                        if ((shi.GradeYear == 4 || shi.GradeYear == 9) && shi.Semester == 2)
+                        if ((shi.GradeYear == 3 || shi.GradeYear == 9) && shi.Semester == 2)
                             _data["SLR3B"] = val;
                     }
                 }

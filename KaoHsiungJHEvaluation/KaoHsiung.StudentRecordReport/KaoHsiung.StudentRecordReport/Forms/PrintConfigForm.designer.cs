@@ -93,7 +93,7 @@
             this.gpDomainSubject.DrawTitleBox = false;
             this.gpDomainSubject.Location = new System.Drawing.Point(7, 8);
             this.gpDomainSubject.Name = "gpDomainSubject";
-            this.gpDomainSubject.Size = new System.Drawing.Size(322, 139);
+            this.gpDomainSubject.Size = new System.Drawing.Size(372, 139);
             // 
             // 
             // 
@@ -137,7 +137,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(316, 112);
+            this.panel1.Size = new System.Drawing.Size(366, 112);
             this.panel1.TabIndex = 12;
             // 
             // rbSubject
@@ -222,7 +222,7 @@
             this.gpPC.DrawTitleBox = false;
             this.gpPC.Location = new System.Drawing.Point(7, 153);
             this.gpPC.Name = "gpPC";
-            this.gpPC.Size = new System.Drawing.Size(322, 66);
+            this.gpPC.Size = new System.Drawing.Size(372, 66);
             // 
             // 
             // 
@@ -264,7 +264,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(316, 39);
+            this.panel2.Size = new System.Drawing.Size(366, 39);
             this.panel2.TabIndex = 12;
             // 
             // gpText
@@ -276,7 +276,7 @@
             this.gpText.DrawTitleBox = false;
             this.gpText.Location = new System.Drawing.Point(7, 225);
             this.gpText.Name = "gpText";
-            this.gpText.Size = new System.Drawing.Size(322, 66);
+            this.gpText.Size = new System.Drawing.Size(372, 66);
             // 
             // 
             // 
@@ -317,7 +317,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(316, 39);
+            this.panel3.Size = new System.Drawing.Size(366, 39);
             this.panel3.TabIndex = 12;
             // 
             // chkText
@@ -340,7 +340,7 @@
             this.gpFormat.DrawTitleBox = false;
             this.gpFormat.Location = new System.Drawing.Point(7, 296);
             this.gpFormat.Name = "gpFormat";
-            this.gpFormat.Size = new System.Drawing.Size(322, 60);
+            this.gpFormat.Size = new System.Drawing.Size(372, 60);
             // 
             // 
             // 
@@ -382,7 +382,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(316, 33);
+            this.panel6.Size = new System.Drawing.Size(366, 33);
             this.panel6.TabIndex = 0;
             // 
             // rtnPDF
@@ -417,7 +417,7 @@
             this.groupPanel1.DrawTitleBox = false;
             this.groupPanel1.Location = new System.Drawing.Point(7, 362);
             this.groupPanel1.Name = "groupPanel1";
-            this.groupPanel1.Size = new System.Drawing.Size(322, 60);
+            this.groupPanel1.Size = new System.Drawing.Size(372, 60);
             // 
             // 
             // 
@@ -458,7 +458,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(316, 33);
+            this.panel4.Size = new System.Drawing.Size(366, 33);
             this.panel4.TabIndex = 0;
             // 
             // checkBoxX1
@@ -471,16 +471,16 @@
             this.checkBoxX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.checkBoxX1.Location = new System.Drawing.Point(18, 5);
             this.checkBoxX1.Name = "checkBoxX1";
-            this.checkBoxX1.Size = new System.Drawing.Size(281, 21);
+            this.checkBoxX1.Size = new System.Drawing.Size(327, 21);
             this.checkBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.checkBoxX1.TabIndex = 0;
-            this.checkBoxX1.Text = "使用單檔列印(檔名：學號_班級_座號_姓名)";
+            this.checkBoxX1.Text = "使用單檔列印(檔名：學號_身分證_班級_座號_姓名)";
             this.checkBoxX1.TextColor = System.Drawing.Color.Black;
             // 
             // PrintConfigForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(341, 461);
+            this.ClientSize = new System.Drawing.Size(389, 461);
             this.Controls.Add(this.groupPanel1);
             this.Controls.Add(this.gpFormat);
             this.Controls.Add(this.btnClose);
@@ -488,6 +488,7 @@
             this.Controls.Add(this.gpText);
             this.Controls.Add(this.gpPC);
             this.Controls.Add(this.gpDomainSubject);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "PrintConfigForm";
             this.Text = "列印設定";

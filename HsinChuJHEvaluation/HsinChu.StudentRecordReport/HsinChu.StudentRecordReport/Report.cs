@@ -352,11 +352,11 @@ namespace HsinChu.StudentRecordReport
                             rm = false;
                             break;
                         }
-                    
-                    if(rm)
+
+                    if (rm)
                         table.Rows[i].Remove();
                 }
-       
+
                 #endregion
 
                 if (OneFileSave)
@@ -365,6 +365,8 @@ namespace HsinChu.StudentRecordReport
 
                     string fileName = "";
                     fileName = student.StudentNumber;
+
+                    fileName += "_" + student.IDNumber;
 
                     if (!string.IsNullOrEmpty(student.RefClassID))
                         fileName += "_" + student.Class.Name;
