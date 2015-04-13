@@ -178,11 +178,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             if (!Subj.Domains.Contains(strDomain)) continue;
 
                             SemesterDomainScore domain = semsscore.Domain[strDomain];
-
+                                                        
                             if (strDomain != "" || strDomain != "彈性課程")  
-                            {
-                            //if (!DetailDomain.Contains(strDomain))
-                            //{
+                            {                          
                                 RowHeader header = new RowHeader(strDomain, string.Empty);
                                 header.IsDomain = true;
 
@@ -197,6 +195,20 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     RowIndexs.Add(lheader);
 
                     List<RowHeader> sortedHeaders = SortHeader(RowIndexs.ToList());
+
+                    if(Program.Mode == ModuleMode.HsinChu)
+                    {
+                        // 新竹板移除語文
+                        int rmIdx = -1, idx = 0; ;
+                        foreach (RowHeader rh in sortedHeaders)
+                        {
+                            if (rh.Domain == "語文" && rh.IsDomain == true && rh.Subject == "")
+                                rmIdx = idx;
+                            idx++;
+                        }
+                        if (rmIdx > 0)
+                            sortedHeaders.RemoveAt(rmIdx);
+                    }
 
                     //產生 Row。
                     List<RowHeader> indexHeaders = new List<RowHeader>();

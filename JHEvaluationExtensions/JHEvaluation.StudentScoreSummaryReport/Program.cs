@@ -91,7 +91,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
 //            Mode = ModuleMode.KaoHsiung; //高雄。
 
-            //Mode = ModuleMode.HsinChu;  //新竹。
+//            Mode = ModuleMode.HsinChu;  //新竹。
         }
     }
 
