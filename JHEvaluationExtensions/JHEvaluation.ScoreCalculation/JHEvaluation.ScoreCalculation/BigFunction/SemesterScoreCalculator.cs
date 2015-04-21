@@ -119,6 +119,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 //文字評量串接。
                 Dictionary<string, string> domainText = new Dictionary<string, string>();
 
+                //被限制不能超過60分的領域(該領域的科目有補考成績)
+                List<string> LimitedDomains = new List<string>();
+
                 // 只計算領域成績，不計算科目
                 bool OnlyCalcDomainScore = false;
 
@@ -132,6 +135,10 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     string strDomainName = objSubj.Domain.Trim();
                     if (!string.IsNullOrEmpty(strDomainName))
                         CheckSubjDomainisNotNullCot++;
+
+                    //該領域的科目有補考成績將被加入
+                    if (objSubj.ScoreMakeup.HasValue && !LimitedDomains.Contains(strDomainName))
+                        LimitedDomains.Add(strDomainName);
                 }
 
                 // 當沒有科目成績或科目成績內領域沒有非空白，只計算領域成績。
@@ -217,9 +224,10 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         dscore.Text = text;
                         dscore.Effort = effortmap.GetCodeByScore(weightAvg);
 
+                        //後面會有一段code執行全領域的擇優判斷,此段已不需要
                         //若有補考成績就進行擇優,否則就將科目的擇優平均帶入領域成績
-                        if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
-                            dscore.BetterScoreSelection(); //進行成績擇優。
+                        //if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
+                            //dscore.BetterScoreSelection(); //進行成績擇優。
                         //else
                             //dscore.Value = weightAvg;
                     }
@@ -236,17 +244,19 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     }
                     #endregion
                 }
-                
-                //else //雖不需計算領域成績，但是仍然需要擇優運算。如果有補考成績就擇優
-                //{
-                    foreach (var domain in dscores.ToArray())
-                    {
-                        SemesterDomainScore objDomain = dscores[domain];
 
-                        if (objDomain.ScoreOrigin.HasValue || objDomain.ScoreMakeup.HasValue)
-                            objDomain.BetterScoreSelection();
-                    }
-                //}
+                //這段會對全部領域做一次擇優
+                foreach (var domain in dscores.ToArray())
+                {
+                    SemesterDomainScore objDomain = dscores[domain];
+
+                    if (objDomain.ScoreOrigin.HasValue || objDomain.ScoreMakeup.HasValue)
+                        objDomain.BetterScoreSelection();
+
+                    //此領域成績被限制為不能超過60分
+                    if (LimitedDomains.Contains(domain) && objDomain.Value > 60)
+                        objDomain.Value = 60;
+                }
 
                 //計算課程學習成績。
                 ScoreResult result = CalcDomainWeightAvgScore(dscores, new UniqueSet<string>());
