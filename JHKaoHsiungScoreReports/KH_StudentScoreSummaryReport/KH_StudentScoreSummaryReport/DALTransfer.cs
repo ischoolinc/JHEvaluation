@@ -54,6 +54,8 @@ namespace KH_StudentScoreSummaryReport
             retVal.Add("派外人員子女滿一學年未滿二學年");
             retVal.Add("派外人員子女滿二學年未滿三學年");
             retVal.Add("資賦優異縮短修業年限學生");
+            retVal.Add("回國僑生");
+            retVal.Add("港澳生");
             return retVal;
         }
 
