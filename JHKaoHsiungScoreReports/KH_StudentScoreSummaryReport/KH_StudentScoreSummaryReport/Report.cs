@@ -47,6 +47,8 @@ namespace KH_StudentScoreSummaryReport
         private const string StudSpcName5 = "蒙藏生";
         private const string StudSpcName6 = "身心障礙生";
         private const string StudSpcName7 = "資賦優異縮短修業年限學生";
+        private const string StudSpcName8 = "回國僑生";
+        private const string StudSpcName9 = "港澳生";
 
         // 服務學習
         Dictionary<string, List<SLRecord>> _SLRecordDict = new Dictionary<string, List<SLRecord>>();
@@ -2130,6 +2132,34 @@ namespace KH_StudentScoreSummaryReport
                         }
                         break;
 
+                    case "特身名稱8":
+                        if (string.IsNullOrEmpty(student.SpcStudTypeName))
+                        {
+                            fieldValue = "□" + StudSpcName8;
+                        }
+                        else
+                        {
+                            if (StudSpcName8.Trim() == student.SpcStudTypeName.Trim())
+                                fieldValue = "■" + StudSpcName8;
+                            else
+                                fieldValue = "□" + StudSpcName8;
+
+                        }
+                        break;
+                    case "特身名稱9":
+                        if (string.IsNullOrEmpty(student.SpcStudTypeName))
+                        {
+                            fieldValue = "□" + StudSpcName9;
+                        }
+                        else
+                        {
+                            if (StudSpcName9.Trim() == student.SpcStudTypeName.Trim())
+                                fieldValue = "■" + StudSpcName9;
+                            else
+                                fieldValue = "□" + StudSpcName9;
+
+                        }
+                        break;
                     case "積分:均衡學習":
                         fieldValue = student.CreditDomainScore;
                         break;
