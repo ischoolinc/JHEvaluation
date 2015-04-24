@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Campus;
 using JHSchool.Data;
 using K12.Data;
 
@@ -50,18 +51,59 @@ namespace JHEvaluation.Rating
             return Histories[studentId][schoolYear][semester];
         }
 
+        /// <summary>
+        /// 判斷是否有該學生的學期歷程。
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <param name="schoolYear"></param>
+        /// <param name="semester"></param>
+        /// <returns></returns>
         public bool Contains(string studentId, int schoolYear, int semester)
         {
             if (Histories.ContainsKey(studentId))
             {
-                if (Histories[studentId].ContainsKey(schoolYear))
+                List<SemesterData> distinct = DistinctSemester(studentId);
+
+                SemesterData found = distinct.Find(sd =>
                 {
-                    if (Histories[studentId][schoolYear].ContainsKey(semester))
+                    if (sd.SchoolYear == schoolYear && sd.Semester == semester)
                         return true;
-                }
+                    else
+                        return false;
+                });
+
+                return found != new SemesterData();
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// 將重讀的處理掉，以最新學期為主。
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <returns></returns>
+        private List<SemesterData> DistinctSemester(string studentId)
+        {
+            List<SemesterData> semesters = new List<SemesterData>();
+
+            //將所有學期歷程先放入 semesters 清單。
+            foreach (KeyValuePair<int, Dictionary<int, SemesterHistoryItem>> sy in Histories[studentId])
+            {
+                int sYear = sy.Key;
+                foreach (KeyValuePair<int, SemesterHistoryItem> ss in sy.Value)
+                {
+                    int sSems = ss.Key;
+                    int gradeYear = ss.Value.GradeYear;
+
+                    semesters.Add(new SemesterData(gradeYear, sYear, sSems));
+                }
+            }
+
+            //去掉重讀的。
+            List<SemesterData> distinct = SemesterData.DistinctGradeYear(semesters.ToArray()).ToList();
+
+            return distinct;
         }
 
         private string GetSemesterString(int semester)
