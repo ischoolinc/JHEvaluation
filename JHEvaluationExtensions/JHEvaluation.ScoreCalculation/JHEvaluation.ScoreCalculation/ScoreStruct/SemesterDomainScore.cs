@@ -73,6 +73,8 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
 
             if (newScore >= oldScore)
                 Value = newScore;
+
+            //Value = betterScore;
         }
 
         #region IScore 成員

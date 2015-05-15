@@ -37,6 +37,10 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     {
                         SemesterSubjectScore sss = Sems.Subject[subject];
 
+                        //沒有原始成績就將既有的成績填入
+                        if (!sss.ScoreOrigin.HasValue)
+                            sss.ScoreOrigin = sss.Value;
+
                         //有原始或補考成績才做擇優
                         if (sss.ScoreOrigin.HasValue || sss.ScoreMakeup.HasValue)
                             sss.BetterScoreSelection();
@@ -249,6 +253,10 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 foreach (var domain in dscores.ToArray())
                 {
                     SemesterDomainScore objDomain = dscores[domain];
+
+                    //沒有原始成績就將既有的成績填入
+                    //if (!objDomain.ScoreOrigin.HasValue)
+                       // objDomain.ScoreOrigin = objDomain.Value;
 
                     if (objDomain.ScoreOrigin.HasValue || objDomain.ScoreMakeup.HasValue)
                         objDomain.BetterScoreSelection();

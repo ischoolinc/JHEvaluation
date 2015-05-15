@@ -77,11 +77,13 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         {
             decimal? betterScore = SubjectScore.GetBetterScore(ScoreOrigin, ScoreMakeup);
 
-            decimal newScore = betterScore.HasValue ? betterScore.Value : 0;
-            decimal oldScore = Value.HasValue ? Value.Value : 0;
+            //decimal newScore = betterScore.HasValue ? betterScore.Value : 0;
+            //decimal oldScore = Value.HasValue ? Value.Value : 0;
 
-            if (newScore >= oldScore)
-                Value = newScore;
+            //if (newScore >= oldScore)
+            //    Value = newScore;
+
+            Value = betterScore;
         }
 
         #region IScore 成員
