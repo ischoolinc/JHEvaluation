@@ -200,7 +200,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 if (!IsValidSubject(each))
                     continue;
 
-                courses.Add(each.ID, each);
+                if (!courses.ContainsKey(each.ID))
+                    courses.Add(each.ID, each);
             }
 
             return courses;
