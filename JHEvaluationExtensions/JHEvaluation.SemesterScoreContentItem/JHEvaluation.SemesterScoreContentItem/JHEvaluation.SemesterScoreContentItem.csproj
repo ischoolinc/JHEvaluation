@@ -104,6 +104,7 @@
     </Reference>
     <Reference Include="JHSchool.Evaluation">
       <HintPath>library\JHSchool.Evaluation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.SF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>library\JHSchool.SF.dll</HintPath>
