@@ -34,6 +34,7 @@
             this.labelX3 = new DevComponents.DotNetBar.LabelX();
             this.labelX2 = new DevComponents.DotNetBar.LabelX();
             this.chkClearDomainScore = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.chkScoreLimite = new DevComponents.DotNetBar.Controls.CheckBoxX();
             ((System.ComponentModel.ISupportInitialize)(this.intSemester)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.intSchoolYear)).BeginInit();
             this.SuspendLayout();
@@ -44,7 +45,7 @@
             this.btnCalc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCalc.BackColor = System.Drawing.Color.Transparent;
             this.btnCalc.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnCalc.Location = new System.Drawing.Point(233, 64);
+            this.btnCalc.Location = new System.Drawing.Point(228, 90);
             this.btnCalc.Name = "btnCalc";
             this.btnCalc.Size = new System.Drawing.Size(75, 23);
             this.btnCalc.TabIndex = 8;
@@ -119,18 +120,37 @@
             // 
             this.chkClearDomainScore.BackgroundStyle.Class = "";
             this.chkClearDomainScore.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.chkClearDomainScore.Location = new System.Drawing.Point(27, 64);
+            this.chkClearDomainScore.Location = new System.Drawing.Point(12, 64);
             this.chkClearDomainScore.Name = "chkClearDomainScore";
             this.chkClearDomainScore.Size = new System.Drawing.Size(191, 23);
             this.chkClearDomainScore.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkClearDomainScore.TabIndex = 19;
             this.chkClearDomainScore.Text = "刪除全部領域成績並重算";
             // 
+            // chkScoreLimite
+            // 
+            this.chkScoreLimite.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.chkScoreLimite.BackgroundStyle.Class = "";
+            this.chkScoreLimite.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.chkScoreLimite.Checked = true;
+            this.chkScoreLimite.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkScoreLimite.CheckValue = "Y";
+            this.chkScoreLimite.Location = new System.Drawing.Point(12, 93);
+            this.chkScoreLimite.Name = "chkScoreLimite";
+            this.chkScoreLimite.Size = new System.Drawing.Size(206, 23);
+            this.chkScoreLimite.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.chkScoreLimite.TabIndex = 20;
+            this.chkScoreLimite.Text = "補考科目該領域不得超過60分";
+            // 
             // DomainScoreCalculate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(330, 107);
+            this.ClientSize = new System.Drawing.Size(325, 133);
+            this.Controls.Add(this.chkScoreLimite);
             this.Controls.Add(this.chkClearDomainScore);
             this.Controls.Add(this.intSemester);
             this.Controls.Add(this.intSchoolYear);
@@ -155,5 +175,6 @@
         private DevComponents.DotNetBar.LabelX labelX3;
         private DevComponents.DotNetBar.LabelX labelX2;
         private DevComponents.DotNetBar.Controls.CheckBoxX chkClearDomainScore;
+        private DevComponents.DotNetBar.Controls.CheckBoxX chkScoreLimite;
     }
 }

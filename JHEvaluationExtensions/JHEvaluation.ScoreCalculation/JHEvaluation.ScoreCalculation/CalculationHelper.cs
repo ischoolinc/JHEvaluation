@@ -90,16 +90,26 @@ namespace JHEvaluation.ScoreCalculation
         public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
             IEnumerable<string> filterDomain)
         {
-            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null),false);
+            //new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null),false);
+            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null), new DomainScoreSetting(false,false));
         }
 
         /// <summary>
         /// 計算領域成績。(new)
         /// </summary>
+        //public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
+        //    IEnumerable<string> filterDomain,bool clearDomainScore)
+        //{
+        //    new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null), clearDomainScore);
+        //}
+
+        /// <summary>
+        /// 計算領域成績。(new on 2015.06.10)
+        /// </summary>
         public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
-            IEnumerable<string> filterDomain,bool clearDomainScore)
+            IEnumerable<string> filterDomain, DomainScoreSetting setting)
         {
-            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null), clearDomainScore);
+            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null), setting);
         }
 
         /// <summary>
@@ -109,17 +119,28 @@ namespace JHEvaluation.ScoreCalculation
             IEnumerable<string> filterDomain,
             ScoreCalculator defaultRule)
         {
-            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule,false);
+            //new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule,false);
+            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule, new DomainScoreSetting(false,false));
         }
 
         /// <summary>
         /// 計算領域成績。(new)
         /// </summary>
+        //public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
+        //    IEnumerable<string> filterDomain,
+        //    ScoreCalculator defaultRule, bool clearDomainScore)
+        //{
+        //    new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule, clearDomainScore);
+        //}
+
+        /// <summary>
+        /// 計算領域成績。(new on 2015.06.10)
+        /// </summary>
         public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
             IEnumerable<string> filterDomain,
-            ScoreCalculator defaultRule, bool clearDomainScore)
+            ScoreCalculator defaultRule, DomainScoreSetting setting)
         {
-            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule, clearDomainScore);
+            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule, setting);
         }
 
         /// <summary>

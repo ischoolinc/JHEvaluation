@@ -98,7 +98,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         /// 計算領域成績
         /// </summary>
         /// <param name="defaultRule"></param>
-        public void CalculateDomainScore(ScoreCalculator defaultRule,bool clearDomainScore)
+        //public void CalculateDomainScore(ScoreCalculator defaultRule,bool clearDomainScore)
+        public void CalculateDomainScore(ScoreCalculator defaultRule,DomainScoreSetting setting)
         {
             EffortMap effortmap = new EffortMap(); //努力程度對照表。
 
@@ -237,7 +238,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     }
 
                     //清除不應該存在領域成績
-                    if (clearDomainScore)
+                    //if (clearDomainScore)
+                    if (setting.DomainScoreClear)
                     {
                         foreach (var domainName in dscores.ToArray())
                         {
@@ -261,9 +263,12 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     if (objDomain.ScoreOrigin.HasValue || objDomain.ScoreMakeup.HasValue)
                         objDomain.BetterScoreSelection();
 
-                    //此領域成績被限制為不能超過60分
-                    if (LimitedDomains.Contains(domain) && objDomain.Value > 60)
-                        objDomain.Value = 60;
+                    //領域成績被限制為不能超過60分
+                    if (setting.DomainScoreLimit)
+                    {
+                        if (LimitedDomains.Contains(domain) && objDomain.Value > 60)
+                            objDomain.Value = 60;
+                    }
                 }
 
                 //計算課程學習成績。

@@ -18,11 +18,13 @@ namespace JHEvaluation.ScoreCalculation
         private int SchoolYear { get; set; }
         private int Semester { get; set; }
 
-        private bool _ClearDomainScore;
+        //private bool _ClearDomainScore;
+        private DomainScoreSetting _domainScoreSetting;
 
         public DomainScoreCalculateByGradeyear()
         {
             InitializeComponent();
+            _domainScoreSetting = new DomainScoreSetting(false, false);
         }
 
         private void DomainScoreCalculateByGradeyear_Load(object sender, EventArgs e)
@@ -48,9 +50,12 @@ namespace JHEvaluation.ScoreCalculation
 
         private void btnCalc_Click(object sender, EventArgs e)
         {
-            _ClearDomainScore = chkClearDomainScore.Checked;
+            //_ClearDomainScore = chkClearDomainScore.Checked;
+            _domainScoreSetting.DomainScoreClear = chkClearDomainScore.Checked;
+            _domainScoreSetting.DomainScoreLimit = chkScoreLimite.Checked;
 
-            if (_ClearDomainScore)
+            //if (_ClearDomainScore)
+            if (_domainScoreSetting.DomainScoreClear)
             {
                 if (MsgBox.Show("確認要進行全部刪除並重新計算?", MessageBoxButtons.YesNo) == DialogResult.No)
                 {
@@ -98,7 +103,8 @@ namespace JHEvaluation.ScoreCalculation
 
             if (RecalculateAll) Students.ClearDomainScore(SemesterData.Empty);
 
-            Students.CalcuateDomainSemesterScore(new string[] { }, _ClearDomainScore);
+            //Students.CalcuateDomainSemesterScore(new string[] { }, _ClearDomainScore);
+            Students.CalcuateDomainSemesterScore(new string[] { }, _domainScoreSetting);
             Students.SaveSemesterScore(this);
 
             //儲存 Log。

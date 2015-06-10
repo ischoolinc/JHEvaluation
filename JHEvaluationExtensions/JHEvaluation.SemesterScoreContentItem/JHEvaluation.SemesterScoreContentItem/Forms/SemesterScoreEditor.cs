@@ -1290,6 +1290,9 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             if (!valid) return;
             #endregion
 
+            //2015.06.10 by Cloud
+            DomainScoreSetting setting = new DomainScoreSetting(false, chkScoreLimit.Checked);
+
             // 是否只計算領域
             bool OnlyCalcDomain = false;
             if (dgvSubject.Rows.Count == 0 || SubjHasDomainCount == 0)
@@ -1325,7 +1328,8 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             //讀取計算規則
             students.ReadCalculationRule(null);
             //計算領域成績
-            students.CalcuateDomainSemesterScore(new string[] { });
+            //students.CalcuateDomainSemesterScore(new string[] { });
+            students.CalcuateDomainSemesterScore(new string[] { },setting);
 
             dgvDomain.SuspendLayout();
             dgvDomain.Rows.Clear();
@@ -1470,6 +1474,24 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
 
         private void btnPreSubjScore_Click(object sender, EventArgs e)
         {
+            //科目名稱重覆算下去會爆炸,所以這邊先檢查一次
+            List<string> subjs = new List<string>();
+            foreach (DataGridViewRow row in dgvSubject.Rows)
+            {
+                if (row.IsNewRow) continue;
+                if(IsEmptyRow((row))) continue;
+
+                string subj = row.Cells[chsSubject.Index].Value + "";
+
+                if (subjs.Contains(subj))
+                {
+                    MessageBox.Show("科目名稱重覆,無法進行試算");
+                    return;
+                }
+                else
+                    subjs.Add(subj);
+            }
+
             StudentScore.SetClassMapping();
             StudentScore studentScore = new StudentScore(_student);
 
