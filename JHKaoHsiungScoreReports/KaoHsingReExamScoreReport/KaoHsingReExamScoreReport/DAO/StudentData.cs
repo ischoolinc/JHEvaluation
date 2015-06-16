@@ -40,5 +40,15 @@ namespace KaoHsingReExamScoreReport.DAO
         /// 學期成績
         /// </summary>
         public JHSemesterScoreRecord SemesterScoreRecord = new JHSemesterScoreRecord();
+
+        /// <summary>
+        /// 判斷領域成績是否及格，及格 True,
+        /// </summary>
+        public Dictionary<string, bool> DomainScorePassDict = new Dictionary<string, bool>();
+
+        /// <summary>
+        /// 領域成績
+        /// </summary>
+        public Dictionary<string, decimal> DomainScoreDict = new Dictionary<string, decimal>();
     }
 }

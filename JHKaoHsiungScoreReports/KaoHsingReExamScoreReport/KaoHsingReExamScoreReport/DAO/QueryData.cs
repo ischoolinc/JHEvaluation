@@ -14,7 +14,7 @@ namespace KaoHsingReExamScoreReport.DAO
         /// </summary>
         /// <param name="ClassIDList"></param>
         /// <returns></returns>
-        public List<StudentData> GetStudentDataListByClassIDs(List<string> ClassIDList)
+        public static List<StudentData> GetStudentDataListByClassIDs(List<string> ClassIDList)
         {
             List<StudentData> retVal = new List<StudentData>();
             QueryHelper qh = new QueryHelper();
@@ -41,11 +41,11 @@ namespace KaoHsingReExamScoreReport.DAO
         /// </summary>
         /// <param name="ClassIDList"></param>
         /// <returns></returns>
-        public List<ClassData> GetClassDataByClassIDs(List<string> ClassIDList)
+        public static List<ClassData> GetClassDataByClassIDs(List<string> ClassIDList)
         {
             List<ClassData> retVal = new List<ClassData>();
             QueryHelper qh = new QueryHelper();
-            string strSQL = "select class.id as cid,class_name ,teacher_name,grade_year from class inner join teacher on class.ref_teacher_id=teacher.id where class.id in("+string.Join(",",ClassIDList.ToArray())+") order by class_name;";
+            string strSQL = "select class.id as cid,class_name ,teacher_name,grade_year from class inner join teacher on class.ref_teacher_id=teacher.id where class.id in("+string.Join(",",ClassIDList.ToArray())+") order by class.grade_year,class_name;";
             DataTable dt = qh.Select(strSQL);
 
             foreach (DataRow dr in dt.Rows)
