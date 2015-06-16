@@ -104,6 +104,12 @@
     <Compile Include="Forms\ReDomainForTeacherForm.Designer.cs">
       <DependentUpon>ReDomainForTeacherForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ReDomainForUserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReDomainForUserForm.Designer.cs">
+      <DependentUpon>ReDomainForUserForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -150,6 +156,9 @@
     <EmbeddedResource Include="Forms\ReDomainForTeacherForm.resx">
       <DependentUpon>ReDomainForTeacherForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReDomainForUserForm.resx">
+      <DependentUpon>ReDomainForUserForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -157,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Template\給班導師樣版.xlsx" />
+    <None Include="Template\給試務樣版.xlsx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
