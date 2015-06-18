@@ -658,18 +658,15 @@ namespace KaoHsiung.StudentExamScoreReport
                 Document each = (Document)_template.Clone(true);
                 DocumentBuilder builder = new DocumentBuilder(each);
 
-                #region 學生基本資料
-                StudentBasicInfo basicInfo = new StudentBasicInfo(builder);
-                basicInfo.SetStudent(student);
-                #endregion
 
-                #region 班導師
-                builder.MoveToMergeField("班導師");
-                if (historyCache.ContainsKey(student.ID))
-                    builder.Write(historyCache[student.ID].Teacher);
-                else
-                    builder.Write(string.Empty);
-                #endregion
+
+                //#region 班導師
+                //builder.MoveToMergeField("班導師");
+                //if (historyCache.ContainsKey(student.ID))
+                //    builder.Write(historyCache[student.ID].Teacher);
+                //else
+                //    builder.Write(string.Empty);
+                //#endregion
 
                 #region 成績
                 List<KH.JHSCETakeRecord> sceScoreList = null;
@@ -756,6 +753,11 @@ namespace KaoHsiung.StudentExamScoreReport
 
                 StudentMoralScore moral = new StudentMoralScore(builder, _config, periodMapping, absenceList);
                 moral.SetData(meritList, demeritList, attendanceList);
+                #endregion
+
+                #region 學生基本資料
+                StudentBasicInfo basicInfo = new StudentBasicInfo(builder);
+                basicInfo.SetStudent(student);
                 #endregion
 
                 foreach (Section sec in each.Sections)

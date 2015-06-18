@@ -40,14 +40,16 @@
             this.txtSDate = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.txtEDate = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.labelX4 = new DevComponents.DotNetBar.LabelX();
-            this.cboSchoolYear = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX5 = new DevComponents.DotNetBar.LabelX();
-            this.cboSemester = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX6 = new DevComponents.DotNetBar.LabelX();
             this.txtCorrect = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.lvSubject = new DevComponents.DotNetBar.Controls.ListViewEx();
             this.groupPanel1 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.iptSchoolYear = new DevComponents.Editors.IntegerInput();
+            this.iptSemester = new DevComponents.Editors.IntegerInput();
             this.groupPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).BeginInit();
             this.SuspendLayout();
             // 
             // cbExam
@@ -197,19 +199,6 @@
             this.labelX4.TabIndex = 0;
             this.labelX4.Text = "學年度";
             // 
-            // cboSchoolYear
-            // 
-            this.cboSchoolYear.DisplayMember = "Text";
-            this.cboSchoolYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cboSchoolYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboSchoolYear.FormattingEnabled = true;
-            this.cboSchoolYear.ItemHeight = 19;
-            this.cboSchoolYear.Location = new System.Drawing.Point(64, 11);
-            this.cboSchoolYear.Name = "cboSchoolYear";
-            this.cboSchoolYear.Size = new System.Drawing.Size(65, 25);
-            this.cboSchoolYear.TabIndex = 1;
-            this.cboSchoolYear.SelectedIndexChanged += new System.EventHandler(this.cboSchoolYear_SelectedIndexChanged);
-            // 
             // labelX5
             // 
             this.labelX5.BackColor = System.Drawing.Color.Transparent;
@@ -223,19 +212,6 @@
             this.labelX5.Size = new System.Drawing.Size(37, 23);
             this.labelX5.TabIndex = 2;
             this.labelX5.Text = "學期";
-            // 
-            // cboSemester
-            // 
-            this.cboSemester.DisplayMember = "Text";
-            this.cboSemester.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cboSemester.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboSemester.FormattingEnabled = true;
-            this.cboSemester.ItemHeight = 19;
-            this.cboSemester.Location = new System.Drawing.Point(189, 11);
-            this.cboSemester.Name = "cboSemester";
-            this.cboSemester.Size = new System.Drawing.Size(55, 25);
-            this.cboSemester.TabIndex = 3;
-            this.cboSemester.SelectedIndexChanged += new System.EventHandler(this.cboSemester_SelectedIndexChanged);
             // 
             // labelX6
             // 
@@ -324,15 +300,51 @@
             this.groupPanel1.TabIndex = 17;
             this.groupPanel1.Text = "科目";
             // 
+            // iptSchoolYear
+            // 
+            this.iptSchoolYear.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.iptSchoolYear.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.iptSchoolYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.iptSchoolYear.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.iptSchoolYear.Location = new System.Drawing.Point(61, 11);
+            this.iptSchoolYear.MaxValue = 999;
+            this.iptSchoolYear.MinValue = 1;
+            this.iptSchoolYear.Name = "iptSchoolYear";
+            this.iptSchoolYear.ShowUpDown = true;
+            this.iptSchoolYear.Size = new System.Drawing.Size(80, 25);
+            this.iptSchoolYear.TabIndex = 18;
+            this.iptSchoolYear.Value = 1;
+            // 
+            // iptSemester
+            // 
+            this.iptSemester.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.iptSemester.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.iptSemester.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.iptSemester.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.iptSemester.Location = new System.Drawing.Point(192, 11);
+            this.iptSemester.MaxValue = 2;
+            this.iptSemester.MinValue = 1;
+            this.iptSemester.Name = "iptSemester";
+            this.iptSemester.ShowUpDown = true;
+            this.iptSemester.Size = new System.Drawing.Size(80, 25);
+            this.iptSemester.TabIndex = 19;
+            this.iptSemester.Value = 1;
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(332, 317);
+            this.Controls.Add(this.iptSemester);
+            this.Controls.Add(this.iptSchoolYear);
             this.Controls.Add(this.groupPanel1);
             this.Controls.Add(this.txtCorrect);
             this.Controls.Add(this.labelX6);
-            this.Controls.Add(this.cboSemester);
-            this.Controls.Add(this.cboSchoolYear);
             this.Controls.Add(this.labelX5);
             this.Controls.Add(this.labelX4);
             this.Controls.Add(this.txtEDate);
@@ -346,11 +358,13 @@
             this.Controls.Add(this.labelX1);
             this.Controls.Add(this.cbExam);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MainForm";
             this.Text = "";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -369,13 +383,13 @@
         private DevComponents.DotNetBar.Controls.TextBoxX txtSDate;
         private DevComponents.DotNetBar.Controls.TextBoxX txtEDate;
         private DevComponents.DotNetBar.LabelX labelX4;
-        private DevComponents.DotNetBar.Controls.ComboBoxEx cboSchoolYear;
         private DevComponents.DotNetBar.LabelX labelX5;
-        private DevComponents.DotNetBar.Controls.ComboBoxEx cboSemester;
         private DevComponents.DotNetBar.LabelX labelX6;
         private DevComponents.DotNetBar.Controls.TextBoxX txtCorrect;
         private DevComponents.DotNetBar.Controls.ListViewEx lvSubject;
         private DevComponents.DotNetBar.Controls.GroupPanel groupPanel1;
+        private DevComponents.Editors.IntegerInput iptSchoolYear;
+        private DevComponents.Editors.IntegerInput iptSemester;
     }
 }
 

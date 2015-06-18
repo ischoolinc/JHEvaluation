@@ -37,14 +37,16 @@ namespace KaoHsiung.StudentExamScoreReport.Processor
             // 使用學期歷程內設定
             _data["班級"] = (student.Class != null ? student.Class.Name : "");
             _data["座號"] = "" + student.SeatNo;
-            _data["班導師"] = teacherName;
+            if(_data.ContainsKey("班導師"))
+                _data["班導師"] = teacherName;
             if (Config._StudSemesterHistoryItemDict.ContainsKey(student.ID))
             {
                 _data["班級"] = Config._StudSemesterHistoryItemDict[student.ID].ClassName;
                 if (Config._StudSemesterHistoryItemDict[student.ID].SeatNo.HasValue)
                     _data["座號"] = Config._StudSemesterHistoryItemDict[student.ID].SeatNo.Value.ToString();
 
-                _data["班導師"] = Config._StudSemesterHistoryItemDict[student.ID].Teacher;
+               if(_data.ContainsKey("班導師"))
+                    _data["班導師"] = Config._StudSemesterHistoryItemDict[student.ID].Teacher;
             }
 
             _data["學號"] = student.StudentNumber;

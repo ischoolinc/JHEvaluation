@@ -116,19 +116,13 @@ namespace KaoHsiung.StudentExamScoreReport
             {
                 int schoolYear = int.Parse(School.DefaultSchoolYear);
                 int semester = int.Parse(School.DefaultSemester);
-                for (int i = -3; i <= 2; i++)
-                    cboSchoolYear.Items.Add(schoolYear + i);
-                cboSemester.Items.Add(1);
-                cboSemester.Items.Add(2);
 
-                //cboSchoolYear.SelectedIndex = 2;
-                //cboSemester.SelectedIndex = semester - 1;
-                cboSchoolYear.Text = schoolYear.ToString();
-                cboSemester.Text = semester.ToString();
+                iptSchoolYear.Value = schoolYear;
+                iptSemester.Value = semester;
             }
             catch (Exception ex)
             {
-
+                FISCA.Presentation.Controls.MsgBox.Show(ex.Message);
             }
         }
 
@@ -216,8 +210,8 @@ namespace KaoHsiung.StudentExamScoreReport
             _config.SetExam(exam);
             _config.SetDateRange(from, to);
             _config.SetStudents(students);
-            _config.SchoolYear = (int)cboSchoolYear.SelectedItem;
-            _config.Semester = (int)cboSemester.SelectedItem;
+            _config.SchoolYear = iptSchoolYear.Value;
+            _config.Semester = iptSemester.Value;
 
             _config.Load();
             Report report = new Report(_config);
@@ -299,7 +293,7 @@ namespace KaoHsiung.StudentExamScoreReport
                 studIDList = Utility.GetClassStudentIDList18ByClassIDList(K12.Presentation.NLDPanels.Class.SelectedSource);
             }
 
-            Global._CourseIDSubjectDict = Utility.Get_SCAttend_CourseID_Subject(studIDList, cbExam.Text, cboSchoolYear.Text, cboSemester.Text);
+            Global._CourseIDSubjectDict = Utility.Get_SCAttend_CourseID_Subject(studIDList, cbExam.Text, iptSchoolYear.Value.ToString(), iptSemester.Value.ToString());
             List<string> subjNameList = Global._CourseIDSubjectDict.Values.Distinct().ToList();
 
             foreach (string str in subjNameList)
