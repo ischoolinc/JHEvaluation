@@ -41,6 +41,7 @@ namespace KaoHsingReExamScoreReport
             {
                 if (studSemsScoreDict.ContainsKey(sd.StudentID))
                 {
+                    sd.StudSemesterScoreRecord = studSemsScoreDict[sd.StudentID];
                     foreach (DomainScore ds in studSemsScoreDict[sd.StudentID].Domains.Values)
                     {
                         if (!sd.DomainScorePassDict.ContainsKey(ds.Domain))
@@ -52,6 +53,7 @@ namespace KaoHsingReExamScoreReport
 
                         if (ds.Score.HasValue)
                         {
+                            
                             sd.DomainScoreDict[ds.Domain] = ds.Score.Value;
                             if (ds.Score.Value >= passScore)
                                 sd.DomainScorePassDict[ds.Domain] = true;
@@ -136,5 +138,6 @@ namespace KaoHsingReExamScoreReport
             retVal.Add("綜合活動");
             return retVal;
         }
+
     }
 }

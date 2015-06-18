@@ -95,9 +95,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configure.cs" />
     <Compile Include="DAO\ClassData.cs" />
     <Compile Include="DAO\QueryData.cs" />
     <Compile Include="DAO\StudentData.cs" />
+    <Compile Include="Forms\ReDomainForStudentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReDomainForStudentForm.Designer.cs">
+      <DependentUpon>ReDomainForStudentForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ReDomainForTeacherForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,6 +160,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="Forms\ReDomainForStudentForm.resx">
+      <DependentUpon>ReDomainForStudentForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ReDomainForTeacherForm.resx">
       <DependentUpon>ReDomainForTeacherForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -167,6 +177,8 @@
   <ItemGroup>
     <None Include="Template\給班導師樣版.xlsx" />
     <None Include="Template\給試務樣版.xlsx" />
+    <None Include="Template\領域補考通知單範本.doc" />
+    <None Include="Template\高雄領域補考通知單合併欄位總表.doc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

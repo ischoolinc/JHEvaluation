@@ -1,6 +1,6 @@
 ﻿namespace KaoHsingReExamScoreReport.Forms
 {
-    partial class ReDomainForUserForm
+    partial class ReDomainForStudentForm
     {
         /// <summary>
         /// Required designer variable.
@@ -34,6 +34,9 @@
             this.iptSemester = new DevComponents.Editors.IntegerInput();
             this.btnPrint = new DevComponents.DotNetBar.ButtonX();
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
+            this.lnkDownload = new System.Windows.Forms.LinkLabel();
+            this.lnkUpload = new System.Windows.Forms.LinkLabel();
+            this.lnkMField = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).BeginInit();
             this.SuspendLayout();
@@ -110,7 +113,7 @@
             this.btnPrint.AutoSize = true;
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPrint.Location = new System.Drawing.Point(109, 76);
+            this.btnPrint.Location = new System.Drawing.Point(118, 113);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 25);
             this.btnPrint.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -124,7 +127,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(190, 76);
+            this.btnExit.Location = new System.Drawing.Point(199, 113);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -132,11 +135,50 @@
             this.btnExit.Text = "離開";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // ReDomainForUserForm
+            // lnkDownload
+            // 
+            this.lnkDownload.AutoSize = true;
+            this.lnkDownload.BackColor = System.Drawing.Color.Transparent;
+            this.lnkDownload.Location = new System.Drawing.Point(25, 80);
+            this.lnkDownload.Name = "lnkDownload";
+            this.lnkDownload.Size = new System.Drawing.Size(60, 17);
+            this.lnkDownload.TabIndex = 6;
+            this.lnkDownload.TabStop = true;
+            this.lnkDownload.Text = "下載範本";
+            this.lnkDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkDownload_LinkClicked);
+            // 
+            // lnkUpload
+            // 
+            this.lnkUpload.AutoSize = true;
+            this.lnkUpload.BackColor = System.Drawing.Color.Transparent;
+            this.lnkUpload.Location = new System.Drawing.Point(92, 80);
+            this.lnkUpload.Name = "lnkUpload";
+            this.lnkUpload.Size = new System.Drawing.Size(60, 17);
+            this.lnkUpload.TabIndex = 7;
+            this.lnkUpload.TabStop = true;
+            this.lnkUpload.Text = "上傳範本";
+            this.lnkUpload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkUpload_LinkClicked);
+            // 
+            // lnkMField
+            // 
+            this.lnkMField.AutoSize = true;
+            this.lnkMField.BackColor = System.Drawing.Color.Transparent;
+            this.lnkMField.Location = new System.Drawing.Point(170, 80);
+            this.lnkMField.Name = "lnkMField";
+            this.lnkMField.Size = new System.Drawing.Size(86, 17);
+            this.lnkMField.TabIndex = 8;
+            this.lnkMField.TabStop = true;
+            this.lnkMField.Text = "合併欄位總表";
+            this.lnkMField.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkMField_LinkClicked);
+            // 
+            // ReDomainForStudentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(295, 116);
+            this.ClientSize = new System.Drawing.Size(295, 153);
+            this.Controls.Add(this.lnkMField);
+            this.Controls.Add(this.lnkUpload);
+            this.Controls.Add(this.lnkDownload);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.iptSemester);
@@ -144,9 +186,9 @@
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.labelX1);
             this.DoubleBuffered = true;
-            this.Name = "ReDomainForUserForm";
+            this.Name = "ReDomainForStudentForm";
             this.Text = "領域補考名單";
-            this.Load += new System.EventHandler(this.ReDomainForUserForm_Load);
+            this.Load += new System.EventHandler(this.ReDomainForStudentForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).EndInit();
             this.ResumeLayout(false);
@@ -162,6 +204,8 @@
         private DevComponents.Editors.IntegerInput iptSemester;
         private DevComponents.DotNetBar.ButtonX btnPrint;
         private DevComponents.DotNetBar.ButtonX btnExit;
-      
+        private System.Windows.Forms.LinkLabel lnkDownload;
+        private System.Windows.Forms.LinkLabel lnkUpload;
+        private System.Windows.Forms.LinkLabel lnkMField;
     }
 }

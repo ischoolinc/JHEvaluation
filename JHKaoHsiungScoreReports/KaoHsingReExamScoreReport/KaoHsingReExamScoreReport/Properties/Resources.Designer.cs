@@ -79,5 +79,25 @@ namespace KaoHsingReExamScoreReport.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
+        internal static byte[] 領域補考通知單範本 {
+            get {
+                object obj = ResourceManager.GetObject("領域補考通知單範本", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
+        internal static byte[] 高雄領域補考通知單合併欄位總表 {
+            get {
+                object obj = ResourceManager.GetObject("高雄領域補考通知單合併欄位總表", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

@@ -50,5 +50,24 @@ namespace KaoHsingReExamScoreReport.DAO
         /// 領域成績
         /// </summary>
         public Dictionary<string, decimal> DomainScoreDict = new Dictionary<string, decimal>();
+
+        /// <summary>
+        /// 學生單學期成績
+        /// </summary>
+        public JHSemesterScoreRecord StudSemesterScoreRecord;
+
+        /// <summary>
+        /// 取得需要補考數
+        /// </summary>
+        /// <returns></returns>
+        public int GetReDomainCount()
+        {
+            int retVal = 0;
+            foreach (string name in DomainScorePassDict.Keys)
+                if (DomainScorePassDict[name] == false)
+                    retVal++;
+
+            return retVal;
+        }
     }
 }
