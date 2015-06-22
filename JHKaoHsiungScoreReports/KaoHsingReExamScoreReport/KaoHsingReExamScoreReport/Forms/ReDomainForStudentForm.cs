@@ -312,11 +312,11 @@ namespace KaoHsingReExamScoreReport.Forms
 
             try
             {
-                System.IO.FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
-                _Configure.Template.Save(stream, Aspose.Words.SaveFormat.Doc);
-
-                stream.Flush();
-                stream.Close();
+                // 檢查目前範本是否 Null，當Null使用預設
+                if (_Configure.Template == null)
+                    _Configure.Template = new Document(new MemoryStream(Properties.Resources.領域補考通知單範本));
+                
+                _Configure.Template.Save(path, Aspose.Words.SaveFormat.Doc);                
                 System.Diagnostics.Process.Start(path);
             }
             catch
@@ -329,12 +329,7 @@ namespace KaoHsingReExamScoreReport.Forms
                 {
                     try
                     {
-                        System.IO.FileStream stream = new FileStream(sd.FileName, FileMode.Create, FileAccess.Write);
-                        _Configure.Template.Save(stream, Aspose.Words.SaveFormat.Doc);
-
-                        stream.Flush();
-                        stream.Close();
-
+                        _Configure.Template.Save(sd.FileName, Aspose.Words.SaveFormat.Doc);
                     }
                     catch
                     {
@@ -363,9 +358,29 @@ namespace KaoHsingReExamScoreReport.Forms
                 try
                 {
                     _Configure.Template = new Aspose.Words.Document(dialog.FileName);
-                    _Configure.Encode();
-                    _Configure.Save();
-                    MsgBox.Show("上傳範本完成.");
+
+                    // 檢查範本是否有合併欄位
+                    int FieldsCount = _Configure.Template.MailMerge.GetFieldNames().Count();
+
+                    if (FieldsCount > 0)
+                    {
+                        _Configure.Encode();
+                        _Configure.Save();
+                        MsgBox.Show("上傳範本完成.");
+                    }
+                    else
+                    {
+                        if (MsgBox.Show("上傳範本內沒有合併欄位，當按「是」將更新為預設範本?", "沒有合併欄位", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                        {
+                            _Configure.Template = new Document(new MemoryStream(Properties.Resources.領域補考通知單範本));
+                            _Configure.Save();
+                            MsgBox.Show("已將範本更新為預設範本.");
+                        }
+                        else
+                            MsgBox.Show("上傳範本內沒有合併欄位無法上傳.");
+                    
+                    }
+
                 }
                 catch
                 {
