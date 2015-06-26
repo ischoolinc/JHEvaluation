@@ -351,8 +351,9 @@ namespace KaoHsiung.StudentRecordReport
                     MotherForm.SetStatusBarMessage("轉換成 PDF 格式中...");
                     foreach (string each in StudentDoc.Keys)
                     {
-                        StudentDoc[each].Save(fbd.SelectedPath + "\\" + each, SaveFormat.AsposePdf);
-
+                        //StudentDoc[each].Save(fbd.SelectedPath + "\\" + each, SaveFormat.AsposePdf);
+                        string fPath = fbd.SelectedPath + "\\" + each;
+                        ReportSaver.SaveDocument(StudentDoc[each], fPath, ReportSaver.OutputType.PDF);
                         //ReportSaver.SaveDocument(StudentDoc[each], each, ReportSaver.OutputType.PDF);
                     }
                 }
