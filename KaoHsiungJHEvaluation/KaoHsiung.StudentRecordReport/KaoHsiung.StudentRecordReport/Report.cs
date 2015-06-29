@@ -352,9 +352,37 @@ namespace KaoHsiung.StudentRecordReport
                     foreach (string each in StudentDoc.Keys)
                     {
                         //StudentDoc[each].Save(fbd.SelectedPath + "\\" + each, SaveFormat.AsposePdf);
-                        string fPath = fbd.SelectedPath + "\\" + each;
-                        ReportSaver.SaveDocument(StudentDoc[each], fPath, ReportSaver.OutputType.PDF);
-                        //ReportSaver.SaveDocument(StudentDoc[each], each, ReportSaver.OutputType.PDF);
+
+                        //ReportSaver.SaveDocument(StudentDoc[each], fPath, ReportSaver.OutputType.PDF);
+                        //ReportSaver.SaveDocument(StudentDoc[each], each, ReportSaver.OutputType.PDF);                        
+
+                        #region 處理產生 PDF
+
+                        string fPath = fbd.SelectedPath + "\\" + each + ".pdf";
+
+                        FileInfo fi = new FileInfo(fPath);
+
+                        DirectoryInfo folder = new DirectoryInfo(Path.Combine(fi.DirectoryName, Path.GetRandomFileName()));
+                        if (!folder.Exists) folder.Create();
+
+                        FileInfo fileinfo = new FileInfo(Path.Combine(folder.FullName, fi.Name));
+
+                        string XmlFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".xml";
+                        string PDFFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".pdf";
+
+                        StudentDoc[each].Save(XmlFileName, Aspose.Words.SaveFormat.AsposePdf);
+
+                        Aspose.Pdf.Pdf pdf1 = new Aspose.Pdf.Pdf();
+
+                        pdf1.BindXML(XmlFileName, null);
+                        pdf1.Save(PDFFileName);
+
+                        if (File.Exists(fPath))
+                            File.Delete(Path.Combine(fi.DirectoryName, fi.Name));
+
+                        File.Move(PDFFileName, fPath);
+                        folder.Delete(true);
+                        #endregion
                     }
                 }
                 else
