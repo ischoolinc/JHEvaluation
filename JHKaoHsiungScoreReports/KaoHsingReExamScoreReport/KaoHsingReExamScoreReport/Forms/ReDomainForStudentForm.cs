@@ -219,10 +219,10 @@ namespace KaoHsingReExamScoreReport.Forms
                     row["聯絡地址"] = AddressRecordDict[sd.StudentID].MailingAddress;
                     row["其他地址"] = AddressRecordDict[sd.StudentID].Address1Address;
 
-                    if (!string.IsNullOrEmpty(AddressRecordDict[sd.StudentID].PermanentAddress))
-                        row["收件人地址"] = AddressRecordDict[sd.StudentID].PermanentAddress;
-                    else if (!string.IsNullOrEmpty(AddressRecordDict[sd.StudentID].MailingAddress))
+                    if (!string.IsNullOrEmpty(AddressRecordDict[sd.StudentID].MailingAddress))
                         row["收件人地址"] = AddressRecordDict[sd.StudentID].MailingAddress;
+                    else if (!string.IsNullOrEmpty(AddressRecordDict[sd.StudentID].PermanentAddress))
+                        row["收件人地址"] = AddressRecordDict[sd.StudentID].PermanentAddress;
                     else
                         row["收件人地址"] = AddressRecordDict[sd.StudentID].Address1Address;
                 }
