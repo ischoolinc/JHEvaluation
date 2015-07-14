@@ -65,6 +65,10 @@
       <HintPath>Library\Aspose.Cells.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Aspose.Pdf, Version=3.7.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Aspose.Pdf.dll</HintPath>
+    </Reference>
     <Reference Include="Aspose.Words, Version=4.4.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Aspose.Words.dll</HintPath>
@@ -252,6 +256,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Library\Aspose.Cells.dll" />
+    <Content Include="Library\Aspose.Pdf.dll" />
+    <Content Include="Library\Aspose.Pdf.xml" />
     <Content Include="Library\Aspose.Words.dll" />
     <Content Include="Library\Campus.dll" />
     <Content Include="Library\Campus.Report.dll" />

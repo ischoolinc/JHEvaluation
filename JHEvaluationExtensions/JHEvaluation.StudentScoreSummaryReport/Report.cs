@@ -297,8 +297,17 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             {
                                 if (semsscore.Subject.Contains(header.Subject))
                                 {
-                                    score = semsscore.Subject[header.Subject].Value;
-                                    weight = semsscore.Subject[header.Subject].Weight;
+                                    // 因為會有相同科目分屬不同領域，在判斷上需要加入領域判斷
+                                    string strDomain = semsscore.Subject[header.Subject].Domain;
+                               
+                                    if (header.Domain == strDomain)
+                                    {
+                                        score = semsscore.Subject[header.Subject].Value;
+                                        weight = semsscore.Subject[header.Subject].Weight;
+                                    }                  
+
+                                    //score = semsscore.Subject[header.Subject].Value;
+                                    //weight = semsscore.Subject[header.Subject].Weight;
                                 }
                             }
 

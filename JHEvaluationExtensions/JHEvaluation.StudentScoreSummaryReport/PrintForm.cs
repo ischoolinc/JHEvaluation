@@ -204,7 +204,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
             PrintStudents.ReadUpdateRecordDate(this);
 
-            e.Result = new Report(PrintStudents, Preference).Print();
+             e.Result = new Report(PrintStudents, Preference).Print();
+  
             Feedback("列印完成", -1);
         }
 

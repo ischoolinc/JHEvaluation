@@ -9,6 +9,7 @@ using JHEvaluation.ScoreCalculation;
 using Campus.Rating;
 using JHSchool.Data;
 using Campus.Report;
+using System.IO;
 
 namespace JHEvaluation.StudentScoreSummaryReport
 {
@@ -23,6 +24,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
         private BackgroundWorker MasterWorker = new BackgroundWorker();
 
         private bool PrintScore = false;
+
+        List<ReportStudent> PrintStudents;
 
         public PrintFormEnglish(List<string> studentIds)
         {
@@ -40,6 +43,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             txtGraduateDate.Text = Preference.GraduateDate;
             txtEntranceDate.Text = Preference.EntranceDate;
             rtnPDF.Checked = Preference.ConvertToPDF;
+            chkSpiltPDF.Checked = Preference.SpiltPDF;
         }
 
         private void btnPrint_Click(object sender, EventArgs e)
@@ -54,7 +58,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             Preference.GraduateDate = txtGraduateDate.Text;
             Preference.EntranceDate = txtEntranceDate.Text;
             Preference.ConvertToPDF = rtnPDF.Checked;
-
+            Preference.SpiltPDF = chkSpiltPDF.Checked;
             Preference.Save(); //儲存設定值。
             PrintScore = rbPrintScore.Checked;
 
@@ -65,7 +69,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
         private void MasterWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             StudentScore.SetClassMapping();
-            List<ReportStudent> PrintStudents = StudentIDs.ToReportStudent();
+            PrintStudents = StudentIDs.ToReportStudent();
 
             PrintStudents.ToSC().ReadSemesterScore(this);
             PrintStudents.ToSC().ReadSemesterHistory(this);
@@ -130,16 +134,84 @@ namespace JHEvaluation.StudentScoreSummaryReport
             PrintStudents.ReadUpdateRecordDate(this);
             PrintStudents.ReadGraduatePhoto(this); //讀取照片。
 
-            e.Result = new ReportEnglish(PrintStudents, Preference).Print(PrintScore);
-            Feedback("列印完成", -1);
+            if(Preference.SpiltPDF)
+                e.Result = new ReportEnglish(PrintStudents, Preference).PrintDict(PrintScore);
+            else
+                e.Result = new ReportEnglish(PrintStudents, Preference).Print(PrintScore);
+
+            Feedback("列印完成", -1);        
         }
 
         private void MasterWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Util.EnableControls(this);
 
-            Document doc = e.Result as Document;
-            Util.Save(doc, "學生在校成績證明書_英文", Preference.ConvertToPDF);
+            if(Preference.SpiltPDF)
+            {
+                Dictionary<string,Document> dataDict =e.Result as Dictionary<string,Document>;
+
+                FolderBrowserDialog fbd = new FolderBrowserDialog();
+                fbd.Description = "請選擇儲存資料夾";
+                fbd.ShowNewFolderButton = true;
+
+                if (fbd.ShowDialog() == DialogResult.Cancel) return;
+                if(Preference.ConvertToPDF)
+                {
+                    MotherForm.SetStatusBarMessage("轉換成 PDF 格式中...");
+                    foreach (string each in dataDict.Keys)
+                    {
+
+                        #region 處理產生 PDF
+
+                        string fPath = fbd.SelectedPath + "\\" + each + ".pdf";
+
+                        FileInfo fi = new FileInfo(fPath);
+
+                        DirectoryInfo folder = new DirectoryInfo(Path.Combine(fi.DirectoryName, Path.GetRandomFileName()));
+                        if (!folder.Exists) folder.Create();
+
+                        FileInfo fileinfo = new FileInfo(Path.Combine(folder.FullName, fi.Name));
+
+                        string XmlFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".xml";
+                        string PDFFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".pdf";
+
+                        dataDict[each].Save(XmlFileName, Aspose.Words.SaveFormat.AsposePdf);
+
+                        Aspose.Pdf.Pdf pdf1 = new Aspose.Pdf.Pdf();
+
+                        pdf1.BindXML(XmlFileName, null);
+                        pdf1.Save(PDFFileName);
+
+                        if (File.Exists(fPath))
+                            File.Delete(Path.Combine(fi.DirectoryName, fi.Name));
+
+                        File.Move(PDFFileName, fPath);
+                        folder.Delete(true);
+                        #endregion
+                    }
+                }
+                else
+                {
+                    MotherForm.SetStatusBarMessage("儲存中...");
+                    foreach (string each in dataDict.Keys)
+                    {
+                        #region 處理產生 Doc
+
+                        string fPath = fbd.SelectedPath + "\\" + each + ".doc";
+                        dataDict[each].Save(fPath, Aspose.Words.SaveFormat.Doc);
+                        #endregion
+                    }
+
+                }
+
+                MotherForm.SetStatusBarMessage("產生完成");
+                System.Diagnostics.Process.Start(fbd.SelectedPath);
+            }
+            else
+            {
+                Document doc = e.Result as Document;
+                Util.Save(doc, "學生在校成績證明書_英文", Preference.ConvertToPDF);
+            }
         }
 
         private void btnExit_Click(object sender, EventArgs e)

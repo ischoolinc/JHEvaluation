@@ -25,6 +25,11 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
         private Dictionary<string, List<string>> PrintAbsences { get; set; }
 
+        /// <summary>
+        /// 儲存分割 PDF Doc 使用
+        /// </summary>
+        private Dictionary<string, Document> _DocDict = new Dictionary<string, Document>();
+
         private List<string> DetailDomain { get; set; }
 
         private SubjDomainEngNameMapping _SubjDomainEngNameMapping;
@@ -34,6 +39,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
         public ReportEnglish(List<ReportStudent> students, ReportPreference printSetting)
         {
+           
             Students = students;
             Students.Sort(delegate(ReportStudent x, ReportStudent y)
             {
@@ -64,10 +70,43 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
             doc.MailMerge.MergeField += new Aspose.Words.Reporting.MergeFieldEventHandler(MailMerge_MergeField);
 
-            doc.MailMerge.Execute(new MergeDataSource(Students, PrintSetting));
+            doc.MailMerge.Execute(new MergeDataSource(Students, PrintSetting));           
 
             return doc;
         }
+
+        public Dictionary<string, Document> PrintDict(bool printScore)
+        {
+            _DocDict.Clear();
+
+            foreach(ReportStudent rs in Students)
+            {
+                Document doc = PrintSetting.Template.ToDocument().Clone();
+
+                List<ReportStudent> rps = new List<ReportStudent>();
+                rps.Add(rs);
+                doc.MailMerge.MergeField += new Aspose.Words.Reporting.MergeFieldEventHandler(MailMerge_MergeField);
+
+                string fileName = "";
+                fileName = rs.StudentNumber;
+
+                fileName += "_" + rs.IDNumber;
+
+                if (!string.IsNullOrEmpty(rs.RefClassID))
+                    fileName += "_" + rs.Class.Name;
+                else
+                    fileName += "_";
+
+                fileName += "_" + rs.SeatNo;
+                fileName += "_" + rs.Name;
+
+                doc.MailMerge.Execute(new MergeDataSource(rps, PrintSetting));
+                if(!_DocDict.ContainsKey(fileName))
+                    _DocDict.Add(fileName, doc);
+            }
+            return _DocDict;        
+        }
+
 
         //最好這程式有人能維護的了.......
         private void MailMerge_MergeField(object sender, MergeFieldEventArgs e)

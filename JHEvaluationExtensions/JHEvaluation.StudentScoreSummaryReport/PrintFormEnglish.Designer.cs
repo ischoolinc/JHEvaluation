@@ -53,11 +53,16 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.rtnPDF = new System.Windows.Forms.RadioButton();
             this.rtnWord = new System.Windows.Forms.RadioButton();
+            this.groupPanel4 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.chkSpiltPDF = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.groupPanel1.SuspendLayout();
             this.groupPanel2.SuspendLayout();
             this.groupPanel3.SuspendLayout();
             this.gpFormat.SuspendLayout();
             this.panel6.SuspendLayout();
+            this.groupPanel4.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnExit
@@ -66,7 +71,7 @@
             this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(272, 354);
+            this.btnExit.Location = new System.Drawing.Point(302, 424);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 4;
@@ -80,7 +85,7 @@
             this.btnPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPrint.Location = new System.Drawing.Point(191, 354);
+            this.btnPrint.Location = new System.Drawing.Point(221, 424);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
             this.btnPrint.TabIndex = 3;
@@ -100,7 +105,7 @@
             this.groupPanel1.DrawTitleBox = false;
             this.groupPanel1.Location = new System.Drawing.Point(13, 12);
             this.groupPanel1.Name = "groupPanel1";
-            this.groupPanel1.Size = new System.Drawing.Size(330, 143);
+            this.groupPanel1.Size = new System.Drawing.Size(350, 143);
             // 
             // 
             // 
@@ -189,7 +194,7 @@
             this.lnkAbsence.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkAbsence.AutoSize = true;
             this.lnkAbsence.BackColor = System.Drawing.Color.Transparent;
-            this.lnkAbsence.Location = new System.Drawing.Point(424, 290);
+            this.lnkAbsence.Location = new System.Drawing.Point(424, 360);
             this.lnkAbsence.Name = "lnkAbsence";
             this.lnkAbsence.Size = new System.Drawing.Size(60, 17);
             this.lnkAbsence.TabIndex = 2;
@@ -268,7 +273,7 @@
             this.lnkTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkTemplate.AutoSize = true;
             this.lnkTemplate.BackColor = System.Drawing.Color.Transparent;
-            this.lnkTemplate.Location = new System.Drawing.Point(12, 354);
+            this.lnkTemplate.Location = new System.Drawing.Point(12, 424);
             this.lnkTemplate.Name = "lnkTemplate";
             this.lnkTemplate.Size = new System.Drawing.Size(86, 17);
             this.lnkTemplate.TabIndex = 2;
@@ -357,7 +362,7 @@
             this.groupPanel3.DrawTitleBox = false;
             this.groupPanel3.Location = new System.Drawing.Point(12, 168);
             this.groupPanel3.Name = "groupPanel3";
-            this.groupPanel3.Size = new System.Drawing.Size(330, 42);
+            this.groupPanel3.Size = new System.Drawing.Size(351, 42);
             // 
             // 
             // 
@@ -422,7 +427,7 @@
             this.gpFormat.DrawTitleBox = false;
             this.gpFormat.Location = new System.Drawing.Point(12, 287);
             this.gpFormat.Name = "gpFormat";
-            this.gpFormat.Size = new System.Drawing.Size(330, 55);
+            this.gpFormat.Size = new System.Drawing.Size(351, 55);
             // 
             // 
             // 
@@ -464,7 +469,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(324, 28);
+            this.panel6.Size = new System.Drawing.Size(345, 28);
             this.panel6.TabIndex = 0;
             // 
             // rtnPDF
@@ -490,10 +495,81 @@
             this.rtnWord.Text = "Word (*.doc)";
             this.rtnWord.UseVisualStyleBackColor = true;
             // 
+            // groupPanel4
+            // 
+            this.groupPanel4.BackColor = System.Drawing.Color.Transparent;
+            this.groupPanel4.CanvasColor = System.Drawing.SystemColors.Control;
+            this.groupPanel4.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.groupPanel4.Controls.Add(this.panel4);
+            this.groupPanel4.DrawTitleBox = false;
+            this.groupPanel4.Location = new System.Drawing.Point(13, 348);
+            this.groupPanel4.Name = "groupPanel4";
+            this.groupPanel4.Size = new System.Drawing.Size(350, 60);
+            // 
+            // 
+            // 
+            this.groupPanel4.Style.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
+            this.groupPanel4.Style.BackColorGradientAngle = 90;
+            this.groupPanel4.Style.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.groupPanel4.Style.BorderBottom = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel4.Style.BorderBottomWidth = 1;
+            this.groupPanel4.Style.BorderColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
+            this.groupPanel4.Style.BorderLeft = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel4.Style.BorderLeftWidth = 1;
+            this.groupPanel4.Style.BorderRight = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel4.Style.BorderRightWidth = 1;
+            this.groupPanel4.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel4.Style.BorderTopWidth = 1;
+            this.groupPanel4.Style.Class = "";
+            this.groupPanel4.Style.CornerDiameter = 4;
+            this.groupPanel4.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
+            this.groupPanel4.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
+            this.groupPanel4.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.groupPanel4.StyleMouseDown.Class = "";
+            this.groupPanel4.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.groupPanel4.StyleMouseOver.Class = "";
+            this.groupPanel4.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.groupPanel4.TabIndex = 17;
+            this.groupPanel4.Text = "單檔列印";
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.Transparent;
+            this.panel4.Controls.Add(this.chkSpiltPDF);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(0, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(344, 33);
+            this.panel4.TabIndex = 0;
+            // 
+            // chkSpiltPDF
+            // 
+            this.chkSpiltPDF.AutoSize = true;
+            this.chkSpiltPDF.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.chkSpiltPDF.BackgroundStyle.Class = "";
+            this.chkSpiltPDF.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.chkSpiltPDF.Location = new System.Drawing.Point(9, 5);
+            this.chkSpiltPDF.Name = "chkSpiltPDF";
+            this.chkSpiltPDF.Size = new System.Drawing.Size(327, 21);
+            this.chkSpiltPDF.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.chkSpiltPDF.TabIndex = 0;
+            this.chkSpiltPDF.Text = "使用單檔列印(檔名：學號_身分證_班級_座號_姓名)";
+            this.chkSpiltPDF.TextColor = System.Drawing.Color.Black;
+            // 
             // PrintFormEnglish
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(359, 387);
+            this.ClientSize = new System.Drawing.Size(389, 457);
+            this.Controls.Add(this.groupPanel4);
             this.Controls.Add(this.gpFormat);
             this.Controls.Add(this.groupPanel3);
             this.Controls.Add(this.label4);
@@ -522,6 +598,9 @@
             this.gpFormat.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
+            this.groupPanel4.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -554,5 +633,8 @@
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.RadioButton rtnPDF;
         private System.Windows.Forms.RadioButton rtnWord;
+        private DevComponents.DotNetBar.Controls.GroupPanel groupPanel4;
+        private System.Windows.Forms.Panel panel4;
+        private DevComponents.DotNetBar.Controls.CheckBoxX chkSpiltPDF;
     }
 }
