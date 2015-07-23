@@ -120,8 +120,14 @@ namespace KaoHsingReExamScoreReport.Forms
 
 
             Document DocTemp = null;
-            // 讀取範本
-            if (_Configure.Template != null)
+            // 讀取範本,如果沒有使用預設樣版
+            if (_Configure.Template == null)
+            {
+                _Configure.Template = new Document(new MemoryStream(Properties.Resources.領域補考通知單範本));
+                _Configure.Encode();
+                _Configure.Save();
+            }
+                
                 DocTemp = _Configure.Template.Clone();
 
             List<string> ColumnList = new List<string>();
@@ -278,7 +284,7 @@ namespace KaoHsingReExamScoreReport.Forms
 
             // 讀取範本
             _Configure = GetUDTConfig();
-
+            _Configure.Decode();
         }
 
         private void lnkDownload_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -373,6 +379,7 @@ namespace KaoHsingReExamScoreReport.Forms
                         if (MsgBox.Show("上傳範本內沒有合併欄位，當按「是」將更新為預設範本?", "沒有合併欄位", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
                         {
                             _Configure.Template = new Document(new MemoryStream(Properties.Resources.領域補考通知單範本));
+                            _Configure.Encode();
                             _Configure.Save();
                             MsgBox.Show("已將範本更新為預設範本.");
                         }

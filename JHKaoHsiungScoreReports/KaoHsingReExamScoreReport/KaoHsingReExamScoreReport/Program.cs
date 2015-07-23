@@ -57,8 +57,8 @@ namespace KaoHsingReExamScoreReport
 
 
             RibbonBarItem rbItem2c = MotherForm.RibbonBarItems["學生", "資料統計"];
-            rbItem2c["報表"]["成績相關報表"]["領域補考名單"].Enable = UserAcl.Current["KaoHsingReExamScoreReport.ReDomainForStudentForm"].Executable;
-            rbItem2c["報表"]["成績相關報表"]["領域補考名單"].Click += delegate
+            rbItem2c["報表"]["成績相關報表"]["領域補考通知單"].Enable = UserAcl.Current["KaoHsingReExamScoreReport.ReDomainForStudentForm"].Executable;
+            rbItem2c["報表"]["成績相關報表"]["領域補考通知單"].Click += delegate
             {
                 if (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0)
                 {
@@ -76,7 +76,7 @@ namespace KaoHsingReExamScoreReport
 
             // 領域補考名單
             Catalog catalog2c = RoleAclSource.Instance["學生"]["功能按鈕"];
-            catalog2c.Add(new RibbonFeature("KaoHsingReExamScoreReport.ReDomainForStudentForm", "領域補考名單"));
+            catalog2c.Add(new RibbonFeature("KaoHsingReExamScoreReport.ReDomainForStudentForm", "領域補考通知單"));
 
         }
     }
