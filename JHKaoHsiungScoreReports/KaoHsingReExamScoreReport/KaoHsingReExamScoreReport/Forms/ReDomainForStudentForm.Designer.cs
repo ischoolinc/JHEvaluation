@@ -187,7 +187,7 @@
             this.Controls.Add(this.labelX1);
             this.DoubleBuffered = true;
             this.Name = "ReDomainForStudentForm";
-            this.Text = "領域補考名單";
+            this.Text = "領域補考通知單";
             this.Load += new System.EventHandler(this.ReDomainForStudentForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).EndInit();

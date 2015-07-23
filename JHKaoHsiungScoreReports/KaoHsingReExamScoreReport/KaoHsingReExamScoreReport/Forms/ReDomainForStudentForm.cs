@@ -40,7 +40,7 @@ namespace KaoHsingReExamScoreReport.Forms
 
         void _bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            FISCA.Presentation.MotherForm.SetStatusBarMessage("領域補考名單產生中 ...", e.ProgressPercentage);
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("領域補考通知單產生中 ...", e.ProgressPercentage);
         }
 
         void _bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -86,7 +86,7 @@ namespace KaoHsingReExamScoreReport.Forms
                 GC.Collect();
             }
 
-            FISCA.Presentation.MotherForm.SetStatusBarMessage("領域補考名單產生完成.");
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("領域補考通知單產生完成.");
         }
 
         void _bgWorker_DoWork(object sender, DoWorkEventArgs e)
