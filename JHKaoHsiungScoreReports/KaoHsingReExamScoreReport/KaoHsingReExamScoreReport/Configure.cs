@@ -33,7 +33,8 @@ namespace KaoHsingReExamScoreReport
         /// </summary>
         public void Decode()
         {
-            this.Template = new Document(new MemoryStream(Convert.FromBase64String(this.TemplateStream)));
+            if(!string.IsNullOrEmpty(this.TemplateStream))
+                this.Template = new Document(new MemoryStream(Convert.FromBase64String(this.TemplateStream)));
         }
     }
 }
