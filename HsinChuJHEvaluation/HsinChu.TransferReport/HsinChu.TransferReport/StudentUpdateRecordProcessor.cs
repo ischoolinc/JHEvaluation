@@ -22,8 +22,23 @@ namespace HsinChu.TransferReport
 
             foreach (JHUpdateRecordRecord record in records)
             {
-                if (record.UpdateCode == "1")
-                    list.Add(record);
+
+                if(record.UpdateCode.Length>1)
+                {
+                    // 高中
+                    int intCode;
+                    if (int.TryParse(record.UpdateCode, out intCode))
+                    {
+                        if (intCode < 100)
+                            list.Add(record);
+                    }
+                }
+                else
+                {
+                    // 國中
+                    if (record.UpdateCode == "1")
+                        list.Add(record);
+                }                
             }
 
             if (list.Count > 1) //有兩筆以上的新生異動…？
