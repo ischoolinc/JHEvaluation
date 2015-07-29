@@ -78,39 +78,55 @@ namespace HsinChu.StudentRecordReport
         {
             string updateDesc = "";
 
-            if (node.UpdateCode == "1")
-                updateDesc = "新生";
-
-            if (node.UpdateCode == "2")
+            // 用異動代碼長度判斷國高中
+            if (node.UpdateCode.Length > 2)
             {
-                if(node.Graduate =="修業")
-                    updateDesc = "修業";
-                else
-                    updateDesc = "畢業";
+                // 高中
+                updateDesc = node.UpdateDescription;
             }
-            if (node.UpdateCode == "3")
-                updateDesc = "轉入";
+            else
+            {
+                // 國中
+                if (node.UpdateCode == "1")
+                    updateDesc = "新生";
 
-            if (node.UpdateCode == "4")
-                updateDesc = "轉出";
+                if (node.UpdateCode == "2")
+                {
+                    if (node.Graduate == "修業")
+                        updateDesc = "修業";
+                    else
+                        updateDesc = "畢業";
+                }
+                if (node.UpdateCode == "3")
+                    updateDesc = "轉入";
 
-            if (node.UpdateCode == "5")
-                updateDesc = "休學";
+                if (node.UpdateCode == "4")
+                    updateDesc = "轉出";
 
-            if (node.UpdateCode == "6")
-                updateDesc = "復學";
+                if (node.UpdateCode == "5")
+                    updateDesc = "休學";
 
-            if (node.UpdateCode == "7")
-                updateDesc = "中輟";
+                if (node.UpdateCode == "6")
+                    updateDesc = "復學";
 
-            if (node.UpdateCode == "8")
-                updateDesc = "續讀";
+                if (node.UpdateCode == "7")
+                    updateDesc = "中輟";
 
-            if (node.UpdateCode == "9")
-                updateDesc = "更正學籍";
+                if (node.UpdateCode == "8")
+                    updateDesc = "續讀";
 
-            if (node.UpdateDescription.Length > 0)
-                updateDesc += ":" + node.UpdateDescription;
+                if (node.UpdateCode == "9")
+                    updateDesc = "更正學籍";
+
+                if (node.UpdateCode == "10")
+                    updateDesc = "延長修業年限";
+
+                if (node.UpdateCode == "11")
+                    updateDesc = "死亡";
+
+                if (node.UpdateDescription.Length > 0)
+                    updateDesc += ":" + node.UpdateDescription;
+            }
 
             return updateDesc;
         }
