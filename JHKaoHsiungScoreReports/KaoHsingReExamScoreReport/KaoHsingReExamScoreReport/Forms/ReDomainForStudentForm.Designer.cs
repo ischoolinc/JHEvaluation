@@ -37,6 +37,7 @@
             this.lnkDownload = new System.Windows.Forms.LinkLabel();
             this.lnkUpload = new System.Windows.Forms.LinkLabel();
             this.lnkMField = new System.Windows.Forms.LinkLabel();
+            this.lnDownDefalut = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).BeginInit();
             this.SuspendLayout();
@@ -113,7 +114,7 @@
             this.btnPrint.AutoSize = true;
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPrint.Location = new System.Drawing.Point(118, 113);
+            this.btnPrint.Location = new System.Drawing.Point(129, 112);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 25);
             this.btnPrint.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -127,7 +128,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(199, 113);
+            this.btnExit.Location = new System.Drawing.Point(210, 112);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -171,11 +172,24 @@
             this.lnkMField.Text = "合併欄位總表";
             this.lnkMField.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkMField_LinkClicked);
             // 
+            // lnDownDefalut
+            // 
+            this.lnDownDefalut.AutoSize = true;
+            this.lnDownDefalut.BackColor = System.Drawing.Color.Transparent;
+            this.lnDownDefalut.Location = new System.Drawing.Point(25, 116);
+            this.lnDownDefalut.Name = "lnDownDefalut";
+            this.lnDownDefalut.Size = new System.Drawing.Size(86, 17);
+            this.lnDownDefalut.TabIndex = 9;
+            this.lnDownDefalut.TabStop = true;
+            this.lnDownDefalut.Text = "下載預設範本";
+            this.lnDownDefalut.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnDownDefalut_LinkClicked);
+            // 
             // ReDomainForStudentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(295, 153);
+            this.ClientSize = new System.Drawing.Size(311, 153);
+            this.Controls.Add(this.lnDownDefalut);
             this.Controls.Add(this.lnkMField);
             this.Controls.Add(this.lnkUpload);
             this.Controls.Add(this.lnkDownload);
@@ -207,5 +221,6 @@
         private System.Windows.Forms.LinkLabel lnkDownload;
         private System.Windows.Forms.LinkLabel lnkUpload;
         private System.Windows.Forms.LinkLabel lnkMField;
+        private System.Windows.Forms.LinkLabel lnDownDefalut;
     }
 }
