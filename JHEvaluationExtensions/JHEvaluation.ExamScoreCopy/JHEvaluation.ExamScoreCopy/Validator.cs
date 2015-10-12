@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using JHSchool.Data;
 using Framework;
+using JHSchool.Data;
 
 namespace JHEvaluation.ExamScoreCopy
 {
@@ -166,7 +166,8 @@ namespace JHEvaluation.ExamScoreCopy
                 {
                     foreach (string subject in config.TargetSubjects)
                     {
-                        if (sd.Scores.SubjectExists(subject) == true)
+                        if (sd.Scores.SubjectExists(subject) == true
+                            && (sd.Scores[subject].Effort != null || sd.Scores[subject].Score != null))
                             view.Add(sd.Student.ID, info, "目的科目「" + subject + "」已有評量成績，成績將會被覆蓋", MessageLevel.Warning);
                         else
                             view.Add(sd.Student.ID, info, "新增科目「" + subject + "」的評量成績");

@@ -1,18 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JHEvaluation.ExamScoreCopy", "JHEvaluation.ExamScoreCopy\JHEvaluation.ExamScoreCopy.csproj", "{EF10306C-52F0-4881-B7FB-FB0DE157D02A}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://tfserver:8080/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = JHEvaluation.ExamScoreCopy\\JHEvaluation.ExamScoreCopy.csproj
-		SccProjectName1 = JHEvaluation.ExamScoreCopy
-		SccLocalPath1 = JHEvaluation.ExamScoreCopy
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

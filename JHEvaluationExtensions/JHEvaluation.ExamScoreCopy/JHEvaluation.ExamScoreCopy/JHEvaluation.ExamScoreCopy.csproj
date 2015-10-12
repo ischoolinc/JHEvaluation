@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JHEvaluation.ExamScoreCopy</RootNamespace>
     <AssemblyName>JHEvaluation.ExamScoreCopy</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
     </StartupObject>
@@ -38,12 +38,13 @@
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\ischool\bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -59,61 +60,63 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevComponents.DotNetBar2, Version=7.9.0.3, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
+    <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\DevComponents.DotNetBar2.dll</HintPath>
+      <HintPath>Library\DevComponents.DotNetBar2.dll</HintPath>
     </Reference>
-    <Reference Include="FISCA, Version=1.0.1.14, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FISCA, Version=2.1.1.22, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\FISCA.dll</HintPath>
+      <HintPath>Library\FISCA.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="FISCA.Deployment, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\FISCA.Deployment.dll</HintPath>
+    <Reference Include="FISCA.Deployment">
+      <HintPath>Library\FISCA.Deployment.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="FISCA.DSAUtil, Version=3.2.21.2, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FISCA.DSAUtil, Version=3.9.0.10, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\FISCA.DSAUtil.dll</HintPath>
-    </Reference>
-    <Reference Include="FISCA.Presentation, Version=1.0.2.3, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\FISCA.Presentation.dll</HintPath>
+      <HintPath>Library\FISCA.DSAUtil.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="FISCA.UDT, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FISCA.Presentation, Version=1.1.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\FISCA.UDT.dll</HintPath>
-    </Reference>
-    <Reference Include="Framework, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ischool\bin\Debug\Framework.dll</HintPath>
+      <HintPath>Library\FISCA.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Data, Version=1.0.2.30, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FISCA.UDT, Version=1.0.2.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\JHSchool.Data.dll</HintPath>
+      <HintPath>Library\FISCA.UDT.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Evaluation, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Framework, Version=1.0.0.10, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ischool\bin\Debug\JHSchool.Evaluation.dll</HintPath>
+      <HintPath>Library\Framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="K12.Data, Version=1.0.2.30, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JHSchool.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\K12.Data.dll</HintPath>
+      <HintPath>Library\JHSchool.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JHSchool.Evaluation, Version=1.0.3.32, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="K12.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\K12.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="K12.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\K12.Presentation.dll</HintPath>
+      <HintPath>Library\K12.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SmartSchool.ErrorReporting, Version=1.0.2.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\SmartSchool.ErrorReporting.dll</HintPath>
+      <HintPath>Library\SmartSchool.ErrorReporting.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -202,6 +205,38 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\rotate_save_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Library\DevComponents.DotNetBar2.dll" />
+    <Content Include="Library\DevComponents.DotNetBar2.xml" />
+    <Content Include="Library\FISCA.dll" />
+    <Content Include="Library\FISCA.DSAUtil.dll" />
+    <Content Include="Library\FISCA.DSAUtil.pdb" />
+    <Content Include="Library\FISCA.DSAUtil.xml" />
+    <Content Include="Library\FISCA.pdb" />
+    <Content Include="Library\FISCA.Presentation.dll" />
+    <Content Include="Library\FISCA.Presentation.pdb" />
+    <Content Include="Library\FISCA.Presentation.xml" />
+    <Content Include="Library\FISCA.UDT.dll" />
+    <Content Include="Library\FISCA.UDT.pdb" />
+    <Content Include="Library\FISCA.UDT.xml" />
+    <Content Include="Library\FISCA.xml" />
+    <Content Include="Library\Framework.dll" />
+    <Content Include="Library\Framework.pdb" />
+    <Content Include="Library\JHSchool.Data.dll" />
+    <Content Include="Library\JHSchool.Data.pdb" />
+    <Content Include="Library\JHSchool.Data.xml" />
+    <Content Include="Library\JHSchool.Evaluation.dll" />
+    <Content Include="Library\JHSchool.Evaluation.pdb" />
+    <Content Include="Library\K12.Data.dll" />
+    <Content Include="Library\K12.Data.pdb" />
+    <Content Include="Library\K12.Data.xml" />
+    <Content Include="Library\K12.Presentation.dll" />
+    <Content Include="Library\K12.Presentation.pdb" />
+    <Content Include="Library\K12.Presentation.xml" />
+    <Content Include="Library\SmartSchool.ErrorReporting.dll" />
+    <Content Include="Library\SmartSchool.ErrorReporting.pdb" />
+    <Content Include="Library\SmartSchool.ErrorReporting.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
