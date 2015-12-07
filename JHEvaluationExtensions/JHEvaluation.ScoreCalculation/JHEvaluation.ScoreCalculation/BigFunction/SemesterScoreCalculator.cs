@@ -103,6 +103,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         {
             EffortMap effortmap = new EffortMap(); //努力程度對照表。
 
+            // 高雄領域轉換用
+            string khDomain = "語文";
+
             foreach (StudentScore student in Students)
             {
                 SemesterScore semsscore = student.SemestersScore[SemesterData.Empty];
@@ -170,6 +173,27 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         {
                             if (!objSubj.ScoreOrigin.HasValue)
                                 objSubj.ScoreOrigin = objSubj.Value;
+
+                            // 針對高雄處理
+                            if(strDomain=="國語文" || strDomain =="英語")
+                            {
+                                if(!domainTotal.ContainsKey(khDomain))
+                                {
+                                    domainTotal.Add(khDomain, 0);
+                                    domainOriginTotal.Add(khDomain, 0);
+                                    domainWeight.Add(khDomain, 0);
+                                    domainPeriod.Add(khDomain, 0);
+                                    domainText.Add(khDomain, string.Empty);
+                                }
+
+                                domainTotal[khDomain] += objSubj.Value.Value * objSubj.Weight.Value;
+                                //科目的原始成績加總
+                                domainOriginTotal[khDomain] += objSubj.ScoreOrigin.Value * objSubj.Weight.Value;
+
+                                domainWeight[khDomain] += objSubj.Weight.Value;
+                                domainPeriod[khDomain] += objSubj.Period.Value;
+                                domainText[khDomain] += GetDomainSubjectText(strSubj, objSubj.Text);
+                            }
 
                             if (!domainTotal.ContainsKey(strDomain))
                             {

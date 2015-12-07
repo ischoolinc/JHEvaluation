@@ -92,8 +92,16 @@ namespace JHEvaluation.SemesterScoreContentItem
 
         private void InitializeColumnHeader()
         {
+            // 高雄也需要加入一個由國語文+英語計算出語文領域
+            List<string> DomainList = new List<string>();
+            DomainList.Add("語文");
+            foreach (string str in JHSchool.Evaluation.Subject.Domains)
+                if (!DomainList.Contains(str))
+                    DomainList.Add(str);
+                
+            
             //一般領域
-            foreach (string each in JHSchool.Evaluation.Subject.Domains)
+            foreach (string each in DomainList)
             {
                 ColumnHeader ch = new ColumnHeader();
                 ch.Name = "ch" + each;
