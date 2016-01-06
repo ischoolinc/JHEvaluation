@@ -179,7 +179,15 @@ namespace JHEvaluation.ClassSemesterScoreReport
                         if (scores.Contains(eachSubj) && headers.Contains(eachSubj, false)) // scores.Weights[eachSubj]))
                         {
                             int headerIndex = headers[eachSubj, false].ColumnIndex;
-                            OutputSheet.Cells[RowOffset, headerIndex].PutValue((double)scores[eachSubj]);
+
+                            decimal ss=(decimal)scores[eachSubj];
+                            decimal rss = scores.GetReExamScore(eachSubj);
+                            
+                            if(Perference.UserSelScoreType =="補考擇優")
+                                if (rss >= ss)
+                                    OutputSheet.Cells[RowOffset, headerIndex].Style.Font.Color = System.Drawing.Color.Blue;
+
+                            OutputSheet.Cells[RowOffset, headerIndex].PutValue(ss);
                         }
                     }
 
@@ -191,7 +199,15 @@ namespace JHEvaluation.ClassSemesterScoreReport
                         if (scores.Contains(eachDomain) && headers.Contains(eachDomain, true))// scores.Weights[eachDomain]))
                         {
                             int headerIndex = headers[eachDomain, true].ColumnIndex;
-                            OutputSheet.Cells[RowOffset, headerIndex].PutValue(((double)scores[eachDomain]));
+                            
+                            decimal dd =(decimal)scores[eachDomain];
+                            decimal rdd = scores.GetReExamScore(eachDomain);                            
+
+                            if(Perference.UserSelScoreType=="補考擇優")                            
+                                if (rdd >= dd)
+                                    OutputSheet.Cells[RowOffset, headerIndex].Style.Font.Color = System.Drawing.Color.Blue;
+
+                            OutputSheet.Cells[RowOffset, headerIndex].PutValue(dd);
                         }
                     }
 

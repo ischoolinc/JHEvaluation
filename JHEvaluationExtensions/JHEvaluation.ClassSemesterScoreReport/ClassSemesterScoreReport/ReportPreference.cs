@@ -24,6 +24,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 PrintItems.Add(item);
 
             PaperSize = _config.GetString("PaperSize", "A4");
+            UserSelScoreType = _config.GetString("UserSelScoreType", "原始成績");
+            ReScoreMark = _config.GetString("ReScoreMark", "*");
         }
 
         /// <summary>
@@ -38,11 +40,23 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
         public string PaperSize { get; set; }
 
+        /// <summary>
+        /// 補考成績加註
+        /// </summary>
+        public string ReScoreMark { get; set; }
+
+        /// <summary>
+        /// 成績類型
+        /// </summary>
+        public string UserSelScoreType { get; set; }
+
         public void Save()
         {
             _config.SetString("RankMethod", RankMethod);
             _config.SetString("PrintItems", string.Join(",", PrintItems.ToArray()));
             _config.SetString("PaperSize", PaperSize);
+            _config.SetString("ReScoreMark", ReScoreMark);
+            _config.SetString("UserSelScoreType", UserSelScoreType);
             _config.Save();
         }
     }

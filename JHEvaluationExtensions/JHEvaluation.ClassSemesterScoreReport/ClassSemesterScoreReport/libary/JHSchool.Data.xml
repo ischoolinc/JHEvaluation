@@ -6540,5 +6540,10 @@
             </summary>
             <returns>功過換算表記錄物件</returns>
         </member>
+        <member name="T:JHSchool.Data.JHChineseEnglishSubjectMapping">
+            <summary>
+            科目中英文對照表
+            </summary>
+        </member>
     </members>
 </doc>

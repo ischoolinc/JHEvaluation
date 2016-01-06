@@ -56,6 +56,9 @@ namespace JHEvaluation.ClassSemesterScoreReport
         private BackgroundWorker MasterWorker = new BackgroundWorker();
         private bool WorkPadding = false; //是否有工作 Padding。
 
+        List<string> _tmpUserSelSubjectList = new List<string>();
+        List<string> _tmpUserSelDomainList = new List<string>();
+
         public static void Run(List<string> classes)
         {
             new MainForm(classes).ShowDialog();
@@ -73,6 +76,15 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            cbxScoreType.Items.Add("原始成績");
+            cbxScoreType.Items.Add("補考擇優");
+            cbxScoreType.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            if (Perference == null)
+                Perference = new ReportPreference();
+            cbxScoreType.Text = Perference.UserSelScoreType;
+            txtReMark.Text = Perference.ReScoreMark;
+
             Utilities.SetSemesterDefaultItems(cboSchoolYear, cboSemester); //顯示學年度學期選項。
 
             Semester = new SemesterSelector(cboSchoolYear, cboSemester);
@@ -81,8 +93,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
             MasterWorker.DoWork += new DoWorkEventHandler(MasterWorker_DoWork);
             MasterWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(MasterWorker_RunWorkerCompleted);
 
-            //報表設定。
-            Perference = new ReportPreference();
+            ////報表設定。
+            //Perference = new ReportPreference();
 
             FillCurrentSemesterData();
         }
@@ -120,6 +132,16 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
             lvDomain.FillItems(Utilities.DomainNames, "領域");
             lvSubject.FillItems(Subjects, "科目");
+
+            // 回填使用者勾選
+            foreach(ListViewItem lvi in lvSubject.Items)
+                if (_tmpUserSelSubjectList.Contains(lvi.Text))
+                    lvi.Checked = true;
+
+            foreach (ListViewItem lvi in lvDomain.Items)
+                if (_tmpUserSelDomainList.Contains(lvi.Text))
+                    lvi.Checked = true;
+            btnPrint.Enabled = true;
         }
 
         private void MasterWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -127,6 +149,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
             //1.Goup By 可選擇的科目清單。
             //2.寫入成績資料到 ReportStudent 上。
 
+
+            
             int schoolYear = Semester.SelectedSchoolYear;
             int semester = Semester.SelectedSemester;
             FunctionSpliter<string, JHSemesterScoreRecord> selectData = new FunctionSpliter<string, JHSemesterScoreRecord>(1000, 5);
@@ -159,20 +183,85 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 //科目成績。
                 foreach (SubjectScore each in eachScore.Subjects.Values)
                 {
-                    if (!each.Score.HasValue) continue; //沒有分數不處理。
+                    // 初始執
+                    decimal ss = -1;
+                    
+                    if(Perference.UserSelScoreType =="原始成績")
+                    {
+                        if (each.ScoreOrigin.HasValue)
+                            ss = each.ScoreOrigin.Value;
+                    }
+
+                    if (Perference.UserSelScoreType == "補考擇優")
+                    {
+                        // 成績
+                        if (each.Score.HasValue && each.Score.Value > ss)
+                            ss = each.Score.Value;
+
+                        // 補考
+                        if (each.ScoreMakeup.HasValue && each.ScoreMakeup.Value > ss)
+                            ss = each.ScoreMakeup.Value;
+
+                        // 原始
+                        if (each.ScoreOrigin.HasValue && each.ScoreOrigin.Value > ss)
+                            ss = each.ScoreOrigin.Value;
+
+                    }
+
+//                    if (!each.Score.HasValue) continue; //沒有分數不處理。
+
+                    if (ss == -1)
+                        continue;
+
                     if (!each.Credit.HasValue || each.Credit.Value <= 0) continue;  //沒有節數不處理。
 
                     if (!student.Scores[Utilities.SubjectToken].Contains(each.Subject))
-                        student.Scores[Utilities.SubjectToken].Add(each.Subject, each.Score.Value, each.Credit.Value);
+                    {
+                        student.Scores[Utilities.SubjectToken].Add(each.Subject, ss, each.Credit.Value);
+                        
+                        if (Perference.UserSelScoreType == "補考擇優" && each.ScoreMakeupLimited.HasValue)
+                        {
+                            student.Scores[Utilities.SubjectToken].AddReExam(each.Subject, each.ScoreMakeup.Value);
+                        }
+                    }
+                        
                 }
 
                 //領域成績。
                 foreach (DomainScore each in eachScore.Domains.Values)
                 {
-                    if (!each.Score.HasValue) continue;
+                    decimal dd = -1;
+                    if(Perference.UserSelScoreType == "原始成績")
+                    {
+                        if (each.ScoreOrigin.HasValue)
+                            dd = each.ScoreOrigin.Value;
+                    }
+
+                    if (Perference.UserSelScoreType == "補考擇優")
+                    {
+                        if (each.Score.HasValue && each.Score.Value > dd)
+                            dd = each.Score.Value;
+
+                        if (each.ScoreMakeup.HasValue && each.ScoreMakeup.Value > dd)
+                            dd = each.ScoreMakeup.Value;
+
+                        if (each.ScoreOrigin.HasValue && each.ScoreOrigin.Value > dd)
+                            dd = each.ScoreOrigin.Value;
+                    }
+
+                    //if (!each.Score.HasValue) continue;
+                    if (dd == -1)
+                        continue;
+
                     if (!each.Credit.HasValue || each.Credit.Value <= 0) continue;
 
-                    student.Scores[Utilities.DomainToken].Add(each.Domain, each.Score.Value, each.Credit.Value);
+                    if (!student.Scores[Utilities.DomainToken].Contains(each.Domain))
+                    {
+                        student.Scores[Utilities.DomainToken].Add(each.Domain, dd, each.Credit.Value);
+
+                        if (Perference.UserSelScoreType == "補考擇優" && each.ScoreMakeup.HasValue)
+                            student.Scores[Utilities.DomainToken].AddReExam(each.Domain, each.ScoreMakeup.Value);
+                    }                    
                 }
 
                 //運算後成績是在使用者按下列印時才計算。
@@ -243,6 +332,10 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 return;
             }
             #endregion
+
+            Perference.ReScoreMark = txtReMark.Text;
+            Perference.UserSelScoreType = cbxScoreType.Text;
+            Perference.Save();
 
             #region 重設計算資料
             foreach (ReportStudent each in AllStudents)
@@ -333,6 +426,36 @@ namespace JHEvaluation.ClassSemesterScoreReport
         private void btnClose_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void cbxScoreType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Loading = true;
+            btnPrint.Enabled = false;
+            // 存取使用成績類型
+            Perference.UserSelScoreType = cbxScoreType.Text;
+            Perference.Save();
+
+            _tmpUserSelDomainList.Clear();
+            _tmpUserSelSubjectList.Clear();
+
+            // 記錄讀取前
+            foreach(ListViewItem lvi in lvSubject.Items)
+            {
+                if (lvi.Checked)
+                    _tmpUserSelSubjectList.Add(lvi.Text);
+            }
+
+            foreach(ListViewItem lvi in lvDomain.Items)
+            {
+                if (lvi.Checked)
+                    _tmpUserSelDomainList.Add(lvi.Text);
+            }
+
+            if (MasterWorker.IsBusy)
+                WorkPadding = true;
+            else
+                MasterWorker.RunWorkerAsync();
         }
     }
 }

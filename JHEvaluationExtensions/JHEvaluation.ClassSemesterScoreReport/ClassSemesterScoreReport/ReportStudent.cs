@@ -140,6 +140,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
         private Dictionary<string, decimal> _scores = new Dictionary<string, decimal>();
         private Dictionary<string, decimal> _weight = new Dictionary<string, decimal>();
 
+        private Dictionary<string, decimal> _ReExamScores = new Dictionary<string, decimal>();
+
         public ScoreCollection()
         {
         }
@@ -153,6 +155,16 @@ namespace JHEvaluation.ClassSemesterScoreReport
             _weight.Add(subject, weight);
         }
 
+        /// <summary>
+        /// 加入科目補考成績
+        /// </summary>
+        /// <param name="subject"></param>
+        /// <param name="score"></param>
+        public void AddReExam(string subject,decimal score)
+        {
+            _ReExamScores.Add(subject.Trim(), score);
+        }
+
         public bool Contains(string subject)
         {
             return _scores.ContainsKey(subject.Trim());
@@ -162,6 +174,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
         {
             _scores.Clear();
             _weight.Clear();
+            _ReExamScores.Clear();
         }
 
         /// <summary>
@@ -178,6 +191,20 @@ namespace JHEvaluation.ClassSemesterScoreReport
         public Dictionary<string, decimal> Weights
         {
             get { return _weight; }
+        }
+
+        /// <summary>
+        /// 取得補考成績，沒有回傳-1
+        /// </summary>
+        /// <param name="subj"></param>
+        /// <returns></returns>
+        public decimal GetReExamScore(string subj)
+        {
+            string key = subj.Trim();
+            decimal value = -1;
+            if (_ReExamScores.ContainsKey(key))
+                value = _ReExamScores[key];
+            return value;
         }
     }
     #endregion
