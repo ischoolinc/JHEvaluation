@@ -77,7 +77,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
         private void MainForm_Load(object sender, EventArgs e)
         {
             cbxScoreType.Items.Add("原始成績");
-            cbxScoreType.Items.Add("補考擇優");
+            cbxScoreType.Items.Add("原始補考擇優");
             cbxScoreType.DropDownStyle = ComboBoxStyle.DropDownList;
 
             if (Perference == null)
@@ -192,7 +192,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                             ss = each.ScoreOrigin.Value;
                     }
 
-                    if (Perference.UserSelScoreType == "補考擇優")
+                    if (Perference.UserSelScoreType == "原始補考擇優")
                     {
                         // 成績
                         if (each.Score.HasValue && each.Score.Value > ss)
@@ -219,7 +219,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     {
                         student.Scores[Utilities.SubjectToken].Add(each.Subject, ss, each.Credit.Value);
                         
-                        if (Perference.UserSelScoreType == "補考擇優" && each.ScoreMakeupLimited.HasValue)
+                        if (Perference.UserSelScoreType == "原始補考擇優" && each.ScoreMakeupLimited.HasValue)
                         {
                             student.Scores[Utilities.SubjectToken].AddReExam(each.Subject, each.ScoreMakeup.Value);
                         }
@@ -237,7 +237,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                             dd = each.ScoreOrigin.Value;
                     }
 
-                    if (Perference.UserSelScoreType == "補考擇優")
+                    if (Perference.UserSelScoreType == "原始補考擇優")
                     {
                         if (each.Score.HasValue && each.Score.Value > dd)
                             dd = each.Score.Value;
@@ -259,7 +259,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     {
                         student.Scores[Utilities.DomainToken].Add(each.Domain, dd, each.Credit.Value);
 
-                        if (Perference.UserSelScoreType == "補考擇優" && each.ScoreMakeup.HasValue)
+                        if (Perference.UserSelScoreType == "原始補考擇優" && each.ScoreMakeup.HasValue)
                             student.Scores[Utilities.DomainToken].AddReExam(each.Domain, each.ScoreMakeup.Value);
                     }                    
                 }
