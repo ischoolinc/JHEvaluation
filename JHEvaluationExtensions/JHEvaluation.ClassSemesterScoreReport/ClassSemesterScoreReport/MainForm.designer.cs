@@ -28,6 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Group1", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Group2", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Item 1");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Item 2");
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Item 3");
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Item 4");
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Item 5");
             System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Group1", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Group2", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("Item 1");
@@ -35,13 +42,6 @@
             System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("Item 3");
             System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem("Item 4");
             System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem("Item 5");
-            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("Group1", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Group2", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem("Item 1");
-            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem("Item 2");
-            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem("Item 3");
-            System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem("Item 4");
-            System.Windows.Forms.ListViewItem listViewItem15 = new System.Windows.Forms.ListViewItem("Item 5");
             this.gpSubject = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.plSubject = new System.Windows.Forms.Panel();
             this.LoadingSubject = new System.Windows.Forms.PictureBox();
@@ -61,7 +61,6 @@
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.labelX4 = new DevComponents.DotNetBar.LabelX();
             this.txtReMark = new DevComponents.DotNetBar.Controls.TextBoxX();
-            this.labelX5 = new DevComponents.DotNetBar.LabelX();
             this.gpSubject.SuspendLayout();
             this.plSubject.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LoadingSubject)).BeginInit();
@@ -143,29 +142,29 @@
             this.lvSubject.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSubject.CheckBoxes = true;
             this.lvSubject.Dock = System.Windows.Forms.DockStyle.Fill;
-            listViewGroup3.Header = "Group1";
-            listViewGroup3.Name = "listViewGroup1";
-            listViewGroup4.Header = "Group2";
-            listViewGroup4.Name = "listViewGroup2";
+            listViewGroup1.Header = "Group1";
+            listViewGroup1.Name = "listViewGroup1";
+            listViewGroup2.Header = "Group2";
+            listViewGroup2.Name = "listViewGroup2";
             this.lvSubject.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup3,
-            listViewGroup4});
-            listViewItem6.Group = listViewGroup3;
-            listViewItem6.StateImageIndex = 0;
-            listViewItem7.Group = listViewGroup4;
-            listViewItem7.StateImageIndex = 0;
-            listViewItem8.Group = listViewGroup3;
-            listViewItem8.StateImageIndex = 0;
-            listViewItem9.Group = listViewGroup4;
-            listViewItem9.StateImageIndex = 0;
-            listViewItem10.Group = listViewGroup3;
-            listViewItem10.StateImageIndex = 0;
+            listViewGroup1,
+            listViewGroup2});
+            listViewItem1.Group = listViewGroup1;
+            listViewItem1.StateImageIndex = 0;
+            listViewItem2.Group = listViewGroup2;
+            listViewItem2.StateImageIndex = 0;
+            listViewItem3.Group = listViewGroup1;
+            listViewItem3.StateImageIndex = 0;
+            listViewItem4.Group = listViewGroup2;
+            listViewItem4.StateImageIndex = 0;
+            listViewItem5.Group = listViewGroup1;
+            listViewItem5.StateImageIndex = 0;
             this.lvSubject.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem6,
-            listViewItem7,
-            listViewItem8,
-            listViewItem9,
-            listViewItem10});
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4,
+            listViewItem5});
             this.lvSubject.Location = new System.Drawing.Point(3, 3);
             this.lvSubject.Name = "lvSubject";
             this.lvSubject.Size = new System.Drawing.Size(254, 219);
@@ -179,7 +178,7 @@
             this.lnConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnConfig.AutoSize = true;
             this.lnConfig.BackColor = System.Drawing.Color.Transparent;
-            this.lnConfig.Location = new System.Drawing.Point(6, 337);
+            this.lnConfig.Location = new System.Drawing.Point(6, 345);
             this.lnConfig.Name = "lnConfig";
             this.lnConfig.Size = new System.Drawing.Size(125, 17);
             this.lnConfig.TabIndex = 4;
@@ -195,7 +194,7 @@
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
             this.btnPrint.Enabled = false;
-            this.btnPrint.Location = new System.Drawing.Point(299, 335);
+            this.btnPrint.Location = new System.Drawing.Point(299, 343);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
             this.btnPrint.TabIndex = 5;
@@ -209,7 +208,7 @@
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
             this.btnClose.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnClose.Location = new System.Drawing.Point(380, 335);
+            this.btnClose.Location = new System.Drawing.Point(380, 343);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(65, 23);
             this.btnClose.TabIndex = 7;
@@ -343,29 +342,29 @@
             this.lvDomain.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvDomain.CheckBoxes = true;
             this.lvDomain.Dock = System.Windows.Forms.DockStyle.Fill;
-            listViewGroup5.Header = "Group1";
-            listViewGroup5.Name = "listViewGroup1";
-            listViewGroup6.Header = "Group2";
-            listViewGroup6.Name = "listViewGroup2";
+            listViewGroup3.Header = "Group1";
+            listViewGroup3.Name = "listViewGroup1";
+            listViewGroup4.Header = "Group2";
+            listViewGroup4.Name = "listViewGroup2";
             this.lvDomain.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup5,
-            listViewGroup6});
-            listViewItem11.Group = listViewGroup5;
-            listViewItem11.StateImageIndex = 0;
-            listViewItem12.Group = listViewGroup6;
-            listViewItem12.StateImageIndex = 0;
-            listViewItem13.Group = listViewGroup5;
-            listViewItem13.StateImageIndex = 0;
-            listViewItem14.Group = listViewGroup6;
-            listViewItem14.StateImageIndex = 0;
-            listViewItem15.Group = listViewGroup5;
-            listViewItem15.StateImageIndex = 0;
+            listViewGroup3,
+            listViewGroup4});
+            listViewItem6.Group = listViewGroup3;
+            listViewItem6.StateImageIndex = 0;
+            listViewItem7.Group = listViewGroup4;
+            listViewItem7.StateImageIndex = 0;
+            listViewItem8.Group = listViewGroup3;
+            listViewItem8.StateImageIndex = 0;
+            listViewItem9.Group = listViewGroup4;
+            listViewItem9.StateImageIndex = 0;
+            listViewItem10.Group = listViewGroup3;
+            listViewItem10.StateImageIndex = 0;
             this.lvDomain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem11,
-            listViewItem12,
-            listViewItem13,
-            listViewItem14,
-            listViewItem15});
+            listViewItem6,
+            listViewItem7,
+            listViewItem8,
+            listViewItem9,
+            listViewItem10});
             this.lvDomain.Location = new System.Drawing.Point(3, 3);
             this.lvDomain.Name = "lvDomain";
             this.lvDomain.Size = new System.Drawing.Size(148, 219);
@@ -413,12 +412,11 @@
             this.labelX4.BackgroundStyle.Class = "";
             this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.labelX4.Location = new System.Drawing.Point(157, 402);
+            this.labelX4.Location = new System.Drawing.Point(204, 304);
             this.labelX4.Name = "labelX4";
             this.labelX4.Size = new System.Drawing.Size(87, 21);
             this.labelX4.TabIndex = 15;
             this.labelX4.Text = "補考成績加註";
-            this.labelX4.Visible = false;
             // 
             // txtReMark
             // 
@@ -427,31 +425,15 @@
             // 
             this.txtReMark.Border.Class = "TextBoxBorder";
             this.txtReMark.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtReMark.Location = new System.Drawing.Point(248, 400);
+            this.txtReMark.Location = new System.Drawing.Point(295, 302);
             this.txtReMark.Name = "txtReMark";
             this.txtReMark.Size = new System.Drawing.Size(67, 25);
             this.txtReMark.TabIndex = 16;
-            this.txtReMark.Visible = false;
-            // 
-            // labelX5
-            // 
-            this.labelX5.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX5.BackgroundStyle.Class = "";
-            this.labelX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX5.Location = new System.Drawing.Point(196, 303);
-            this.labelX5.Name = "labelX5";
-            this.labelX5.Size = new System.Drawing.Size(249, 23);
-            this.labelX5.TabIndex = 17;
-            this.labelX5.Text = "科目或領域分數藍色是因補考成績調整。";
             // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(456, 364);
-            this.Controls.Add(this.labelX5);
+            this.ClientSize = new System.Drawing.Size(456, 372);
             this.Controls.Add(this.txtReMark);
             this.Controls.Add(this.labelX4);
             this.Controls.Add(this.cbxScoreType);
@@ -503,7 +485,6 @@
         private DevComponents.DotNetBar.LabelX labelX1;
         private DevComponents.DotNetBar.LabelX labelX4;
         private DevComponents.DotNetBar.Controls.TextBoxX txtReMark;
-        private DevComponents.DotNetBar.LabelX labelX5;
 
     }
 }

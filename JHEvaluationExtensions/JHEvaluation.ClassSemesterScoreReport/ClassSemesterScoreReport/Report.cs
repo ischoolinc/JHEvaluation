@@ -89,6 +89,15 @@ namespace JHEvaluation.ClassSemesterScoreReport
             int ClassOffset = 0; //整個班級的 Offset。
             int RowOffset = 0;
             int ColumnOffset = 0;
+            int AvgRowOffset = 0;
+
+            // 計算平均與及格人數用
+            Dictionary<string, decimal> ClassSubjSumScoreDict = new Dictionary<string, decimal>();
+            Dictionary<string, decimal> ClassDomainSumScoreDict = new Dictionary<string, decimal>();
+            Dictionary<string, decimal> ClassSubjPeopleDict = new Dictionary<string, decimal>();
+            Dictionary<string, decimal> ClassDomainPeopleDict = new Dictionary<string, decimal>();
+            Dictionary<string, int> ClassSubjPassDict = new Dictionary<string, int>();
+            Dictionary<string, int> ClassDomainPassDict = new Dictionary<string, int>();
 
             Range all = Template.Worksheets.GetRangeByName("All");
 
@@ -100,6 +109,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
             Range rowHeaders = Template.Worksheets.GetRangeByName("RowHeaders");
             Range columnHeaders = Template.Worksheets.GetRangeByName("ColumnHeaders");
             Range rankColumnHeader = Template.Worksheets.GetRangeByName("RankColumnHeader");
+            Range AverageRowHeader = Template.Worksheets.GetRangeByName("AverageRowHeaders");
 
             int RowNumber = all.RowCount;
             int DataRowNumber = rowHeaders.RowCount;
@@ -124,6 +134,13 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 {//將學生按座號排序。
                     return x.OrderSeatNo.CompareTo(y.OrderSeatNo);
                 });
+
+                ClassDomainPassDict.Clear();
+                ClassDomainPeopleDict.Clear();
+                ClassDomainSumScoreDict.Clear();
+                ClassSubjPassDict.Clear();
+                ClassSubjPeopleDict.Clear();
+                ClassSubjSumScoreDict.Clear();
 
                 //描述要印出來的科目、領域有哪些。
                 ScoreHeaderIndexer headers = new ScoreHeaderIndexer();
@@ -153,6 +170,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 //填入科目、領域資料。
                 RowOffset = columnHeaders.FirstRow + ClassOffset;
                 ColumnOffset = columnHeaders.FirstColumn;
+                AvgRowOffset = AverageRowHeader.FirstRow + ClassOffset;
                 foreach (Header eachHeacher in headers)
                 {
                     if (eachHeacher.IsDomain)
@@ -182,12 +200,28 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
                             decimal ss=(decimal)scores[eachSubj];
                             decimal rss = scores.GetReExamScore(eachSubj);
-                            
-                            if(Perference.UserSelScoreType =="補考擇優")
-                                if (rss >= ss)
-                                    OutputSheet.Cells[RowOffset, headerIndex].Style.Font.Color = System.Drawing.Color.Blue;
 
                             OutputSheet.Cells[RowOffset, headerIndex].PutValue(ss);
+
+                            if (Perference.UserSelScoreType == "原始補考擇優")
+                                if (rss >= ss)
+                                    OutputSheet.Cells[RowOffset, headerIndex].PutValue(Perference.ReScoreMark+ss);
+                            
+
+                            // 科目平均與及格人數
+                            if (!ClassSubjSumScoreDict.ContainsKey(eachSubj))
+                                ClassSubjSumScoreDict.Add(eachSubj, 0);
+
+                            if (!ClassSubjPeopleDict.ContainsKey(eachSubj))
+                                ClassSubjPeopleDict.Add(eachSubj, 0);
+
+                            if (!ClassSubjPassDict.ContainsKey(eachSubj))
+                                ClassSubjPassDict.Add(eachSubj, 0);
+
+                            ClassSubjSumScoreDict[eachSubj] += ss;
+                            ClassSubjPeopleDict[eachSubj]++;
+                            if (ss >= 60)
+                                ClassSubjPassDict[eachSubj]++;
                         }
                     }
 
@@ -201,13 +235,29 @@ namespace JHEvaluation.ClassSemesterScoreReport
                             int headerIndex = headers[eachDomain, true].ColumnIndex;
                             
                             decimal dd =(decimal)scores[eachDomain];
-                            decimal rdd = scores.GetReExamScore(eachDomain);                            
-
-                            if(Perference.UserSelScoreType=="補考擇優")                            
-                                if (rdd >= dd)
-                                    OutputSheet.Cells[RowOffset, headerIndex].Style.Font.Color = System.Drawing.Color.Blue;
+                            decimal rdd = scores.GetReExamScore(eachDomain);
 
                             OutputSheet.Cells[RowOffset, headerIndex].PutValue(dd);
+
+                            if (Perference.UserSelScoreType == "原始補考擇優")
+                                if (rdd >= dd)
+                                    OutputSheet.Cells[RowOffset, headerIndex].PutValue(Perference.ReScoreMark + dd);
+                                                       
+
+                            // 領域平均與及格人數
+                            if (!ClassDomainSumScoreDict.ContainsKey(eachDomain))
+                                ClassDomainSumScoreDict.Add(eachDomain, 0);
+
+                            if (!ClassDomainPeopleDict.ContainsKey(eachDomain))
+                                ClassDomainPeopleDict.Add(eachDomain, 0);
+
+                            if (!ClassDomainPassDict.ContainsKey(eachDomain))
+                                ClassDomainPassDict.Add(eachDomain, 0);
+
+                            ClassDomainSumScoreDict[eachDomain] += dd;
+                            ClassDomainPeopleDict[eachDomain]++;
+                            if (dd >= 60)
+                                ClassDomainPassDict[eachDomain]++;
                         }
                     }
 
@@ -217,7 +267,24 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     foreach (string eachSummary in Perference.PrintItems)
                     {
                         if (summaryScores.Contains(eachSummary))
-                            OutputSheet.Cells[RowOffset, summaryDataOffset].PutValue(summaryScores[eachSummary]);
+                        {
+                            decimal su = summaryScores[eachSummary];
+                            OutputSheet.Cells[RowOffset, summaryDataOffset].PutValue(su);
+
+                            if (!ClassDomainSumScoreDict.ContainsKey(eachSummary))
+                                ClassDomainSumScoreDict.Add(eachSummary, 0);
+
+                            if (!ClassDomainPeopleDict.ContainsKey(eachSummary))
+                                ClassDomainPeopleDict.Add(eachSummary, 0);
+
+                            if (!ClassDomainPassDict.ContainsKey(eachSummary))
+                                ClassDomainPassDict.Add(eachSummary, 0);
+
+                            ClassDomainSumScoreDict[eachSummary] += su;
+                            ClassDomainPeopleDict[eachSummary]++;
+                            if (su >= 60)
+                                ClassDomainPassDict[eachSummary]++;
+                        }
                         summaryDataOffset++;
                     }
 
@@ -231,6 +298,67 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     RowOffset++;
 //                    if ((RowOffset - (rowHeaders.FirstRow + ClassOffset)) >= 45) break; //超過45個學生就不印了。
                 }
+
+
+                #region 填入平均與人數
+
+                // 科目及格人數
+                foreach (string key in ClassSubjPassDict.Keys)
+                {
+                    if (headers.Contains(key, false))
+                    {
+                        int headerIndex = headers[key, false].ColumnIndex;
+                        OutputSheet.Cells[AvgRowOffset + 1, headerIndex].PutValue(ClassSubjPassDict[key]);
+                    }
+                }
+                // 科目平均
+                foreach(string key in ClassSubjSumScoreDict.Keys)
+                {
+                    if (headers.Contains(key, false))
+                    {
+                        int headerIndex = headers[key, false].ColumnIndex;
+                        decimal ss = ClassSubjSumScoreDict[key] / ClassSubjPeopleDict[key];
+                        OutputSheet.Cells[AvgRowOffset, headerIndex].PutValue(ss);
+                    }
+                }
+
+                // 領域及格人數
+                foreach (string key in ClassDomainPassDict.Keys)
+                {
+                    if (headers.Contains(key, true))
+                    {
+                        int headerIndex = headers[key, true].ColumnIndex;
+                        OutputSheet.Cells[AvgRowOffset + 1, headerIndex].PutValue(ClassDomainPassDict[key]);
+                    }
+                }
+                // 領域平均
+                foreach (string key in ClassDomainSumScoreDict.Keys)
+                {
+                    if (headers.Contains(key, true))
+                    {
+                        int headerIndex = headers[key, true].ColumnIndex;
+                        decimal dd = ClassDomainSumScoreDict[key] / ClassDomainPeopleDict[key];
+                        OutputSheet.Cells[AvgRowOffset, headerIndex].PutValue(dd);
+                    }
+                }
+
+                int suDataOffset = (columnHeaders.FirstColumn + ScoreHeaderCount) - Perference.PrintItems.Count;
+                // 總分平均,人數
+                foreach (string eachSummary in Perference.PrintItems)
+                {                    
+                    
+                    if(ClassDomainSumScoreDict.ContainsKey(eachSummary))
+                    {
+                        decimal dd = ClassDomainSumScoreDict[eachSummary] / ClassDomainPeopleDict[eachSummary];
+                        OutputSheet.Cells[AvgRowOffset, suDataOffset].PutValue(dd);
+                    }
+                    
+                    if(ClassDomainPassDict.ContainsKey(eachSummary))
+                        OutputSheet.Cells[AvgRowOffset + 1, suDataOffset].PutValue(ClassDomainPassDict[eachSummary]);
+                    suDataOffset++;
+                }
+
+                #endregion
 
                 #region 填入標題及回條
                 //Ex. 新竹市立光華國民中學 97 學年度第 1 學期    101  第1次平時評量成績單
