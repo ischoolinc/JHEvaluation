@@ -332,7 +332,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             foreach (StudentRecord StudRec in _students)
             {
                 if (!_result.ContainsKey(StudRec.ID)) continue;
-                
+
                 //處理年級為0的資料
                 List<ResultDetail> zeroGrades = new List<ResultDetail>();
 
@@ -429,7 +429,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
                 sgpd.DocDate = UserSeldtDate;
 
-                foreach(ResultDetail rd in zeroGrades)
+                foreach (ResultDetail rd in zeroGrades)
                 {
                     sgpd.Text += string.Join(",", rd.Details);
                 }
@@ -441,7 +441,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             Dictionary<string, object> FieldData = new Dictionary<string, object>();
 
             // 班座排序
-            StudentGraduationPredictDataList = (from data in StudentGraduationPredictDataList orderby data.ClassName, data.SeatNo.PadLeft(3,'0') ascending select data).ToList();
+            StudentGraduationPredictDataList = (from data in StudentGraduationPredictDataList orderby data.ClassName, data.SeatNo.PadLeft(3, '0') ascending select data).ToList();
 
             foreach (StudentGraduationPredictData sgpd in StudentGraduationPredictDataList)
             {
@@ -720,8 +720,11 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
             // 產出"學習領域畢業總平均明細", 小郭, 2013/12/30
             if (Config.rpt_isCheckGraduateDomain == true)
+            {
                 OutStudentDomainData(book, sorted);
+                ExportStudentDemeritAmountAllData(book, sorted);
 
+            }
             try
             {
 
@@ -1079,12 +1082,12 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                     if (TempData.tmpStudDomainCreditDict.Count > 0)
                     {
                         if (TempData.tmpStudDomainCreditDict.ContainsKey(student.ID))
-                        { 
+                        {
                             // 國語文
                             if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("國語文"))
-                            {                                
+                            {
                                 decimal sc = TempData.tmpStudDomainScoreDict[student.ID]["國語文"] / TempData.tmpStudDomainCreditDict[student.ID]["國語文"];
-                                if(sc>=60)
+                                if (sc >= 60)
                                     SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleNormal);
                                 else
                                     SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleRed);
@@ -1097,9 +1100,9 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                             {
                                 decimal sc = 0;
                                 if (TempData.tmpStudDomainScoreDict[student.ID].ContainsKey("英語"))
-                                    sc = TempData.tmpStudDomainScoreDict[student.ID]["英語"] / TempData.tmpStudDomainCreditDict[student.ID]["英語"];                              
+                                    sc = TempData.tmpStudDomainScoreDict[student.ID]["英語"] / TempData.tmpStudDomainCreditDict[student.ID]["英語"];
 
-                                if(sc>=60)
+                                if (sc >= 60)
                                     SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleNormal);
                                 else
                                     SetStudentDomainCell(cells, rowIndex, columnIndex++, sc, styleRed);
@@ -1147,6 +1150,86 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             cells[rowIndex, columnIndex].Style = style;
         }
 
-    }
+        /// <summary>
+        /// 產生學生獎懲明細工作表
+        /// </summary>
+        /// <param name="wb"></param>
+        /// <param name="studList"></param>
+        private void ExportStudentDemeritAmountAllData(Workbook wb, List<StudentRecord> studList)
+        {
+            Worksheet sheet = wb.Worksheets[wb.Worksheets.Add()];
+            sheet.Name = "獎懲累積明細";
+            int rowIndex = 0;
+            int columnIndex = 0;
 
+            Cells cells = sheet.Cells;
+
+            #region 設定Style
+            Style styleNormal = wb.Styles[wb.Styles.Add()];
+            //Setting the line style of the top border
+            styleNormal.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the top border
+            styleNormal.Borders[BorderType.TopBorder].Color = Color.Black;
+            //Setting the line style of the bottom border
+            styleNormal.Borders[BorderType.BottomBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the bottom border
+            styleNormal.Borders[BorderType.BottomBorder].Color = Color.Black;
+            //Setting the line style of the left border
+            styleNormal.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the left border
+            styleNormal.Borders[BorderType.LeftBorder].Color = Color.Black;
+            //Setting the line style of the right border
+            styleNormal.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the right border
+            styleNormal.Borders[BorderType.RightBorder].Color = Color.Black;
+
+            Style styleRed = wb.Styles[wb.Styles.Add()];
+            styleRed.Copy(styleNormal);
+            styleRed.Font.Color = Color.Red;
+            #endregion 設定Style
+
+            #region 輸出標題
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "班級", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "座號", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "學號", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "姓名", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "大功", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "小功", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "嘉獎", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "大過", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "小過", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "警告", styleNormal);
+            #endregion
+
+            #region 輸出明細
+            foreach (StudentRecord student in studList)
+            {
+                rowIndex++;
+                columnIndex = 0;
+                string className = student.Class != null ? student.Class.Name : "";
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, className, styleNormal);      // 班級
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.SeatNo, styleNormal);          // 座號
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.StudentNumber, styleNormal);   // 學號
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.Name, styleNormal);            // 姓名
+                               
+                #region 輸出有資料的學生                
+                if(TempData.tmpStudentDemeritAmountAllDict.ContainsKey(student.ID))
+                {
+                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["大功"].ToString(), styleNormal);
+                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["小功"].ToString(), styleNormal);
+                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["嘉獎"].ToString(), styleNormal);
+                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["大過"].ToString(), styleNormal);
+                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["小過"].ToString(), styleNormal);
+                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["警告"].ToString(), styleNormal);
+                }
+                #endregion
+            }
+            #endregion
+        }
+
+        private void ExportStudentAbsenceAmountAllData(Workbook wb, List<StudentRecord> studList)
+        {
+
+        }
+    }
 }

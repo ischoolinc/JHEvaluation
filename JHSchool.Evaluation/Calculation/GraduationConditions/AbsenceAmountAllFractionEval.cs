@@ -108,7 +108,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
         Dictionary<string, bool> IEvaluative.Evaluate(IEnumerable<StudentRecord> list)
         {
             _result.Clear();
-
+            TempData.tmpStudentAbsenceAmountAllDict.Clear();
             Dictionary<string, bool> passList = new Dictionary<string, bool>();
 
             Dictionary<string, List<AutoSummaryRecord>> morals = new Dictionary<string, List<AutoSummaryRecord>>();
@@ -181,6 +181,17 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                         if (!counter.ContainsKey(info))
                             counter.Add(info, 0);
                         counter[info] += acRecord.Count * _types[acRecord.PeriodType + ":" + acRecord.Name];
+
+                        // 累積缺曠明細
+                        if (!TempData.tmpStudentAbsenceAmountAllDict.ContainsKey(student.ID))
+                            TempData.tmpStudentAbsenceAmountAllDict.Add(student.ID, new Dictionary<string, int>());
+
+                        string strType = acRecord.PeriodType + ":" + acRecord.Name;
+                        if (!TempData.tmpStudentAbsenceAmountAllDict[student.ID].ContainsKey(strType))
+                            TempData.tmpStudentAbsenceAmountAllDict[student.ID].Add(strType, 0);
+
+                        TempData.tmpStudentAbsenceAmountAllDict[student.ID][strType] += acRecord.Count;
+
                     }
                 }
 

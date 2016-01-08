@@ -91,6 +91,9 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
             //    studHisRecDic.Add(rec.RefStudentID, rec);
             //}
 
+            // 獎懲明細統計
+            TempData.tmpStudentDemeritAmountAllDict.Clear();
+
             foreach (StudentRecord student in list)
             {
                 passList.Add(student.ID, true);
@@ -132,6 +135,26 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     info.Semester = record.Semester;
                     if (!counter.ContainsKey(info))
                         counter.Add(info, new DisTestABC());
+
+                    if (!TempData.tmpStudentDemeritAmountAllDict.ContainsKey(student.ID))
+                    {
+                        Dictionary<string, int> value = new Dictionary<string, int>();
+                        value.Add("大功", 0);
+                        value.Add("小功", 0);
+                        value.Add("嘉獎", 0);
+                        value.Add("大過", 0);
+                        value.Add("小過", 0);
+                        value.Add("警告", 0);
+
+                        TempData.tmpStudentDemeritAmountAllDict.Add(student.ID, value);
+                    }
+
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["大功"] += record.MeritA;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["小功"] += record.MeritB;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["嘉獎"] += record.MeritC;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["大過"] += record.DemeritA;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["小過"] += record.DemeritB;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["警告"] += record.DemeritC;
 
                     decimal total_merit = _meritConverter.BtoC(_meritConverter.AtoB(record.MeritA) + record.MeritB) + record.MeritC;
                     decimal total_demerit = _demeritConverter.BtoC(_demeritConverter.AtoB(record.DemeritA) + record.DemeritB) + record.DemeritC;
