@@ -723,7 +723,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             {
                 OutStudentDomainData(book, sorted);
                 ExportStudentDemeritAmountAllData(book, sorted);
-
+                ExportStudentAbsenceAmountAllData(book, sorted);
             }
             try
             {
@@ -1229,7 +1229,85 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
         private void ExportStudentAbsenceAmountAllData(Workbook wb, List<StudentRecord> studList)
         {
+            Worksheet sheet = wb.Worksheets[wb.Worksheets.Add()];
+            sheet.Name = "缺曠累積明細";
+            int rowIndex = 0;
+            int columnIndex = 0;
 
+            Cells cells = sheet.Cells;
+
+            #region 設定Style
+            Style styleNormal = wb.Styles[wb.Styles.Add()];
+            //Setting the line style of the top border
+            styleNormal.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the top border
+            styleNormal.Borders[BorderType.TopBorder].Color = Color.Black;
+            //Setting the line style of the bottom border
+            styleNormal.Borders[BorderType.BottomBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the bottom border
+            styleNormal.Borders[BorderType.BottomBorder].Color = Color.Black;
+            //Setting the line style of the left border
+            styleNormal.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the left border
+            styleNormal.Borders[BorderType.LeftBorder].Color = Color.Black;
+            //Setting the line style of the right border
+            styleNormal.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Thin;
+            //Setting the color of the right border
+            styleNormal.Borders[BorderType.RightBorder].Color = Color.Black;
+
+            Style styleRed = wb.Styles[wb.Styles.Add()];
+            styleRed.Copy(styleNormal);
+            styleRed.Font.Color = Color.Red;
+            #endregion 設定Style
+
+            #region 輸出標題
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "班級", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "座號", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "學號", styleNormal);
+            SetStudentDomainCell(cells, rowIndex, columnIndex++, "姓名", styleNormal);
+
+            Dictionary<string, int> colDict = new Dictionary<string, int>();
+
+            int colIdx = columnIndex;
+            foreach(string sid in TempData.tmpStudentAbsenceAmountAllDict.Keys)
+            {
+                foreach(string key in TempData.tmpStudentAbsenceAmountAllDict[sid].Keys)
+                {
+                    if(!colDict.ContainsKey(key))
+                    {
+                        colDict.Add(key, colIdx);
+                        colIdx++;
+                    }
+                }
+            }
+
+            foreach(string key in colDict.Keys)
+                SetStudentDomainCell(cells, rowIndex, colDict[key], key, styleNormal);
+
+            #endregion
+
+            #region 輸出明細
+            foreach (StudentRecord student in studList)
+            {
+                rowIndex++;
+                columnIndex = 0;
+                string className = student.Class != null ? student.Class.Name : "";
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, className, styleNormal);      // 班級
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.SeatNo, styleNormal);          // 座號
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.StudentNumber, styleNormal);   // 學號
+                SetStudentDomainCell(cells, rowIndex, columnIndex++, student.Name, styleNormal);            // 姓名
+
+                #region 輸出有資料的學生
+                if(TempData.tmpStudentAbsenceAmountAllDict.ContainsKey(student.ID))
+                {
+                    foreach(string key in TempData.tmpStudentAbsenceAmountAllDict[student.ID].Keys)
+                    {
+                        SetStudentDomainCell(cells, rowIndex, colDict[key], TempData.tmpStudentAbsenceAmountAllDict[student.ID][key], styleNormal);
+                    }
+                }
+                #endregion
+            }
+            #endregion
         }
     }
 }
