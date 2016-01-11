@@ -94,5 +94,20 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         /// 所有說明
         /// </summary>
         public string Text { get; set; }
+
+        /// <summary>
+        /// 領域說明文字
+        /// </summary>
+        public string DomainText { get; set; }
+
+        /// <summary>
+        /// 功過累計明細文字
+        /// </summary>
+        public string DemeritText { get; set; }
+
+        /// <summary>
+        /// 缺曠累計明細文字
+        /// </summary>
+        public string AbsenceText { get; set; }
     }
 }

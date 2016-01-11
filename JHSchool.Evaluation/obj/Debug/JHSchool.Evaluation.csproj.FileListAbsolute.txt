@@ -369,4 +369,3 @@ D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchoo
 D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.csproj.GenerateResource.Cache
 D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.dll
 D:\GitHub2\國中成績系統\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.pdb
-D:\GitProjModules\ischoolDesktop\JHEvaluation\JHSchool.Evaluation\obj\Debug\JHSchool.Evaluation.csprojResolveAssemblyReference.cache

@@ -429,10 +429,72 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
                 sgpd.DocDate = UserSeldtDate;
 
-                foreach (ResultDetail rd in zeroGrades)
+                // 說明文字
+                StringBuilder sbText = new StringBuilder();
+                List<string> textList = new List<string>();
+                foreach (ResultDetail rd in zeroGrades)                    
+                    sbText.Append(string.Join(",", rd.Details.ToArray()));
+
+
+                sbText.AppendLine("");
+                textList.Clear();                 
+
+                // 領域
+                 if (StudentDomainResult._DomainResult.ContainsKey(StudRec.ID))
+                 {
+                     foreach (string dName in StudentDomainResult._DomainResult[StudRec.ID].Keys)
+                     {
+                         textList.Add(dName + ":" + StudentDomainResult._DomainResult[StudRec.ID][dName].domainScore);                       
+                     }                
+                 }                
+
+                if(TempData.tmpStudDomainScoreDict.ContainsKey(StudRec.ID))
                 {
-                    sgpd.Text += string.Join(",", rd.Details);
+                    foreach(string key in TempData.tmpStudDomainScoreDict[StudRec.ID].Keys)
+                    {                      
+                        // 小數下第2位四捨五入
+                        decimal sc = Math.Round(TempData.tmpStudDomainScoreDict[StudRec.ID][key] / TempData.tmpStudDomainCreditDict[StudRec.ID][key], 2, MidpointRounding.AwayFromZero);
+                        textList.Add(key + ":" + sc);
+                    }                    
                 }
+
+                if (textList.Count > 0)
+                {
+                    sbText.Append("各領域加權總平均：");
+                    sbText.AppendLine(string.Join(",", textList.ToArray()));
+                }                    
+
+                // 缺曠
+                if(TempData.tmpStudentAbsenceAmountAllDict.ContainsKey(StudRec.ID))
+                {                    
+                    textList.Clear();
+                    foreach(string key in TempData.tmpStudentAbsenceAmountAllDict[StudRec.ID].Keys)
+                        textList.Add(key + ":" + TempData.tmpStudentAbsenceAmountAllDict[StudRec.ID][key]);
+
+
+                    if(textList.Count>0)
+                        sbText.Append("缺曠累計：");
+
+                    sbText.AppendLine(string.Join(",", textList.ToArray()));
+                }
+
+                // 獎懲
+                if(TempData.tmpStudentDemeritAmountAllDict.ContainsKey(StudRec.ID))
+                {
+                    
+                    textList.Clear();
+
+                    foreach (string key in TempData.tmpStudentDemeritAmountAllDict[StudRec.ID].Keys)
+                    {
+                        if (TempData.tmpStudentDemeritAmountAllDict[StudRec.ID][key]>0)
+                            textList.Add(key + ":" + TempData.tmpStudentDemeritAmountAllDict[StudRec.ID][key]);
+                    }
+                    if(textList.Count>0)
+                        sbText.Append("獎懲累計：");
+                    sbText.Append(string.Join(",", textList.ToArray()));
+                }
+                
+                sgpd.Text = sbText.ToString();
 
                 StudentGraduationPredictDataList.Add(sgpd);
             }
@@ -1296,6 +1358,9 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 SetStudentDomainCell(cells, rowIndex, columnIndex++, student.SeatNo, styleNormal);          // 座號
                 SetStudentDomainCell(cells, rowIndex, columnIndex++, student.StudentNumber, styleNormal);   // 學號
                 SetStudentDomainCell(cells, rowIndex, columnIndex++, student.Name, styleNormal);            // 姓名
+
+                foreach (string key in colDict.Keys)
+                    SetStudentDomainCell(cells, rowIndex, colDict[key], "", styleNormal);
 
                 #region 輸出有資料的學生
                 if(TempData.tmpStudentAbsenceAmountAllDict.ContainsKey(student.ID))
