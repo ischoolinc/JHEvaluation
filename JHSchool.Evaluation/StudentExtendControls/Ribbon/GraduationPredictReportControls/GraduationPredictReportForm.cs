@@ -432,6 +432,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 // 說明文字
                 StringBuilder sbText = new StringBuilder();
                 List<string> textList = new List<string>();
+                List<string> textSubList = new List<string>();
                 foreach (ResultDetail rd in zeroGrades)                    
                     sbText.Append(string.Join(",", rd.Details.ToArray()));
 
@@ -463,34 +464,46 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                     sbText.Append("各領域加權總平均：");
                     sbText.AppendLine(string.Join(",", textList.ToArray()));
                 }                    
-
+                
                 // 缺曠
                 if(TempData.tmpStudentAbsenceAmountAllDict.ContainsKey(StudRec.ID))
                 {                    
                     textList.Clear();
-                    foreach(string key in TempData.tmpStudentAbsenceAmountAllDict[StudRec.ID].Keys)
-                        textList.Add(key + ":" + TempData.tmpStudentAbsenceAmountAllDict[StudRec.ID][key]);
+                    
+                    foreach (string key in TempData.tmpStudentAbsenceAmountAllDict[StudRec.ID].Keys)                    
+                    {
+                        textSubList.Clear();
+                        foreach (string ss in TempData.tmpStudentAbsenceAmountAllDict[StudRec.ID][key].Keys)
+                            textSubList.Add(ss + ":" + TempData.tmpStudentAbsenceAmountAllDict[StudRec.ID][key][ss]);
 
+                        if(textSubList.Count>0)
+                            textList.Add(key + ":" + string.Join(",",textSubList.ToArray()));
+                    }
 
                     if(textList.Count>0)
-                        sbText.Append("缺曠累計：");
+                        sbText.Append("各學期缺曠累計：");
 
                     sbText.AppendLine(string.Join(",", textList.ToArray()));
                 }
 
                 // 獎懲
                 if(TempData.tmpStudentDemeritAmountAllDict.ContainsKey(StudRec.ID))
-                {
-                    
-                    textList.Clear();
-
+                {                    
+                    textList.Clear();                    
                     foreach (string key in TempData.tmpStudentDemeritAmountAllDict[StudRec.ID].Keys)
                     {
-                        if (TempData.tmpStudentDemeritAmountAllDict[StudRec.ID][key]>0)
-                            textList.Add(key + ":" + TempData.tmpStudentDemeritAmountAllDict[StudRec.ID][key]);
+                        textSubList.Clear();
+                        foreach (string ss in TempData.tmpStudentDemeritAmountAllDict[StudRec.ID][key].Keys)
+                        {
+                            if(TempData.tmpStudentDemeritAmountAllDict[StudRec.ID][key][ss]>0)
+                                textSubList.Add(ss+":"+TempData.tmpStudentDemeritAmountAllDict[StudRec.ID][key][ss]);
+                        }
+
+                        if (textSubList.Count>0)
+                            textList.Add(key + ":" +string.Join(",",textSubList.ToArray()));
                     }
                     if(textList.Count>0)
-                        sbText.Append("獎懲累計：");
+                        sbText.Append("各學期獎懲累計：");
                     sbText.Append(string.Join(",", textList.ToArray()));
                 }
                 
@@ -1255,12 +1268,31 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             SetStudentDomainCell(cells, rowIndex, columnIndex++, "座號", styleNormal);
             SetStudentDomainCell(cells, rowIndex, columnIndex++, "學號", styleNormal);
             SetStudentDomainCell(cells, rowIndex, columnIndex++, "姓名", styleNormal);
-            SetStudentDomainCell(cells, rowIndex, columnIndex++, "大功", styleNormal);
-            SetStudentDomainCell(cells, rowIndex, columnIndex++, "小功", styleNormal);
-            SetStudentDomainCell(cells, rowIndex, columnIndex++, "嘉獎", styleNormal);
-            SetStudentDomainCell(cells, rowIndex, columnIndex++, "大過", styleNormal);
-            SetStudentDomainCell(cells, rowIndex, columnIndex++, "小過", styleNormal);
-            SetStudentDomainCell(cells, rowIndex, columnIndex++, "警告", styleNormal);
+            List<string> scList = new List<string>();
+            Dictionary<string, int> colDict = new Dictionary<string, int>();
+            int colIdx = columnIndex;
+            foreach (string sid in TempData.tmpStudentDemeritAmountAllDict.Keys)
+            {
+                // 學年度學期
+                foreach (string key in TempData.tmpStudentDemeritAmountAllDict[sid].Keys)
+                {
+                    if (!scList.Contains(key))
+                        scList.Add(key);
+                }
+            }
+
+            scList.Sort();
+
+            foreach (string key in scList)
+            {
+                colDict.Add(key, colIdx);
+                colIdx++;
+            }
+
+
+            foreach (string key in colDict.Keys)
+                SetStudentDomainCell(cells, rowIndex, colDict[key], key, styleNormal);
+
             #endregion
 
             #region 輸出明細
@@ -1277,16 +1309,29 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 #region 輸出有資料的學生                
                 if(TempData.tmpStudentDemeritAmountAllDict.ContainsKey(student.ID))
                 {
-                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["大功"].ToString(), styleNormal);
-                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["小功"].ToString(), styleNormal);
-                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["嘉獎"].ToString(), styleNormal);
-                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["大過"].ToString(), styleNormal);
-                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["小過"].ToString(), styleNormal);
-                    SetStudentDomainCell(cells, rowIndex, columnIndex++, TempData.tmpStudentDemeritAmountAllDict[student.ID]["警告"].ToString(), styleNormal);
+                    List<string> detail = new List<string>();
+                    foreach(string sc in TempData.tmpStudentDemeritAmountAllDict[student.ID].Keys)
+                    {
+                        int cot=0;
+                        // 獎懲明細
+                        detail.Clear();
+                        if (colDict.ContainsKey(sc))
+                            cot = colDict[sc];
+
+                        foreach(string ssc in TempData.tmpStudentDemeritAmountAllDict[student.ID][sc].Keys)
+                            if (TempData.tmpStudentDemeritAmountAllDict[student.ID][sc][ssc]>0)
+                            detail.Add(ssc + ":" + TempData.tmpStudentDemeritAmountAllDict[student.ID][sc][ssc]);
+
+                        string value=string.Join(",",detail.ToArray());
+                        SetStudentDomainCell(cells, rowIndex, cot,value , styleNormal);
+                    }
+
+
                 }
                 #endregion
             }
             #endregion
+            sheet.AutoFitColumns();
         }
 
         private void ExportStudentAbsenceAmountAllData(Workbook wb, List<StudentRecord> studList)
@@ -1328,20 +1373,27 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             SetStudentDomainCell(cells, rowIndex, columnIndex++, "學號", styleNormal);
             SetStudentDomainCell(cells, rowIndex, columnIndex++, "姓名", styleNormal);
 
+            List<string> scList = new List<string>();
             Dictionary<string, int> colDict = new Dictionary<string, int>();
-
             int colIdx = columnIndex;
             foreach(string sid in TempData.tmpStudentAbsenceAmountAllDict.Keys)
             {
-                foreach(string key in TempData.tmpStudentAbsenceAmountAllDict[sid].Keys)
+                // 學年度學期
+                foreach (string key in TempData.tmpStudentAbsenceAmountAllDict[sid].Keys)
                 {
-                    if(!colDict.ContainsKey(key))
-                    {
-                        colDict.Add(key, colIdx);
-                        colIdx++;
-                    }
+                    if(!scList.Contains(key))
+                        scList.Add(key);
                 }
             }
+
+            scList.Sort();
+
+            foreach(string key in scList)
+            {
+                colDict.Add(key, colIdx);
+                colIdx++;
+            }
+            
 
             foreach(string key in colDict.Keys)
                 SetStudentDomainCell(cells, rowIndex, colDict[key], key, styleNormal);
@@ -1362,17 +1414,32 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 foreach (string key in colDict.Keys)
                     SetStudentDomainCell(cells, rowIndex, colDict[key], "", styleNormal);
 
+                List<string> detail = new List<string> ();
                 #region 輸出有資料的學生
                 if(TempData.tmpStudentAbsenceAmountAllDict.ContainsKey(student.ID))
                 {
                     foreach(string key in TempData.tmpStudentAbsenceAmountAllDict[student.ID].Keys)
                     {
-                        SetStudentDomainCell(cells, rowIndex, colDict[key], TempData.tmpStudentAbsenceAmountAllDict[student.ID][key], styleNormal);
+                        int col = 0;
+                        if (colDict.ContainsKey(key))
+                            col = colDict[key];
+                        
+                        // 缺曠明細
+                        detail.Clear();
+                        foreach(string str in TempData.tmpStudentAbsenceAmountAllDict[student.ID][key].Keys)
+                        {
+                            string ss = str + ":" + TempData.tmpStudentAbsenceAmountAllDict[student.ID][key][str];
+                            detail.Add(ss);
+                        }
+
+                        string value=string.Join(",",detail.ToArray());
+                        SetStudentDomainCell(cells, rowIndex, col,value , styleNormal);
                     }
                 }
                 #endregion
             }
             #endregion
+            sheet.AutoFitColumns();
         }
     }
 }

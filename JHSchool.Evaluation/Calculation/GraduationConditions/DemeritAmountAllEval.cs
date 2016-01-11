@@ -136,7 +136,11 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     if (!counter.ContainsKey(info))
                         counter.Add(info, new DisTestABC());
 
+                    string scStr = info.SchoolYear + "學年度第" + info.Semester + "學期";
                     if (!TempData.tmpStudentDemeritAmountAllDict.ContainsKey(student.ID))
+                        TempData.tmpStudentDemeritAmountAllDict.Add(student.ID, new Dictionary<string, Dictionary<string, int>>());
+
+                    if (!TempData.tmpStudentDemeritAmountAllDict[student.ID].ContainsKey(scStr))
                     {
                         Dictionary<string, int> value = new Dictionary<string, int>();
                         value.Add("大功", 0);
@@ -146,15 +150,15 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                         value.Add("小過", 0);
                         value.Add("警告", 0);
 
-                        TempData.tmpStudentDemeritAmountAllDict.Add(student.ID, value);
+                        TempData.tmpStudentDemeritAmountAllDict[student.ID].Add(scStr, value);
                     }
 
-                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["大功"] += record.MeritA;
-                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["小功"] += record.MeritB;
-                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["嘉獎"] += record.MeritC;
-                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["大過"] += record.DemeritA;
-                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["小過"] += record.DemeritB;
-                    TempData.tmpStudentDemeritAmountAllDict[student.ID]["警告"] += record.DemeritC;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID][scStr]["大功"] += record.MeritA;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID][scStr]["小功"] += record.MeritB;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID][scStr]["嘉獎"] += record.MeritC;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID][scStr]["大過"] += record.DemeritA;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID][scStr]["小過"] += record.DemeritB;
+                    TempData.tmpStudentDemeritAmountAllDict[student.ID][scStr]["警告"] += record.DemeritC;
 
                     decimal total_merit = _meritConverter.BtoC(_meritConverter.AtoB(record.MeritA) + record.MeritB) + record.MeritC;
                     decimal total_demerit = _demeritConverter.BtoC(_demeritConverter.AtoB(record.DemeritA) + record.DemeritB) + record.DemeritC;

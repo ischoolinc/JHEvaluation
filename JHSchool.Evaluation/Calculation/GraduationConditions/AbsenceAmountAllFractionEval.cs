@@ -167,7 +167,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     SemesterInfo info = new SemesterInfo();
                     info.SchoolYear = record.SchoolYear;
                     info.Semester = record.Semester;
-
+                   
                     foreach (AbsenceCountRecord acRecord in record.AbsenceCounts)
                     {
                         //加總各項核定假別
@@ -184,13 +184,19 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
                         // 累積缺曠明細
                         if (!TempData.tmpStudentAbsenceAmountAllDict.ContainsKey(student.ID))
-                            TempData.tmpStudentAbsenceAmountAllDict.Add(student.ID, new Dictionary<string, int>());
+                            TempData.tmpStudentAbsenceAmountAllDict.Add(student.ID, new Dictionary<string, Dictionary<string, int>>());
 
-                        string strType = acRecord.PeriodType + ":" + acRecord.Name;
-                        if (!TempData.tmpStudentAbsenceAmountAllDict[student.ID].ContainsKey(strType))
-                            TempData.tmpStudentAbsenceAmountAllDict[student.ID].Add(strType, 0);
+                        string scStr = info.SchoolYear + "學年度第"+info.Semester+"學期";
 
-                        TempData.tmpStudentAbsenceAmountAllDict[student.ID][strType] += acRecord.Count;
+                        if (!TempData.tmpStudentAbsenceAmountAllDict[student.ID].ContainsKey(scStr))
+                            TempData.tmpStudentAbsenceAmountAllDict[student.ID].Add(scStr, new Dictionary<string, int>());
+
+                        string strType = acRecord.PeriodType + ":" + acRecord.Name; 
+                            
+                        if (!TempData.tmpStudentAbsenceAmountAllDict[student.ID][scStr].ContainsKey(strType))
+                            TempData.tmpStudentAbsenceAmountAllDict[student.ID][scStr].Add(strType, 0);
+
+                        TempData.tmpStudentAbsenceAmountAllDict[student.ID][scStr][strType] += acRecord.Count;
 
                     }
                 }
