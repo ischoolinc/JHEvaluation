@@ -481,7 +481,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                     }
 
                     if(textList.Count>0)
-                        sbText.Append("各學期缺曠累計：");
+                        sbText.Append("各學期缺曠統計：");
 
                     sbText.AppendLine(string.Join(",", textList.ToArray()));
                 }
@@ -503,7 +503,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                             textList.Add(key + ":" +string.Join(",",textSubList.ToArray()));
                     }
                     if(textList.Count>0)
-                        sbText.Append("各學期獎懲累計：");
+                        sbText.Append("各學期獎懲統計：");
                     sbText.Append(string.Join(",", textList.ToArray()));
                 }
                 
@@ -1233,7 +1233,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         private void ExportStudentDemeritAmountAllData(Workbook wb, List<StudentRecord> studList)
         {
             Worksheet sheet = wb.Worksheets[wb.Worksheets.Add()];
-            sheet.Name = "獎懲累積明細";
+            sheet.Name = "各學期獎懲統計";
             int rowIndex = 0;
             int columnIndex = 0;
 
@@ -1337,7 +1337,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         private void ExportStudentAbsenceAmountAllData(Workbook wb, List<StudentRecord> studList)
         {
             Worksheet sheet = wb.Worksheets[wb.Worksheets.Add()];
-            sheet.Name = "缺曠累積明細";
+            sheet.Name = "各學期缺曠統計";
             int rowIndex = 0;
             int columnIndex = 0;
 
