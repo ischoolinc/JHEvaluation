@@ -182,12 +182,13 @@ namespace KaoHsiung.StudentRecordReport
             bool printPeriod = Config.GetBoolean("列印節數", true);
             bool printCredit = Config.GetBoolean("列印權數", false);
             if (printPeriod && printCredit)
-                pcDisplay = "節權數";
+                pcDisplay = "節"+Environment.NewLine+"權"+Environment.NewLine+"數";
             else if (printPeriod)
-                pcDisplay = "節數";
+                pcDisplay = "節" + Environment.NewLine + "數";
             else if (printCredit)
-                pcDisplay = "權數";
+                pcDisplay = "權" + Environment.NewLine + "數";
 
+            
             while (templateBuilder.MoveToMergeField("節權數"))
                 templateBuilder.Write(pcDisplay);
             #endregion
@@ -373,7 +374,7 @@ namespace KaoHsiung.StudentRecordReport
                         StudentDoc[each].Save(XmlFileName, Aspose.Words.SaveFormat.AsposePdf);
 
                         Aspose.Pdf.Pdf pdf1 = new Aspose.Pdf.Pdf();
-
+                        
                         pdf1.BindXML(XmlFileName, null);
                         pdf1.Save(PDFFileName);
 
