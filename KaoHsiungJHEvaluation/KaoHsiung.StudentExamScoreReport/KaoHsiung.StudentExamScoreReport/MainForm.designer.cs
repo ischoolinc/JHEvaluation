@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("test");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("test");
             this.cbExam = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.btnNext = new DevComponents.DotNetBar.ButtonX();
@@ -248,9 +248,9 @@
             this.lvSubject.Border.Class = "ListViewBorder";
             this.lvSubject.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSubject.CheckBoxes = true;
-            listViewItem1.StateImageIndex = 0;
+            listViewItem2.StateImageIndex = 0;
             this.lvSubject.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewItem2});
             this.lvSubject.Location = new System.Drawing.Point(12, 3);
             this.lvSubject.Name = "lvSubject";
             this.lvSubject.Size = new System.Drawing.Size(276, 86);
@@ -317,6 +317,7 @@
             this.iptSchoolYear.Size = new System.Drawing.Size(80, 25);
             this.iptSchoolYear.TabIndex = 18;
             this.iptSchoolYear.Value = 1;
+            this.iptSchoolYear.ValueChanged += new System.EventHandler(this.iptSchoolYear_ValueChanged);
             // 
             // iptSemester
             // 
@@ -335,6 +336,7 @@
             this.iptSemester.Size = new System.Drawing.Size(80, 25);
             this.iptSemester.TabIndex = 19;
             this.iptSemester.Value = 1;
+            this.iptSemester.ValueChanged += new System.EventHandler(this.iptSemester_ValueChanged);
             // 
             // MainForm
             // 

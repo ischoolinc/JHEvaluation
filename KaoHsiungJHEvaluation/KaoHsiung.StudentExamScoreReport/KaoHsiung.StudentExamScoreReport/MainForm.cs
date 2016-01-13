@@ -302,23 +302,22 @@ namespace KaoHsiung.StudentExamScoreReport
                 lvi.Text = str;
                 lvi.Checked = true;
                 lvSubject.Items.Add(lvi);
-            }
-        
-        }
-
-        private void cboSchoolYear_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            LoadSubjectName();
-        }
-
-        private void cboSemester_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            LoadSubjectName();
+            }        
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             lvSubject.Enabled = CheckSelectItemEnable();
+        }
+
+        private void iptSchoolYear_ValueChanged(object sender, EventArgs e)
+        {
+            LoadSubjectName();
+        }
+
+        private void iptSemester_ValueChanged(object sender, EventArgs e)
+        {
+            LoadSubjectName();
         }
     }
 
