@@ -87,21 +87,36 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 return Round(sum / weight);
             }
             else
-            {
-                decimal sumS = 0, sumD = 0, avgS = 0, avgD = 0;
+            {                
+                decimal sumS = 0, sumD = 0, avgS = 0, avgD = 0,sumAll=0,avgAll=0;
                 foreach (string scoreItem in subjectWeight.Keys)
+                {
                     sumS += student.Scores[SubjectToken][scoreItem];
-
+                    sumAll += student.Scores[SubjectToken][scoreItem];
+                }
                 foreach (string scoreItem in domainWeight.Keys)
+                {
                     sumD += student.Scores[DomainToken][scoreItem];
+                    sumAll += student.Scores[DomainToken][scoreItem];
+                }
+                    
 
-                if (subjectWeight.Count > 0)
-                    avgS = student.StudScoreCalculator.ParseSubjectScore(sumS / subjectWeight.Count);
+                // 當科目與領域混用，進位方式使用領域
+                if (subjectWeight.Count>0 && domainWeight.Count>0)
+                {
+                    avgAll = student.StudScoreCalculator.ParseDomainScore(sumAll / (subjectWeight.Count + domainWeight.Count));
+                    return avgAll;
+                }
+                else
+                {
+                    if (subjectWeight.Count > 0)
+                        avgS = student.StudScoreCalculator.ParseSubjectScore(sumS / subjectWeight.Count);
 
-                if (domainWeight.Count > 0)
-                    avgD = student.StudScoreCalculator.ParseDomainScore(sumD / domainWeight.Count);
+                    if (domainWeight.Count > 0)
+                        avgD = student.StudScoreCalculator.ParseDomainScore(sumD / domainWeight.Count);
 
-                return avgS + avgD;
+                    return avgS + avgD;
+                }
             }            
         }
 
@@ -149,19 +164,37 @@ namespace JHEvaluation.ClassSemesterScoreReport
             else
             {
                 decimal sumS = 0, sumD = 0, avgS = 0, avgD = 0, wS = subjectWeight.GetWeightSum(), wD = domainWeight.GetWeightSum();
+                decimal sumAll = 0, avgAll = 0;
                 foreach (string scoreItem in subjectWeight.Keys)
+                {
                     sumS += (student.Scores[SubjectToken][scoreItem] * subjectWeight[scoreItem]);
+                    sumAll += (student.Scores[SubjectToken][scoreItem] * subjectWeight[scoreItem]);
+                }
+                    
 
                 foreach (string scoreItem in domainWeight.Keys)
+                {
                     sumD += (student.Scores[DomainToken][scoreItem] * domainWeight[scoreItem]);
+                    sumAll += (student.Scores[DomainToken][scoreItem] * domainWeight[scoreItem]);
+                }                    
 
-                if (wS > 0)
-                    avgS = student.StudScoreCalculator.ParseSubjectScore(sumS/wS);
+                // 當科目與領域混用，進位方式使用領域。
+                if(wS>0 && wD>0)
+                {
+                    avgAll = student.StudScoreCalculator.ParseDomainScore(sumAll / (wS + wD));
+                    return avgAll;
+                }
+                else
+                {
+                    if (wS > 0)
+                        avgS = student.StudScoreCalculator.ParseSubjectScore(sumS / wS);
 
-                if (wD > 0)
-                    avgD = student.StudScoreCalculator.ParseDomainScore(sumD / wD);
+                    if (wD > 0)
+                        avgD = student.StudScoreCalculator.ParseDomainScore(sumD / wD);
 
-                return avgS + avgD;
+                    return avgS + avgD;
+
+                }
             }
 
         }
