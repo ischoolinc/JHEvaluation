@@ -435,7 +435,8 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ProgramPlanRelated
             _CalcFlagIndex = Column16.Index;
 
             dgv.CurrentCell = dgv.FirstDisplayedCell;
-            dgv.BeginEdit(true);
+            if(dgv.CurrentCell !=null)
+                dgv.BeginEdit(true);
         }
 
         #region IGraduationPlanEditor 成員
@@ -648,7 +649,8 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ProgramPlanRelated
             }
             if (this.IsValidated) { }
             dgv.CurrentCell = dgv.FirstDisplayedCell;
-            dgv.BeginEdit(true);
+            if(dgv.CurrentCell !=null)
+                dgv.BeginEdit(true);
             ValidateSameSubject();
         }
 
