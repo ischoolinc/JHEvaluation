@@ -217,12 +217,30 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                     #region 計算各領域加權平均。
 
+                    // 高雄市特有語文領域成績
+                    decimal sTotal = 0, sTotalOrigin = 0, sWeight = 0, sPeriod = 0, sWeightAvg = 0, sWeightOriginAvg = 0;
+                    string sText = "";
+
                     /* (2014/11/18 補考調整)調整為保留領域成績中的資訊，但是移除多的領域成績項目。 */
                     // 從科目算過來清空原來領域成績，以科目成績的領域為主
                     //dscores.Clear();
 
                     foreach (string strDomain in domainTotal.Keys)
                     {
+
+                        if (Program.Mode == ModuleMode.KaoHsiung)
+                        {
+                            if(strDomain=="國語文" || strDomain=="英語")
+                            {
+                                sTotal += domainTotal[strDomain];
+                                sTotalOrigin += domainOriginTotal[strDomain];
+                                sWeight += domainWeight[strDomain];
+                                sPeriod += domainPeriod[strDomain];                                
+                                sText = string.Join(";", domainText[strDomain].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));                           
+                            }
+                        }
+
+
                         decimal total = domainTotal[strDomain];
                         decimal totalOrigin = domainOriginTotal[strDomain];
 
@@ -272,6 +290,51 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 dscores.Remove(domainName);
                         }
                     }
+
+                     //高雄市透有領域成績
+                    if(Program.Mode== ModuleMode.KaoHsiung)
+                    {
+                        if(sWeight >0)
+                        {
+                            SemesterDomainScore dsSS = null;
+                            if (dscores.Contains("語文"))
+                                dsSS = dscores["語文"];
+                            else
+                            {
+                                dsSS = new SemesterDomainScore();
+                                dscores.Add("語文", dsSS);
+                            }
+
+                            sWeightAvg = rule.ParseDomainScore(sTotal / sWeight);
+                            sWeightOriginAvg = rule.ParseDomainScore(sTotalOrigin / sWeight);                            
+                            dsSS.Value = sWeightAvg;
+                            dsSS.ScoreOrigin = sWeightOriginAvg;
+                            dsSS.Weight = sWeight;
+                            dsSS.Period = sPeriod;
+                            dsSS.Text = sText;
+                            dsSS.Effort = effortmap.GetCodeByScore(sWeightAvg);
+
+                            // 檢查國語文與英語補考成績，如果有加權平均填入語文
+                            decimal mmScore =0;
+                            if(dscores.Contains("國語文"))
+                            {
+                                if (dscores["國語文"].ScoreMakeup.HasValue && dscores["國語文"].Weight.HasValue)
+                                    mmScore += dscores["國語文"].ScoreMakeup.Value * dscores["國語文"].Weight.Value;
+                            }
+
+                            if (dscores.Contains("英語"))
+                            {
+                                if (dscores["英語"].ScoreMakeup.HasValue && dscores["英語"].Weight.HasValue)
+                                    mmScore += dscores["英語"].ScoreMakeup.Value * dscores["英語"].Weight.Value;
+                            }                            
+
+                            if(mmScore>0)
+                                dsSS.ScoreMakeup = rule.ParseDomainScore(mmScore / sWeight);
+
+                        }
+                    }
+
+
                     #endregion
                 }
 
@@ -294,6 +357,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             objDomain.Value = 60;
                     }
                 }
+
+     
 
                 //計算課程學習成績。
                 ScoreResult result = CalcDomainWeightAvgScore(dscores, new UniqueSet<string>());
@@ -401,6 +466,11 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
             decimal TotalScore = 0, TotalScoreOrigin = 0, TotalWeight = 0;
             foreach (string strDomain in dscores)
             {
+                // 高雄語文只顯示不計算
+                if (Program.Mode == ModuleMode.KaoHsiung)
+                    if (strDomain == "語文")
+                        continue;
+
                 if (excludeItem.Contains(strDomain.Trim())) continue;
 
                 SemesterDomainScore dscore = dscores[strDomain];
