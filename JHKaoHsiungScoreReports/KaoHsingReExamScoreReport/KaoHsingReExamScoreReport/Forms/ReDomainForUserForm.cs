@@ -118,7 +118,7 @@ namespace KaoHsingReExamScoreReport.Forms
             }
 
             _bgWorker.ReportProgress(100);
-            string rr = "I" + rowIdx;
+            string rr = "J" + rowIdx;
             Range rng = wst.Cells.CreateRange("A2", rr);
             Style sty = wb.CreateStyle();
             sty.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thin;

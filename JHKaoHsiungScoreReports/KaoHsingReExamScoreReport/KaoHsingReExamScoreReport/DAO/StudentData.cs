@@ -63,10 +63,15 @@ namespace KaoHsingReExamScoreReport.DAO
         public int GetReDomainCount()
         {
             int retVal = 0;
+            // 01-06 小組會議討論，國語文、英語 屬語文，只有看語文領域，共7大領域
             foreach (string name in DomainScorePassDict.Keys)
+            {
+                if (name == "國語文" || name == "英語")
+                    continue;
+
                 if (DomainScorePassDict[name] == false)
                     retVal++;
-
+            }
             return retVal;
         }
     }

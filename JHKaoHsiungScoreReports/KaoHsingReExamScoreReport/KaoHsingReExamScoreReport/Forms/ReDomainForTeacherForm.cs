@@ -104,7 +104,7 @@ namespace KaoHsingReExamScoreReport.Forms
 
                         // 印成績
                         if (sd.DomainScoreDict.ContainsKey(name))
-                            wst.Cells[rowIdx, colIdx + 8].PutValue(sd.DomainScoreDict[name]);
+                            wst.Cells[rowIdx, colIdx + 9].PutValue(sd.DomainScoreDict[name]);
 
                         colIdx++;
                     }
@@ -116,7 +116,7 @@ namespace KaoHsingReExamScoreReport.Forms
             }
 
             _bgWorker.ReportProgress(100);
-            string rr = "T" + rowIdx;
+            string rr = "V" + rowIdx;
             Range rng =wst.Cells.CreateRange("A2",rr);
             Style sty =wb.CreateStyle();
             sty.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thin;

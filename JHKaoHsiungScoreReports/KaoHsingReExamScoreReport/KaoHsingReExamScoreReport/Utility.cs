@@ -43,7 +43,7 @@ namespace KaoHsingReExamScoreReport
                 {
                     sd.StudSemesterScoreRecord = studSemsScoreDict[sd.StudentID];
                     foreach (DomainScore ds in studSemsScoreDict[sd.StudentID].Domains.Values)
-                    {
+                    {                     
                         if (!sd.DomainScorePassDict.ContainsKey(ds.Domain))
                         {
                             sd.DomainScorePassDict.Add(ds.Domain, false);
@@ -127,9 +127,11 @@ namespace KaoHsingReExamScoreReport
         /// <returns></returns>
         public static List<string> GetDomainNameList()
         {
+            // 需要按照報表順序 (xlsx)
             List<string> retVal = new List<string>();
+            retVal.Add("語文");
             retVal.Add("國語文");
-            retVal.Add("英語");
+            retVal.Add("英語");            
             retVal.Add("數學");
             retVal.Add("社會");
             retVal.Add("自然與生活科技");
