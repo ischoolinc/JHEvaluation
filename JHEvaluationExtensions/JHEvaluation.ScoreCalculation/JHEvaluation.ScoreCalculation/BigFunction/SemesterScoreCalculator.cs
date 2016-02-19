@@ -315,20 +315,38 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             dsSS.Effort = effortmap.GetCodeByScore(sWeightAvg);
 
                             // 檢查國語文與英語補考成績，如果有加權平均填入語文
+                            bool hasmmScore = false;
+
                             decimal mmScore =0;
                             if(dscores.Contains("國語文"))
                             {
                                 if (dscores["國語文"].ScoreMakeup.HasValue && dscores["國語文"].Weight.HasValue)
+                                {
                                     mmScore += dscores["國語文"].ScoreMakeup.Value * dscores["國語文"].Weight.Value;
+                                    hasmmScore = true;
+                                }
+                                else
+                                {
+                                    if (dscores["國語文"].Value.HasValue)
+                                        mmScore += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
+                                }
                             }
 
                             if (dscores.Contains("英語"))
                             {
                                 if (dscores["英語"].ScoreMakeup.HasValue && dscores["英語"].Weight.HasValue)
+                                {
                                     mmScore += dscores["英語"].ScoreMakeup.Value * dscores["英語"].Weight.Value;
+                                    hasmmScore = true;
+                                }
+                                else
+                                {
+                                    if (dscores["英語"].Value.HasValue)
+                                        mmScore += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
+                                }
                             }                            
 
-                            if(mmScore>0)
+                            if(hasmmScore)
                                 dsSS.ScoreMakeup = rule.ParseDomainScore(mmScore / sWeight);
 
                         }
