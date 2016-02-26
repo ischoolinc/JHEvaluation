@@ -143,7 +143,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                         foreach (K12.Data.DomainScore domain in record.Domains.Values)
                         {
                             //這三種挑出來處理
-                            if (domain.Domain == "國語文" || domain.Domain == "英語" || domain.Domain == "語文")
+                            if (domain.Domain == "國語文" || domain.Domain == "英語")
                             {
                                 if (domain.Score.HasValue && domain.Credit.HasValue)
                                 {
