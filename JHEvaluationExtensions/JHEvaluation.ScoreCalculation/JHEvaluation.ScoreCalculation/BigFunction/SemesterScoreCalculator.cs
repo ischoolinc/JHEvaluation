@@ -183,7 +183,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                     domainOriginTotal.Add(khDomain, 0);
                                     domainWeight.Add(khDomain, 0);
                                     domainPeriod.Add(khDomain, 0);
-                                    domainText.Add(khDomain, string.Empty);
+                                    // 2016/2/26 經高雄繼斌與蔡主任討論，語文領域文字描述不需要儲存
+                                    //domainText.Add(khDomain, string.Empty);
                                 }
 
                                 domainTotal[khDomain] += objSubj.Value.Value * objSubj.Weight.Value;
@@ -192,7 +193,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                                 domainWeight[khDomain] += objSubj.Weight.Value;
                                 domainPeriod[khDomain] += objSubj.Period.Value;
-                                domainText[khDomain] += GetDomainSubjectText(strSubj, objSubj.Text);
+                                // 2016/2/26 經高雄繼斌與蔡主任討論，語文領域文字描述不需要儲存
+                                domainText[khDomain] = "";//+= GetDomainSubjectText(strSubj, objSubj.Text);
                             }
 
                             if (!domainTotal.ContainsKey(strDomain))
@@ -235,8 +237,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 sTotal += domainTotal[strDomain];
                                 sTotalOrigin += domainOriginTotal[strDomain];
                                 sWeight += domainWeight[strDomain];
-                                sPeriod += domainPeriod[strDomain];                                
-                                sText = string.Join(";", domainText[strDomain].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));                           
+                                sPeriod += domainPeriod[strDomain];
+                                // 2016/2/26 經高雄繼斌與蔡主任討論，語文領域文字描述不需要儲存
+                                sText = "";// string.Join(";", domainText[strDomain].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));                           
                             }
                         }
 
@@ -310,7 +313,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             dsSS.Value = sWeightAvg;
                             dsSS.ScoreOrigin = sWeightOriginAvg;
                             dsSS.Weight = sWeight;
-                            dsSS.Period = sPeriod;
+                            dsSS.Period = sPeriod;                            
                             dsSS.Text = sText;
                             dsSS.Effort = effortmap.GetCodeByScore(sWeightAvg);
 
