@@ -249,7 +249,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                         decimal weight = domainWeight[strDomain];
                         decimal period = domainPeriod[strDomain];
-                        string text = string.Join(";", domainText[strDomain].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                        string text = "";
+                        if (domainText.ContainsKey(strDomain))
+                            text = string.Join(";", domainText[strDomain].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
 
                         if (weight <= 0) continue; //沒有權重就不計算，保留原來的成績。
 
@@ -308,9 +310,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 dscores.Add("語文", dsSS);
                             }
 
-                            sWeightAvg = rule.ParseDomainScore(sTotal / sWeight);
+                            //sWeightAvg = rule.ParseDomainScore(sTotal / sWeight);
                             sWeightOriginAvg = rule.ParseDomainScore(sTotalOrigin / sWeight);                            
-                            dsSS.Value = sWeightAvg;
+                            //dsSS.Value = sWeightAvg;
                             dsSS.ScoreOrigin = sWeightOriginAvg;
                             dsSS.Weight = sWeight;
                             dsSS.Period = sPeriod;                            
@@ -319,7 +321,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                             // 檢查國語文與英語補考成績，如果有加權平均填入語文
                             bool hasmmScore = false;
-
+                            decimal scSum = 0;
                             decimal mmScore =0;
                             if(dscores.Contains("國語文"))
                             {
@@ -331,7 +333,10 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 else
                                 {
                                     if (dscores["國語文"].Value.HasValue)
+                                    {
                                         mmScore += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
+                                        scSum += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
+                                    }
                                 }
                             }
 
@@ -345,12 +350,17 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 else
                                 {
                                     if (dscores["英語"].Value.HasValue)
+                                    {
                                         mmScore += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
+                                        scSum += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
+                                    }
                                 }
                             }                            
 
                             if(hasmmScore)
                                 dsSS.ScoreMakeup = rule.ParseDomainScore(mmScore / sWeight);
+                            
+                            dsSS.Value = rule.ParseDomainScore(scSum / sWeight);
 
                         }
                     }
@@ -358,6 +368,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                     #endregion
                 }
+
+
+
 
                 //這段會對全部領域做一次擇優
                 foreach (var domain in dscores.ToArray())
