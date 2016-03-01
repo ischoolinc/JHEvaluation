@@ -197,19 +197,6 @@ namespace JHEvaluation.ClassSemesterScoreReport
                         // 成績
                         if (each.Score.HasValue && each.Score.Value > ss)
                             ss = each.Score.Value;
-
-                        // 補考
-                        if (each.ScoreMakeup.HasValue && each.ScoreMakeup.Value > ss)
-                        {
-                            ss = each.ScoreMakeup.Value;
-                            if (each.ScoreMakeupLimited.HasValue)
-                                if (ss > each.ScoreMakeupLimited.Value)
-                                    ss = each.ScoreMakeupLimited.Value;
-                        }
-                        // 原始
-                        if (each.ScoreOrigin.HasValue && each.ScoreOrigin.Value > ss)
-                            ss = each.ScoreOrigin.Value;
-
                     }
 
 //                    if (!each.Score.HasValue) continue; //沒有分數不處理。
@@ -222,21 +209,12 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     if (!student.Scores[Utilities.SubjectToken].Contains(each.Subject))
                     {
                         student.Scores[Utilities.SubjectToken].Add(each.Subject, ss, each.Credit.Value);
-                        
-                        // 加入補考成績
+                       
                         if (Perference.UserSelScoreType == "原始補考擇優" && each.ScoreMakeup.HasValue)
-                        {
-                            // 補考限制判斷
-                            decimal rd = each.ScoreMakeup.Value;
-
-                            if (each.ScoreMakeupLimited.HasValue)
-                                if (rd > each.ScoreMakeupLimited.Value)
-                                    rd = each.ScoreMakeupLimited.Value;
-
-                            student.Scores[Utilities.SubjectToken].AddReExam(each.Subject, rd);
-                        }
-                    }
-                        
+                        {   
+                            student.Scores[Utilities.DomainToken].AddReExam(each.Subject, each.ScoreMakeup.Value);
+                        }                                        
+                    }  
                 }
 
                 //領域成績。
@@ -253,18 +231,6 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     {
                         if (each.Score.HasValue && each.Score.Value > dd)
                             dd = each.Score.Value;
-
-                        if (each.ScoreMakeup.HasValue && each.ScoreMakeup.Value > dd)
-                        {
-                            dd = each.ScoreMakeup.Value;
-
-                            // 判斷補考限制
-                            if (each.ScoreMakeupLimited.HasValue)
-                                if (dd > each.ScoreMakeupLimited.Value)
-                                    dd = each.ScoreMakeupLimited.Value;
-                        }
-                        if (each.ScoreOrigin.HasValue && each.ScoreOrigin.Value > dd)
-                            dd = each.ScoreOrigin.Value;
                     }
 
                     //if (!each.Score.HasValue) continue;
@@ -277,18 +243,9 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     {
                         student.Scores[Utilities.DomainToken].Add(each.Domain, dd, each.Credit.Value);
 
-                        // 加入補考成績
                         if (Perference.UserSelScoreType == "原始補考擇優" && each.ScoreMakeup.HasValue)
-                        {
-                            // 判斷補考限制
-                            decimal rd = each.ScoreMakeup.Value;
-                            if (each.ScoreMakeupLimited.HasValue)
-                                if (rd > each.ScoreMakeupLimited.Value)
-                                    rd = each.ScoreMakeupLimited.Value;
-
-                            student.Scores[Utilities.DomainToken].AddReExam(each.Domain, rd);
-                        }
-                    }                    
+                            student.Scores[Utilities.DomainToken].AddReExam(each.Domain, each.ScoreMakeup.Value);
+                    }
                 }
 
                 //運算後成績是在使用者按下列印時才計算。
