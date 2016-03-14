@@ -128,6 +128,29 @@ namespace KH_StudentScoreSummaryReport
 
             doc.MailMerge.Execute(new MergeDataSource(Students, PrintSetting));
 
+            // 上傳電子報表
+            if(PrintSetting.isUploadEPaper)
+            {
+                try
+                {
+                    TempData._ePaperMemStreamList.Clear();
+                    foreach (Section section in doc.Sections)
+                    {
+                        Document document = new Document();
+                        document.Sections.Clear();
+                        document.Sections.Add(document.ImportNode(section, true));
+                        MemoryStream ms = new MemoryStream();
+                        document.Save(ms, SaveFormat.Doc);
+                        TempData._ePaperMemStreamList.Add(ms);
+                    }
+                    
+                }catch(Exception ex)
+                {
+                    
+                }
+                
+            }
+
             return doc;
         }
 
@@ -1961,6 +1984,8 @@ namespace KH_StudentScoreSummaryReport
 
                 switch (fieldName)
                 {
+                    case "電子報表辨識編號": fieldValue = "系統編號{" + student.Id + "}"; break;
+
                     case "學號":
                         fieldValue = student.StudentNumber;
                         break;

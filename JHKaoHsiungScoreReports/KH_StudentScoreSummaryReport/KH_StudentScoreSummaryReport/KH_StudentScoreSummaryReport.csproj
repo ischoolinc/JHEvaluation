@@ -50,6 +50,11 @@
       <HintPath>Library\Campus.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Campus.ePaper, Version=1.0.0.14, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Campus.ePaper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Campus.Report, Version=1.0.0.11, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Campus.Report.dll</HintPath>
@@ -178,6 +183,7 @@
     <Compile Include="SLRecord.cs" />
     <Compile Include="StudentFitnessRecord.cs" />
     <Compile Include="StudRankScore.cs" />
+    <Compile Include="TempData.cs" />
     <Compile Include="UDTTransfer.cs" />
     <Compile Include="UniqueSet.cs" />
     <Compile Include="UserDefData.cs" />
@@ -202,13 +208,14 @@
       <DependentUpon>SetStudAddWeight.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Library\Aspose.Cells.dll" />
     <Content Include="Library\Aspose.Cells.xml" />
     <Content Include="Library\Aspose.Words.dll" />
     <Content Include="Library\Aspose.Words.xml" />
     <Content Include="Library\Campus.dll" />
+    <Content Include="Library\Campus.ePaper.dll" />
+    <Content Include="Library\Campus.ePaper.pdb" />
     <Content Include="Library\Campus.pdb" />
     <Content Include="Library\Campus.Report.dll" />
     <Content Include="Library\Campus.Report.pdb" />

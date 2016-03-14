@@ -13,6 +13,7 @@ using K12.BusinessLogic;
 using System.Linq;
 using System.Reflection;
 using Aspose.Cells;
+using Campus.ePaper;
 
 namespace KH_StudentScoreSummaryReport
 {
@@ -46,6 +47,7 @@ namespace KH_StudentScoreSummaryReport
             //intRankStart.Value = Preference.RankStart;
             //intRankEnd.Value = Preference.RankEnd;
             rtnPDF.Checked = Preference.ConvertToPDF;
+            chkUploadEpaper.Checked = Preference.isUploadEPaper;
 
             chk1Up.Checked = false;
             chk1Down.Checked = false;
@@ -107,6 +109,7 @@ namespace KH_StudentScoreSummaryReport
             //Preference.RankStart = intRankStart.Value;
             //Preference.RankEnd = intRankEnd.Value;
             Preference.ConvertToPDF = rtnPDF.Checked;
+            Preference.isUploadEPaper = chkUploadEpaper.Checked;
 
             Preference.PrintSemesters.Clear();
             if (chk1Up.Checked) Preference.PrintSemesters.Add(1);
@@ -455,9 +458,21 @@ namespace KH_StudentScoreSummaryReport
             Util.EnableControls(this);
 
             if (e.Error == null)
-            {
+            {                
                 Document doc = e.Result as Document;
                 Util.Save(doc, "學生免試入學在校成績證明單", Preference.ConvertToPDF);
+
+                // 檢查是否上傳電子報表
+                if(chkUploadEpaper.Checked)
+                {
+                    try
+                    {
+                        ConvertAspose.Update_ePaperWordV14(TempData._ePaperMemStreamList, "高雄市免試入學在校成績證明書", PrefixStudent.系統編號);                    
+                    }catch(Exception ex)
+                    {
+                        MsgBox.Show("上傳電子報表發生錯誤," + ex.Message);
+                    }
+                }
             }
             else
                 MsgBox.Show(e.Error.Message);
@@ -530,6 +545,11 @@ namespace KH_StudentScoreSummaryReport
         {
             SetStudAddWeight ssaw = new SetStudAddWeight();
             ssaw.Show();
+        }
+
+        private void PrintForm_Load(object sender, EventArgs e)
+        {
+            this.MaximumSize = this.MinimumSize = this.Size;
         }
     }
 }

@@ -46,6 +46,7 @@
             this.chk1Down = new System.Windows.Forms.CheckBox();
             this.chk1Up = new System.Windows.Forms.CheckBox();
             this.lnkSetStudType = new System.Windows.Forms.LinkLabel();
+            this.chkUploadEpaper = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.gpFormat.SuspendLayout();
             this.panel6.SuspendLayout();
             this.groupPanel3.SuspendLayout();
@@ -57,7 +58,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(274, 242);
+            this.btnExit.Location = new System.Drawing.Point(274, 258);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.TabIndex = 3;
@@ -71,7 +72,7 @@
             this.btnPrint.AutoSize = true;
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPrint.Location = new System.Drawing.Point(193, 242);
+            this.btnPrint.Location = new System.Drawing.Point(193, 258);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 25);
             this.btnPrint.TabIndex = 2;
@@ -331,7 +332,7 @@
             // 
             this.lnkSetStudType.AutoSize = true;
             this.lnkSetStudType.BackColor = System.Drawing.Color.Transparent;
-            this.lnkSetStudType.Location = new System.Drawing.Point(11, 246);
+            this.lnkSetStudType.Location = new System.Drawing.Point(11, 262);
             this.lnkSetStudType.Name = "lnkSetStudType";
             this.lnkSetStudType.Size = new System.Drawing.Size(177, 17);
             this.lnkSetStudType.TabIndex = 18;
@@ -340,10 +341,28 @@
             this.lnkSetStudType.Text = "設定特種身分加分比與不排名";
             this.lnkSetStudType.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSetStudType_LinkClicked_1);
             // 
+            // chkUploadEpaper
+            // 
+            this.chkUploadEpaper.AutoSize = true;
+            this.chkUploadEpaper.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.chkUploadEpaper.BackgroundStyle.Class = "";
+            this.chkUploadEpaper.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.chkUploadEpaper.Location = new System.Drawing.Point(25, 230);
+            this.chkUploadEpaper.Name = "chkUploadEpaper";
+            this.chkUploadEpaper.Size = new System.Drawing.Size(147, 21);
+            this.chkUploadEpaper.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.chkUploadEpaper.TabIndex = 19;
+            this.chkUploadEpaper.Text = "列印並上傳電子報表";
+            this.chkUploadEpaper.TextColor = System.Drawing.Color.Red;
+            // 
             // PrintForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(362, 283);
+            this.ClientSize = new System.Drawing.Size(362, 294);
+            this.Controls.Add(this.chkUploadEpaper);
             this.Controls.Add(this.lnkSetStudType);
             this.Controls.Add(this.groupPanel3);
             this.Controls.Add(this.gpFormat);
@@ -358,6 +377,7 @@
             this.Name = "PrintForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "高雄學生免試入學列印設定";
+            this.Load += new System.EventHandler(this.PrintForm_Load);
             this.gpFormat.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
@@ -388,5 +408,6 @@
         private System.Windows.Forms.CheckBox chk1Down;
         private System.Windows.Forms.CheckBox chk1Up;
         private System.Windows.Forms.LinkLabel lnkSetStudType;
+        private DevComponents.DotNetBar.Controls.CheckBoxX chkUploadEpaper;
     }
 }
