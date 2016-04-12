@@ -13,10 +13,12 @@ using System.IO;
 using HsinChu.JHEvaluation.Data;
 using Aspose.Words;
 using JHSchool.Evaluation.Calculation;
+using Aspose.Words.Reporting;
+using Aspose.Words.Tables;
 
 namespace HsinChuExamScore_JH
 {
-    public partial class PrintForm : BaseForm
+    public partial class PrintForm : BaseForm, IFieldMergingCallback
     {
         private FISCA.UDT.AccessHelper _AccessHelper = new FISCA.UDT.AccessHelper();
 
@@ -1744,7 +1746,8 @@ namespace HsinChuExamScore_JH
                 docAtt.Sections.Add(docAtt.ImportNode(docTemplate.Sections[0], true));
 
                 _builder = new DocumentBuilder(docAtt);
-                docAtt.MailMerge.MergeField += new Aspose.Words.Reporting.MergeFieldEventHandler(MailMerge_MergeField);
+//                docAtt.MailMerge.MergeField += new Aspose.Words.Reporting.MergeFieldEventHandler(MailMerge_MergeField);
+                docAtt.MailMerge.FieldMergingCallback = this;
                 docAtt.MailMerge.Execute(dtAtt);
 
                 doc1.Sections.Add(doc1.ImportNode(docAtt.Sections[0], true));
@@ -1806,87 +1809,10 @@ namespace HsinChuExamScore_JH
             _bgWorkReport.ReportProgress(100);
         }
 
-        void MailMerge_MergeField(object sender, Aspose.Words.Reporting.MergeFieldEventArgs e)
-        {
-            if (e.FieldName == "缺曠紀錄")
-            {
-                if (_builder.MoveToMergeField(e.FieldName))
-                {
-                    string sid = e.FieldValue.ToString();
-
-                    Dictionary<string, int> dataDict = new Dictionary<string, int>();    
-                        List<string> colNameList = new List<string>();
-                        if (_AttendanceDict.ContainsKey(sid))
-                            dataDict = _AttendanceDict[sid];
-                        //dataDict.Keys
-                        
-                        foreach (string name in _SelAttendanceList)
-                            colNameList.Add(name.Replace("_",""));
-
-                        //colNameList.Sort();
-                        int colCount=colNameList.Count;
-
-                        if (colCount > 0)
-                        {
-                            Cell cell = _builder.CurrentParagraph.ParentNode as Cell;
-                            cell.CellFormat.LeftPadding = 0;
-                            cell.CellFormat.RightPadding = 0;
-                            double width = cell.CellFormat.Width;
-                            int columnCount = colCount;
-                            double miniUnitWitdh = width / (double)columnCount;
-
-                            Table table = _builder.StartTable();
-
-                            //(table.ParentNode.ParentNode as Row).RowFormat.LeftIndent = 0;
-                            double p = _builder.RowFormat.LeftIndent;
-                            _builder.RowFormat.HeightRule = HeightRule.Exactly;
-                            _builder.RowFormat.Height = 18.0;
-                            _builder.RowFormat.LeftIndent = 0;
-
-                            // 缺曠名稱
-                            foreach (string name in colNameList)
-                            {
-                                Cell c1 = _builder.InsertCell();
-                                c1.CellFormat.Width = miniUnitWitdh;
-                                c1.CellFormat.WrapText = true;
-                                _builder.Write(name);                            
-                            }
-                            _builder.EndRow();
-
-                            // 缺曠統計
-                            foreach (string name in colNameList)
-                            {
-                                Cell c1 = _builder.InsertCell();
-                                c1.CellFormat.Width = miniUnitWitdh;
-                                c1.CellFormat.WrapText = true;
-                                if (dataDict.ContainsKey(name)) 
-                                    _builder.Write(dataDict[name].ToString()); 
-                                else
-                                    _builder.Write("");
-                            }
-                            _builder.EndRow();                            
-
-                            _builder.EndTable();
-
-                            //去除表格四邊的線
-                            foreach (Cell c in table.FirstRow.Cells)
-                                c.CellFormat.Borders.Top.LineStyle = LineStyle.None;
-
-                            foreach (Cell c in table.LastRow.Cells)
-                                c.CellFormat.Borders.Bottom.LineStyle = LineStyle.None;
-
-                            foreach (Row r in table.Rows)
-                            {
-                                r.FirstCell.CellFormat.Borders.Left.LineStyle = LineStyle.None;
-                                r.LastCell.CellFormat.Borders.Right.LineStyle = LineStyle.None;
-                            }
-
-                            _builder.RowFormat.LeftIndent = p;
-                        }
-                  
-                }
-            }            
-        }
+        //void MailMerge_MergeField(object sender, Aspose.Words.Reporting.MergeFieldEventArgs e)
+        //{
+            
+        //}
 
 
         // 載入學生所屬學年度學習的試別，科目，並排序
@@ -2502,7 +2428,94 @@ namespace HsinChuExamScore_JH
             }
         }
 
-     
-        
+
+
+
+        void IFieldMergingCallback.FieldMerging(FieldMergingArgs e)
+        {
+            if (e.FieldName == "缺曠紀錄")
+            {
+                if (_builder.MoveToMergeField(e.FieldName))
+                {
+                    string sid = e.FieldValue.ToString();
+
+                    Dictionary<string, int> dataDict = new Dictionary<string, int>();
+                    List<string> colNameList = new List<string>();
+                    if (_AttendanceDict.ContainsKey(sid))
+                        dataDict = _AttendanceDict[sid];
+                    //dataDict.Keys
+
+                    foreach (string name in _SelAttendanceList)
+                        colNameList.Add(name.Replace("_", ""));
+
+                    //colNameList.Sort();
+                    int colCount = colNameList.Count;
+
+                    if (colCount > 0)
+                    {
+                        Cell cell = _builder.CurrentParagraph.ParentNode as Cell;
+                        cell.CellFormat.LeftPadding = 0;
+                        cell.CellFormat.RightPadding = 0;
+                        double width = cell.CellFormat.Width;
+                        int columnCount = colCount;
+                        double miniUnitWitdh = width / (double)columnCount;
+
+                        Table table = _builder.StartTable();
+
+                        //(table.ParentNode.ParentNode as Row).RowFormat.LeftIndent = 0;
+                        double p = _builder.RowFormat.LeftIndent;
+                        _builder.RowFormat.HeightRule = HeightRule.Exactly;
+                        _builder.RowFormat.Height = 18.0;
+                        _builder.RowFormat.LeftIndent = 0;
+
+                        // 缺曠名稱
+                        foreach (string name in colNameList)
+                        {
+                            Cell c1 = _builder.InsertCell();
+                            c1.CellFormat.Width = miniUnitWitdh;
+                            c1.CellFormat.WrapText = true;
+                            _builder.Write(name);
+                        }
+                        _builder.EndRow();
+
+                        // 缺曠統計
+                        foreach (string name in colNameList)
+                        {
+                            Cell c1 = _builder.InsertCell();
+                            c1.CellFormat.Width = miniUnitWitdh;
+                            c1.CellFormat.WrapText = true;
+                            if (dataDict.ContainsKey(name))
+                                _builder.Write(dataDict[name].ToString());
+                            else
+                                _builder.Write("");
+                        }
+                        _builder.EndRow();
+
+                        _builder.EndTable();
+
+                        //去除表格四邊的線
+                        foreach (Cell c in table.FirstRow.Cells)
+                            c.CellFormat.Borders.Top.LineStyle = LineStyle.None;
+
+                        foreach (Cell c in table.LastRow.Cells)
+                            c.CellFormat.Borders.Bottom.LineStyle = LineStyle.None;
+
+                        foreach (Row r in table.Rows)
+                        {
+                            r.FirstCell.CellFormat.Borders.Left.LineStyle = LineStyle.None;
+                            r.LastCell.CellFormat.Borders.Right.LineStyle = LineStyle.None;
+                        }
+
+                        _builder.RowFormat.LeftIndent = p;
+                    }
+                }
+            }            
+            
+        }
+
+        void IFieldMergingCallback.ImageFieldMerging(ImageFieldMergingArgs args)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
