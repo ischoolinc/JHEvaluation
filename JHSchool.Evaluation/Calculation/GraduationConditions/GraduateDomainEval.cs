@@ -120,6 +120,8 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
                     //每個學期整理後的成績
                     List<List<K12.Data.DomainScore>> GradeScoreList = new List<List<K12.Data.DomainScore>>();
+                    
+                  
 
                     // 取得學生學生領域成績填入計算畢業成績用
                     foreach (JHSemesterScoreRecord record in studentSemesterScoreCache[each.ID])
@@ -129,7 +131,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                         //只處理承認的學年度學期
                         if (!studentSYSM.ContainsKey(each.ID) || !studentSYSM[each.ID].Contains(key))
                             continue;
-
+                        
                         //整理後的領域成績
                         List<K12.Data.DomainScore> domainScoreList = new List<K12.Data.DomainScore>();
 
@@ -138,10 +140,13 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                         
                         decimal sum = 0;
                         decimal credit = 0;
-
+                          // 檢查領域名稱是否有相同
+                        List<string> chkDomainList = new List<string>();
                         //跑一遍領域成績
                         foreach (K12.Data.DomainScore domain in record.Domains.Values)
                         {
+                            chkDomainList.Add(domain.Domain);
+
                             //這三種挑出來處理
                             if (domain.Domain == "國語文" || domain.Domain == "英語")
                             {
@@ -178,7 +183,8 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                             語文.Score = Math.Round(sum / credit, 2, MidpointRounding.AwayFromZero);
                             語文.Credit = credit;
 
-                            domainScoreList.Add(語文);
+                            if(!chkDomainList.Contains(語文.Domain))
+                                domainScoreList.Add(語文);
                         }
 
                         //會被加入就代表承認了
