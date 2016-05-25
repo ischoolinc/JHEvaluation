@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using FISCA.Presentation;
 using Framework;
 using JHSchool.Evaluation.Editor;
+using System.Collections.Generic;
 
 namespace JHSchool.Evaluation.StudentExtendControls
 {
@@ -15,7 +16,7 @@ namespace JHSchool.Evaluation.StudentExtendControls
         private ChangeListener _listener;
         private GradScoreRecord _record;
         private string _RunningID;
-
+     
         public GraduationScoreItem()
         {
             InitializeComponent();
@@ -29,12 +30,22 @@ namespace JHSchool.Evaluation.StudentExtendControls
         }
 
         private void InitializeDomains()
-        {
-            foreach (string each in Domain.SelectGeneral())
+        {                
+
+            // 2016/5/25,因高雄加入語文領域調整 
+            List<string> GeneralDomainList = new List<string>();
+            GeneralDomainList.Add("語文");
+            foreach (string str in Domain.SelectGeneral())
+            {
+                if (!GeneralDomainList.Contains(str))
+                    GeneralDomainList.Add(str);
+            }
+
+            foreach (string each in GeneralDomainList)
             {
                 DataGridViewRow row = new DataGridViewRow();
                 row.CreateCells(dgv, each, string.Empty);
-                dgv.Rows.Add(row);
+                dgv.Rows.Add(row);                
             }
 
             DataGridViewRow elasticRow = new DataGridViewRow();
@@ -45,9 +56,10 @@ namespace JHSchool.Evaluation.StudentExtendControls
             {
                 DataGridViewRow row = new DataGridViewRow();
                 row.CreateCells(dgv, each, string.Empty);
-                dgv.Rows.Add(row);
+                dgv.Rows.Add(row);             
             }
 
+           
             DataGridViewRow learnDomainRow = new DataGridViewRow();
             learnDomainRow.CreateCells(dgv, "學習領域", string.Empty);
             learnDomainRow.Tag = "LearnDomain";
