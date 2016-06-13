@@ -4,6 +4,7 @@ using System.Text;
 using JHEvaluation.ScoreCalculation.ScoreStruct;
 using SCSemsScore = JHEvaluation.ScoreCalculation.ScoreStruct.SemesterScore;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace JHEvaluation.ScoreCalculation.BigFunction
 {
@@ -12,6 +13,10 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         private List<StudentScore> Students { get; set; }
 
         private UniqueSet<string> Filter { get; set; }
+
+        Dictionary<string, string> Dic_StudentAttendScore = new Dictionary<string, string>();
+
+        
 
         public SemesterScoreCalculator(List<StudentScore> students, IEnumerable<string> filter)
         {
@@ -47,8 +52,26 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     }
                 }
 
-                //處理修課課程
+
                 foreach (string subject in student.AttendScore)
+                {
+            
+                    if (!Dic_StudentAttendScore.ContainsKey(subject))
+                    {
+                        Dic_StudentAttendScore.Add(subject, subject);
+
+                    }
+                    else {
+
+                        //MessageBox.Show("科目:" + subject + "在課程科目名稱有重覆，" + "如繼續匯入將導致學期科目成績遺漏誤植，請確認您在" + subject + "這一科的課程資料無誤");
+                    }
+                                                                               
+                }
+
+
+
+                //處理修課課程
+                foreach (string subject in Dic_StudentAttendScore.Keys)
                 {
                     if (!IsValidItem(subject)) continue; //慮掉不算的科目。
 
@@ -109,7 +132,18 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
             foreach (StudentScore student in Students)
             {
                 SemesterScore semsscore = student.SemestersScore[SemesterData.Empty];
+                
                 SemesterDomainScoreCollection dscores = semsscore.Domain;
+
+
+
+                //if (dscores.Contains("國語文") && student.SemestersScore[SemesterData.Empty].Domain["國語文"].ScoreMakeup!=null) {
+
+                //    dscores["國語文"].ScoreMakeup = student.SemestersScore[SemesterData.Empty].Domain["國語文"].ScoreMakeup;
+                
+                //}
+
+
                 SemesterSubjectScoreCollection jscores = semsscore.Subject;
                 ScoreCalculator rule = student.CalculationRule;
 
@@ -175,9 +209,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 objSubj.ScoreOrigin = objSubj.Value;
 
                             // 針對高雄處理
-                            if(strDomain=="國語文" || strDomain =="英語")
+                            if (strDomain == "國語文" || strDomain == "英語")
                             {
-                                if(!domainTotal.ContainsKey(khDomain))
+                                if (!domainTotal.ContainsKey(khDomain))
                                 {
                                     domainTotal.Add(khDomain, 0);
                                     domainOriginTotal.Add(khDomain, 0);
@@ -221,6 +255,13 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                     // 高雄市特有語文領域成績
                     decimal sTotal = 0, sTotalOrigin = 0, sWeight = 0, sPeriod = 0, sWeightAvg = 0, sWeightOriginAvg = 0;
+
+
+                    //2016/5/20(蔡英文就職) 穎驊新增高雄市特有語文領域 努力程度計算方式
+
+                    decimal Chinese_Effort = 0, English_Effort = 0, Chinese_Weight = 0, English_Weight = 0, s_Language_Weight = 0;
+
+
                     string sText = "";
 
                     /* (2014/11/18 補考調整)調整為保留領域成績中的資訊，但是移除多的領域成績項目。 */
@@ -232,7 +273,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                         if (Program.Mode == ModuleMode.KaoHsiung)
                         {
-                            if(strDomain=="國語文" || strDomain=="英語")
+                            if (strDomain == "國語文" || strDomain == "英語")
                             {
                                 sTotal += domainTotal[strDomain];
                                 sTotalOrigin += domainOriginTotal[strDomain];
@@ -240,6 +281,22 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 sPeriod += domainPeriod[strDomain];
                                 // 2016/2/26 經高雄繼斌與蔡主任討論，語文領域文字描述不需要儲存
                                 sText = "";// string.Join(";", domainText[strDomain].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));                           
+
+
+                                if (domainWeight.ContainsKey("國語文") && domainWeight["國語文"] != null)
+                                {
+
+                                    Chinese_Weight = domainWeight["國語文"];
+                                }
+
+                                if (domainWeight.ContainsKey("英語") && domainWeight["英語"] != null)
+                                {
+                                    English_Weight = domainWeight["英語"];
+                                }
+                                s_Language_Weight = Chinese_Weight + English_Weight;
+
+
+
                             }
                         }
 
@@ -276,12 +333,24 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         dscore.Text = text;
                         dscore.Effort = effortmap.GetCodeByScore(weightAvg);
 
+                        if (strDomain == "國語文")
+                        {
+                            Chinese_Effort = effortmap.GetCodeByScore(weightAvg);
+                        }
+
+                        if (strDomain == "英語")
+                        {
+                            English_Effort = effortmap.GetCodeByScore(weightAvg);
+
+                        }
+
+
                         //後面會有一段code執行全領域的擇優判斷,此段已不需要
                         //若有補考成績就進行擇優,否則就將科目的擇優平均帶入領域成績
                         //if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
-                            //dscore.BetterScoreSelection(); //進行成績擇優。
+                        //dscore.BetterScoreSelection(); //進行成績擇優。
                         //else
-                            //dscore.Value = weightAvg;
+                        //dscore.Value = weightAvg;
                     }
 
                     //清除不應該存在領域成績
@@ -296,10 +365,10 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         }
                     }
 
-                     //高雄市透有領域成績
-                    if(Program.Mode== ModuleMode.KaoHsiung)
+                    //高雄市特有領域成績
+                    if (Program.Mode == ModuleMode.KaoHsiung)
                     {
-                        if(sWeight >0)
+                        if (sWeight > 0)
                         {
                             SemesterDomainScore dsSS = null;
                             if (dscores.Contains("語文"))
@@ -310,20 +379,36 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 dscores.Add("語文", dsSS);
                             }
 
+
                             //sWeightAvg = rule.ParseDomainScore(sTotal / sWeight);
-                            sWeightOriginAvg = rule.ParseDomainScore(sTotalOrigin / sWeight);                            
+
+                            sWeightOriginAvg = rule.ParseDomainScore(sTotalOrigin / sWeight);
+
                             //dsSS.Value = sWeightAvg;
+
+
                             dsSS.ScoreOrigin = sWeightOriginAvg;
                             dsSS.Weight = sWeight;
-                            dsSS.Period = sPeriod;                            
+                            dsSS.Period = sPeriod;
                             dsSS.Text = sText;
-                            dsSS.Effort = effortmap.GetCodeByScore(sWeightAvg);
+
+
+                            //dsSS.Effort = effortmap.GetCodeByScore(sWeightAvg);
+
+
+                            //2016/5/20 穎驊更正語文領域努力程度正確計算顯示
+                            decimal Language_Effort = ((Chinese_Effort * Chinese_Weight) + (English_Effort * English_Weight)) / s_Language_Weight;
+
+                            // 將原本為decimal Language_Effort 型別 四捨五入後 轉型成int
+                            int Language_Effort_int = Convert.ToInt32(decimal.Round(Language_Effort, 0, MidpointRounding.AwayFromZero));
+
+                            dsSS.Effort = Language_Effort_int;
 
                             // 檢查國語文與英語補考成績，如果有加權平均填入語文
                             bool hasmmScore = false;
                             decimal scSum = 0;
-                            decimal mmScore =0;
-                            if(dscores.Contains("國語文"))
+                            decimal mmScore = 0;
+                            if (dscores.Contains("國語文"))
                             {
                                 if (dscores["國語文"].ScoreMakeup.HasValue && dscores["國語文"].Weight.HasValue)
                                 {
@@ -332,6 +417,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 }
                                 else
                                 {
+
+
                                     if (dscores["國語文"].Value.HasValue)
                                     {
                                         mmScore += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
@@ -355,11 +442,11 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                         scSum += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
                                     }
                                 }
-                            }                            
+                            }
 
-                            if(hasmmScore)
+                            if (hasmmScore)
                                 dsSS.ScoreMakeup = rule.ParseDomainScore(mmScore / sWeight);
-                            
+
                             dsSS.Value = rule.ParseDomainScore(scSum / sWeight);
 
                         }
@@ -369,7 +456,154 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     #endregion
                 }
 
+                # region 處理沒有學期科目成績狀況
 
+                // 2016/5/24 穎驊處理  OnlyCalcDomainScore = true狀況(原本並沒有else處理)，也就是該學生該學期沒有學期科目成績，
+                //只有領域成績，此現象可能發生在學期中轉入的轉學生上
+
+                else
+                {
+                    // 高雄市特有語文領域成績
+                    decimal sTotal = 0, sTotalOrigin = 0, sWeight = 0, sPeriod = 0, sWeightAvg = 0, sWeightOriginAvg = 0;
+
+                    //2016/5/20(蔡英文就職) 穎驊新增高雄市特有語文領域 努力程度計算方式
+
+                    decimal Chinese_Effort = 0, English_Effort = 0, Chinese_Weight = 0, English_Weight = 0, s_Language_Weight = 0;
+
+                    string sText = "";
+
+
+                    //高雄市特有領域成績
+                    if (Program.Mode == ModuleMode.KaoHsiung)
+                    {
+                        if (dscores.Contains("國語文") && dscores["國語文"].Value.HasValue && dscores["國語文"].ScoreOrigin.HasValue && dscores["國語文"].Weight.HasValue
+                            && dscores["國語文"].Period.HasValue)
+                        {
+
+
+                            sTotal += (decimal)dscores["國語文"].Value;
+                            sTotalOrigin += (decimal)dscores["國語文"].ScoreOrigin * (decimal)dscores["國語文"].Weight;
+                            sWeight += (decimal)dscores["國語文"].Weight;
+                            sPeriod += (decimal)dscores["國語文"].Period;
+
+                            Chinese_Effort = (decimal)dscores["國語文"].Effort;
+                            Chinese_Weight = (decimal)dscores["國語文"].Weight;
+
+                        }
+
+                        else {
+
+                            MessageBox.Show("請確認學期領域:國語文的每一項數值是否有輸入不正確、遺漏");
+
+                            break;
+                        }
+
+                        if (dscores.Contains("英語") && dscores["英語"].Value.HasValue && dscores["英語"].ScoreOrigin.HasValue && dscores["英語"].Weight.HasValue
+                             && dscores["英語"].Period.HasValue)
+                        {
+                            sTotal += (decimal)dscores["英語"].Value;
+                            sTotalOrigin += (decimal)dscores["英語"].ScoreOrigin * (decimal)dscores["英語"].Weight;
+                            sWeight += (decimal)dscores["英語"].Weight;
+                            sPeriod += (decimal)dscores["英語"].Period;
+
+
+                            English_Effort = (decimal)dscores["英語"].Effort;
+                            English_Weight = (decimal)dscores["英語"].Weight;
+                        }
+
+                        else
+                        {
+                            MessageBox.Show("請確認學期領域:英語的每一項數值是否有輸入不正確、遺漏");
+                            break;
+                        }
+
+
+                        if (sWeight > 0)
+                        {
+                            SemesterDomainScore dsSS = null;
+                            if (dscores.Contains("語文"))
+                                dsSS = dscores["語文"];
+                            else
+                            {
+                                dsSS = new SemesterDomainScore();
+                                dscores.Add("語文", dsSS);
+                            }
+
+
+                            //sWeightAvg = rule.ParseDomainScore(sTotal / sWeight);
+
+                            sWeightOriginAvg = rule.ParseDomainScore(sTotalOrigin / sWeight);
+
+                            s_Language_Weight = English_Weight + Chinese_Weight;
+                            //dsSS.Value = sWeightAvg;
+
+
+                            dsSS.ScoreOrigin = sWeightOriginAvg;
+                            dsSS.Weight = sWeight;
+                            dsSS.Period = sPeriod;
+                            dsSS.Text = sText;
+                            //dsSS.Effort = effortmap.GetCodeByScore(sWeightAvg);
+
+
+                            //2016/5/20 穎驊更正語文領域努力程度正確計算顯示
+                            decimal Language_Effort = ((Chinese_Effort * Chinese_Weight) + (English_Effort * English_Weight)) / s_Language_Weight;
+
+                            // 將原本為decimal Language_Effort 型別 四捨五入後 轉型成int
+                            int Language_Effort_int = Convert.ToInt32(decimal.Round(Language_Effort, 0, MidpointRounding.AwayFromZero));
+
+                            dsSS.Effort = Language_Effort_int;
+
+                            // 檢查國語文與英語補考成績，如果有加權平均填入語文
+                            bool hasmmScore = false;
+                            decimal scSum = 0;
+                            decimal mmScore = 0;
+                            if (dscores.Contains("國語文"))
+                            {
+                                if (dscores["國語文"].ScoreMakeup.HasValue && dscores["國語文"].Weight.HasValue)
+                                {
+                                    mmScore += dscores["國語文"].ScoreMakeup.Value * dscores["國語文"].Weight.Value;
+                                    hasmmScore = true;
+                                }
+                                else
+                                {
+
+
+                                    if (dscores["國語文"].Value.HasValue)
+                                    {
+                                        mmScore += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
+                                        scSum += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
+                                    }
+                                }
+                            }
+
+                            if (dscores.Contains("英語"))
+                            {
+                                if (dscores["英語"].ScoreMakeup.HasValue && dscores["英語"].Weight.HasValue)
+                                {
+                                    mmScore += dscores["英語"].ScoreMakeup.Value * dscores["英語"].Weight.Value;
+                                    hasmmScore = true;
+                                }
+                                else
+                                {
+                                    if (dscores["英語"].Value.HasValue)
+                                    {
+                                        mmScore += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
+                                        scSum += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
+                                    }
+                                }
+                            }
+
+                            if (hasmmScore)
+                                dsSS.ScoreMakeup = rule.ParseDomainScore(mmScore / sWeight);
+
+                            dsSS.Value = rule.ParseDomainScore(scSum / sWeight);
+
+                        }
+                    }
+
+                }
+
+                #endregion
 
 
                 //這段會對全部領域做一次擇優

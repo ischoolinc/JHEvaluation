@@ -104,6 +104,11 @@
             // lblMsg
             // 
             this.lblMsg.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblMsg.BackgroundStyle.Class = "";
+            this.lblMsg.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblMsg.Location = new System.Drawing.Point(12, 12);
             this.lblMsg.Name = "lblMsg";
             this.lblMsg.Size = new System.Drawing.Size(518, 40);
@@ -171,6 +176,7 @@
             this.Controls.Add(this.btnAddToTemp);
             this.Controls.Add(this.lblMsg);
             this.Controls.Add(this.dgStudents);
+            this.DoubleBuffered = true;
             this.Name = "StudentsView";
             this.Text = "資料檢視";
             this.Load += new System.EventHandler(this.StudentsView_Load);

@@ -7,6 +7,7 @@ namespace JHEvaluation.ScoreCalculation
     public interface IStatusReporter
     {
         void Feedback(string message, int percentage);
+
     }
 
     internal class EmptyStatusReport : IStatusReporter
@@ -16,7 +17,6 @@ namespace JHEvaluation.ScoreCalculation
         public void Feedback(string message, int percentage)
         {
         }
-
         #endregion
     }
 }

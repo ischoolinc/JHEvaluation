@@ -1510,6 +1510,71 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             List<StudentScore> students = new List<StudentScore>();
             students.Add(studentScore);
 
+
+
+            // 2016/ 6/7 穎驊製作，恩正說從這邊先於Students.ReadAttendScore 攔科目名稱重覆，否則進去攔的資料太複雜，超級崩潰
+            #region 檢查科目重複問題
+           
+            List<JHSCAttendRecord> scAttendList = JHSCAttend.SelectByStudentID(_student.ID);
+
+            Dictionary<string, List<JHSCAttendRecord>> scAttendCheck = new Dictionary<string, List<JHSchool.Data.JHSCAttendRecord>>();
+            
+            // 檢查重覆修習科目用字典
+            Dictionary<string, List<JHSCAttendRecord>> duplicateErrorCourse = new Dictionary<string, List<JHSCAttendRecord>>();
+
+            //把課程讀下來快取，穎驊筆記: 這一行超級重要，如果沒有的話至少多100倍的時間下面Foreach 才能算完，不誇張
+            JHSchool.Data.JHCourse.SelectAll();
+
+            List<string> ErrorMessages = new List<string>();
+           
+            foreach (JHSCAttendRecord scAttendRec in scAttendList)
+            {
+
+                if (scAttendRec.Course.SchoolYear == int.Parse(cboSchoolYear.Text) && scAttendRec.Course.Semester == int.Parse(cboSemester.Text) && scAttendRec.Course.CalculationFlag == "1")
+                {
+                    String duplicateErrorCourseKey = scAttendRec.Student.ID + "_" + scAttendRec.Course.Subject;
+
+                    if (!scAttendCheck.ContainsKey(duplicateErrorCourseKey))
+                    {
+                        scAttendCheck.Add(duplicateErrorCourseKey, new List<JHSchool.Data.JHSCAttendRecord>());
+                    }
+                    else
+                    {
+                        ErrorMessages.Add(scAttendRec.Course.Name);
+                    }                    
+                }
+            }
+            try {
+              if (ErrorMessages.Count>0)
+            {
+                String msg = "";
+
+                foreach(String CourseName in ErrorMessages){
+
+                if(msg ==""){
+                msg += CourseName;                
+                }
+                else{
+                msg+= "、";
+                msg += CourseName;                
+                }
+                }                
+                throw new System.Exception(msg);
+            }                         
+            }
+            catch(Exception ee){
+                if (ee.Source != null)
+                {
+                    MsgBox.Show(ee.Message + "科目於本學期重覆，請檢查");
+                    //意外發現原來void 的函式 也可以用return 來終止，總之如果抓到Exception 後面的東西也不需要做了
+                    return;
+                }
+            
+            }    
+            #endregion
+            //2016/6/7，穎驊筆記，就是下面這一條，去找CalculationHelper的ReadAttendScore，恩正大大說，要在這之前先驗證
+            //此學生有沒有修習重覆科目名稱的問題，要不然ReadAttendScore裡面的結構複雜到爆牽一髮動全身般地拆炸彈讓人戰戰兢兢無法下手
+
             //計算課程成績
             students.ReadAttendScore(int.Parse(cboSchoolYear.Text), int.Parse(cboSemester.Text), new string[] { }, null);
             students.SaveAttendScore(new string[] { }, null);
