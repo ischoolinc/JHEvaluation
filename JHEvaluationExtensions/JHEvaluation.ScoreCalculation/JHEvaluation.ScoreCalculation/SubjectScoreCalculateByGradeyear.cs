@@ -244,9 +244,8 @@ namespace JHEvaluation.ScoreCalculation
             //        Application.DoEvents();
             //    }
             //}
-
-        #endregion
         }
+        #endregion
 
         void _BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {

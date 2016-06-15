@@ -13,11 +13,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         private List<StudentScore> Students { get; set; }
 
         private UniqueSet<string> Filter { get; set; }
-
-        Dictionary<string, string> Dic_StudentAttendScore = new Dictionary<string, string>();
-
-        
-
+               
         public SemesterScoreCalculator(List<StudentScore> students, IEnumerable<string> filter)
         {
             Students = students;
@@ -29,9 +25,12 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         /// </summary>
         public void CalculateSubjectScore()
         {
+            Dictionary<string, string> dicStudentAttendScore = new Dictionary<string, string>();
             foreach (StudentScore student in Students)
             {
                 if (student.CalculationRule == null) continue; //沒有成績計算規則就不計算。
+
+                dicStudentAttendScore.Clear();
 
                 SCSemsScore Sems = student.SemestersScore[SemesterData.Empty];
 
@@ -56,9 +55,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 foreach (string subject in student.AttendScore)
                 {
             
-                    if (!Dic_StudentAttendScore.ContainsKey(subject))
+                    if (!dicStudentAttendScore.ContainsKey(subject))
                     {
-                        Dic_StudentAttendScore.Add(subject, subject);
+                        dicStudentAttendScore.Add(subject, subject);
 
                     }
                     else {
@@ -71,7 +70,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
 
                 //處理修課課程
-                foreach (string subject in Dic_StudentAttendScore.Keys)
+                foreach (string subject in dicStudentAttendScore.Keys)
                 {
                     if (!IsValidItem(subject)) continue; //慮掉不算的科目。
 
