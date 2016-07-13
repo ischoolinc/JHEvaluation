@@ -5,11 +5,18 @@ using K12.Data;
 
 namespace JHEvaluation.ScoreCalculation.ScoreStruct
 {
+
+   
+
+
     /// <summary>
     /// 每一個評量的成績，以 ExamID 為 Key 的成績集合。
     /// </summary>
     public class TakeScoreCollection : ScoreCollection<TakeScore>
     {
+
+        
+
         /// <summary>
         /// 取得加權平均成績。
         /// </summary>
@@ -159,6 +166,8 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
     public class ScoreCollection<T> : IEnumerable<string> where T : IScore
     {
         private Dictionary<string, T> _scores = new Dictionary<string, T>();
+        
+        List<string> ExceptionItems = new List<string>();
 
         public ScoreCollection()
         {
@@ -197,7 +206,13 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         /// </summary>
         public T this[string item]
         {
-            get { return _scores[item.Trim()]; }
+
+            
+            get {
+
+                    return _scores[item.Trim()];
+
+            }
         }
 
         #region IEnumerable<string> 成員

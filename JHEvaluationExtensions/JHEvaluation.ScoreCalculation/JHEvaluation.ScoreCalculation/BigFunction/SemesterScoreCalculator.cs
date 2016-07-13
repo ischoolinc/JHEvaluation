@@ -13,7 +13,11 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         private List<StudentScore> Students { get; set; }
 
         private UniqueSet<string> Filter { get; set; }
-               
+
+        Dictionary<string, string> Dic_StudentAttendScore = new Dictionary<string, string>();
+
+        Dictionary<string, List<string>> errCheck = new Dictionary<string, List<string>>();
+
         public SemesterScoreCalculator(List<StudentScore> students, IEnumerable<string> filter)
         {
             Students = students;
@@ -25,12 +29,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         /// </summary>
         public void CalculateSubjectScore()
         {
-            Dictionary<string, string> dicStudentAttendScore = new Dictionary<string, string>();
             foreach (StudentScore student in Students)
             {
                 if (student.CalculationRule == null) continue; //沒有成績計算規則就不計算。
-
-                dicStudentAttendScore.Clear();
 
                 SCSemsScore Sems = student.SemestersScore[SemesterData.Empty];
 
@@ -52,25 +53,31 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 }
 
 
-                foreach (string subject in student.AttendScore)
-                {
+
+                // 2016/7/13 穎驊註解，原本為整理重覆科目使用，後來功能被另外取代掉，又保留Dic_StudentAttendScore 的話，
+                // 如果再 //處理修課課程 foreach (string subject in student.AttendScore)，不使用in student.AttendScore 而是用 in Dic_StudentAttendScore
+                // 則會出現 下一個學生使用上一個學生的修課紀錄，假如上一個學生有著下一個學生沒有的修課內容，就會造成錯誤
+
+
+                //foreach (string subject in student.AttendScore)
+                //{
             
-                    if (!dicStudentAttendScore.ContainsKey(subject))
-                    {
-                        dicStudentAttendScore.Add(subject, subject);
+                //    if (!Dic_StudentAttendScore.ContainsKey(subject))
+                //    {
+                //        Dic_StudentAttendScore.Add(subject, subject);
 
-                    }
-                    else {
+                //    }
+                //    else {
 
-                        //MessageBox.Show("科目:" + subject + "在課程科目名稱有重覆，" + "如繼續匯入將導致學期科目成績遺漏誤植，請確認您在" + subject + "這一科的課程資料無誤");
-                    }
+                //        //MessageBox.Show("科目:" + subject + "在課程科目名稱有重覆，" + "如繼續匯入將導致學期科目成績遺漏誤植，請確認您在" + subject + "這一科的課程資料無誤");
+                //    }
                                                                                
-                }
+                //}
 
 
 
                 //處理修課課程
-                foreach (string subject in dicStudentAttendScore.Keys)
+                foreach (string subject in student.AttendScore)
                 {
                     if (!IsValidItem(subject)) continue; //慮掉不算的科目。
 
@@ -460,145 +467,159 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 // 2016/5/24 穎驊處理  OnlyCalcDomainScore = true狀況(原本並沒有else處理)，也就是該學生該學期沒有學期科目成績，
                 //只有領域成績，此現象可能發生在學期中轉入的轉學生上
 
+                //2016/7/11 穎驊改動，因應克服需求，原本要更正OnlyCalcDomainScore = true狀況的計算方式，但跟恩正、國志討論後，
+                //如果學校方在計算時遇到沒有學習科目成績的學生，就不再另外計算、提醒，避免以後麻煩
+
+
                 else
                 {
-                    // 高雄市特有語文領域成績
-                    decimal sTotal = 0, sTotalOrigin = 0, sWeight = 0, sPeriod = 0, sWeightAvg = 0, sWeightOriginAvg = 0;
+                    //// 高雄市特有語文領域成績
+                    //decimal sTotal = 0, sTotalOrigin = 0, sWeight = 0, sPeriod = 0, sWeightAvg = 0, sWeightOriginAvg = 0;
 
-                    //2016/5/20(蔡英文就職) 穎驊新增高雄市特有語文領域 努力程度計算方式
+                    ////2016/5/20(蔡英文就職) 穎驊新增高雄市特有語文領域 努力程度計算方式
 
-                    decimal Chinese_Effort = 0, English_Effort = 0, Chinese_Weight = 0, English_Weight = 0, s_Language_Weight = 0;
+                    //decimal Chinese_Effort = 0, English_Effort = 0, Chinese_Weight = 0, English_Weight = 0, s_Language_Weight = 0;
 
-                    string sText = "";
-
-
-                    //高雄市特有領域成績
-                    if (Program.Mode == ModuleMode.KaoHsiung)
-                    {
-                        if (dscores.Contains("國語文") && dscores["國語文"].Value.HasValue && dscores["國語文"].ScoreOrigin.HasValue && dscores["國語文"].Weight.HasValue
-                            && dscores["國語文"].Period.HasValue)
-                        {
+                    //string sText = "";
 
 
-                            sTotal += (decimal)dscores["國語文"].Value;
-                            sTotalOrigin += (decimal)dscores["國語文"].ScoreOrigin * (decimal)dscores["國語文"].Weight;
-                            sWeight += (decimal)dscores["國語文"].Weight;
-                            sPeriod += (decimal)dscores["國語文"].Period;
-
-                            Chinese_Effort = (decimal)dscores["國語文"].Effort;
-                            Chinese_Weight = (decimal)dscores["國語文"].Weight;
-
-                        }
-
-                        else {
-
-                            MessageBox.Show("請確認學期領域:國語文的每一項數值是否有輸入不正確、遺漏");
-
-                            break;
-                        }
-
-                        if (dscores.Contains("英語") && dscores["英語"].Value.HasValue && dscores["英語"].ScoreOrigin.HasValue && dscores["英語"].Weight.HasValue
-                             && dscores["英語"].Period.HasValue)
-                        {
-                            sTotal += (decimal)dscores["英語"].Value;
-                            sTotalOrigin += (decimal)dscores["英語"].ScoreOrigin * (decimal)dscores["英語"].Weight;
-                            sWeight += (decimal)dscores["英語"].Weight;
-                            sPeriod += (decimal)dscores["英語"].Period;
+                    ////高雄市特有領域成績
+                    //if (Program.Mode == ModuleMode.KaoHsiung)
+                    //{
+                    //    if (dscores.Contains("國語文") && dscores["國語文"].Value.HasValue && dscores["國語文"].ScoreOrigin.HasValue && dscores["國語文"].Weight.HasValue
+                    //        && dscores["國語文"].Period.HasValue)
+                    //    {
 
 
-                            English_Effort = (decimal)dscores["英語"].Effort;
-                            English_Weight = (decimal)dscores["英語"].Weight;
-                        }
+                    //        sTotal += (decimal)dscores["國語文"].Value;
+                    //        sTotalOrigin += (decimal)dscores["國語文"].ScoreOrigin * (decimal)dscores["國語文"].Weight;
+                    //        sWeight += (decimal)dscores["國語文"].Weight;
+                    //        sPeriod += (decimal)dscores["國語文"].Period;
 
-                        else
-                        {
-                            MessageBox.Show("請確認學期領域:英語的每一項數值是否有輸入不正確、遺漏");
-                            break;
-                        }
+                    //        Chinese_Effort = (decimal)dscores["國語文"].Effort;
+                    //        Chinese_Weight = (decimal)dscores["國語文"].Weight;
 
+                    //    }
 
-                        if (sWeight > 0)
-                        {
-                            SemesterDomainScore dsSS = null;
-                            if (dscores.Contains("語文"))
-                                dsSS = dscores["語文"];
-                            else
-                            {
-                                dsSS = new SemesterDomainScore();
-                                dscores.Add("語文", dsSS);
-                            }
+                    //    else {
 
 
-                            //sWeightAvg = rule.ParseDomainScore(sTotal / sWeight);
 
-                            sWeightOriginAvg = rule.ParseDomainScore(sTotalOrigin / sWeight);
+                    //        if (!errCheck.ContainsKey(student.Name +student.Id))
+                    //        {
 
-                            s_Language_Weight = English_Weight + Chinese_Weight;
-                            //dsSS.Value = sWeightAvg;
+                    //            errCheck.Add(student.Name + student.Id, new List<string>());
+                    //        }
+                    //        errCheck[student.Name + student.Id].Add("請確認學生:" + student.Name + " 在所計算學期內" + "學期領域:國語文的每一項數值是否有輸入不正確、遺漏");
+                   
+                    //    }
 
-
-                            dsSS.ScoreOrigin = sWeightOriginAvg;
-                            dsSS.Weight = sWeight;
-                            dsSS.Period = sPeriod;
-                            dsSS.Text = sText;
-                            //dsSS.Effort = effortmap.GetCodeByScore(sWeightAvg);
-
-
-                            //2016/5/20 穎驊更正語文領域努力程度正確計算顯示
-                            decimal Language_Effort = ((Chinese_Effort * Chinese_Weight) + (English_Effort * English_Weight)) / s_Language_Weight;
-
-                            // 將原本為decimal Language_Effort 型別 四捨五入後 轉型成int
-                            int Language_Effort_int = Convert.ToInt32(decimal.Round(Language_Effort, 0, MidpointRounding.AwayFromZero));
-
-                            dsSS.Effort = Language_Effort_int;
-
-                            // 檢查國語文與英語補考成績，如果有加權平均填入語文
-                            bool hasmmScore = false;
-                            decimal scSum = 0;
-                            decimal mmScore = 0;
-                            if (dscores.Contains("國語文"))
-                            {
-                                if (dscores["國語文"].ScoreMakeup.HasValue && dscores["國語文"].Weight.HasValue)
-                                {
-                                    mmScore += dscores["國語文"].ScoreMakeup.Value * dscores["國語文"].Weight.Value;
-                                    hasmmScore = true;
-                                }
-                                else
-                                {
+                    //    if (dscores.Contains("英語") && dscores["英語"].Value.HasValue && dscores["英語"].ScoreOrigin.HasValue && dscores["英語"].Weight.HasValue
+                    //         && dscores["英語"].Period.HasValue)
+                    //    {
+                    //        sTotal += (decimal)dscores["英語"].Value;
+                    //        sTotalOrigin += (decimal)dscores["英語"].ScoreOrigin * (decimal)dscores["英語"].Weight;
+                    //        sWeight += (decimal)dscores["英語"].Weight;
+                    //        sPeriod += (decimal)dscores["英語"].Period;
 
 
-                                    if (dscores["國語文"].Value.HasValue)
-                                    {
-                                        mmScore += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
-                                        scSum += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
-                                    }
-                                }
-                            }
+                    //        English_Effort = (decimal)dscores["英語"].Effort;
+                    //        English_Weight = (decimal)dscores["英語"].Weight;
+                    //    }
 
-                            if (dscores.Contains("英語"))
-                            {
-                                if (dscores["英語"].ScoreMakeup.HasValue && dscores["英語"].Weight.HasValue)
-                                {
-                                    mmScore += dscores["英語"].ScoreMakeup.Value * dscores["英語"].Weight.Value;
-                                    hasmmScore = true;
-                                }
-                                else
-                                {
-                                    if (dscores["英語"].Value.HasValue)
-                                    {
-                                        mmScore += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
-                                        scSum += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
-                                    }
-                                }
-                            }
+                    //    else
+                    //    {
+                    //        if (!errCheck.ContainsKey(student.Name + student.Id))
+                    //        {
 
-                            if (hasmmScore)
-                                dsSS.ScoreMakeup = rule.ParseDomainScore(mmScore / sWeight);
+                    //            errCheck.Add(student.Name + student.Id, new List<string>());
+                    //        }
+                    //        errCheck[student.Name + student.Id].Add("請確認學生:" + student.Name + " 在所計算學期內" + "學期領域:英語的每一項數值是否有輸入不正確、遺漏");
+                    //    }
 
-                            dsSS.Value = rule.ParseDomainScore(scSum / sWeight);
 
-                        }
-                    }
+                    //    if (sWeight > 0)
+                    //    {
+                    //        SemesterDomainScore dsSS = null;
+                    //        if (dscores.Contains("語文"))
+                    //            dsSS = dscores["語文"];
+                    //        else
+                    //        {
+                    //            dsSS = new SemesterDomainScore();
+                    //            dscores.Add("語文", dsSS);
+                    //        }
+
+
+                    //        //sWeightAvg = rule.ParseDomainScore(sTotal / sWeight);
+
+                    //        sWeightOriginAvg = rule.ParseDomainScore(sTotalOrigin / sWeight);
+
+                    //        s_Language_Weight = English_Weight + Chinese_Weight;
+                    //        //dsSS.Value = sWeightAvg;
+
+
+                    //        dsSS.ScoreOrigin = sWeightOriginAvg;
+                    //        dsSS.Weight = sWeight;
+                    //        dsSS.Period = sPeriod;
+                    //        dsSS.Text = sText;
+                    //        //dsSS.Effort = effortmap.GetCodeByScore(sWeightAvg);
+
+
+                    //        //2016/5/20 穎驊更正語文領域努力程度正確計算顯示
+                    //        decimal Language_Effort = ((Chinese_Effort * Chinese_Weight) + (English_Effort * English_Weight)) / s_Language_Weight;
+
+                    //        // 將原本為decimal Language_Effort 型別 四捨五入後 轉型成int
+                    //        int Language_Effort_int = Convert.ToInt32(decimal.Round(Language_Effort, 0, MidpointRounding.AwayFromZero));
+
+                    //        dsSS.Effort = Language_Effort_int;
+
+                    //        // 檢查國語文與英語補考成績，如果有加權平均填入語文
+                    //        bool hasmmScore = false;
+                    //        decimal scSum = 0;
+                    //        decimal mmScore = 0;
+                    //        if (dscores.Contains("國語文"))
+                    //        {
+                    //            if (dscores["國語文"].ScoreMakeup.HasValue && dscores["國語文"].Weight.HasValue)
+                    //            {
+                    //                mmScore += dscores["國語文"].ScoreMakeup.Value * dscores["國語文"].Weight.Value;
+                    //                hasmmScore = true;
+                    //            }
+                    //            else
+                    //            {
+
+
+                    //                if (dscores["國語文"].Value.HasValue)
+                    //                {
+                    //                    mmScore += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
+                    //                    scSum += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
+                    //                }
+                    //            }
+                    //        }
+
+                    //        if (dscores.Contains("英語"))
+                    //        {
+                    //            if (dscores["英語"].ScoreMakeup.HasValue && dscores["英語"].Weight.HasValue)
+                    //            {
+                    //                mmScore += dscores["英語"].ScoreMakeup.Value * dscores["英語"].Weight.Value;
+                    //                hasmmScore = true;
+                    //            }
+                    //            else
+                    //            {
+                    //                if (dscores["英語"].Value.HasValue)
+                    //                {
+                    //                    mmScore += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
+                    //                    scSum += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
+                    //                }
+                    //            }
+                    //        }
+
+                    //        if (hasmmScore)
+                    //            dsSS.ScoreMakeup = rule.ParseDomainScore(mmScore / sWeight);
+
+                    //        dsSS.Value = rule.ParseDomainScore(scSum / sWeight);
+
+                    //    }
+                    //}
 
                 }
 
@@ -641,6 +662,23 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 if (result.ScoreOrigin.HasValue)
                     semsscore.LearnDomainScoreOrigin = rule.ParseLearnDomainScore(result.ScoreOrigin.Value);
             }
+
+
+            //if (errCheck.Count > 0)
+            //{
+            //    StringBuilder sb = new StringBuilder();
+                
+            //    foreach (var student in errCheck.Keys)
+            //    {
+            //        foreach (var err in errCheck[student])
+            //        {
+            //            sb.AppendLine(string.Format("{0}",err));
+            //        }
+            //    }
+            //    MessageBox.Show(sb.ToString());
+            //}
+
+
         }
 
         /// <summary>
