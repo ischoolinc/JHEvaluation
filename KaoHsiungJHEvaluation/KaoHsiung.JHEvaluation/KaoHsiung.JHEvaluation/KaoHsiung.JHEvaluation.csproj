@@ -77,6 +77,10 @@
       <HintPath>library\FISCA.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="FISCA.Data">
+      <HintPath>library\FISCA.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="FISCA.DSAUtil, Version=3.9.0.10, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>library\FISCA.DSAUtil.dll</HintPath>
