@@ -310,9 +310,9 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 {
                                     if (!exams.ContainsKey(ae.RefExamID)) continue;
 
-                                    // 2016/7/26，穎驊新增，由於高雄國中希望可以加入匯出匯入"平時成績的功能"，因此必須要在原本的Exam.Name驗證
-                                    // 加上 ||examName =="平時成績" ，避免平時成績的欄位被擋掉
-                                    if (exams[ae.RefExamID].Name == examName ||examName =="平時成績" )
+                                    // 2016/7/26，穎驊新增，由於高雄國中希望可以加入匯出匯入"平時評量的功能"，因此必須要在原本的Exam.Name驗證
+                                    // 加上 ||examName =="平時評量" ，避免平時評量的欄位被擋掉
+                                    if (exams[ae.RefExamID].Name == examName || examName == "平時評量")
                                         examValid = true;
                                 }
 
@@ -361,7 +361,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                         string SchoolYear = data["學年度"];
                         string Semester = data["學期"];
 
-                        // 2016/7/26，穎驊新增bool值避免 在有"平時成績"的評量名稱Row 進入算評量成績的判斷式
+                        // 2016/7/26，穎驊新增bool值避免 在有"平時評量"的評量名稱Row 進入算評量成績的判斷式
                         bool isOrdinarilyScore = false;
 
                         if (!scattends.ContainsKey(id)) continue;
@@ -387,15 +387,15 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                             if (SchoolYear == sy && Semester == ss && course.Name == courseName)
                             {
 
-                                // 2016/7/26，穎驊新增，由於高雄國中希望可以加入匯出匯入"平時成績的功能"，在原本的Code努力尋找見縫插針的位子，                                
-                                //因為"平時成績"與一般的"評量成績"處理邏輯要分開
-                                //後來決定這邊是最佳位子，邏輯為，當程序在一條一條讀取Excel Row時，讀到欄位"評量名稱"值為 "平時成績"
-                                //則進入我們處理平時成績的程序，如果欄位"評量名稱"值非為 "平時成績" 則使用它原本的邏輯處理
+                                // 2016/7/26，穎驊新增，由於高雄國中希望可以加入匯出匯入"平時評量的功能"，在原本的Code努力尋找見縫插針的位子，                                
+                                //因為"平時評量"與一般的"評量成績"處理邏輯要分開
+                                //後來決定這邊是最佳位子，邏輯為，當程序在一條一條讀取Excel Row時，讀到欄位"評量名稱"值為 "平時評量"
+                                //則進入我們處理平時評量的程序，如果欄位"評量名稱"值非為 "平時評量" 則使用它原本的邏輯處理
                                 // 上面的CODE會幫忙進行學年、學期、課程的驗證，確保是同一門課程成績資料， 
-                                //而 JHSCAttendRecord record內意外發現剛好有 平時成績OrdinarilyScore的欄位
+                                //而 JHSCAttendRecord record內意外發現剛好有 平時評量OrdinarilyScore的欄位
                                 //因此只要指定欄位為新的Excel 內的值，最後 使用JHSCAttend.Update(record) 更新即可
 
-                                if (data["評量名稱"] == "平時成績")
+                                if (data["評量名稱"] == "平時評量")
                                 {
                                     if (data["分數評量"] != null && data["分數評量"] != "")
                                     {
@@ -441,7 +441,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 }
                             }
 
-                            // 2016/7/26，穎驊新增bool值避免 在有"平時成績"的評量名稱Row 進入算評量成績的判斷式
+                            // 2016/7/26，穎驊新增bool值避免 在有"平時評量"的評量名稱Row 進入算評量成績的判斷式
                             if (currentSCE != null && isOrdinarilyScore==false)
                             {
                                 bool changed = false;
@@ -489,7 +489,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                     updateList.Add(currentSCE);
                             }
 
-                            // 2016/7/26，穎驊新增bool值避免 在有"平時成績"的評量名稱Row 進入算評量成績的判斷式
+                            // 2016/7/26，穎驊新增bool值避免 在有"平時評量"的評量名稱Row 進入算評量成績的判斷式
                             if (currentSCE == null && isOrdinarilyScore == false)
                             {
                                 KH.JHSCETakeRecord newSCE = new KH.JHSCETakeRecord(new JHSCETakeRecord());

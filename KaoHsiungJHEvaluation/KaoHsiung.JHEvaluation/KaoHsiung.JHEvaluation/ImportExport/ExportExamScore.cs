@@ -122,7 +122,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
 
                         //2016/7/26 穎驊新增，因應高雄國中希望能加入匯出匯入"平時成績"的功能，因此在原本的匯出評量成績報表Excel中增加平時成績的項目，
                         // 基本邏輯跟 SCEtake 的定期評量一樣，另外意外發現平時成績、努力程度、Text在 JHSCAttendRecord裏頭就有了，不必在另外下SQL 找UDT 在用XElement 去解析Xml 檔填成績
-                            string examName2 = "平時成績";                           
+                            string examName2 = "平時評量";                           
                             RowData row2 = new RowData();
                             row2.ID = stu.ID;
                             foreach (string field in e.ExportFields)
