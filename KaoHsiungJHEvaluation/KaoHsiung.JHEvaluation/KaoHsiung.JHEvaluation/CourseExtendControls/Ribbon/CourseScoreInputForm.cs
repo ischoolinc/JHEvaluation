@@ -49,6 +49,8 @@ namespace KaoHsiung.JHEvaluation.CourseExtendControls.Ribbon
             InitializeComponent();
             prlp = new PermRecLogProcess();
 
+            
+
             _course = course;
 
             #region 設定小標題
@@ -742,18 +744,20 @@ namespace KaoHsiung.JHEvaluation.CourseExtendControls.Ribbon
             return valid;
         }
 
+
+        //2016/9/23 穎驊更新，不再需要點擊格子，直接輸入即可編輯
         /// <summary>
         /// 點欄位立即進入編輯。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void dgv_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex != chInputScore.Index && e.ColumnIndex != chInputEffort.Index && e.ColumnIndex != chInputText.Index) return;
-            if (e.RowIndex < 0) return;
+        //private void dgv_CellClick(object sender, DataGridViewCellEventArgs e)
+        //{
+        //    if (e.ColumnIndex != chInputScore.Index && e.ColumnIndex != chInputEffort.Index && e.ColumnIndex != chInputText.Index) return;
+        //    if (e.RowIndex < 0) return;
 
-            dgv.BeginEdit(true);
-        }
+        //    dgv.BeginEdit(true);
+        //}
 
         /// <summary>
         /// 當欄位結束編輯，進行驗證。

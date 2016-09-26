@@ -225,6 +225,7 @@ namespace JHEvaluation.ScoreCalculation
 
                 return;
             }
+            MsgBox.Show("成績計算完成。");
             MotherForm.SetStatusBarMessage("成績計算完成。");
             //Close();
         }
