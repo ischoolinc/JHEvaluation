@@ -131,7 +131,9 @@ namespace KaoHsiung.StudentRecordReport.Processor
                 updateType = "續讀";
             else if (node.UpdateCode == "9")
                 updateType = "更正學籍";
-
+            else if (node.UpdateCode == "11")
+                updateType = "死亡";
+            
             return updateType;
         }
     }
