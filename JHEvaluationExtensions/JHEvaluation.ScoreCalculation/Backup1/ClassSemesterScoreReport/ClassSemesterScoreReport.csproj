@@ -60,17 +60,17 @@
   <ItemGroup>
     <Reference Include="Aspose.Cells, Version=4.3.0.0, Culture=neutral, PublicKeyToken=9a40d5a4b59e5256, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ischool\bin\Debug\Aspose.Cells.dll</HintPath>
+      <HintPath>Library\Aspose.Cells.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Campus, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ischool\bin\Debug\CampusLibrary\Campus.dll</HintPath>
+      <HintPath>Library\Campus.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Campus.Report, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\CampusLibrary\Campus.Report.dll</HintPath>
+      <HintPath>Library\Campus.Report.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DevComponents.DotNetBar2, Version=7.9.0.3, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
@@ -79,50 +79,51 @@
     </Reference>
     <Reference Include="FISCA, Version=1.0.1.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibraryProject\FISCA.dll</HintPath>
+      <HintPath>Library\FISCA.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.Data">
-      <HintPath>..\..\..\..\..\..\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\kernel\FISCA.Data.dll</HintPath>
+      <HintPath>Library\FISCA.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.Deployment">
-      <HintPath>..\..\..\..\..\..\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\kernel\FISCA.Deployment.dll</HintPath>
+      <HintPath>Library\FISCA.Deployment.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.Permission, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ischool\bin\Debug\FISCA.Permission.dll</HintPath>
+      <HintPath>Library\FISCA.Permission.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.Presentation, Version=1.0.2.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ischool\bin\Debug\FISCA.Presentation.dll</HintPath>
+      <HintPath>Library\FISCA.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Framework">
-      <HintPath>..\..\..\..\..\..\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\modules\JHCore_Beta\Framework.dll</HintPath>
+      <HintPath>Library\Framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool, Version=1.0.1.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
+      <HintPath>Library\JHSchool.dll</HintPath>
     </Reference>
     <Reference Include="JHSchool.Data, Version=1.0.2.19, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ischool\bin\Debug\JHSchool.Data.dll</HintPath>
+      <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.Evaluation">
-      <HintPath>..\..\..\..\..\..\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\modules\JHEvaluation_Beta\JHSchool.Evaluation.dll</HintPath>
+      <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="K12.Data">
-      <HintPath>..\..\..\..\..\..\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\modules\JHCore_Beta\K12.Data.dll</HintPath>
+      <HintPath>Library\K12.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="K12.Presentation">
-      <HintPath>..\..\..\..\..\..\Documents and Settings\ChenCT\桌面\FiscaAEAlpha\FiscaAE Alpha\modules\JHCore_Beta\K12.Presentation.dll</HintPath>
+      <HintPath>Library\K12.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -204,6 +205,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Library\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
