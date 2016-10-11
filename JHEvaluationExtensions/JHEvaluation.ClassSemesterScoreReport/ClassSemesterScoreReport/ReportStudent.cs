@@ -162,7 +162,19 @@ namespace JHEvaluation.ClassSemesterScoreReport
         /// <param name="score"></param>
         public void AddReExam(string subject,decimal score)
         {
-            _ReExamScores.Add(subject.Trim(), score);
+
+            // 2016/10/7  穎驊修正，避免Key 重覆的問題(當學校同時具有科目補考成績、領域補考成績，且領域、科目名稱相同EX: 數學，此狀況基本上為誤植)
+            // 就會有此問題，雖然回去看前面的MainForm.cs 的Code 我認為有點奇怪，但恩正說 目前如果KEY 值重覆先行覆蓋即可
+            if (!_ReExamScores.ContainsKey(subject.Trim()))
+            {
+                _ReExamScores.Add(subject.Trim(), score);
+            }
+            else 
+            {
+                _ReExamScores[subject.Trim()] = score;
+            
+            }
+            
         }
 
         public bool Contains(string subject)
