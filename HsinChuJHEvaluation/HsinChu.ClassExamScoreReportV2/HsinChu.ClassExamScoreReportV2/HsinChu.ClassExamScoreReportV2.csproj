@@ -187,6 +187,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Prc\班級評量成績單.xls" />
+    <None Include="Prc\班級評量成績單60.xls" />
+    <None Include="Prc\班級評量成績單60B4.xls" />
     <None Include="Prc\班級評量成績單B4.xls" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

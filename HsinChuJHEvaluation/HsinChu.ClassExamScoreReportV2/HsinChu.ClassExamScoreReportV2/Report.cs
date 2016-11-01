@@ -4,6 +4,9 @@ using System.Text;
 using JHSchool.Data;
 using Aspose.Cells;
 using System.IO;
+using FISCA.Data;
+using System.Data;
+
 
 namespace HsinChu.ClassExamScoreReportV2
 {
@@ -37,6 +40,11 @@ namespace HsinChu.ClassExamScoreReportV2
         public string ExamName { get; set; }
         //public const int ScoreHeaderCount = 35;
 
+
+        private int _MaxClassStudCot = 0;
+
+        private int _studentCounter = 0;
+
         public Report()
         {
             Template = new Workbook();
@@ -45,6 +53,29 @@ namespace HsinChu.ClassExamScoreReportV2
 
         public Workbook Output()
         {
+
+            // 取得班級最大人數
+            _MaxClassStudCot = 0;
+           
+            Classes.Sort(new Comparison<JHClassRecord>(Utilities.JHClassRecordComparison));
+
+            foreach (var Class in Classes) 
+            {
+                _studentCounter = 0;
+                foreach (var student in Class.Students) 
+                {
+                    if (student.Status == K12.Data.StudentRecord.StudentStatus.一般 | student.Status == K12.Data.StudentRecord.StudentStatus.延修) 
+                    {
+                        _studentCounter++;
+                    }                                
+                }
+                if (_studentCounter > _MaxClassStudCot) 
+                {
+                    _MaxClassStudCot = _studentCounter;
+                }
+            }
+        
+
             OutputBook = new Workbook();
             OutputBook.Open(GetTemplateStream());
             OutputSheet = OutputBook.Worksheets[0];
@@ -72,7 +103,7 @@ namespace HsinChu.ClassExamScoreReportV2
             int DataRowNumber = rowHeaders.RowCount;
 
             //排序班級。
-            Classes.Sort(new Comparison<JHClassRecord>(Utilities.JHClassRecordComparison));
+            //Classes.Sort(new Comparison<JHClassRecord>(Utilities.JHClassRecordComparison));
 
             int summaryHeaderOffset = ScoreHeaderCount - Perference.PrintItems.Count;
             foreach (string each in Perference.PrintItems)
@@ -83,6 +114,7 @@ namespace HsinChu.ClassExamScoreReportV2
 
             foreach (JHClassRecord each in Classes)
             {
+
                 OutputSheet.Cells.CreateRange(ClassOffset, RowNumber, false).Copy(all);
 
                 //轉換成 ReportStudent。
@@ -184,7 +216,7 @@ namespace HsinChu.ClassExamScoreReportV2
                         OutputSheet.Cells[RowOffset, rankColumnHeader.FirstColumn + 1].PutValue(eachStudent.Places.NS("年排名")[rm].Level);
 
                     RowOffset++;
-                    if ((RowOffset - (rowHeaders.FirstRow + ClassOffset)) >= 45) break; //超過45個學生就不印了。
+                    //if ((RowOffset - (rowHeaders.FirstRow + ClassOffset)) >= 45) break; //超過45個學生就不印了。               
                 }
 
                 #region 填入標題及回條
@@ -206,10 +238,28 @@ namespace HsinChu.ClassExamScoreReportV2
 
         private Stream GetTemplateStream()
         {
-            if (Perference.PaperSize == "B4")
-                return new MemoryStream(Prc.班級評量成績單B4);
+            //if (Perference.PaperSize == "B4")
+            //    return new MemoryStream(Prc.班級評量成績單B4);
+            //else
+            //    return new MemoryStream(Prc.班級評量成績單);
+
+            // 超過45人
+            if (_MaxClassStudCot > 45)
+            {
+                if (Perference.PaperSize == "B4")
+                    return new MemoryStream(Prc.班級評量成績單60B4);
+                else
+                    return new MemoryStream(Prc.班級評量成績單60);
+            }
             else
-                return new MemoryStream(Prc.班級評量成績單);
+            {
+                if (Perference.PaperSize == "B4")
+                    return new MemoryStream(Prc.班級評量成績單B4);
+                else
+                    return new MemoryStream(Prc.班級評量成績單);
+            }
+
+
         }
 
         private List<ReportStudent> GetPreparedStudent(IEnumerable<JHStudentRecord> students)
@@ -221,6 +271,29 @@ namespace HsinChu.ClassExamScoreReportV2
                     result.Add(AllStudents[each.ID]);
             }
             return result;
+        }
+
+        /// <summary>
+        /// 取得班級人數(一般、輟學)
+        /// </summary>
+        /// <returns></returns>
+        private static Dictionary<string, int> GetClassStudentCount18()
+        {
+            Dictionary<string, int> retVal = new Dictionary<string, int>();
+            QueryHelper qh = new QueryHelper();
+            string strSQL = "select class.id,count(student.id) as count from student inner join class on student.ref_class_id=class.id where student.status in(1,8) group by class.id";
+            DataTable dt = qh.Select(strSQL);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                int cot = 0, i;
+                if (int.TryParse(dr["count"].ToString(), out i))
+                    cot = i;
+
+                retVal.Add(dr["id"].ToString(), cot);
+            }
+
+            return retVal;
         }
     }
 }

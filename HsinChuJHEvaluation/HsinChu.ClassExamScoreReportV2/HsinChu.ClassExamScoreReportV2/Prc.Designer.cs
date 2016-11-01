@@ -80,5 +80,27 @@ namespace HsinChu.ClassExamScoreReportV2 {
                 return ((byte[])(obj));
             }
         }
+
+
+        internal static byte[] 班級評量成績單60
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("班級評量成績單60", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+
+        internal static byte[] 班級評量成績單60B4
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("班級評量成績單60B4", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+
+
+
     }
 }
