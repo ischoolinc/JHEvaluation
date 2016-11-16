@@ -304,6 +304,9 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
+
+            MsgBox.Show( "請注意: 本成績單包含所有學生學期成績及排名，僅供校內教師參考使用，請勿公佈或發放與學生。","注意",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
             List<string> selectedSubjects = lvSubject.GetSelectedItems();
             List<string> selectedDomains = lvDomain.GetSelectedItems();
 
