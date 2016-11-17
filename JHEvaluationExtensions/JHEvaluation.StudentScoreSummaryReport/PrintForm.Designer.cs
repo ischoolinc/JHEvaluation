@@ -59,6 +59,9 @@
             this.chk2Up = new System.Windows.Forms.CheckBox();
             this.chk1Down = new System.Windows.Forms.CheckBox();
             this.chk1Up = new System.Windows.Forms.CheckBox();
+            this.groupPanel4 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.OneFileSave = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.groupPanel1.SuspendLayout();
             this.groupPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.intRankEnd)).BeginInit();
@@ -66,6 +69,8 @@
             this.gpFormat.SuspendLayout();
             this.panel6.SuspendLayout();
             this.groupPanel3.SuspendLayout();
+            this.groupPanel4.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnExit
@@ -74,7 +79,7 @@
             this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(268, 479);
+            this.btnExit.Location = new System.Drawing.Point(268, 550);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 3;
@@ -88,7 +93,7 @@
             this.btnPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPrint.Location = new System.Drawing.Point(187, 479);
+            this.btnPrint.Location = new System.Drawing.Point(187, 550);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
             this.btnPrint.TabIndex = 2;
@@ -197,7 +202,7 @@
             this.lnkAbsence.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkAbsence.AutoSize = true;
             this.lnkAbsence.BackColor = System.Drawing.Color.Transparent;
-            this.lnkAbsence.Location = new System.Drawing.Point(6, 482);
+            this.lnkAbsence.Location = new System.Drawing.Point(6, 553);
             this.lnkAbsence.Name = "lnkAbsence";
             this.lnkAbsence.Size = new System.Drawing.Size(60, 17);
             this.lnkAbsence.TabIndex = 4;
@@ -335,7 +340,7 @@
             this.lnkTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkTemplate.AutoSize = true;
             this.lnkTemplate.BackColor = System.Drawing.Color.Transparent;
-            this.lnkTemplate.Location = new System.Drawing.Point(72, 482);
+            this.lnkTemplate.Location = new System.Drawing.Point(72, 553);
             this.lnkTemplate.Name = "lnkTemplate";
             this.lnkTemplate.Size = new System.Drawing.Size(86, 17);
             this.lnkTemplate.TabIndex = 5;
@@ -592,10 +597,81 @@
             this.chk1Up.Text = "一上";
             this.chk1Up.UseVisualStyleBackColor = true;
             // 
+            // groupPanel4
+            // 
+            this.groupPanel4.BackColor = System.Drawing.Color.Transparent;
+            this.groupPanel4.CanvasColor = System.Drawing.SystemColors.Control;
+            this.groupPanel4.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.groupPanel4.Controls.Add(this.panel4);
+            this.groupPanel4.DrawTitleBox = false;
+            this.groupPanel4.Location = new System.Drawing.Point(12, 479);
+            this.groupPanel4.Name = "groupPanel4";
+            this.groupPanel4.Size = new System.Drawing.Size(331, 60);
+            // 
+            // 
+            // 
+            this.groupPanel4.Style.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
+            this.groupPanel4.Style.BackColorGradientAngle = 90;
+            this.groupPanel4.Style.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.groupPanel4.Style.BorderBottom = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel4.Style.BorderBottomWidth = 1;
+            this.groupPanel4.Style.BorderColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
+            this.groupPanel4.Style.BorderLeft = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel4.Style.BorderLeftWidth = 1;
+            this.groupPanel4.Style.BorderRight = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel4.Style.BorderRightWidth = 1;
+            this.groupPanel4.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel4.Style.BorderTopWidth = 1;
+            this.groupPanel4.Style.Class = "";
+            this.groupPanel4.Style.CornerDiameter = 4;
+            this.groupPanel4.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
+            this.groupPanel4.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
+            this.groupPanel4.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.groupPanel4.StyleMouseDown.Class = "";
+            this.groupPanel4.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.groupPanel4.StyleMouseOver.Class = "";
+            this.groupPanel4.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.groupPanel4.TabIndex = 21;
+            this.groupPanel4.Text = "單檔列印";
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.Transparent;
+            this.panel4.Controls.Add(this.OneFileSave);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(0, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(325, 33);
+            this.panel4.TabIndex = 0;
+            // 
+            // OneFileSave
+            // 
+            this.OneFileSave.AutoSize = true;
+            this.OneFileSave.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.OneFileSave.BackgroundStyle.Class = "";
+            this.OneFileSave.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.OneFileSave.Location = new System.Drawing.Point(3, 3);
+            this.OneFileSave.Name = "OneFileSave";
+            this.OneFileSave.Size = new System.Drawing.Size(327, 21);
+            this.OneFileSave.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.OneFileSave.TabIndex = 0;
+            this.OneFileSave.Text = "使用單檔列印(檔名：學號_身分證_班級_座號_姓名)";
+            this.OneFileSave.TextColor = System.Drawing.Color.Black;
+            // 
             // PrintForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(355, 508);
+            this.ClientSize = new System.Drawing.Size(355, 579);
+            this.Controls.Add(this.groupPanel4);
             this.Controls.Add(this.groupPanel3);
             this.Controls.Add(this.gpFormat);
             this.Controls.Add(this.txtGraduateDate);
@@ -624,6 +700,9 @@
             this.panel6.PerformLayout();
             this.groupPanel3.ResumeLayout(false);
             this.groupPanel3.PerformLayout();
+            this.groupPanel4.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -662,5 +741,8 @@
         private System.Windows.Forms.CheckBox chk2Up;
         private System.Windows.Forms.CheckBox chk1Down;
         private System.Windows.Forms.CheckBox chk1Up;
+        private DevComponents.DotNetBar.Controls.GroupPanel groupPanel4;
+        private System.Windows.Forms.Panel panel4;
+        private DevComponents.DotNetBar.Controls.CheckBoxX OneFileSave;
     }
 }

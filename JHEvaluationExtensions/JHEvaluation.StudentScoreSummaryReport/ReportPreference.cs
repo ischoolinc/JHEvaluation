@@ -34,6 +34,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
             ConvertToPDF = _config.GetBoolean("ConvertToPDF", false);
             SpiltPDF = _config.GetBoolean("SpiltPDF", false);
 
+            OneFileSave = _config.GetBoolean("OneFileSave", false);
+
             PrintSemesters = new List<int>();
             string[] semses = _config.GetString("PrintSemesters", "1,2,3,4,5,6").Split(',');
             foreach (string each in semses)
@@ -89,6 +91,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
         public List<int> PrintSemesters { get; set; }
 
+
+        public bool OneFileSave { get; set; }
+
         public ReportTemplate Template
         {
             get
@@ -116,6 +121,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
             _config.SetInteger("RankEnd", RankEnd);
             _config.SetBoolean("ConvertToPDF", ConvertToPDF);
             _config.SetBoolean("SpiltPDF", SpiltPDF);
+
+            _config.SetBoolean("OneFileSave", OneFileSave);
 
             StringBuilder sb = new StringBuilder();
             foreach (int each in PrintSemesters)

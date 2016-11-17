@@ -23,6 +23,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
         private BackgroundWorker MasterWorker = new BackgroundWorker();
 
+        private List<ReportStudent> PrintStudents = new List<ReportStudent>();
+
         public PrintForm(List<string> studentIds)
         {
             InitializeComponent();
@@ -42,6 +44,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
             intRankStart.Value = Preference.RankStart;
             intRankEnd.Value = Preference.RankEnd;
             rtnPDF.Checked = Preference.ConvertToPDF;
+
+            OneFileSave.Checked = Preference.OneFileSave;
 
             chk1Up.Checked = false;
             chk1Down.Checked = false;
@@ -88,6 +92,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
             Preference.RankEnd = intRankEnd.Value;
             Preference.ConvertToPDF = rtnPDF.Checked;
 
+            Preference.OneFileSave = OneFileSave.Checked;
+
+
             Preference.PrintSemesters.Clear();
             if (chk1Up.Checked) Preference.PrintSemesters.Add(1);
             if (chk1Down.Checked) Preference.PrintSemesters.Add(2);
@@ -105,7 +112,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
         private void MasterWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             StudentScore.SetClassMapping();
-            List<ReportStudent> PrintStudents = StudentIDs.ToReportStudent();
+             PrintStudents = StudentIDs.ToReportStudent();
             List<ReportStudent> AllStudents = Util.GetAllStudents();
 
             AllStudents.ToSC().ReadSemesterScore(this);
@@ -216,7 +223,54 @@ namespace JHEvaluation.StudentScoreSummaryReport
             if (e.Error == null)
             {
                 Document doc = e.Result as Document;
-                Util.Save(doc, "學生在校成績證明書", Preference.ConvertToPDF);
+                //單檔列印
+                if (OneFileSave.Checked)
+                {
+                    FolderBrowserDialog fbd = new FolderBrowserDialog();
+                    fbd.Description = "請選擇儲存資料夾";
+                    fbd.ShowNewFolderButton = true;
+
+                    if (fbd.ShowDialog() == DialogResult.Cancel) return;
+
+                    int i = 0;
+
+                    foreach (Section section in doc.Sections)
+                    {
+                        // 依照 學號_身分字號_班級_座號_姓名 .doc 來存檔
+                        string fileName = "";
+
+                        Document document = new Document();
+                        document.Sections.Clear();
+                        document.Sections.Add(document.ImportNode(section, true));
+
+                        fileName = PrintStudents[i].StudentNumber;
+
+                        fileName += "_" + PrintStudents[i].IDNumber;
+
+                        if (!string.IsNullOrEmpty(PrintStudents[i].RefClassID))
+                        {
+                            fileName += "_" + PrintStudents[i].Class.Name;
+                        }
+                        else
+                        {
+                            fileName += "_";
+                        }
+
+                        fileName += "_" + PrintStudents[i].SeatNo;
+
+                        fileName += "_" + PrintStudents[i].Name;
+
+                        document.Save(fbd.SelectedPath + "\\" + fileName + ".doc");
+
+                        i++;
+                    }
+                }
+                else 
+                {
+                    Util.Save(doc, "學生在校成績證明書", Preference.ConvertToPDF);
+                }
+
+                
             }
             else
                 MsgBox.Show(e.Error.Message);

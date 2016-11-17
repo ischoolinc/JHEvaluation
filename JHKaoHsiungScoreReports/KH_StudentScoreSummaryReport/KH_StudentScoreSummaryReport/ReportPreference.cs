@@ -33,6 +33,7 @@ namespace KH_StudentScoreSummaryReport
             RankEnd = _config.GetInteger("RankEnd", 10);
             ConvertToPDF = _config.GetBoolean("ConvertToPDF", false);
             isUploadEPaper = _config.GetBoolean("isUploadEPaper", false);
+            OneFileSave = _config.GetBoolean("OneFileSave", false);
             PrintSemesters = new List<int>();
             string[] semses = _config.GetString("PrintSemesters", "1,2,3,4,5,6").Split(',');
             foreach (string each in semses)
@@ -81,6 +82,8 @@ namespace KH_StudentScoreSummaryReport
 
         public bool ConvertToPDF { get; set; }
 
+        public bool OneFileSave { get; set; }
+
         /// <summary>
         /// 是否上傳電子報表
         /// </summary>
@@ -115,6 +118,8 @@ namespace KH_StudentScoreSummaryReport
             _config.SetInteger("RankEnd", RankEnd);
             _config.SetBoolean("ConvertToPDF", ConvertToPDF);
             _config.SetBoolean("isUploadEPaper", isUploadEPaper);
+
+            _config.SetBoolean("OneFileSave", OneFileSave);
 
             StringBuilder sb = new StringBuilder();
             foreach (int each in PrintSemesters)

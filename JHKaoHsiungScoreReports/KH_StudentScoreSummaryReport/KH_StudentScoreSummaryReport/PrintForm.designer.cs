@@ -47,9 +47,14 @@
             this.chk1Up = new System.Windows.Forms.CheckBox();
             this.lnkSetStudType = new System.Windows.Forms.LinkLabel();
             this.chkUploadEpaper = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.groupPanel1 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.OneFileSave = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.gpFormat.SuspendLayout();
             this.panel6.SuspendLayout();
             this.groupPanel3.SuspendLayout();
+            this.groupPanel1.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnExit
@@ -58,7 +63,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(274, 258);
+            this.btnExit.Location = new System.Drawing.Point(275, 357);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.TabIndex = 3;
@@ -72,7 +77,7 @@
             this.btnPrint.AutoSize = true;
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPrint.Location = new System.Drawing.Point(193, 258);
+            this.btnPrint.Location = new System.Drawing.Point(194, 357);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 25);
             this.btnPrint.TabIndex = 2;
@@ -137,9 +142,9 @@
             this.gpFormat.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.gpFormat.Controls.Add(this.panel6);
             this.gpFormat.DrawTitleBox = false;
-            this.gpFormat.Location = new System.Drawing.Point(22, 168);
+            this.gpFormat.Location = new System.Drawing.Point(15, 168);
             this.gpFormat.Name = "gpFormat";
-            this.gpFormat.Size = new System.Drawing.Size(330, 55);
+            this.gpFormat.Size = new System.Drawing.Size(337, 55);
             // 
             // 
             // 
@@ -181,7 +186,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(324, 28);
+            this.panel6.Size = new System.Drawing.Size(331, 28);
             this.panel6.TabIndex = 0;
             // 
             // rtnPDF
@@ -332,7 +337,7 @@
             // 
             this.lnkSetStudType.AutoSize = true;
             this.lnkSetStudType.BackColor = System.Drawing.Color.Transparent;
-            this.lnkSetStudType.Location = new System.Drawing.Point(11, 262);
+            this.lnkSetStudType.Location = new System.Drawing.Point(12, 361);
             this.lnkSetStudType.Name = "lnkSetStudType";
             this.lnkSetStudType.Size = new System.Drawing.Size(177, 17);
             this.lnkSetStudType.TabIndex = 18;
@@ -350,7 +355,7 @@
             // 
             this.chkUploadEpaper.BackgroundStyle.Class = "";
             this.chkUploadEpaper.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.chkUploadEpaper.Location = new System.Drawing.Point(25, 230);
+            this.chkUploadEpaper.Location = new System.Drawing.Point(26, 329);
             this.chkUploadEpaper.Name = "chkUploadEpaper";
             this.chkUploadEpaper.Size = new System.Drawing.Size(147, 21);
             this.chkUploadEpaper.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -358,10 +363,81 @@
             this.chkUploadEpaper.Text = "列印並上傳電子報表";
             this.chkUploadEpaper.TextColor = System.Drawing.Color.Red;
             // 
+            // groupPanel1
+            // 
+            this.groupPanel1.BackColor = System.Drawing.Color.Transparent;
+            this.groupPanel1.CanvasColor = System.Drawing.SystemColors.Control;
+            this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.groupPanel1.Controls.Add(this.panel4);
+            this.groupPanel1.DrawTitleBox = false;
+            this.groupPanel1.Location = new System.Drawing.Point(15, 244);
+            this.groupPanel1.Name = "groupPanel1";
+            this.groupPanel1.Size = new System.Drawing.Size(337, 60);
+            // 
+            // 
+            // 
+            this.groupPanel1.Style.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
+            this.groupPanel1.Style.BackColorGradientAngle = 90;
+            this.groupPanel1.Style.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.groupPanel1.Style.BorderBottom = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel1.Style.BorderBottomWidth = 1;
+            this.groupPanel1.Style.BorderColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
+            this.groupPanel1.Style.BorderLeft = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel1.Style.BorderLeftWidth = 1;
+            this.groupPanel1.Style.BorderRight = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel1.Style.BorderRightWidth = 1;
+            this.groupPanel1.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.groupPanel1.Style.BorderTopWidth = 1;
+            this.groupPanel1.Style.Class = "";
+            this.groupPanel1.Style.CornerDiameter = 4;
+            this.groupPanel1.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
+            this.groupPanel1.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
+            this.groupPanel1.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.groupPanel1.StyleMouseDown.Class = "";
+            this.groupPanel1.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.groupPanel1.StyleMouseOver.Class = "";
+            this.groupPanel1.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.groupPanel1.TabIndex = 20;
+            this.groupPanel1.Text = "單檔列印";
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.Transparent;
+            this.panel4.Controls.Add(this.OneFileSave);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(0, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(331, 33);
+            this.panel4.TabIndex = 0;
+            // 
+            // OneFileSave
+            // 
+            this.OneFileSave.AutoSize = true;
+            this.OneFileSave.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.OneFileSave.BackgroundStyle.Class = "";
+            this.OneFileSave.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.OneFileSave.Location = new System.Drawing.Point(3, 3);
+            this.OneFileSave.Name = "OneFileSave";
+            this.OneFileSave.Size = new System.Drawing.Size(327, 21);
+            this.OneFileSave.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.OneFileSave.TabIndex = 0;
+            this.OneFileSave.Text = "使用單檔列印(檔名：學號_身分證_班級_座號_姓名)";
+            this.OneFileSave.TextColor = System.Drawing.Color.Black;
+            // 
             // PrintForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(362, 294);
+            this.ClientSize = new System.Drawing.Size(362, 393);
+            this.Controls.Add(this.groupPanel1);
             this.Controls.Add(this.chkUploadEpaper);
             this.Controls.Add(this.lnkSetStudType);
             this.Controls.Add(this.groupPanel3);
@@ -383,6 +459,9 @@
             this.panel6.PerformLayout();
             this.groupPanel3.ResumeLayout(false);
             this.groupPanel3.PerformLayout();
+            this.groupPanel1.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -409,5 +488,8 @@
         private System.Windows.Forms.CheckBox chk1Up;
         private System.Windows.Forms.LinkLabel lnkSetStudType;
         private DevComponents.DotNetBar.Controls.CheckBoxX chkUploadEpaper;
+        private DevComponents.DotNetBar.Controls.GroupPanel groupPanel1;
+        private System.Windows.Forms.Panel panel4;
+        private DevComponents.DotNetBar.Controls.CheckBoxX OneFileSave;
     }
 }
