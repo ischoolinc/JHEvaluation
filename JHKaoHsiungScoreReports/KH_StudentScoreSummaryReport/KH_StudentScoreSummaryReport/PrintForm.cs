@@ -14,6 +14,7 @@ using System.Linq;
 using System.Reflection;
 using Aspose.Cells;
 using Campus.ePaper;
+using System.IO;
 
 namespace KH_StudentScoreSummaryReport
 {
@@ -28,7 +29,13 @@ namespace KH_StudentScoreSummaryReport
 
         private BackgroundWorker MasterWorker = new BackgroundWorker();
 
+        private BackgroundWorker ConvertToPDF_Worker = new BackgroundWorker();
+
         private List<ReportStudent> PrintStudents = new List<ReportStudent>();
+
+        private string fbdPath = "";
+
+        private DoWorkEventArgs e_For_ConvertToPDF_Worker;
 
         public PrintForm(List<string> studentIds)
         {
@@ -38,6 +45,15 @@ namespace KH_StudentScoreSummaryReport
             Preference = new ReportPreference(ConfigName, Properties.Resources.高雄學生免試入學高中在校成績證明書);
             MasterWorker.DoWork += new DoWorkEventHandler(MasterWorker_DoWork);
             MasterWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(MasterWorker_RunWorkerCompleted);
+
+            ConvertToPDF_Worker.DoWork += new DoWorkEventHandler(ConvertToPDF_Worker_DoWork);
+            ConvertToPDF_Worker.WorkerReportsProgress = true;
+            ConvertToPDF_Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(ConvertToPDF_Worker_RunWorkerCompleted);
+
+            ConvertToPDF_Worker.ProgressChanged += delegate(object sender, ProgressChangedEventArgs e)
+            {
+                FISCA.Presentation.MotherForm.SetStatusBarMessage(e.UserState.ToString(), e.ProgressPercentage);
+            };
 
             //rbDomainOnly.Checked = (Preference.ListMethod == ListMethod.DomainOnly);            
             //rbSubjectOnly.Checked = (Preference.ListMethod == ListMethod.SubjectOnly);
@@ -455,6 +471,8 @@ namespace KH_StudentScoreSummaryReport
 
                 e.Result = new Report(PrintStudents, Preference).Print();
 
+                e_For_ConvertToPDF_Worker = e;
+
                 Feedback("列印完成", -1);
             }
         }
@@ -469,68 +487,177 @@ namespace KH_StudentScoreSummaryReport
 
                 //單檔列印
                 if (OneFileSave.Checked)
-                {                
+                {
                     FolderBrowserDialog fbd = new FolderBrowserDialog();
                     fbd.Description = "請選擇儲存資料夾";
                     fbd.ShowNewFolderButton = true;
 
                     if (fbd.ShowDialog() == DialogResult.Cancel) return;
 
-                    int i = 0;
+                    fbdPath = fbd.SelectedPath;
 
-                    foreach (Section section in doc.Sections)
-                    {
-                        // 依照 學號_身分字號_班級_座號_姓名 .doc 來存檔
-                        string fileName = "";
 
-                        Document document = new Document();
-                        document.Sections.Clear();
-                        document.Sections.Add(document.ImportNode(section, true));
-
-                        fileName = PrintStudents[i].StudentNumber;
-
-                        fileName += "_" + PrintStudents[i].IDNumber;
-
-                        if (!string.IsNullOrEmpty(PrintStudents[i].RefClassID))
-                        {
-                            fileName += "_" + PrintStudents[i].Class.Name;
-                        }
-                        else
-                        {                            
-                            fileName += "_";                        
-                        }
-
-                        fileName += "_" + PrintStudents[i].SeatNo;
-
-                        fileName += "_" + PrintStudents[i].Name;
-
-                        document.Save(fbd.SelectedPath + "\\" +fileName+ ".doc");
-                        
-                        i++;
-                    }
+                    Util.DisableControls(this);
+                    ConvertToPDF_Worker.RunWorkerAsync();
+                                       
                 }
-                else 
+                else
                 {
-             
-                    Util.Save(doc, "學生免試入學在校成績證明單", Preference.ConvertToPDF);
+                    if (Preference.ConvertToPDF )
+                    {
+                        MotherForm.SetStatusBarMessage("正在轉換PDF格式... 請耐心等候"); 
+                    }
+
+                    Util.DisableControls(this);
+                    ConvertToPDF_Worker.RunWorkerAsync();
+
+
+                    
                 }
 
-                
+
                 // 檢查是否上傳電子報表
-                if(chkUploadEpaper.Checked)
+                if (chkUploadEpaper.Checked)
                 {
                     try
                     {
-                        ConvertAspose.Update_ePaperWordV14(TempData._ePaperMemStreamList, "高雄市免試入學在校成績證明書", PrefixStudent.系統編號);                    
-                    }catch(Exception ex)
+                        ConvertAspose.Update_ePaperWordV14(TempData._ePaperMemStreamList, "高雄市免試入學在校成績證明書", PrefixStudent.系統編號);
+                    }
+                    catch (Exception ex)
                     {
                         MsgBox.Show("上傳電子報表發生錯誤," + ex.Message);
                     }
-                }    
+                }
+
+            }
+            else 
+            {
+                MsgBox.Show(e.Error.Message);
+            }
+
+            if (Preference.ConvertToPDF )
+            {
+                MotherForm.SetStatusBarMessage("正在轉換PDF格式", 0);
+            }
+            else 
+            {
+                MotherForm.SetStatusBarMessage("產生完成", 100);
+            }
+            
+        }
+
+
+        private void ConvertToPDF_Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Document doc = e_For_ConvertToPDF_Worker.Result as Document;
+
+            if (!OneFileSave.Checked)
+            {
+                Util.Save(doc, "學生免試入學在校成績證明單", Preference.ConvertToPDF);
             }
             else
-                MsgBox.Show(e.Error.Message);
+            {
+                int i = 0;
+
+                foreach (Section section in doc.Sections)
+                {
+                    // 依照 學號_身分字號_班級_座號_姓名 .doc 來存檔
+                    string fileName = "";
+
+                    Document document = new Document();
+                    document.Sections.Clear();
+                    document.Sections.Add(document.ImportNode(section, true));
+
+                    fileName = PrintStudents[i].StudentNumber;
+
+                    fileName += "_" + PrintStudents[i].IDNumber;
+
+                    if (!string.IsNullOrEmpty(PrintStudents[i].RefClassID))
+                    {
+                        fileName += "_" + PrintStudents[i].Class.Name;
+                    }
+                    else
+                    {
+                        fileName += "_";
+                    }
+
+                    fileName += "_" + PrintStudents[i].SeatNo;
+
+                    fileName += "_" + PrintStudents[i].Name;
+
+                    //document.Save(fbd.SelectedPath + "\\" +fileName+ ".doc");
+
+                    if (Preference.ConvertToPDF)
+                    {
+                        //string fPath = fbd.SelectedPath + "\\" + fileName + ".pdf";
+
+                        string fPath = fbdPath + "\\" + fileName + ".pdf";
+
+                        FileInfo fi = new FileInfo(fPath);
+
+                        DirectoryInfo folder = new DirectoryInfo(Path.Combine(fi.DirectoryName, Path.GetRandomFileName()));
+                        if (!folder.Exists) folder.Create();
+
+                        FileInfo fileinfo = new FileInfo(Path.Combine(folder.FullName, fi.Name));
+
+                        string XmlFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".xml";
+                        string PDFFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".pdf";
+
+                        document.Save(XmlFileName, Aspose.Words.SaveFormat.AsposePdf);
+
+                        Aspose.Pdf.Pdf pdf1 = new Aspose.Pdf.Pdf();
+
+                        pdf1.BindXML(XmlFileName, null);
+                        pdf1.Save(PDFFileName);
+
+                        if (File.Exists(fPath))
+                            File.Delete(Path.Combine(fi.DirectoryName, fi.Name));
+
+                        File.Move(PDFFileName, fPath);
+                        folder.Delete(true);
+
+                        int percent = (((i + 1) * 100 / doc.Sections.Count));
+
+                        ConvertToPDF_Worker.ReportProgress(percent, "PDF轉換中...進行到" + (i + 1) + "/" + doc.Sections.Count + "個檔案");
+                    }
+                    else
+                    {
+                        document.Save(fbdPath + "\\" + fileName + ".doc");
+
+                        int percent = (((i + 1) * 100 / doc.Sections.Count));
+
+                        ConvertToPDF_Worker.ReportProgress(percent, "Doc存檔...進行到" + (i + 1) + "/" + doc.Sections.Count + "個檔案");
+                    }
+
+                    i++;
+
+
+                }
+            }
         }
+
+
+
+        private void ConvertToPDF_Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Util.EnableControls(this);
+
+            if (Preference.ConvertToPDF)
+            {
+                MotherForm.SetStatusBarMessage("PDF轉換完成", 100);
+                
+            }
+            else 
+            {
+                MotherForm.SetStatusBarMessage("存檔完成", 100);
+                
+            }
+            
+        }
+
+        
+
+
 
         private void btnExit_Click(object sender, EventArgs e)
         {

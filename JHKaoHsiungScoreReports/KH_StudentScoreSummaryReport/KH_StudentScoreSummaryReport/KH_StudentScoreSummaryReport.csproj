@@ -40,6 +40,9 @@
       <HintPath>Library\Aspose.Cells.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Aspose.Pdf">
+      <HintPath>Library\Aspose.Pdf.dll</HintPath>
+    </Reference>
     <Reference Include="Aspose.Words, Version=4.4.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Aspose.Words.dll</HintPath>
