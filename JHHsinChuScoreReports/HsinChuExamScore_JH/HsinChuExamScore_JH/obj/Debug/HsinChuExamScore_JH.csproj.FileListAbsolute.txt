@@ -28,3 +28,12 @@ D:\GitProjModules\ischoolDesktop\JHEvaluation\JHHsinChuScoreReports\HsinChuExamS
 D:\GitProjModules\ischoolDesktop\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.csproj.GenerateResource.Cache
 D:\GitProjModules\ischoolDesktop\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.dll
 D:\GitProjModules\ischoolDesktop\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.pdb
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\bin\Debug\HsinChuExamScore_JH.dll
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\bin\Debug\HsinChuExamScore_JH.pdb
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.CloneConfigure.resources
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.NewConfigure.resources
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.PrintForm.resources
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.Properties.Resources.resources
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.csproj.GenerateResource.Cache
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.dll
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHHsinChuScoreReports\HsinChuExamScore_JH\HsinChuExamScore_JH\obj\Debug\HsinChuExamScore_JH.pdb

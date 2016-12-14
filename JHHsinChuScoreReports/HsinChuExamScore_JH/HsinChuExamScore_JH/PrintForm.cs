@@ -988,12 +988,37 @@ namespace HsinChuExamScore_JH
             List<SemesterHistoryRecord> SemesterHistoryRecordList = SemesterHistory.SelectByStudentIDs(_StudentIDList);
             foreach (SemesterHistoryRecord shr in SemesterHistoryRecordList)
             {
-                foreach(SemesterHistoryItem shi in shr.SemesterHistoryItems)
-                if (shi.SchoolYear == _SelSchoolYear && shi.Semester == _SelSemester)
-                {
-                    if (!StudShiDict.ContainsKey(shi.RefStudentID))
-                        StudShiDict.Add(shi.RefStudentID, shi);
+                bool thisTimeHaveSemesterHistoryItem = false;
+
+                foreach (SemesterHistoryItem shi in shr.SemesterHistoryItems) {
+                    if (shi.SchoolYear == _SelSchoolYear && shi.Semester == _SelSemester)
+                    {
+                        if (!StudShiDict.ContainsKey(shi.RefStudentID))
+                            StudShiDict.Add(shi.RefStudentID, shi);
+                        thisTimeHaveSemesterHistoryItem = true;
+
+                    }
+                
                 }
+                if (!thisTimeHaveSemesterHistoryItem) {
+
+                    if (!StudShiDict.ContainsKey(shr.RefStudentID)) {
+
+                        SemesterHistoryItem New_shi = new SemesterHistoryItem();
+
+                        New_shi.ClassName = shr.Student.Class!= null ? shr.Student.Class.Name :"";
+
+                        New_shi.SeatNo = shr.Student.SeatNo;
+
+                        New_shi.Teacher = shr.Student.Class !=null ? shr.Student.Class.Teacher.Name : "";
+
+                        StudShiDict.Add(shr.RefStudentID, New_shi);
+                    
+                    }
+                    
+                
+                }
+                
             }
 
  
