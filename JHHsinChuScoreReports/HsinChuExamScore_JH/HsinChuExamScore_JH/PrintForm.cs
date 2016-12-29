@@ -1770,7 +1770,7 @@ namespace HsinChuExamScore_JH
                 docAtt.Sections.Clear();
                 docAtt.Sections.Add(docAtt.ImportNode(docTemplate.Sections[0], true));
 
-                _builder = new DocumentBuilder(docAtt);
+                //_builder = new DocumentBuilder(docAtt);
 //                docAtt.MailMerge.MergeField += new Aspose.Words.Reporting.MergeFieldEventHandler(MailMerge_MergeField);
                 docAtt.MailMerge.FieldMergingCallback = this;
                 docAtt.MailMerge.Execute(dtAtt);
@@ -2460,6 +2460,7 @@ namespace HsinChuExamScore_JH
         {
             if (e.FieldName == "缺曠紀錄")
             {
+                var _builder = new DocumentBuilder(e.Document);
                 if (_builder.MoveToMergeField(e.FieldName))
                 {
                     string sid = e.FieldValue.ToString();
