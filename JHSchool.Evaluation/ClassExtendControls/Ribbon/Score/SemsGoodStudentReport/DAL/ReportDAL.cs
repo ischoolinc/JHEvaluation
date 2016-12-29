@@ -10,7 +10,7 @@ namespace JHSchool.Evaluation.ClassExtendControls.Ribbon.Score.SemsGoodStudentRe
 {
     public static class ReportDAL
     {
-        public static ReportData GetReportData(string schoolyear,string semester)
+        public static ReportData GetReportData(string schoolyear, string semester, bool exclude_abnormal)
         {
             string targetService = "SmartSchool.Score.GetSemesterSubjectScore";
             ReportData reportData = new ReportData();
@@ -26,7 +26,7 @@ namespace JHSchool.Evaluation.ClassExtendControls.Ribbon.Score.SemsGoodStudentRe
 
             foreach (K12.Data.ClassRecord classRecord in K12.Data.Class.SelectByIDs(Class.Instance.SelectedKeys))
             {
-                ClassData cd = new ClassData(classRecord);
+                ClassData cd = new ClassData(classRecord, exclude_abnormal);
                 reportData.Classes.Add(cd);
 
                 foreach (K12.Data.StudentRecord studentRecord in classRecord.Students)

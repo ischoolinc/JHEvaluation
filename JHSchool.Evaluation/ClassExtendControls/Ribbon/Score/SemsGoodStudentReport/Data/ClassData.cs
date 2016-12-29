@@ -10,7 +10,7 @@ namespace JHSchool.Evaluation.ClassExtendControls.Ribbon.Score.SemsGoodStudentRe
         public K12.Data.ClassRecord ClassRecord { get; set; }
         public List<StudentData> Students { get; set; }
 
-        public ClassData(K12.Data.ClassRecord classRecord)
+        public ClassData(K12.Data.ClassRecord classRecord, bool exclude_abnormal)
         {
             ClassRecord = classRecord;
             Students = new List<StudentData>();
@@ -18,10 +18,20 @@ namespace JHSchool.Evaluation.ClassExtendControls.Ribbon.Score.SemsGoodStudentRe
             foreach (K12.Data.StudentRecord sr in classRecord.Students)
             {
                 StudentData sd = new StudentData();
-                sd.Student = sr;
-                sd.Score = 0;
-
-                Students.Add(sd);
+                if (exclude_abnormal)
+                {
+                    if (sr.Status == K12.Data.StudentRecord.StudentStatus.一般)
+                    {
+                        sd.Student = sr;
+                        sd.Score = 0;
+                        Students.Add(sd);
+                    }
+                }
+                else {
+                    sd.Student = sr;
+                    sd.Score = 0;
+                    Students.Add(sd);                        
+                }               
             }
         }
 
@@ -40,17 +50,17 @@ namespace JHSchool.Evaluation.ClassExtendControls.Ribbon.Score.SemsGoodStudentRe
             for (int i = 0; i < Students.Count; i++)
             {
                 StudentData sd = Students[i];
-
-                if (sd.Score == currentScore)
-                {
-                    sd.Rank = currentRank;
-                }
-                else
-                {
-                    sd.Rank = (i + 1);
-                    currentRank = sd.Rank;
-                    currentScore = sd.Score;
-                }                
+                        
+                if (sd.Score == currentScore)                        
+                {                            
+                    sd.Rank = currentRank;                        
+                }                        
+                else                        
+                {                            
+                    sd.Rank = (i + 1);                           
+                    currentRank = sd.Rank;                         
+                    currentScore = sd.Score;                        
+                }           
             }
 
             foreach (StudentData sd in Students)

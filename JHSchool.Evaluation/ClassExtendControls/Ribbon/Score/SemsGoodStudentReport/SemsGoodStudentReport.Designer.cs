@@ -39,6 +39,7 @@
             this.buttonX2 = new DevComponents.DotNetBar.ButtonX();
             this.iiCount = new DevComponents.Editors.IntegerInput();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.Cbo_Exclude_Abnormal = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.iiCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
@@ -46,6 +47,11 @@
             // labelX1
             // 
             this.labelX1.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.Location = new System.Drawing.Point(12, 12);
             this.labelX1.Name = "labelX1";
             this.labelX1.Size = new System.Drawing.Size(45, 23);
@@ -55,6 +61,11 @@
             // labelX2
             // 
             this.labelX2.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX2.Location = new System.Drawing.Point(143, 12);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(39, 23);
@@ -64,6 +75,11 @@
             // labelX3
             // 
             this.labelX3.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX3.Location = new System.Drawing.Point(12, 41);
             this.labelX3.Name = "labelX3";
             this.labelX3.Size = new System.Drawing.Size(63, 23);
@@ -73,6 +89,11 @@
             // labelX4
             // 
             this.labelX4.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX4.BackgroundStyle.Class = "";
+            this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX4.Location = new System.Drawing.Point(143, 43);
             this.labelX4.Name = "labelX4";
             this.labelX4.Size = new System.Drawing.Size(39, 23);
@@ -97,7 +118,7 @@
             this.cboSemester.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboSemester.FormattingEnabled = true;
             this.cboSemester.ItemHeight = 19;
-            this.cboSemester.Location = new System.Drawing.Point(188, 12);
+            this.cboSemester.Location = new System.Drawing.Point(177, 10);
             this.cboSemester.Name = "cboSemester";
             this.cboSemester.Size = new System.Drawing.Size(74, 25);
             this.cboSemester.TabIndex = 2;
@@ -108,7 +129,7 @@
             this.buttonX1.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonX1.BackColor = System.Drawing.Color.Transparent;
             this.buttonX1.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonX1.Location = new System.Drawing.Point(106, 74);
+            this.buttonX1.Location = new System.Drawing.Point(123, 74);
             this.buttonX1.Name = "buttonX1";
             this.buttonX1.Size = new System.Drawing.Size(75, 23);
             this.buttonX1.TabIndex = 4;
@@ -120,7 +141,7 @@
             this.buttonX2.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonX2.BackColor = System.Drawing.Color.Transparent;
             this.buttonX2.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonX2.Location = new System.Drawing.Point(187, 74);
+            this.buttonX2.Location = new System.Drawing.Point(204, 74);
             this.buttonX2.Name = "buttonX2";
             this.buttonX2.Size = new System.Drawing.Size(75, 23);
             this.buttonX2.TabIndex = 5;
@@ -134,6 +155,7 @@
             // 
             // 
             this.iiCount.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.iiCount.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.iiCount.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
             this.iiCount.Location = new System.Drawing.Point(72, 43);
             this.iiCount.MaxValue = 100;
@@ -148,11 +170,23 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // Cbo_Exclude_Abnormal
+            // 
+            this.Cbo_Exclude_Abnormal.AutoSize = true;
+            this.Cbo_Exclude_Abnormal.BackColor = System.Drawing.Color.Transparent;
+            this.Cbo_Exclude_Abnormal.Location = new System.Drawing.Point(177, 47);
+            this.Cbo_Exclude_Abnormal.Name = "Cbo_Exclude_Abnormal";
+            this.Cbo_Exclude_Abnormal.Size = new System.Drawing.Size(105, 21);
+            this.Cbo_Exclude_Abnormal.TabIndex = 7;
+            this.Cbo_Exclude_Abnormal.Text = "排除非一般生";
+            this.Cbo_Exclude_Abnormal.UseVisualStyleBackColor = false;
+            // 
             // SemsGoodStudentReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(271, 102);
+            this.ClientSize = new System.Drawing.Size(291, 102);
+            this.Controls.Add(this.Cbo_Exclude_Abnormal);
             this.Controls.Add(this.iiCount);
             this.Controls.Add(this.buttonX2);
             this.Controls.Add(this.buttonX1);
@@ -162,11 +196,13 @@
             this.Controls.Add(this.labelX3);
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.labelX1);
+            this.DoubleBuffered = true;
             this.Name = "SemsGoodStudentReport";
             this.Text = "列印學期優異表現名單";
             ((System.ComponentModel.ISupportInitialize)(this.iiCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -182,5 +218,6 @@
         private DevComponents.DotNetBar.ButtonX buttonX2;
         private DevComponents.Editors.IntegerInput iiCount;
         private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.CheckBox Cbo_Exclude_Abnormal;
     }
 }

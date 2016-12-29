@@ -63,7 +63,7 @@ namespace JHSchool.Evaluation.ClassExtendControls.Ribbon.Score.SemsGoodStudentRe
 
         private void buttonX1_Click(object sender, EventArgs e)
         {
-            ReportData report = ReportDAL.GetReportData(cboSchoolYear.Text, cboSemester.Text);
+            ReportData report = ReportDAL.GetReportData(cboSchoolYear.Text, cboSemester.Text,Cbo_Exclude_Abnormal.Checked);
 
             Workbook book = new Workbook();
             book.Worksheets.Clear();
