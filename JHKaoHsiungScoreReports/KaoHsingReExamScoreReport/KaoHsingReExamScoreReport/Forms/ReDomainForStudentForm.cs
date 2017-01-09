@@ -192,6 +192,8 @@ namespace KaoHsingReExamScoreReport.Forms
                 {
                     if (ds.Score.HasValue)
                     {
+                        if (ds.Domain != "國語文" && ds.Domain != "英語") // 2017/1/9 穎驊 註解， 高雄不再分別使用 國語文 、英語 領域，而是兩領域合一算一"語文"領域成績 來看有沒有及格。 
+                        {
                         if (ds.Score.Value < _passScore)
                         {
                             row["領域名稱" + rDomCOunt] = ds.Domain;
@@ -201,7 +203,9 @@ namespace KaoHsingReExamScoreReport.Forms
                                 row["原始成績" + rDomCOunt] = ds.ScoreOrigin.Value;
 
                             rDomCOunt++;
+                        }                                                
                         }
+                        
                     }
                 }
 
