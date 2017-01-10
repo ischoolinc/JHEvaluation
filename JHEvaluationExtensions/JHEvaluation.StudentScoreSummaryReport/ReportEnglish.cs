@@ -63,6 +63,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
             PrintAbsences = printSetting.AcceptAbsences.PeriodOptionsFromString();
         }
 
+        //  2016/4/18 穎驊debug 存同一檔列印處理，要印分數的話，傳進來bool 應為 ture，印等第的話，傳進來bool = false
+
         public Document Print(bool printScore)
         {
             PrintScore = printScore;
@@ -75,8 +77,15 @@ namespace JHEvaluation.StudentScoreSummaryReport
             return doc;
         }
 
+
+        //  2016/4/18 穎驊debug 分檔列印處理，要印分數的話，傳進來bool 應為 ture，印等第的話，傳進來bool = false
+
         public Dictionary<string, Document> PrintDict(bool printScore)
         {
+
+            // 2016/4/18 穎驊debug  發現下面這行未加，導致分檔列印處理，要印分數時，總是印成等第制。
+            PrintScore = printScore;
+
             _DocDict.Clear();
 
             foreach(ReportStudent rs in Students)
@@ -109,6 +118,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
 
         //最好這程式有人能維護的了.......
+
+
+        /// 2016/4/18  穎驊同感...  好險目前他不用太懂...
         private void MailMerge_MergeField(object sender, MergeFieldEventArgs e)
         {
             //不是 Fix 開頭的合併欄位不處理。

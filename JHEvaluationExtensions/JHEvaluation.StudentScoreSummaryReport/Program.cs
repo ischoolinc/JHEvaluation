@@ -61,7 +61,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             {
                 new PrintForm(K12.Presentation.NLDPanels.Student.SelectedSource).ShowDialog();
             };
-            MenuButton mb2 = NLDPanels.Student.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["在校成績證明書(英文)"];
+            MenuButton mb2 = NLDPanels.Student.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["在校成績證明書(英文版)"];
             mb2.Enable = false;
             mb2.Click += delegate
             {
