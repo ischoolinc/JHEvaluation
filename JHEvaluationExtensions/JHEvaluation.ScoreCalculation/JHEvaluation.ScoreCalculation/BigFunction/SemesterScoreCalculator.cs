@@ -167,8 +167,14 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 //文字評量串接。
                 Dictionary<string, string> domainText = new Dictionary<string, string>();
 
+                //各領域補考分數加總。
+                Dictionary<string, decimal> domain_MakeUpScore_Total = new Dictionary<string, decimal>();
+
                 //被限制不能超過60分的領域(該領域的科目有補考成績)
                 List<string> LimitedDomains = new List<string>();
+
+                //該領域的科目有補考成績清單
+                List<string> Have_MakeUpScore_Domains = new List<string>();
 
                 // 只計算領域成績，不計算科目
                 bool OnlyCalcDomainScore = false;
@@ -186,7 +192,25 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                     //該領域的科目有補考成績將被加入
                     if (objSubj.ScoreMakeup.HasValue && !LimitedDomains.Contains(strDomainName))
+                    {
                         LimitedDomains.Add(strDomainName);
+
+                        if (strDomainName == "國語文" || strDomainName == "英語")
+                        {
+                            LimitedDomains.Add(khDomain);
+                        }    
+                    }
+
+                    //該領域的科目有補考成績將被加入
+                    if (objSubj.ScoreMakeup.HasValue && !Have_MakeUpScore_Domains.Contains(strDomainName))
+                    {                  
+                        Have_MakeUpScore_Domains.Add(strDomainName);
+
+                        if (strDomainName == "國語文" || strDomainName == "英語")
+                        {
+                            Have_MakeUpScore_Domains.Add(khDomain);
+                        }                        
+                    }                                     
                 }
 
                 // 當沒有科目成績或科目成績內領域沒有非空白，只計算領域成績。
@@ -225,8 +249,11 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                     domainPeriod.Add(khDomain, 0);
                                     // 2016/2/26 經高雄繼斌與蔡主任討論，語文領域文字描述不需要儲存
                                     //domainText.Add(khDomain, string.Empty);
-                                }
 
+                                    //領域補考成績
+                                    domain_MakeUpScore_Total.Add(khDomain, 0);
+                                }
+                                
                                 domainTotal[khDomain] += objSubj.Value.Value * objSubj.Weight.Value;
                                 //科目的原始成績加總
                                 domainOriginTotal[khDomain] += objSubj.ScoreOrigin.Value * objSubj.Weight.Value;
@@ -235,6 +262,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 domainPeriod[khDomain] += objSubj.Period.Value;
                                 // 2016/2/26 經高雄繼斌與蔡主任討論，語文領域文字描述不需要儲存
                                 domainText[khDomain] = "";//+= GetDomainSubjectText(strSubj, objSubj.Text);
+
+                                //領域補考成績總和 ，算法為 先用各科目的"成績" 加權計算 ， 之後會再判斷， 此成績總和 是否含有"補考成績" 是否為"補考成績總和"
+                                domain_MakeUpScore_Total[khDomain] += objSubj.Value.Value * objSubj.Weight.Value;
                             }
 
                             if (!domainTotal.ContainsKey(strDomain))
@@ -244,6 +274,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 domainWeight.Add(strDomain, 0);
                                 domainPeriod.Add(strDomain, 0);
                                 domainText.Add(strDomain, string.Empty);
+
+                                //領域補考成績
+                                domain_MakeUpScore_Total.Add(strDomain, 0);
                             }
 
                             domainTotal[strDomain] += objSubj.Value.Value * objSubj.Weight.Value;
@@ -253,6 +286,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             domainWeight[strDomain] += objSubj.Weight.Value;
                             domainPeriod[strDomain] += objSubj.Period.Value;
                             domainText[strDomain] += GetDomainSubjectText(strSubj, objSubj.Text);
+
+                            //領域補考成績總和 ，算法為 先用各科目的"成績" 加權計算 ， 之後會再判斷， 此成績總和 是否含有"補考成績" 是否為"補考成績總和"
+                            domain_MakeUpScore_Total[strDomain] += objSubj.Value.Value * objSubj.Weight.Value;
                         }
                     }
                     #endregion
@@ -301,8 +337,6 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 }
                                 s_Language_Weight = Chinese_Weight + English_Weight;
 
-
-
                             }
                         }
 
@@ -313,6 +347,12 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         decimal weight = domainWeight[strDomain];
                         decimal period = domainPeriod[strDomain];
                         string text = "";
+
+                        // 補考總分
+                        decimal makeup_score_total = domain_MakeUpScore_Total[strDomain];
+
+                        
+
                         if (domainText.ContainsKey(strDomain))
                             text = string.Join(";", domainText[strDomain].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
 
@@ -320,6 +360,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                         decimal weightAvg = rule.ParseDomainScore(total / weight);
                         decimal weightOriginAvg = rule.ParseDomainScore(totalOrigin / weight);
+
+                        // 補考總分平均
+                        decimal? makeup_score_total_Avg = rule.ParseDomainScore(makeup_score_total / weight);
 
                         //將成績更新回學生。
                         SemesterDomainScore dscore = null;
@@ -339,6 +382,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         dscore.Text = text;
                         dscore.Effort = effortmap.GetCodeByScore(weightAvg);
 
+                        dscore.ScoreMakeup = Have_MakeUpScore_Domains.Contains(strDomain) ? makeup_score_total_Avg : null;
+
                         if (strDomain == "國語文")
                         {
                             Chinese_Effort = effortmap.GetCodeByScore(weightAvg);
@@ -349,7 +394,6 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             English_Effort = effortmap.GetCodeByScore(weightAvg);
 
                         }
-
 
                         //後面會有一段code執行全領域的擇優判斷,此段已不需要
                         //若有補考成績就進行擇優,否則就將科目的擇優平均帶入領域成績
@@ -385,13 +429,11 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 dscores.Add("語文", dsSS);
                             }
 
-
                             //sWeightAvg = rule.ParseDomainScore(sTotal / sWeight);
 
                             sWeightOriginAvg = rule.ParseDomainScore(sTotalOrigin / sWeight);
 
                             //dsSS.Value = sWeightAvg;
-
 
                             dsSS.ScoreOrigin = sWeightOriginAvg;
                             dsSS.Weight = sWeight;
@@ -400,7 +442,6 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
 
                             //dsSS.Effort = effortmap.GetCodeByScore(sWeightAvg);
-
 
                             //2016/5/20 穎驊更正語文領域努力程度正確計算顯示
                             decimal Language_Effort = ((Chinese_Effort * Chinese_Weight) + (English_Effort * English_Weight)) / s_Language_Weight;
@@ -419,12 +460,11 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 if (dscores["國語文"].ScoreMakeup.HasValue && dscores["國語文"].Weight.HasValue)
                                 {
                                     mmScore += dscores["國語文"].ScoreMakeup.Value * dscores["國語文"].Weight.Value;
+                                    scSum += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
                                     hasmmScore = true;
                                 }
                                 else
                                 {
-
-
                                     if (dscores["國語文"].Value.HasValue)
                                     {
                                         mmScore += dscores["國語文"].Value.Value * dscores["國語文"].Weight.Value;
@@ -438,6 +478,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 if (dscores["英語"].ScoreMakeup.HasValue && dscores["英語"].Weight.HasValue)
                                 {
                                     mmScore += dscores["英語"].ScoreMakeup.Value * dscores["英語"].Weight.Value;
+                                    scSum += dscores["英語"].Value.Value * dscores["英語"].Weight.Value;
                                     hasmmScore = true;
                                 }
                                 else
@@ -639,10 +680,32 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         objDomain.BetterScoreSelection();
 
                     //領域成績被限制為不能超過60分
+                    // 2017/1/11 穎驊筆記，因應 恩正與高雄小組重新討論後，有了以下 成績新判斷法，
+                    // 若領域補考 沒有大於原始分數 則領域成績分數為 領域原始成績 (以本程式碼， 上面會先有 BetterScoreSelection() 擇優， 下面第一個if 判斷 是否 要直接用原始成績)
+                    // (我知道 這樣子做 很像繞圈圈走回頭冗路，為什麼 不直接 在BetterScoreSelection() 裡更動就好?)
+                    // (因為我是接手 維護此CODE ，先前的CODE 架構已經太複雜， 我都盡量不會再更動，避免有意外發生。)
+                    // 若領域補考 大於原始分數 且又小於60分 則領域成績分數  為 領域補考成績
+                    // 若領域補考 大於原始分數 且又大於60分 則領域成績分數 以60分 為上限
+
+                    //詳情可看本專案 Resource 資料匣 內流程圖圖檔 : 補考科目成績計算流程圖  TXT 檔: 補考科目成績計算流程文字
+                    // 或是 高雄項目 [08-07][06] 補考科目成績影響領域成績計算結果問題 的討論
+
                     if (setting.DomainScoreLimit)
                     {
-                        if (LimitedDomains.Contains(domain) && objDomain.Value > 60)
+                        if (LimitedDomains.Contains(domain) && objDomain.ScoreOrigin > 60 )
+                        {
+                            objDomain.Value = objDomain.ScoreOrigin;
+                        }
+
+                        if (LimitedDomains.Contains(domain) && 60 > objDomain.ScoreMakeup && objDomain.ScoreMakeup > objDomain.ScoreOrigin)
+                        {
+                            objDomain.Value = objDomain.ScoreMakeup;
+                        }
+
+                        if (LimitedDomains.Contains(domain) &&  objDomain.ScoreMakeup >60  &&  60 >objDomain.ScoreOrigin )
+                        {
                             objDomain.Value = 60;
+                        }                        
                     }
                 }
 
