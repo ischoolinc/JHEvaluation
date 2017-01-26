@@ -66,15 +66,30 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         /// </summary>
         public void BetterScoreSelection()
         {
-            decimal? betterScore = DomainScore.GetBetterScore(ScoreOrigin, ScoreMakeup);
+            BetterScoreSelection(true);
+        }
 
-            decimal newScore = betterScore.HasValue ? betterScore.Value : 0;
-            decimal oldScore = Value.HasValue ? Value.Value : 0;
 
-            if (newScore >= oldScore)
-                Value = newScore;
+        //2016/1/26 恩正與穎驊改寫幫原本的BetterScoreSelection()方法加入新的分數篩汰邏輯，
+        //因本class 為public 為了怕有其他地方有引用原本的舊方法， 故在上面設一個轉移至新方法的方法
 
-            //Value = betterScore;
+        public void BetterScoreSelection(bool limit60)
+        {
+            decimal originScore = 0;
+            decimal makeupScore = 0;
+
+            if (ScoreOrigin.HasValue)
+                originScore = ScoreOrigin.Value;
+
+            if (limit60 && ScoreMakeup.HasValue && ScoreMakeup.Value > 60)
+                makeupScore = 60;
+            else if (ScoreMakeup.HasValue)
+                makeupScore = ScoreMakeup.Value;
+
+            if (originScore >= makeupScore)
+                Value = originScore;
+            else
+                Value = makeupScore;
         }
 
         #region IScore 成員

@@ -248,7 +248,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                     domainWeight.Add(khDomain, 0);
                                     domainPeriod.Add(khDomain, 0);
                                     // 2016/2/26 經高雄繼斌與蔡主任討論，語文領域文字描述不需要儲存
-                                    //domainText.Add(khDomain, string.Empty);
+                                    domainText.Add(khDomain, string.Empty);
 
                                     //領域補考成績
                                     domain_MakeUpScore_Total.Add(khDomain, 0);
@@ -382,7 +382,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         dscore.Text = text;
                         dscore.Effort = effortmap.GetCodeByScore(weightAvg);
 
-                        dscore.ScoreMakeup = Have_MakeUpScore_Domains.Contains(strDomain) ? makeup_score_total_Avg : null;
+
+                        //2017/1/26  穎驊註解，原本 如果該領域的的科目沒有補考成績  會把dscore.ScoreMakeup 原本含有的補考成績洗掉，現在加回來
+                        dscore.ScoreMakeup = Have_MakeUpScore_Domains.Contains(strDomain) ? makeup_score_total_Avg : dscore.ScoreMakeup;
 
                         if (strDomain == "國語文")
                         {
@@ -677,7 +679,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                        // objDomain.ScoreOrigin = objDomain.Value;
 
                     if (objDomain.ScoreOrigin.HasValue || objDomain.ScoreMakeup.HasValue)
-                        objDomain.BetterScoreSelection();
+
+                        objDomain.BetterScoreSelection(setting.DomainScoreLimit);
 
                     //領域成績被限制為不能超過60分
                     // 2017/1/11 穎驊筆記，因應 恩正與高雄小組重新討論後，有了以下 成績新判斷法，
@@ -690,23 +693,25 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     //詳情可看本專案 Resource 資料匣 內流程圖圖檔 : 補考科目成績計算流程圖  TXT 檔: 補考科目成績計算流程文字
                     // 或是 高雄項目 [08-07][06] 補考科目成績影響領域成績計算結果問題 的討論
 
-                    if (setting.DomainScoreLimit)
-                    {
-                        if (LimitedDomains.Contains(domain) && objDomain.ScoreOrigin > 60 )
-                        {
-                            objDomain.Value = objDomain.ScoreOrigin;
-                        }
+                    //if (setting.DomainScoreLimit)
+                    //{
+                    //    if (LimitedDomains.Contains(domain) && objDomain.ScoreOrigin > 60)
+                    //    {
+                    //        objDomain.Value = objDomain.ScoreOrigin;
+                    //    }
 
-                        if (LimitedDomains.Contains(domain) && 60 > objDomain.ScoreMakeup && objDomain.ScoreMakeup > objDomain.ScoreOrigin)
-                        {
-                            objDomain.Value = objDomain.ScoreMakeup;
-                        }
+                    //    if (LimitedDomains.Contains(domain) && 60 > objDomain.ScoreMakeup && objDomain.ScoreMakeup > objDomain.ScoreOrigin)
+                    //    {
+                    //        objDomain.Value = objDomain.ScoreMakeup;
+                    //    }
 
-                        if (LimitedDomains.Contains(domain) &&  objDomain.ScoreMakeup >60  &&  60 >objDomain.ScoreOrigin )
-                        {
-                            objDomain.Value = 60;
-                        }                        
-                    }
+                    //    if (LimitedDomains.Contains(domain) && objDomain.ScoreMakeup > 60 && 60 > objDomain.ScoreOrigin)
+                    //    {
+                    //        objDomain.Value = 60;
+                    //    }
+                    //}
+
+                    //2017/1/26  穎驊註解，恩正說還是該要在BetterScoreSelection()裡改寫，會比較易懂，故把以上的CODE註解掉，分數的篩汰 請進入BetterScoreSelection()看清楚。
                 }
 
      
