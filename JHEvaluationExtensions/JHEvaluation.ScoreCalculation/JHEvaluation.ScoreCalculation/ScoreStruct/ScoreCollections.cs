@@ -6,7 +6,7 @@ using K12.Data;
 namespace JHEvaluation.ScoreCalculation.ScoreStruct
 {
 
-   
+
 
 
     /// <summary>
@@ -15,7 +15,7 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
     public class TakeScoreCollection : ScoreCollection<TakeScore>
     {
 
-        
+
 
         /// <summary>
         /// 取得加權平均成績。
@@ -166,7 +166,7 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
     public class ScoreCollection<T> : IEnumerable<string> where T : IScore
     {
         private Dictionary<string, T> _scores = new Dictionary<string, T>();
-        
+
         List<string> ExceptionItems = new List<string>();
 
         public ScoreCollection()
@@ -179,6 +179,27 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         public virtual void Add(string item, T score)
         {
             _scores.Add(item.Trim(), score);
+        }
+
+        public virtual void Add(string item, T score, int index)
+        {
+            var pass = false;
+            var old = _scores;
+            
+            _scores = new Dictionary<string, T>();
+            int i = 0;
+            foreach (var pair in old)
+            {
+                if (i <= index && !pass)
+                {
+                    _scores.Add(item.Trim(), score);
+                    pass = true;
+                }
+                _scores.Add(pair.Key, pair.Value);
+                i++;
+            }
+            if (!pass)
+                _scores.Add(item.Trim(), score);
         }
 
         /// <summary>
@@ -207,10 +228,11 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
         public T this[string item]
         {
 
-            
-            get {
 
-                    return _scores[item.Trim()];
+            get
+            {
+
+                return _scores[item.Trim()];
 
             }
         }
