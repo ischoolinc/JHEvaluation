@@ -20,3 +20,12 @@ D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluatio
 D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.csproj.GenerateResource.Cache
 D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.dll
 D:\GitProjModules\ischoolDesktop\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.pdb
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\bin\Debug\JHEvaluation.AssignmentScore.dll
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\bin\Debug\JHEvaluation.AssignmentScore.pdb
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.CourseScoreStatusForm.resources
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.MainFormScoreInput.resources
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.Properties.Resources.resources
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.Resource1.resources
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.csproj.GenerateResource.Cache
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.dll
+C:\Users\ED\Documents\ischool_github\JHEvaluation\JHEvaluationExtensions\JHEvaluationAssignmentScore\obj\Debug\JHEvaluation.AssignmentScore.pdb
