@@ -29,7 +29,7 @@ namespace JHEvaluation.Rating
             //排序學生資料。
             students.Sort(new Comparison<RatingStudent>(RatingUtils.RatingStudentComparison));
 
-            foreach (string field in new string[] { "班級 ", "座號", "姓名", "學號" })
+            foreach (string field in new string[] { "班級", "座號", "姓名", "學號" })
                 sheet.Cells[0, columnOffset++].PutValue(field);
 
             foreach (string field in ratingNames)

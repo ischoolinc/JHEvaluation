@@ -61,20 +61,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aspose.Cells">
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\modules\Campus\Aspose.Cells.dll</HintPath>
+      <HintPath>Library\Aspose.Cells.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Campus">
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\modules\Campus\Campus.dll</HintPath>
+      <HintPath>Library\Campus.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Campus.Report">
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\modules\Campus\Campus.Report.dll</HintPath>
+      <HintPath>Library\Campus.Report.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Campus.Windows, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\modules\Campus\Campus.Windows.dll</HintPath>
+      <HintPath>Library\Campus.Windows.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DevComponents.DotNetBar2, Version=7.9.0.3, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
@@ -83,50 +83,54 @@
     </Reference>
     <Reference Include="FISCA, Version=1.0.1.14, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\kernel\FISCA.dll</HintPath>
+      <HintPath>Library\FISCA.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.Authentication, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\kernel\FISCA.Authentication.dll</HintPath>
+      <HintPath>Library\FISCA.Authentication.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.Core">
+      <HintPath>Library\FISCA.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.Deployment, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\kernel\FISCA.Deployment.dll</HintPath>
+      <HintPath>Library\FISCA.Deployment.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.Presentation, Version=1.0.2.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\kernel\FISCA.Presentation.dll</HintPath>
+      <HintPath>Library\FISCA.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Framework, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\modules\JHCore\Framework.dll</HintPath>
+      <HintPath>Library\Framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool">
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\modules\JHCore\JHSchool.dll</HintPath>
+      <HintPath>Library\JHSchool.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.Data">
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\modules\JHCore\JHSchool.Data.dll</HintPath>
+      <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.Evaluation, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\modules\JHEvaluation\JHSchool.Evaluation.dll</HintPath>
+      <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="K12.Data, Version=1.0.2.23, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\modules\JHCore\K12.Data.dll</HintPath>
+      <HintPath>Library\K12.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="K12.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\ischool desktop\modules\JHCore\K12.Presentation.dll</HintPath>
+      <HintPath>Library\K12.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -243,6 +247,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\refresh_window_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Library\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
