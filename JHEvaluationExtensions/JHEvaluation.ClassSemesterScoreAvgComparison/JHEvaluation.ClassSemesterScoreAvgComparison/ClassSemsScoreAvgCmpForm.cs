@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using FISCA.Presentation.Controls;
+using FISCA.Data;
 
 namespace JHEvaluation.ClassSemesterScoreAvgComparison
 {
@@ -18,6 +19,8 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison
         private List<string> _SelectSubjName;
         private List<string> _SelectDomainName;
         private bool _isBGWorkBusy = false;
+        ReportPreference config = null;
+        private List<string> notRankStudentIDList;
 
         public ClassSemsScoreAvgCmpForm()
         {
@@ -25,6 +28,22 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison
 
             _SelectSubjName = new List<string>();
             _SelectDomainName = new List<string>();
+
+            config = new ReportPreference();
+
+            btnPrint.Enabled = false;
+
+            //填上學生類別清單
+
+            List<string> StudTagItemList = GetStudentTagList();
+            // 取得學生類別清單
+            cbxNotRankTag.Items.Clear();
+            cbxNotRankTag.Items.Add("");
+            foreach (string item in StudTagItemList)
+            {
+                cbxNotRankTag.Items.Add(item);
+            }
+            
             _BGWork = new BackgroundWorker();
             _BGWork.DoWork += new DoWorkEventHandler(_BGWork_DoWork);
             _BGWork.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_BGWork_RunWorkerCompleted);
@@ -38,12 +57,13 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison
                 _BGWork.RunWorkerAsync();
                 return;
             }
+            btnPrint.Enabled = true;
             LoadSubjectDomainNameToForm();
         }
 
         void _BGWork_DoWork(object sender, DoWorkEventArgs e)
         {
-            DAL.DALTransfer.LoadSemesterScoreRecord(_SchoolYear, _Semester, _ClassIDList);
+            DAL.DALTransfer.LoadSemesterScoreRecord(_SchoolYear, _Semester, _ClassIDList,notRankStudentIDList);
         }
 
         // 畫面預設
@@ -53,6 +73,7 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison
             cbxSemester.Items.Clear();
             cbxSchoolYear.Text = JHSchool.School.DefaultSchoolYear;
             cbxSemester.Text = JHSchool.School.DefaultSemester;
+            cbxNotRankTag.Text = config.NotRankTag;
 
             int intDefaultSchoolYear;
             int.TryParse(JHSchool.School.DefaultSchoolYear, out intDefaultSchoolYear);
@@ -103,20 +124,29 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison
             int.TryParse(JHSchool.School.DefaultSchoolYear, out _SchoolYear);
             int.TryParse(JHSchool.School.DefaultSemester, out _Semester);
             LoadDefaultSchoolYearAndSemester();
-            _BGWork.RunWorkerAsync();
-
-            
-            
+            if (_BGWork.IsBusy)
+                _isBGWorkBusy = true;
+            else
+                _BGWork.RunWorkerAsync();
 
         }
 
         private void cbxSchoolYear_SelectedIndexChanged(object sender, EventArgs e)
         {
+            btnPrint.Enabled = false;
             ReloadFormData();               
         }
 
         private void cbxSemester_SelectedIndexChanged(object sender, EventArgs e)
         {
+            btnPrint.Enabled = false;
+            ReloadFormData();
+        }
+
+        private void cbxNotRankTag_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnPrint.Enabled = false;
+            notRankStudentIDList = GetNotRankStudentIDList(cbxNotRankTag.Text);
             ReloadFormData();
         }
 
@@ -152,14 +182,105 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison
             }
 
             btnPrint.Enabled = false;
+
+            #region 儲存不排名學生設定
+
+            config.NotRankTag = cbxNotRankTag.Text;
+
+            config.Save();
+
+            notRankStudentIDList = GetNotRankStudentIDList(cbxNotRankTag.Text);
+
+            #endregion
+
             // 取得成績
-            Dictionary<string, DAL.ClassEntity> ClassEntityDic = DAL.DALTransfer.GetClassEntityDic(_SelectSubjName, _SelectDomainName);
+            Dictionary<string, DAL.ClassEntity> ClassEntityDic = DAL.DALTransfer.GetClassEntityDic(_SelectSubjName, _SelectDomainName, notRankStudentIDList);
 
             // 產生報表
             ClassSemsScoreAvgCmpReporter cssacr = new ClassSemsScoreAvgCmpReporter(ClassEntityDic, _SelectSubjName, _SelectDomainName,JHSchool.School.ChineseName,cbxSchoolYear.Text,cbxSemester.Text);
 
             btnPrint.Enabled = true;
         }
+
+        /// <summary>
+        /// 取得學生清單，[]表示Prefix
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetStudentTagList()
+        {
+            List<string> retVal = new List<string>();
+            QueryHelper qh = new QueryHelper();
+            string query = "select  distinct tag.prefix,tag.name from tag where category='Student' order by tag.prefix,tag.name;";
+            DataTable dt = qh.Select(query);
+            foreach (DataRow dr in dt.Rows)
+            {
+                string prefix = "", name = "";
+                if (dr["prefix"] != null)
+                    prefix = dr["prefix"].ToString();
+
+                name = dr["name"].ToString();
+
+                if (string.IsNullOrEmpty(prefix))
+                {
+                    if (!retVal.Contains(name))
+                        retVal.Add(name);
+                }
+                else
+                {
+                    prefix = "[" + prefix + "]";
+                    if (!retVal.Contains(prefix))
+                        retVal.Add(prefix);
+                }
+            }
+
+            retVal.Sort();
+
+            return retVal;
+        }
+
+        //取得不排名類別學生 ID List
+        public static List<string> GetNotRankStudentIDList(string StudTag)
+        {
+            List<string> retVal = new List<string>();
+
+            Dictionary<string, List<string>> mapDict = new Dictionary<string, List<string>>();
+            QueryHelper qh = new QueryHelper();
+            string query = @"select tag.prefix,tag.name,ref_student_id as sid from tag inner join tag_student on tag.id=tag_student.ref_tag_id  where category='Student' order by tag.prefix,tag.name";
+            DataTable dt = qh.Select(query);
+            foreach (DataRow dr in dt.Rows)
+            {
+                string prefix = "", name = "";
+                if (dr["prefix"] != null)
+                    prefix = dr["prefix"].ToString();
+
+                name = dr["name"].ToString();
+                string sid = dr["sid"].ToString();
+
+                if (string.IsNullOrEmpty(prefix))
+                {
+                    if (!mapDict.ContainsKey(name))
+                        mapDict.Add(name, new List<string>());
+
+                    mapDict[name].Add(sid);
+                }
+                else
+                {
+                    prefix = "[" + prefix + "]";
+                    if (!mapDict.ContainsKey(prefix))
+                        mapDict.Add(prefix, new List<string>());
+
+                    mapDict[prefix].Add(sid);
+                }
+            }
+
+            if (mapDict.ContainsKey(StudTag))
+                retVal = mapDict[StudTag];
+
+            return retVal;
+        }
+
+       
+
 
     }
 }

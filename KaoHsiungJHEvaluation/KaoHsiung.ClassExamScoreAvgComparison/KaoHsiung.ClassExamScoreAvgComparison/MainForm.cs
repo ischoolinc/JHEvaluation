@@ -11,6 +11,7 @@ using KaoHsiung.ClassExamScoreAvgComparison.Model;
 using KaoHsiung.JHEvaluation.Data;
 using JHSchool.Evaluation.Ranking;
 using K12.Data;
+using FISCA.Data;
 
 namespace KaoHsiung.ClassExamScoreAvgComparison
 {
@@ -29,6 +30,10 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
         private int _runningSchoolYear;
         private int _runningSemester;
 
+        ReportPreference config = null;
+
+        private List<string> notRankStudentIDList;
+
         public static void Run()
         {
             new MainForm().ShowDialog();
@@ -44,6 +49,8 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
 
             _config = new Config(Global.ReportName);
 
+            config = new ReportPreference();
+
             _data = new List<ClassExamScoreData>();
             _courseDict = new Dictionary<string, JHCourseRecord>();
             _exams = new List<JHExamRecord>();
@@ -58,6 +65,24 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
             foreach (var exam in _exams)
                 cbExam.Items.Add(exam);
             cbExam.SelectedIndex = 0;
+
+
+            //填上學生類別清單
+
+            List<string> StudTagItemList = GetStudentTagList();
+            // 取得學生類別清單
+            cbxNotRankTag.Items.Clear();
+            cbxNotRankTag.Items.Add("");
+            foreach (string item in StudTagItemList)
+            {
+                cbxNotRankTag.Items.Add(item);            
+            }
+
+            cbxNotRankTag.Text = config.NotRankTag;
+
+
+            notRankStudentIDList = GetNotRankStudentIDList(cbxNotRankTag.Text);
+
 
             _worker = new BackgroundWorker();
             _worker.DoWork += delegate(object sender, DoWorkEventArgs e)
@@ -94,7 +119,7 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
                 _data.Clear();
                 foreach (JHClassRecord cla in _classes)
                 {
-                    ClassExamScoreData classData = new ClassExamScoreData(cla);
+                    ClassExamScoreData classData = new ClassExamScoreData(cla, notRankStudentIDList);
                     foreach (JHStudentRecord stu in classData.Students)
                         scMapping.Add(stu.ID, classData);
                     _data.Add(classData);
@@ -212,6 +237,7 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
                 btnPrint.Enabled = value;
                 pictureBox1.Visible = !value;
                 pictureBox2.Visible = !value;
+                cbxNotRankTag.Enabled = value;
             }
         }
 
@@ -316,6 +342,17 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
                 ced.SortCourseIDs(courseIDs);
             }
             #endregion
+
+
+
+            #region 儲存不排名學生設定
+
+            config.NotRankTag = cbxNotRankTag.Text;
+
+            config.Save(); 
+
+            #endregion
+
 
             #region 產生報表
             //Report report = new Report(_data, _courseDict, exam, methods);
@@ -470,5 +507,89 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
             return JHSchool.Evaluation.Subject.CompareSubjectOrdinal(x.Text, y.Text);
 
         }
+
+        /// <summary>
+        /// 取得學生清單，[]表示Prefix
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetStudentTagList()
+        {
+            List<string> retVal = new List<string>();
+            QueryHelper qh = new QueryHelper();
+            string query = "select  distinct tag.prefix,tag.name from tag where category='Student' order by tag.prefix,tag.name;";
+            DataTable dt = qh.Select(query);
+            foreach (DataRow dr in dt.Rows)
+            {
+                string prefix = "", name = "";
+                if (dr["prefix"] != null)
+                    prefix = dr["prefix"].ToString();
+
+                name = dr["name"].ToString();
+
+                if (string.IsNullOrEmpty(prefix))
+                {
+                    if (!retVal.Contains(name))
+                        retVal.Add(name);
+                }
+                else
+                {
+                    prefix = "[" + prefix + "]";
+                    if (!retVal.Contains(prefix))
+                        retVal.Add(prefix);
+                }
+            }
+
+            retVal.Sort();
+
+            return retVal;
+        }
+
+        //取得不排名類別學生 ID List
+        public static List<string> GetNotRankStudentIDList(string StudTag)
+        {
+            List<string> retVal = new List<string>();
+
+            Dictionary<string, List<string>> mapDict = new Dictionary<string, List<string>>();
+            QueryHelper qh = new QueryHelper();
+            string query = @"select tag.prefix,tag.name,ref_student_id as sid from tag inner join tag_student on tag.id=tag_student.ref_tag_id  where category='Student' order by tag.prefix,tag.name";
+            DataTable dt = qh.Select(query);
+            foreach (DataRow dr in dt.Rows)
+            {
+                string prefix = "", name = "";
+                if (dr["prefix"] != null)
+                    prefix = dr["prefix"].ToString();
+
+                name = dr["name"].ToString();
+                string sid = dr["sid"].ToString();
+
+                if (string.IsNullOrEmpty(prefix))
+                {
+                    if (!mapDict.ContainsKey(name))
+                        mapDict.Add(name, new List<string>());
+
+                    mapDict[name].Add(sid);
+                }
+                else
+                {
+                    prefix = "[" + prefix + "]";
+                    if (!mapDict.ContainsKey(prefix))
+                        mapDict.Add(prefix, new List<string>());
+
+                    mapDict[prefix].Add(sid);
+                }
+            }
+
+            if (mapDict.ContainsKey(StudTag))
+                retVal = mapDict[StudTag];
+
+            return retVal;
+        }
+
+        private void cbxNotRankTag_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            notRankStudentIDList = GetNotRankStudentIDList(cbxNotRankTag.Text);
+            RunWorker();
+        }
+
     }
 }

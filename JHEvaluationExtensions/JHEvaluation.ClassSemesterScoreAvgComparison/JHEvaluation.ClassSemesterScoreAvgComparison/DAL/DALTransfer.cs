@@ -19,14 +19,14 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison.DAL
         /// <param name="SchoolYear"></param>
         /// <param name="Semester"></param>
         /// <param name="StudentIDList"></param>
-        public static void LoadSemesterScoreRecord(int SchoolYear, int Semester, List<string> ClassIDList)
+        public static void LoadSemesterScoreRecord(int SchoolYear, int Semester, List<string> ClassIDList, List<string> notRankStudentIDList)
         {
             _ClassStudCount.Clear();
             List<JHClassRecord> ClassRecList = JHClass.SelectByIDs(ClassIDList);
             List<string> StudentIDList = new List<string>();
             foreach (JHClassRecord ClassRec in ClassRecList)
                 foreach (JHStudentRecord studRec in ClassRec.Students)
-                    if (studRec.Status == K12.Data.StudentRecord.StudentStatus.一般)
+                    if (studRec.Status == K12.Data.StudentRecord.StudentStatus.一般 && !notRankStudentIDList.Contains(studRec.ID))//剔除不排名學生
                     {
                         StudentIDList.Add(studRec.ID);
 
@@ -45,13 +45,20 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison.DAL
         /// 取得班級符合條件成績
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string,ClassEntity> GetClassEntityDic(List<string> SubjList,List<string> DomainList)
+        public static Dictionary<string, ClassEntity> GetClassEntityDic(List<string> SubjList, List<string> DomainList, List<string> NotRankStudentIDList)
         {
             Dictionary<string, ClassEntity> ClassEntityDic = new Dictionary<string, ClassEntity>();
 
             foreach (JHSemesterScoreRecord SemsRec in _SemesterScoreRecordList)
             {
                 string ClassName=string.Empty;
+
+                //剔除 不排名學生
+                if (NotRankStudentIDList.Contains(SemsRec.RefStudentID))
+                {
+                    continue;                                
+                }
+
 
                 // 取得學生班名
                 if(SemsRec.Student.Class !=null )

@@ -45,6 +45,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.lvDomain = new DevComponents.DotNetBar.Controls.ListViewEx();
+            this.cbxNotRankTag = new DevComponents.DotNetBar.Controls.ComboBoxEx();
+            this.labelX4 = new DevComponents.DotNetBar.LabelX();
             this.gpSubject.SuspendLayout();
             this.plSubject.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -73,7 +75,7 @@
             this.gpSubject.CanvasColor = System.Drawing.SystemColors.Control;
             this.gpSubject.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.gpSubject.Controls.Add(this.plSubject);
-            this.gpSubject.Location = new System.Drawing.Point(8, 71);
+            this.gpSubject.Location = new System.Drawing.Point(8, 110);
             this.gpSubject.Name = "gpSubject";
             this.gpSubject.Size = new System.Drawing.Size(261, 178);
             // 
@@ -91,10 +93,21 @@
             this.gpSubject.Style.BorderRightWidth = 1;
             this.gpSubject.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
             this.gpSubject.Style.BorderTopWidth = 1;
+            this.gpSubject.Style.Class = "";
             this.gpSubject.Style.CornerDiameter = 4;
             this.gpSubject.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
             this.gpSubject.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
             this.gpSubject.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.gpSubject.StyleMouseDown.Class = "";
+            this.gpSubject.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.gpSubject.StyleMouseOver.Class = "";
+            this.gpSubject.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.gpSubject.TabIndex = 6;
             this.gpSubject.Text = "科目";
             // 
@@ -125,6 +138,7 @@
             // 
             // 
             this.lvSubject.Border.Class = "ListViewBorder";
+            this.lvSubject.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSubject.CheckBoxes = true;
             this.lvSubject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvSubject.Location = new System.Drawing.Point(3, 3);
@@ -137,6 +151,11 @@
             // labelX1
             // 
             this.labelX1.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.Location = new System.Drawing.Point(6, 41);
             this.labelX1.Name = "labelX1";
             this.labelX1.Size = new System.Drawing.Size(58, 23);
@@ -148,7 +167,7 @@
             // 
             this.lnConfig.AutoSize = true;
             this.lnConfig.BackColor = System.Drawing.Color.Transparent;
-            this.lnConfig.Location = new System.Drawing.Point(8, 260);
+            this.lnConfig.Location = new System.Drawing.Point(12, 300);
             this.lnConfig.Name = "lnConfig";
             this.lnConfig.Size = new System.Drawing.Size(125, 17);
             this.lnConfig.TabIndex = 8;
@@ -163,7 +182,7 @@
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
             this.btnPrint.Enabled = false;
-            this.btnPrint.Location = new System.Drawing.Point(314, 255);
+            this.btnPrint.Location = new System.Drawing.Point(308, 294);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
             this.btnPrint.TabIndex = 9;
@@ -175,7 +194,7 @@
             this.btnClose.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
             this.btnClose.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnClose.Location = new System.Drawing.Point(395, 255);
+            this.btnClose.Location = new System.Drawing.Point(395, 294);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(65, 23);
             this.btnClose.TabIndex = 10;
@@ -197,6 +216,11 @@
             // labelX2
             // 
             this.labelX2.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX2.Location = new System.Drawing.Point(6, 7);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(48, 23);
@@ -218,6 +242,11 @@
             // labelX3
             // 
             this.labelX3.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX3.Location = new System.Drawing.Point(183, 8);
             this.labelX3.Name = "labelX3";
             this.labelX3.Size = new System.Drawing.Size(36, 23);
@@ -230,7 +259,7 @@
             this.gpDomain.CanvasColor = System.Drawing.SystemColors.Control;
             this.gpDomain.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.gpDomain.Controls.Add(this.panel1);
-            this.gpDomain.Location = new System.Drawing.Point(275, 71);
+            this.gpDomain.Location = new System.Drawing.Point(275, 110);
             this.gpDomain.Name = "gpDomain";
             this.gpDomain.Size = new System.Drawing.Size(185, 178);
             // 
@@ -248,10 +277,21 @@
             this.gpDomain.Style.BorderRightWidth = 1;
             this.gpDomain.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
             this.gpDomain.Style.BorderTopWidth = 1;
+            this.gpDomain.Style.Class = "";
             this.gpDomain.Style.CornerDiameter = 4;
             this.gpDomain.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
             this.gpDomain.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
             this.gpDomain.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.gpDomain.StyleMouseDown.Class = "";
+            this.gpDomain.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.gpDomain.StyleMouseOver.Class = "";
+            this.gpDomain.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.gpDomain.TabIndex = 7;
             this.gpDomain.Text = "領域";
             // 
@@ -282,6 +322,7 @@
             // 
             // 
             this.lvDomain.Border.Class = "ListViewBorder";
+            this.lvDomain.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvDomain.CheckBoxes = true;
             this.lvDomain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvDomain.Location = new System.Drawing.Point(3, 3);
@@ -291,10 +332,40 @@
             this.lvDomain.UseCompatibleStateImageBehavior = false;
             this.lvDomain.View = System.Windows.Forms.View.List;
             // 
+            // cbxNotRankTag
+            // 
+            this.cbxNotRankTag.DisplayMember = "Text";
+            this.cbxNotRankTag.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbxNotRankTag.FormattingEnabled = true;
+            this.cbxNotRankTag.ItemHeight = 19;
+            this.cbxNotRankTag.Location = new System.Drawing.Point(103, 73);
+            this.cbxNotRankTag.Name = "cbxNotRankTag";
+            this.cbxNotRankTag.Size = new System.Drawing.Size(202, 25);
+            this.cbxNotRankTag.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cbxNotRankTag.TabIndex = 12;
+            this.cbxNotRankTag.SelectedIndexChanged += new System.EventHandler(this.cbxNotRankTag_SelectedIndexChanged);
+            // 
+            // labelX4
+            // 
+            this.labelX4.AutoSize = true;
+            this.labelX4.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX4.BackgroundStyle.Class = "";
+            this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX4.Location = new System.Drawing.Point(6, 73);
+            this.labelX4.Name = "labelX4";
+            this.labelX4.Size = new System.Drawing.Size(101, 21);
+            this.labelX4.TabIndex = 11;
+            this.labelX4.Text = "不排名學生類別";
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(466, 284);
+            this.ClientSize = new System.Drawing.Size(466, 320);
+            this.Controls.Add(this.cbxNotRankTag);
+            this.Controls.Add(this.labelX4);
             this.Controls.Add(this.labelX3);
             this.Controls.Add(this.cboSemester);
             this.Controls.Add(this.labelX2);
@@ -306,7 +377,10 @@
             this.Controls.Add(this.gpDomain);
             this.Controls.Add(this.gpSubject);
             this.Controls.Add(this.cbExam);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MaximumSize = new System.Drawing.Size(482, 359);
+            this.MinimumSize = new System.Drawing.Size(482, 359);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "";
@@ -340,6 +414,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private DevComponents.DotNetBar.Controls.ListViewEx lvDomain;
+        private DevComponents.DotNetBar.Controls.ComboBoxEx cbxNotRankTag;
+        private DevComponents.DotNetBar.LabelX labelX4;
 
     }
 }

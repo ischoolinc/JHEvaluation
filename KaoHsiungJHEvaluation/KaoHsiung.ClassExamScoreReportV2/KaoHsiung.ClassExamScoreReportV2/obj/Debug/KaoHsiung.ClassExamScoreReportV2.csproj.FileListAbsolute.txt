@@ -22,6 +22,8 @@ D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.Cl
 D:\GitProjModules\ischoolDesktop\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.pdb
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\bin\Debug\KaoHsiung.ClassExamScoreReportV2.dll
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\bin\Debug\KaoHsiung.ClassExamScoreReportV2.pdb
+C:\Users\ED\Desktop\高雄班級評量成績單更改後Dll\KaoHsiung.ClassExamScoreReportV2.dll
+C:\Users\ED\Desktop\高雄班級評量成績單更改後Dll\KaoHsiung.ClassExamScoreReportV2.pdb
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.csprojResolveAssemblyReference.cache
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.ConfigForm.resources
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.MainForm.resources
@@ -30,5 +32,3 @@ C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiun
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.csproj.GenerateResource.Cache
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.dll
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.pdb
-C:\Users\ED\Desktop\高雄班級評量成績單更改後Dll\KaoHsiung.ClassExamScoreReportV2.dll
-C:\Users\ED\Desktop\高雄班級評量成績單更改後Dll\KaoHsiung.ClassExamScoreReportV2.pdb

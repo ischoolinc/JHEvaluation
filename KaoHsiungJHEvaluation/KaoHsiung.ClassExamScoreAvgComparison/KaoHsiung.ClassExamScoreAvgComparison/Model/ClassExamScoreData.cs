@@ -15,7 +15,7 @@ namespace KaoHsiung.ClassExamScoreAvgComparison.Model
         public List<string> ValidCourseIDs { get; private set; }
 
         private Dictionary<string, StudentScore> _StudentScoreDict;
-        public ClassExamScoreData(JHClassRecord cla)
+        public ClassExamScoreData(JHClassRecord cla, List<string> notRankStudentIDList)
         {
             Class = cla;
             //Students = cla.Students;
@@ -23,13 +23,21 @@ namespace KaoHsiung.ClassExamScoreAvgComparison.Model
             _StudentScoreDict = new Dictionary<string, StudentScore>();
 
             List<StudentScore> studentScores = new List<StudentScore>();
+
+            List<string> _notRankStudentIDList = notRankStudentIDList;
+
             foreach (JHStudentRecord student in cla.Students)
             {
+
                 if (student.Status == K12.Data.StudentRecord.StudentStatus.一般 ||
                     student.Status == K12.Data.StudentRecord.StudentStatus.輟學)
                 {
-                    Students.Add(student);
-                    studentScores.Add(new StudentScore(student));
+                    // 剔除 不排名類別學生
+                    if (!_notRankStudentIDList.Contains(student.ID)) 
+                    {
+                        Students.Add(student);
+                        studentScores.Add(new StudentScore(student));                                        
+                    }                    
                 }
             }
             StudentScore.SetClassMapping();
