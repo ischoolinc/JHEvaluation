@@ -2047,6 +2047,10 @@ namespace KH_StudentScoreSummaryReport
                             fieldValue = student.TransUpdateDateStr;
                         break;
 
+                        
+                    case "最後計算日期":
+                        fieldValue = Preference.FinalComputeDate;
+                        break;
                     case "特身名稱1":
                         if (string.IsNullOrEmpty(student.SpcStudTypeName))
                         {

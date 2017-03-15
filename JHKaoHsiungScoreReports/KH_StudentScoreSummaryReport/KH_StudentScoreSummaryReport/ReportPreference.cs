@@ -27,6 +27,7 @@ namespace KH_StudentScoreSummaryReport
             PrintRankPercentage = _config.GetBoolean("PrintRankPercentage", false);
             AcceptAbsences = _config.GetString("AcceptAbsences", string.Empty);
             EntranceDate = _config.GetString("EntranceDate", "");
+            FinalComputeDate = _config.GetString("FinalComputeDate", "");
             GraduateDate = _config.GetString("GraduateDate", "");
             FilterRankScope = _config.GetBoolean("FilterRankScope", false);
             RankStart = _config.GetInteger("RankStart", 1);
@@ -68,6 +69,11 @@ namespace KH_StudentScoreSummaryReport
         /// 入學日期。
         /// </summary>
         public string EntranceDate { get; set; }
+
+        /// <summary>
+        /// 最後計算日期
+        /// </summary>
+        public string FinalComputeDate { get; set; }
 
         /// <summary>
         /// 畢業年月。
@@ -112,6 +118,7 @@ namespace KH_StudentScoreSummaryReport
             _config.SetBoolean("PrintRankPercentage", PrintRankPercentage);
             _config.SetString("AcceptAbsences", AcceptAbsences);
             _config.SetString("EntranceDate", EntranceDate);
+            _config.SetString("FinalComputeDate", FinalComputeDate);
             _config.SetString("GraduateDate", GraduateDate);
             _config.SetBoolean("FilterRankScope", FilterRankScope);
             _config.SetInteger("RankStart", RankStart);

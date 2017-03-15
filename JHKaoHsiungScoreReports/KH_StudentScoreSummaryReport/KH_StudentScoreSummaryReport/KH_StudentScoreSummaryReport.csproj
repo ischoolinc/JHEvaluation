@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="Aspose.Pdf">
       <HintPath>Library\Aspose.Pdf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Aspose.Words, Version=4.4.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -61,6 +61,7 @@ namespace KH_StudentScoreSummaryReport
             //chkPercentage.Checked = Preference.PrintRankPercentage;
             txtGraduateDate.Text = Preference.GraduateDate;
             txtEntranceDate.Text = Preference.EntranceDate;
+            txtFinalComputeDate.Text = Preference.FinalComputeDate;
             //chkRankFilter.Checked = Preference.FilterRankScope;
             //intRankStart.Value = Preference.RankStart;
             //intRankEnd.Value = Preference.RankEnd;
@@ -125,6 +126,7 @@ namespace KH_StudentScoreSummaryReport
             //Preference.PrintRankPercentage = chkPercentage.Checked;
             Preference.GraduateDate = txtGraduateDate.Text;
             Preference.EntranceDate = txtEntranceDate.Text;
+            Preference.FinalComputeDate = txtFinalComputeDate.Text;
             //Preference.FilterRankScope = chkRankFilter.Checked;
             //Preference.RankStart = intRankStart.Value;
             //Preference.RankEnd = intRankEnd.Value;

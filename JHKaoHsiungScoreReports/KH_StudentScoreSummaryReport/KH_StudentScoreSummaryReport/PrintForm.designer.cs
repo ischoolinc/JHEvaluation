@@ -50,6 +50,8 @@
             this.groupPanel1 = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.OneFileSave = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.txtFinalComputeDate = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.label3 = new System.Windows.Forms.Label();
             this.gpFormat.SuspendLayout();
             this.panel6.SuspendLayout();
             this.groupPanel3.SuspendLayout();
@@ -63,7 +65,7 @@
             this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(275, 357);
+            this.btnExit.Location = new System.Drawing.Point(281, 390);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.TabIndex = 3;
@@ -77,7 +79,7 @@
             this.btnPrint.AutoSize = true;
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPrint.Location = new System.Drawing.Point(194, 357);
+            this.btnPrint.Location = new System.Drawing.Point(200, 390);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 25);
             this.btnPrint.TabIndex = 2;
@@ -142,7 +144,7 @@
             this.gpFormat.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.gpFormat.Controls.Add(this.panel6);
             this.gpFormat.DrawTitleBox = false;
-            this.gpFormat.Location = new System.Drawing.Point(15, 168);
+            this.gpFormat.Location = new System.Drawing.Point(21, 201);
             this.gpFormat.Name = "gpFormat";
             this.gpFormat.Size = new System.Drawing.Size(337, 55);
             // 
@@ -337,7 +339,7 @@
             // 
             this.lnkSetStudType.AutoSize = true;
             this.lnkSetStudType.BackColor = System.Drawing.Color.Transparent;
-            this.lnkSetStudType.Location = new System.Drawing.Point(12, 361);
+            this.lnkSetStudType.Location = new System.Drawing.Point(18, 394);
             this.lnkSetStudType.Name = "lnkSetStudType";
             this.lnkSetStudType.Size = new System.Drawing.Size(177, 17);
             this.lnkSetStudType.TabIndex = 18;
@@ -355,7 +357,7 @@
             // 
             this.chkUploadEpaper.BackgroundStyle.Class = "";
             this.chkUploadEpaper.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.chkUploadEpaper.Location = new System.Drawing.Point(26, 329);
+            this.chkUploadEpaper.Location = new System.Drawing.Point(32, 362);
             this.chkUploadEpaper.Name = "chkUploadEpaper";
             this.chkUploadEpaper.Size = new System.Drawing.Size(147, 21);
             this.chkUploadEpaper.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -370,7 +372,7 @@
             this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.groupPanel1.Controls.Add(this.panel4);
             this.groupPanel1.DrawTitleBox = false;
-            this.groupPanel1.Location = new System.Drawing.Point(15, 244);
+            this.groupPanel1.Location = new System.Drawing.Point(21, 277);
             this.groupPanel1.Name = "groupPanel1";
             this.groupPanel1.Size = new System.Drawing.Size(337, 60);
             // 
@@ -433,10 +435,37 @@
             this.OneFileSave.Text = "使用單檔列印(檔名：學號_身分證_班級_座號_姓名)";
             this.OneFileSave.TextColor = System.Drawing.Color.Black;
             // 
+            // txtFinalComputeDate
+            // 
+            // 
+            // 
+            // 
+            this.txtFinalComputeDate.Border.Class = "TextBoxBorder";
+            this.txtFinalComputeDate.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtFinalComputeDate.Location = new System.Drawing.Point(110, 177);
+            this.txtFinalComputeDate.Name = "txtFinalComputeDate";
+            this.txtFinalComputeDate.Size = new System.Drawing.Size(238, 25);
+            this.txtFinalComputeDate.TabIndex = 21;
+            this.txtFinalComputeDate.Tag = "StatusVarying";
+            this.txtFinalComputeDate.WatermarkText = "請輸入最後計算日期";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Location = new System.Drawing.Point(18, 181);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(86, 17);
+            this.label3.TabIndex = 22;
+            this.label3.Tag = "StatusVarying";
+            this.label3.Text = "最後計算日期";
+            // 
             // PrintForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(362, 393);
+            this.ClientSize = new System.Drawing.Size(362, 422);
+            this.Controls.Add(this.txtFinalComputeDate);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.groupPanel1);
             this.Controls.Add(this.chkUploadEpaper);
             this.Controls.Add(this.lnkSetStudType);
@@ -491,5 +520,7 @@
         private DevComponents.DotNetBar.Controls.GroupPanel groupPanel1;
         private System.Windows.Forms.Panel panel4;
         private DevComponents.DotNetBar.Controls.CheckBoxX OneFileSave;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtFinalComputeDate;
+        private System.Windows.Forms.Label label3;
     }
 }
