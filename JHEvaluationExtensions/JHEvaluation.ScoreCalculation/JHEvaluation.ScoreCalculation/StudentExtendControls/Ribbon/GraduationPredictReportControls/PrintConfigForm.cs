@@ -55,7 +55,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         {
             if (Config.Template == null)
             {
-                ReportTemplate template = new ReportTemplate(Properties.Resources.未達畢業標準通知單樣板, TemplateType.Word);
+                ReportTemplate template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準通知單樣板, TemplateType.Word);
                 Config.Template = template;            
             }        
         }
@@ -167,7 +167,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             {
                 try
                 {
-                    Aspose.Words.Document doc = new Aspose.Words.Document(new MemoryStream(Properties.Resources.功能變數));
+                    Aspose.Words.Document doc = new Aspose.Words.Document(new MemoryStream(JHEvaluation.ScoreCalculation.Properties.Resources.功能變數));
                     doc.Save(saveDialog.FileName);
                 }
                 catch (Exception ex)

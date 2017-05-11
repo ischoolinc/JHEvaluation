@@ -9,6 +9,9 @@ using K12.Presentation;
 using System.Windows.Forms;
 using FISCA.Presentation.Controls;
 using Framework;
+using JHSchool;
+using DataRationality;
+using JHSchool.Evaluation.StudentExtendControls;
 
 namespace JHEvaluation.ScoreCalculation
 {
@@ -31,7 +34,14 @@ namespace JHEvaluation.ScoreCalculation
             TestMode(dparams);
             return;
 # else
+
+
+
             DeployModeSetup();
+
+            //2017/5/9 穎驊 自JHSchool.Evaluation 搬過來
+            //畢業成績
+            Student.Instance.AddDetailBulider(new DetailBulider<GraduationScoreItem>());
 
             #region 教務作業
             //學期歷程。
@@ -78,6 +88,23 @@ namespace JHEvaluation.ScoreCalculation
             {
                 new GraduateScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog();
             };
+
+            //2017/5/9 穎驊 自JHSchool.Evaluation 搬過來
+            #region 學生/資料統計/報表
+            RibbonBarButton rbButton = Student.Instance.RibbonBarItems["資料統計"]["報表"];
+            rbButton["成績相關報表"]["畢業預警報表"].Enable = User.Acl["JHSchool.Student.Report0010"].Executable;
+            rbButton["成績相關報表"]["畢業預警報表"].Click += delegate
+            {
+                if (Student.Instance.SelectedList.Count <= 0) return;
+                JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport report = new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport(Student.Instance.SelectedList);
+            };
+            rbButton["學務相關報表"]["畢業預警報表"].Enable = User.Acl["JHSchool.Student.Report0010"].Executable;
+            rbButton["學務相關報表"]["畢業預警報表"].Click += delegate
+            {
+                if (Student.Instance.SelectedList.Count <= 0) return;
+                JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport report = new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport(Student.Instance.SelectedList);
+            };
+            #endregion
 
             //註冊「畢業資格審查」。
             rbItem["畢業資格審查"].Enable = User.Acl[GradFilteStudentCode].Executable;
@@ -135,6 +162,18 @@ namespace JHEvaluation.ScoreCalculation
                     User.Acl[GradFilteStudentCode].Executable;
             };
 #endif
+
+            //2017/5/9 穎驊 自JHSchool.Evaluation 搬過來
+            //學生
+            Catalog detail = RoleAclSource.Instance["學生"]["資料項目"];
+            detail.Add(new DetailItemFeature(typeof(SemesterScoreItem)));
+            detail.Add(new DetailItemFeature(typeof(GraduationScoreItem)));
+            detail.Add(new DetailItemFeature(typeof(CourseScoreItem)));
+
+
+            //2017/5/9 穎驊 自JHSchool.Evaluation 搬過來
+            // 學生學期歷程與學期成績學年度學期檢查
+            DataRationalityManager.Checks.Add(new JHSchool.Evaluation.StudentExtendControls.Ribbon.CheckStudentSemHistoryScoreRAT());
         }
 
         private static void DeployModeSetup()

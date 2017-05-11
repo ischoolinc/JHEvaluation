@@ -6,7 +6,7 @@ using JHSchool.Data ;
 
 namespace JHSchool.Evaluation
 {
-    class UIConfig
+    public class UIConfig
     {
         /// <summary>
         /// 使用者設定畫面存取學年度(學期歷程)

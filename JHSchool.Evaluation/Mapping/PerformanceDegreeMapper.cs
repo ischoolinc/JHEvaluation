@@ -6,7 +6,7 @@ using K12.Data;
 
 namespace JHSchool.Evaluation.Mapping
 {
-    internal class PerformanceDegreeMapper
+    public class PerformanceDegreeMapper
     {
         private Dictionary<int, string> _DegreeToDesc;
         private Dictionary<string, int> _DescToDegree;

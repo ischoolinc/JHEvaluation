@@ -213,43 +213,6 @@
     <Compile Include="AEIncludeRecord.cs" />
     <Compile Include="AssessmentSetup.cs" />
     <Compile Include="AssessmentSetupRecord.cs" />
-    <Compile Include="Calculation\ErrorViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Calculation\ErrorViewer.designer.cs">
-      <DependentUpon>ErrorViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Calculation\GraduationConditions\AbsenceAmountAllEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\AbsenceAmountAllFractionEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\AbsenceAmountGraduateFractionEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\DailyBehaviorAllEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\DemeritAmountAllEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\DemeritAmountGraduateEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\GraduateDomainEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\GraduateDomainEval_backup.cs" />
-    <Compile Include="Calculation\GraduationConditions\LearnDomainAllEval.cs" />
-    <Compile Include="Calculation\HelperClass\DespToDegree.cs" />
-    <Compile Include="Calculation\Interface\EvaluationResult.cs" />
-    <Compile Include="Calculation\GraduationConditions\AbsenceAmountEachEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\AbsenceAmountEachFractionEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\AbsenceAmountLastEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\AbsenceAmountLastFractionEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\AndEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\DailyBehaviorEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\DailyBehaviorLastEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\DemeritAmountEachEval.cs" />
-    <Compile Include="Calculation\HelperClass\Graduation.cs" />
-    <Compile Include="Calculation\GraduationConditions\DemeritAmountLastEval.cs" />
-    <Compile Include="Calculation\Interface\EvaluateFactory.cs" />
-    <Compile Include="Calculation\Interface\IEvaluateFactory.cs" />
-    <Compile Include="Calculation\GraduationConditions\OrEval.cs" />
-    <Compile Include="Calculation\Interface\IEvaluative.cs" />
-    <Compile Include="Calculation\HelperClass\InnerScoreCalculator.cs" />
-    <Compile Include="Calculation\GraduationConditions\LearnDomainEachEval.cs" />
-    <Compile Include="Calculation\GraduationConditions\LearnDomainLastEval.cs" />
-    <Compile Include="Calculation\Interface\ResultDetail.cs" />
-    <Compile Include="Calculation\HelperClass\ScoreCalculator.cs" />
-    <Compile Include="Calculation\HelperClass\SemesterData.cs" />
     <Compile Include="ClassExtendControls\ClassBaseInfoItem_Extend.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -294,18 +257,16 @@
     <Compile Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleRelated\Talker.Designer.cs">
       <DependentUpon>Talker.cs</DependentUpon>
     </Compile>
-    <Compile Include="StudentExtendControls\Ribbon\CheckStudentSemHistoryScoreRAT.cs" />
-    <Compile Include="StudentExtendControls\Ribbon\Config.cs" />
-    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\PrintConfigForm.cs">
+    <Compile Include="ErrorViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\PrintConfigForm.Designer.cs">
-      <DependentUpon>PrintConfigForm.cs</DependentUpon>
+    <Compile Include="ErrorViewer.designer.cs">
+      <DependentUpon>ErrorViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\StudentDomainResult.cs" />
-    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\StudentGraduationPredictData.cs" />
-    <Compile Include="StudentExtendControls\SemesterScoreItem.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="TempData.cs" />
     <Compile Include="UIConfig.cs" />
@@ -692,11 +653,6 @@
     <Compile Include="Feature\QueryStudent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Ranking\AbstractReport.cs" />
     <Compile Include="Ranking\CombineReport.cs" />
     <Compile Include="Ranking\Rank.cs" />
@@ -764,50 +720,6 @@
     <Compile Include="StuAdminExtendControls\Ribbon\ScoreCalculateForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StudentExtendControls\CourseScoreItem.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="StudentExtendControls\CourseScoreItem.Designer.cs">
-      <DependentUpon>CourseScoreItem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StudentExtendControls\CourseScoreItemControls\CreateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StudentExtendControls\CourseScoreItemControls\CreateForm.Designer.cs">
-      <DependentUpon>CreateForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StudentExtendControls\CourseScoreItemControls\ScoreInputForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StudentExtendControls\CourseScoreItemControls\ScoreInputForm.Designer.cs">
-      <DependentUpon>ScoreInputForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StudentExtendControls\GraduationScoreItem.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="StudentExtendControls\GraduationScoreItem.Designer.cs">
-      <DependentUpon>GraduationScoreItem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StudentExtendControls\Ribbon\GraduationInspectWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StudentExtendControls\Ribbon\GraduationInspectWizard.Designer.cs">
-      <DependentUpon>GraduationInspectWizard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReport.cs" />
-    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\ConditionalEvaluateFactory.cs" />
-    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\GraduationPredictReportForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\GraduationPredictReportForm.Designer.cs">
-      <DependentUpon>GraduationPredictReportForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StudentExtendControls\Ribbon\GraduationScoreCalculation.cs" />
-    <Compile Include="StudentExtendControls\Ribbon\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Legacy\SwapAttendStudents.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -821,10 +733,6 @@
     <Compile Include="TCInstructRecord.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Calculation\ErrorViewer.resx">
-      <DependentUpon>ErrorViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ClassExtendControls\ClassBaseInfoItem_Extend.resx">
       <DependentUpon>ClassBaseInfoItem_Extend.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -990,6 +898,10 @@
       <DependentUpon>Step4.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ErrorViewer.resx">
+      <DependentUpon>ErrorViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ImportExport\Course\ExportStudentV2.resx">
       <DependentUpon>ExportStudentV2.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1028,8 +940,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="StuAdminExtendControls\Ribbon\ActivityRecord\Forms\ActivityTypeManager.resx">
       <DependentUpon>ActivityTypeManager.cs</DependentUpon>
@@ -1064,38 +976,6 @@
       <DependentUpon>ScoreCalculateForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="StudentExtendControls\CourseScoreItem.resx">
-      <DependentUpon>CourseScoreItem.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StudentExtendControls\CourseScoreItemControls\CreateForm.resx">
-      <DependentUpon>CreateForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StudentExtendControls\CourseScoreItemControls\ScoreInputForm.resx">
-      <DependentUpon>ScoreInputForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StudentExtendControls\GraduationScoreItem.resx">
-      <DependentUpon>GraduationScoreItem.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StudentExtendControls\Ribbon\GraduationInspectWizard.resx">
-      <DependentUpon>GraduationInspectWizard.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\GraduationPredictReportForm.resx">
-      <DependentUpon>GraduationPredictReportForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\PrintConfigForm.resx">
-      <DependentUpon>PrintConfigForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StudentExtendControls\Ribbon\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Legacy\SwapAttendStudents.resx">
       <DependentUpon>SwapAttendStudents.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1104,7 +984,6 @@
   <ItemGroup>
     <None Include="Resources\loading.gif" />
     <None Include="Resources\功能變數.doc" />
-    <None Include="StudentExtendControls\Ribbon\Resources\未達畢業標準通知單樣板.doc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\error.ico" />
@@ -1220,7 +1099,6 @@
     <Content Include="StuAdminExtendControls\Ribbon\ActivityRecord\Package.xml" />
     <None Include="ClassExtendControls\Ribbon\Resources\課程修課學生清單1.xls" />
     <None Include="CourseExtendControls\Ribbon\Resources\btndeletecourse.image.png" />
-    <None Include="StudentExtendControls\Ribbon\Resources\未達畢業標準學生名冊template.xls" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CourseExtendControls\Ribbon\CourseScoreInputControls\" />

@@ -113,8 +113,30 @@ namespace JHEvaluation.ScoreCalculation
             { 
                 if(StudDomainNullScore.ContainsKey(ss.Id ))
                 {
-                    decimal score = ss.CalculationRule.ParseDomainScore(StudDomainNullScore[ss.Id]);
+                    //2017/5/9 穎驊修正 ，因應 高雄 [08-05][03] 畢業資格判斷成績及格標準調整 項目，
+                    // 領域 分數超過60分 ，以 四捨五入取到小數第二位 ， 低於60分 採用 無條件進位至整數 (EX : 59.01 =60)
+                    //decimal score = ss.CalculationRule.ParseDomainScore(StudDomainNullScore[ss.Id]);
 
+                    decimal score = 0;
+
+                    if (JHEvaluation.ScoreCalculation.Program.Mode == JHEvaluation.ScoreCalculation.ModuleMode.HsinChu)
+                    {
+                        score = ss.CalculationRule.ParseDomainScore(StudDomainNullScore[ss.Id]);
+                    }
+                    
+                    if (JHEvaluation.ScoreCalculation.Program.Mode == JHEvaluation.ScoreCalculation.ModuleMode.KaoHsiung)
+                    {
+                        if (StudDomainNullScore[ss.Id] >= 60)
+                        {
+                            score = ss.CalculationRule.ParseDomainScore(StudDomainNullScore[ss.Id]);
+                        }
+                        else
+                        {
+                            score = Math.Ceiling(StudDomainNullScore[ss.Id]);
+                        }
+                    }
+
+                    
                     if (ss.GraduateScore.Contains("彈性課程"))
                     {
 

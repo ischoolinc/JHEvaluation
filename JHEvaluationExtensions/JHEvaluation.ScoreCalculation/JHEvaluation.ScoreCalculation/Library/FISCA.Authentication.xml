@@ -4,11 +4,6 @@
         <name>FISCA.Authentication</name>
     </assembly>
     <members>
-        <member name="T:FISCA.Authentication.AutoRetryOnWebExceptionAttribute">
-            <summary>
-            標上此屬性的方法或類別中的方法在CallService時若發生WebException則將自動重試
-            </summary>
-        </member>
         <member name="T:FISCA.Authentication.AccountType">
             <summary>
             
@@ -48,13 +43,6 @@
             <summary>
             是否全程加密。
             </summary>
-        </member>
-        <member name="M:FISCA.Authentication.DSAServices.ConfirmPassword(System.String,System.Action{System.Exception})">
-            <summary>
-            已經登入系統後，用於重新確認密碼。
-            </summary>
-            <param name="password"></param>
-            <param name="onError"></param>
         </member>
         <member name="M:FISCA.Authentication.DSAServices.Connect(System.String,System.String,System.String)">
             <summary>
@@ -180,11 +168,6 @@
             取得登入帳號是否為系統管理員帳號
             </summary>
         </member>
-        <member name="P:FISCA.Authentication.DSAServices.PhysicalSchemaVersion">
-            <summary>
-            實體資料庫 Schema 版本。
-            </summary>
-        </member>
         <member name="P:FISCA.Authentication.DSAServices.IsLogined">
             <summary>
             使用者已經成功登入系統
@@ -204,6 +187,22 @@
             <summary>
             登入的主機名稱。
             </summary>
+        </member>
+        <member name="T:FISCA.Authentication.AutoRetryOnWebExceptionAttribute">
+            <summary>
+            標上此屬性的方法或類別中的方法在CallService時若發生WebException則將自動重試
+            </summary>
+        </member>
+        <member name="T:FISCA.Authentication.VersionNotSupportException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FISCA.Authentication.VersionNotSupportException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="msg"></param>
         </member>
         <member name="T:FISCA.Authentication.LeaveOnErrorAttribute">
             <summary>
@@ -230,17 +229,6 @@
             <summary>
               查詢類似 電腦授權錯誤，需請系統管理員重新設定電腦的授權。 的當地語系化字串。
             </summary>
-        </member>
-        <member name="T:FISCA.Authentication.VersionNotSupportException">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:FISCA.Authentication.VersionNotSupportException.#ctor(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="msg"></param>
         </member>
     </members>
 </doc>

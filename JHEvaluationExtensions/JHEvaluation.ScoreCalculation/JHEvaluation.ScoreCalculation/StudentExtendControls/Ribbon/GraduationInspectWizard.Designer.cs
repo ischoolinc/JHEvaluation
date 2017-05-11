@@ -212,7 +212,7 @@
             // pic_loading
             // 
             this.pic_loading.BackColor = System.Drawing.Color.Transparent;
-            this.pic_loading.Image = global::JHSchool.Evaluation.Properties.Resources.loading;
+            this.pic_loading.Image = global::JHEvaluation.ScoreCalculation.Properties.Resources.loading;
             this.pic_loading.Location = new System.Drawing.Point(163, 170);
             this.pic_loading.Name = "pic_loading";
             this.pic_loading.Size = new System.Drawing.Size(34, 27);

@@ -397,7 +397,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
             {
                 btnExit.Enabled = true;
 
-                ErrorViewer viewer = new ErrorViewer();
+                JHSchool.Evaluation.Calculation_for_JHEvaluation.ScoreCalculation.ErrorViewer viewer = new JHSchool.Evaluation.Calculation_for_JHEvaluation.ScoreCalculation.ErrorViewer();
                 viewer.SetHeader("學生");
                 foreach (StudentRecord student in _errorList)
                     viewer.SetMessage(student, new List<string>(new string[] { "學期歷程不完整" }));
@@ -532,14 +532,14 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
             sd.FileName = "未達畢業標準學生名冊";
             sd.Filter = "Excel檔案(*.xls)|*.xls";
             if (sd.ShowDialog() != DialogResult.OK) return;
-
+            
             Workbook template = new Workbook();
-            template.Open(new MemoryStream(Resources.未達畢業標準學生名冊template));
+            template.Open(new MemoryStream(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準學生名冊template));
             Worksheet tempsheet = template.Worksheets[0];
             Worksheet tempsheet2 = template.Worksheets[1];
-
+            
             Workbook book = new Workbook();
-            book.Open(new MemoryStream(Resources.未達畢業標準學生名冊template));
+            book.Open(new MemoryStream(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準學生名冊template));
             //Worksheet sheet = book.Worksheets[0];
             //sheet.Name = "未達畢業標準學生";
             Range temprow = tempsheet.Cells.CreateRange(3, 1, false);

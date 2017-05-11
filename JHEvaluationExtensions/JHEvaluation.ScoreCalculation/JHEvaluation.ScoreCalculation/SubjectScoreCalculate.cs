@@ -10,7 +10,6 @@ using FISCA.Presentation;
 using JHSchool.Data;
 using FISCA.LogAgent;
 using JHEvaluation.ScoreCalculation.ScoreStruct;
-using JHSchool.Data;
 
 namespace JHEvaluation.ScoreCalculation
 {

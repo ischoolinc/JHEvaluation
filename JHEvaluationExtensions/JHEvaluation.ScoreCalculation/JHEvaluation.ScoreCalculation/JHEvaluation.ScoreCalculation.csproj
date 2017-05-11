@@ -65,9 +65,29 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.BarCode">
+      <HintPath>Library\Aspose.BarCode.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Aspose.Cells, Version=4.3.0.0, Culture=neutral, PublicKeyToken=9a40d5a4b59e5256, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Aspose.Cells.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Aspose.Words">
+      <HintPath>Library\Aspose.Words.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Campus.Configuration">
+      <HintPath>Library\Campus.Configuration.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Campus.Report">
+      <HintPath>Library\Campus.Report.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DataRationality">
+      <HintPath>Library\DataRationality.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
@@ -124,9 +144,17 @@
       <HintPath>Library\FISCA.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="FISCA.UDT">
+      <HintPath>Library\FISCA.UDT.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Framework, Version=1.0.0.10, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Framework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="IntelliSchool.DSA.ClientFramework">
+      <HintPath>Library\IntelliSchool.DSA.ClientFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool, Version=1.0.3.15, Culture=neutral, processorArchitecture=MSIL">
@@ -139,12 +167,16 @@
       <HintPath>Library\JHSchool.Affair.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JHSchool.Behavior">
+      <HintPath>Library\JHSchool.Behavior.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="JHSchool.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Evaluation, Version=1.0.3.18, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JHSchool.Evaluation, Version=1.0.3.41, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
       <Private>False</Private>
@@ -157,6 +189,22 @@
     <Reference Include="K12.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\K12.Presentation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SmartSchool.API.PlugIn">
+      <HintPath>Library\SmartSchool.API.PlugIn.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SmartSchool.Common.DotNetBar">
+      <HintPath>Library\SmartSchool.Common.DotNetBar.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SmartSchool.Customization.PlugIn">
+      <HintPath>Library\SmartSchool.Customization.PlugIn.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SmartSchool.ErrorReporting">
+      <HintPath>Library\SmartSchool.ErrorReporting.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -193,6 +241,43 @@
     <Compile Include="BigFunction\SemesterScoreCalculator.cs" />
     <Compile Include="BigFunction\SemesterScoreReader.cs" />
     <Compile Include="BigFunction\SemesterScoreSaver.cs" />
+    <Compile Include="Calculation\ErrorViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Calculation\ErrorViewer.designer.cs">
+      <DependentUpon>ErrorViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Calculation\GraduationConditions\AbsenceAmountAllEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\AbsenceAmountAllFractionEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\AbsenceAmountEachEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\AbsenceAmountEachFractionEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\AbsenceAmountGraduateFractionEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\AbsenceAmountLastEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\AbsenceAmountLastFractionEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\AndEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\DailyBehaviorAllEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\DailyBehaviorEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\DailyBehaviorLastEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\DemeritAmountAllEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\DemeritAmountEachEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\DemeritAmountGraduateEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\DemeritAmountLastEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\GraduateDomainEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\GraduateDomainEval_backup.cs" />
+    <Compile Include="Calculation\GraduationConditions\LearnDomainAllEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\LearnDomainEachEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\LearnDomainLastEval.cs" />
+    <Compile Include="Calculation\GraduationConditions\OrEval.cs" />
+    <Compile Include="Calculation\HelperClass\DespToDegree.cs" />
+    <Compile Include="Calculation\HelperClass\Graduation.cs" />
+    <Compile Include="Calculation\HelperClass\InnerScoreCalculator.cs" />
+    <Compile Include="Calculation\HelperClass\ScoreCalculator.cs" />
+    <Compile Include="Calculation\HelperClass\SemesterData.cs" />
+    <Compile Include="Calculation\Interface\EvaluateFactory.cs" />
+    <Compile Include="Calculation\Interface\EvaluationResult.cs" />
+    <Compile Include="Calculation\Interface\IEvaluateFactory.cs" />
+    <Compile Include="Calculation\Interface\IEvaluative.cs" />
+    <Compile Include="Calculation\Interface\ResultDetail.cs" />
     <Compile Include="DomainTextScoreSumByGradeyear.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -273,6 +358,63 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SemesterSelector.cs" />
+    <Compile Include="StudentExtendControls\CourseScoreItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StudentExtendControls\CourseScoreItem.Designer.cs">
+      <DependentUpon>CourseScoreItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentExtendControls\CourseScoreItemControls\CreateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentExtendControls\CourseScoreItemControls\CreateForm.Designer.cs">
+      <DependentUpon>CreateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentExtendControls\CourseScoreItemControls\ScoreInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentExtendControls\CourseScoreItemControls\ScoreInputForm.Designer.cs">
+      <DependentUpon>ScoreInputForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentExtendControls\GraduationScoreItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StudentExtendControls\GraduationScoreItem.Designer.cs">
+      <DependentUpon>GraduationScoreItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentExtendControls\Ribbon\CheckStudentSemHistoryScoreRAT.cs" />
+    <Compile Include="StudentExtendControls\Ribbon\Config.cs" />
+    <Compile Include="StudentExtendControls\Ribbon\GraduationInspectWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentExtendControls\Ribbon\GraduationInspectWizard.Designer.cs">
+      <DependentUpon>GraduationInspectWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReport.cs" />
+    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\ConditionalEvaluateFactory.cs" />
+    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\GraduationPredictReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\GraduationPredictReportForm.Designer.cs">
+      <DependentUpon>GraduationPredictReportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\PrintConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\PrintConfigForm.Designer.cs">
+      <DependentUpon>PrintConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\StudentDomainResult.cs" />
+    <Compile Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\StudentGraduationPredictData.cs" />
+    <Compile Include="StudentExtendControls\Ribbon\GraduationScoreCalculation.cs" />
+    <Compile Include="StudentExtendControls\Ribbon\Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="StudentExtendControls\SemesterScoreItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="StudentScore.cs" />
     <Compile Include="StudentsView.cs">
       <SubType>Form</SubType>
@@ -304,6 +446,10 @@
   <ItemGroup>
     <EmbeddedResource Include="CalculationTest.resx">
       <DependentUpon>CalculationTest.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Calculation\ErrorViewer.resx">
+      <DependentUpon>ErrorViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DomainTextScoreSumByGradeyear.resx">
@@ -339,6 +485,34 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SemesterHistory\BatchSemesterHistory.resx">
       <DependentUpon>BatchSemesterHistory.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentExtendControls\CourseScoreItem.resx">
+      <DependentUpon>CourseScoreItem.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentExtendControls\CourseScoreItemControls\CreateForm.resx">
+      <DependentUpon>CreateForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentExtendControls\CourseScoreItemControls\ScoreInputForm.resx">
+      <DependentUpon>ScoreInputForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentExtendControls\GraduationScoreItem.resx">
+      <DependentUpon>GraduationScoreItem.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentExtendControls\Ribbon\GraduationInspectWizard.resx">
+      <DependentUpon>GraduationInspectWizard.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\PrintConfigForm.resx">
+      <DependentUpon>PrintConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentExtendControls\Ribbon\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="StudentsView.resx">
@@ -377,6 +551,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\calc_save_64.png" />
+    <None Include="Resources\功能變數.doc" />
+    <None Include="Resources\未達畢業標準通知單樣板.doc" />
+    <None Include="Resources\未達畢業標準學生名冊template.xls" />
+    <None Include="StudentExtendControls\Ribbon\Resources\未達畢業標準學生名冊template.xls" />
+    <None Include="StudentExtendControls\Ribbon\Resources\未達畢業標準通知單樣板.doc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\graduation_write_64.png" />
@@ -436,6 +615,7 @@
     <Content Include="Library\K12.Presentation.dll" />
     <Content Include="Library\K12.Presentation.pdb" />
     <Content Include="Library\K12.Presentation.xml" />
+    <Content Include="Resources\loading.gif" />
     <Content Include="Resources\補考科目成績計算流程圖.png" />
     <Content Include="Resources\補考科目成績計算流程文字.txt" />
   </ItemGroup>

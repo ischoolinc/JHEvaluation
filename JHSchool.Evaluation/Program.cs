@@ -8,7 +8,6 @@ using JHSchool.Affair;
 using JHSchool.Evaluation.CourseExtendControls;
 using JHSchool.Evaluation.CourseExtendControls.Ribbon;
 using JHSchool.Evaluation.EduAdminExtendControls.Ribbon;
-using JHSchool.Evaluation.StudentExtendControls;
 using System;
 using DataRationality;
 using K12.Presentation;
@@ -67,8 +66,10 @@ namespace JHSchool.Evaluation
             //個人活動表現紀錄
             //Student.Instance.AddDetailBulider(new DetailBulider<StudentActivityRecordItem>());
 
+            // 2017/5/9 穎驊  註解 下面位子 搬去 JHEvaluation.ScoreCalculation
             //畢業成績
-            Student.Instance.AddDetailBulider(new DetailBulider<GraduationScoreItem>());
+            //Student.Instance.AddDetailBulider(new DetailBulider<GraduationScoreItem>());
+
             //修課及評量成績
             //Student.Instance.AddDetailBulider(new DetailBulider<CourseScoreItem>());
             #endregion
@@ -83,18 +84,20 @@ namespace JHSchool.Evaluation
 
             #region 學生/資料統計/報表
             RibbonBarButton rbButton = Student.Instance.RibbonBarItems["資料統計"]["報表"];
-            rbButton["成績相關報表"]["畢業預警報表"].Enable = User.Acl["JHSchool.Student.Report0010"].Executable;
-            rbButton["成績相關報表"]["畢業預警報表"].Click += delegate
-            {
-                if (Student.Instance.SelectedList.Count <= 0) return;
-                JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport report = new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport(Student.Instance.SelectedList);
-            };
-            rbButton["學務相關報表"]["畢業預警報表"].Enable = User.Acl["JHSchool.Student.Report0010"].Executable;
-            rbButton["學務相關報表"]["畢業預警報表"].Click += delegate
-            {
-                if (Student.Instance.SelectedList.Count <= 0) return;
-                JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport report = new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport(Student.Instance.SelectedList);
-            };
+
+            // 2017/5/9 穎驊  註解 下面位子 搬去 JHEvaluation.ScoreCalculation
+            //rbButton["成績相關報表"]["畢業預警報表"].Enable = User.Acl["JHSchool.Student.Report0010"].Executable;
+            //rbButton["成績相關報表"]["畢業預警報表"].Click += delegate
+            //{
+            //    if (Student.Instance.SelectedList.Count <= 0) return;
+            //    JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport report = new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport(Student.Instance.SelectedList);
+            //};
+            //rbButton["學務相關報表"]["畢業預警報表"].Enable = User.Acl["JHSchool.Student.Report0010"].Executable;
+            //rbButton["學務相關報表"]["畢業預警報表"].Click += delegate
+            //{
+            //    if (Student.Instance.SelectedList.Count <= 0) return;
+            //    JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport report = new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport(Student.Instance.SelectedList);
+            //};
             #endregion
 
             #region 學生/資料統計/匯入匯出
@@ -630,11 +633,14 @@ namespace JHSchool.Evaluation
             //--------------------------------下面還沒整理的分隔線--------------------------------
 
             #region 註冊權限管理
+            
             //學生
             Catalog detail = RoleAclSource.Instance["學生"]["資料項目"];
-            detail.Add(new DetailItemFeature(typeof(SemesterScoreItem)));
-            detail.Add(new DetailItemFeature(typeof(GraduationScoreItem)));
-            detail.Add(new DetailItemFeature(typeof(CourseScoreItem)));
+
+            // 2017/5/9 穎驊  註解 下面位子 搬去 JHEvaluation.ScoreCalculation
+            //detail.Add(new DetailItemFeature(typeof(SemesterScoreItem)));
+            //detail.Add(new DetailItemFeature(typeof(GraduationScoreItem)));
+            //detail.Add(new DetailItemFeature(typeof(CourseScoreItem)));
 
             Catalog ribbon = RoleAclSource.Instance["學生"]["功能按鈕"];
             ribbon.Add(new RibbonFeature("JHSchool.Student.Ribbon0055", "課程規劃"));
@@ -708,8 +714,10 @@ namespace JHSchool.Evaluation
 
             Domain.TestDrive();
             Course.Instance.AddView(new TeacherCategoryView());
+
+            // 2017/5/9 穎驊  註解 下面位子 搬去 JHEvaluation.ScoreCalculation
             // 學生學期歷程與學期成績學年度學期檢查
-            DataRationalityManager.Checks.Add(new StudentExtendControls.Ribbon.CheckStudentSemHistoryScoreRAT());
+            //DataRationalityManager.Checks.Add(new StudentExtendControls.Ribbon.CheckStudentSemHistoryScoreRAT());
 
         }
     }

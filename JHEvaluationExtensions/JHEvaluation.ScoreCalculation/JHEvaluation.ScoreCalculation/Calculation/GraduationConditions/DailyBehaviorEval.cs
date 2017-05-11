@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
 using JHSchool.Evaluation.Mapping;
+using JHSchool.Evaluation;
 
 namespace JHSchool.Evaluation.Calculation.GraduationConditions
 {
