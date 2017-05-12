@@ -176,10 +176,6 @@
       <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Evaluation, Version=1.0.3.45, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
-    </Reference>
     <Reference Include="K12.Data, Version=2.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\K12.Data.dll</HintPath>
@@ -270,6 +266,7 @@
     <Compile Include="Calculation\HelperClass\DespToDegree.cs" />
     <Compile Include="Calculation\HelperClass\Graduation.cs" />
     <Compile Include="Calculation\HelperClass\InnerScoreCalculator.cs" />
+    <Compile Include="Calculation\HelperClass\ScoreCalculator.cs" />
     <Compile Include="Calculation\Interface\EvaluateFactory.cs" />
     <Compile Include="Calculation\Interface\EvaluationResult.cs" />
     <Compile Include="Calculation\Interface\IEvaluateFactory.cs" />
@@ -614,6 +611,12 @@
     <Content Include="Resources\loading.gif" />
     <Content Include="Resources\補考科目成績計算流程圖.png" />
     <Content Include="Resources\補考科目成績計算流程文字.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\JHSchool.Evaluation\JHSchool.Evaluation.csproj">
+      <Project>{948fe24f-e461-4d7b-91d5-a4e8332a2afa}</Project>
+      <Name>JHSchool.Evaluation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

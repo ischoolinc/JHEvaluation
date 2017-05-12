@@ -28,7 +28,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
             foreach (StudentScore student in Students)
             {
                 //成績計算規則。
-                JHSchool.Evaluation.Calculation.ScoreCalculator calcRule = student.CalculationRule;
+                ScoreCalculator calcRule = student.CalculationRule;
 
                 //沒有成績計算規則的不計算。
                 if (calcRule == null) continue;

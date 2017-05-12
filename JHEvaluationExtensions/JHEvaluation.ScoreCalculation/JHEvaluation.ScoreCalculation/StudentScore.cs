@@ -33,9 +33,9 @@ namespace JHEvaluation.ScoreCalculation
 
         internal static void SetRuleMapping(IEnumerable<JHScoreCalcRuleRecord> rules)
         {
-            Rules = new Dictionary<string, JHSchool.Evaluation.Calculation.ScoreCalculator>();
+            Rules = new Dictionary<string, ScoreCalculator>();
             foreach (JHScoreCalcRuleRecord each in rules)
-                Rules.Add(each.ID, new JHSchool.Evaluation.Calculation.ScoreCalculator(each));
+                Rules.Add(each.ID, new ScoreCalculator(each));
         }
 
         #region 基本資料屬性方法。

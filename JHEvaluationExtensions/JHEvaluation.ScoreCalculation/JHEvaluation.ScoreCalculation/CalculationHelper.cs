@@ -91,7 +91,7 @@ namespace JHEvaluation.ScoreCalculation
             IEnumerable<string> filterDomain)
         {
             //new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null),false);
-            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new JHSchool.Evaluation.Calculation.ScoreCalculator(null), new DomainScoreSetting(false,false));
+            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null), new DomainScoreSetting(false,false));
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace JHEvaluation.ScoreCalculation
         public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
             IEnumerable<string> filterDomain, DomainScoreSetting setting)
         {
-            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new JHSchool.Evaluation.Calculation.ScoreCalculator(null), setting);
+            new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(new ScoreCalculator(null), setting);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace JHEvaluation.ScoreCalculation
         /// </summary>
         public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
             IEnumerable<string> filterDomain,
-            JHSchool.Evaluation.Calculation.ScoreCalculator defaultRule)
+            ScoreCalculator defaultRule)
         {
             //new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule,false);
             new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule, new DomainScoreSetting(false,false));
@@ -138,7 +138,7 @@ namespace JHEvaluation.ScoreCalculation
         /// </summary>
         public static void CalcuateDomainSemesterScore(this List<StudentScore> students,
             IEnumerable<string> filterDomain,
-            JHSchool.Evaluation.Calculation.ScoreCalculator defaultRule, DomainScoreSetting setting)
+            ScoreCalculator defaultRule, DomainScoreSetting setting)
         {
             new SemesterScoreCalculator(students, filterDomain).CalculateDomainScore(defaultRule, setting);
         }
@@ -149,14 +149,14 @@ namespace JHEvaluation.ScoreCalculation
         public static void CalculateLearningDomainSemesterScore(this List<StudentScore> students,
             IEnumerable<string> filterDomain)
         {
-            new SemesterScoreCalculator(students, filterDomain).CalculateLearningDomainScore(new JHSchool.Evaluation.Calculation.ScoreCalculator(null));
+            new SemesterScoreCalculator(students, filterDomain).CalculateLearningDomainScore(new ScoreCalculator(null));
         }
 
         /// <summary>
         /// 計算學習領域成績
         /// </summary>
         public static void CalculateLearningDomainSemesterScore(this List<StudentScore> students,
-            IEnumerable<string> filterDomain, JHSchool.Evaluation.Calculation.ScoreCalculator defaultRule)
+            IEnumerable<string> filterDomain, ScoreCalculator defaultRule)
         {
             new SemesterScoreCalculator(students, filterDomain).CalculateLearningDomainScore(defaultRule);
         }
