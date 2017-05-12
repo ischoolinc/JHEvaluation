@@ -268,6 +268,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ScoreCalculator.cs" />
     <Compile Include="TempData.cs" />
     <Compile Include="UIConfig.cs" />
     <Compile Include="CourseExtendControls\NavViewNode.cs" />
@@ -322,9 +323,7 @@
     <Compile Include="EduAdminExtendControls\Ribbon\EffortDegreeTable.Designer.cs">
       <DependentUpon>EffortDegreeTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="EduAdminExtendControls\Ribbon\ProgramPlanRelated\DataGridViewExtendedControls.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="EduAdminExtendControls\Ribbon\ProgramPlanRelated\DataGridViewExtendedControls.cs" />
     <Compile Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleManager.cs">
       <SubType>Form</SubType>
     </Compile>
