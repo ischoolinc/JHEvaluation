@@ -16,7 +16,7 @@ namespace JHEvaluation.ScoreCalculation
         /// </summary>
         private static Dictionary<string, JHClassRecord> Classes { get; set; }
 
-        private static Dictionary<string, ScoreCalculator> Rules { get; set; }
+        private static Dictionary<string, JHSchool.Evaluation.Calculation.ScoreCalculator> Rules { get; set; }
 
         /// <summary>
         /// 設定班級對照表。
@@ -32,9 +32,9 @@ namespace JHEvaluation.ScoreCalculation
 
         internal static void SetRuleMapping(IEnumerable<JHScoreCalcRuleRecord> rules)
         {
-            Rules = new Dictionary<string, ScoreCalculator>();
+            Rules = new Dictionary<string, JHSchool.Evaluation.Calculation.ScoreCalculator>();
             foreach (JHScoreCalcRuleRecord each in rules)
-                Rules.Add(each.ID, new ScoreCalculator(each));
+                Rules.Add(each.ID, new JHSchool.Evaluation.Calculation.ScoreCalculator(each));
         }
 
         #region 基本資料屬性方法。
@@ -131,7 +131,7 @@ namespace JHEvaluation.ScoreCalculation
         /// <summary>
         /// 成績計算規則。
         /// </summary>
-        public ScoreCalculator CalculationRule
+        public JHSchool.Evaluation.Calculation.ScoreCalculator CalculationRule
         {
             get
             {

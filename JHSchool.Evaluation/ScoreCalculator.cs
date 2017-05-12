@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using JHSchool.Data;
 using System.Xml;
 
-namespace JHEvaluation.ScoreCalculation
+namespace JHSchool.Evaluation
 {
     public class ScoreCalculator
     {
@@ -13,7 +10,7 @@ namespace JHEvaluation.ScoreCalculation
         private Round _learnDomainRound = new Round();
         private Round _graduateRound = new Round();
 
-        public ScoreCalculator(JHScoreCalcRuleRecord record)
+        public ScoreCalculator(Data.JHScoreCalcRuleRecord record)
         {
             if (record == null) return;
 
@@ -124,5 +121,4 @@ namespace JHEvaluation.ScoreCalculation
             }
         }
     }
-
 }

@@ -176,7 +176,7 @@
       <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Evaluation, Version=1.0.3.42, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JHSchool.Evaluation, Version=1.0.3.43, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
     </Reference>
@@ -270,8 +270,6 @@
     <Compile Include="Calculation\HelperClass\DespToDegree.cs" />
     <Compile Include="Calculation\HelperClass\Graduation.cs" />
     <Compile Include="Calculation\HelperClass\InnerScoreCalculator.cs" />
-    <Compile Include="Calculation\HelperClass\ScoreCalculator.cs" />
-    <Compile Include="Calculation\HelperClass\SemesterData.cs" />
     <Compile Include="Calculation\Interface\EvaluateFactory.cs" />
     <Compile Include="Calculation\Interface\EvaluationResult.cs" />
     <Compile Include="Calculation\Interface\IEvaluateFactory.cs" />

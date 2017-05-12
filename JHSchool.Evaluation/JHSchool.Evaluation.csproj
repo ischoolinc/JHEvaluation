@@ -213,6 +213,9 @@
     <Compile Include="AEIncludeRecord.cs" />
     <Compile Include="AssessmentSetup.cs" />
     <Compile Include="AssessmentSetupRecord.cs" />
+    <Compile Include="Calculation\ScoreCalculator.cs" />
+    <Compile Include="ScoreCalculator.cs" />
+    <Compile Include="Calculation\SemesterData.cs" />
     <Compile Include="ClassExtendControls\ClassBaseInfoItem_Extend.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -268,7 +271,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ScoreCalculator.cs" />
     <Compile Include="TempData.cs" />
     <Compile Include="UIConfig.cs" />
     <Compile Include="CourseExtendControls\NavViewNode.cs" />

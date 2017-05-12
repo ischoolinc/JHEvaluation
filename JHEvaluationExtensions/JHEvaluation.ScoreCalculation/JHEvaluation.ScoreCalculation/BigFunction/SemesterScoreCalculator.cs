@@ -128,7 +128,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         /// </summary>
         /// <param name="defaultRule"></param>
         //public void CalculateDomainScore(ScoreCalculator defaultRule,bool clearDomainScore)
-        public void CalculateDomainScore(ScoreCalculator defaultRule, DomainScoreSetting setting)
+        public void CalculateDomainScore(JHSchool.Evaluation.Calculation.ScoreCalculator defaultRule, DomainScoreSetting setting)
         {
             EffortMap effortmap = new EffortMap(); //努力程度對照表。
             foreach (StudentScore student in Students)
@@ -137,7 +137,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                 SemesterDomainScoreCollection dscores = semsscore.Domain;
                 SemesterSubjectScoreCollection jscores = semsscore.Subject;
-                ScoreCalculator rule = student.CalculationRule;
+                JHSchool.Evaluation.Calculation.ScoreCalculator rule = student.CalculationRule;
 
                 if (rule == null)
                     rule = defaultRule;
@@ -455,13 +455,13 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         /// 計算學習領域成績
         /// </summary>
         /// <param name="defaultRule"></param>
-        public void CalculateLearningDomainScore(ScoreCalculator defaultRule)
+        public void CalculateLearningDomainScore(JHSchool.Evaluation.Calculation.ScoreCalculator defaultRule)
         {
             foreach (StudentScore student in Students)
             {
                 SemesterScore semsscore = student.SemestersScore[SemesterData.Empty];
                 SemesterDomainScoreCollection dscores = semsscore.Domain;
-                ScoreCalculator rule = student.CalculationRule;
+                JHSchool.Evaluation.Calculation.ScoreCalculator rule = student.CalculationRule;
 
                 if (rule == null)
                     rule = defaultRule;
