@@ -32,3 +32,13 @@ C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiun
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.csproj.GenerateResource.Cache
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.dll
 C:\Users\ED\Documents\ischool_github\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.pdb
+C:\Users\lelala\Desktop\高雄班級評量成績單更改後Dll\KaoHsiung.ClassExamScoreReportV2.dll
+C:\Users\lelala\Desktop\高雄班級評量成績單更改後Dll\KaoHsiung.ClassExamScoreReportV2.pdb
+C:\Users\lelala\Documents\GitHub\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.csprojResolveAssemblyReference.cache
+C:\Users\lelala\Documents\GitHub\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.ConfigForm.resources
+C:\Users\lelala\Documents\GitHub\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.MainForm.resources
+C:\Users\lelala\Documents\GitHub\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.Prc.resources
+C:\Users\lelala\Documents\GitHub\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.Properties.Resources.resources
+C:\Users\lelala\Documents\GitHub\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.csproj.GenerateResource.Cache
+C:\Users\lelala\Documents\GitHub\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.dll
+C:\Users\lelala\Documents\GitHub\JHEvaluation\KaoHsiungJHEvaluation\KaoHsiung.ClassExamScoreReportV2\KaoHsiung.ClassExamScoreReportV2\obj\Debug\KaoHsiung.ClassExamScoreReportV2.pdb

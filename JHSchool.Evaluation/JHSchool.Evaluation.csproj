@@ -214,7 +214,6 @@
     <Compile Include="AssessmentSetup.cs" />
     <Compile Include="AssessmentSetupRecord.cs" />
     <Compile Include="Calculation\ScoreCalculator.cs" />
-    <Compile Include="ScoreCalculator.cs" />
     <Compile Include="Calculation\SemesterData.cs" />
     <Compile Include="ClassExtendControls\ClassBaseInfoItem_Extend.cs">
       <SubType>UserControl</SubType>

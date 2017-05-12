@@ -116,11 +116,6 @@
       <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Evaluation, Version=1.0.0.30, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="K12.Data, Version=1.8.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\K12.Data.dll</HintPath>
@@ -241,9 +236,16 @@
     <Content Include="Library\Framework.dll" />
     <Content Include="Library\JHSchool.Data.dll" />
     <Content Include="Library\JHSchool.Evaluation.dll" />
+    <Content Include="Library\JHSchool.Evaluation.pdb" />
     <Content Include="Library\K12.Data.dll" />
     <Content Include="Library\K12.Presentation.dll" />
     <Content Include="Library\KaoHsiung.JHEvaluation.Data.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\JHSchool.Evaluation\JHSchool.Evaluation.csproj">
+      <Project>{948fe24f-e461-4d7b-91d5-a4e8332a2afa}</Project>
+      <Name>JHSchool.Evaluation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

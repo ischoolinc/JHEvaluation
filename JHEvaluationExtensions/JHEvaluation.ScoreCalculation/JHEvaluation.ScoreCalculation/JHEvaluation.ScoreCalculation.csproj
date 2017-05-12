@@ -176,7 +176,7 @@
       <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Evaluation, Version=1.0.3.43, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JHSchool.Evaluation, Version=1.0.3.45, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
     </Reference>

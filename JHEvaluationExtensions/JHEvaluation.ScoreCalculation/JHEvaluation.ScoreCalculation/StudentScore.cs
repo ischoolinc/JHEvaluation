@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using JHSchool.Data;
 using JHEvaluation.ScoreCalculation.ScoreStruct;
+using JHSchool.Evaluation.Calculation;
 
 namespace JHEvaluation.ScoreCalculation
 {
@@ -16,7 +17,7 @@ namespace JHEvaluation.ScoreCalculation
         /// </summary>
         private static Dictionary<string, JHClassRecord> Classes { get; set; }
 
-        private static Dictionary<string, JHSchool.Evaluation.Calculation.ScoreCalculator> Rules { get; set; }
+        private static Dictionary<string, ScoreCalculator> Rules { get; set; }
 
         /// <summary>
         /// 設定班級對照表。
@@ -131,7 +132,7 @@ namespace JHEvaluation.ScoreCalculation
         /// <summary>
         /// 成績計算規則。
         /// </summary>
-        public JHSchool.Evaluation.Calculation.ScoreCalculator CalculationRule
+        public ScoreCalculator CalculationRule
         {
             get
             {
