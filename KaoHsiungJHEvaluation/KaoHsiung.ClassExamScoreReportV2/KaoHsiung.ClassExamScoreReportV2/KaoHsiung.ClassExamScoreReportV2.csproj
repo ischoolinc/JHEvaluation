@@ -104,18 +104,20 @@
       <HintPath>Library\Framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHEvaluation.ScoreCalculation, Version=1.0.1.35, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JHEvaluation.ScoreCalculation, Version=1.0.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHEvaluation.ScoreCalculation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.Data, Version=1.4.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Evaluation, Version=1.0.3.45, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JHSchool.Evaluation, Version=1.0.0.31, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="K12.Data, Version=1.8.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
