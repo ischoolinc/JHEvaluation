@@ -139,9 +139,24 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                         decimal sum = 0;
                         decimal credit = 0;
 
+
+                        // 2017/5/25 穎驊新增， 因應 高雄客服 高雄小組 [05-01][--] 項目調整，
+                        // 舊有邏輯無論該學期是否已經有教務作業期末結算完產生 "語文領域" 的領域成績，
+                        // 皆會再額外再幫它算一次並且加入語文領域總分、語文領域權重，此行為容易造成資料的組成比重不對，產生錯誤無法解釋的語文領域分數，
+                        // 現在加入新判斷，如果該學期已經有 語文領域成績， 則不會再另外計算、加入該學期的語文領域成績，
+                        // 反之，如果該學期 沒有語文領域成績， 會再計算一次 補上，以作為畢業預警判斷使用。
+
+                        bool hasLanguageDomain = false;
+
                         //跑一遍領域成績
                         foreach (K12.Data.DomainScore domain in record.Domains.Values)
                         {
+
+                            if (domain.Domain == "語文") 
+                            {
+                                hasLanguageDomain = true;
+                            }
+
                             //這三種挑出來處理
                             if (domain.Domain == "國語文" || domain.Domain == "英語")
                             {
@@ -173,7 +188,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                                 domainScoreList.Add(domain);
                         }
 
-                        if (credit > 0)
+                        if (!hasLanguageDomain&&credit > 0)
                         {
                             語文.Score = Math.Round(sum / credit, 2, MidpointRounding.AwayFromZero);
                             語文.Credit = credit;
