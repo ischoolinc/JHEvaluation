@@ -51,7 +51,13 @@ namespace JHEvaluation.ScoreCalculation
         private void btnCalc_Click(object sender, EventArgs e)
         {
             //_ClearDomainScore = chkClearDomainScore.Checked;
-            _domainScoreSetting.DomainScoreClear = chkClearDomainScore.Checked;
+                        
+            //_domainScoreSetting.DomainScoreClear = chkClearDomainScore.Checked;
+
+            //2017/6/19  穎驊修改，因應 [02-03][02] 轉入生語文領域成績問題 項目， 將原"刪除全部領域成績並重算" 的功能隱藏，把原本setting 註解後，現在預設皆為false
+            //而若欲一次批次大量修改刪除領域成績，在本次[02-02][06] 計算學期科目成績新增清空原成績模式 項目，也已增加 "刪除"欄位， 提供使用者已匯入的方式，刪除既有領域成績
+            _domainScoreSetting.DomainScoreClear = false;
+
             _domainScoreSetting.DomainScoreLimit = chkScoreLimite.Checked;
 
             //if (_ClearDomainScore)

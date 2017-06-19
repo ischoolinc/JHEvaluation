@@ -27,7 +27,9 @@ namespace KaoHsiung.JHEvaluation.ImportExport
             Dictionary<string, List<JHSemesterScoreRecord>> semsDict = new Dictionary<string, List<JHSemesterScoreRecord>>();
 
             wizard.PackageLimit = 3000;
-            wizard.ImportableFields.AddRange("領域", "學年度", "學期", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記");
+            
+            //2017/6/16 穎驊新增，因應[02-02][06] 計算學期科目成績新增清空原成績模式 項目， 新增 "刪除"欄位，使使用者能匯入 刪除成績資料
+            wizard.ImportableFields.AddRange("領域", "學年度", "學期", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記","刪除");
             //wizard.ImportableFields.AddRange("領域", "學年度", "學期", "權數", "節數", "分數評量", "文字描述", "註記");
             wizard.RequiredFields.AddRange("領域", "學年度", "學期");
 
@@ -123,6 +125,13 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                             {
                                 inputFormatPass &= false;
                                 e.ErrorFields.Add(field, "必須填入空白或數值");
+                            }
+                            break;
+                        case "刪除":
+                            if (value != "" && value != "是")
+                            {
+                                inputFormatPass &= false;
+                                e.ErrorFields.Add(field, "必須填入空白或 '是'");
                             }
                             break;
                     }
@@ -362,6 +371,13 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                                     hasChanged = true;
                                                 }
                                                 break;
+                                            case "刪除":
+                                                if (value == "是")
+                                                {
+                                                    record.Domains.Remove(domain);
+                                                    hasChanged = true;
+                                                }
+                                                break;
                                         }
                                     }
                                     //}
@@ -415,8 +431,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
 
                                 string domain = row["領域"];
                                 domainScore = new K12.Data.DomainScore();
+
+                                bool contain_deleted_words = false;
+
                                 #region 建立newScore
-                                foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記" })
+                                foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記","刪除" })
                                 {
                                     if (e.ImportFields.Contains(field))
                                     {
@@ -469,6 +488,12 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                             case "註記":
                                                 domainScore.Comment = value;
                                                 break;
+                                            case "刪除":
+                                                if (value == "是")
+                                                {
+                                                    contain_deleted_words = true;                                                                                                  
+                                                }
+                                                break;
                                         }
                                         #endregion
                                     }
@@ -477,14 +502,18 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 //}
                                 //subjectScoreInfo.AppendChild(newScore);
 
-                                if (domainScore != null)
+                                if (!contain_deleted_words) 
                                 {
-                                    if (!record.Domains.ContainsKey(domainScore.Domain))
-                                        record.Domains.Add(domainScore.Domain, domainScore);
-                                    else
-                                        record.Domains[domainScore.Domain] = domainScore;
-                                }
-                                updateList.Add(record);
+                                    if (domainScore != null)
+                                    {
+                                        if (!record.Domains.ContainsKey(domainScore.Domain))
+                                            record.Domains.Add(domainScore.Domain, domainScore);
+                                        else
+                                            record.Domains[domainScore.Domain] = domainScore;
+                                    }
+                                    updateList.Add(record);
+                                                                
+                                }                                
                             }
                         }
                         #endregion
@@ -501,9 +530,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                             JHSemesterScoreRecord record = new JHSchool.Data.JHSemesterScoreRecord();
                             K12.Data.DomainScore domainScore = null;
 
+                            bool contain_deleted_words = false;
+
                             string domain = row["領域"];
                             domainScore = new K12.Data.DomainScore();
-                            foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記" })
+                            foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記","刪除" })
                             {
                                 if (e.ImportFields.Contains(field))
                                 {
@@ -556,6 +587,12 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                         case "註記":
                                             domainScore.Comment = value;
                                             break;
+                                        case "刪除":
+                                            if (value == "是")
+                                            {
+                                                contain_deleted_words = true;
+                                            }                                            
+                                            break;
                                     }
                                     #endregion
                                 }
@@ -574,7 +611,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 else
                                     record.Domains[domainScore.Domain] = domainScore;
                             }
-                            insertList.Add(record);
+
+                            if (!contain_deleted_words) 
+                            {
+                                insertList.Add(record);
+                            }                            
                         }
                         //insertList.Add(new SmartSchool.Feature.Score.AddScore.InsertInfo(studentRec.StudentID, "" + sy, "" + se, gradeyear, "", subjectScoreInfo));
                     }

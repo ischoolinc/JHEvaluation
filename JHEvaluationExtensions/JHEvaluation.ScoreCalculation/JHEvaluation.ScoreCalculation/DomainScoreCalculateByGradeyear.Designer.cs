@@ -159,6 +159,7 @@
             this.chkClearDomainScore.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkClearDomainScore.TabIndex = 23;
             this.chkClearDomainScore.Text = "刪除全部領域成績並重算";
+            this.chkClearDomainScore.Visible = false;
             // 
             // chkScoreLimite
             // 

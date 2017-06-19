@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{80EA510D-77CC-4CF0-8EBB-CFA3DE45F8E3}</ProjectGuid>
+    <ProjectGuid>{C52C867F-F4C9-4DDC-A055-0208B81A3D1B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KaoHsiung.ReaderScoreImport</RootNamespace>
