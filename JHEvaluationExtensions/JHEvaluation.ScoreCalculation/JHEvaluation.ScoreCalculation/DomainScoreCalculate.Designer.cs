@@ -45,7 +45,7 @@
             this.btnCalc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCalc.BackColor = System.Drawing.Color.Transparent;
             this.btnCalc.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnCalc.Location = new System.Drawing.Point(228, 90);
+            this.btnCalc.Location = new System.Drawing.Point(229, 44);
             this.btnCalc.Name = "btnCalc";
             this.btnCalc.Size = new System.Drawing.Size(75, 23);
             this.btnCalc.TabIndex = 8;
@@ -61,7 +61,7 @@
             this.intSemester.BackgroundStyle.Class = "DateTimeInputBackground";
             this.intSemester.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.intSemester.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
-            this.intSemester.Location = new System.Drawing.Point(224, 25);
+            this.intSemester.Location = new System.Drawing.Point(224, 10);
             this.intSemester.Name = "intSemester";
             this.intSemester.ShowUpDown = true;
             this.intSemester.Size = new System.Drawing.Size(80, 25);
@@ -76,7 +76,7 @@
             this.intSchoolYear.BackgroundStyle.Class = "DateTimeInputBackground";
             this.intSchoolYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.intSchoolYear.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
-            this.intSchoolYear.Location = new System.Drawing.Point(80, 25);
+            this.intSchoolYear.Location = new System.Drawing.Point(80, 10);
             this.intSchoolYear.Name = "intSchoolYear";
             this.intSchoolYear.ShowUpDown = true;
             this.intSchoolYear.Size = new System.Drawing.Size(80, 25);
@@ -91,7 +91,7 @@
             this.labelX3.BackgroundStyle.Class = "";
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.labelX3.Location = new System.Drawing.Point(184, 26);
+            this.labelX3.Location = new System.Drawing.Point(184, 12);
             this.labelX3.Name = "labelX3";
             this.labelX3.Size = new System.Drawing.Size(34, 23);
             this.labelX3.TabIndex = 16;
@@ -106,7 +106,7 @@
             this.labelX2.BackgroundStyle.Class = "";
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.labelX2.Location = new System.Drawing.Point(27, 26);
+            this.labelX2.Location = new System.Drawing.Point(27, 12);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(47, 23);
             this.labelX2.TabIndex = 15;
@@ -120,9 +120,9 @@
             // 
             this.chkClearDomainScore.BackgroundStyle.Class = "";
             this.chkClearDomainScore.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.chkClearDomainScore.Location = new System.Drawing.Point(12, 64);
+            this.chkClearDomainScore.Location = new System.Drawing.Point(2, -3);
             this.chkClearDomainScore.Name = "chkClearDomainScore";
-            this.chkClearDomainScore.Size = new System.Drawing.Size(191, 23);
+            this.chkClearDomainScore.Size = new System.Drawing.Size(19, 23);
             this.chkClearDomainScore.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkClearDomainScore.TabIndex = 19;
             this.chkClearDomainScore.Text = "刪除全部領域成績並重算";
@@ -130,6 +130,7 @@
             // 
             // chkScoreLimite
             // 
+            this.chkScoreLimite.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chkScoreLimite.BackColor = System.Drawing.Color.Transparent;
             // 
             // 
@@ -139,7 +140,7 @@
             this.chkScoreLimite.Checked = true;
             this.chkScoreLimite.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkScoreLimite.CheckValue = "Y";
-            this.chkScoreLimite.Location = new System.Drawing.Point(12, 93);
+            this.chkScoreLimite.Location = new System.Drawing.Point(12, 44);
             this.chkScoreLimite.Name = "chkScoreLimite";
             this.chkScoreLimite.Size = new System.Drawing.Size(206, 23);
             this.chkScoreLimite.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -150,7 +151,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(325, 133);
+            this.ClientSize = new System.Drawing.Size(325, 79);
             this.Controls.Add(this.chkScoreLimite);
             this.Controls.Add(this.chkClearDomainScore);
             this.Controls.Add(this.intSemester);
@@ -159,6 +160,8 @@
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.btnCalc);
             this.DoubleBuffered = true;
+            this.MaximumSize = new System.Drawing.Size(341, 118);
+            this.MinimumSize = new System.Drawing.Size(341, 118);
             this.Name = "DomainScoreCalculate";
             this.Text = "學期領域成績計算";
             this.Load += new System.EventHandler(this.DomainScoreCalculate_Load);
