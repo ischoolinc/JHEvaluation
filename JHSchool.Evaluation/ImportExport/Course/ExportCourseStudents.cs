@@ -31,7 +31,7 @@ namespace JHSchool.Evaluation.ImportExport.Course
                 Dictionary<string, List<Data.JHSCAttendRecord>> scattends = new Dictionary<string, List<JHSchool.Data.JHSCAttendRecord>>();
                 //課程修課學生
                 Dictionary<string, Data.JHStudentRecord> students = new Dictionary<string, JHSchool.Data.JHStudentRecord>();
-
+                
                 #region 取得修課記錄
                 foreach (Data.JHSCAttendRecord record in Data.JHSCAttend.SelectByStudentIDAndCourseID(new string[] { }, e.List))
                 {
@@ -60,23 +60,26 @@ namespace JHSchool.Evaluation.ImportExport.Course
                     if (!scattends.ContainsKey(course.ID)) continue;
 
                     foreach (Data.JHSCAttendRecord record in scattends[course.ID])
-                    {
-                        RowData row = new RowData();
-                        row.ID = course.ID;
-                        foreach (string field in e.ExportFields)
+                    {   //2017.09.29 羿均修改，僅匯出在校生 。
+                        if (record.Student.Status.ToString() == "一般")
                         {
-                            if (wizard.ExportableFields.Contains(field))
+                            RowData row = new RowData();
+                            row.ID = course.ID;
+                            foreach (string field in e.ExportFields)
                             {
-                                switch (field)
+                                if (wizard.ExportableFields.Contains(field))
                                 {
-                                    case "姓名": row.Add(field, students[record.RefStudentID].Name); break;
-                                    case "學號": row.Add(field, students[record.RefStudentID].StudentNumber); break;
-                                    case "班級": row.Add(field, (students[record.RefStudentID].Class != null ? students[record.RefStudentID].Class.Name : "")); break;
-                                    case "座號": row.Add(field, "" + students[record.RefStudentID].SeatNo); break;
+                                    switch (field)
+                                    {
+                                        case "姓名": row.Add(field, students[record.RefStudentID].Name); break;
+                                        case "學號": row.Add(field, students[record.RefStudentID].StudentNumber); break;
+                                        case "班級": row.Add(field, (students[record.RefStudentID].Class != null ? students[record.RefStudentID].Class.Name : "")); break;
+                                        case "座號": row.Add(field, "" + students[record.RefStudentID].SeatNo); break;
+                                    }
                                 }
                             }
+                            e.Items.Add(row);
                         }
-                        e.Items.Add(row);
                     }
                 }
                 #endregion
