@@ -79,35 +79,39 @@ namespace JHEvaluation.AssignmentScore
                     listView.Columns[chText.Index].Text = "文字描述";
                 else
                     listView.Columns[chText.Index].Text="";
-                foreach (CourseScoreCountRecord csce in vCourseScoreCountEntityList)
+                //2017/10/05，羿均，避免vCourseScoreCountEntityList = null 例外狀況發生。
+                if (vCourseScoreCountEntityList != null)
                 {
-                    ListViewItem lvi = new ListViewItem();
-                    lvi.SubItems[0].Text = csce.CourseID;
-                    lvi.SubItems.Add(csce.CourseName);
-                    lvi.SubItems.Add(csce.TeacherName);
-                    lvi.SubItems.Add(csce.OraHasScoreCount + "/" + csce.OraTotalScoreCount);
-                    if (csce.OraHasScoreCount == csce.OraTotalScoreCount)
-                        lvi.SubItems[3].ForeColor = Color.Black;
-                    else
-                        lvi.SubItems[3].ForeColor = Color.Red;
-
-                    lvi.SubItems.Add(csce.OraHasEffortCount + "/" + csce.OraTotalEffortCount);
-                    if (csce.OraHasEffortCount == csce.OraTotalEffortCount)
-                        lvi.SubItems[4].ForeColor = Color.Black;
-                    else
-                        lvi.SubItems[4].ForeColor = Color.Red;
-
-                    if (Option.CheckText)
+                    foreach (CourseScoreCountRecord csce in vCourseScoreCountEntityList)
                     {
-                        // 文字描述
-                        lvi.SubItems.Add(csce.OraHasTextCount + "/" + csce.OraTotalScoreCount);
-                        if (csce.OraHasTextCount == csce.OraTotalTextCount)
-                            lvi.SubItems[5].ForeColor = Color.Black;
+                        ListViewItem lvi = new ListViewItem();
+                        lvi.SubItems[0].Text = csce.CourseID;
+                        lvi.SubItems.Add(csce.CourseName);
+                        lvi.SubItems.Add(csce.TeacherName);
+                        lvi.SubItems.Add(csce.OraHasScoreCount + "/" + csce.OraTotalScoreCount);
+                        if (csce.OraHasScoreCount == csce.OraTotalScoreCount)
+                            lvi.SubItems[3].ForeColor = Color.Black;
                         else
-                            lvi.SubItems[5].ForeColor = Color.Red;
-                    }
+                            lvi.SubItems[3].ForeColor = Color.Red;
 
-                    listView.Items.Add(lvi);
+                        lvi.SubItems.Add(csce.OraHasEffortCount + "/" + csce.OraTotalEffortCount);
+                        if (csce.OraHasEffortCount == csce.OraTotalEffortCount)
+                            lvi.SubItems[4].ForeColor = Color.Black;
+                        else
+                            lvi.SubItems[4].ForeColor = Color.Red;
+
+                        if (Option.CheckText)
+                        {
+                            // 文字描述
+                            lvi.SubItems.Add(csce.OraHasTextCount + "/" + csce.OraTotalScoreCount);
+                            if (csce.OraHasTextCount == csce.OraTotalTextCount)
+                                lvi.SubItems[5].ForeColor = Color.Black;
+                            else
+                                lvi.SubItems[5].ForeColor = Color.Red;
+                        }
+
+                        listView.Items.Add(lvi);
+                    }
                 }
                 intSchoolYear.Enabled = true;
                 intSemester.Enabled = true;
@@ -298,10 +302,11 @@ namespace JHEvaluation.AssignmentScore
 
         private void ReloadListViewData()
         {
+            //2017/10/05，羿均，Reload後控制會項反紅，造成滑鼠移到控制項上就開始點擊的問題，所以註解掉。
             _SchoolYear = intSchoolYear.Value;
             _Semester = intSemester.Value;
-            intSchoolYear.Enabled = false;
-            intSemester.Enabled = false;
+            //intSchoolYear.Enabled = false;
+            //intSemester.Enabled = false;
             chkDisplayNotFinish.Enabled = false;
             chkText.Enabled = false;
 
