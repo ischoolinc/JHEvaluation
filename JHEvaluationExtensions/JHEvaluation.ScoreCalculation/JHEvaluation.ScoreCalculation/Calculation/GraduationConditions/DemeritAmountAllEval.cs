@@ -221,7 +221,8 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     {
                         str += kvp.Key + kvp.Value;
                     }
-                    rd.AddDetail("懲戒表現不符合畢業規範(" + str + ")");
+                    //2017/12/19，羿均根據高雄小組會議[09-11][02] 所做之修改
+                    rd.AddDetail("懲戒表現不符合畢業規範(說明:所有學期之獎懲累計，經功過相抵換算後相當於" + str + "，已滿三大過)");
                     resultList.Add(rd);
                 }
 
