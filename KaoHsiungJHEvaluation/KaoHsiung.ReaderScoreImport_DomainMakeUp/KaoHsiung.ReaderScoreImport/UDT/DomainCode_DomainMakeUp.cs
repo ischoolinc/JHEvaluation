@@ -6,11 +6,11 @@ using FISCA.UDT;
 
 namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.UDT
 {
-    [TableName("ReaderScoreImport.ExamCode")]
-    public class ExamCode : ActiveRecord
+    [TableName("ReaderScoreImport.DomainCode_DomainMakeUp")]
+    public class DomainCode_DomainMakeUp : ActiveRecord
     {
-        [Field(Field = "ExamName", Indexed = true)]
-        public string ExamName { get; set; }
+        [Field(Field = "Domain", Indexed = true)]
+        public string Domain { get; set; }
 
         [Field(Field = "Code", Indexed = false)]
         public string Code { get; set; }

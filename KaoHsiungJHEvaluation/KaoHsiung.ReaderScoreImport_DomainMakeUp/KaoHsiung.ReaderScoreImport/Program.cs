@@ -17,11 +17,11 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
         [MainMethod]
         public static void Main()
         {
-            RibbonBarItem rbItem = FISCA.Presentation.MotherForm.RibbonBarItems["課程", "讀卡"];
+            RibbonBarItem rbItem = FISCA.Presentation.MotherForm.RibbonBarItems["課程", "領域補考讀卡"];
 
-            RibbonBarButton importButton = rbItem["匯入讀卡成績"];
+            RibbonBarButton importButton = rbItem["匯入補考讀卡成績"];
             importButton.Size = RibbonBarButton.MenuButtonSize.Large;
-            importButton.Enable = User.Acl["KaoHsiung.JHEvaluation.Course.ReaderScoreImport01"].Executable;
+            importButton.Enable = User.Acl["KaoHsiung.JHEvaluation.Course.ReaderScoreImport01_DomainMakeUp"].Executable;
             importButton.Image = Properties.Resources.proyector_save_64;
             importButton.Click += delegate
             {
@@ -29,36 +29,36 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                 form.ShowDialog();
             };
 
-            RibbonBarButton classButton = rbItem["班級代碼設定"];
+            RibbonBarButton classButton = rbItem["補考班級代碼設定"];
             classButton.Size = RibbonBarButton.MenuButtonSize.Small;
-            classButton.Enable = User.Acl["KaoHsiung.JHEvaluation.Course.ReaderScoreImport02"].Executable; ;
+            classButton.Enable = User.Acl["KaoHsiung.JHEvaluation.Course.ReaderScoreImport02_DomainMakeUp"].Executable; ;
             classButton.Click += delegate
             {
                 new ClassCodeConfig().ShowDialog();
             };
 
-            RibbonBarButton examButton = rbItem["試別代碼設定"];
+            RibbonBarButton examButton = rbItem["補考試別代碼設定"];
             examButton.Size = RibbonBarButton.MenuButtonSize.Small;
-            examButton.Enable = User.Acl["KaoHsiung.JHEvaluation.Course.ReaderScoreImport03"].Executable; ;
+            examButton.Enable = User.Acl["KaoHsiung.JHEvaluation.Course.ReaderScoreImport03_DomainMakeUp"].Executable; ;
             examButton.Click += delegate
             {
                 new ExamCodeConfig().ShowDialog();
             };
 
-            RibbonBarButton subjectButton = rbItem["科目代碼設定"];
+            RibbonBarButton subjectButton = rbItem["補考領域代碼設定"];
             subjectButton.Size = RibbonBarButton.MenuButtonSize.Small;
-            subjectButton.Enable = User.Acl["KaoHsiung.JHEvaluation.Course.ReaderScoreImport04"].Executable; ;
+            subjectButton.Enable = User.Acl["KaoHsiung.JHEvaluation.Course.ReaderScoreImport04_DomainMakeUp"].Executable; ;
             subjectButton.Click += delegate
             {
-                new SubjectCodeConfig().ShowDialog();
+                new DomainCodeConfig().ShowDialog();
             };
 
 
             Catalog detail = RoleAclSource.Instance["課程"]["功能按鈕"];
-            detail.Add(new ReportFeature("KaoHsiung.JHEvaluation.Course.ReaderScoreImport01", "匯入讀卡成績"));
-            detail.Add(new ReportFeature("KaoHsiung.JHEvaluation.Course.ReaderScoreImport02", "班級代碼設定"));
-            detail.Add(new ReportFeature("KaoHsiung.JHEvaluation.Course.ReaderScoreImport03", "試別代碼設定"));
-            detail.Add(new ReportFeature("KaoHsiung.JHEvaluation.Course.ReaderScoreImport04", "科目代碼設定"));
+            detail.Add(new ReportFeature("KaoHsiung.JHEvaluation.Course.ReaderScoreImport01_DomainMakeUp", "匯入補考讀卡成績"));
+            detail.Add(new ReportFeature("KaoHsiung.JHEvaluation.Course.ReaderScoreImport02_DomainMakeUp", "補考班級代碼設定"));
+            detail.Add(new ReportFeature("KaoHsiung.JHEvaluation.Course.ReaderScoreImport03_DomainMakeUp", "補考試別代碼設定"));
+            detail.Add(new ReportFeature("KaoHsiung.JHEvaluation.Course.ReaderScoreImport04_DomainMakeUp", "補考領域代碼設定"));
         }
     }
 }

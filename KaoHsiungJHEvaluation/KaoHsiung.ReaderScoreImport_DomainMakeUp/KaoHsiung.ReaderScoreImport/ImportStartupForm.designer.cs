@@ -36,11 +36,11 @@
             this.labelX2 = new DevComponents.DotNetBar.LabelX();
             this.cboSemester = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.lblMessage = new DevComponents.DotNetBar.LabelX();
-            this.pic = new System.Windows.Forms.PictureBox();
             this.intStudentNumberLenght = new DevComponents.Editors.IntegerInput();
             this.labelX3 = new DevComponents.DotNetBar.LabelX();
-            ((System.ComponentModel.ISupportInitialize)(this.pic)).BeginInit();
+            this.pic = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.intStudentNumberLenght)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pic)).BeginInit();
             this.SuspendLayout();
             // 
             // txtFiles
@@ -149,17 +149,6 @@
             this.lblMessage.TabIndex = 5;
             this.lblMessage.Visible = false;
             // 
-            // pic
-            // 
-            this.pic.BackColor = System.Drawing.Color.Transparent;
-            this.pic.Image = global::KaoHsiung.ReaderScoreImport_DomainMakeUp.Properties.Resources.loading;
-            this.pic.Location = new System.Drawing.Point(7, 90);
-            this.pic.Name = "pic";
-            this.pic.Size = new System.Drawing.Size(32, 32);
-            this.pic.TabIndex = 6;
-            this.pic.TabStop = false;
-            this.pic.Visible = false;
-            // 
             // intStudentNumberLenght
             // 
             this.intStudentNumberLenght.BackColor = System.Drawing.Color.Transparent;
@@ -192,10 +181,21 @@
             this.labelX3.TabIndex = 8;
             this.labelX3.Text = "學號長度";
             // 
+            // pic
+            // 
+            this.pic.BackColor = System.Drawing.Color.Transparent;
+            this.pic.Image = global::KaoHsiung.ReaderScoreImport_DomainMakeUp.Properties.Resources.loading;
+            this.pic.Location = new System.Drawing.Point(7, 90);
+            this.pic.Name = "pic";
+            this.pic.Size = new System.Drawing.Size(32, 32);
+            this.pic.TabIndex = 6;
+            this.pic.TabStop = false;
+            this.pic.Visible = false;
+            // 
             // ImportStartupForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(414, 133);
+            this.ClientSize = new System.Drawing.Size(406, 128);
             this.Controls.Add(this.labelX3);
             this.Controls.Add(this.intStudentNumberLenght);
             this.Controls.Add(this.pic);
@@ -207,14 +207,15 @@
             this.Controls.Add(this.btnImport);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.txtFiles);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximumSize = new System.Drawing.Size(422, 167);
             this.MinimumSize = new System.Drawing.Size(422, 167);
             this.Name = "ImportStartupForm";
-            this.Text = "匯入讀卡成績";
+            this.Text = "匯入領域補考讀卡成績";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ImportStartupForm_FormClosed);
-            ((System.ComponentModel.ISupportInitialize)(this.pic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.intStudentNumberLenght)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pic)).EndInit();
             this.ResumeLayout(false);
 
         }

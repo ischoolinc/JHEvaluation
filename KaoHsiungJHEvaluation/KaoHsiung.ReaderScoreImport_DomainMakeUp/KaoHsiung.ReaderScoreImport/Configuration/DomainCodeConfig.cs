@@ -14,14 +14,14 @@ using KaoHsiung.ReaderScoreImport_DomainMakeUp.Mapper;
 
 namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
 {
-    public partial class ClassCodeConfig : BaseForm
+    public partial class DomainCodeConfig : BaseForm
     {
         //private List<JHClassRecord> _classes;
         protected BackgroundWorker _worker;
         protected AccessHelper _accessHelper;
-        private List<ClassCode_DomainMakeUp> _list;
+        private List<DomainCode_DomainMakeUp> _list;
 
-        public ClassCodeConfig()
+        public DomainCodeConfig()
         {
             InitializeComponent();
             InitAccessHelper();
@@ -70,7 +70,7 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
 
         protected void DoWork(object sender, DoWorkEventArgs e)
         {
-            _list = _accessHelper.Select<ClassCode_DomainMakeUp>();
+            _list = _accessHelper.Select<DomainCode_DomainMakeUp>();
             //if (_list.Count <= 0)
             //    _classes = JHClass.SelectAll();
         }
@@ -91,10 +91,10 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
             foreach (var record in _list)
             {
                 DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(dataGridViewX1, record.ClassName, record.Code);
+                row.CreateCells(dataGridViewX1, record.Domain, record.Code);
 
                 dataGridViewX1.Rows.Add(row);
-                ValidateCodeFormat(row.Cells[chCode.Index], 3);
+                ValidateCodeFormat(row.Cells[chCode.Index], 5);
             }
 
             dataGridViewX1.ResumeLayout();
@@ -110,13 +110,13 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                 return;
             }
 
-            List<ClassCode_DomainMakeUp> newList = new List<ClassCode_DomainMakeUp>();
+            List<DomainCode_DomainMakeUp> newList = new List<DomainCode_DomainMakeUp>();
             foreach (DataGridViewRow row in dataGridViewX1.Rows)
             {
                 if (row.IsNewRow) continue;
 
-                ClassCode_DomainMakeUp cc = new ClassCode_DomainMakeUp();
-                cc.ClassName = "" + row.Cells[chClassName.Index].Value;
+                DomainCode_DomainMakeUp cc = new DomainCode_DomainMakeUp();
+                cc.Domain = "" + row.Cells[chDomainName.Index].Value;
                 cc.Code = "" + row.Cells[chCode.Index].Value;
                 newList.Add(cc);
             }
@@ -133,32 +133,32 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
 
             if (cell.OwningColumn == chCode)
             {
-                ValidateCodeFormat(cell, 3);
+                ValidateCodeFormat(cell, 5);
                 ValidateDuplication(dataGridViewX1, chCode.Index, "代碼不能重覆");
             }
             else
             {
-                ValidateDuplication(dataGridViewX1, chClassName.Index, "班級名稱不能重覆");
+                ValidateDuplication(dataGridViewX1, chDomainName.Index, "領域名稱不能重覆");
             }
         }
 
         protected void Export()
         {
-            ImportExport.Export(dataGridViewX1, "匯出補考班級代碼設定");
+            ImportExport.Export(dataGridViewX1, "匯出領域代碼設定");
         }
 
         protected void Import()
         {
-            ImportExport.Import(dataGridViewX1, new List<string>() { "班級", "代碼" });
+            ImportExport.Import(dataGridViewX1, new List<string>() { "領域", "代碼" });
 
             foreach (DataGridViewRow row in dataGridViewX1.Rows)
             {
                 if (row.IsNewRow) continue;
                 DataGridViewCell cell = row.Cells[chCode.Index];
-                ValidateCodeFormat(cell, 3);
+                ValidateCodeFormat(cell, 5);
             }
             ValidateDuplication(dataGridViewX1, chCode.Index, "代碼不能重覆");
-            ValidateDuplication(dataGridViewX1, chClassName.Index, "班級名稱不能重覆");
+            ValidateDuplication(dataGridViewX1, chDomainName.Index, "領域名稱不能重覆");
         }
 
 

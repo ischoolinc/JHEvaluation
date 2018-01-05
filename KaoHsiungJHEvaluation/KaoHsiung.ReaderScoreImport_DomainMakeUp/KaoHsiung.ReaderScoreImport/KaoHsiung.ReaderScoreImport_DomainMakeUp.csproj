@@ -140,6 +140,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\DomainCodeConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Configuration\DomainCodeConfig.Designer.cs">
+      <DependentUpon>DomainCodeConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\ExamCodeConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Configuration\ExamCodeConfig.Designer.cs">
+      <DependentUpon>ExamCodeConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Configuration\ClassCodeConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,20 +165,8 @@
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Configuration\DomainValidator.cs" />
-    <Compile Include="Configuration\ExamCodeConfig.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Configuration\ExamCodeConfig.Designer.cs">
-      <DependentUpon>ExamCodeConfig.cs</DependentUpon>
-    </Compile>
     <Compile Include="Configuration\IColumnValidator.cs" />
     <Compile Include="Configuration\ImportExport.cs" />
-    <Compile Include="Configuration\SubjectCodeConfig.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Configuration\SubjectCodeConfig.Designer.cs">
-      <DependentUpon>SubjectCodeConfig.cs</DependentUpon>
-    </Compile>
     <Compile Include="FunctionSpliter.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="ImportStartupForm.cs">
@@ -183,20 +183,20 @@
     <Compile Include="Model\RawData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Configuration\ClassCodeConfig.resx">
-      <DependentUpon>ClassCodeConfig.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\ConfigForm.resx">
-      <DependentUpon>ConfigForm.cs</DependentUpon>
+    <EmbeddedResource Include="Configuration\DomainCodeConfig.resx">
+      <DependentUpon>DomainCodeConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Configuration\ExamCodeConfig.resx">
       <DependentUpon>ExamCodeConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\SubjectCodeConfig.resx">
-      <DependentUpon>SubjectCodeConfig.cs</DependentUpon>
+    <EmbeddedResource Include="Configuration\ClassCodeConfig.resx">
+      <DependentUpon>ClassCodeConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configuration\ConfigForm.resx">
+      <DependentUpon>ConfigForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ImportStartupForm.resx">
@@ -230,9 +230,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="UDT\ClassCode.cs" />
-    <Compile Include="UDT\ExamCode.cs" />
-    <Compile Include="UDT\SubjectCode.cs" />
+    <Compile Include="UDT\ClassCode_DomainMakeUp.cs" />
+    <Compile Include="UDT\ExamCode_DomainMakeUp.cs" />
+    <Compile Include="UDT\DomainCode_DomainMakeUp.cs" />
     <Compile Include="ValidationErrorViewer.cs">
       <SubType>Form</SubType>
     </Compile>

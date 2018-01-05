@@ -31,10 +31,10 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Mapper
 
             AccessHelper helper = new AccessHelper();
 
-            foreach (SubjectCode item in helper.Select<SubjectCode>())
+            foreach (DomainCode_DomainMakeUp item in helper.Select<DomainCode_DomainMakeUp>())
             {
                 if (!CodeMap.ContainsKey(item.Code))
-                    CodeMap.Add(item.Code, item.Subject);
+                    CodeMap.Add(item.Code, item.Domain);
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FISCA.Presentation.Controls;
@@ -13,114 +14,226 @@ using KaoHsiung.ReaderScoreImport_DomainMakeUp.Mapper;
 
 namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
 {
-    public partial class ExamCodeConfig : ConfigForm
+    public partial class ExamCodeConfig : BaseForm
     {
-        //private List<JHExamRecord> _exams;
-        private List<ExamCode> _list;
+        //private List<JHClassRecord> _classes;
+        protected BackgroundWorker _worker;
+        protected AccessHelper _accessHelper;
+        private List<ExamCode_DomainMakeUp> _list;
 
         public ExamCodeConfig()
         {
             InitializeComponent();
+            InitAccessHelper();
+            InitWorker();
             //Init();
             Startup();
         }
 
-        //private void Init()
-        //{
-        //    _exams = new List<JHExamRecord>();
-        //}
-
-        protected override void DoWork(object sender, DoWorkEventArgs e)
+        private void InitAccessHelper()
         {
-            _list = _accessHelper.Select<ExamCode>();
-            //if (_list.Count <= 0)
-            //    _exams = JHExam.SelectAll();
+            _accessHelper = new AccessHelper();
         }
 
-        protected override void RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void InitWorker()
         {
-            dgv.SuspendLayout();
+            _worker = new BackgroundWorker();
+            _worker.DoWork += new DoWorkEventHandler(_worker_DoWork);
+            _worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_worker_RunWorkerCompleted);
+            picWaiting.Visible = true;
+            //_worker.RunWorkerAsync();
+        }
 
-            //foreach (var exam in _exams)
+
+
+        private void _worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            DoWork(sender, e);
+        }
+
+        private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            picWaiting.Visible = false;
+            RunWorkerCompleted(sender, e);
+        }
+
+
+        public void Startup()
+        {
+            _worker.RunWorkerAsync();
+        }
+
+        //private void Init()
+        //{
+        //    _classes = new List<JHClassRecord>();
+        //}
+
+        protected void DoWork(object sender, DoWorkEventArgs e)
+        {
+            _list = _accessHelper.Select<ExamCode_DomainMakeUp>();
+            //if (_list.Count <= 0)
+            //    _classes = JHClass.SelectAll();
+        }
+
+        protected void RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            dataGridViewX1.SuspendLayout();
+
+            //foreach (var cla in _classes)
             //{
             //    DataGridViewRow row = new DataGridViewRow();
-            //    row.CreateCells(dgv, exam.Name, "");
+            //    row.CreateCells(dataGridViewX1, cla.Name, "");
 
-            //    dgv.Rows.Add(row);
-            //    ValidateCodeFormat(row.Cells[chCode.Index],2);
+            //    dataGridViewX1.Rows.Add(row);
+            //    ValidateCodeFormat(row.Cells[chCode.Index],3);
             //}
 
             foreach (var record in _list)
             {
                 DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(dgv, "" + record.ExamName, "" + record.Code);
+                row.CreateCells(dataGridViewX1, record.ExamName, record.Code);
 
-                dgv.Rows.Add(row);
-                ValidateCodeFormat(row.Cells[chCode.Index],2);
+                dataGridViewX1.Rows.Add(row);
+                ValidateCodeFormat(row.Cells[chCode.Index], 2);
             }
 
-            dgv.ResumeLayout();
+            dataGridViewX1.ResumeLayout();
         }
 
-        protected override void Save()
+        protected void Save()
         {
-            dgv.EndEdit();
+            dataGridViewX1.EndEdit();
 
-            if (!IsValid(dgv))
+            if (!IsValid(dataGridViewX1))
             {
                 MsgBox.Show("請先修正錯誤");
                 return;
             }
 
-            List<ExamCode> newList = new List<ExamCode>();
-            foreach (DataGridViewRow row in dgv.Rows)
+            List<ExamCode_DomainMakeUp> newList = new List<ExamCode_DomainMakeUp>();
+            foreach (DataGridViewRow row in dataGridViewX1.Rows)
             {
                 if (row.IsNewRow) continue;
 
-                ExamCode ec = new ExamCode();
-                ec.ExamName = "" + row.Cells[chExamName.Index].Value;
-                ec.Code = "" + row.Cells[chCode.Index].Value;
-                newList.Add(ec);
+                ExamCode_DomainMakeUp cc = new ExamCode_DomainMakeUp();
+                cc.ExamName = "" + row.Cells[chExamName.Index].Value;
+                cc.Code = "" + row.Cells[chCode.Index].Value;
+                newList.Add(cc);
             }
             _accessHelper.DeletedValues(_list.ToArray());
             _accessHelper.InsertValues(newList.ToArray());
-            ExamCodeMapper.Instance.Reload();
+            ClassCodeMapper.Instance.Reload();
 
             this.DialogResult = DialogResult.OK;
         }
 
         private void dgv_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewCell cell = dgv.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            DataGridViewCell cell = dataGridViewX1.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
             if (cell.OwningColumn == chCode)
             {
-                ValidateCodeFormat(cell,2);
-                ValidateDuplication(dgv, chCode.Index, "代碼不能重覆");
+                ValidateCodeFormat(cell, 2);
+                ValidateDuplication(dataGridViewX1, chCode.Index, "代碼不能重覆");
             }
             else
             {
-                ValidateDuplication(dgv, chExamName.Index, "試別名稱不能重覆");
+                ValidateDuplication(dataGridViewX1, chExamName.Index, "試別名稱不能重覆");
             }
         }
 
-        protected override void Export()
+        protected void Export()
         {
-            ImportExport.Export(dgv, "匯出試別代碼設定");
+            ImportExport.Export(dataGridViewX1, "匯出試別代碼設定");
         }
 
-        protected override void Import()
+        protected void Import()
         {
-            ImportExport.Import(dgv, new List<string>() { "試別", "代碼" });
+            ImportExport.Import(dataGridViewX1, new List<string>() { "試別", "代碼" });
 
-            foreach (DataGridViewRow row in dgv.Rows)
+            foreach (DataGridViewRow row in dataGridViewX1.Rows)
             {
                 if (row.IsNewRow) continue;
                 DataGridViewCell cell = row.Cells[chCode.Index];
-                ValidateCodeFormat(cell,2);
+                ValidateCodeFormat(cell, 2);
             }
-            ValidateDuplication(dgv, chCode.Index, "代碼不能重覆");
-            ValidateDuplication(dgv, chExamName.Index, "試別名稱不能重覆");
+            ValidateDuplication(dataGridViewX1, chCode.Index, "代碼不能重覆");
+            ValidateDuplication(dataGridViewX1, chExamName.Index, "試別名稱不能重覆");
+        }
+
+
+
+        protected bool IsValid(DataGridView dataGridViewX1)
+        {
+            bool valid = true;
+
+            foreach (DataGridViewRow row in dataGridViewX1.Rows)
+            {
+                if (row.IsNewRow) continue;
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    if (!string.IsNullOrEmpty(cell.ErrorText))
+                    {
+                        valid &= false;
+                        break;
+                    }
+                }
+            }
+
+            return valid;
+        }
+
+
+        protected void ValidateDuplication(DataGridView dataGridViewX1, int index, string message)
+        {
+            List<string> codeList = new List<string>();
+            foreach (DataGridViewRow row in dataGridViewX1.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                DataGridViewCell runningCell = row.Cells[index];
+                if (string.IsNullOrEmpty("" + runningCell.Value)) continue;
+
+                if (!codeList.Contains("" + runningCell.Value))
+                {
+                    codeList.Add("" + runningCell.Value);
+                    runningCell.ErrorText = string.Empty;
+                }
+                else if (string.IsNullOrEmpty(runningCell.ErrorText))
+                    runningCell.ErrorText = message;
+            }
+        }
+
+        protected void ValidateCodeFormat(DataGridViewCell cell, int num)
+        {
+            int i;
+            string code = "" + cell.Value;
+            if (code.Length != num)
+                cell.ErrorText = "代碼必須為 " + num + " 位數";
+            else if (!int.TryParse(code, out i))
+                cell.ErrorText = "代碼必須為數字";
+            else
+                cell.ErrorText = "";
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            Export();
+        }
+
+        private void btnImport_Click(object sender, EventArgs e)
+        {
+            Import();
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

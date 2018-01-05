@@ -1,6 +1,6 @@
 ﻿namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
 {
-    partial class ClassCodeConfig
+    partial class DomainCodeConfig
     {
         /// <summary>
         /// Required designer variable.
@@ -35,7 +35,7 @@
             this.btnClose = new DevComponents.DotNetBar.ButtonX();
             this.btnSave = new DevComponents.DotNetBar.ButtonX();
             this.dataGridViewX1 = new DevComponents.DotNetBar.Controls.DataGridViewX();
-            this.chClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chDomainName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picWaiting)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewX1)).BeginInit();
@@ -114,7 +114,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewX1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewX1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.chClassName,
+            this.chDomainName,
             this.chCode});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
@@ -131,10 +131,10 @@
             this.dataGridViewX1.Size = new System.Drawing.Size(391, 255);
             this.dataGridViewX1.TabIndex = 9;
             // 
-            // chClassName
+            // chDomainName
             // 
-            this.chClassName.HeaderText = "班級";
-            this.chClassName.Name = "chClassName";
+            this.chDomainName.HeaderText = "領域";
+            this.chDomainName.Name = "chDomainName";
             // 
             // chCode
             // 
@@ -142,7 +142,7 @@
             this.chCode.HeaderText = "代碼";
             this.chCode.Name = "chCode";
             // 
-            // ClassCodeConfig
+            // DomainCodeConfig
             // 
             this.ClientSize = new System.Drawing.Size(404, 298);
             this.Controls.Add(this.btnImport);
@@ -152,8 +152,8 @@
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.dataGridViewX1);
             this.DoubleBuffered = true;
-            this.Name = "ClassCodeConfig";
-            this.Text = "補考班級代碼設定";
+            this.Name = "DomainCodeConfig";
+            this.Text = "補考領域代碼設定";
             ((System.ComponentModel.ISupportInitialize)(this.picWaiting)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewX1)).EndInit();
             this.ResumeLayout(false);
@@ -170,7 +170,7 @@
         protected DevComponents.DotNetBar.ButtonX btnClose;
         protected DevComponents.DotNetBar.ButtonX btnSave;
         private DevComponents.DotNetBar.Controls.DataGridViewX dataGridViewX1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chClassName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chDomainName;
         private System.Windows.Forms.DataGridViewTextBoxColumn chCode;
     }
 }

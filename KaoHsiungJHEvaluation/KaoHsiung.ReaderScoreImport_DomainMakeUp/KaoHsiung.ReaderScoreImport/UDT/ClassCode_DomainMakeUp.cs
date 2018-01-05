@@ -6,8 +6,8 @@ using FISCA.UDT;
 
 namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.UDT
 {
-    [TableName("ReaderScoreImport.ClassCode")]
-    public class ClassCode : ActiveRecord
+    [TableName("ReaderScoreImport.ClassCode_DomainMakeUp")]
+    public class ClassCode_DomainMakeUp : ActiveRecord
     {
         [Field(Field = "ClassName", Indexed = true)]
         public string ClassName { get; set; }

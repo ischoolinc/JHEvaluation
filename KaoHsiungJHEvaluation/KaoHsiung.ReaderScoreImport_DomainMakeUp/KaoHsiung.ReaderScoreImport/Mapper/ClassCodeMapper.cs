@@ -31,7 +31,7 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Mapper
 
             AccessHelper helper = new AccessHelper();
 
-            foreach (ClassCode item in helper.Select<ClassCode>())
+            foreach (ClassCode_DomainMakeUp item in helper.Select<ClassCode_DomainMakeUp>())
             {
                 if (!CodeMap.ContainsKey(item.Code))
                     CodeMap.Add(item.Code, item.ClassName);
