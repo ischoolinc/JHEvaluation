@@ -170,6 +170,9 @@
             // 
             this.chkScoreLimite.BackgroundStyle.Class = "";
             this.chkScoreLimite.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.chkScoreLimite.Checked = true;
+            this.chkScoreLimite.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkScoreLimite.CheckValue = "Y";
             this.chkScoreLimite.Location = new System.Drawing.Point(17, 78);
             this.chkScoreLimite.Name = "chkScoreLimite";
             this.chkScoreLimite.Size = new System.Drawing.Size(201, 23);
