@@ -36,6 +36,9 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Mapper
                 if (!CodeMap.ContainsKey(item.Code))
                     CodeMap.Add(item.Code, item.ExamName);
             }
+
+
+
         }
     }
 }

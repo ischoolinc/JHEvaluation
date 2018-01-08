@@ -7,7 +7,7 @@ using KaoHsiung.ReaderScoreImport_DomainMakeUp.UDT;
 
 namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Mapper
 {
-    internal class SubjectCodeMapper : CodeMapper
+    internal class DomainCodeMapper : CodeMapper
     {
         private static CodeMapper _instance;
 
@@ -16,12 +16,12 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Mapper
             get
             {
                 if (_instance == null)
-                    _instance = new SubjectCodeMapper();
+                    _instance = new DomainCodeMapper();
                 return _instance;
             }
         }
 
-        private SubjectCodeMapper()
+        private DomainCodeMapper()
         {
         }
 

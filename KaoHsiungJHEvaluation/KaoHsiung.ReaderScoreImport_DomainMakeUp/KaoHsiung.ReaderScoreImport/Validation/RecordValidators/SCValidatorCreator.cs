@@ -20,7 +20,7 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Validation.RecordValidators
 
         public List<string> AttendCourseIDs { get { return _attendCourseIDs; } }
 
-        public SCValidatorCreator(List<JHStudentRecord> studentList, List<JHCourseRecord> courseList, List<JHSCAttendRecord> scaList)
+        public SCValidatorCreator(List<JHStudentRecord> studentList)
         {
             _studentDict = new StudentNumberDictionary();
             _courseDict = new Dictionary<string, JHCourseRecord>();
@@ -39,26 +39,26 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Validation.RecordValidators
                 _studentCourseInfo.Add(student);
             }
 
-            foreach (JHCourseRecord course in courseList)
-            {
-                if (!_courseDict.ContainsKey(course.ID))
-                    _courseDict.Add(course.ID, course);
-            }
+            //foreach (JHCourseRecord course in courseList)
+            //{
+            //    if (!_courseDict.ContainsKey(course.ID))
+            //        _courseDict.Add(course.ID, course);
+            //}
 
             //Linq
             var student_ids = from student in studentList select student.ID;
 
             //foreach (JHSCAttendRecord sc in JHSCAttend.Select(student_ids.ToList<string>(), null, null, "" + schoolYear, "" + semester))
-            foreach (JHSCAttendRecord sc in scaList)
-            {
-                if (!_studentCourseInfo.ContainsID(sc.RefStudentID)) continue;
-                if (!_courseDict.ContainsKey(sc.RefCourseID)) continue;
+            //foreach (JHSCAttendRecord sc in scaList)
+            //{
+            //    if (!_studentCourseInfo.ContainsID(sc.RefStudentID)) continue;
+            //    if (!_courseDict.ContainsKey(sc.RefCourseID)) continue;
 
-                if (!_attendCourseIDs.Contains(sc.RefCourseID))
-                    _attendCourseIDs.Add(sc.RefCourseID);
+            //    if (!_attendCourseIDs.Contains(sc.RefCourseID))
+            //        _attendCourseIDs.Add(sc.RefCourseID);
 
-                _studentCourseInfo.AddCourse(sc.RefStudentID, _courseDict[sc.RefCourseID]);
-            }
+            //    _studentCourseInfo.AddCourse(sc.RefStudentID, _courseDict[sc.RefCourseID]);
+            //}
         }
 
         internal static string GetStudentNumberFormat(string studentNumber)

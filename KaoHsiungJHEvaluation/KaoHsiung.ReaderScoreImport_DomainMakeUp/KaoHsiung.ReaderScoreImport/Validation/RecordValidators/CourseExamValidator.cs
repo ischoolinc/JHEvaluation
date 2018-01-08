@@ -38,11 +38,11 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Validation.RecordValidators
         public string Validate(DataRecord record)
         {
             List<JHCourseRecord> courses = new List<JHCourseRecord>();
-            foreach (JHCourseRecord course in _studentCourseInfo.GetCourses(record.StudentNumber))
-            {
-                if (record.Subjects.Contains(course.Subject))
-                    courses.Add(course);
-            }
+            //foreach (JHCourseRecord course in _studentCourseInfo.GetCourses(record.StudentNumber))
+            //{
+            //    if (record.Subjects.Contains(course.Subject))
+            //        courses.Add(course);
+            //}
             StringBuilder builder = new StringBuilder("");
             foreach (JHCourseRecord course in courses)
             {

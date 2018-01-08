@@ -22,7 +22,7 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Model
         public string ClassCode { get; set; }
         public string SeatNo { get; set; }
         public string ExamCode { get; set; }
-        public string SubjectCode { get; set; }
+        public string DomainCode { get; set; }
         public string Score { get; set; }
 
         public RawData(string filename, string original)
@@ -38,7 +38,7 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Model
                 StudentNumber = match.Groups[1].Value;
                 ClassCode = match.Groups[2].Value;
                 ExamCode = match.Groups[3].Value;
-                SubjectCode = match.Groups[4].Value;
+                DomainCode = match.Groups[4].Value;
                 Score = match.Groups[5].Value;
             }
             else { } // 理論上，進來的資料格式都應該正確。

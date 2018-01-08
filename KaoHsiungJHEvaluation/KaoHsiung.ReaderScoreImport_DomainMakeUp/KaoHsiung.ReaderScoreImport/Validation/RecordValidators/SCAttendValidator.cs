@@ -20,24 +20,25 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp.Validation.RecordValidators
         public string Validate(DataRecord record)
         {
             string studentNumber = record.StudentNumber;
-            List<string> subjects = new List<string>(record.Subjects);
-            foreach (JHCourseRecord course in _studentCourseInfo.GetCourses(record.StudentNumber))
-                subjects.Remove(course.Subject);
+            //List<string> subjects = new List<string>(record.Subjects);
+            //foreach (JHCourseRecord course in _studentCourseInfo.GetCourses(record.StudentNumber))
+            //    subjects.Remove(course.Subject);
 
-            if (subjects.Count > 0)
-            {
-                StringBuilder builder = new StringBuilder("");
-                foreach (string s in subjects)
-                    builder.Append(s + "、");
-                string result = builder.ToString();
-                if (result.EndsWith("、")) result = result.Substring(0, result.Length - 1);
-                if (_studentCourseInfo.ContainsStudentNumber(record.StudentNumber))
-                    return string.Format("學生「{0}」並沒有修習科目「{1}」。", _studentCourseInfo.GetStudentName(record.StudentNumber), result);
-                else
-                    return string.Empty;
-            }
-            else
-                return string.Empty;
+            //if (subjects.Count > 0)
+            //{
+            //    StringBuilder builder = new StringBuilder("");
+            //    foreach (string s in subjects)
+            //        builder.Append(s + "、");
+            //    string result = builder.ToString();
+            //    if (result.EndsWith("、")) result = result.Substring(0, result.Length - 1);
+            //    if (_studentCourseInfo.ContainsStudentNumber(record.StudentNumber))
+            //        return string.Format("學生「{0}」並沒有修習科目「{1}」。", _studentCourseInfo.GetStudentName(record.StudentNumber), result);
+            //    else
+            //        return string.Empty;
+            //}
+            //else
+            //    return string.Empty;
+            return string.Empty;
         }
 
         #endregion

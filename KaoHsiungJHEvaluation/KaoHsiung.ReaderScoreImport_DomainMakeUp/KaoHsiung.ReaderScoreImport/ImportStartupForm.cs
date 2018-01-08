@@ -30,15 +30,22 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
         private DataValidator<DataRecord> _dataRecordValidator;
 
         private List<FileInfo> _files;
-        private List<JHSCETakeRecord> _addScoreList;
-        private List<JHSCETakeRecord> _deleteScoreList;
+
+        private List<JHSemesterScoreRecord> _updateMakeUpScoreList = new List<JHSemesterScoreRecord>();
+        private List<JHSemesterScoreRecord> _duplicateMakeUpScoreList = new List<JHSemesterScoreRecord>();
+
+        //記錄錯誤訊息使用
+        private List<string> msgList = new List<string>();
+
+        //記錄重覆補考成績錯誤訊息使用
+        private Dictionary<string, string> msg_DuplicatedDict = new Dictionary<string, string>();
 
         /// <summary>
         /// 儲存畫面上學號長度
         /// </summary>
         K12.Data.Configuration.ConfigData cd;
 
-        private string _StudentNumberLenght = "國中匯入讀卡學號長度";
+        private string _StudentNumberLenght = "國中匯入補考讀卡學號長度";
         private string _StudentNumberLenghtName = "StudentNumberLenght";
 
         private EffortMapper _effortMapper;
@@ -115,58 +122,65 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                 List<JHStudentRecord> studentList = GetInSchoolStudents();
                 
                 List<string> s_ids = new List<string>();
-                Dictionary<string, List<string>> studentNumberToStudentIDs = new Dictionary<string, List<string>>();
+                Dictionary<string, string> studentNumberToStudentIDs = new Dictionary<string, string>();
                 foreach (JHStudentRecord student in studentList)
                 {
                     string sn = SCValidatorCreator.GetStudentNumberFormat(student.StudentNumber);
                     if (!studentNumberToStudentIDs.ContainsKey(sn))
-                        studentNumberToStudentIDs.Add(sn, new List<string>());
-                    studentNumberToStudentIDs[sn].Add(student.ID);
+                        studentNumberToStudentIDs.Add(sn, student.ID);                    
                 }
+
+                //紀錄現在所有txt 上 的學號，以處理重覆學號學號問題
+                List<string> s_numbers = new List<string>();
+
+
                 foreach (var dr in drCollection)
                 {
                     if (studentNumberToStudentIDs.ContainsKey(dr.StudentNumber))
-                        s_ids.AddRange(studentNumberToStudentIDs[dr.StudentNumber]);
+                    {
+                        s_ids.Add(studentNumberToStudentIDs[dr.StudentNumber]);
+                    }
+                    else
+                    {
+                        //學號不存在系統中，下面的Validator 會進行處理
+
+                    }
+
+                    //2017/1/8 穎驊註解， 原本的程式碼並沒有驗證學號重覆的問題，且無法在他Validator 的處理邏輯加入，故在此驗證
+                    if (!s_numbers.Contains(dr.StudentNumber))
+                    {
+                        s_numbers.Add(dr.StudentNumber);
+                    }
+                    else
+                    {
+                        msgList.Add("學號:"+dr.StudentNumber+"，資料重覆，請檢察資料來源txt是否有重覆填寫的學號資料。");
+
+                    }
                 }
 
                 studentList.Clear();
 
-                _worker.ReportProgress(0, "取得課程資料…");
-                List<JHCourseRecord> courseList = JHCourse.SelectBySchoolYearAndSemester(SchoolYear, Semester);
-                List<JHAEIncludeRecord> aeList = JHAEInclude.SelectAll();
+                _worker.ReportProgress(0, "取得學期領域成績…");
+                List<JHSemesterScoreRecord> jhssr_list = JHSemesterScore.SelectBySchoolYearAndSemester(s_ids, SchoolYear, Semester);
 
-                //List<JHSCAttendRecord> scaList = JHSCAttend.SelectAll();
-                var c_ids = from course in courseList select course.ID;
-                _worker.ReportProgress(0, "取得修課資料…");
-                //List<JHSCAttendRecord> scaList2 = JHSCAttend.SelectByStudentIDAndCourseID(s_ids, c_ids.ToList<string>());
-                List<JHSCAttendRecord> scaList = new List<JHSCAttendRecord>();
-                FunctionSpliter<string, JHSCAttendRecord> spliter = new FunctionSpliter<string, JHSCAttendRecord>(300, 3);
-                spliter.Function = delegate(List<string> part)
-                {
-                    return JHSCAttend.Select(part, c_ids.ToList<string>(), null, SchoolYear.ToString(), Semester.ToString());
-                };
-                scaList = spliter.Execute(s_ids);
-                
-                _worker.ReportProgress(0, "取得試別資料…");
-                List<JHExamRecord> examList = JHExam.SelectAll();
                 #endregion
 
                 #region 註冊驗證
                 _worker.ReportProgress(0, "載入驗證規則…");
-                _rawDataValidator.Register(new SubjectCodeValidator());
+                _rawDataValidator.Register(new DomainCodeValidator());
                 _rawDataValidator.Register(new ClassCodeValidator());
                 _rawDataValidator.Register(new ExamCodeValidator());
 
-                SCValidatorCreator scCreator = new SCValidatorCreator(JHStudent.SelectByIDs(s_ids), courseList, scaList);
+                SCValidatorCreator scCreator = new SCValidatorCreator(JHStudent.SelectByIDs(s_ids));
                 _dataRecordValidator.Register(scCreator.CreateStudentValidator());
-                _dataRecordValidator.Register(new ExamValidator(examList));
-                _dataRecordValidator.Register(scCreator.CreateSCAttendValidator());
-                _dataRecordValidator.Register(new CourseExamValidator(scCreator.StudentCourseInfo, aeList, examList));
+                //_dataRecordValidator.Register(new ExamValidator(examList));
+                //_dataRecordValidator.Register(scCreator.CreateSCAttendValidator());
+                //_dataRecordValidator.Register(new CourseExamValidator(scCreator.StudentCourseInfo, aeList, examList));
                 #endregion
 
                 #region 進行驗證
                 _worker.ReportProgress(0, "進行驗證中…");
-                List<string> msgList = new List<string>();
+                
 
                 foreach (RawData rawData in rdCollection)
                 {
@@ -192,72 +206,104 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                 #endregion
 
                 #region 取得學生的評量成績
-                _deleteScoreList.Clear();
-                _addScoreList.Clear();
+                _duplicateMakeUpScoreList.Clear();
+                _updateMakeUpScoreList.Clear();
 
-                //var student_ids = from student in scCreator.StudentNumberDictionary.Values select student.ID;
-                //List<string> course_ids = scCreator.AttendCourseIDs;
+                //Dictionary<string, JHSCETakeRecord> sceList = new Dictionary<string, JHSCETakeRecord>();
+                //FunctionSpliter<string, JHSCETakeRecord> spliterSCE = new FunctionSpliter<string, JHSCETakeRecord>(300, 3);
+                //spliterSCE.Function = delegate(List<string> part)
+                //{
+                //    return JHSCETake.Select(null, null, null, null, part);
+                //};
+                //foreach (JHSCETakeRecord sce in spliterSCE.Execute(scaIDs.ToList()))
+                //{
+                //    string key = GetCombineKey(sce.RefStudentID, sce.RefCourseID, sce.RefExamID);
+                //    if (!sceList.ContainsKey(key))
+                //        sceList.Add(key, sce);
+                //}
 
-                var scaIDs = from sca in scaList select sca.ID;
+                //Dictionary<string, JHExamRecord> examTable = new Dictionary<string, JHExamRecord>();
+                //Dictionary<string, JHSCAttendRecord> scaTable = new Dictionary<string, JHSCAttendRecord>();
 
-                Dictionary<string, JHSCETakeRecord> sceList = new Dictionary<string, JHSCETakeRecord>();
-                FunctionSpliter<string, JHSCETakeRecord> spliterSCE = new FunctionSpliter<string, JHSCETakeRecord>(300, 3);
-                spliterSCE.Function = delegate(List<string> part)
-                {
-                    return JHSCETake.Select(null, null, null, null, part);
-                };
-                foreach (JHSCETakeRecord sce in spliterSCE.Execute(scaIDs.ToList()))
-                {
-                    string key = GetCombineKey(sce.RefStudentID, sce.RefCourseID, sce.RefExamID);
-                    if (!sceList.ContainsKey(key))
-                        sceList.Add(key, sce);
-                }
+                //foreach (JHExamRecord exam in examList)
+                //    if (!examTable.ContainsKey(exam.Name))
+                //        examTable.Add(exam.Name, exam);
 
-                Dictionary<string, JHExamRecord> examTable = new Dictionary<string, JHExamRecord>();
-                Dictionary<string, JHSCAttendRecord> scaTable = new Dictionary<string, JHSCAttendRecord>();
+                //foreach (JHSCAttendRecord sca in scaList)
+                //{
+                //    string key = GetCombineKey(sca.RefStudentID, sca.RefCourseID);
+                //    if (!scaTable.ContainsKey(key))
+                //        scaTable.Add(key, sca);
+                //}
 
-                foreach (JHExamRecord exam in examList)
-                    if (!examTable.ContainsKey(exam.Name))
-                        examTable.Add(exam.Name, exam);
-
-                foreach (JHSCAttendRecord sca in scaList)
-                {
-                    string key = GetCombineKey(sca.RefStudentID, sca.RefCourseID);
-                    if (!scaTable.ContainsKey(key))
-                        scaTable.Add(key, sca);
-                }
-
+                //2018/1/8 穎驊新增
+                //填寫補考成績
                 foreach (DataRecord dr in drCollection)
-                {
-                    JHStudentRecord student = student = scCreator.StudentNumberDictionary[dr.StudentNumber];
-                    JHExamRecord exam = examTable[dr.Exam];
-                    List<JHCourseRecord> courses = new List<JHCourseRecord>();
-                    foreach (JHCourseRecord course in scCreator.StudentCourseInfo.GetCourses(dr.StudentNumber))
+                {                   
+                    // 利用學號 將學生的isd 對應出來
+                    string s_id = studentNumberToStudentIDs[dr.StudentNumber];
+
+                    // 紀錄學生是否有學期成績，如果連學期成績都沒有，本補考成績將會無法匯入(因為不合理)
+                    bool haveSemesterRecord = false;
+
+                    foreach (JHSemesterScoreRecord jhssr in jhssr_list)
                     {
-                        if (dr.Subjects.Contains(course.Subject))
-                            courses.Add(course);
+                        if (jhssr.RefStudentID == s_id)
+                        {
+                            haveSemesterRecord = true;
+
+                            if (jhssr.Domains.ContainsKey(dr.Domain))
+                            {
+                                // 假如原本已經有補考成績，必須將之加入waring_list，讓使用者決定是否真的要覆蓋
+                                if (jhssr.Domains[dr.Domain].ScoreMakeup != null)
+                                {
+                                    string warning = "學號:" + dr.StudentNumber + "學生，在學年度: " + SchoolYear + "，學期: " + Semester + "，領域: " + dr.Domain + "已有補考成績: " + jhssr.Domains[dr.Domain].ScoreMakeup + "，本次匯入將會將其覆蓋取代。";
+
+                                    _duplicateMakeUpScoreList.Add(jhssr);
+
+                                    if (!msg_DuplicatedDict.ContainsKey(s_id))
+                                    {
+                                        msg_DuplicatedDict.Add(s_id, warning);
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                    
+                                    jhssr.Domains[dr.Domain].ScoreMakeup = dr.Score;
+
+                                    _updateMakeUpScoreList.Add(jhssr);
+                                }
+                                else
+                                {
+                                    jhssr.Domains[dr.Domain].ScoreMakeup = dr.Score;
+
+                                    _updateMakeUpScoreList.Add(jhssr);
+                                }                                
+                            }
+                            else
+                            {
+                                // 2018/1/8 穎驊註解，針對假如該學生在當學期成績卻沒有其領域成績時，跳出提醒，因為正常情境是領域成績計算出來不及格，才需要補考。
+                                msgList.Add("學號:" + dr.StudentNumber + "學生，在學年度:" + SchoolYear + "，學期:" + Semester + "，並無領域:" + dr.Domain + "成績，請先至學生上確認是否已有結算資料。");
+                            }
+                        }
                     }
 
-                    foreach (JHCourseRecord course in courses)
+                    if (!haveSemesterRecord)
                     {
-                        string key = GetCombineKey(student.ID, course.ID, exam.ID);
-
-                        if (sceList.ContainsKey(key))
-                            _deleteScoreList.Add(sceList[key]);
-
-                        JHSCETakeRecord jh = new JHSCETakeRecord();
-                        KH.JHSCETakeRecord sceNew = new KH.JHSCETakeRecord(jh);
-                        sceNew.RefCourseID = course.ID;
-                        sceNew.RefExamID = exam.ID;
-                        sceNew.RefSCAttendID = scaTable[GetCombineKey(student.ID, course.ID)].ID;
-                        sceNew.RefStudentID = student.ID;
-                        sceNew.Score = dr.Score;
-                        sceNew.Effort = _effortMapper.GetCodeByScore(dr.Score);
-                        _addScoreList.Add(sceNew.AsJHSCETakeRecord());
+                        msgList.Add("學號:" + dr.StudentNumber + "學生，在學年度:" + SchoolYear + "，學期:" + Semester + "，並無學期成績，請先至學生上確認是否已有結算資料。");
                     }
+                 
                 }
-                #endregion
 
+                if (msgList.Count > 0)
+                {
+                    e.Result = msgList;
+                    return;
+                }
+
+                #endregion
+              
                 e.Result = null;
                 #endregion
             };
@@ -268,8 +314,8 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                 {
                     if (!_upload.IsBusy)
                     {
-                        //如果學生身上已有成績，則提醒使用者
-                        if (_deleteScoreList.Count > 0)
+                        //如果學生身上已有補考成績，則提醒使用者
+                        if (_duplicateMakeUpScoreList.Count > 0)
                         {
                             _warn.RunWorkerAsync();
                         }
@@ -319,35 +365,6 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
             //};
             _upload.DoWork += new DoWorkEventHandler(_upload_DoWork);
 
-            //_upload.DoWork += delegate
-            //{
-                    
-
-                //#region Upload DoWork
-                //Framework.MultiThreadWorker<JHSCETakeRecord> multi = new Framework.MultiThreadWorker<JHSCETakeRecord>();
-                //multi.MaxThreads = 3;
-                //multi.PackageSize = 500;
-                //multi.PackageWorker += delegate(object sender, Framework.PackageWorkEventArgs<JHSCETakeRecord> e)
-                //{
-                //    JHSCETake.Delete(e.List);
-                //};
-                //multi.Run(_deleteScoreList);
-
-                //Framework.MultiThreadWorker<JHSCETakeRecord> multi2 = new Framework.MultiThreadWorker<JHSCETakeRecord>();
-                //multi2.MaxThreads = 3;
-                //multi2.PackageSize = 500;
-                //multi2.PackageWorker += delegate(object sender, Framework.PackageWorkEventArgs<JHSCETakeRecord> e)
-                //{
-                //    JHSCETake.Insert(e.List);
-                //    lock (_upload)
-                //    {
-                //        _upload.ReportProgress(e.List.Count);
-                //    }
-                //};
-                //multi2.Run(_addScoreList);
-                //#endregion
-            //};
-
 
             _upload.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_upload_RunWorkerCompleted);
 
@@ -366,26 +383,10 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
 
                 WarningForm form = new WarningForm();
                 int count = 0;
-                foreach (JHSCETakeRecord sce in _deleteScoreList)
-                {
-                    // 當成績資料是空值跳過
-                    if (sce.Score.HasValue == false && sce.Effort.HasValue == false && string.IsNullOrEmpty(sce.Text))
-                        continue;
-                    
-                        count++;
-
-                    JHStudentRecord student = JHStudent.SelectByID(sce.RefStudentID);
-                    JHCourseRecord course = JHCourse.SelectByID(sce.RefCourseID);
-                    string exam = (examDict.ContainsKey(sce.RefExamID) ? examDict[sce.RefExamID] : "<未知的試別>");
-
-                    string s = "";
-                    if (student.Class != null) s += student.Class.Name;
-                    if (!string.IsNullOrEmpty("" + student.SeatNo)) s += " " + student.SeatNo + "號";
-                    if (!string.IsNullOrEmpty(student.StudentNumber)) s += " (" + student.StudentNumber + ")";
-                    s += " " + student.Name;
-
-                    form.Add(student.ID, s, string.Format("學生在「{0}」課程「{1}」中已有成績。", course.Name, exam));
-                    _warn.ReportProgress((int)(count * 100 / _deleteScoreList.Count), "產生警告訊息...");
+                foreach (JHSemesterScoreRecord sce in _duplicateMakeUpScoreList)
+                {              
+                    form.Add(sce.RefStudentID, sce.Student.Name, msg_DuplicatedDict[sce.RefStudentID]);
+                    _warn.ReportProgress((int)(count * 100 / _duplicateMakeUpScoreList.Count), "產生警告訊息...");
                 }
 
                 e.Result = form;
@@ -412,13 +413,12 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
             };
 
             _files = new List<FileInfo>();
-            _addScoreList = new List<JHSCETakeRecord>();
-            _deleteScoreList = new List<JHSCETakeRecord>();
+                        
         }
 
         void _upload_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            FISCA.Presentation.MotherForm.SetStatusBarMessage("成績上傳中…", (int)(counter * 100f / (double)_addScoreList.Count));
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("成績上傳中…", (int)(counter * 100f / (double)_updateMakeUpScoreList.Count));
         }
 
         // 上傳成績完成
@@ -426,7 +426,6 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
         {
             try
             {
-
                 string msg = "";
                 if (e.Result != null)
                     msg = e.Result.ToString();
@@ -444,59 +443,39 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                 ControlEnable = true;
             }
             catch (Exception ex)
-            { 
-                
-            }
-        }
+            {
 
+            }
+            //關閉視窗
+            this.Close();
+        }
 
         // 上傳
         void _upload_DoWork(object sender, DoWorkEventArgs e)
         {
                 // 傳送與回傳筆數
                 int SendCount = 0, RspCount = 0;
-                // 刪除舊資料
-                SendCount = _deleteScoreList.Count;
-
-                // 取得 del id
-                List<string> delIDList = _deleteScoreList.Select(x => x.ID).ToList();
-
-                // 執行
-                try
-                {
-                    JHSCETake.Delete(_deleteScoreList);
-                }
-                catch (Exception ex)
-                {
-                    e.Result = ex.Message;
-                    e.Cancel = true;
-                }
-            //    RspCount = JHSCETake.SelectByIDs(delIDList).Count;
-
-            //// 刪除未完成
-            //    if (RspCount > 0)
-            //        e.Cancel = true;
-
+    
                 try
                 {
 
                     //新增資料，分筆上傳
-                    Dictionary<int, List<JHSCETakeRecord>> batchDict = new Dictionary<int, List<JHSCETakeRecord>>();
+                    Dictionary<int, List<JHSemesterScoreRecord>> batchDict = new Dictionary<int, List<JHSemesterScoreRecord>>();
                     int bn = 150;
-                    int n1 = (int)(_addScoreList.Count / bn);
+                    int n1 = (int)(_updateMakeUpScoreList.Count / bn);
 
-                    if ((_addScoreList.Count % bn) != 0)
+                    if ((_updateMakeUpScoreList.Count % bn) != 0)
                         n1++;
 
                     for (int i = 0; i <= n1; i++)
-                        batchDict.Add(i, new List<JHSCETakeRecord>());
+                        batchDict.Add(i, new List<JHSemesterScoreRecord>());
 
 
-                    if (_addScoreList.Count > 0)
+                    if (_updateMakeUpScoreList.Count > 0)
                     {
                         int idx = 0, count = 1;
                         // 分批
-                        foreach (JHSCETakeRecord rec in _addScoreList)
+                        foreach (JHSemesterScoreRecord rec in _updateMakeUpScoreList)
                         {
                             // 100 分一批
                             if ((count % bn) == 0)
@@ -507,9 +486,8 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                         }
                     }
 
-
                     // 上傳資料
-                    foreach (KeyValuePair<int, List<JHSCETakeRecord>> data in batchDict)
+                    foreach (KeyValuePair<int, List<JHSemesterScoreRecord>> data in batchDict)
                     {
                         SendCount = 0; RspCount = 0;
                         if (data.Value.Count > 0)
@@ -517,7 +495,7 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                             SendCount = data.Value.Count;
                             try
                             {
-                                JHSCETake.Insert(data.Value);
+                                JHSemesterScore.Update(data.Value);                                
                             }
                             catch (Exception ex)
                             {
@@ -529,7 +507,7 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
 
                         }
                     }
-                    e.Result = _addScoreList.Count;
+                    e.Result = _updateMakeUpScoreList.Count;
                 }
                 catch (Exception ex)
                 {
@@ -645,5 +623,7 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
         {
             FISCA.Presentation.MotherForm.SetStatusBarMessage("");
         }
+
+    
     }
 }

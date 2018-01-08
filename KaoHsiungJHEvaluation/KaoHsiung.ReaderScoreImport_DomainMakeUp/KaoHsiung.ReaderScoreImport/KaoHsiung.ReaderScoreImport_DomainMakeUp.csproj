@@ -103,10 +103,8 @@
       <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="K12.Data, Version=1.0.2.13, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="K12.Data">
       <HintPath>Library\K12.Data.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="K12.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -178,7 +176,7 @@
     <Compile Include="Mapper\ClassCodeMapper.cs" />
     <Compile Include="Mapper\CodeMapper.cs" />
     <Compile Include="Mapper\ExamCodeMapper.cs" />
-    <Compile Include="Mapper\SubjectCodeMapper.cs" />
+    <Compile Include="Mapper\DomainCodeMapper.cs" />
     <Compile Include="Model\DataRecord.cs" />
     <Compile Include="Model\RawData.cs" />
     <Compile Include="Program.cs" />
@@ -248,7 +246,7 @@
     <Compile Include="Validation\RecordValidators\SCAttendValidator.cs" />
     <Compile Include="Validation\RecordValidators\SCValidatorCreator.cs" />
     <Compile Include="Validation\RecordValidators\StudentValidator.cs" />
-    <Compile Include="Validation\RecordValidators\SubjectCodeValidator.cs" />
+    <Compile Include="Validation\RecordValidators\DomainCodeValidator.cs" />
     <Compile Include="Validation\ValidateTextFiles.cs" />
     <Compile Include="WarningForm.cs">
       <SubType>Form</SubType>
