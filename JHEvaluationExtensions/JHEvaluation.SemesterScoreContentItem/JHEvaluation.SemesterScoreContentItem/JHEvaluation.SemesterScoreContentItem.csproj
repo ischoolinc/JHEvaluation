@@ -138,9 +138,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\DataGridViewExtendedControls.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Controls\DataGridViewExtendedControls.cs" />
     <Compile Include="Forms\SemesterScoreEditor.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -305,7 +305,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         //填入dscore.Value
                         if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
                             dscore.BetterScoreSelection(setting.DomainScoreLimit);
-                    }
+                    }                                      
                     #endregion
                     #region 高雄專用語文領域成績結算
                     //高雄市特有領域成績
@@ -375,6 +375,15 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 dscores.Remove(domainName);
                         }
                     }
+                }
+
+                //2018/1/8 穎驊因應高雄項目[11-01][02] 學期領域成績結算BUG 問題新增
+                // 將所有的領域成績一併擇優計算，以防止有些僅有領域成績，但是卻沒有科目成績的領域，其補考成績被漏算的問題
+                foreach (var domain in dscores.ToArray())
+                {
+                    SemesterDomainScore dscore = dscores[domain];
+                    //擇優
+                    dscore.BetterScoreSelection(setting.DomainScoreLimit);
                 }
 
 
