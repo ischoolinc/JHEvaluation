@@ -76,6 +76,11 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
 
         public ImportStartupForm()
         {
+            // 每次開啟，就重新載入 代碼對照
+            KaoHsiung.ReaderScoreImport_DomainMakeUp.Mapper.ClassCodeMapper.Instance.Reload();
+            KaoHsiung.ReaderScoreImport_DomainMakeUp.Mapper.ExamCodeMapper.Instance.Reload();
+            KaoHsiung.ReaderScoreImport_DomainMakeUp.Mapper.DomainCodeMapper.Instance.Reload();
+
             InitializeComponent();
             InitializeSemesters();
 
@@ -91,7 +96,11 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                 lblMessage.Text = "" + e.UserState;
             };
             _worker.DoWork += delegate(object sender, DoWorkEventArgs e)
-            {                
+            {
+                //將錯誤訊息刪光，以便重新統計
+                msgList.Clear();
+
+
                 #region Worker DoWork
                 _worker.ReportProgress(0, "檢查讀卡文字格式…");
 
