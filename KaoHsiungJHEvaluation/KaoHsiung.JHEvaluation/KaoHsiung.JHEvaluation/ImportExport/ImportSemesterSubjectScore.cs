@@ -31,7 +31,8 @@ namespace KaoHsiung.JHEvaluation.ImportExport
             //wizard.ImportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "分數評量", "文字描述", "註記");
 
             //2015.1.27 Cloud新增
-            wizard.ImportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記");
+            //2017/6/16 穎驊新增，因應[02-02][06] 計算學期科目成績新增清空原成績模式 項目， 新增 "刪除"欄位，使使用者能匯入 刪除成績資料
+            wizard.ImportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記","刪除");
             
             wizard.RequiredFields.AddRange("領域", "科目", "學年度", "學期");
 
@@ -180,6 +181,14 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 e.ErrorFields.Add(field, "必須填入空白或數值");
                             }
                             break;
+
+                        case "刪除":
+                            if (value != "" && value != "是")
+                            {
+                                inputFormatPass &= false;
+                                e.ErrorFields.Add(field, "必須填入空白或 '是'");
+                            }
+                            break;
                     }
                 }
                 #endregion
@@ -265,6 +274,8 @@ namespace KaoHsiung.JHEvaluation.ImportExport
 
                 List<JHSemesterScoreRecord> insertList = new List<JHSemesterScoreRecord>();
                 List<JHSemesterScoreRecord> updateList = new List<JHSemesterScoreRecord>();
+
+                
                 //交叉比對各學生資料
                 #region 交叉比對各學生資料
                 foreach (string id in id_Rows.Keys)
@@ -332,7 +343,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                     //開始處理ImportScore
                     #region 開始處理ImportScore
                     foreach (SemesterInfo info in semesterImportScoreDictionary.Keys)
-                    {
+                    {                        
                         foreach (string subject in semesterImportScoreDictionary[info].Keys)
                         {
                             RowData data = semesterImportScoreDictionary[info][subject];
@@ -350,6 +361,8 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 if (semesterScoreDictionary[info].Subjects.ContainsKey(subject))
                                 {
                                     JHSemesterScoreRecord record = semesterScoreDictionary[info];
+
+                                    
 
                                     #region 直接修改已存在的成績資料的Detail
                                     foreach (string field in e.ImportFields)
@@ -466,6 +479,13 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                                     hasChanged = true;
                                                 }
                                                 break;
+                                            case "刪除":
+                                                if (value =="是")
+                                                {
+                                                    record.Subjects.Remove(subject);
+                                                    hasChanged = true;                                                    
+                                                }
+                                                break;
                                         }
                                     }
                                     #endregion
@@ -512,9 +532,12 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                             {
                                 //XmlElement newScore = doc.CreateElement("Subject");
                                 K12.Data.SubjectScore subjectScore = new K12.Data.SubjectScore();
+
+                                bool contain_deleted_words = false;
+
                                 #region 建立newScore
                                 //foreach (string field in new string[] { "領域", "科目", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記" })
-                                foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記" })
+                                foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記","刪除" })
                                 {
                                     if (e.ImportFields.Contains(field))
                                     {
@@ -581,19 +604,31 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                             case "註記":
                                                 subjectScore.Comment = value;
                                                 break;
+                                            case "刪除":
+                                                if (value == "是")
+                                                {
+                                                    contain_deleted_words = true;
+                                                }
+                                                break;
                                         }
                                         #endregion
                                     }
                                 }
                                 #endregion
                                 //subjectScoreInfo.AppendChild(newScore);
-                                JHSemesterScoreRecord record = semesterScoreDictionary[info];
-                                if (!record.Subjects.ContainsKey(subjectScore.Subject))
-                                    record.Subjects.Add(subjectScore.Subject, subjectScore);
-                                else
-                                    record.Subjects[subjectScore.Subject] = subjectScore;
 
-                                updateList.Add(record);
+                                if (!contain_deleted_words) 
+                                {
+                                    JHSemesterScoreRecord record = semesterScoreDictionary[info];
+
+                                    if (!record.Subjects.ContainsKey(subjectScore.Subject))
+                                        record.Subjects.Add(subjectScore.Subject, subjectScore);
+                                    else
+                                        record.Subjects[subjectScore.Subject] = subjectScore;
+
+                                    updateList.Add(record);
+                                
+                                }                                
                             }
                         }
                         #endregion
@@ -608,8 +643,12 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                         foreach (RowData row in insertNewSemesterScore[info])
                         {
                             K12.Data.SubjectScore subjectScore = new K12.Data.SubjectScore();
+
+
+                            bool contain_deleted_words = false;
+
                             //foreach (string field in new string[] { "領域", "科目", "權數", "節數", "分數評量", "努力程度", "文字描述", "註記" })
-                            foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記" })
+                            foreach (string field in new string[] { "領域", "科目", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記" ,"刪除"})
                             {
                                 if (e.ImportFields.Contains(field))
                                 {
@@ -674,6 +713,12 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                         case "註記":
                                             subjectScore.Comment = value;
                                             break;
+                                        case "刪除":
+                                            if (value == "是")
+                                            {
+                                                contain_deleted_words = true;
+                                            }                                            
+                                            break;
                                     }
                                 }
                             }
@@ -689,7 +734,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                             else
                                 record.Subjects[subjectScore.Subject] = subjectScore;
 
-                            insertList.Add(record);
+                            if (!contain_deleted_words) 
+                            {
+                                insertList.Add(record);
+                            }
+                            
                         }
                         //insertList.Add(new SmartSchool.Feature.Score.AddScore.InsertInfo(studentRec.StudentID, "" + sy, "" + se, gradeyear, "", subjectScoreInfo));
                     }

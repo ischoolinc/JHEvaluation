@@ -238,9 +238,7 @@
       <DependentUpon>ScoreInputForm.cs</DependentUpon>
     </Compile>
     <Compile Include="StudentExtendControls\Ribbon\GraduationScoreCalculation.cs" />
-    <Compile Include="StudentExtendControls\SemesterScoreItemRelated\DataGridViewExtendedControls.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="StudentExtendControls\SemesterScoreItemRelated\DataGridViewExtendedControls.cs" />
     <Compile Include="StudentExtendControls\SemesterScoreItemRelated\QuickInputSemesterScoreForm.cs">
       <SubType>Form</SubType>
     </Compile>
