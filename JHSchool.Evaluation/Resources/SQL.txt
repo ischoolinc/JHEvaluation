@@ -1,0 +1,107 @@
+WITH course_data_row AS(
+			 
+                SELECT
+                    4140::BIGINT AS id
+                 UNION ALL
+                SELECT
+                    4141::BIGINT AS id
+                
+) ,delete_sc_attend_data AS(
+	SELECT 
+		sc_attend.id AS sc_attend_id
+	FROM 
+		course_data_row
+		INNER JOIN sc_attend
+			ON sc_attend.ref_course_id = course_data_row.id		
+) ,delete_sce_take_data AS(
+	SELECT 
+		sce_take.id AS sce_take_id
+	FROM 
+		delete_sc_attend_data
+		INNER JOIN sce_take 
+			ON sce_take.ref_sc_attend_id = delete_sc_attend_data.sc_attend_id		
+) ,delete_sce_take AS(
+	DELETE
+	FROM
+		sce_take
+	WHERE sce_take.id IN (
+		SELECT delete_sce_take_data.sce_take_id
+		FROM delete_sce_take_data
+		LEFT OUTER JOIN sce_take 
+			ON delete_sce_take_data.sce_take_id = sce_take.id
+		)
+	RETURNING sce_take.*
+),delete_sc_attend AS(
+	DELETE
+	FROM
+		sc_attend
+	WHERE sc_attend.id IN (
+		SELECT delete_sc_attend_data.sc_attend_id
+		FROM delete_sc_attend_data
+		LEFT OUTER JOIN sc_attend 
+			ON delete_sc_attend_data.sc_attend_id = sc_attend.id
+		)
+	RETURNING sc_attend.*
+),delete_course AS(
+	DELETE
+	FROM
+		course
+	WHERE course.id IN (
+		SELECT course_data_row.id
+		FROM course_data_row
+		)
+	RETURNING course.*
+),insert_sce_take_log_student_data AS(
+INSERT INTO log(
+	actor
+	, action_type
+	, action
+	, target_category
+	, target_id
+	, server_time
+	, client_info
+	, action_by
+	, description
+)
+SELECT 
+	'admin'::TEXT AS actor
+	, 'Record' AS action_type
+	, '課程_刪除' AS action
+	, 'student'::TEXT AS target_category
+	, student.id AS target_id
+	, now() AS server_time
+	, '<ClientInfo><HostName>DESKTOP-PACK4MN</HostName><NetworkAdapterList><NetworkAdapter><IPAddress>fe80::bdad:881c:f3f7:a35%5</IPAddress><PhysicalAddress>00-1B-21-CF-95-D6</PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>fe80::18e:e2a3:5bea:22d%7</IPAddress><PhysicalAddress>FC-AA-14-41-41-EC</PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>fe80::e05b:d4ff:f1a:6580%8</IPAddress><PhysicalAddress>0A-00-27-00-00-08</PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>fe80::b4c9:63d1:54b6:4f6b%16</IPAddress><PhysicalAddress>6C-19-8F-DA-CD-EB</PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>fe80::940a:47bd:610b:3f95%3</IPAddress><PhysicalAddress>6C-19-8F-DA-CD-E9</PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>::1</IPAddress><PhysicalAddress></PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>2001:0:9d38:90d7:2408:7f:2dc2:2e0b</IPAddress><PhysicalAddress>00-00-00-00-00-00-00-E0</PhysicalAddress></NetworkAdapter></NetworkAdapterList></ClientInfo>' AS client_info
+	, '刪除_學生_課程評量成績'AS action_by   
+	, '學生「'|| student.name ||'」，課程「'|| course.course_name || '」修課紀錄，評量成績刪除，刪除內容:「'|| sce_take.extension ||'」 使用者「admin」，' AS description 
+FROM
+	delete_sce_take_data
+	LEFT OUTER JOIN sce_take ON sce_take.id = delete_sce_take_data.sce_take_id 	
+	LEFT OUTER JOIN sc_attend ON sc_attend.id = sce_take.ref_sc_attend_id
+	LEFT OUTER JOIN course ON course.id = sc_attend.ref_course_id 	
+	LEFT OUTER JOIN student ON student.id = sc_attend.ref_student_id
+
+)INSERT INTO log(
+	actor
+	, action_type
+	, action
+	, target_category
+	, target_id
+	, server_time
+	, client_info
+	, action_by
+	, description
+)
+SELECT 
+	'admin'::TEXT AS actor
+	, 'Record' AS action_type
+	, '課程_刪除' AS action
+	, 'course'::TEXT AS target_category
+	, course.id AS target_id
+	, now() AS server_time
+	, '<ClientInfo><HostName>DESKTOP-PACK4MN</HostName><NetworkAdapterList><NetworkAdapter><IPAddress>fe80::bdad:881c:f3f7:a35%5</IPAddress><PhysicalAddress>00-1B-21-CF-95-D6</PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>fe80::18e:e2a3:5bea:22d%7</IPAddress><PhysicalAddress>FC-AA-14-41-41-EC</PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>fe80::e05b:d4ff:f1a:6580%8</IPAddress><PhysicalAddress>0A-00-27-00-00-08</PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>fe80::b4c9:63d1:54b6:4f6b%16</IPAddress><PhysicalAddress>6C-19-8F-DA-CD-EB</PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>fe80::940a:47bd:610b:3f95%3</IPAddress><PhysicalAddress>6C-19-8F-DA-CD-E9</PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>::1</IPAddress><PhysicalAddress></PhysicalAddress></NetworkAdapter><NetworkAdapter><IPAddress>2001:0:9d38:90d7:2408:7f:2dc2:2e0b</IPAddress><PhysicalAddress>00-00-00-00-00-00-00-E0</PhysicalAddress></NetworkAdapter></NetworkAdapterList></ClientInfo>' AS client_info
+	, '刪除_課程_課程'AS action_by   
+	, '課程「'|| course.course_name || '」，課程刪除，包含其所有修課學生修課紀錄、評量成績，使用者「admin」，' AS description 
+FROM
+	course_data_row
+	LEFT OUTER JOIN course ON course.id = course_data_row.id
+                

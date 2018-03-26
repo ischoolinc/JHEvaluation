@@ -117,44 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="btnAddCourse" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\btnaddcourse.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="btnDeleteCourse" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\btndeletecourse.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="btnDeleteStudent_Image" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\btndeletestudent_image.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="calcScore" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\calcscore.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="course_plan" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\course_plan.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="exam_write_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\exam_write_64.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="graduation_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\graduation_64.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="paste_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\paste_64.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="對照表" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\對照表.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="成績輸入" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\成績輸入.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="成績輸入檢查" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\成績輸入檢查.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="評量名稱管理" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\評量名稱管理.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="評量設定" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\評量設定.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

@@ -11,6 +11,11 @@ using JHSchool.Evaluation.EduAdminExtendControls.Ribbon;
 using System;
 using DataRationality;
 using K12.Presentation;
+using FISCA.Data;
+using K12.Data;
+using FISCA.Authentication;
+using FISCA.LogAgent;
+using System.IO;
 
 namespace JHSchool.Evaluation
 {
@@ -61,7 +66,7 @@ namespace JHSchool.Evaluation
             //Course.Instance.AddDetailBulider(new JHSchool.Legacy.ContentItemBulider<CourseExtendControls.ElectronicPaperItem>());
             //班級課程規劃
             Class.Instance.AddDetailBulider(new DetailBulider<ClassExtendControls.ClassBaseInfoItem_Extend>());
-            
+
             //暫時註解
             //個人活動表現紀錄
             //Student.Instance.AddDetailBulider(new DetailBulider<StudentActivityRecordItem>());
@@ -345,65 +350,213 @@ namespace JHSchool.Evaluation
             rbButton = rbItem["刪除"];
             rbButton.Size = RibbonBarButton.MenuButtonSize.Large;
             rbButton.Image = JHSchool.Evaluation.CourseExtendControls.Ribbon.Resources.btnDeleteCourse;
-            rbButton.Enable = User.Acl["JHSchool.Course.Ribbon0010"].Executable;
+            rbButton.Enable = false;
             rbButton.Click += delegate
             {
-                if (Course.Instance.SelectedKeys.Count == 1)
+                //2018/3/26 穎驊註記 下列為舊的 刪除課程，一次僅能一筆，且如果內有資料，則無法刪除，也不會有Log 紀錄
+                //if (Course.Instance.SelectedKeys.Count == 1)
+                //{
+                //    JHSchool.Data.JHCourseRecord record = JHSchool.Data.JHCourse.SelectByID(Course.Instance.SelectedKeys[0]);
+                //    //int CourseAttendCot = Course.Instance.Items[record.ID].GetAttendStudents().Count;
+                //    List<JHSchool.Data.JHSCAttendRecord> scattendList = JHSchool.Data.JHSCAttend.SelectByStudentIDAndCourseID(new List<string>() { }, new List<string>() { record.ID });
+                //    int attendStudentCount = 0;
+                //    foreach (JHSchool.Data.JHSCAttendRecord scattend in scattendList)
+                //    {
+                //        if (scattend.Student.Status == K12.Data.StudentRecord.StudentStatus.一般)
+                //            attendStudentCount++;
+                //    }
+
+                //    if (attendStudentCount > 0)
+                //        MsgBox.Show(record.Name + " 有" + attendStudentCount.ToString() + "位修課學生，請先移除修課學生後再刪除課程.");
+                //    else
+                //    {
+                //        string msg = string.Format("確定要刪除「{0}」？", record.Name);
+                //        if (MsgBox.Show(msg, "刪除課程", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                //        {
+                //            #region 自動刪除非一般學生的修課記錄
+                //            List<JHSchool.Data.JHSCAttendRecord> deleteSCAttendList = new List<JHSchool.Data.JHSCAttendRecord>();
+                //            foreach (JHSchool.Data.JHSCAttendRecord scattend in scattendList)
+                //            {
+                //                JHSchool.Data.JHStudentRecord stuRecord = JHSchool.Data.JHStudent.SelectByID(scattend.RefStudentID);
+                //                if (stuRecord == null) continue;
+                //                if (stuRecord.Status != K12.Data.StudentRecord.StudentStatus.一般)
+                //                    deleteSCAttendList.Add(scattend);
+                //            }
+                //            List<string> studentIDs = new List<string>();
+                //            foreach (JHSchool.Data.JHSCAttendRecord scattend in deleteSCAttendList)
+                //                studentIDs.Add(scattend.RefStudentID);
+                //            List<JHSchool.Data.JHSCETakeRecord> sceList = JHSchool.Data.JHSCETake.SelectByStudentAndCourse(studentIDs, new List<string>() { record.ID });
+                //            JHSchool.Data.JHSCETake.Delete(sceList);
+                //            JHSchool.Data.JHSCAttend.Delete(deleteSCAttendList);
+                //            #endregion
+
+                //            JHSchool.Data.JHCourse.Delete(record);
+                //            //CourseRecordEditor crd = Course.Instance.Items[record.ID].GetEditor();
+                //            //crd.Remove = true;
+                //            //crd.Save();
+                //            // 加這主要是重新整理
+                //            Course.Instance.SyncDataBackground(record.ID);
+                //        }
+                //        else
+                //            return;
+                //    }
+                //}
+
+                if (MsgBox.Show("本功能將會將所選全部課程移除，請問是否繼續?", "批次刪除課程", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    JHSchool.Data.JHCourseRecord record = JHSchool.Data.JHCourse.SelectByID(Course.Instance.SelectedKeys[0]);
-                    //int CourseAttendCot = Course.Instance.Items[record.ID].GetAttendStudents().Count;
-                    List<JHSchool.Data.JHSCAttendRecord> scattendList = JHSchool.Data.JHSCAttend.SelectByStudentIDAndCourseID(new List<string>() { }, new List<string>() { record.ID });
-                    int attendStudentCount = 0;
-                    foreach (JHSchool.Data.JHSCAttendRecord scattend in scattendList)
+                    List<JHSchool.Data.JHCourseRecord> record_list = JHSchool.Data.JHCourse.SelectByIDs(Course.Instance.SelectedKeys);
+
+                    //課程資料
+                    List<string> courseIDList = new List<string>();
+
+                    foreach (JHSchool.Data.JHCourseRecord r in record_list)
                     {
-                        if (scattend.Student.Status == K12.Data.StudentRecord.StudentStatus.一般)
-                            attendStudentCount++;
+                        courseIDList.Add(r.ID);
                     }
 
-                    if (attendStudentCount > 0)
-                        MsgBox.Show(record.Name + " 有" + attendStudentCount.ToString() + "位修課學生，請先移除修課學生後再刪除課程.");
-                    else
-                    {
-                        string msg = string.Format("確定要刪除「{0}」？", record.Name);
-                        if (MsgBox.Show(msg, "刪除課程", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        {
-                            #region 自動刪除非一般學生的修課記錄
-                            List<JHSchool.Data.JHSCAttendRecord> deleteSCAttendList = new List<JHSchool.Data.JHSCAttendRecord>();
-                            foreach (JHSchool.Data.JHSCAttendRecord scattend in scattendList)
-                            {
-                                JHSchool.Data.JHStudentRecord stuRecord = JHSchool.Data.JHStudent.SelectByID(scattend.RefStudentID);
-                                if (stuRecord == null) continue;
-                                if (stuRecord.Status != K12.Data.StudentRecord.StudentStatus.一般)
-                                    deleteSCAttendList.Add(scattend);
-                            }
-                            List<string> studentIDs = new List<string>();
-                            foreach (JHSchool.Data.JHSCAttendRecord scattend in deleteSCAttendList)
-                                studentIDs.Add(scattend.RefStudentID);
-                            List<JHSchool.Data.JHSCETakeRecord> sceList = JHSchool.Data.JHSCETake.SelectByStudentAndCourse(studentIDs, new List<string>() { record.ID });
-                            JHSchool.Data.JHSCETake.Delete(sceList);
-                            JHSchool.Data.JHSCAttend.Delete(deleteSCAttendList);
-                            #endregion
+                    // 學生參與課堂紀錄
+                    List<JHSchool.Data.JHSCAttendRecord> scattendList = JHSchool.Data.JHSCAttend.SelectByStudentIDAndCourseID(new List<string>() { }, courseIDList);
 
-                            JHSchool.Data.JHCourse.Delete(record);
-                            //CourseRecordEditor crd = Course.Instance.Items[record.ID].GetEditor();
-                            //crd.Remove = true;
-                            //crd.Save();
-                            // 加這主要是重新整理
-                            Course.Instance.SyncDataBackground(record.ID);
+                    List<string> scattendIDList = new List<string>();
+                    List<string> studentIDList = new List<string>();
+
+                    foreach (JHSchool.Data.JHSCAttendRecord r in scattendList)
+                    {
+                        scattendIDList.Add(r.ID);
+                        studentIDList.Add(r.RefStudentID);
+                    }
+
+                    //學生課堂考試紀錄
+                    List<JHSchool.Data.JHSCETakeRecord> sceList = JHSchool.Data.JHSCETake.SelectByStudentAndCourse(new List<string>() { }, courseIDList);
+
+                    Dictionary<string, List<JHSchool.Data.JHSCETakeRecord>> studentScoreDict = new Dictionary<string, List<Data.JHSCETakeRecord>>();
+
+                    //用RefStudentID 整理個學生的成績
+                    foreach (JHSchool.Data.JHSCETakeRecord jhscetr in sceList)
+                    {
+                        if (!studentScoreDict.ContainsKey(jhscetr.RefStudentID))
+                        {
+                            studentScoreDict.Add(jhscetr.RefStudentID, new List<Data.JHSCETakeRecord>());
+                            studentScoreDict[jhscetr.RefStudentID].Add(jhscetr);
                         }
                         else
-                            return;
+                        {
+                            studentScoreDict[jhscetr.RefStudentID].Add(jhscetr);
+                        }
+                    }
+                    List<string> WarningList = new List<string>();
+
+                    System.Text.StringBuilder sb1 = new System.Text.StringBuilder();
+                    foreach (KeyValuePair<string, List<JHSchool.Data.JHSCETakeRecord>> p in studentScoreDict)
+                    {
+                        sb1.AppendLine("學生:" + p.Value[0].Student.Name + ",於");
+
+                        foreach (JHSchool.Data.JHSCETakeRecord r in p.Value)
+                        {
+                            sb1.AppendLine("課程:" + r.Course.Name + ",試別:" + r.Exam.Name + ",含有分數:" + r.Score + "資料");
+                        }
+
+                        WarningList.Add(sb1.ToString());
+
+                        sb1.Clear();
+                    }
+
+                    string warning_total = string.Format("發現「{0}」位學生在課程具有成績資料，請問是否仍要刪除？", WarningList.Count);
+
+                    System.Text.StringBuilder sb2 = new System.Text.StringBuilder();
+                    sb2.AppendLine(warning_total);
+
+                    foreach (string s in WarningList)
+                    {
+                        sb2.AppendLine(s);
+                    }
+                    
+                    // 假如刪除的學生中，有人有成績資料，則提醒使用者是否要刪掉
+                    if (sceList.Count > 0)
+                    {
+                        DeleteCourseWarningForm dcwf = new DeleteCourseWarningForm(warning_total, studentScoreDict);
+                        
+                        if (dcwf.ShowDialog() == DialogResult.Yes)
+                        {
+                            DeleteCourseWithLogSQL();
+
+                        }
+
+                        //if (MsgBox.Show(sb2.ToString(), "批次刪除課程", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        //{
+                        //    DeleteCourseWithLogSQL();
+                        //}
+                    }
+                    else
+                    {
+                        DeleteCourseWithLogSQL();
                     }
                 }
             };
 
-            RibbonBarButton CouItem = Course.Instance.RibbonBarItems["編輯"]["刪除"];
+
+
+            //2018/3/26 穎驊註解，將此功能一併併入刪除處理
+            //////2018/3/9 穎驊註解，此為因應高雄小組項目 [09-05][04] 批次刪除課程功能 所新增的功能
+            //rbButton = rbItem["批次刪除修課學生"];
+            //rbButton.Size = RibbonBarButton.MenuButtonSize.Large;
+            //rbButton.Image = JHSchool.Evaluation.CourseExtendControls.Ribbon.Resources.btnDeleteStudent_Image;
+            ////2018/3/9 穎驊註解，暫時找不到期註冊開放權限的Code，先跟隨 刪除課程的設定
+            //rbButton.Enable = false;
+            //rbButton.Click += delegate
+            //{
+            //    if (MsgBox.Show("本功能將會將所選課程的全部修課學生移除，請問是否繼續?", "批次刪除修課學生", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //    {
+            //        List<JHSchool.Data.JHCourseRecord> record_list = JHSchool.Data.JHCourse.SelectByIDs(Course.Instance.SelectedKeys);
+
+            //        //課程資料
+            //        List<string> courseIDList = new List<string>();
+
+            //        foreach (JHSchool.Data.JHCourseRecord r in record_list)
+            //        {
+            //            courseIDList.Add(r.ID);
+            //        }
+
+            //        // 學生參與課堂紀錄
+            //        List<JHSchool.Data.JHSCAttendRecord> scattendList = JHSchool.Data.JHSCAttend.SelectByStudentIDAndCourseID(new List<string>() { }, courseIDList);
+
+            //        List<string> scattendIDList = new List<string>();
+
+            //        foreach (JHSchool.Data.JHSCAttendRecord r in scattendList)
+            //        {
+            //            scattendIDList.Add(r.ID);
+            //        }
+
+            //        //學生課堂考試紀錄
+            //        List<JHSchool.Data.JHSCETakeRecord> sceList = JHSchool.Data.JHSCETake.SelectByIDs(scattendIDList);
+
+
+            //        // 假如刪除的學生中，有人有成績資料，則提醒使用者是否要刪掉
+            //        if (sceList.Count > 0)
+            //        {
+            //            if (MsgBox.Show("發現有學生在課程具有成績資料，請問是否仍要刪除?", "批次刪除修課學生", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //            {
+
+
+            //            }
+            //        }
+            //    }
+            //};
+
+            RibbonBarButton CouItem1 = Course.Instance.RibbonBarItems["編輯"]["刪除"];
+            //RibbonBarButton CouItem2 = Course.Instance.RibbonBarItems["編輯"]["批次刪除修課學生"];
             Course.Instance.SelectedListChanged += delegate
             {
                 // 課程刪除不能多選
-                CouItem.Enable = (Course.Instance.SelectedList.Count < 2) && User.Acl["JHSchool.Course.Ribbon0010"].Executable;
+                //CouItem1.Enable = (Course.Instance.SelectedList.Count < 2) && User.Acl["JHSchool.Course.Ribbon0010"].Executable;
+                CouItem1.Enable = User.Acl["JHSchool.Course.Ribbon0010"].Executable;
+
+                ////2018/3/9 穎驊註解，批次刪除學生至少要選一
+                //CouItem2.Enable = (Course.Instance.SelectedList.Count > 0) && User.Acl["JHSchool.Course.Ribbon0010"].Executable;
             };
             #endregion
+
+
 
             #region 課程/資料統計/報表
             rbButton = Course.Instance.RibbonBarItems["資料統計"]["報表"];
@@ -633,7 +786,7 @@ namespace JHSchool.Evaluation
             //--------------------------------下面還沒整理的分隔線--------------------------------
 
             #region 註冊權限管理
-            
+
             //學生
             Catalog detail = RoleAclSource.Instance["學生"]["資料項目"];
 
@@ -720,5 +873,161 @@ namespace JHSchool.Evaluation
             //DataRationalityManager.Checks.Add(new StudentExtendControls.Ribbon.CheckStudentSemHistoryScoreRAT());
 
         }
+
+
+        //2018/3/23  穎驊備註 ，以下超大包SQL 是參考 弈均所開發的選課模組 github\SHSchool.CourseSelection\SHSchool.CourseSelection\Forms\AdjustSSAttendForm.cs
+        // 由恩正所教的WITH AS SQL 寫法，其好處是整包的SQL 會一併執行完，或是全部不執行，
+        //如此可以避免 利用ischool API分段 處理資料，可能會造成資料不同步的問題，並且可以一併寫入log
+        private static void DeleteCourseWithLogSQL()
+        {
+            string _actor = DSAServices.UserAccount; ;
+            string _client_info = ClientInfo.GetCurrentClientInfo().OutputResult().OuterXml;
+
+            // 兜資料
+            List<string> dataList = new List<string>();
+            foreach (string id in Course.Instance.SelectedKeys)
+            {                
+                string data = string.Format(@"
+                SELECT
+                    {0}::BIGINT AS id
+                ", id);
+
+                dataList.Add(data);
+            }
+
+            string Data = string.Join(" UNION ALL", dataList);
+
+
+            string sql = string.Format(@"WITH course_data_row AS(
+			 {0}
+) ,delete_sc_attend_data AS(
+	SELECT 
+		sc_attend.id AS sc_attend_id
+	FROM 
+		course_data_row
+		INNER JOIN sc_attend
+			ON sc_attend.ref_course_id = course_data_row.id		
+) ,delete_sce_take_data AS(
+	SELECT 
+		sce_take.id AS sce_take_id
+	FROM 
+		delete_sc_attend_data
+		INNER JOIN sce_take 
+			ON sce_take.ref_sc_attend_id = delete_sc_attend_data.sc_attend_id		
+) ,delete_sce_take AS(
+	DELETE
+	FROM
+		sce_take
+	WHERE sce_take.id IN (
+		SELECT delete_sce_take_data.sce_take_id
+		FROM delete_sce_take_data
+		LEFT OUTER JOIN sce_take 
+			ON delete_sce_take_data.sce_take_id = sce_take.id
+		)
+	RETURNING sce_take.*
+),delete_sc_attend AS(
+	DELETE
+	FROM
+		sc_attend
+	WHERE sc_attend.id IN (
+		SELECT delete_sc_attend_data.sc_attend_id
+		FROM delete_sc_attend_data
+		LEFT OUTER JOIN sc_attend 
+			ON delete_sc_attend_data.sc_attend_id = sc_attend.id
+		)
+	RETURNING sc_attend.*
+),delete_course AS(
+	DELETE
+	FROM
+		course
+	WHERE course.id IN (
+		SELECT course_data_row.id
+		FROM course_data_row
+		)
+	RETURNING course.*
+),insert_sce_take_log_student_data AS(
+INSERT INTO log(
+	actor
+	, action_type
+	, action
+	, target_category
+	, target_id
+	, server_time
+	, client_info
+	, action_by
+	, description
+)
+SELECT 
+	'{1}'::TEXT AS actor
+	, 'Record' AS action_type
+	, '課程_刪除' AS action
+	, 'student'::TEXT AS target_category
+	, student.id AS target_id
+	, now() AS server_time
+	, '{2}' AS client_info
+	, '刪除_學生_課程評量成績'AS action_by   
+	, '學生「'|| student.name ||'」，課程「'|| course.course_name || '」修課紀錄，評量成績刪除，刪除內容:「'|| sce_take.extension ||'」 使用者「{1}」，' AS description 
+FROM
+	delete_sce_take_data
+	LEFT OUTER JOIN sce_take ON sce_take.id = delete_sce_take_data.sce_take_id 	
+	LEFT OUTER JOIN sc_attend ON sc_attend.id = sce_take.ref_sc_attend_id
+	LEFT OUTER JOIN course ON course.id = sc_attend.ref_course_id 	
+	LEFT OUTER JOIN student ON student.id = sc_attend.ref_student_id
+
+)INSERT INTO log(
+	actor
+	, action_type
+	, action
+	, target_category
+	, target_id
+	, server_time
+	, client_info
+	, action_by
+	, description
+)
+SELECT 
+	'{1}'::TEXT AS actor
+	, 'Record' AS action_type
+	, '課程_刪除' AS action
+	, 'course'::TEXT AS target_category
+	, course.id AS target_id
+	, now() AS server_time
+	, '{2}' AS client_info
+	, '刪除_課程_課程'AS action_by   
+	, '課程「'|| course.course_name || '」，課程刪除，包含其所有修課學生修課紀錄、評量成績，使用者「{1}」，' AS description 
+FROM
+	course_data_row
+	LEFT OUTER JOIN course ON course.id = course_data_row.id
+                ", Data,_actor,_client_info);
+
+            
+            UpdateHelper uh = new UpdateHelper();
+
+            //執行sql
+            uh.Execute(sql);
+
+            //2018/3/26 穎驊註記，此段會將上面一包SQL 檔 匯出至debug 資料夾。
+            //如果對於拼裝SQL 完整內容有疑問，可以取消下面的註解執行匯出檢查，
+            //其完整格式應與Resouse 資料夾內的 SQL.txt 雷同
+            #region SQL文字檔            
+            //string path = "SQL.txt";
+            //FileStream file = new FileStream(path, FileMode.Create);
+            //StreamWriter sw = new StreamWriter(file);
+            //sw.Write(sql);
+
+            //sw.Flush();
+            //sw.Close();
+            //file.Close();
+
+            //QueryHelper qh = new QueryHelper();
+            //qh.Select(sql);
+            #endregion
+
+            //2018/3/23 穎驊註記，因為ischool 主系統 在開啟時，會對於課程作快取，如果不重整，
+            //選到本次被刪除的課程會造成系統當機
+            // 加這主要是重新整理
+            Course.Instance.SyncDataBackground(Course.Instance.SelectedKeys);
+        }
+
     }
 }

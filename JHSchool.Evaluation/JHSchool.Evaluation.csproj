@@ -247,6 +247,12 @@
       <DependentUpon>StudinCourse.cs</DependentUpon>
     </Compile>
     <Compile Include="Class_ExtendMethod.cs" />
+    <Compile Include="DeleteCourseWarningForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeleteCourseWarningForm.Designer.cs">
+      <DependentUpon>DeleteCourseWarningForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EduAdminExtendControls\Ribbon\ScoreCalcRuleRelated\PeriodAbsenceSelectionFormNew.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -827,6 +833,9 @@
       <DependentUpon>TeacherCategoryView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="DeleteCourseWarningForm.resx">
+      <DependentUpon>DeleteCourseWarningForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EduAdminExtendControls\Ribbon\CourseScoreStatusForm.resx">
       <DependentUpon>CourseScoreStatusForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -997,6 +1006,7 @@
   <ItemGroup>
     <Content Include="ClassExtendControls\Ribbon\Resources\btnProgramPlan.Image.png" />
     <Content Include="ClassExtendControls\Ribbon\Resources\subject_64.png" />
+    <Content Include="CourseExtendControls\Ribbon\Resources\btnDeleteStudent_Image.png" />
     <Content Include="CourseExtendControls\Ribbon\Resources\course_plan.png" />
     <Content Include="CourseExtendControls\Ribbon\Resources\exam_write_64.png" />
     <Content Include="CourseExtendControls\Ribbon\Resources\graduation_64.png" />
@@ -1094,6 +1104,7 @@
     <None Include="Resources\graduated_write_64.png" />
     <None Include="Resources\refresh_window_64.png" />
     <None Include="Resources\預設成績計算規則Content.xml" />
+    <Content Include="Resources\SQL.txt" />
     <Content Include="StuAdminExtendControls\Ribbon\ActivityRecord\Forms\ImportTables.xml" />
     <Content Include="StuAdminExtendControls\Ribbon\ActivityRecord\ImportTables.xml" />
     <Content Include="StuAdminExtendControls\Ribbon\ActivityRecord\Package.xml" />
