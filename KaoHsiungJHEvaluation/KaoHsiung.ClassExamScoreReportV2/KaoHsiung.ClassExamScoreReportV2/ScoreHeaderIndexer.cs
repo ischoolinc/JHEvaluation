@@ -7,7 +7,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
 {
     internal class ScoreHeaderIndexer : IEnumerable<Header>
     {
-        private Dictionary<string, Header> ItemIndexs = new Dictionary<string, Header>();
+        public Dictionary<string, Header> ItemIndexs = new Dictionary<string, Header>();
 
         public ScoreHeaderIndexer()
         {

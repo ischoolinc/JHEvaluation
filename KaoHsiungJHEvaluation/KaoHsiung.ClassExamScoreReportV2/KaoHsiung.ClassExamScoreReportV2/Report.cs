@@ -134,8 +134,20 @@ namespace KaoHsiung.ClassExamScoreReportV2
                     {
                         if (eachStu.Scores[Utilities.DomainToken].Contains(eachDomain))
                         {
-                            if (!headers.Contains(eachDomain, true)) //eachStu.Scores[Utilities.DomainToken].Weights[eachDomain]))
+                            //eachStu.Scores[Utilities.DomainToken].Weights[eachDomain]))
+                            if (!headers.Contains(eachDomain, true))
+                            {
                                 headers.Add(eachDomain, true, eachStu.Scores[Utilities.DomainToken].Weights[eachDomain]);
+                            }
+                            else
+                            {
+                                if (eachStu.Scores[Utilities.DomainToken].Weights[eachDomain] > headers.ItemIndexs[eachDomain + ":True"].Credits[0])
+                                {
+                                    headers.ItemIndexs[eachDomain + ":True"].Credits[0] = eachStu.Scores[Utilities.DomainToken].Weights[eachDomain];
+
+                                }
+                            }
+                                
                         }
                     }
                 }
