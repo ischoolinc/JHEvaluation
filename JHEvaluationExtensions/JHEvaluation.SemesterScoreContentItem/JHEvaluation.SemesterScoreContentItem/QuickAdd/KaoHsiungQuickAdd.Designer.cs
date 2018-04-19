@@ -103,6 +103,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(642, 512);
             this.Controls.Add(this.dgvDomain);
+            this.DoubleBuffered = true;
             this.Name = "KaoHsiungQuickAdd";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "KaoHsiungQuickAdd";

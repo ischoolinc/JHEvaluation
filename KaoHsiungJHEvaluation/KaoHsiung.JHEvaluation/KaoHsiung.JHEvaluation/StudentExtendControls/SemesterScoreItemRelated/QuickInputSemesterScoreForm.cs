@@ -85,14 +85,15 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         private void InitializeTextBoxManager()
         {
             _manager = new TextBoxManager(
-                txtPC1, txtScore1, txtEffort1, txtText1,
-                txtPC2, txtScore2, txtEffort2, txtText2,
-                txtPC3, txtScore3, txtEffort3, txtText3,
-                txtPC4, txtScore4, txtEffort4, txtText4,
-                txtPC5, txtScore5, txtEffort5, txtText5,
-                txtPC6, txtScore6, txtEffort6, txtText6,
-                txtPC7, txtScore7, txtEffort7, txtText7,
-                txtPC8, txtScore8, txtEffort8, txtText8
+                txtPC1, txtScore1, txtOriScore1,txtEffort1, txtText1,
+                txtPC2, txtScore2, txtOriScore2, txtEffort2, txtText2,
+                txtPC3, txtScore3, txtOriScore3, txtEffort3, txtText3,
+                txtPC4, txtScore4, txtOriScore4, txtEffort4, txtText4,
+                txtPC5, txtScore5, txtOriScore5, txtEffort5, txtText5,
+                txtPC6, txtScore6, txtOriScore6, txtEffort6, txtText6,
+                txtPC7, txtScore7, txtOriScore7, txtEffort7, txtText7,
+                txtPC8, txtScore8, txtOriScore8, txtEffort8, txtText8,
+                txtPC9, txtScore9, txtOriScore9, txtEffort9, txtText9
                 );
             _manager.AddEffortTextBoxMapping(txtScore1, txtEffort1);
             _manager.AddEffortTextBoxMapping(txtScore2, txtEffort2);
@@ -102,6 +103,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             _manager.AddEffortTextBoxMapping(txtScore6, txtEffort6);
             _manager.AddEffortTextBoxMapping(txtScore7, txtEffort7);
             _manager.AddEffortTextBoxMapping(txtScore8, txtEffort8);
+            _manager.AddEffortTextBoxMapping(txtScore9, txtEffort9);
         }
 
         private void InitializeComboBoxes()
@@ -284,25 +286,29 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                         else
                             checkSubjName.Add(tmpSubjName);
                     }
-                }   
+                }
 
+                //2018/4/16 穎驊因應高雄項目[02-03][06]學期成績，快速新增功能如無原始成績，則結算學期領域成績時快速新增的成績都會變成"0"分
+                // 新增原始成績登錄、語文領域，另外看來以前不流行 datagridView 這土法煉鋼有點驚人呀!!。
 
-                if (CheckDomainValid(txtPC1, txtScore1, txtEffort1))
-                    newRecord.Domains.Add("國語文", GetDomainScore("國語文", txtPC1, txtScore1, txtEffort1, txtText1));
-                if (CheckDomainValid(txtPC2, txtScore2, txtEffort2))
-                    newRecord.Domains.Add("英語", GetDomainScore("英語", txtPC2, txtScore2, txtEffort2, txtText2));
-                if (CheckDomainValid(txtPC3, txtScore3, txtEffort3))
-                    newRecord.Domains.Add("數學", GetDomainScore("數學", txtPC3, txtScore3, txtEffort3, txtText3));
-                if (CheckDomainValid(txtPC4, txtScore4, txtEffort4))
-                    newRecord.Domains.Add("社會", GetDomainScore("社會", txtPC4, txtScore4, txtEffort4, txtText4));
-                if (CheckDomainValid(txtPC5, txtScore5, txtEffort5))
-                    newRecord.Domains.Add("藝術與人文", GetDomainScore("藝術與人文", txtPC5, txtScore5, txtEffort5, txtText5));
-                if (CheckDomainValid(txtPC6, txtScore6, txtEffort6))
-                    newRecord.Domains.Add("自然與生活科技", GetDomainScore("自然與生活科技", txtPC6, txtScore6, txtEffort6, txtText6));
-                if (CheckDomainValid(txtPC7, txtScore7, txtEffort7))
-                    newRecord.Domains.Add("健康與體育", GetDomainScore("健康與體育", txtPC7, txtScore7, txtEffort7, txtText7));
-                if (CheckDomainValid(txtPC8, txtScore8, txtEffort8))
-                    newRecord.Domains.Add("綜合活動", GetDomainScore("綜合活動", txtPC8, txtScore8, txtEffort8, txtText8));
+                if (CheckDomainValid(txtPC1, txtScore1, txtOriScore1, txtEffort1))
+                    newRecord.Domains.Add("國語文", GetDomainScore("國語文", txtPC1, txtScore1, txtOriScore1, txtEffort1, txtText1));
+                if (CheckDomainValid(txtPC2, txtScore2, txtOriScore2, txtEffort2))
+                    newRecord.Domains.Add("英語", GetDomainScore("英語", txtPC2, txtScore2, txtOriScore2, txtEffort2, txtText2));
+                if (CheckDomainValid(txtPC3, txtScore3, txtOriScore3, txtEffort3))
+                    newRecord.Domains.Add("數學", GetDomainScore("數學", txtPC3, txtScore3, txtOriScore3, txtEffort3, txtText3));
+                if (CheckDomainValid(txtPC4, txtScore4, txtOriScore4, txtEffort4))
+                    newRecord.Domains.Add("社會", GetDomainScore("社會", txtPC4, txtScore4, txtOriScore4, txtEffort4, txtText4));
+                if (CheckDomainValid(txtPC5, txtScore5, txtOriScore5, txtEffort5))
+                    newRecord.Domains.Add("藝術與人文", GetDomainScore("藝術與人文", txtPC5, txtScore5, txtOriScore5, txtEffort5, txtText5));
+                if (CheckDomainValid(txtPC6, txtScore6, txtOriScore6, txtEffort6))
+                    newRecord.Domains.Add("自然與生活科技", GetDomainScore("自然與生活科技", txtPC6, txtScore6, txtOriScore6, txtEffort6, txtText6));
+                if (CheckDomainValid(txtPC7, txtScore7, txtOriScore7, txtEffort7))
+                    newRecord.Domains.Add("健康與體育", GetDomainScore("健康與體育", txtPC7, txtScore7, txtOriScore7, txtEffort7, txtText7));
+                if (CheckDomainValid(txtPC8, txtScore8, txtOriScore8, txtEffort8))
+                    newRecord.Domains.Add("綜合活動", GetDomainScore("綜合活動", txtPC8, txtScore8, txtOriScore8, txtEffort8, txtText8));
+                if (CheckDomainValid(txtPC9, txtScore9, txtOriScore9, txtEffort9))
+                    newRecord.Domains.Add("語文", GetDomainScore("語文", txtPC9, txtScore9, txtOriScore9, txtEffort9, txtText9));
 
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
@@ -314,8 +320,9 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                     subject.Domain = "" + row.Cells[chsDomain.Index].Value;
                     subject.Subject = "" + row.Cells[chsSubject.Index].Value;
                     subject.Period = pc.Period;
-                    subject.Credit = pc.Credit;
+                    subject.Credit = pc.Credit; 
                     subject.Score = decimal.Parse("" + row.Cells[chsScore.Index].Value);
+                    subject.ScoreOrigin = decimal.Parse("" + row.Cells[chOriScore.Index].Value);
                     subject.Effort = int.Parse("" + row.Cells[chsEffort.Index].Value);
                     subject.Text = "" + row.Cells[chsText.Index].Value;
 
@@ -359,13 +366,14 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             return KaoHsiung.JHEvaluation.Utility.StudentInfoConvertor.GetInfoWithClass(student);
         }
 
-        private bool CheckDomainValid(TextBoxX pc, TextBoxX score, TextBoxX effort)
+        private bool CheckDomainValid(TextBoxX pc, TextBoxX score, TextBoxX Oriscore, TextBoxX effort)
         {
             bool boolPc = !string.IsNullOrEmpty(pc.Text);
             bool boolScore = !string.IsNullOrEmpty(score.Text);
+            bool boolOriScore = !string.IsNullOrEmpty(Oriscore.Text);
             bool boolEffort = !string.IsNullOrEmpty(effort.Text);
 
-            if (boolPc && boolScore && boolEffort)
+            if (boolPc && boolScore && boolOriScore&& boolEffort)
                 return true;
             else
                 return false;
@@ -414,7 +422,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             return domain;
         }
 
-        private K12.Data.DomainScore GetDomainScore(string p, TextBoxX pc, TextBoxX score, TextBoxX effort, TextBoxX text)
+        private K12.Data.DomainScore GetDomainScore(string p, TextBoxX pc, TextBoxX score, TextBoxX Oriscore, TextBoxX effort, TextBoxX text)
         {
             PeriodCredit temp = new PeriodCredit();
             temp.Parse(pc.Text);
@@ -424,6 +432,9 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             domain.Credit = temp.Credit;
             domain.Effort = int.Parse(effort.Text);
             domain.Score = decimal.Parse(score.Text);
+            //2018/4/16 穎驊因應高雄項目[02-03][06]學期成績，快速新增功能如無原始成績，則結算學期領域成績時快速新增的成績都會變成"0"分
+            // 新增原始成績登錄
+            domain.ScoreOrigin = decimal.Parse(Oriscore.Text);
             domain.Text = text.Text;
             return domain;
         }
@@ -751,8 +762,8 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             }
             #endregion
 
-            #region 驗證成績
-            if (cell.OwningColumn == chsScore)
+            #region 驗證成績、原始成績
+            if (cell.OwningColumn == chsScore || cell.OwningColumn == chOriScore)
             {
                 cell.ErrorText = "";
                 if (!string.IsNullOrEmpty("" + cell.Value))
@@ -915,9 +926,9 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         public Control GetNextControl4D(Control control)
         {
             int index = _controls.IndexOf(control);
-            if (index >= 0 && index + 4 < _controls.Count)
-                if((index +4)<=_controls.Count )
-                    return _controls[index + 4];
+            if (index >= 0 && index + 5 < _controls.Count)
+                if((index +5)<=_controls.Count )
+                    return _controls[index + 5];
                 else
                     return _controls[0];
 
@@ -928,9 +939,9 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         public Control GetNextControl4U(Control control)
         {
             int index = _controls.IndexOf(control);
-            if (index >= 0 && index - 4 < _controls.Count)
-                if((index -4) >0)
-                    return _controls[index - 4];
+            if (index >= 0 && index - 5 < _controls.Count)
+                if((index -5) >0)
+                    return _controls[index - 5];
                 else
                     return _controls[0];
 

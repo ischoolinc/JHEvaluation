@@ -81,6 +81,7 @@ namespace JHEvaluation.SemesterScoreContentItem
                 btnQuick.Click += delegate
                 {
                     JHSchool.SF.Evaluation.QuickInputSemesterScoreForm.ShowDialog(_student.ID);
+                    LoadSemesterScores(); //2018/4/19 穎驊新增，因應[02-03][06] 快速新增學期成績功能重寫 項目調整，讓此功能執行完後，UI 重整
                 };
                 //btnQuick.Click += delegate
                 //{
