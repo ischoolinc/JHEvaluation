@@ -130,6 +130,7 @@
             this.dataGridViewX1.RowTemplate.Height = 24;
             this.dataGridViewX1.Size = new System.Drawing.Size(391, 255);
             this.dataGridViewX1.TabIndex = 9;
+            this.dataGridViewX1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
             // 
             // chDomainName
             // 

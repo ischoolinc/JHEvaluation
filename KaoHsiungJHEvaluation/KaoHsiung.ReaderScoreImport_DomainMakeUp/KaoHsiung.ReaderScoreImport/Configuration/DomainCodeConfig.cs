@@ -197,7 +197,8 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                 if (!codeList.Contains("" + runningCell.Value))
                 {
                     codeList.Add("" + runningCell.Value);
-                    runningCell.ErrorText = string.Empty;
+                    //(因應客服的暫時解)，他一般讀卡匯入成績原本的驗證寫得很爛... 有時間要調整 假如上一部就有驗出錯誤的長度問題，將原本的保留
+                    runningCell.ErrorText = runningCell.ErrorText.Contains("代碼必須為") ? runningCell.ErrorText : string.Empty ; 
                 }
                 else if (string.IsNullOrEmpty(runningCell.ErrorText))
                     runningCell.ErrorText = message;
