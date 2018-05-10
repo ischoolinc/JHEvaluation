@@ -52,7 +52,7 @@ namespace JointAdmissionModule
             if(Mode== ModuleMode.KaoHsiung)
                 detail1.Add(new ReportFeature(PermissionCodeRpt, "高雄區高中高職免試入學成績證明"));
 
-            detail1.Add(new ReportFeature(PermissionCodeRpt5, "北中南區五專免試入學成績證明"));
+            //detail1.Add(new ReportFeature(PermissionCodeRpt5, "北中南區五專免試入學成績證明"));
 
             //if (Mode == ModuleMode.HsinChu)
             detail1.Add(new ReportFeature(PermissionCodeRpt_HsinChu, "高中高職免試入學成績證明"));
@@ -67,12 +67,13 @@ namespace JointAdmissionModule
                 K12.Presentation.NLDPanels.Student.SelectedSourceChanged += (sender,e) => mb.Enable = (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0) && FISCA.Permission.UserAcl.Current[PermissionCodeRpt].Executable;
             }
 
+            // 2018 /05 /10 穎驊註解，整理五專免試相關流程後，發現此功能應已過時，故註解隱藏
             //註冊報表功能項目。
             //2013/6/13 - Dylan增加判斷權限
-            MenuButton mb1 = NLDPanels.Student.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["五專免試入學相關報表"]["北中南區五專免試入學成績證明"];
-            mb1.Enable = false;
-            mb1.Click += (sender,e) => new StudentScoreSummaryReport5.PrintForm(K12.Presentation.NLDPanels.Student.SelectedSource).ShowDialog();;
-            K12.Presentation.NLDPanels.Student.SelectedSourceChanged += (sender, e) => mb1.Enable = (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0) && FISCA.Permission.UserAcl.Current[PermissionCodeRpt5].Executable;
+            //MenuButton mb1 = NLDPanels.Student.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["五專免試入學相關報表"]["北中南區五專免試入學成績證明"];
+            //mb1.Enable = false;
+            //mb1.Click += (sender,e) => new StudentScoreSummaryReport5.PrintForm(K12.Presentation.NLDPanels.Student.SelectedSource).ShowDialog();;
+            //K12.Presentation.NLDPanels.Student.SelectedSourceChanged += (sender, e) => mb1.Enable = (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0) && FISCA.Permission.UserAcl.Current[PermissionCodeRpt5].Executable;
 
             //註冊報表功能項目。
             MenuButton mb2 = NLDPanels.Student.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["高中高職免試入學相關報表"]["竹苗區高中高職免試入學成績證明"];
