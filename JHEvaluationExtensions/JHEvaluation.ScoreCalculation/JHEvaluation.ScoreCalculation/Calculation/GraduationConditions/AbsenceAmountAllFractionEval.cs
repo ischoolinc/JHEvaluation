@@ -167,7 +167,8 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                     SemesterInfo info = new SemesterInfo();
                     info.SchoolYear = record.SchoolYear;
                     info.Semester = record.Semester;
-                   
+
+                  
                     foreach (AbsenceCountRecord acRecord in record.AbsenceCounts)
                     {
                         //加總各項核定假別
@@ -178,9 +179,14 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
                         if (!_types.ContainsKey(acRecord.PeriodType + ":" + acRecord.Name)) continue;
 
-                        if (!counter.ContainsKey(info))
+                        // 2018/05/08 穎驊註解 因應高雄小組項目 [03-03][04] 畢業預警及畢業判斷 ， 學生休學期間 成績、缺曠不採計，獎懲 仍採計
+                        // 該缺曠紀錄 在該學期必須要有學習歷程 才列入計算，否則其應該為休學的資料
+                        if (!counter.ContainsKey(info) && schoolDayMapping.ContainsKey(info))
+                        {
                             counter.Add(info, 0);
-                        counter[info] += acRecord.Count * _types[acRecord.PeriodType + ":" + acRecord.Name];
+                            counter[info] += acRecord.Count * _types[acRecord.PeriodType + ":" + acRecord.Name];
+                        }
+                        
 
                         // 累積缺曠明細
                         if (!TempData.tmpStudentAbsenceAmountAllDict.ContainsKey(student.ID))

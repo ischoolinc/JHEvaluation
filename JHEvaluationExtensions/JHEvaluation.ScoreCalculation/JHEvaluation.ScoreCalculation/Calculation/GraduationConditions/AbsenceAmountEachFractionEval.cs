@@ -158,6 +158,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 morals[record.RefStudentID].Add(record);
             }
 
+
             foreach (StudentRecord student in list)
             {
                 passList.Add(student.ID, true);
