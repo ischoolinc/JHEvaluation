@@ -41,6 +41,14 @@ namespace JHSchool.Evaluation.StudentExtendControls
             elasticRow.CreateCells(dgv, "彈性課程", string.Empty);
             dgv.Rows.Add(elasticRow);
 
+            DataGridViewRow IEPRow = new DataGridViewRow();
+            IEPRow.CreateCells(dgv, "特殊需求", string.Empty);
+            dgv.Rows.Add(IEPRow);
+
+            DataGridViewRow technologyRow = new DataGridViewRow();
+            technologyRow.CreateCells(dgv, "科技", string.Empty);
+            dgv.Rows.Add(technologyRow);
+
             foreach (string each in Domain.SelectSpecial())
             {
                 DataGridViewRow row = new DataGridViewRow();

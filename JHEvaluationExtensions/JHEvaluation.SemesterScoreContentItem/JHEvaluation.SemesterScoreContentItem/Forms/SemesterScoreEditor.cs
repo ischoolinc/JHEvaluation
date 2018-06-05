@@ -207,11 +207,19 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
 
             chsDomain.Items.Clear();
             chsDomain.Items.AddRange(domainList);
+
+            // 2018/6/5 穎驊 因應 [08-05][11] 特殊需求領域?? 需求 新增　特殊需求、科技領域
+            // 上面　Subject.Domains的記法，　是存在configure 內的xml ，目前看起來管理不易，先執行先用下列方式簡單新增
+            chsDomain.Items.Add("特殊需求");
+            chsDomain.Items.Add("科技");
+
             chsSubject.Items.Clear();
             chsSubject.Items.AddRange(subjectList);
 
             chdDomain.Items.Clear();
             chdDomain.Items.AddRange(domainList);
+            chdDomain.Items.Add("特殊需求");
+            chdDomain.Items.Add("科技");
         }
 
         /// <summary>

@@ -112,6 +112,16 @@ namespace JHSchool.Evaluation.CourseExtendControls
                 item.Text = each;
                 cboDomain.Items.Add(item);
             }
+      
+            // 2018/6/5 穎驊 因應 [08-05][11] 特殊需求領域?? 需求 新增　特殊需求、科技領域
+            // 另外發現下面以前似乎有個特教領域的概念，但現在已經沒用了，不知道當時個概念為何
+            ComboItem IEPItem = new ComboItem(); //特殊需求領域            
+            IEPItem.Text = "特殊需求";
+            cboDomain.Items.Add(IEPItem);
+
+            ComboItem technologyItem = new ComboItem(); //科技領域            
+            technologyItem.Text = "科技";
+            cboDomain.Items.Add(technologyItem);
 
             ComboItem elasticItem = new ComboItem(); //彈性課程
             elasticItem.FontStyle = System.Drawing.FontStyle.Bold;
