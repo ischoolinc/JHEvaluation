@@ -26,6 +26,9 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
 
         private void LoadDomain()
         {
+            bool containsIEPDomin = false;
+            bool containsTechnologydomin = false;
+
             ConfigData cd = K12.Data.School.Configuration[ConfigName];
             if (cd.Contains(ColumnKey))
             {
@@ -36,11 +39,34 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                     string name = domainElement.GetAttribute("Name");
                     string englishName = domainElement.GetAttribute("EnglishName");
 
+                    if (name == "特殊需求")
+                    {
+                        containsIEPDomin = true;
+                    }
+                    if (name == "科技")
+                    {
+                        containsTechnologydomin = true;
+                    }
+
                     DataGridViewRow row = new DataGridViewRow();
                     row.CreateCells(dgv, group, name, englishName);
                     dgv.Rows.Add(row);
                 }
             }
+
+            if (!containsIEPDomin)
+            {
+                DataGridViewRow row = new DataGridViewRow();
+                row.CreateCells(dgv, "", "特殊需求", "");
+                dgv.Rows.Add(row);
+            }
+            if (!containsTechnologydomin)
+            {
+                DataGridViewRow row = new DataGridViewRow();
+                row.CreateCells(dgv, "", "科技", "");
+                dgv.Rows.Add(row);
+            }
+
         }
 
         /// <summary>
