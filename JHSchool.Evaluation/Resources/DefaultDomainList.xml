@@ -6,6 +6,8 @@
 	<Domain Type="General">健康與體育</Domain>
 	<Domain Type="General">藝術與人文</Domain>
 	<Domain Type="General">綜合活動</Domain>
+  <Domain Type="General">特殊需求</Domain>
+  <Domain Type="General">科技</Domain>
 	<!-- <Domain Type="Special">實用語文</Domain>
 	<Domain Type="Special">實用數學</Domain>
 	<Domain Type="Special">社會適應</Domain>
