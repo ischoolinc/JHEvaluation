@@ -104,6 +104,10 @@ namespace JHSchool.Evaluation.CourseExtendControls
 
         private void InitializeDomainList()
         {
+            bool containsIEPDomain = false;
+            bool containsTechnologyDomain = false;
+
+
             cboDomain.Items.Add(new ComboItem()); //空白
 
             foreach (string each in Domain.SelectGeneral()) //一般領域
@@ -111,18 +115,35 @@ namespace JHSchool.Evaluation.CourseExtendControls
                 ComboItem item = new ComboItem();
                 item.Text = each;
                 cboDomain.Items.Add(item);
+
+                if (each == "特殊需求")
+                {
+                    containsIEPDomain = true;
+                }
+
+                if (each == "科技")
+                {
+                    containsTechnologyDomain = true;
+                }
+
             }
-      
+
             // 2018/6/5 穎驊 因應 [08-05][11] 特殊需求領域?? 需求 新增　特殊需求、科技領域
             // 另外發現下面以前似乎有個特教領域的概念，但現在已經沒用了，不知道當時個概念為何
-            ComboItem IEPItem = new ComboItem(); //特殊需求領域            
-            IEPItem.Text = "特殊需求";
-            cboDomain.Items.Add(IEPItem);
+            if (!containsIEPDomain)
+            {
+                ComboItem IEPItem = new ComboItem(); //特殊需求領域            
+                IEPItem.Text = "特殊需求";
+                cboDomain.Items.Add(IEPItem);
+            }
 
-            ComboItem technologyItem = new ComboItem(); //科技領域            
-            technologyItem.Text = "科技";
-            cboDomain.Items.Add(technologyItem);
-
+            if (!containsTechnologyDomain)
+            {
+                ComboItem technologyItem = new ComboItem(); //科技領域            
+                technologyItem.Text = "科技";
+                cboDomain.Items.Add(technologyItem);
+            }
+        
             ComboItem elasticItem = new ComboItem(); //彈性課程
             elasticItem.FontStyle = System.Drawing.FontStyle.Bold;
             elasticItem.ForeColor = System.Drawing.Color.Red;
