@@ -134,7 +134,29 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
                 Dictionary<SemesterInfo, int> gyMapping = new Dictionary<SemesterInfo, int>();
                 Dictionary<SemesterInfo, decimal> schoolDayMapping = new Dictionary<SemesterInfo, decimal>();
+
+                Dictionary<string, K12.Data.SemesterHistoryItem> uniqloSHistoryDict = new Dictionary<string, K12.Data.SemesterHistoryItem>();
+
+                // 2018/6/22 穎驊紀錄，在此排除 重覆的學習歷程資料，若重覆，將會以新學年度 重讀學年度為主
                 foreach (K12.Data.SemesterHistoryItem item in UIConfig._StudentSHistoryRecDict[student.ID].SemesterHistoryItems)
+                {
+                    if (!uniqloSHistoryDict.ContainsKey(item.GradeYear + "_" + item.Semester))
+                    {
+                        uniqloSHistoryDict.Add(item.GradeYear + "_" + item.Semester, item);
+
+                    }
+                    else
+                    {
+                        if (uniqloSHistoryDict[item.GradeYear + "_" + item.Semester].SchoolYear < item.SchoolYear)
+                        {
+                            uniqloSHistoryDict.Remove(item.GradeYear + "_" + item.Semester);
+
+                            uniqloSHistoryDict.Add(item.GradeYear + "_" + item.Semester, item);
+                        }
+                    }                   
+                }
+
+                foreach (K12.Data.SemesterHistoryItem item in uniqloSHistoryDict.Values)
                 {
                     SemesterInfo info = new SemesterInfo();
                     info.SchoolYear = item.SchoolYear;
