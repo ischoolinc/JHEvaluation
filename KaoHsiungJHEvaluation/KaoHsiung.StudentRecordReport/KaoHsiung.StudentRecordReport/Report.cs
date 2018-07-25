@@ -371,12 +371,15 @@ namespace KaoHsiung.StudentRecordReport
                         string XmlFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".xml";
                         string PDFFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".pdf";
 
-                        StudentDoc[each].Save(XmlFileName, Aspose.Words.SaveFormat.AsposePdf);
 
-                        Aspose.Pdf.Pdf pdf1 = new Aspose.Pdf.Pdf();
+                        ReportSaver.SaveDocumentBatch(StudentDoc[each], PDFFileName, ReportSaver.OutputType.PDF);
+
+                        //StudentDoc[each].Save(XmlFileName, Aspose.Words.SaveFormat.AsposePdf);
+
+                        //Aspose.Pdf.Pdf pdf1 = new Aspose.Pdf.Pdf();
                         
-                        pdf1.BindXML(XmlFileName, null);
-                        pdf1.Save(PDFFileName);
+                        //pdf1.BindXML(XmlFileName, null);
+                        //pdf1.Save(PDFFileName);
 
                         if (File.Exists(fPath))
                             File.Delete(Path.Combine(fi.DirectoryName, fi.Name));
@@ -390,7 +393,9 @@ namespace KaoHsiung.StudentRecordReport
                 {
                     foreach (string each in StudentDoc.Keys)
                     {
-                        StudentDoc[each].Save(fbd.SelectedPath + "\\" + each + ".doc");
+                        ReportSaver.SaveDocumentBatch(StudentDoc[each], fbd.SelectedPath + "\\" + each + ".doc", ReportSaver.OutputType.Word);
+
+                        //StudentDoc[each].Save(fbd.SelectedPath + "\\" + each + ".doc");
                     }
                 }
 

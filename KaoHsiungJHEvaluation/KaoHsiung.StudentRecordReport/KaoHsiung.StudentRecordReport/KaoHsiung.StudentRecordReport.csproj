@@ -241,7 +241,6 @@
     <Content Include="Library\Aspose.Pdf.xml" />
     <Content Include="Library\Aspose.Words.dll" />
     <Content Include="Library\Campus.Configuration.dll" />
-    <Content Include="Library\Campus.Report.dll" />
     <Content Include="Library\DevComponents.DotNetBar2.dll" />
     <Content Include="Library\FISCA.Data.dll" />
     <Content Include="Library\FISCA.Data.pdb" />
