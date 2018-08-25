@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D5BB1779-3778-440B-83C7-ABD366526DE8}</ProjectGuid>
+    <ProjectGuid>{BA336A5E-383E-4736-8851-5F35BAF2C4A6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JHEvaluation.StudentScoreSummaryReport</RootNamespace>
