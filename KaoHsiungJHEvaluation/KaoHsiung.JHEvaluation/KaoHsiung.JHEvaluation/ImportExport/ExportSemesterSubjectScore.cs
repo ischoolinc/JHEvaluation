@@ -21,7 +21,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
             
             //2015.1.27 Cloud新增
             //2017/6/16 穎驊新增，因應[02-02][06] 計算學期科目成績新增清空原成績模式 項目， 新增 "刪除"欄位，使使用者能匯入 刪除成績資料
-            wizard.ExportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "文字描述", "註記","刪除");
+            wizard.ExportableFields.AddRange("領域", "科目", "學年度", "學期", "權數", "節數", "成績", "原始成績", "補考成績", "努力程度", "註記","刪除");
             wizard.ExportPackage += delegate(object sender, SmartSchool.API.PlugIn.Export.ExportPackageEventArgs e)
             {
                 List<JHStudentRecord> students = JHStudent.SelectByIDs(e.List);
@@ -63,7 +63,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                         case "補考成績": row.Add(field, "" + subject.ScoreMakeup); break;
 
                                         case "努力程度": row.Add(field, "" + subject.Effort); break;
-                                        case "文字描述": row.Add(field, subject.Text); break;
+                                        //case "文字描述": row.Add(field, subject.Text); break;
                                         case "註記": row.Add(field, subject.Comment); break;
                                         case "刪除": row.Add(field, ""); break;
                                     }

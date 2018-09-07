@@ -66,7 +66,8 @@ namespace KaoHsiung.JHEvaluation.ImportExport
 
 
             wizard.PackageLimit = 3000;
-            wizard.ImportableFields.AddRange("學年度", "學期", "課程名稱", "評量名稱", "分數評量", "努力程度", "文字描述");
+            // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
+            wizard.ImportableFields.AddRange("學年度", "學期", "課程名稱", "評量名稱", "分數評量", "努力程度");
             wizard.RequiredFields.AddRange("學年度", "學期", "課程名稱", "評量名稱");
 
             wizard.ValidateStart += delegate(object sender, SmartSchool.API.PlugIn.Import.ValidateStartEventArgs e)
@@ -220,8 +221,10 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 e.ErrorFields.Add(field, "必須填入空白或整數");
                             }
                             break;
-                        case "文字描述":
-                            break;
+
+                            // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
+                            //case "文字描述":
+                            //    break;
                     }
                 }
                 #endregion
@@ -414,11 +417,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                         record.OrdinarilyEffort = i;
                                     }
 
-
-                                    if (data["文字描述"] != null)
-                                    {
-                                        record.Text = data["文字描述"].ToString();
-                                    }
+                                    // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
+                                    //if (data["文字描述"] != null)
+                                    //{
+                                    //    record.Text = data["文字描述"].ToString();
+                                    //}
                                     JHSCAttend.Update(record);
 
                                     isOrdinarilyScore = true;
@@ -474,13 +477,14 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                                 changed = true;
                                             }
                                             break;
-                                        case "文字描述":
-                                            if (currentSCE.Text != value)
-                                            {
-                                                currentSCE.Text = value;
-                                                changed = true;
-                                            }
-                                            break;
+                                            // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
+                                            //case "文字描述":
+                                            //    if (currentSCE.Text != value)
+                                            //    {
+                                            //        currentSCE.Text = value;
+                                            //        changed = true;
+                                            //    }
+                                            //    break;
                                     }
                                 }
                                 #endregion
@@ -536,9 +540,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                             else
                                                 newSCE.Effort = null;
                                             break;
-                                        case "文字描述":
-                                            newSCE.Text = value;
-                                            break;
+
+                                            // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
+                                            //case "文字描述":
+                                            //    newSCE.Text = value;
+                                            //    break;
                                     }
                                 }
                                 #endregion

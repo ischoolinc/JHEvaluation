@@ -21,7 +21,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
 
         public override void InitializeExport(SmartSchool.API.PlugIn.Export.ExportWizard wizard)
         {
-            wizard.ExportableFields.AddRange("學年度", "學期", "課程名稱", "評量名稱", "分數評量", "努力程度", "文字描述");
+            // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
+            // 2018.09.05 [ischoolKingdom] Vicky依據 [12-01][01] 多學期成績排名 項目，增加 "領域", "科目", "節數(權重)", "學分" 。 
+            // 2018.09.07 [ischoolKingdom] Vicky依據新需求調整項目位置。
+            wizard.ExportableFields.AddRange("學年度", "學期", "課程名稱", "領域", "科目", "節數(權重)", "學分", "評量名稱", "分數評量", "努力程度" );
+            
             wizard.ExportPackage += delegate(object sender, SmartSchool.API.PlugIn.Export.ExportPackageEventArgs e)
             {
                 //學生資訊
@@ -110,10 +114,19 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                         case "學年度": row.Add(field, "" + courses[record.RefCourseID].SchoolYear); break;
                                         case "學期": row.Add(field, "" + courses[record.RefCourseID].Semester); break;
                                         case "課程名稱": row.Add(field, courses[record.RefCourseID].Name); break;
+                                        // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
+                                        // 2018.09.05 [ischoolKingdom] Vicky依據 [12-01][01] 多學期成績排名 項目，增加 "領域", "科目", "節數(權重)", "學分" 項目資料。
+                                        //case "文字描述": row.Add(field, sce.Text); break;
+                                        case "領域": row.Add(field, courses[record.RefCourseID].Domain); break;
+                                        case "科目": row.Add(field, courses[record.RefCourseID].Subject); break;
+                                        case "節數(權重)": row.Add(field, "" + courses[record.RefCourseID].Period); break;
+                                        case "學分": row.Add(field, "" + courses[record.RefCourseID].Credit); break;
+
                                         case "評量名稱": row.Add(field, examName); break;
                                         case "分數評量": row.Add(field, "" + sce.Score); break;
                                         case "努力程度": row.Add(field, "" + sce.Effort); break;
-                                        case "文字描述": row.Add(field, sce.Text); break;
+                                       
+
                                     }
                                 }
                             }
@@ -134,10 +147,19 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                         case "學年度": row2.Add(field, "" + courses[record.RefCourseID].SchoolYear); break;
                                         case "學期": row2.Add(field, "" + courses[record.RefCourseID].Semester); break;
                                         case "課程名稱": row2.Add(field, courses[record.RefCourseID].Name); break;
+                                    // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
+                                    // 2018.09.05 [ischoolKingdom] Vicky依據 [12-01][01] 多學期成績排名 項目，增加 "領域", "科目", "節數(權重)", "學分" 項目資料。
+                                    // case "文字描述": row2.Add(field, record.Text); break;
+                                        case "領域": row2.Add(field, courses[record.RefCourseID].Domain); break;
+                                        case "科目": row2.Add(field, courses[record.RefCourseID].Subject); break;
+                                        case "節數(權重)": row2.Add(field, "" + courses[record.RefCourseID].Period); break;
+                                        case "學分": row2.Add(field, "" + courses[record.RefCourseID].Credit); break;
+
                                         case "評量名稱": row2.Add(field, examName2); break;
                                         case "分數評量": row2.Add(field, "" + record.OrdinarilyScore); break;
                                         case "努力程度": row2.Add(field, "" + record.OrdinarilyEffort); break;
-                                        case "文字描述": row2.Add(field, record.Text); break;
+                                   
+
                                     }
                                 }
                             }

@@ -57,7 +57,7 @@ namespace KaoHsiung.JHEvaluation
             {
                 SmartSchool.API.PlugIn.Export.Exporter exporter = new ImportExport.ExportExamScore();
                 JHSchool.Evaluation.ImportExport.ExportStudentV2 wizard = new JHSchool.Evaluation.ImportExport.ExportStudentV2(exporter.Text, exporter.Image);
-                exporter.InitializeExport(wizard);
+                exporter.InitializeExport(wizard); 
                 wizard.ShowDialog();
             };
 
