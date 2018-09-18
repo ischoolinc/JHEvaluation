@@ -29,6 +29,8 @@ namespace JHEvaluation.StudentSemesterScoreReport.Writers
             _data.Add("班導師", "");
             _data.Add("應到日數", "");
             _data.Add("服務學習時數", "");
+            //2018.09.16 [ischoolKingdom] Vicky依據[05-02][02]學期成績證明單 服務學習時數顯示處理 項目，新增服務學習學年累計時數。
+            _data.Add("本學年目前累計", "");
 
             #region comment
             //_data.Add("性別", "");
@@ -77,12 +79,19 @@ namespace JHEvaluation.StudentSemesterScoreReport.Writers
             _data["座號"] = (HistoryItem != null) ? "" + HistoryItem.SeatNo : "" + Student.SeatNo;
             _data["班導師"] = teacherName;
             _data["應到日數"] = (HistoryItem != null) ? "" + HistoryItem.SchoolDayCount : "";
-
             _data["服務學習時數"] = "0";
+
+            //2018.09.16 [ischoolKingdom] Vicky依據[05-02][02]學期成績證明單 服務學習時數顯示處理 項目，新增服務學習學年累計時數。               
+            _data["本學年目前累計"] = "0";
 
             if (Global._SRDict.ContainsKey(Student.ID))
             {
                 _data["服務學習時數"] = Global._SRDict[Student.ID].ToString();
+            }
+            //2018.09.16 [ischoolKingdom] Vicky依據[05-02][02]學期成績證明單 服務學習時數顯示處理 項目，新增服務學習學年累計時數。               
+            if (Global._SRDict_yrsum.ContainsKey(Student.ID))
+            {
+                _data["本學年目前累計"] = Global._SRDict_yrsum[Student.ID].ToString();
             }
 
             #region comment

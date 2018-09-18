@@ -82,7 +82,9 @@ namespace JHEvaluation.StudentSemesterScoreReport
             Global._SRDict.Clear();
             List<string> sidList = (from data in Options.Students select data.ID).ToList();
             Global._SRDict = Utility.GetServiceLearningDetail(sidList, Options.SchoolYear, Options.Semester);
-            
+
+            //2018.09.16 [ischoolKingdom] Vicky依據[05-02][02]學期成績證明單 服務學習時數顯示處理 項目，新增服務學習學年累計時數。
+            Global._SRDict_yrsum = Utility.GetServiceLearningDetail(sidList, Options.SchoolYear);
             #endregion
 
             #region 節權數顯示

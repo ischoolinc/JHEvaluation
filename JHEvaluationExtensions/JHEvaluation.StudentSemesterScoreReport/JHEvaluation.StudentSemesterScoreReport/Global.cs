@@ -15,7 +15,8 @@ namespace JHEvaluation.StudentSemesterScoreReport
         /// 學生服務學習時數累計
         /// </summary>
         public static Dictionary<string, decimal> _SRDict = new Dictionary<string, decimal>();
-
+        //2018.09.16 [ischoolKingdom] Vicky依據[05-02][02]學期成績證明單 服務學習時數顯示處理 項目，新增服務學習學年累計時數。
+        public static Dictionary<string, decimal> _SRDict_yrsum = new Dictionary<string, decimal>();
 
         internal static string CDate(string p)
         {
