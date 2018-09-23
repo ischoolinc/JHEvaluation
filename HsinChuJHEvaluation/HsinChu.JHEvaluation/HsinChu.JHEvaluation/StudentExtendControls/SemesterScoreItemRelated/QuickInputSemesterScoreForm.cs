@@ -75,7 +75,7 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 }
 
                 _effortScoreList.AddRange(_effortDict.Keys);
-                _effortScoreList.Sort(delegate(decimal a, decimal b)
+                _effortScoreList.Sort(delegate (decimal a, decimal b)
                 {
                     return b.CompareTo(a);
                 });
@@ -85,23 +85,21 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         private void InitializeTextBoxManager()
         {
             _manager = new TextBoxManager(
-                textBoxX36, textBoxX25, textBoxX1, textBoxX9,
-                textBoxX37, textBoxX26, textBoxX2, textBoxX10,
-                textBoxX27, textBoxX3, textBoxX11,
-                textBoxX28, textBoxX4, textBoxX12,
-                textBoxX29, textBoxX5, textBoxX13,
-                textBoxX30, textBoxX6, textBoxX14,
-                textBoxX31, textBoxX7, textBoxX15,
-                textBoxX32, textBoxX8, textBoxX16
+                textBoxPC1, textBoxScore1, textBoxText1, // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，將語文領域的子領域兩個項目欄位拿掉，僅保留輸入語文領域成績的單一功能。
+                textBoxPC2, textBoxScore2, textBoxText2,
+                textBoxPC3, textBoxScore3, textBoxText3,
+                textBoxPC4, textBoxScore4, textBoxText4,
+                textBoxPC5, textBoxScore5, textBoxText5,
+                textBoxPC6, textBoxScore6, textBoxText6,
+                textBoxPC7, textBoxScore7, textBoxText7
                 );
-            _manager.AddEffortTextBoxMapping(textBoxX1, textBoxX17);
-            _manager.AddEffortTextBoxMapping(textBoxX2, textBoxX18);
-            _manager.AddEffortTextBoxMapping(textBoxX3, textBoxX19);
-            _manager.AddEffortTextBoxMapping(textBoxX4, textBoxX20);
-            _manager.AddEffortTextBoxMapping(textBoxX5, textBoxX21);
-            _manager.AddEffortTextBoxMapping(textBoxX6, textBoxX22);
-            _manager.AddEffortTextBoxMapping(textBoxX7, textBoxX23);
-            _manager.AddEffortTextBoxMapping(textBoxX8, textBoxX24);
+            _manager.AddEffortTextBoxMapping(textBoxScore1, textBoxEffort1); // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，將語文領域的子領域兩個項目欄位拿掉，僅保留輸入語文領域成績的單一功能。
+            _manager.AddEffortTextBoxMapping(textBoxScore2, textBoxEffort2);
+            _manager.AddEffortTextBoxMapping(textBoxScore3, textBoxEffort3);
+            _manager.AddEffortTextBoxMapping(textBoxScore4, textBoxEffort4);
+            _manager.AddEffortTextBoxMapping(textBoxScore5, textBoxEffort5);
+            _manager.AddEffortTextBoxMapping(textBoxScore6, textBoxEffort6);
+            _manager.AddEffortTextBoxMapping(textBoxScore7, textBoxEffort7);
         }
 
         private void InitializeComboBoxes()
@@ -171,69 +169,32 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             JHProgramPlanRecord record = _student.ProgramPlan;
             if (record != null)
             {
-                List<string> chList = new List<string>(new string[] { "國文", "國語文", "國語" });
-                List<string> enList = new List<string>(new string[] { "英文", "英語文", "英語" });
-                string chinese = "", english = "", chPC = "", enPC = "";
-
                 Dictionary<string, PeriodCredit> pcs = new Dictionary<string, PeriodCredit>();
 
                 foreach (K12.Data.ProgramSubject subject in record.Subjects)
                 {
                     if ("" + subject.GradeYear == "" + _util.GetGradeYear(cboSchoolYear.Text, cboSemester.Text) && "" + subject.Semester == cboSemester.Text)
                     {
-                        if (subject.Domain == "語文")
-                        {
-                            #region 語文領域特別處理
-                            foreach (string word in chList)
-                            {
-                                if (subject.SubjectName.Contains(word))
-                                {
-                                    chinese = subject.SubjectName;
-                                    if (subject.Period != subject.Credit)
-                                        chPC = "" + subject.Period + "/" + subject.Credit;
-                                    else
-                                        chPC = "" + subject.Period;
-                                }
-                            }
+                        // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，將語文領域的子領域兩個項目欄位拿掉，僅保留輸入語文領域成績的單一功能。
+                        #region 各領域
+                        if (!pcs.ContainsKey(subject.Domain))
+                            pcs.Add(subject.Domain, new PeriodCredit(0, 0));
+                        if (subject.Period.HasValue)
+                            pcs[subject.Domain].Period += subject.Period.Value;
+                        if (subject.Credit.HasValue)
+                            pcs[subject.Domain].Credit += subject.Credit.Value;
+                        #endregion
 
-                            foreach (string word in enList)
-                            {
-                                if (subject.SubjectName.Contains(word))
-                                {
-                                    english = subject.SubjectName;
-                                    if (subject.Period != subject.Credit)
-                                        enPC = "" + subject.Period + "/" + subject.Credit;
-                                    else
-                                        enPC = "" + subject.Period;
-                                }
-                            }
-                            #endregion
-                        }
-                        else
-                        {
-                            #region 其它領域
-                            if (!pcs.ContainsKey(subject.Domain))
-                                pcs.Add(subject.Domain, new PeriodCredit(0, 0));
-                            if (subject.Period.HasValue)
-                                pcs[subject.Domain].Period += subject.Period.Value;
-                            if (subject.Credit.HasValue)
-                                pcs[subject.Domain].Credit += subject.Credit.Value;
-                            #endregion
-                        }
                     }
                 }
 
-                textBoxX36.Text = chinese;
-                textBoxX37.Text = english;
-                textBoxX25.Text = chPC;
-                textBoxX26.Text = enPC;
-
-                textBoxX27.Text = pcs.ContainsKey("數學") ? pcs["數學"].ToString() : "";
-                textBoxX28.Text = pcs.ContainsKey("社會") ? pcs["社會"].ToString() : "";
-                textBoxX29.Text = pcs.ContainsKey("藝術與人文") ? pcs["藝術與人文"].ToString() : "";
-                textBoxX30.Text = pcs.ContainsKey("自然與生活科技") ? pcs["自然與生活科技"].ToString() : "";
-                textBoxX31.Text = pcs.ContainsKey("健康與體育") ? pcs["健康與體育"].ToString() : "";
-                textBoxX32.Text = pcs.ContainsKey("綜合活動") ? pcs["綜合活動"].ToString() : "";
+                textBoxPC1.Text = pcs.ContainsKey("語文") ? pcs["語文"].ToString() : ""; // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，將語文領域的子領域兩個項目欄位拿掉，僅保留輸入語文領域成績的單一功能。
+                textBoxPC2.Text = pcs.ContainsKey("數學") ? pcs["數學"].ToString() : "";
+                textBoxPC3.Text = pcs.ContainsKey("社會") ? pcs["社會"].ToString() : "";
+                textBoxPC4.Text = pcs.ContainsKey("藝術與人文") ? pcs["藝術與人文"].ToString() : "";
+                textBoxPC5.Text = pcs.ContainsKey("自然與生活科技") ? pcs["自然與生活科技"].ToString() : "";
+                textBoxPC6.Text = pcs.ContainsKey("健康與體育") ? pcs["健康與體育"].ToString() : "";
+                textBoxPC7.Text = pcs.ContainsKey("綜合活動") ? pcs["綜合活動"].ToString() : "";
             }
             #endregion
         }
@@ -306,73 +267,22 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 newRecord.SchoolYear = schoolYear;
                 newRecord.Semester = semester;
 
-                K12.Data.DomainScore liter = new K12.Data.DomainScore();
-                PeriodCredit literpc1 = new PeriodCredit();
-                PeriodCredit literpc2 = new PeriodCredit();
-                literpc1.Parse(textBoxX25.Text);
-                literpc2.Parse(textBoxX26.Text);
-                //if (!int.TryParse(textBoxX25.Text, out literpc1))
-                //    literpc1 = 0;
-                //if (!int.TryParse(textBoxX26.Text, out literpc2))
-                //    literpc2 = 0;
-                int effort1, effort2;
-                if (!int.TryParse(textBoxX17.Text, out effort1))
-                    effort1 = 0;
-                if (!int.TryParse(textBoxX18.Text, out effort2))
-                    effort2 = 0;
+                // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，將語文領域的子領域兩個項目欄位拿掉，僅保留輸入語文領域成績的單一功能。
+                if (CheckDomainValid(textBoxPC1, textBoxScore1, textBoxEffort1))
+                    newRecord.Domains.Add("語文", GetDomainScore("語文", textBoxPC1, textBoxScore1, textBoxEffort1, textBoxText1));
+                if (CheckDomainValid(textBoxPC2, textBoxScore2, textBoxEffort2))
+                    newRecord.Domains.Add("數學", GetDomainScore("數學", textBoxPC2, textBoxScore2, textBoxEffort2, textBoxText2));
+                if (CheckDomainValid(textBoxPC3, textBoxScore3, textBoxEffort3))
+                    newRecord.Domains.Add("社會", GetDomainScore("社會", textBoxPC3, textBoxScore3, textBoxEffort3, textBoxText3));
+                if (CheckDomainValid(textBoxPC4, textBoxScore4, textBoxEffort4))
+                    newRecord.Domains.Add("藝術與人文", GetDomainScore("藝術與人文", textBoxPC4, textBoxScore4, textBoxEffort4, textBoxText4));
+                if (CheckDomainValid(textBoxPC5, textBoxScore5, textBoxEffort5))
+                    newRecord.Domains.Add("自然與生活科技", GetDomainScore("自然與生活科技", textBoxPC5, textBoxScore5, textBoxEffort5, textBoxText5));
+                if (CheckDomainValid(textBoxPC6, textBoxScore6, textBoxEffort6))
+                    newRecord.Domains.Add("健康與體育", GetDomainScore("健康與體育", textBoxPC6, textBoxScore6, textBoxEffort6, textBoxText6));
+                if (CheckDomainValid(textBoxPC7, textBoxScore7, textBoxEffort7))
+                    newRecord.Domains.Add("綜合活動", GetDomainScore("綜合活動", textBoxPC7, textBoxScore7, textBoxEffort7, textBoxText7));
 
-                liter.Period = literpc1.Period + literpc2.Period;
-                liter.Credit = literpc1.Credit + literpc2.Credit;
-                liter.Domain = "語文";
-                //liter.Effort = (int)((effort1 + effort2) / 2);
-                liter.Effort = 1;
-                decimal d;
-                liter.Score = decimal.TryParse(labelX14.Text, out d) ? (decimal?)d : null;
-                liter.Text = textBoxX9.Text + " " + textBoxX10.Text;
-
-                newRecord.Domains.Add("語文", liter);
-
-                if (CheckDomainValid(textBoxX27, textBoxX3, textBoxX19))
-                    newRecord.Domains.Add("數學", GetDomainScore("語文", textBoxX27, textBoxX3, textBoxX19, textBoxX11));
-                if (CheckDomainValid(textBoxX28, textBoxX4, textBoxX20))
-                    newRecord.Domains.Add("社會", GetDomainScore("社會", textBoxX28, textBoxX4, textBoxX20, textBoxX12));
-                if (CheckDomainValid(textBoxX29, textBoxX5, textBoxX21))
-                    newRecord.Domains.Add("藝術與人文", GetDomainScore("藝術與人文", textBoxX29, textBoxX5, textBoxX21, textBoxX13));
-                if (CheckDomainValid(textBoxX30, textBoxX6, textBoxX22))
-                    newRecord.Domains.Add("自然與生活科技", GetDomainScore("自然與生活科技", textBoxX30, textBoxX6, textBoxX22, textBoxX14));
-                if (CheckDomainValid(textBoxX31, textBoxX7, textBoxX23))
-                    newRecord.Domains.Add("健康與體育", GetDomainScore("健康與體育", textBoxX31, textBoxX7, textBoxX23, textBoxX15));
-                if (CheckDomainValid(textBoxX32, textBoxX8, textBoxX24))
-                    newRecord.Domains.Add("綜合活動", GetDomainScore("綜合活動", textBoxX32, textBoxX8, textBoxX24, textBoxX16));
-
-                if (textBoxX25.Enabled)
-                {
-                    K12.Data.SubjectScore subject1 = new K12.Data.SubjectScore();
-                    subject1.Domain = "語文";
-                    subject1.Subject = textBoxX36.Text;
-                    subject1.Score = decimal.Parse(textBoxX1.Text);
-                    //subject1.Effort = int.Parse(textBoxX17.Text);
-                    subject1.Effort = 1;
-                    subject1.Text = textBoxX9.Text;
-                    //subject1.Period = subject1.Credit = int.Parse(textBoxX25.Text);
-                    subject1.Period = literpc1.Period;
-                    subject1.Credit = literpc1.Credit;
-                    newRecord.Subjects.Add(subject1.Subject, subject1);
-                }
-
-                if (textBoxX26.Enabled)
-                {
-                    K12.Data.SubjectScore subject2 = new K12.Data.SubjectScore();
-                    subject2.Domain = "語文";
-                    subject2.Subject = textBoxX37.Text;
-                    subject2.Score = decimal.Parse(textBoxX2.Text);
-                    subject2.Effort = int.Parse(textBoxX18.Text);
-                    subject2.Text = textBoxX10.Text;
-                    //subject2.Period = subject2.Credit = int.Parse(textBoxX26.Text);
-                    subject2.Period = literpc2.Period;
-                    subject2.Credit = literpc2.Credit;
-                    newRecord.Subjects.Add(subject2.Subject, subject2);
-                }
 
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
@@ -385,6 +295,8 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                     subject.Period = pc.Period;
                     subject.Credit = pc.Credit;
                     subject.Score = decimal.Parse("" + row.Cells[chsScore.Index].Value);
+                    // 2018.09.22 [ischoolKingdom] Vicky 依據 [J成績][HC][03]快速新增學期成績修正 項目，使輸入成績一併儲存至原始成績。
+                    subject.ScoreOrigin = decimal.Parse("" + row.Cells[chsScore.Index].Value);
                     //subject.Effort = int.Parse("" + row.Cells[chsEffort.Index].Value);
                     subject.Effort = 1;
                     subject.Text = "" + row.Cells[chsText.Index].Value;
@@ -446,7 +358,7 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             K12.Data.DomainScore domain = new K12.Data.DomainScore();
             domain.Domain = "彈性課程";
             domain.Score = decimal.Parse(textBoxX33.Text);
-
+            domain.ScoreOrigin = decimal.Parse(textBoxX33.Text); // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，輸入成績一併存入原始成績。
 
             PeriodCredit pc = new PeriodCredit();
             PeriodCredit temp = new PeriodCredit();
@@ -491,6 +403,7 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             //domain.Effort = int.Parse(effort.Text);
             domain.Effort = 1;
             domain.Score = decimal.Parse(score.Text);
+            domain.ScoreOrigin = decimal.Parse(score.Text); // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，將語文領域的子領域兩個項目欄位拿掉，僅保留輸入語文領域成績的單一功能。
             domain.Text = text.Text;
             return domain;
         }
@@ -524,46 +437,20 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
 
         /// <summary>
         /// 計算學習領域成績
-        /// </summary>
+        /// </summary>       
         private void CalculateLearnDomainScore()
         {
             PeriodCredit pc = new PeriodCredit();
             //int pc = 0;
             decimal total = 0;
 
-            if (!string.IsNullOrEmpty(labelX14.Text))
-            {
-                PeriodCredit literpc = new PeriodCredit();
-                PeriodCredit temp = new PeriodCredit();
-                //int literpc = 0;
-                if (ValidTextBox(textBoxX25))
-                {
-                    temp.Parse(textBoxX25.Text);
-                    literpc.Credit += temp.Credit;
-                    literpc.Period += temp.Period;
-                    //literpc += int.Parse(textBoxX25.Text);
-                }
-                if (ValidTextBox(textBoxX26))
-                {
-                    temp.Parse(textBoxX26.Text);
-                    literpc.Credit += temp.Credit;
-                    literpc.Period += temp.Period;
-                    //literpc += int.Parse(textBoxX26.Text);
-                }
-
-                if (literpc.Credit > 0)
-                {
-                    pc += literpc;
-                    total += decimal.Parse(labelX14.Text) * literpc.Credit;
-                }
-            }
-
-            EvalDomainScore(ref pc, ref total, textBoxX3, textBoxX27);
-            EvalDomainScore(ref pc, ref total, textBoxX4, textBoxX28);
-            EvalDomainScore(ref pc, ref total, textBoxX5, textBoxX29);
-            EvalDomainScore(ref pc, ref total, textBoxX6, textBoxX30);
-            EvalDomainScore(ref pc, ref total, textBoxX7, textBoxX31);
-            EvalDomainScore(ref pc, ref total, textBoxX8, textBoxX32);
+            EvalDomainScore(ref pc, ref total, textBoxScore1, textBoxPC1); // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，將語文領域的子領域兩個項目欄位拿掉，僅保留輸入語文領域成績的單一功能。
+            EvalDomainScore(ref pc, ref total, textBoxScore2, textBoxPC2);
+            EvalDomainScore(ref pc, ref total, textBoxScore3, textBoxPC3);
+            EvalDomainScore(ref pc, ref total, textBoxScore4, textBoxPC4);
+            EvalDomainScore(ref pc, ref total, textBoxScore5, textBoxPC5);
+            EvalDomainScore(ref pc, ref total, textBoxScore6, textBoxPC6);
+            EvalDomainScore(ref pc, ref total, textBoxScore7, textBoxPC7);
 
             if (pc.Credit > 0)
             {
@@ -631,7 +518,7 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             }
 
 
-            if (e.KeyData == Keys.Left )
+            if (e.KeyData == Keys.Left)
             {
                 Control control = sender as Control;
                 Control next = null;
@@ -719,7 +606,6 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 #endregion
 
                 ProcessEffortCode(txt);
-                CalculateLiteratureDomainScore();
                 CalculateLearnDomainScore();
             }
         }
@@ -728,7 +614,6 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         {
             if (ValidPCTextBox(sender as TextBox))
             {
-                CalculateLiteratureDomainScore();
                 CalculateLearnDomainScore();
             }
         }
@@ -795,40 +680,7 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             return valid;
         }
 
-        private void CalculateLiteratureDomainScore()
-        {
-            decimal chTotal = 0, enTotal = 0;
-            decimal chCredit = 0, enCredit = 0;
-
-            PeriodCredit pc = new PeriodCredit();
-
-            if (ValidTextBox(textBoxX25) && ValidTextBox(textBoxX1))
-            {
-                pc.Parse(textBoxX25.Text);
-                chCredit = pc.Credit;
-                chTotal = decimal.Parse(textBoxX1.Text) * chCredit;
-            }
-
-            if (ValidTextBox(textBoxX26) && ValidTextBox(textBoxX2))
-            {
-                pc.Parse(textBoxX26.Text);
-                enCredit = pc.Credit;
-                enTotal = decimal.Parse(textBoxX2.Text) * enCredit;
-            }
-
-            decimal total = 0;
-            if (chCredit + enCredit > 0)
-                total = (chTotal + enTotal) / (chCredit + enCredit);
-            if (total > 0)
-                labelX14.Text = "" + _calculator.ParseDomainScore(total);
-        }
-
-        private void literatureSubjectTextBox_TextChanged(object sender, EventArgs e)
-        {
-            textBoxX1.Enabled = textBoxX25.Enabled = (!string.IsNullOrEmpty(textBoxX36.Text));
-            textBoxX2.Enabled = textBoxX26.Enabled = (!string.IsNullOrEmpty(textBoxX37.Text));
-            CalculateLiteratureDomainScore();
-        }
+        // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，將語文領域的子領域兩個項目欄位拿掉，僅保留輸入語文領域成績的單一功能。
 
         private void cboSchoolYear_KeyUp(object sender, KeyEventArgs e)
         {
@@ -842,12 +694,11 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         {
             if (e.KeyData == Keys.Enter)
             {
-                if (textBoxX1.Enabled)
-                    textBoxX1.Focus();
-                else if (textBoxX2.Enabled)
-                    textBoxX2.Focus();
+                if (textBoxScore1.Enabled)
+                    textBoxScore1.Focus();
+
                 else
-                    textBoxX3.Focus();
+                    textBoxScore2.Focus();
             }
         }
 
@@ -1081,24 +932,11 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         public Control GetNextControl4D(Control control)
         {
             int index = _controls.IndexOf(control);
-            if (index <7)
-            {
-                if (index >= 0 && index + 4 < _controls.Count)
-                    if ((index + 4) <= _controls.Count)
-                        return _controls[index + 4];
-                    else
-                        return _controls[0];
-            }
-            else
-            {
-                if (index >= 0 && index + 3 < _controls.Count)
-                    if ((index + 3) <= _controls.Count)
-                        return _controls[index + 3];
-                    else
-                        return _controls[0];
-
-            }
-
+            if (index >= 0 && index + 3 < _controls.Count)
+                if ((index + 3) <= _controls.Count)
+                    return _controls[index + 3];
+                else
+                    return _controls[0];
 
             return null;
         }
@@ -1107,24 +945,12 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         public Control GetNextControl4U(Control control)
         {
             int index = _controls.IndexOf(control);
-            if (index <=7)
-            {
-                if (index >= 0 && index - 4 < _controls.Count)
-                    if ((index - 4) > 0)
-                        return _controls[index - 4];
-                    else
-                        return _controls[0];
-            }
-            else
-            {
-                if (index >= 0 && index - 3 < _controls.Count)
-                    if ((index - 3) > 0)
-                        return _controls[index - 3];
-                    else
-                        return _controls[0];
-            }
-
-
+            if (index >= 0 && index - 3 < _controls.Count)
+                if ((index - 3) > 0)
+                    return _controls[index - 3];
+                else
+                    return _controls[0];
+           
             return null;
         }
 
