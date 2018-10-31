@@ -1087,6 +1087,18 @@ namespace HsinChuExamScore_JH
                 // 取得欄位
                 foreach (string colName in Global.DTColumnsList())
                     dt.Columns.Add(colName);
+
+                // 缺曠欄位
+                foreach (var studentID in _AttendanceDict.Keys)
+                {
+                    foreach (var absentKey in _AttendanceDict[studentID].Keys)
+                    {
+                        if (!dt.Columns.Contains(absentKey))
+                        {
+                            dt.Columns.Add(absentKey);
+                        }
+                    }
+                }
                                
                 // 組距欄位
                 // 領域班級組距
@@ -1376,6 +1388,14 @@ namespace HsinChuExamScore_JH
                         string key = str + "區間統計";
                         if (DisciplineCountDict[StudRec.ID].ContainsKey(str))
                             row[key] = DisciplineCountDict[StudRec.ID][str];
+                    }
+                }
+                //缺曠套印
+                if (_AttendanceDict.ContainsKey(StudRec.ID))
+                {
+                    foreach (var absentKey in _AttendanceDict[StudRec.ID].Keys)
+                    {
+                        row[absentKey] = _AttendanceDict[StudRec.ID][absentKey];
                     }
                 }
 
