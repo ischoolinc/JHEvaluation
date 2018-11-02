@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using FISCA.Data;
 using K12.Data;
+using System.IO;
 
 namespace HsinChuExamScore_JH
 {
@@ -18,7 +19,7 @@ namespace HsinChuExamScore_JH
         /// <param name="beginDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        public static Dictionary<string,decimal> GetServiceLearningDetailByDate(List<string> StudentIDList, DateTime beginDate, DateTime endDate)
+        public static Dictionary<string, decimal> GetServiceLearningDetailByDate(List<string> StudentIDList, DateTime beginDate, DateTime endDate)
         {
             Dictionary<string, decimal> retVal = new Dictionary<string, decimal>();
             if (StudentIDList.Count > 0)
@@ -139,7 +140,7 @@ namespace HsinChuExamScore_JH
                     // ex.一般:曠課
                     //string key = "區間" + PeriodMappingDict[per.Period] + "_" + per.AbsenceType;
 
-                    string key = PeriodMappingDict[per.Period] +  per.AbsenceType;
+                    string key = PeriodMappingDict[per.Period] + per.AbsenceType;
                     if (!retVal[rec.RefStudentID].ContainsKey(key))
                         retVal[rec.RefStudentID].Add(key, 0);
 
@@ -159,7 +160,7 @@ namespace HsinChuExamScore_JH
         {
             List<string> retVal = new List<string>();
             QueryHelper qh = new QueryHelper();
-            string query = "select student.id from student inner join class on student.ref_class_id = class.id where student.status=1 and class.id in("+string.Join(",",ClassIDList.ToArray())+") order by class.grade_year,class.class_name,student.seat_no";
+            string query = "select student.id from student inner join class on student.ref_class_id = class.id where student.status=1 and class.id in(" + string.Join(",", ClassIDList.ToArray()) + ") order by class.grade_year,class.class_name,student.seat_no";
             DataTable dt = new DataTable();
             dt = qh.Select(query);
 
@@ -170,7 +171,7 @@ namespace HsinChuExamScore_JH
             return retVal;
         }
 
-        
+
         /// <summary>
         /// 取得系統內學生類別,群組用[]表示,沒有群組直接名稱
         /// </summary>
@@ -186,9 +187,9 @@ namespace HsinChuExamScore_JH
 
             foreach (DataRow dr in dt.Rows)
             {
-                string strP = "",key="",StudID="";
+                string strP = "", key = "", StudID = "";
 
-                if(dr["prefix"]!=null)
+                if (dr["prefix"] != null)
                     strP = dr["prefix"].ToString();
 
                 if (string.IsNullOrEmpty(strP))
@@ -198,18 +199,18 @@ namespace HsinChuExamScore_JH
 
                 if (dr["ref_student_id"] != null)
                     StudID = dr["ref_student_id"].ToString();
-                
+
                 if (!retVal.ContainsKey(key))
                     retVal.Add(key, new List<string>());
 
                 if (!string.IsNullOrEmpty(StudID))
                     retVal[key].Add(StudID);
 
-            }               
-            return retVal;        
+            }
+            return retVal;
         }
 
-        public static Dictionary<string, Dictionary<string,DAO.SubjectDomainName>> GetStudentSCAttendCourse(List<string> StudentIDList,List<string> CourseIDList,string examID)
+        public static Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> GetStudentSCAttendCourse(List<string> StudentIDList, List<string> CourseIDList, string examID)
         {
             Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> retVal = new Dictionary<string, Dictionary<string, DAO.SubjectDomainName>>();
             QueryHelper qh = new QueryHelper();
@@ -224,11 +225,11 @@ namespace HsinChuExamScore_JH
 
                 string domainName = dr["domain"].ToString();
                 string subjectName = dr["subject"].ToString();
-                
+
                 if (string.IsNullOrEmpty(domainName))
                     domainName = "彈性課程";
 
-                
+
 
                 if (!retVal[id].ContainsKey(subjectName))
                 {
@@ -240,11 +241,11 @@ namespace HsinChuExamScore_JH
                     {
                         sdn.Credit = credit;
                     }
-                    
+
                     retVal[id].Add(subjectName, sdn);
                 }
             }
-                        
+
             return retVal;
         }
 
@@ -293,13 +294,183 @@ namespace HsinChuExamScore_JH
             {
                 string id = dr["id"].ToString();
                 decimal sp = 50;
-                if(decimal.TryParse(dr["ScorePercentage"].ToString(), out sp))
+                if (decimal.TryParse(dr["ScorePercentage"].ToString(), out sp))
                     returnData.Add(id, sp);
                 else
                     returnData.Add(id, 50);
-                
+
             }
             return returnData;
         }
+
+        // 建立word 大量功能變數
+        public static void CreateFieldTemplate()
+        {
+            Aspose.Words.Document doc = new Aspose.Words.Document();
+            Aspose.Words.DocumentBuilder builder = new Aspose.Words.DocumentBuilder(doc);
+            
+            builder.Write("變數");
+            builder.Writeln();
+
+            //領域
+            builder.Write("領域成績排名");
+            builder.StartTable();
+            builder.InsertCell();
+            builder.Write("領域名稱");
+            builder.InsertCell();
+            builder.Write("領域班排名名次");
+            builder.InsertCell();
+            builder.Write("領域班排名PR值");
+            builder.InsertCell();
+            builder.Write("領域班排名百分比");
+            builder.InsertCell();
+            builder.Write("領域年排名名次");
+            builder.InsertCell();
+            builder.Write("領域年排名PR值");
+            builder.InsertCell();
+            builder.Write("領域年排名百分比");
+            builder.EndRow();
+
+            foreach (string key in new string[]{
+                    "語文",
+                    "數學",
+                    "社會",
+                    "自然與生活科技",
+                    "健康與體育",
+                    "藝術與人文",
+                    "綜合活動",
+                    "彈性課程"
+                })
+            {
+
+                builder.InsertCell();
+                builder.Write(key);
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名名次" + " \\* MERGEFORMAT ", "«DCR»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名PR值" + " \\* MERGEFORMAT ", "«DCPR»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名百分比" + " \\* MERGEFORMAT ", "«DCP»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域年排名名次" + " \\* MERGEFORMAT ", "«DYR»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域年排名PR值" + " \\* MERGEFORMAT ", "«DYPR»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域年排名百分比" + " \\* MERGEFORMAT ", "«DYP»");
+                builder.EndRow();
+
+            }
+
+            builder.EndTable();
+
+            builder.Writeln();
+
+
+            foreach (string key in new string[]{
+                    "語文",
+                    "數學",
+                    "社會",
+                    "自然與生活科技",
+                    "健康與體育",
+                    "藝術與人文",
+                    "綜合活動",
+                    "彈性課程"
+                })
+            {
+                builder.Write("領域:" +key);
+
+                builder.StartTable();
+                builder.InsertCell();
+                builder.Write("科目名稱");
+                builder.InsertCell();
+                builder.Write("科目班排名名次");
+                builder.InsertCell();
+                builder.Write("科目班排名PR值");
+                builder.InsertCell();
+                builder.Write("科目班排名百分比");
+                builder.InsertCell();
+                builder.Write("科目年排名名次");
+                builder.InsertCell();
+                builder.Write("科目年排名PR值");
+                builder.InsertCell();
+                builder.Write("科目年排名百分比");
+                builder.EndRow();
+
+                for (int i = 1; i <= 7; i++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目名稱" + i + " \\* MERGEFORMAT ", "«SN»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目班排名名次" + i + " \\* MERGEFORMAT ", "«SCR»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目班排名PR值" + i + " \\* MERGEFORMAT ", "«SCPR»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目班排名百分比" + i + " \\* MERGEFORMAT ", "«SCP»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目年排名名次" + i + " \\* MERGEFORMAT ", "«SYR»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目年排名PR值" + i + " \\* MERGEFORMAT ", "«SYPR»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目年排名百分比" + i + " \\* MERGEFORMAT ", "«SYP»");
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln();
+
+            }
+
+            #region 儲存檔案
+            string inputReportName = "合併欄位總表";
+            string reportName = inputReportName;
+
+            string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            path = Path.Combine(path, reportName + ".doc");
+
+            if (System.IO.File.Exists(path))
+            {
+                int i = 1;
+                while (true)
+                {
+                    string newPath = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + (i++) + Path.GetExtension(path);
+                    if (!System.IO.File.Exists(newPath))
+                    {
+                        path = newPath;
+                        break;
+                    }
+                }
+            }
+
+            try
+            {
+                doc.Save(path, Aspose.Words.SaveFormat.Doc);
+                System.Diagnostics.Process.Start(path);
+            }
+            catch
+            {
+                System.Windows.Forms.SaveFileDialog sd = new System.Windows.Forms.SaveFileDialog();
+                sd.Title = "另存新檔";
+                sd.FileName = reportName + ".doc";
+                sd.Filter = "Excel檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+                if (sd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    try
+                    {
+                        doc.Save(path, Aspose.Words.SaveFormat.Doc);
+                    }
+                    catch
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show("指定路徑無法存取。", "建立檔案失敗", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+            }
+            #endregion
+
+
+        }
+
     }
 }
