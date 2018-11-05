@@ -324,11 +324,15 @@ namespace HsinChuExamScore_JH
             builder.InsertCell();
             builder.Write("領域班排名百分比");
             builder.InsertCell();
+            builder.Write("領域班排名母體平均");
+            builder.InsertCell();
             builder.Write("領域年排名名次");
             builder.InsertCell();
             builder.Write("領域年排名PR值");
             builder.InsertCell();
             builder.Write("領域年排名百分比");
+            builder.InsertCell();
+            builder.Write("領域年排名母體平均");
             builder.EndRow();
 
             foreach (string key in new string[]{
@@ -352,11 +356,15 @@ namespace HsinChuExamScore_JH
                 builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域班排名百分比" + " \\* MERGEFORMAT ", "«DCP»");
                 builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名母體平均" + " \\* MERGEFORMAT ", "«DCA»");
+                builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域年排名名次" + " \\* MERGEFORMAT ", "«DYR»");
                 builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域年排名PR值" + " \\* MERGEFORMAT ", "«DYPR»");
                 builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域年排名百分比" + " \\* MERGEFORMAT ", "«DYP»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域年排名母體平均" + " \\* MERGEFORMAT ", "«DYA»");
                 builder.EndRow();
 
             }
@@ -389,11 +397,15 @@ namespace HsinChuExamScore_JH
                 builder.InsertCell();
                 builder.Write("科目班排名百分比");
                 builder.InsertCell();
+                builder.Write("科目班排名母體平均");
+                builder.InsertCell();
                 builder.Write("科目年排名名次");
                 builder.InsertCell();
                 builder.Write("科目年排名PR值");
                 builder.InsertCell();
                 builder.Write("科目年排名百分比");
+                builder.InsertCell();
+                builder.Write("科目年排名母體平均");
                 builder.EndRow();
 
                 for (int i = 1; i <= 7; i++)
@@ -407,11 +419,15 @@ namespace HsinChuExamScore_JH
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + key + "_科目班排名百分比" + i + " \\* MERGEFORMAT ", "«SCP»");
                     builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目班排名母體平均" + i + " \\* MERGEFORMAT ", "«SCA»");
+                    builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + key + "_科目年排名名次" + i + " \\* MERGEFORMAT ", "«SYR»");
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + key + "_科目年排名PR值" + i + " \\* MERGEFORMAT ", "«SYPR»");
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + key + "_科目年排名百分比" + i + " \\* MERGEFORMAT ", "«SYP»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目年排名母體平均" + i + " \\* MERGEFORMAT ", "«SYA»");
                     builder.EndRow();
                 }
                 builder.EndTable();
