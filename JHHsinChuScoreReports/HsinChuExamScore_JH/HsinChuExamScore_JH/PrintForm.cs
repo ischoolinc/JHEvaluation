@@ -1014,7 +1014,14 @@ ORDER BY
                         }
                         if (!_DomainWeightRankDataDict["" + dr["ref_student_id"]].ContainsKey("領域成績加權平均" + rankType + "母體平均"))
                         {
-                            _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "母體平均", "" + dr["avg"]);
+                            decimal d;
+
+                            decimal.TryParse("" + dr["avg"], out d);
+
+                            // 四捨五入標準作法
+                            d =Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+
+                            _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "母體平均", "" + d);
                         }
 
                     }
@@ -1039,7 +1046,14 @@ ORDER BY
                         }
                         if (!_DomainWeightRankDataDict["" + dr["ref_student_id"]].ContainsKey("領域成績加權平均" + rankType + "母體平均"))
                         {
-                            _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "母體平均", "" + dr["avg"]);
+                            decimal d;
+
+                            decimal.TryParse("" + dr["avg"], out d);
+
+                            // 四捨五入標準作法
+                            d = Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+
+                            _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "母體平均", "" + d);
                         }
 
                     }
@@ -1067,7 +1081,14 @@ ORDER BY
                         }
                         if (!_subjectRankDataDict["" + dr["ref_student_id"]].ContainsKey(subjectName + "_科目" + rankType + "母體平均"))
                         {
-                            _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "母體平均", "" + dr["avg"]);
+                            decimal d;
+
+                            decimal.TryParse("" + dr["avg"], out d);
+
+                            // 四捨五入標準作法
+                            d = Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+
+                            _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "母體平均", "" + d);
                         }
 
                     }
@@ -1093,7 +1114,14 @@ ORDER BY
                         }
                         if (!_subjectRankDataDict["" + dr["ref_student_id"]].ContainsKey(subjectName + "_科目" + rankType + "母體平均"))
                         {
-                            _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "母體平均", "" + dr["avg"]);
+                            decimal d;
+
+                            decimal.TryParse("" + dr["avg"], out d);
+
+                            // 四捨五入標準作法
+                            d = Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+
+                            _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "母體平均", "" + d);
                         }
                     }
 
@@ -1121,7 +1149,14 @@ ORDER BY
                         }
                         if (!_domainRankDataDict["" + dr["ref_student_id"]].ContainsKey(domainName + "_領域" + rankType + "母體平均"))
                         {
-                            _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "母體平均", "" + dr["avg"]);
+                            decimal d;
+
+                            decimal.TryParse("" + dr["avg"], out d);
+
+                            // 四捨五入標準作法
+                            d = Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+
+                            _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "母體平均", "" + d);
                         }
                     }
                 }
@@ -1146,7 +1181,14 @@ ORDER BY
                         }
                         if (!_domainRankDataDict["" + dr["ref_student_id"]].ContainsKey(domainName + "_領域" + rankType + "母體平均"))
                         {
-                            _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "母體平均", "" + dr["avg"]);
+                            decimal d;
+
+                            decimal.TryParse("" + dr["avg"], out d);
+
+                            // 四捨五入標準作法
+                            d = Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+
+                            _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "母體平均", "" + d);
                         }
                     }
                 }                   
