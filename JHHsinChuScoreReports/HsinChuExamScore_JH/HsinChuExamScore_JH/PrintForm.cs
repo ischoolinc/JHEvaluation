@@ -1778,27 +1778,59 @@ ORDER BY
                                     break;
 
                                 case "科目班排名名次":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
                                     row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item)? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item]:"";
                                     break;
                                 case "科目班排名PR值":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
                                     row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
                                     break;
                                 case "科目班排名百分比":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
                                     row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
                                     break;
                                 case "科目班排名母體平均":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
                                     row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
                                     break;
                                 case "科目年排名名次":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
                                     row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
                                     break;
                                 case "科目年排名PR值":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
                                     row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
                                     break;
                                 case "科目年排名百分比":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
                                     row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
                                     break;
                                 case "科目年排名母體平均":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
                                     row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
                                     break;
                             }
@@ -1851,6 +1883,11 @@ ORDER BY
                             row[keyf] = eds.ScoreF.Value;
 
                         // 領域排名資料
+
+                        if (!_domainRankDataDict.ContainsKey(StudRec.ID))
+                        {
+                            continue; // 沒有排名資料 就跳出
+                        }
                         row[keyRank1] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank1) ? _domainRankDataDict[StudRec.ID][keyRank1] : "";
                         row[keyRank2] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank2) ? _domainRankDataDict[StudRec.ID][keyRank2] : "";
                         row[keyRank3] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank3) ? _domainRankDataDict[StudRec.ID][keyRank3] : "";
