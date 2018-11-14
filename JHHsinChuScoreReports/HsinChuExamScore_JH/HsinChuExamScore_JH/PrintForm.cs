@@ -1019,7 +1019,7 @@ ORDER BY
                             decimal.TryParse("" + dr["avg"], out d);
 
                             // 四捨五入標準作法
-                            d =Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+                            d =Math.Round(d, 2, MidpointRounding.AwayFromZero); // 四捨五入到第二位
 
                             _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "母體平均", "" + d);
                         }
@@ -1051,7 +1051,7 @@ ORDER BY
                             decimal.TryParse("" + dr["avg"], out d);
 
                             // 四捨五入標準作法
-                            d = Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+                            d = Math.Round(d, 2, MidpointRounding.AwayFromZero); // 四捨五入到第二位
 
                             _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "母體平均", "" + d);
                         }
@@ -1086,7 +1086,7 @@ ORDER BY
                             decimal.TryParse("" + dr["avg"], out d);
 
                             // 四捨五入標準作法
-                            d = Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+                            d = Math.Round(d, 2, MidpointRounding.AwayFromZero); // 四捨五入到第二位
 
                             _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "母體平均", "" + d);
                         }
@@ -1119,7 +1119,7 @@ ORDER BY
                             decimal.TryParse("" + dr["avg"], out d);
 
                             // 四捨五入標準作法
-                            d = Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+                            d = Math.Round(d, 2, MidpointRounding.AwayFromZero); // 四捨五入到第二位
 
                             _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "母體平均", "" + d);
                         }
@@ -1154,7 +1154,7 @@ ORDER BY
                             decimal.TryParse("" + dr["avg"], out d);
 
                             // 四捨五入標準作法
-                            d = Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+                            d = Math.Round(d, 2, MidpointRounding.AwayFromZero); // 四捨五入到第二位
 
                             _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "母體平均", "" + d);
                         }
@@ -1186,7 +1186,7 @@ ORDER BY
                             decimal.TryParse("" + dr["avg"], out d);
 
                             // 四捨五入標準作法
-                            d = Math.Round(d, 2, MidpointRounding.ToEven); // 四捨五入到第二位
+                            d = Math.Round(d, 2, MidpointRounding.AwayFromZero); // 四捨五入到第二位
 
                             _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "母體平均", "" + d);
                         }
