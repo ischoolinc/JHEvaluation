@@ -29,14 +29,7 @@ namespace HsinChuExamScore_JH
         // 缺曠區間統計
         Dictionary<string, Dictionary<string, int>> _AttendanceDict = new Dictionary<string, Dictionary<string, int>>();
 
-        //領域加權排名資料 字典，存放、最後合併列印使用 (studentID,<MergeFieldkey,RankValue>)
-        Dictionary<string, Dictionary<string, string>> _DomainWeightRankDataDict = new Dictionary<string, Dictionary<string, string>>();
-
-        //科目排名資料 字典，存放、最後合併列印使用 (studentID,<subjectName +Key,RankValue>)
-        Dictionary<string, Dictionary<string, string>> _subjectRankDataDict = new Dictionary<string, Dictionary<string, string>>();
-
-        //科目排名資料 字典，存放、最後合併列印使用 (studentID,<domainName +Key,RankValue>)
-        Dictionary<string, Dictionary<string, string>> _domainRankDataDict = new Dictionary<string, Dictionary<string, string>>();
+       
 
 
         private List<string> typeList = new List<string>();
@@ -943,189 +936,7 @@ namespace HsinChuExamScore_JH
             li2.Add("R10_19");
             li2.Add("R0_9");
 
-            //抓取排名資料
-            string sql = @"SELECT 
-	rank_matrix.id AS rank_matrix_id
-	, rank_matrix.school_year
-	, rank_matrix.semester
-	, rank_matrix.grade_year
-	, rank_matrix.item_type
-	, rank_matrix.ref_exam_id
-	, rank_matrix.item_name
-	, rank_matrix.rank_type
-	, rank_matrix.rank_name
-	, class.class_name
-	, student.seat_no
-	, student.student_number
-	, student.name
-	, rank_detail.ref_student_id
-	,rank_detail.rank
-	,rank_detail.pr
-	,rank_detail.percentile
-FROM 
-	rank_matrix
-	LEFT OUTER JOIN rank_detail
-		ON rank_detail.ref_matrix_id = rank_matrix.id
-	LEFT OUTER JOIN student
-		ON student.id = rank_detail.ref_student_id
-	LEFT OUTER JOIN class
-		ON class.id = student.ref_class_id
-WHERE
-	rank_matrix.is_alive = true
-	AND rank_matrix.school_year = '" + _SelSchoolYear + @"'
-    AND rank_matrix.semester = '" +_SelSemester + @"'
-	AND rank_matrix.item_type like '定期評量%'
-	AND rank_matrix.ref_exam_id = '" + _SelExamID + @"'
-    AND ref_student_id IN ('" + string.Join("','", _StudentIDList) + @"') 
-ORDER BY 
-	rank_matrix.id
-	, rank_detail.rank
-	, class.grade_year
-	, class.display_order
-	, class.class_name
-	, student.seat_no
-	, student.id";
-
-            QueryHelper qh = new QueryHelper();
-            DataTable datatable = qh.Select(sql);
-
-            foreach (DataRow dr in datatable.Rows)
-            {
-                if (!_DomainWeightRankDataDict.ContainsKey("" + dr["ref_student_id"]))
-                {
-                    _DomainWeightRankDataDict.Add("" + dr["ref_student_id"], new Dictionary<string, string>());
-
-                    if ("" + dr["item_type"] == "定期評量/總計成績" && "" + dr["item_name"] == "加權平均")
-                    {
-                        string rankType = "" + dr["rank_type"];
-
-                        if (!_DomainWeightRankDataDict["" + dr["ref_student_id"]].ContainsKey("領域成績加權平均" + rankType + "名次"))
-                        {
-                            _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "名次", "" + dr["rank"]);
-                        }
-                        if (!_DomainWeightRankDataDict["" + dr["ref_student_id"]].ContainsKey("領域成績加權平均" + rankType + "PR值"))
-                        {
-                            _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "PR值", "" + dr["pr"]);
-                        }
-                        if (!_DomainWeightRankDataDict["" + dr["ref_student_id"]].ContainsKey("領域成績加權平均" + rankType + "百分比"))
-                        {
-                            _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "百分比", "" + dr["percentile"]);
-                        }
-
-                    }
-                }
-                else
-                {
-                    if ("" + dr["item_type"] == "定期評量/總計成績" && "" + dr["item_name"] == "加權平均")
-                    {
-                        string rankType = "" + dr["rank_type"];
-
-                        if (!_DomainWeightRankDataDict["" + dr["ref_student_id"]].ContainsKey("領域成績加權平均" + rankType + "名次"))
-                        {
-                            _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "名次", "" + dr["rank"]);
-                        }
-                        if (!_DomainWeightRankDataDict["" + dr["ref_student_id"]].ContainsKey("領域成績加權平均" + rankType + "PR值"))
-                        {
-                            _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "PR值", "" + dr["pr"]);
-                        }
-                        if (!_DomainWeightRankDataDict["" + dr["ref_student_id"]].ContainsKey("領域成績加權平均" + rankType + "百分比"))
-                        {
-                            _DomainWeightRankDataDict["" + dr["ref_student_id"]].Add("領域成績加權平均" + rankType + "百分比", "" + dr["percentile"]);
-                        }
-
-                    }
-                }
-                if (!_subjectRankDataDict.ContainsKey("" + dr["ref_student_id"]))
-                {
-                    _subjectRankDataDict.Add("" + dr["ref_student_id"], new Dictionary<string, string>());
-
-                    if ("" + dr["item_type"] == "定期評量/科目成績")
-                    {
-                        string subjectName = "" + dr["item_name"];
-                        string rankType = "" + dr["rank_type"];
-
-                        if (!_subjectRankDataDict["" + dr["ref_student_id"]].ContainsKey(subjectName + "_科目" + rankType + "名次"))
-                        {
-                            _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "名次", "" + dr["rank"]);
-                        }
-                        if (!_subjectRankDataDict["" + dr["ref_student_id"]].ContainsKey(subjectName + "_科目" + rankType + "PR值"))
-                        {
-                            _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "PR值", "" + dr["pr"]);
-                        }
-                        if (!_subjectRankDataDict["" + dr["ref_student_id"]].ContainsKey(subjectName + "_科目" + rankType + "百分比"))
-                        {
-                            _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "百分比", "" + dr["percentile"]);
-                        }
-
-                    }
-                }
-                else
-                {
-                    if ("" + dr["item_type"] == "定期評量/科目成績")
-                    {
-                        string subjectName = "" + dr["item_name"];
-                        string rankType = "" + dr["rank_type"];
-
-                        if (!_subjectRankDataDict["" + dr["ref_student_id"]].ContainsKey(subjectName + "_科目" + rankType + "名次"))
-                        {
-                            _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "名次", "" + dr["rank"]);
-                        }
-                        if (!_subjectRankDataDict["" + dr["ref_student_id"]].ContainsKey(subjectName + "_科目" + rankType + "PR值"))
-                        {
-                            _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "PR值", "" + dr["pr"]);
-                        }
-                        if (!_subjectRankDataDict["" + dr["ref_student_id"]].ContainsKey(subjectName + "_科目" + rankType + "百分比"))
-                        {
-                            _subjectRankDataDict["" + dr["ref_student_id"]].Add(subjectName + "_科目" + rankType + "百分比", "" + dr["percentile"]);
-                        }
-                    }
-
-                }
-                if (!_domainRankDataDict.ContainsKey("" + dr["ref_student_id"]))
-                {
-                    _domainRankDataDict.Add("" + dr["ref_student_id"], new Dictionary<string, string>());
-
-                    if ("" + dr["item_type"] == "定期評量/領域成績")
-                    {
-                        string domainName = "" + dr["item_name"];
-                        string rankType = "" + dr["rank_type"];
-
-                        if (!_domainRankDataDict["" + dr["ref_student_id"]].ContainsKey(domainName + "_領域" + rankType + "名次"))
-                        {
-                            _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "名次", "" + dr["rank"]);
-                        }
-                        if (!_domainRankDataDict["" + dr["ref_student_id"]].ContainsKey(domainName + "_領域" + rankType + "PR值"))
-                        {
-                            _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "PR值", "" + dr["pr"]);
-                        }
-                        if (!_domainRankDataDict["" + dr["ref_student_id"]].ContainsKey(domainName + "_領域" + rankType + "百分比"))
-                        {
-                            _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "百分比", "" + dr["percentile"]);
-                        }
-                    }
-                }
-                else
-                {
-                    if ("" + dr["item_type"] == "定期評量/領域成績")
-                    {
-                        string domainName = "" + dr["item_name"];
-                        string rankType = "" + dr["rank_type"];
-
-                        if (!_domainRankDataDict["" + dr["ref_student_id"]].ContainsKey(domainName + "_領域" + rankType + "名次"))
-                        {
-                            _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "名次", "" + dr["rank"]);
-                        }
-                        if (!_domainRankDataDict["" + dr["ref_student_id"]].ContainsKey(domainName + "_領域" + rankType + "PR值"))
-                        {
-                            _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "PR值", "" + dr["pr"]);
-                        }
-                        if (!_domainRankDataDict["" + dr["ref_student_id"]].ContainsKey(domainName + "_領域" + rankType + "百分比"))
-                        {
-                            _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "百分比", "" + dr["percentile"]);
-                        }
-                    }
-                }                   
-            }
+           
 
 
 
@@ -1144,13 +955,7 @@ ORDER BY
             subjLi.Add("科目總成績");
             subjLi.Add("科目文字評量");
 
-            // 新增排名資訊
-            subjLi.Add("科目班排名名次");
-            subjLi.Add("科目班排名PR值");
-            subjLi.Add("科目班排名百分比");
-            subjLi.Add("科目年排名名次");
-            subjLi.Add("科目年排名PR值");
-            subjLi.Add("科目年排名百分比");
+
 
 
             List<string> subjColList = new List<string>();
@@ -1543,24 +1348,9 @@ ORDER BY
                     dt.Columns.Add(dName + "_領域權數");
                     dt.Columns.Add(dName + "_領域定期加權平均");
                     dt.Columns.Add(dName + "_領域平時加權平均");
-
-                    //領域排名欄位
-                    dt.Columns.Add(dName + "_領域班排名名次");
-                    dt.Columns.Add(dName + "_領域班排名PR值");
-                    dt.Columns.Add(dName + "_領域班排名百分比");
-                    dt.Columns.Add(dName + "_領域年排名名次");
-                    dt.Columns.Add(dName + "_領域年排名PR值");
-                    dt.Columns.Add(dName + "_領域年排名百分比");
-
                 }
 
-                //領域加權排名欄位
-                dt.Columns.Add("領域成績加權平均班排名名次");
-                dt.Columns.Add("領域成績加權平均班排名PR值");
-                dt.Columns.Add("領域成績加權平均班排名百分比");
-                dt.Columns.Add("領域成績加權平均年排名名次");
-                dt.Columns.Add("領域成績加權平均年排名PR值");
-                dt.Columns.Add("領域成績加權平均年排名百分比");
+
 
                 dt.TableName = StudRec.ID;
                 row["StudentID"] = StudRec.ID;
@@ -1704,24 +1494,7 @@ ORDER BY
                                     row[key] = ess.Text;
                                     break;
 
-                                case "科目班排名名次":
-                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item)? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item]:"";
-                                    break;
-                                case "科目班排名PR值":
-                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
-                                    break;
-                                case "科目班排名百分比":
-                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
-                                    break;
-                                case "科目年排名名次":
-                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
-                                    break;
-                                case "科目年排名PR值":
-                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
-                                    break;
-                                case "科目年排名百分比":
-                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
-                                    break;
+
                             }
 
 
@@ -1746,12 +1519,7 @@ ORDER BY
                         string keyf = eds.DomainName + "_領域定期加權平均";
                         string keyc = eds.DomainName + "_領域權數";
 
-                        string keyRank1 = eds.DomainName + "_領域班排名名次";
-                        string keyRank2 = eds.DomainName + "_領域班排名PR值";
-                        string keyRank3 = eds.DomainName + "_領域班排名百分比";
-                        string keyRank4 = eds.DomainName + "_領域年排名名次";
-                        string keyRank5 = eds.DomainName + "_領域年排名PR值";
-                        string keyRank6 = eds.DomainName + "_領域年排名百分比";
+
 
                         // 總成績
                         if (eds.ScoreT.HasValue)
@@ -1769,14 +1537,7 @@ ORDER BY
                         if (eds.ScoreF.HasValue)
                             row[keyf] = eds.ScoreF.Value;
 
-                        // 領域排名資料
-                        row[keyRank1] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank1) ? _domainRankDataDict[StudRec.ID][keyRank1] : "";
-                        row[keyRank2] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank2) ? _domainRankDataDict[StudRec.ID][keyRank2] : "";
-                        row[keyRank3] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank3) ? _domainRankDataDict[StudRec.ID][keyRank3] : "";
-                        row[keyRank4] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank4) ? _domainRankDataDict[StudRec.ID][keyRank4] : "";
-                        row[keyRank5] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank5) ? _domainRankDataDict[StudRec.ID][keyRank5] : "";
-                        row[keyRank6] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank6) ? _domainRankDataDict[StudRec.ID][keyRank6] : "";
-                        
+
                     }
                 }
 
@@ -1839,14 +1600,7 @@ ORDER BY
                 }
 
 
-                // 領域加權排名資料
-                if (_DomainWeightRankDataDict.ContainsKey(StudRec.ID))
-                {
-                    foreach (string key in _DomainWeightRankDataDict[StudRec.ID].Keys)
-                    {
-                        row[key] = _DomainWeightRankDataDict[StudRec.ID][key];
-                    }
-                }
+
 
 
                 // 處理領域組距相關
