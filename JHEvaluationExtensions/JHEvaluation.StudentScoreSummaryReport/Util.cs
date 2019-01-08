@@ -1,10 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using JHEvaluation.ScoreCalculation;
 using JHSchool.Data;
 using Aspose.Words;
+using Aspose.Words.Tables;
 using FISCA.Presentation.Controls;
 using Campus.Rating;
 using System.Globalization;
@@ -149,6 +151,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
         public static void Save(Document doc, string fileName, bool convertToPDF)
         {
+            string path ;
+
             //SaveFileDialog sdf = new SaveFileDialog();
 
             //if (convertToPDF)
@@ -167,8 +171,19 @@ namespace JHEvaluation.StudentScoreSummaryReport
             try
             {
                 //doc.Save(fileName, SaveFormat.Doc);
-                Campus.Report.ReportSaver.SaveDocument(doc, fileName,
-                    convertToPDF ? Campus.Report.ReportSaver.OutputType.PDF : Campus.Report.ReportSaver.OutputType.Word);
+                //Campus.Report.ReportSaver.SaveDocument(doc, fileName,
+                //    convertToPDF ? Campus.Report.ReportSaver.OutputType.PDF : Campus.Report.ReportSaver.OutputType.Word);
+                if (!convertToPDF)
+                {
+                    path = CreatePath(fileName, ".doc");
+                    doc.Save(path, SaveFormat.Doc);
+                }
+                else
+                {
+                    path = CreatePath(fileName, ".pdf");
+                    doc.Save(path, SaveFormat.Pdf);                                                  
+                }
+
             }
             catch (Exception ex)
             {
@@ -176,17 +191,17 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 return;
             }
 
-            //try
-            //{
-            //    //if (MsgBox.Show("排名完成，是否立刻開啟？", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            //    //{
-            //    //System.Diagnostics.Process.Start(sdf.FileName);
-            //    //}
-            //}
-            //catch (Exception ex)
-            //{
-            //    MsgBox.Show("開啟失敗。" + ex.Message);
-            //}
+            try
+            {
+                if (MsgBox.Show("產生報表完成，是否立刻開啟？", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start(path);
+                }
+            }
+            catch (Exception ex)
+            {
+                MsgBox.Show("開啟失敗。" + ex.Message);
+            }
             //}
         }
 
@@ -430,5 +445,32 @@ namespace JHEvaluation.StudentScoreSummaryReport
         /// 服務學時數暫存使用
         /// </summary>
         public static Dictionary<string, Dictionary<string, string>> _SLRDict = new Dictionary<string, Dictionary<string, string>>();
+
+
+        private static string CreatePath(string filename, string ext)
+        {
+            string path = Path.Combine(Application.StartupPath, "Reports");
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            string fullname = filename.EndsWith(ext) ? filename : filename + ext;
+            path = Path.Combine(path, fullname);
+
+            #region 如果檔案已經存在
+            if (File.Exists(path))
+            {
+                int i = 1;
+                while (true)
+                {
+                    string newPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + (i++) + Path.GetExtension(path));
+                    if (!File.Exists(newPath))
+                    {
+                        path = newPath;
+                        break;
+                    }
+                }
+            }
+            #endregion
+
+            return path;
+        }
     }
 }

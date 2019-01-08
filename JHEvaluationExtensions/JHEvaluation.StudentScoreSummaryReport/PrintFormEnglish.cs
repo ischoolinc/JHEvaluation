@@ -175,7 +175,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                         string XmlFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".xml";
                         string PDFFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".pdf";
 
-                        dataDict[each].Save(XmlFileName, Aspose.Words.SaveFormat.AsposePdf);
+                        dataDict[each].Save(XmlFileName, Aspose.Words.SaveFormat.Pdf);
 
                         Aspose.Pdf.Pdf pdf1 = new Aspose.Pdf.Pdf();
 
