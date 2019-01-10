@@ -165,28 +165,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                         string fPath = fbd.SelectedPath + "\\" + each + ".pdf";
 
-                        FileInfo fi = new FileInfo(fPath);
+                        dataDict[each].Save(fPath, Aspose.Words.SaveFormat.Pdf);
 
-                        DirectoryInfo folder = new DirectoryInfo(Path.Combine(fi.DirectoryName, Path.GetRandomFileName()));
-                        if (!folder.Exists) folder.Create();
-
-                        FileInfo fileinfo = new FileInfo(Path.Combine(folder.FullName, fi.Name));
-
-                        string XmlFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".xml";
-                        string PDFFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".pdf";
-
-                        dataDict[each].Save(XmlFileName, Aspose.Words.SaveFormat.Pdf);
-
-                        Aspose.Pdf.Pdf pdf1 = new Aspose.Pdf.Pdf();
-
-                        pdf1.BindXML(XmlFileName, null);
-                        pdf1.Save(PDFFileName);
-
-                        if (File.Exists(fPath))
-                            File.Delete(Path.Combine(fi.DirectoryName, fi.Name));
-
-                        File.Move(PDFFileName, fPath);
-                        folder.Delete(true);
                         #endregion
                     }
                 }

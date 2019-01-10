@@ -333,34 +333,11 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     //document.Save(fbd.SelectedPath + "\\" +fileName+ ".doc");
 
                     if (Preference.ConvertToPDF)
-                    {
-                        //string fPath = fbd.SelectedPath + "\\" + fileName + ".pdf";
-
+                    {                        
                         string fPath = fbdPath + "\\" + fileName + ".pdf";
-
-                        FileInfo fi = new FileInfo(fPath);
-
-                        DirectoryInfo folder = new DirectoryInfo(Path.Combine(fi.DirectoryName, Path.GetRandomFileName()));
-                        if (!folder.Exists) folder.Create();
-
-                        FileInfo fileinfo = new FileInfo(Path.Combine(folder.FullName, fi.Name));
-
-                        string XmlFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".xml";
-                        string PDFFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".pdf";
-
-                        document.Save(XmlFileName, Aspose.Words.SaveFormat.Pdf);
-
-                        Aspose.Pdf.Pdf pdf1 = new Aspose.Pdf.Pdf();
-
-                        pdf1.BindXML(XmlFileName, null);
-                        pdf1.Save(PDFFileName);
-
-                        if (File.Exists(fPath))
-                            File.Delete(Path.Combine(fi.DirectoryName, fi.Name));
-
-                        File.Move(PDFFileName, fPath);
-                        folder.Delete(true);
-
+                       
+                        document.Save(fPath, SaveFormat.Pdf);
+                        
                         int percent = (((i + 1) * 100 / doc.Sections.Count));
 
                         ConvertToPDF_Worker.ReportProgress(percent, "PDF轉換中...進行到" + (i + 1) + "/" + doc.Sections.Count + "個檔案");

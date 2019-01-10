@@ -69,8 +69,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
         public Document Print(bool printScore)
         {
             PrintScore = printScore;
-            Document doc = PrintSetting.Template.ToDocument();
-            
+            // 2018/12/25 穎驊 完成 高雄小組 [09-20][03]在校成績證明書樣式 項目
+            // 用此方法 可以避開 與 Campus.Report  Aspose.Word  版本不相容的問題
+            Document doc = new Document(PrintSetting.Template.GetStream());
+                        
             doc.MailMerge.FieldMergingCallback = new InsertDocumentAtMailMergeHandler();
 
             doc.MailMerge.Execute(new MergeDataSource(Students, PrintSetting));           
@@ -200,8 +202,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
             foreach(ReportStudent rs in Students)
             {
-                Document doc = PrintSetting.Template.ToDocument().Clone();
-
+                // 2018/12/25 穎驊 完成 高雄小組 [09-20][03]在校成績證明書樣式 項目
+                // 用此方法 可以避開 與 Campus.Report  Aspose.Word  版本不相容的問題
+                Document doc = new Document(PrintSetting.Template.GetStream());
+                
                 List<ReportStudent> rps = new List<ReportStudent>();
                 rps.Add(rs);
                 doc.MailMerge.FieldMergingCallback = new InsertDocumentAtMailMergeHandler();
