@@ -75,7 +75,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 }
 
                 _effortScoreList.AddRange(_effortDict.Keys);
-                _effortScoreList.Sort(delegate(decimal a, decimal b)
+                _effortScoreList.Sort(delegate (decimal a, decimal b)
                 {
                     return b.CompareTo(a);
                 });
@@ -85,7 +85,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         private void InitializeTextBoxManager()
         {
             _manager = new TextBoxManager(
-                txtPC1, txtScore1,txtEffort1, txtText1,
+                txtPC1, txtScore1, txtEffort1, txtText1,
                 txtPC2, txtScore2, txtEffort2, txtText2,
                 txtPC3, txtScore3, txtEffort3, txtText3,
                 txtPC4, txtScore4, txtEffort4, txtText4,
@@ -266,6 +266,9 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 return;
             }
 
+            // 驗證所有權數欄位
+            ValidAllPCTextBox();
+
             if (!IsValid()) return;
 
             try
@@ -281,13 +284,13 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 newRecord.Semester = semester;
 
                 List<string> checkSubjName = new List<string>();
-                
+
                 // 檢查科目名稱是否相同，因為科目名稱重複會造成新增錯誤，科目名稱是唯一值。
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
                     if (row.Cells[chsSubject.Index].Value != null)
                     {
-                        string tmpSubjName="" + row.Cells[chsSubject.Index].Value;
+                        string tmpSubjName = "" + row.Cells[chsSubject.Index].Value;
                         if (checkSubjName.Contains(tmpSubjName))
                         {
                             FISCA.Presentation.Controls.MsgBox.Show("科目名稱重複，無法儲存。");
@@ -332,8 +335,8 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                     subject.Domain = "" + row.Cells[chsDomain.Index].Value;
                     subject.Subject = "" + row.Cells[chsSubject.Index].Value;
                     subject.Period = pc.Period;
-                    subject.Credit = pc.Credit; 
-                    subject.Score = decimal.Parse("" + row.Cells[chsScore.Index].Value);                    
+                    subject.Credit = pc.Credit;
+                    subject.Score = decimal.Parse("" + row.Cells[chsScore.Index].Value);
                     subject.ScoreOrigin = decimal.Parse("" + row.Cells[chsScore.Index].Value); // 2018/5/22 穎華聽從恩正建議，原始成績直接抓取成績即可
                     subject.Effort = int.Parse("" + row.Cells[chsEffort.Index].Value);
                     subject.Text = "" + row.Cells[chsText.Index].Value;
@@ -385,7 +388,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             bool boolOriScore = !string.IsNullOrEmpty(Oriscore.Text);
             bool boolEffort = !string.IsNullOrEmpty(effort.Text);
 
-            if (boolPc && boolScore && boolOriScore&& boolEffort)
+            if (boolPc && boolScore && boolOriScore && boolEffort)
                 return true;
             else
                 return false;
@@ -518,7 +521,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
 
         private void textBox_KeyUp(object sender, KeyEventArgs e)
         {
-            if ((e.KeyData == Keys.Enter) || e.KeyData== Keys.Down)
+            if ((e.KeyData == Keys.Enter) || e.KeyData == Keys.Down)
             {
                 Control control = sender as Control;
                 Control next = null;
@@ -557,7 +560,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 }
                 while (next != null && next.Enabled == false);
                 if (next != null)
-                    next.Focus();            
+                    next.Focus();
             }
 
             if (e.KeyData == Keys.Right)
@@ -571,7 +574,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 }
                 while (next != null && next.Enabled == false);
                 if (next != null)
-                    next.Focus();            
+                    next.Focus();
             }
         }
 
@@ -648,6 +651,124 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             }
 
             return valid;
+        }
+
+        // 按儲存前 驗證所有權數欄位
+        private void ValidAllPCTextBox()
+        {
+            List<TextBox> textBoxList = new List<TextBox>();
+
+            textBoxList.Add(txtPC1);
+            textBoxList.Add(txtPC2);
+            textBoxList.Add(txtPC3);
+            textBoxList.Add(txtPC4);
+            textBoxList.Add(txtPC5);
+            textBoxList.Add(txtPC6);
+            textBoxList.Add(txtPC7);
+            textBoxList.Add(txtPC8);
+            textBoxList.Add(txtPC9);
+
+            // 這方法很蠢， 但目前暫時也沒更好的寫法           
+            #region 配對分數的權重 關係 有分數資料 才要驗
+            if (txtScore1.Text != "")
+            {
+                txtPC1.Tag = "hasValue";
+            }
+            else
+            {
+                txtPC1.Tag = "";
+            }
+
+            if (txtScore2.Text != "")
+            {
+                txtPC2.Tag = "hasValue";
+            }
+            else
+            {
+                txtPC2.Tag = "";
+            }
+
+            if (txtScore3.Text != "")
+            {
+                txtPC3.Tag = "hasValue";
+            }
+            else
+            {
+                txtPC3.Tag = "";
+            }
+
+            if (txtScore4.Text != "")
+            {
+                txtPC4.Tag = "hasValue";
+            }
+            else
+            {
+                txtPC4.Tag = "";
+            }
+
+            if (txtScore5.Text != "")
+            {
+                txtPC5.Tag = "hasValue";
+            }
+            else
+            {
+                txtPC5.Tag = "";
+            }
+
+            if (txtScore6.Text != "")
+            {
+                txtPC6.Tag = "hasValue";
+            }
+            else
+            {
+                txtPC6.Tag = "";
+            }
+
+            if (txtScore7.Text != "")
+            {
+                txtPC7.Tag = "hasValue";
+            }
+            else
+            {
+                txtPC7.Tag = "";
+            }
+
+            if (txtScore8.Text != "")
+            {
+                txtPC8.Tag = "hasValue";
+            }
+            else
+            {
+                txtPC8.Tag = "";
+            }
+
+            if (txtScore9.Text != "")
+            {
+                txtPC9.Tag = "hasValue";
+            }
+            else
+            {
+                txtPC9.Tag = "";
+            } 
+            #endregion
+
+            foreach (TextBox tb in textBoxList)
+            {
+                // 對應的欄位有分數才要驗證
+                if ("" + tb.Tag != "hasValue")
+                {
+                    continue;
+                }
+
+                errorProvider.SetError(tb, "");
+                PeriodCredit pc = new PeriodCredit();
+                if (!pc.Parse(tb.Text))
+                {
+                    errorProvider.SetIconPadding(tb, -17);
+                    errorProvider.SetError(tb, pc.Error);
+
+                }
+            }
         }
 
         private bool ValidIntTextBox(TextBox txtBox)
@@ -745,14 +866,14 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             {
                 foreach (DataGridViewColumn col in cols)
                 {
-                    
+
                     DataGridViewCell cell = row.Cells[col.Index];
                     // 加這判斷是主要是允許領域可以空白
                     if (col.Index != chsDomain.Index)
-                    if (string.IsNullOrEmpty("" + cell.Value))
-                        cell.ErrorText = "不可為空白";
-                    else
-                        cell.ErrorText = "";
+                        if (string.IsNullOrEmpty("" + cell.Value))
+                            cell.ErrorText = "不可為空白";
+                        else
+                            cell.ErrorText = "";
                 }
             }
 
@@ -860,7 +981,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                     temp.Parse("" + row.Cells[chsPeriodCredit.Index].Value);
                     pc.Credit += temp.Credit;
                     pc.Period += temp.Period;
-                    if(row.Cells[chsScore.Index].Value !=null )
+                    if (row.Cells[chsScore.Index].Value != null)
                         total += temp.Credit * decimal.Parse("" + row.Cells[chsScore.Index].Value);
                 }
             }
@@ -939,7 +1060,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         {
             int index = _controls.IndexOf(control);
             if (index >= 0 && index + 4 < _controls.Count)
-                if((index +4)<=_controls.Count )
+                if ((index + 4) <= _controls.Count)
                     return _controls[index + 4];
                 else
                     return _controls[0];
@@ -952,7 +1073,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         {
             int index = _controls.IndexOf(control);
             if (index >= 0 && index - 4 < _controls.Count)
-                if((index -4) >0)
+                if ((index - 4) > 0)
                     return _controls[index - 4];
                 else
                     return _controls[0];
@@ -964,9 +1085,9 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         public Control GetNextControl1R(Control control)
         {
             int index = _controls.IndexOf(control);
-            if (index >= 0 && index +1 < _controls.Count)
-                if((index+1) <=_controls.Count )
-                    return _controls[index +1];
+            if (index >= 0 && index + 1 < _controls.Count)
+                if ((index + 1) <= _controls.Count)
+                    return _controls[index + 1];
                 else
                     return _controls[0];
 
@@ -978,7 +1099,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
         {
             int index = _controls.IndexOf(control);
             if (index >= 0 && index - 1 < _controls.Count)
-                if((index-1) >0)
+                if ((index - 1) > 0)
                     return _controls[index - 1];
                 else
                     return _controls[0];
