@@ -198,6 +198,16 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 txtPC6.Text = pcs.ContainsKey("自然與生活科技") ? pcs["自然與生活科技"].ToString() : "";
                 txtPC7.Text = pcs.ContainsKey("健康與體育") ? pcs["健康與體育"].ToString() : "";
                 txtPC8.Text = pcs.ContainsKey("綜合活動") ? pcs["綜合活動"].ToString() : "";
+
+                // 2019/1/10 穎驊修正  佳樺反映 快速登錄沒有 自動帶出 語文領域節數/權數
+                // 討論過後， 確認 語文領域的權數 為 國語文、 英文 加總
+                int chinesesPeriodCredit = 0;
+                int englishPeriodCredit = 0;
+
+                chinesesPeriodCredit = pcs.ContainsKey("國語文") ? int.Parse(pcs["國語文"].ToString()) : 0;
+                englishPeriodCredit = pcs.ContainsKey("英語") ? int.Parse(pcs["英語"].ToString()) : 0;
+
+                txtPC9.Text = "" + (chinesesPeriodCredit + englishPeriodCredit);
             }
             #endregion
         }
