@@ -7,6 +7,8 @@ using JHSchool.Evaluation;
 using JHSchool.Data;
 using FISCA.Presentation.Controls;
 using JHSchool.Evaluation.Calculation;
+using FISCA.Data;
+using System.Xml;
 
 namespace HsinChu.MidTermTransferReport.Processor
 {
@@ -107,26 +109,26 @@ namespace HsinChu.MidTermTransferReport.Processor
                 SubjectRow row = domain.Subjects[subjectName];
                 //if (row.Display)
                 //{
-                    Cell temp = subjectCell;
-                    WordHelper.Write(temp, _font, row.SubjectName);
-                    temp = temp.NextSibling as Cell;
-                    WordHelper.Write(temp, _font, row.PeriodCredit);
+                Cell temp = subjectCell;
+                WordHelper.Write(temp, _font, row.SubjectName);
+                temp = temp.NextSibling as Cell;
+                WordHelper.Write(temp, _font, row.PeriodCredit);
 
-                    foreach (string examID in row.Scores.Keys)
-                    {
-                        ScoreData data = row.Scores[examID];
-                        temp = WordHelper.GetMoveRightCell(subjectCell, _columnMapping[examID] - 1);
-                        WordHelper.Write(temp, _font, (data.Score.HasValue ? "" + _calculator.ParseSubjectScore(data.Score.Value) : ""));
-                        WordHelper.Write(temp.NextSibling as Cell, _font, "" + data.AssignmentScore);
-                        WordHelper.Write(temp.NextSibling.NextSibling as Cell, _font, "" + row.GetFinalScore(examID));
-                    }
+                foreach (string examID in row.Scores.Keys)
+                {
+                    ScoreData data = row.Scores[examID];
+                    temp = WordHelper.GetMoveRightCell(subjectCell, _columnMapping[examID] - 1);
+                    WordHelper.Write(temp, _font, (data.Score.HasValue ? "" + _calculator.ParseSubjectScore(data.Score.Value) : ""));
+                    WordHelper.Write(temp.NextSibling as Cell, _font, "" + data.AssignmentScore);
+                    WordHelper.Write(temp.NextSibling.NextSibling as Cell, _font, "" + row.GetFinalScore(examID));
+                }
 
-                    subjectCell = WordHelper.GetMoveDownCell(subjectCell, 1);
-                    if (subjectCell == null)
-                    {
-                        break;
-                    }
-                    count++;
+                subjectCell = WordHelper.GetMoveDownCell(subjectCell, 1);
+                if (subjectCell == null)
+                {
+                    break;
+                }
+                count++;
                 //}
             }
             return count;
@@ -178,7 +180,6 @@ namespace HsinChu.MidTermTransferReport.Processor
         {
             if (!_courseDict.ContainsKey(sce.RefCourseID)) return; //如果評量成績的課程不存在，return。
             JHCourseRecord course = _courseDict[sce.RefCourseID];
-
             if (!Domains.ContainsKey(course.Domain))
                 Domains.Add(course.Domain, new DomainRow(course.Domain));
 
@@ -194,6 +195,19 @@ namespace HsinChu.MidTermTransferReport.Processor
             SubjectRow subjectRow = row.Subjects[course.Subject];
             subjectRow.SetPeriodCredit(course.Period, course.Credit);
             subjectRow.AddScore(sce.RefExamID, sce.Score, sce.AssignmentScore);
+
+
+            K12.Data.AssessmentSetupRecord assessmentSetupRecord = course.AssessmentSetup;
+            XmlElement extension = assessmentSetupRecord.Extension;
+            int examPercentage = 0;
+            if (!string.IsNullOrEmpty(extension["ScorePercentage"].InnerText))
+            {
+                examPercentage = Convert.ToInt32(extension["ScorePercentage"].InnerText.Trim(' ', '\n'));
+            }
+            int assignmentPercentage = 100 - examPercentage;
+
+            subjectRow.examPercentage = examPercentage;
+            subjectRow.assignmentPercentage = assignmentPercentage;
             //if (_config.DomainSubjectSetup == DomainSubjectSetup.Subject)
             //    subjectRow.Display = true;
         }
@@ -233,7 +247,7 @@ namespace HsinChu.MidTermTransferReport.Processor
                 courseList.Add(_courseDict[courseID]);
             }
 
-            courseList.Sort(delegate(JHCourseRecord x, JHCourseRecord y)
+            courseList.Sort(delegate (JHCourseRecord x, JHCourseRecord y)
             {
                 return JHSchool.Evaluation.Subject.CompareSubjectOrdinal(x.Subject, y.Subject);
             });
@@ -284,9 +298,11 @@ namespace HsinChu.MidTermTransferReport.Processor
 
         private Dictionary<string, decimal?> _scoreCache;
         private List<string> _scoreCacheExamIDs;
+        private Dictionary<string, decimal?> _scorePercentageCache;
 
         private Dictionary<string, decimal?> _assignmentScoreCache;
         private List<string> _assignmentScoreCacheExamIDs;
+        private Dictionary<string, decimal?> _assignmentScorePercentageCache;
 
         public bool Display { get; set; }
         public Dictionary<string, SubjectRow> Subjects { get; set; }
@@ -304,6 +320,7 @@ namespace HsinChu.MidTermTransferReport.Processor
                 decimal s = decimal.Zero;
                 decimal c = decimal.Zero;
                 bool hasScore = false;
+                decimal scorePercentage = decimal.Zero;
 
                 foreach (var subject in Subjects.Values)
                 {
@@ -314,6 +331,7 @@ namespace HsinChu.MidTermTransferReport.Processor
 
                     s += data.Score.Value * subject.Credit;
                     c += subject.Credit;
+                    scorePercentage += data.Score.Value * subject.examPercentage * subject.Credit;
                     hasScore = true;
                 }
 
@@ -322,6 +340,9 @@ namespace HsinChu.MidTermTransferReport.Processor
                     if (!_scoreCache.ContainsKey(examID))
                         _scoreCache.Add(examID, null);
                     _scoreCache[examID] = s / c;
+                    if (!_scorePercentageCache.ContainsKey(examID))
+                        _scorePercentageCache.Add(examID, null);
+                    _scorePercentageCache[examID] = scorePercentage / c;
                     return _scoreCache[examID];
                 }
                 else
@@ -339,6 +360,7 @@ namespace HsinChu.MidTermTransferReport.Processor
                 decimal s = decimal.Zero;
                 decimal c = decimal.Zero;
                 bool hasScore = false;
+                decimal assignmentPercentage = decimal.Zero;
 
                 foreach (var subject in Subjects.Values)
                 {
@@ -349,6 +371,7 @@ namespace HsinChu.MidTermTransferReport.Processor
 
                     s += data.AssignmentScore.Value * subject.Credit;
                     c += subject.Credit;
+                    assignmentPercentage += data.AssignmentScore.Value * subject.assignmentPercentage * subject.Credit;
                     hasScore = true;
                 }
 
@@ -357,6 +380,9 @@ namespace HsinChu.MidTermTransferReport.Processor
                     if (!_assignmentScoreCache.ContainsKey(examID))
                         _assignmentScoreCache.Add(examID, null);
                     _assignmentScoreCache[examID] = s / c;
+                    if (!_assignmentScorePercentageCache.ContainsKey(examID))
+                        _assignmentScorePercentageCache.Add(examID, null);
+                    _assignmentScorePercentageCache[examID] = assignmentPercentage / c;
                     return _assignmentScoreCache[examID];
                 }
                 else
@@ -366,11 +392,13 @@ namespace HsinChu.MidTermTransferReport.Processor
 
         public decimal? GetFinalScore(string examID)
         {
-            decimal? score = GetScore(examID);
-            decimal? assignmentScore = GetAssignmentScore(examID);
+            decimal? score = _scorePercentageCache[examID].Value;
+            decimal? assignmentScore = _assignmentScorePercentageCache[examID].Value;
 
             if (score.HasValue && assignmentScore.HasValue)
-                return (score + assignmentScore) / 2;
+                //2019/1/11 俊緯更新 期中轉學成績證明書成績有誤，應該將成績乘上評分模板的比例
+                return (score + assignmentScore) / 100;
+            //return 100;
             else if (score.HasValue)
                 return score.Value;
             else if (assignmentScore.HasValue)
@@ -390,9 +418,11 @@ namespace HsinChu.MidTermTransferReport.Processor
 
             _scoreCache = new Dictionary<string, decimal?>();
             _scoreCacheExamIDs = new List<string>();
+            _scorePercentageCache = new Dictionary<string, decimal?>();
 
             _assignmentScoreCache = new Dictionary<string, decimal?>();
             _assignmentScoreCacheExamIDs = new List<string>();
+            _assignmentScorePercentageCache = new Dictionary<string, decimal?>();
         }
 
         internal void AddSubject(string subject)
@@ -419,6 +449,10 @@ namespace HsinChu.MidTermTransferReport.Processor
     class SubjectRow
     {
         //public bool Display { get; set; }
+
+        public int examPercentage { get; set; }
+        public int assignmentPercentage { get; set; }
+
         public string SubjectName { get; set; }
         public string PeriodCredit
         {
@@ -441,7 +475,8 @@ namespace HsinChu.MidTermTransferReport.Processor
             {
                 ScoreData sd = Scores[examID];
                 if (sd.Score.HasValue && sd.AssignmentScore.HasValue)
-                    return (sd.Score + sd.AssignmentScore) / 2;
+                    //2019/1/11 俊緯更新 期中轉學成績證明書成績有誤，應該將成績乘上評分模板的比例
+                    return ((sd.Score * examPercentage) + (sd.AssignmentScore * assignmentPercentage)) / (examPercentage + assignmentPercentage);
                 else if (sd.Score.HasValue)
                     return sd.Score.Value;
                 else if (sd.AssignmentScore.HasValue)
