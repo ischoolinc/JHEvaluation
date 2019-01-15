@@ -84,7 +84,9 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
 
         private void InitializeTextBoxManager()
         {
+            // 2019/1/11 穎驊應恩正建議， 將語文領與 拉到最上面項目
             _manager = new TextBoxManager(
+                txtPC9, txtScore9, txtEffort9, txtText9,
                 txtPC1, txtScore1, txtEffort1, txtText1,
                 txtPC2, txtScore2, txtEffort2, txtText2,
                 txtPC3, txtScore3, txtEffort3, txtText3,
@@ -92,9 +94,9 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 txtPC5, txtScore5, txtEffort5, txtText5,
                 txtPC6, txtScore6, txtEffort6, txtText6,
                 txtPC7, txtScore7, txtEffort7, txtText7,
-                txtPC8, txtScore8, txtEffort8, txtText8,
-                txtPC9, txtScore9, txtEffort9, txtText9
+                txtPC8, txtScore8, txtEffort8, txtText8                
                 );
+            _manager.AddEffortTextBoxMapping(txtScore9, txtEffort9);
             _manager.AddEffortTextBoxMapping(txtScore1, txtEffort1);
             _manager.AddEffortTextBoxMapping(txtScore2, txtEffort2);
             _manager.AddEffortTextBoxMapping(txtScore3, txtEffort3);
@@ -102,8 +104,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             _manager.AddEffortTextBoxMapping(txtScore5, txtEffort5);
             _manager.AddEffortTextBoxMapping(txtScore6, txtEffort6);
             _manager.AddEffortTextBoxMapping(txtScore7, txtEffort7);
-            _manager.AddEffortTextBoxMapping(txtScore8, txtEffort8);
-            _manager.AddEffortTextBoxMapping(txtScore9, txtEffort9);
+            _manager.AddEffortTextBoxMapping(txtScore8, txtEffort8);            
         }
 
         private void InitializeComboBoxes()
