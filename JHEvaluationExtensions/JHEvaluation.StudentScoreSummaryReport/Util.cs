@@ -12,6 +12,8 @@ using Campus.Rating;
 using System.Globalization;
 using FISCA.Data;
 using System.Data;
+using System.Xml;
+
 namespace JHEvaluation.StudentScoreSummaryReport
 {
     internal static class Util
@@ -151,7 +153,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
         public static void Save(Document doc, string fileName, bool convertToPDF)
         {
-            string path ;
+            string path;
 
             //SaveFileDialog sdf = new SaveFileDialog();
 
@@ -181,7 +183,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 else
                 {
                     path = CreatePath(fileName, ".pdf");
-                    doc.Save(path, SaveFormat.Pdf);                                                  
+                    doc.Save(path, SaveFormat.Pdf);
                 }
 
             }
@@ -343,22 +345,63 @@ namespace JHEvaluation.StudentScoreSummaryReport
         //        return x.Domain.CompareTo(y.Domain);
         //}
 
-        public static string GetDegree(decimal score)
+        public static Dictionary<decimal, string> GetDegreeTemplate()
         {
-            if (score >= 90) return "優";
-            else if (score >= 80) return "甲";
-            else if (score >= 70) return "乙";
-            else if (score >= 60) return "丙";
-            else return "丁";
+            Dictionary<decimal, string> degreeTemplate = new Dictionary<decimal, string>();
+            Framework.ConfigData configData = JHSchool.School.Configuration["等第對照表"];
+            XmlDocument xdoc = new XmlDocument();
+            xdoc.LoadXml(configData["xml"]);
+            XmlNodeList nodeList = xdoc.SelectNodes("ScoreMappingList/ScoreMapping");
+            foreach (XmlNode node in nodeList)
+            {
+                decimal minScore;
+                if (!decimal.TryParse(node.SelectSingleNode("@Score").InnerText, out minScore))
+                {
+                    minScore = 0;
+                }
+                if (!degreeTemplate.ContainsKey(minScore))
+                {
+                    //Key : 該等第的下限分數
+                    //Value : 對應的等第設定
+                    degreeTemplate.Add(minScore, null);
+                }
+                degreeTemplate[minScore] = node.OuterXml;
+            }
+            return degreeTemplate;
         }
 
-        public static string GetDegreeEnglish(decimal score)
+        public static string GetDegree(decimal score, Dictionary<decimal, string> degreeTemplate)
         {
-            if (score >= 90) return "A+";
-            else if (score >= 80) return "A";
-            else if (score >= 70) return "B";
-            else if (score >= 60) return "C";
-            else return "D";
+            //2019/1/18 俊緯更新 原本抓等第是寫死的，現在改成依據成績等第對照表的設定顯示對應的等第
+            decimal minScore = 0;
+            foreach (var degree in degreeTemplate)
+            {
+                if (degree.Key <= score && degree.Key > minScore)
+                {
+                    minScore = degree.Key;
+                }
+            }
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.LoadXml(degreeTemplate[minScore]);
+            string engDegree = xDoc.SelectSingleNode("ScoreMapping/@Name").InnerText;
+            return engDegree;
+        }
+
+        public static string GetDegreeEnglish(decimal score, Dictionary<decimal, string> degreeTemplate)
+        {
+            //2019/1/18 俊緯更新 原本抓等第是寫死的，現在改成依據成績等第對照表的設定顯示對應的等第
+            decimal minScore = 0;
+            foreach (var degree in degreeTemplate)
+            {
+                if (degree.Key <= score && degree.Key > minScore)
+                {
+                    minScore = degree.Key;
+                }
+            }
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.LoadXml(degreeTemplate[minScore]);
+            string engDegree = xDoc.SelectSingleNode("ScoreMapping/@EngName").InnerText;
+            return engDegree;
         }
 
         /// <summary>

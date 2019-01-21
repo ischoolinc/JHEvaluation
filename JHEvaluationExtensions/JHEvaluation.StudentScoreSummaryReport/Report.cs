@@ -19,7 +19,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
         private List<ReportStudent> Students { get; set; }
 
-        private static  Dictionary<string, List<string>> PrintAbsences { get; set; }
+        private static Dictionary<string, List<string>> PrintAbsences { get; set; }
 
         private static List<string> DetailDomain { get; set; }
 
@@ -62,7 +62,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
             // 2018/12/25 穎驊 完成 高雄小組 [09-20][03]在校成績證明書樣式 項目
             // 用此方法 可以避開 與 Campus.Report  Aspose.Word  版本不相容的問題
-            Document doc = new Document( PrintSetting.Template.GetStream());
+            Document doc = new Document(PrintSetting.Template.GetStream());
 
             doc.MailMerge.FieldMergingCallback = new InsertDocumentAtMailMergeHandler();
 
@@ -273,6 +273,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                         #region 填資料
                         Row RatingRow = null;
+
+                        //先取得等第對照表
+                        Dictionary<decimal, string> degreeTemplate = Util.GetDegreeTemplate();
+
                         foreach (RowHeader header in indexHeaders)
                         {
                             SemesterDataCollection semesters = new SemesterDataCollection();
@@ -328,7 +332,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     if (!score.HasValue) continue;
 
                                     row.Cells[columnIndex * 3 + 2].Write(builder, ((double)score) + "");
-                                    row.Cells[columnIndex * 3 + 4].Write(builder, (Util.GetDegree(score.Value)));
+                                    row.Cells[columnIndex * 3 + 4].Write(builder, (Util.GetDegree(score.Value, degreeTemplate)));
 
                                     if (PrintSetting.PrintRank || PrintSetting.PrintRankPercentage)
                                         RatingRow = row.NextSibling as Row;
@@ -340,7 +344,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                                     row.Cells[columnIndex * 3 + 2].Write(builder, ((double)weight) + "");
                                     row.Cells[columnIndex * 3 + 3].Write(builder, ((double)score) + "");
-                                    row.Cells[columnIndex * 3 + 4].Write(builder, (Util.GetDegree(score.Value)));
+                                    row.Cells[columnIndex * 3 + 4].Write(builder, (Util.GetDegree(score.Value, degreeTemplate)));
                                 }
                             }
 
@@ -384,7 +388,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             }
 
                             row.Cells[20].Write(builder, (double)avgScore + "");
-                            row.Cells[21].Write(builder, Util.GetDegree(avgScore.Value));
+                            row.Cells[21].Write(builder, Util.GetDegree(avgScore.Value, degreeTemplate));
                         }
 
                         if (RatingRow != null)
@@ -579,6 +583,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                         //填資料
                         Row RatingRow = null;
+
+                        //先取得等第對照表
+                        Dictionary<decimal, string> degreeTemplate = Util.GetDegreeTemplate();
+
                         foreach (RowHeader header in indexHeaders)
                         {
                             SemesterDataCollection semesters = new SemesterDataCollection();
@@ -632,7 +640,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     if (!score.HasValue) continue;
 
                                     row.Cells[columnIndex * 3 + 2].Write(builder, ((double)score) + "");
-                                    row.Cells[columnIndex * 3 + 4].Write(builder, (Util.GetDegree(score.Value)));
+                                    row.Cells[columnIndex * 3 + 4].Write(builder, (Util.GetDegree(score.Value, degreeTemplate)));
 
                                     if (PrintSetting.PrintRank || PrintSetting.PrintRankPercentage)
                                         RatingRow = row.NextSibling as Row;
@@ -644,7 +652,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                                     row.Cells[columnIndex * 3 + 2].Write(builder, ((double)weight) + "");
                                     row.Cells[columnIndex * 3 + 3].Write(builder, ((double)score) + "");
-                                    row.Cells[columnIndex * 3 + 4].Write(builder, (Util.GetDegree(score.Value)));
+                                    row.Cells[columnIndex * 3 + 4].Write(builder, (Util.GetDegree(score.Value, degreeTemplate)));
                                 }
                             }
 
@@ -688,7 +696,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             }
 
                             row.Cells[20].Write(builder, (double)avgScore + "");
-                            row.Cells[21].Write(builder, Util.GetDegree(avgScore.Value));
+                            row.Cells[21].Write(builder, Util.GetDegree(avgScore.Value, degreeTemplate));
                         }
                         if (RatingRow != null)
                         {

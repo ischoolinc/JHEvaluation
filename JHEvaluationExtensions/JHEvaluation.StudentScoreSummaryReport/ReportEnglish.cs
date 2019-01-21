@@ -40,9 +40,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
         public ReportEnglish(List<ReportStudent> students, ReportPreference printSetting)
         {
-           
+
             Students = students;
-            Students.Sort(delegate(ReportStudent x, ReportStudent y)
+            Students.Sort(delegate (ReportStudent x, ReportStudent y)
             {
                 return x.OrderString.CompareTo(y.OrderString);
             });
@@ -72,10 +72,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
             // 2018/12/25 穎驊 完成 高雄小組 [09-20][03]在校成績證明書樣式 項目
             // 用此方法 可以避開 與 Campus.Report  Aspose.Word  版本不相容的問題
             Document doc = new Document(PrintSetting.Template.GetStream());
-                        
+
             doc.MailMerge.FieldMergingCallback = new InsertDocumentAtMailMergeHandler();
 
-            doc.MailMerge.Execute(new MergeDataSource(Students, PrintSetting));           
+            doc.MailMerge.Execute(new MergeDataSource(Students, PrintSetting));
 
             return doc;
         }
@@ -200,12 +200,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
             _DocDict.Clear();
 
-            foreach(ReportStudent rs in Students)
+            foreach (ReportStudent rs in Students)
             {
                 // 2018/12/25 穎驊 完成 高雄小組 [09-20][03]在校成績證明書樣式 項目
                 // 用此方法 可以避開 與 Campus.Report  Aspose.Word  版本不相容的問題
                 Document doc = new Document(PrintSetting.Template.GetStream());
-                
+
                 List<ReportStudent> rps = new List<ReportStudent>();
                 rps.Add(rs);
                 doc.MailMerge.FieldMergingCallback = new InsertDocumentAtMailMergeHandler();
@@ -224,10 +224,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 fileName += "_" + rs.Name;
 
                 doc.MailMerge.Execute(new MergeDataSource(rps, PrintSetting));
-                if(!_DocDict.ContainsKey(fileName))
+                if (!_DocDict.ContainsKey(fileName))
                     _DocDict.Add(fileName, doc);
             }
-            return _DocDict;        
+            return _DocDict;
         }
 
         private static void PrintSubjectOnly(DocumentBuilder builder, ReportStudent student, Row template, Table table)
@@ -260,7 +260,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             }
 
             List<RowHeader> sortedHeaders = RowIndexs.ToList();
-            sortedHeaders.Sort(delegate(RowHeader x, RowHeader y)
+            sortedHeaders.Sort(delegate (RowHeader x, RowHeader y)
             {
                 Subj xx = new JHSchool.Evaluation.Subject(x.Subject, x.Domain);
                 Subj yy = new JHSchool.Evaluation.Subject(y.Subject, y.Domain);
@@ -286,7 +286,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 string subjCName = header.Subject;
                 //string subjEName = Subj.GetSubjectEnglish(header.Subject);
                 string subjEName = _SubjDomainEngNameMapping.GetSubjectEngName(header.Subject);
-                
+
                 string subjString = header.Subject + (string.IsNullOrEmpty(subjEName) ? "" : " " + subjEName);
 
                 datarow.Cells[0].Write(builder, subjString);
@@ -306,6 +306,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
             #region 填資料
             //填資料
+
+            //先取得等第對照表
+            Dictionary<decimal, string> degreeTemplate = Util.GetDegreeTemplate();
+
             foreach (RowHeader header in indexHeaders)
             {
                 SemesterDataCollection semesters = new SemesterDataCollection();
@@ -347,7 +351,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     if (PrintScore)
                         row.Cells[columnIndex + 2].Write(builder, score.Value + "");
                     else
-                        row.Cells[columnIndex + 2].Write(builder, Util.GetDegreeEnglish(score.Value));
+                    {
+                        row.Cells[columnIndex + 2].Write(builder, Util.GetDegreeEnglish(score.Value, degreeTemplate));
+                    }
                 }
             }
             #endregion
@@ -486,6 +492,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
             #region 填資料
             //Row RatingRow = null;
+
+            //先取得等第對照表
+            Dictionary<decimal, string> degreeTemplate = Util.GetDegreeTemplate();
+
             foreach (RowHeader header in indexHeaders)
             {
                 SemesterDataCollection semesters = new SemesterDataCollection();
@@ -527,7 +537,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     if (PrintScore)
                         row.Cells[columnIndex + 2].Write(builder, score.Value + "");
                     else
-                        row.Cells[columnIndex + 2].Write(builder, Util.GetDegreeEnglish(score.Value));
+                    {
+                        row.Cells[columnIndex + 2].Write(builder, Util.GetDegreeEnglish(score.Value, degreeTemplate));
+                    }
                 }
 
             }
@@ -602,7 +614,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                         subjects.Add(each);
                 }
             }
-            domains.Sort(delegate(RowHeader x, RowHeader y)
+            domains.Sort(delegate (RowHeader x, RowHeader y)
             {
                 Subj xx = new JHSchool.Evaluation.Subject(x.Subject, x.Domain);
                 Subj yy = new JHSchool.Evaluation.Subject(y.Subject, y.Domain);
