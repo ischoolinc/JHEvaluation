@@ -84,6 +84,7 @@
             this.dgv.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgv.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgv.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
+            this.dgv.ImeMode = System.Windows.Forms.ImeMode.Close;
             this.dgv.Location = new System.Drawing.Point(6, 72);
             this.dgv.Name = "dgv";
             this.dgv.RowHeadersWidth = 25;

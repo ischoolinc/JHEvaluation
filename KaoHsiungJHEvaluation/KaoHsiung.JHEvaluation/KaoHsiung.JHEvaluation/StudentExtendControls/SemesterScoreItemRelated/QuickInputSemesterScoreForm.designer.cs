@@ -247,6 +247,7 @@
             // 
             this.txtPC4.Border.Class = "TextBoxBorder";
             this.txtPC4.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPC4.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtPC4.Location = new System.Drawing.Point(140, 165);
             this.txtPC4.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC4.Name = "txtPC4";
@@ -264,6 +265,7 @@
             // 
             this.txtEffort4.Border.Class = "TextBoxBorder";
             this.txtEffort4.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEffort4.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtEffort4.Location = new System.Drawing.Point(289, 165);
             this.txtEffort4.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort4.Name = "txtEffort4";
@@ -295,6 +297,7 @@
             // 
             this.txtScore4.Border.Class = "TextBoxBorder";
             this.txtScore4.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtScore4.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore4.Location = new System.Drawing.Point(220, 165);
             this.txtScore4.Name = "txtScore4";
             this.txtScore4.Size = new System.Drawing.Size(63, 25);
@@ -310,6 +313,7 @@
             // 
             this.txtScore5.Border.Class = "TextBoxBorder";
             this.txtScore5.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtScore5.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore5.Location = new System.Drawing.Point(220, 194);
             this.txtScore5.Name = "txtScore5";
             this.txtScore5.Size = new System.Drawing.Size(63, 25);
@@ -341,6 +345,7 @@
             // 
             this.txtEffort5.Border.Class = "TextBoxBorder";
             this.txtEffort5.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEffort5.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtEffort5.Location = new System.Drawing.Point(289, 194);
             this.txtEffort5.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort5.Name = "txtEffort5";
@@ -373,6 +378,7 @@
             // 
             this.txtPC3.Border.Class = "TextBoxBorder";
             this.txtPC3.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPC3.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtPC3.Location = new System.Drawing.Point(140, 136);
             this.txtPC3.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC3.Name = "txtPC3";
@@ -405,6 +411,7 @@
             // 
             this.txtPC5.Border.Class = "TextBoxBorder";
             this.txtPC5.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPC5.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtPC5.Location = new System.Drawing.Point(140, 194);
             this.txtPC5.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC5.Name = "txtPC5";
@@ -422,6 +429,7 @@
             // 
             this.txtPC1.Border.Class = "TextBoxBorder";
             this.txtPC1.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPC1.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtPC1.Location = new System.Drawing.Point(140, 79);
             this.txtPC1.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC1.Name = "txtPC1";
@@ -439,6 +447,7 @@
             // 
             this.txtEffort3.Border.Class = "TextBoxBorder";
             this.txtEffort3.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEffort3.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtEffort3.Location = new System.Drawing.Point(289, 136);
             this.txtEffort3.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort3.Name = "txtEffort3";
@@ -456,6 +465,7 @@
             // 
             this.txtPC2.Border.Class = "TextBoxBorder";
             this.txtPC2.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPC2.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtPC2.Location = new System.Drawing.Point(140, 108);
             this.txtPC2.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC2.Name = "txtPC2";
@@ -488,6 +498,7 @@
             // 
             this.txtEffort1.Border.Class = "TextBoxBorder";
             this.txtEffort1.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEffort1.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtEffort1.Location = new System.Drawing.Point(289, 79);
             this.txtEffort1.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort1.Name = "txtEffort1";
@@ -504,6 +515,7 @@
             // 
             this.txtScore3.Border.Class = "TextBoxBorder";
             this.txtScore3.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtScore3.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore3.Location = new System.Drawing.Point(220, 136);
             this.txtScore3.Name = "txtScore3";
             this.txtScore3.Size = new System.Drawing.Size(63, 25);
@@ -520,6 +532,7 @@
             // 
             this.txtEffort2.Border.Class = "TextBoxBorder";
             this.txtEffort2.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEffort2.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtEffort2.Location = new System.Drawing.Point(289, 108);
             this.txtEffort2.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort2.Name = "txtEffort2";
@@ -536,6 +549,7 @@
             // 
             this.txtScore6.Border.Class = "TextBoxBorder";
             this.txtScore6.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtScore6.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore6.Location = new System.Drawing.Point(220, 223);
             this.txtScore6.Name = "txtScore6";
             this.txtScore6.Size = new System.Drawing.Size(63, 25);
@@ -551,6 +565,7 @@
             // 
             this.txtScore1.Border.Class = "TextBoxBorder";
             this.txtScore1.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtScore1.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore1.Location = new System.Drawing.Point(220, 79);
             this.txtScore1.Name = "txtScore1";
             this.txtScore1.Size = new System.Drawing.Size(63, 25);
@@ -567,6 +582,7 @@
             // 
             this.txtEffort6.Border.Class = "TextBoxBorder";
             this.txtEffort6.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEffort6.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtEffort6.Location = new System.Drawing.Point(289, 223);
             this.txtEffort6.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort6.Name = "txtEffort6";
@@ -583,6 +599,7 @@
             // 
             this.txtScore2.Border.Class = "TextBoxBorder";
             this.txtScore2.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtScore2.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore2.Location = new System.Drawing.Point(220, 108);
             this.txtScore2.Name = "txtScore2";
             this.txtScore2.Size = new System.Drawing.Size(63, 25);
@@ -599,6 +616,7 @@
             // 
             this.txtPC6.Border.Class = "TextBoxBorder";
             this.txtPC6.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPC6.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtPC6.Location = new System.Drawing.Point(140, 223);
             this.txtPC6.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC6.Name = "txtPC6";
@@ -630,6 +648,7 @@
             // 
             this.txtScore7.Border.Class = "TextBoxBorder";
             this.txtScore7.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtScore7.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore7.Location = new System.Drawing.Point(220, 252);
             this.txtScore7.Name = "txtScore7";
             this.txtScore7.Size = new System.Drawing.Size(63, 25);
@@ -646,6 +665,7 @@
             // 
             this.txtEffort7.Border.Class = "TextBoxBorder";
             this.txtEffort7.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEffort7.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtEffort7.Location = new System.Drawing.Point(289, 252);
             this.txtEffort7.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort7.Name = "txtEffort7";
@@ -663,6 +683,7 @@
             // 
             this.txtPC7.Border.Class = "TextBoxBorder";
             this.txtPC7.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPC7.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtPC7.Location = new System.Drawing.Point(140, 252);
             this.txtPC7.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC7.Name = "txtPC7";
@@ -694,6 +715,7 @@
             // 
             this.txtScore8.Border.Class = "TextBoxBorder";
             this.txtScore8.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtScore8.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore8.Location = new System.Drawing.Point(220, 281);
             this.txtScore8.Name = "txtScore8";
             this.txtScore8.Size = new System.Drawing.Size(63, 25);
@@ -728,6 +750,7 @@
             // 
             this.txtEffort8.Border.Class = "TextBoxBorder";
             this.txtEffort8.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEffort8.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtEffort8.Location = new System.Drawing.Point(289, 281);
             this.txtEffort8.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort8.Name = "txtEffort8";
@@ -797,6 +820,7 @@
             // 
             this.txtPC8.Border.Class = "TextBoxBorder";
             this.txtPC8.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPC8.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtPC8.Location = new System.Drawing.Point(140, 281);
             this.txtPC8.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC8.Name = "txtPC8";
@@ -1019,6 +1043,7 @@
             this.dgv.DefaultCellStyle = dataGridViewCellStyle1;
             this.dgv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
+            this.dgv.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.dgv.Location = new System.Drawing.Point(2, 2);
             this.dgv.Name = "dgv";
             this.dgv.RowTemplate.Height = 24;
@@ -1207,6 +1232,7 @@
             // 
             this.txtScore9.Border.Class = "TextBoxBorder";
             this.txtScore9.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtScore9.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore9.Location = new System.Drawing.Point(220, 50);
             this.txtScore9.Name = "txtScore9";
             this.txtScore9.Size = new System.Drawing.Size(63, 25);
@@ -1241,6 +1267,7 @@
             // 
             this.txtEffort9.Border.Class = "TextBoxBorder";
             this.txtEffort9.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEffort9.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtEffort9.Location = new System.Drawing.Point(289, 50);
             this.txtEffort9.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort9.Name = "txtEffort9";
@@ -1258,6 +1285,7 @@
             // 
             this.txtPC9.Border.Class = "TextBoxBorder";
             this.txtPC9.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPC9.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtPC9.Location = new System.Drawing.Point(140, 50);
             this.txtPC9.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC9.Name = "txtPC9";
@@ -1347,6 +1375,7 @@
             this.panelEx1.Controls.Add(this.txtEffort4);
             this.panelEx1.Controls.Add(this.txtPC4);
             this.panelEx1.Enabled = false;
+            this.panelEx1.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.panelEx1.Location = new System.Drawing.Point(7, 35);
             this.panelEx1.Name = "panelEx1";
             this.panelEx1.Size = new System.Drawing.Size(589, 559);
