@@ -41,10 +41,9 @@ namespace HsinChuExamScore_JH
             {
                 if (K12.Presentation.NLDPanels.Class.SelectedSource.Count > 0)
                 {
-                    Utility.CreateFieldTemplate();
-                    //List<string> StudentIDList = Utility.GetClassStudentIDList1ByClassID(K12.Presentation.NLDPanels.Class.SelectedSource);
-                    //PrintForm pf = new PrintForm(StudentIDList);
-                    //pf.ShowDialog();
+                    List<string> StudentIDList = Utility.GetClassStudentIDList1ByClassID(K12.Presentation.NLDPanels.Class.SelectedSource);
+                    PrintForm pf = new PrintForm(StudentIDList);
+                    pf.ShowDialog();
                 }
                 else
                 {
