@@ -978,7 +978,7 @@ FROM
 WHERE
 	rank_matrix.is_alive = true
 	AND rank_matrix.school_year = '" + _SelSchoolYear + @"'
-    AND rank_matrix.semester = '" +_SelSemester + @"'
+    AND rank_matrix.semester = '" + _SelSemester + @"'
 	AND rank_matrix.item_type like '定期評量%'
 	AND rank_matrix.ref_exam_id = '" + _SelExamID + @"'
     AND ref_student_id IN ('" + string.Join("','", _StudentIDList) + @"') 
@@ -1483,7 +1483,7 @@ ORDER BY
                             _domainRankDataDict["" + dr["ref_student_id"]].Add(domainName + "_領域" + rankType + "母體底標", "" + d);
                         }
                     }
-                }                   
+                }
             }
 
 
@@ -1520,6 +1520,22 @@ ORDER BY
             subjLi.Add("科目年排名母體平均");
             subjLi.Add("科目年排名母體後標");
             subjLi.Add("科目年排名母體底標");
+            subjLi.Add("科目類別1排名名次");
+            subjLi.Add("科目類別1排名PR值");
+            subjLi.Add("科目類別1排名百分比");
+            subjLi.Add("科目類別1排名母體頂標");
+            subjLi.Add("科目類別1排名母體前標");
+            subjLi.Add("科目類別1排名母體平均");
+            subjLi.Add("科目類別1排名母體後標");
+            subjLi.Add("科目類別1排名母體底標");
+            subjLi.Add("科目類別2排名名次");
+            subjLi.Add("科目類別2排名PR值");
+            subjLi.Add("科目類別2排名百分比");
+            subjLi.Add("科目類別2排名母體頂標");
+            subjLi.Add("科目類別2排名母體前標");
+            subjLi.Add("科目類別2排名母體平均");
+            subjLi.Add("科目類別2排名母體後標");
+            subjLi.Add("科目類別2排名母體底標");
 
 
             List<string> subjColList = new List<string>();
@@ -1930,6 +1946,22 @@ ORDER BY
                     dt.Columns.Add(dName + "_領域年排名母體平均");
                     dt.Columns.Add(dName + "_領域年排名母體後標");
                     dt.Columns.Add(dName + "_領域年排名母體底標");
+                    dt.Columns.Add(dName + "_領域類別1排名名次");
+                    dt.Columns.Add(dName + "_領域類別1排名PR值");
+                    dt.Columns.Add(dName + "_領域類別1排名百分比");
+                    dt.Columns.Add(dName + "_領域類別1排名母體頂標");
+                    dt.Columns.Add(dName + "_領域類別1排名母體前標");
+                    dt.Columns.Add(dName + "_領域類別1排名母體平均");
+                    dt.Columns.Add(dName + "_領域類別1排名母體後標");
+                    dt.Columns.Add(dName + "_領域類別1排名母體底標");
+                    dt.Columns.Add(dName + "_領域類別2排名名次");
+                    dt.Columns.Add(dName + "_領域類別2排名PR值");
+                    dt.Columns.Add(dName + "_領域類別2排名百分比");
+                    dt.Columns.Add(dName + "_領域類別2排名母體頂標");
+                    dt.Columns.Add(dName + "_領域類別2排名母體前標");
+                    dt.Columns.Add(dName + "_領域類別2排名母體平均");
+                    dt.Columns.Add(dName + "_領域類別2排名母體後標");
+                    dt.Columns.Add(dName + "_領域類別2排名母體底標");
 
                 }
 
@@ -1950,6 +1982,22 @@ ORDER BY
                 dt.Columns.Add("領域成績加權平均年排名母體平均");
                 dt.Columns.Add("領域成績加權平均年排名母體後標");
                 dt.Columns.Add("領域成績加權平均年排名母體底標");
+                dt.Columns.Add("領域成績加權平均類別1排名名次");
+                dt.Columns.Add("領域成績加權平均類別1排名PR值");
+                dt.Columns.Add("領域成績加權平均類別1排名百分比");
+                dt.Columns.Add("領域成績加權平均類別1排名母體頂標");
+                dt.Columns.Add("領域成績加權平均類別1排名母體前標");
+                dt.Columns.Add("領域成績加權平均類別1排名母體平均");
+                dt.Columns.Add("領域成績加權平均類別1排名母體後標");
+                dt.Columns.Add("領域成績加權平均類別1排名母體底標");
+                dt.Columns.Add("領域成績加權平均類別2排名名次");
+                dt.Columns.Add("領域成績加權平均類別2排名PR值");
+                dt.Columns.Add("領域成績加權平均類別2排名百分比");
+                dt.Columns.Add("領域成績加權平均類別2排名母體頂標");
+                dt.Columns.Add("領域成績加權平均類別2排名母體前標");
+                dt.Columns.Add("領域成績加權平均類別2排名母體平均");
+                dt.Columns.Add("領域成績加權平均類別2排名母體後標");
+                dt.Columns.Add("領域成績加權平均類別2排名母體底標");
 
                 dt.TableName = StudRec.ID;
                 row["StudentID"] = StudRec.ID;
@@ -2098,7 +2146,7 @@ ORDER BY
                                     {
                                         continue; // 沒有排名資料 就跳出
                                     }
-                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item)? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item]:"";
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
                                     break;
                                 case "科目班排名PR值":
                                     if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
@@ -2205,6 +2253,118 @@ ORDER BY
                                     }
                                     row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
                                     break;
+                                case "科目類別1排名名次":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別1排名PR值":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別1排名百分比":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別1排名母體頂標":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別1排名母體前標":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別1排名母體平均":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別1排名母體後標":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別1排名母體底標":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別2排名名次":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別2排名PR值":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別2排名百分比":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別2排名母體頂標":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別2排名母體前標":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別2排名母體平均":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別2排名母體後標":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
+                                case "科目類別2排名母體底標":
+                                    if (!_subjectRankDataDict.ContainsKey(StudRec.ID))
+                                    {
+                                        continue; // 沒有排名資料 就跳出
+                                    }
+                                    row[key] = _subjectRankDataDict[StudRec.ID].ContainsKey(ess.SubjectName + "_" + item) ? _subjectRankDataDict[StudRec.ID][ess.SubjectName + "_" + item] : "";
+                                    break;
                             }
 
 
@@ -2245,6 +2405,22 @@ ORDER BY
                         string keyRank14 = eds.DomainName + "_領域年排名母體平均";
                         string keyRank15 = eds.DomainName + "_領域年排名母體後標";
                         string keyRank16 = eds.DomainName + "_領域年排名母體底標";
+                        string keyRank17 = eds.DomainName + "_領域類別1排名名次";
+                        string keyRank18 = eds.DomainName + "_領域類別1排名PR值";
+                        string keyRank19 = eds.DomainName + "_領域類別1排名百分比";
+                        string keyRank20 = eds.DomainName + "_領域類別1排名母體頂標";
+                        string keyRank21 = eds.DomainName + "_領域類別1排名母體前標";
+                        string keyRank22 = eds.DomainName + "_領域類別1排名母體平均";
+                        string keyRank23 = eds.DomainName + "_領域類別1排名母體後標";
+                        string keyRank24 = eds.DomainName + "_領域類別1排名母體底標";
+                        string keyRank25 = eds.DomainName + "_領域類別2排名名次";
+                        string keyRank26 = eds.DomainName + "_領域類別2排名PR值";
+                        string keyRank27 = eds.DomainName + "_領域類別2排名百分比";
+                        string keyRank28 = eds.DomainName + "_領域類別2排名母體頂標";
+                        string keyRank29 = eds.DomainName + "_領域類別2排名母體前標";
+                        string keyRank30 = eds.DomainName + "_領域類別2排名母體平均";
+                        string keyRank31 = eds.DomainName + "_領域類別2排名母體後標";
+                        string keyRank32 = eds.DomainName + "_領域類別2排名母體底標";
 
                         // 總成績
                         if (eds.ScoreT.HasValue)
@@ -2275,15 +2451,31 @@ ORDER BY
                         row[keyRank5] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank5) ? _domainRankDataDict[StudRec.ID][keyRank5] : "";
                         row[keyRank6] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank6) ? _domainRankDataDict[StudRec.ID][keyRank6] : "";
                         row[keyRank7] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank7) ? _domainRankDataDict[StudRec.ID][keyRank7] : "";
-                        row[keyRank8] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank8) ? _domainRankDataDict[StudRec.ID][keyRank8]  : "";
-                        row[keyRank9] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank9) ? _domainRankDataDict[StudRec.ID][keyRank9]  : "";
-                        row[keyRank10]= _domainRankDataDict[StudRec.ID].ContainsKey(keyRank10) ? _domainRankDataDict[StudRec.ID][keyRank10] : "";
-                        row[keyRank11]= _domainRankDataDict[StudRec.ID].ContainsKey(keyRank11) ? _domainRankDataDict[StudRec.ID][keyRank11] : "";
-                        row[keyRank12]= _domainRankDataDict[StudRec.ID].ContainsKey(keyRank12) ? _domainRankDataDict[StudRec.ID][keyRank12] : "";
-                        row[keyRank13]= _domainRankDataDict[StudRec.ID].ContainsKey(keyRank13) ? _domainRankDataDict[StudRec.ID][keyRank13] : "";
-                        row[keyRank14]= _domainRankDataDict[StudRec.ID].ContainsKey(keyRank14) ? _domainRankDataDict[StudRec.ID][keyRank14] : "";
-                        row[keyRank15]= _domainRankDataDict[StudRec.ID].ContainsKey(keyRank15) ? _domainRankDataDict[StudRec.ID][keyRank15] : "";
-                        row[keyRank16]= _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank8] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank8) ? _domainRankDataDict[StudRec.ID][keyRank8] : "";
+                        row[keyRank9] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank9) ? _domainRankDataDict[StudRec.ID][keyRank9] : "";
+                        row[keyRank10] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank10) ? _domainRankDataDict[StudRec.ID][keyRank10] : "";
+                        row[keyRank11] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank11) ? _domainRankDataDict[StudRec.ID][keyRank11] : "";
+                        row[keyRank12] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank12) ? _domainRankDataDict[StudRec.ID][keyRank12] : "";
+                        row[keyRank13] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank13) ? _domainRankDataDict[StudRec.ID][keyRank13] : "";
+                        row[keyRank14] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank14) ? _domainRankDataDict[StudRec.ID][keyRank14] : "";
+                        row[keyRank15] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank15) ? _domainRankDataDict[StudRec.ID][keyRank15] : "";
+                        row[keyRank16] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank17] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank18] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank19] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank20] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank21] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank22] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank23] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank24] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank25] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank26] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank27] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank28] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank29] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank30] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank31] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
+                        row[keyRank32] = _domainRankDataDict[StudRec.ID].ContainsKey(keyRank16) ? _domainRankDataDict[StudRec.ID][keyRank16] : "";
 
                     }
                 }
@@ -2800,7 +2992,7 @@ ORDER BY
         }
 
         private void btnPrint_Click(object sender, EventArgs e)
-        {            
+        {
             if (dtBegin.IsEmpty || dtEnd.IsEmpty)
             {
                 FISCA.Presentation.Controls.MsgBox.Show("日期區間必須輸入!");

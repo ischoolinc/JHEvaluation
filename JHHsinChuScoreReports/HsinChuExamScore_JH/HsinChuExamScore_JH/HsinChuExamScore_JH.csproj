@@ -193,15 +193,16 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Template\新竹_科目及領域成績單_科目組距.doc" />
     <None Include="Template\新竹_科目及領域成績單_領域組距.doc" />
     <None Include="Template\新竹_科目成績單.doc" />
+    <None Include="Template\新竹_評量成績合併欄位總表.doc" />
     <None Include="Template\新竹_評量成績通知單樣板.doc" />
     <None Include="Template\新竹_領域成績單.doc" />
-    <None Include="Template\新竹評量成績合併欄位總表.doc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
