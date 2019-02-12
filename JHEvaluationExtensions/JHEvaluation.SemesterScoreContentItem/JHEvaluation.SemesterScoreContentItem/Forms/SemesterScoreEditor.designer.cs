@@ -29,22 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SemesterScoreEditor));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.gpDomain = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panelDomain = new System.Windows.Forms.Panel();
-            this.dgvDomain = new DevComponents.DotNetBar.Controls.DataGridViewX();
-            this.chdDomain = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
-            this.chdPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chdScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chScoreOrigin = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chScoreMakeup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chdEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chdText = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chMemo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelScore = new DevComponents.DotNetBar.PanelEx();
             this.txtCourseLearnScoreOrigin = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.txtLearnDomainScoreOrigin = new DevComponents.DotNetBar.Controls.TextBoxX();
@@ -64,16 +55,6 @@
             this.lblStudentInfo = new DevComponents.DotNetBar.LabelX();
             this.gpSubject = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panelSubject = new System.Windows.Forms.Panel();
-            this.dgvSubject = new DevComponents.DotNetBar.Controls.DataGridViewX();
-            this.chsDomain = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
-            this.chsSubject = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
-            this.chsPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chsScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chsScoreOrigin = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chsScoreMakeup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chsEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chsText = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chsComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblSaveWarning = new DevComponents.DotNetBar.LabelX();
             this.errorProvider = new Framework.EnhancedErrorProvider();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -86,6 +67,25 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.btnPreSubjScore = new DevComponents.DotNetBar.ButtonX();
             this.chkScoreLimit = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.dgvSubject = new DevComponents.DotNetBar.Controls.DataGridViewX();
+            this.chsDomain = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
+            this.chsSubject = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
+            this.chsPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsScoreOrigin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsScoreMakeup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsText = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chsComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvDomain = new DevComponents.DotNetBar.Controls.DataGridViewX();
+            this.chdDomain = new JHEvaluation.SemesterScoreContentItem.Controls.DataGridViewComboBoxExColumn();
+            this.chdPeriodCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chdScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chScoreOrigin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chScoreMakeup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chdEffort = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chdText = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chMemo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -103,14 +103,14 @@
             this.dataGridViewTextBoxColumn15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gpDomain.SuspendLayout();
             this.panelDomain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDomain)).BeginInit();
             this.panelScore.SuspendLayout();
             this.gpSubject.SuspendLayout();
             this.panelSubject.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSubject)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.contextMenuStripSubject.SuspendLayout();
             this.contextMenuStripDomain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSubject)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDomain)).BeginInit();
             this.SuspendLayout();
             // 
             // gpDomain
@@ -165,101 +165,8 @@
             this.panelDomain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDomain.Location = new System.Drawing.Point(0, 0);
             this.panelDomain.Name = "panelDomain";
-            this.panelDomain.Size = new System.Drawing.Size(674, 334);
+            this.panelDomain.Size = new System.Drawing.Size(674, 335);
             this.panelDomain.TabIndex = 11;
-            // 
-            // dgvDomain
-            // 
-            this.dgvDomain.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.AliceBlue;
-            this.dgvDomain.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvDomain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvDomain.BackgroundColor = System.Drawing.Color.White;
-            this.dgvDomain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dgvDomain.ColumnHeadersHeight = 42;
-            this.dgvDomain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dgvDomain.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.chdDomain,
-            this.chdPeriodCredit,
-            this.chdScore,
-            this.chScoreOrigin,
-            this.chScoreMakeup,
-            this.chdEffort,
-            this.chdText,
-            this.chMemo});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvDomain.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvDomain.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.dgvDomain.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
-            this.dgvDomain.Location = new System.Drawing.Point(6, 3);
-            this.dgvDomain.MultiSelect = false;
-            this.dgvDomain.Name = "dgvDomain";
-            this.dgvDomain.RowHeadersWidth = 25;
-            this.dgvDomain.RowTemplate.Height = 24;
-            this.dgvDomain.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dgvDomain.Size = new System.Drawing.Size(662, 259);
-            this.dgvDomain.TabIndex = 12;
-            this.dgvDomain.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
-            this.dgvDomain.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_CellMouseClick);
-            this.dgvDomain.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_RowHeaderMouseClick);
-            this.dgvDomain.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_RowsAdded);
-            // 
-            // chdDomain
-            // 
-            this.chdDomain.HeaderText = "領域";
-            this.chdDomain.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chdDomain.Items")));
-            this.chdDomain.Name = "chdDomain";
-            this.chdDomain.Width = 110;
-            // 
-            // chdPeriodCredit
-            // 
-            this.chdPeriodCredit.HeaderText = "節數/權數";
-            this.chdPeriodCredit.Name = "chdPeriodCredit";
-            this.chdPeriodCredit.Width = 65;
-            // 
-            // chdScore
-            // 
-            this.chdScore.HeaderText = "成績";
-            this.chdScore.Name = "chdScore";
-            this.chdScore.Width = 60;
-            // 
-            // chScoreOrigin
-            // 
-            this.chScoreOrigin.HeaderText = "原始成績";
-            this.chScoreOrigin.Name = "chScoreOrigin";
-            this.chScoreOrigin.Width = 60;
-            // 
-            // chScoreMakeup
-            // 
-            this.chScoreMakeup.HeaderText = "補考成績";
-            this.chScoreMakeup.Name = "chScoreMakeup";
-            this.chScoreMakeup.Width = 60;
-            // 
-            // chdEffort
-            // 
-            this.chdEffort.HeaderText = "努力程度";
-            this.chdEffort.Name = "chdEffort";
-            this.chdEffort.Width = 59;
-            // 
-            // chdText
-            // 
-            this.chdText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.chdText.HeaderText = "文字描述";
-            this.chdText.Name = "chdText";
-            // 
-            // chMemo
-            // 
-            this.chMemo.HeaderText = "註記";
-            this.chMemo.Name = "chMemo";
-            this.chMemo.Width = 60;
             // 
             // panelScore
             // 
@@ -275,7 +182,7 @@
             this.panelScore.Controls.Add(this.labelX4);
             this.panelScore.Controls.Add(this.labelX3);
             this.panelScore.Controls.Add(this.labelX5);
-            this.panelScore.Location = new System.Drawing.Point(6, 268);
+            this.panelScore.Location = new System.Drawing.Point(6, 269);
             this.panelScore.Name = "panelScore";
             this.panelScore.Size = new System.Drawing.Size(662, 63);
             this.panelScore.Style.Alignment = System.Drawing.StringAlignment.Center;
@@ -558,111 +465,8 @@
             this.panelSubject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelSubject.Location = new System.Drawing.Point(0, 0);
             this.panelSubject.Name = "panelSubject";
-            this.panelSubject.Size = new System.Drawing.Size(674, 304);
+            this.panelSubject.Size = new System.Drawing.Size(674, 305);
             this.panelSubject.TabIndex = 8;
-            // 
-            // dgvSubject
-            // 
-            this.dgvSubject.AllowUserToResizeRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.AliceBlue;
-            this.dgvSubject.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
-            this.dgvSubject.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvSubject.BackgroundColor = System.Drawing.Color.White;
-            this.dgvSubject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dgvSubject.ColumnHeadersHeight = 42;
-            this.dgvSubject.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dgvSubject.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.chsDomain,
-            this.chsSubject,
-            this.chsPeriodCredit,
-            this.chsScore,
-            this.chsScoreOrigin,
-            this.chsScoreMakeup,
-            this.chsEffort,
-            this.chsText,
-            this.chsComment});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvSubject.DefaultCellStyle = dataGridViewCellStyle4;
-            this.dgvSubject.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.dgvSubject.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
-            this.dgvSubject.Location = new System.Drawing.Point(6, 3);
-            this.dgvSubject.MultiSelect = false;
-            this.dgvSubject.Name = "dgvSubject";
-            this.dgvSubject.RowHeadersWidth = 25;
-            this.dgvSubject.RowTemplate.Height = 24;
-            this.dgvSubject.Size = new System.Drawing.Size(662, 293);
-            this.dgvSubject.TabIndex = 9;
-            this.dgvSubject.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
-            this.dgvSubject.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_CellMouseClick);
-            this.dgvSubject.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_RowHeaderMouseClick);
-            this.dgvSubject.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_RowsAdded);
-            // 
-            // chsDomain
-            // 
-            this.chsDomain.HeaderText = "領域";
-            this.chsDomain.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chsDomain.Items")));
-            this.chsDomain.MinimumWidth = 97;
-            this.chsDomain.Name = "chsDomain";
-            this.chsDomain.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.chsDomain.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.chsDomain.Width = 110;
-            // 
-            // chsSubject
-            // 
-            this.chsSubject.HeaderText = "科目";
-            this.chsSubject.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chsSubject.Items")));
-            this.chsSubject.Name = "chsSubject";
-            this.chsSubject.Width = 81;
-            // 
-            // chsPeriodCredit
-            // 
-            this.chsPeriodCredit.HeaderText = "節數/權數";
-            this.chsPeriodCredit.Name = "chsPeriodCredit";
-            this.chsPeriodCredit.Width = 65;
-            // 
-            // chsScore
-            // 
-            this.chsScore.HeaderText = "成績";
-            this.chsScore.Name = "chsScore";
-            this.chsScore.Width = 60;
-            // 
-            // chsScoreOrigin
-            // 
-            this.chsScoreOrigin.HeaderText = "原始成績";
-            this.chsScoreOrigin.Name = "chsScoreOrigin";
-            this.chsScoreOrigin.Width = 60;
-            // 
-            // chsScoreMakeup
-            // 
-            this.chsScoreMakeup.HeaderText = "補考成績";
-            this.chsScoreMakeup.Name = "chsScoreMakeup";
-            this.chsScoreMakeup.Width = 60;
-            // 
-            // chsEffort
-            // 
-            this.chsEffort.HeaderText = "努力程度";
-            this.chsEffort.Name = "chsEffort";
-            this.chsEffort.Width = 59;
-            // 
-            // chsText
-            // 
-            this.chsText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.chsText.HeaderText = "文字描述";
-            this.chsText.Name = "chsText";
-            // 
-            // chsComment
-            // 
-            this.chsComment.HeaderText = "註記";
-            this.chsComment.Name = "chsComment";
-            this.chsComment.Width = 60;
             // 
             // lblSaveWarning
             // 
@@ -779,6 +583,204 @@
             this.chkScoreLimit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkScoreLimit.TabIndex = 24;
             this.chkScoreLimit.Text = "補考科目該領域不得超過60分";
+            // 
+            // dgvSubject
+            // 
+            this.dgvSubject.AllowUserToResizeRows = false;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.AliceBlue;
+            this.dgvSubject.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvSubject.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvSubject.BackgroundColor = System.Drawing.Color.White;
+            this.dgvSubject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dgvSubject.ColumnHeadersHeight = 42;
+            this.dgvSubject.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvSubject.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.chsDomain,
+            this.chsSubject,
+            this.chsPeriodCredit,
+            this.chsScore,
+            this.chsScoreOrigin,
+            this.chsScoreMakeup,
+            this.chsEffort,
+            this.chsText,
+            this.chsComment});
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvSubject.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dgvSubject.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
+            this.dgvSubject.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
+            this.dgvSubject.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.dgvSubject.Location = new System.Drawing.Point(6, 3);
+            this.dgvSubject.MultiSelect = false;
+            this.dgvSubject.Name = "dgvSubject";
+            this.dgvSubject.RowHeadersWidth = 25;
+            this.dgvSubject.RowTemplate.Height = 24;
+            this.dgvSubject.Size = new System.Drawing.Size(662, 294);
+            this.dgvSubject.TabIndex = 9;
+            this.dgvSubject.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
+            this.dgvSubject.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_CellMouseClick);
+            this.dgvSubject.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_RowHeaderMouseClick);
+            this.dgvSubject.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_RowsAdded);
+            // 
+            // chsDomain
+            // 
+            this.chsDomain.HeaderText = "領域";
+            this.chsDomain.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chsDomain.Items")));
+            this.chsDomain.MinimumWidth = 97;
+            this.chsDomain.Name = "chsDomain";
+            this.chsDomain.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.chsDomain.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.chsDomain.Width = 110;
+            // 
+            // chsSubject
+            // 
+            this.chsSubject.HeaderText = "科目";
+            this.chsSubject.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chsSubject.Items")));
+            this.chsSubject.Name = "chsSubject";
+            this.chsSubject.Width = 81;
+            // 
+            // chsPeriodCredit
+            // 
+            this.chsPeriodCredit.HeaderText = "節數/權數";
+            this.chsPeriodCredit.Name = "chsPeriodCredit";
+            this.chsPeriodCredit.Width = 65;
+            // 
+            // chsScore
+            // 
+            this.chsScore.HeaderText = "成績";
+            this.chsScore.Name = "chsScore";
+            this.chsScore.Width = 60;
+            // 
+            // chsScoreOrigin
+            // 
+            this.chsScoreOrigin.HeaderText = "原始成績";
+            this.chsScoreOrigin.Name = "chsScoreOrigin";
+            this.chsScoreOrigin.Width = 60;
+            // 
+            // chsScoreMakeup
+            // 
+            this.chsScoreMakeup.HeaderText = "補考成績";
+            this.chsScoreMakeup.Name = "chsScoreMakeup";
+            this.chsScoreMakeup.Width = 60;
+            // 
+            // chsEffort
+            // 
+            this.chsEffort.HeaderText = "努力程度";
+            this.chsEffort.Name = "chsEffort";
+            this.chsEffort.Width = 59;
+            // 
+            // chsText
+            // 
+            this.chsText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.chsText.HeaderText = "文字描述";
+            this.chsText.Name = "chsText";
+            // 
+            // chsComment
+            // 
+            this.chsComment.HeaderText = "註記";
+            this.chsComment.Name = "chsComment";
+            this.chsComment.Width = 60;
+            // 
+            // dgvDomain
+            // 
+            this.dgvDomain.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.AliceBlue;
+            this.dgvDomain.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvDomain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvDomain.BackgroundColor = System.Drawing.Color.White;
+            this.dgvDomain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dgvDomain.ColumnHeadersHeight = 42;
+            this.dgvDomain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvDomain.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.chdDomain,
+            this.chdPeriodCredit,
+            this.chdScore,
+            this.chScoreOrigin,
+            this.chScoreMakeup,
+            this.chdEffort,
+            this.chdText,
+            this.chMemo});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvDomain.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvDomain.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
+            this.dgvDomain.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
+            this.dgvDomain.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.dgvDomain.Location = new System.Drawing.Point(6, 3);
+            this.dgvDomain.MultiSelect = false;
+            this.dgvDomain.Name = "dgvDomain";
+            this.dgvDomain.RowHeadersWidth = 25;
+            this.dgvDomain.RowTemplate.Height = 24;
+            this.dgvDomain.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dgvDomain.Size = new System.Drawing.Size(662, 260);
+            this.dgvDomain.TabIndex = 12;
+            this.dgvDomain.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
+            this.dgvDomain.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_CellMouseClick);
+            this.dgvDomain.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_RowHeaderMouseClick);
+            this.dgvDomain.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_RowsAdded);
+            // 
+            // chdDomain
+            // 
+            this.chdDomain.HeaderText = "領域";
+            this.chdDomain.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chdDomain.Items")));
+            this.chdDomain.Name = "chdDomain";
+            this.chdDomain.Width = 110;
+            // 
+            // chdPeriodCredit
+            // 
+            this.chdPeriodCredit.HeaderText = "節數/權數";
+            this.chdPeriodCredit.Name = "chdPeriodCredit";
+            this.chdPeriodCredit.Width = 65;
+            // 
+            // chdScore
+            // 
+            this.chdScore.HeaderText = "成績";
+            this.chdScore.Name = "chdScore";
+            this.chdScore.Width = 60;
+            // 
+            // chScoreOrigin
+            // 
+            this.chScoreOrigin.HeaderText = "原始成績";
+            this.chScoreOrigin.Name = "chScoreOrigin";
+            this.chScoreOrigin.Width = 60;
+            // 
+            // chScoreMakeup
+            // 
+            this.chScoreMakeup.HeaderText = "補考成績";
+            this.chScoreMakeup.Name = "chScoreMakeup";
+            this.chScoreMakeup.Width = 60;
+            // 
+            // chdEffort
+            // 
+            this.chdEffort.HeaderText = "努力程度";
+            this.chdEffort.Name = "chdEffort";
+            this.chdEffort.Width = 59;
+            // 
+            // chdText
+            // 
+            this.chdText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.chdText.HeaderText = "文字描述";
+            this.chdText.Name = "chdText";
+            // 
+            // chMemo
+            // 
+            this.chMemo.HeaderText = "註記";
+            this.chMemo.Name = "chMemo";
+            this.chMemo.Width = 60;
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -901,14 +903,14 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SemesterScoreEditor_FormClosing);
             this.gpDomain.ResumeLayout(false);
             this.panelDomain.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDomain)).EndInit();
             this.panelScore.ResumeLayout(false);
             this.gpSubject.ResumeLayout(false);
             this.panelSubject.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSubject)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.contextMenuStripSubject.ResumeLayout(false);
             this.contextMenuStripDomain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSubject)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDomain)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
