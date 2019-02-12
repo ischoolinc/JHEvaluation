@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Aspose.Words;
+using Aspose.Words.Tables;
 using KaoHsiung.JHEvaluation.Data;
 using JHSchool.Evaluation;
 using JHSchool.Data;
@@ -62,7 +63,17 @@ namespace KaoHsiung.MidTermTransferReport.Processor
 
         private void FillScore()
         {
-            _builder.MoveToMergeField("成績");
+            // 2018/11/28 穎驊註解， 因應 新版 aspose.Word　修正， 支援學生名字特殊字列印不要錯誤當機問題，
+            // 發現，原本寫法　動態畫表，在換了新aspose.Word 有神奇Bug
+            // 這裡的　_builder　第一次.MoveToMergeField("成績") 將游標定在　"成績"　功能變數上　
+            // 即便回傳值　是　true，但實際上是失敗了，　游標並沒有移到上面，且也沒有刪除該"成績"　功能變數　(可以透過_builder.Document.MailMerge.GetFieldNames()　檢查)
+            // 要連續做兩次才會成功，　目前初步判斷，是 _builder　起先還沒有正確定位到Document，導致第一次的失敗
+            // 這邊可以先用.MoveToDocumentStart()　讓游標移到文件首後，再移到　"成績"　功能變數，讓往後功能都可以正常運行
+            // 如未來有後者有興趣，可以將　_builder.MoveToDocumentStart();　註解掉後，　將　b1、b2、b3 都開啟，觀察狀況了解。
+            _builder.MoveToDocumentStart();  
+            bool b1 = _builder.MoveToMergeField("成績");
+            //bool b2 = _builder.MoveToMergeField("成績");
+            //bool b3 = _builder.MoveToMergeField("成績");
             _font = _builder.Font;
             Cell indexCell = _builder.CurrentParagraph.ParentNode as Cell;
 

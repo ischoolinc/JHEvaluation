@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using JHSchool.Data;
 using Aspose.Words;
+using Aspose.Words.Tables;
 
 namespace KaoHsiung.MidTermTransferReport.Processor
 {
@@ -63,7 +64,7 @@ namespace KaoHsiung.MidTermTransferReport.Processor
         private void FillData()
         {
             _builder.MoveToMergeField("缺曠獎懲");
-
+            
             Cell cell = _builder.CurrentParagraph.ParentNode as Cell;
             //cell.CellFormat.Borders.Top.LineStyle = LineStyle.Double;
 
@@ -71,7 +72,7 @@ namespace KaoHsiung.MidTermTransferReport.Processor
             int columnCount = _manager.DisciplineCount + _manager.AttendacneCount;
             double miniUnitWitdh = width / (double)columnCount;
 
-            Table table = _builder.StartTable();
+            Table table = _builder.StartTable();            
 
             _builder.RowFormat.HeightRule = HeightRule.Exactly;
             _builder.RowFormat.Height = 18.0;

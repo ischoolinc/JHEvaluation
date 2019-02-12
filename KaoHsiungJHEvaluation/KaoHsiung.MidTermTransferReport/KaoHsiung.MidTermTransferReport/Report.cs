@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Aspose.Words;
+using Aspose.Words.Tables;
 using System.IO;
 using System.ComponentModel;
 using JHSchool.Data;
@@ -72,7 +73,7 @@ namespace KaoHsiung.MidTermTransferReport
                 DirectoryInfo dir = new DirectoryInfo(path);
                 if (!dir.Exists) dir.Create();
 
-                path = Path.Combine(path, Global.ReportName + ".doc");
+                path = Path.Combine(path, Global.ReportName + ".docx");
 
                 if (File.Exists(path))
                 {
@@ -90,7 +91,7 @@ namespace KaoHsiung.MidTermTransferReport
 
                 try
                 {
-                    _doc.Save(path);
+                    _doc.Save(path,SaveFormat.Docx);
                     FISCA.LogAgent.ApplicationLog.Log("成績系統.報表", "列印" + Global.ReportName, string.Format("產生{0}份{1}", Students.Count, Global.ReportName));
 
                     MotherForm.SetStatusBarMessage(Global.ReportName + "產生完成");
