@@ -89,6 +89,17 @@ namespace KaoHsiung.StudentRecordReport
         {
             JHClassRecord c1 = x.Class;
             JHClassRecord c2 = y.Class;
+            if (c1 == null || c2 == null)
+            {
+                if (c1 == null && c2 == null)
+                {
+                    return x.StudentNumber.CompareTo(y.StudentNumber);
+                }
+                else if (c1 == null)
+                    return -1;
+                else
+                    return 1;
+            }
             if (c1.ID == c2.ID)
             {
                 int seatNo1 = x.SeatNo.HasValue ? x.SeatNo.Value : int.MinValue;
@@ -101,10 +112,6 @@ namespace KaoHsiung.StudentRecordReport
             }
             else
             {
-                if (c1 == null)
-                    return -1;
-                else if (c2 == null)
-                    return 1;
                 return c1.Name.CompareTo(c2.Name);
             }
         }
