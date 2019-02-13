@@ -7,6 +7,7 @@ using JHSchool.Data;
 using K12.Data.Configuration;
 using JHSchool.Behavior.BusinessLogic;
 using KaoHsiung.StudentRecordReport.Association.UDT;
+using Aspose.Words.Tables;
 
 namespace KaoHsiung.StudentRecordReport.Processor
 {

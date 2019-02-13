@@ -60,15 +60,13 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Pdf, Version=3.7.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+    <Reference Include="Aspose.Pdf_201402, Version=8.8.0.0, Culture=neutral, PublicKeyToken=47b2d0fcacdd3eb6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Aspose.Pdf.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>Library\Aspose.Pdf_201402.dll</HintPath>
     </Reference>
-    <Reference Include="Aspose.Words, Version=4.4.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+    <Reference Include="Aspose.Words_201402, Version=14.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Aspose.Words.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>Library\Aspose.Words_201402.dll</HintPath>
     </Reference>
     <Reference Include="Campus.Configuration, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -214,10 +212,10 @@
     <Compile Include="Processor\StudentSemesterScoreProcessor.cs" />
     <Compile Include="Processor\StudentTextProcessor.cs" />
     <Compile Include="Processor\StudentUpdateRecordProcessor.cs" />
+    <None Include="Resources\高雄國中學籍表.docx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\loading.gif" />
-    <None Include="Resources\高雄國中學籍表.doc" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -237,9 +235,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Library\Aspose.Pdf.dll" />
-    <Content Include="Library\Aspose.Pdf.xml" />
-    <Content Include="Library\Aspose.Words.dll" />
+    <Content Include="Library\Aspose.Pdf_201402.dll" />
+    <Content Include="Library\Aspose.Words_201402.dll" />
     <Content Include="Library\Campus.Configuration.dll" />
     <Content Include="Library\DevComponents.DotNetBar2.dll" />
     <Content Include="Library\FISCA.Data.dll" />

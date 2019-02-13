@@ -5,6 +5,8 @@ using JHSchool.Data;
 using Aspose.Words;
 using Aspose.Words.Drawing;
 using K12.Data;
+using Aspose.Words.Tables;
+using Aspose.Words.Reporting;
 
 namespace KaoHsiung.StudentRecordReport.Processor
 {
@@ -19,60 +21,69 @@ namespace KaoHsiung.StudentRecordReport.Processor
             InitializeField();
 
             _builder = builder;
-            _builder.Document.MailMerge.MergeField += new Aspose.Words.Reporting.MergeFieldEventHandler(MailMerge_MergeField);
+            _builder.Document.MailMerge.FieldMergingCallback = new MailMerge_MergeField();
         }
 
-        private void MailMerge_MergeField(object sender, Aspose.Words.Reporting.MergeFieldEventArgs e)
+        class MailMerge_MergeField : Aspose.Words.Reporting.IFieldMergingCallback
         {
-            #region 處理照片
-            if (e.FieldName == "照片")
+
+            void IFieldMergingCallback.FieldMerging(FieldMergingArgs e)
             {
-                DocumentBuilder builder1 = new DocumentBuilder(e.Document);
-                builder1.MoveToField(e.Field, true);
+                #region 處理照片
+                if (e.FieldName == "照片")
+                {
+                    DocumentBuilder builder1 = new DocumentBuilder(e.Document);
+                    builder1.MoveToField(e.Field, true);
 
-                byte[] photoBytes = null;
-                try
-                {
-                    photoBytes = Convert.FromBase64String("" + e.FieldValue);
-                }
-                catch (Exception ex)
-                {
-                    //builder1.Write("照片粘貼處");
+                    byte[] photoBytes = null;
+                    try
+                    {
+                        photoBytes = Convert.FromBase64String("" + e.FieldValue);
+                    }
+                    catch (Exception ex)
+                    {
+                        //builder1.Write("照片粘貼處");
+                        e.Field.Remove();
+                        return;
+                    }
+
+                    if (photoBytes == null || photoBytes.Length == 0)
+                    {
+                        //builder1.Write("照片粘貼處");
+                        e.Field.Remove();
+                        return;
+                    }
+
                     e.Field.Remove();
-                    return;
+
+                    Shape photoShape = new Shape(e.Document, ShapeType.Image);
+                    photoShape.ImageData.SetImage(photoBytes);
+                    photoShape.WrapType = WrapType.Inline;
+
+                    #region AutoResize
+
+                    double origHWRate = photoShape.ImageData.ImageSize.HeightPoints / photoShape.ImageData.ImageSize.WidthPoints;
+                    double shapeHeight = (builder1.CurrentParagraph.ParentNode.ParentNode as Row).RowFormat.Height;
+                    double shapeWidth = (builder1.CurrentParagraph.ParentNode as Cell).CellFormat.Width;
+                    if ((shapeHeight / shapeWidth) < origHWRate)
+                        shapeWidth = shapeHeight / origHWRate;
+                    else
+                        shapeHeight = shapeWidth * origHWRate;
+
+                    #endregion
+
+                    photoShape.Height = shapeHeight * 0.9;
+                    photoShape.Width = shapeWidth * 0.9;
+
+                    builder1.InsertNode(photoShape);
                 }
-
-                if (photoBytes == null || photoBytes.Length == 0)
-                {
-                    //builder1.Write("照片粘貼處");
-                    e.Field.Remove();
-                    return;
-                }
-
-                e.Field.Remove();
-
-                Shape photoShape = new Shape(e.Document, ShapeType.Image);
-                photoShape.ImageData.SetImage(photoBytes);
-                photoShape.WrapType = WrapType.Inline;
-
-                #region AutoResize
-
-                double origHWRate = photoShape.ImageData.ImageSize.HeightPoints / photoShape.ImageData.ImageSize.WidthPoints;
-                double shapeHeight = (builder1.CurrentParagraph.ParentNode.ParentNode as Row).RowFormat.Height;
-                double shapeWidth = (builder1.CurrentParagraph.ParentNode as Cell).CellFormat.Width;
-                if ((shapeHeight / shapeWidth) < origHWRate)
-                    shapeWidth = shapeHeight / origHWRate;
-                else
-                    shapeHeight = shapeWidth * origHWRate;
-
                 #endregion
-
-                photoShape.Height = shapeHeight * 0.9;
-                photoShape.Width = shapeWidth * 0.9;
-
-                builder1.InsertNode(photoShape);
             }
-            #endregion
+
+            void IFieldMergingCallback.ImageFieldMerging(ImageFieldMergingArgs args)
+            {
+
+            }
         }
 
         public void SetStudent(JHStudentRecord student, List<SemesterHistoryItem> semesterHistoryList)

@@ -5,6 +5,7 @@ using Aspose.Words;
 using JHSchool.Data;
 using JHSchool.Evaluation.Mapping;
 using System.Linq;
+using Aspose.Words.Tables;
 
 namespace KaoHsiung.StudentRecordReport.Processor
 {

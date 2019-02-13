@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Aspose.Words;
+using Aspose.Words.Tables;
 using JHSchool.Data;
 
 namespace KaoHsiung.StudentRecordReport.Processor

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Aspose.Words;
 using System.Text.RegularExpressions;
+using Aspose.Words.Tables;
 
 namespace KaoHsiung.StudentRecordReport
 {

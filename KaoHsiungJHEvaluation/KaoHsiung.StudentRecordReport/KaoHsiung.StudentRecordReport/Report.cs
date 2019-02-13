@@ -15,6 +15,7 @@ using Campus.Report;
 using KaoHsiung.StudentRecordReport.Processor;
 using JHSchool.Behavior.BusinessLogic;
 using JHSchool.Evaluation.Mapping;
+using Aspose.Words.Tables;
 
 namespace KaoHsiung.StudentRecordReport
 {
@@ -182,13 +183,13 @@ namespace KaoHsiung.StudentRecordReport
             bool printPeriod = Config.GetBoolean("列印節數", true);
             bool printCredit = Config.GetBoolean("列印權數", false);
             if (printPeriod && printCredit)
-                pcDisplay = "節"+Environment.NewLine+"權"+Environment.NewLine+"數";
+                pcDisplay = "節" + Environment.NewLine + "權" + Environment.NewLine + "數";
             else if (printPeriod)
                 pcDisplay = "節" + Environment.NewLine + "數";
             else if (printCredit)
                 pcDisplay = "權" + Environment.NewLine + "數";
 
-            
+
             while (templateBuilder.MoveToMergeField("節權數"))
                 templateBuilder.Write(pcDisplay);
             #endregion
@@ -352,50 +353,18 @@ namespace KaoHsiung.StudentRecordReport
                     MotherForm.SetStatusBarMessage("轉換成 PDF 格式中...");
                     foreach (string each in StudentDoc.Keys)
                     {
-                        //StudentDoc[each].Save(fbd.SelectedPath + "\\" + each, SaveFormat.AsposePdf);
-
-                        //ReportSaver.SaveDocument(StudentDoc[each], fPath, ReportSaver.OutputType.PDF);
-                        //ReportSaver.SaveDocument(StudentDoc[each], each, ReportSaver.OutputType.PDF);                        
-
-                        #region 處理產生 PDF
-
                         string fPath = fbd.SelectedPath + "\\" + each + ".pdf";
 
-                        FileInfo fi = new FileInfo(fPath);
-
-                        DirectoryInfo folder = new DirectoryInfo(Path.Combine(fi.DirectoryName, Path.GetRandomFileName()));
-                        if (!folder.Exists) folder.Create();
-
-                        FileInfo fileinfo = new FileInfo(Path.Combine(folder.FullName, fi.Name));
-
-                        string XmlFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".xml";
-                        string PDFFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".pdf";
-
-
-                        ReportSaver.SaveDocumentBatch(StudentDoc[each], PDFFileName, ReportSaver.OutputType.PDF);
-
-                        //StudentDoc[each].Save(XmlFileName, Aspose.Words.SaveFormat.AsposePdf);
-
-                        //Aspose.Pdf.Pdf pdf1 = new Aspose.Pdf.Pdf();
-                        
-                        //pdf1.BindXML(XmlFileName, null);
-                        //pdf1.Save(PDFFileName);
-
-                        if (File.Exists(fPath))
-                            File.Delete(Path.Combine(fi.DirectoryName, fi.Name));
-
-                        File.Move(PDFFileName, fPath);
-                        folder.Delete(true);
-                        #endregion
+                        StudentDoc[each].Save(fPath, SaveFormat.Pdf);
                     }
                 }
                 else
                 {
                     foreach (string each in StudentDoc.Keys)
                     {
-                        ReportSaver.SaveDocumentBatch(StudentDoc[each], fbd.SelectedPath + "\\" + each + ".doc", ReportSaver.OutputType.Word);
+                        //ReportSaver.SaveDocumentBatch(StudentDoc[each], fbd.SelectedPath + "\\" + each + ".doc", ReportSaver.OutputType.Word);
 
-                        //StudentDoc[each].Save(fbd.SelectedPath + "\\" + each + ".doc");
+                        StudentDoc[each].Save(fbd.SelectedPath + "\\" + each + ".docx");
                     }
                 }
 
@@ -404,16 +373,24 @@ namespace KaoHsiung.StudentRecordReport
             }
             else
             {
+                FolderBrowserDialog fbd = new FolderBrowserDialog();
+                fbd.Description = "請選擇儲存資料夾";
+                fbd.ShowNewFolderButton = true;
+
+                if (fbd.ShowDialog() == DialogResult.Cancel) return;
+
                 if (pdf)
                 {
                     MotherForm.SetStatusBarMessage("轉換成 PDF 格式中...");
-                    ReportSaver.SaveDocument(_doc, Global.ReportName, ReportSaver.OutputType.PDF);
+                    //ReportSaver.SaveDocument(_doc, Global.ReportName, ReportSaver.OutputType.PDF);
+                    _doc.Save(fbd.SelectedPath + "\\" + Global.ReportName + ".pdf", SaveFormat.Pdf);
                     MotherForm.SetStatusBarMessage(Global.ReportName + "產生完成");
                 }
                 else
                 {
                     MotherForm.SetStatusBarMessage(Global.ReportName + "產生完成");
-                    ReportSaver.SaveDocument(_doc, Global.ReportName);
+                    //ReportSaver.SaveDocument(_doc, Global.ReportName);
+                    _doc.Save(fbd.SelectedPath + "\\" + Global.ReportName + ".docx", SaveFormat.Docx);
                 }
             }
 
