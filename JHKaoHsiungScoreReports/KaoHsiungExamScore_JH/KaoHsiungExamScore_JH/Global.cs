@@ -58,6 +58,8 @@ namespace KaoHsiungExamScore_JH
             retVal.Add("藝術與人文");
             retVal.Add("綜合活動");
             retVal.Add("彈性課程");
+            retVal.Add("科技");
+            retVal.Add("特殊需求");
             return retVal;
         }
 

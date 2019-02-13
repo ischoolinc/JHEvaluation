@@ -122,7 +122,7 @@ namespace KaoHsiungExamScore_JH
                 if (!PeriodMappingDict.ContainsKey(rec.Name))
                     PeriodMappingDict.Add(rec.Name, rec.Type);
             }
-
+            
             List<AttendanceRecord> attendList = K12.Data.Attendance.SelectByDate(StudRecordList, beginDate, endDate);
 
             // 計算統計資料

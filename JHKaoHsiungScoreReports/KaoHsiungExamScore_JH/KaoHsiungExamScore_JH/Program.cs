@@ -20,8 +20,8 @@ namespace KaoHsiungExamScore_JH
         public static void Main()
         {
             RibbonBarItem rbItem1 = MotherForm.RibbonBarItems["學生", "資料統計"];
-            rbItem1["報表"]["成績相關報表"]["評量成績通知單(測試版)"].Enable = UserAcl.Current["JH.Student.KaoHsiungExamScore_JH_Student"].Executable;
-            rbItem1["報表"]["成績相關報表"]["評量成績通知單(測試版)"].Click += delegate
+            rbItem1["報表"]["成績相關報表"]["評量成績通知單"].Enable = UserAcl.Current["JH.Student.KaoHsiungExamScore_JH_Student"].Executable;
+            rbItem1["報表"]["成績相關報表"]["評量成績通知單"].Click += delegate
             {
                 if (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0)
                 {

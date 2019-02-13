@@ -38,3 +38,16 @@ D:\GitHub2\JHEvaluation\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_
 D:\GitHub2\JHEvaluation\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\bin\Debug\KaoHsiungExamScore_JH.pdb
 D:\GitHub2\JHEvaluation\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.dll
 D:\GitHub2\JHEvaluation\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.pdb
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\bin\Debug\KaoHsiungExamScore_JH.dll
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\bin\Debug\KaoHsiungExamScore_JH.pdb
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\bin\Debug\DevComponents.DotNetBar2.dll
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.CloneConfigure.resources
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.NewConfigure.resources
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.PrintForm.resources
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.Properties.Resources.resources
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.csproj.GenerateResource.cache
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.csproj.CoreCompileInputs.cache
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.csproj.CopyComplete
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.dll
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.pdb
+C:\Users\win51\source\repos\Git\JHEvaluation\JHKaoHsiungScoreReports\KaoHsiungExamScore_JH\KaoHsiungExamScore_JH\obj\Debug\KaoHsiungExamScore_JH.csprojAssemblyReference.cache
