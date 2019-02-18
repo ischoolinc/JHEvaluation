@@ -40,6 +40,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
             InitializeComponent();
             HideNavigationBar();
 
+            
             AssessmentSetup.Instance.ItemUpdated += delegate(object sender, ItemUpdatedEventArgs e)
             {
                 if (e.PrimaryKeys.Count > 0)

@@ -51,6 +51,11 @@
             // 
             this.lblSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSave.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblSave.BackgroundStyle.Class = "";
+            this.lblSave.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblSave.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSave.ForeColor = System.Drawing.Color.Red;
             this.lblSave.Location = new System.Drawing.Point(645, 42);
@@ -93,16 +98,21 @@
             this.cboExamList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboExamList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboExamList.FormattingEnabled = true;
-            this.cboExamList.ItemHeight = 19;
+            this.cboExamList.ItemHeight = 23;
             this.cboExamList.Location = new System.Drawing.Point(50, 41);
             this.cboExamList.Name = "cboExamList";
-            this.cboExamList.Size = new System.Drawing.Size(206, 25);
+            this.cboExamList.Size = new System.Drawing.Size(206, 29);
             this.cboExamList.TabIndex = 9;
             this.cboExamList.SelectedIndexChanged += new System.EventHandler(this.cboExamList_SelectedIndexChanged);
             // 
             // lblExam
             // 
             this.lblExam.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblExam.BackgroundStyle.Class = "";
+            this.lblExam.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblExam.Location = new System.Drawing.Point(6, 42);
             this.lblExam.Name = "lblExam";
             this.lblExam.Size = new System.Drawing.Size(52, 23);
@@ -112,6 +122,11 @@
             // lblCourseName
             // 
             this.lblCourseName.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblCourseName.BackgroundStyle.Class = "";
+            this.lblCourseName.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblCourseName.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblCourseName.Location = new System.Drawing.Point(6, 6);
             this.lblCourseName.Name = "lblCourseName";
@@ -125,9 +140,9 @@
             this.dgv.AllowUserToDeleteRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.AliceBlue;
             this.dgv.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv.BackgroundColor = System.Drawing.Color.White;
             this.dgv.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -148,15 +163,16 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgv.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgv.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
+            this.dgv.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.dgv.Location = new System.Drawing.Point(6, 71);
             this.dgv.Name = "dgv";
             this.dgv.RowHeadersWidth = 25;
             this.dgv.RowTemplate.Height = 24;
             this.dgv.Size = new System.Drawing.Size(780, 380);
             this.dgv.TabIndex = 6;
-            this.dgv.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dgv_SortCompare);
-            this.dgv.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
             this.dgv.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellClick);
+            this.dgv.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
+            this.dgv.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dgv_SortCompare);
             // 
             // chClassName
             // 
@@ -216,6 +232,7 @@
             this.Controls.Add(this.lblExam);
             this.Controls.Add(this.lblCourseName);
             this.Controls.Add(this.dgv);
+            this.DoubleBuffered = true;
             this.Name = "CourseScoreInputForm";
             this.Text = "課程成績輸入";
             this.Load += new System.EventHandler(this.CourseScoreInputForm_Load);
