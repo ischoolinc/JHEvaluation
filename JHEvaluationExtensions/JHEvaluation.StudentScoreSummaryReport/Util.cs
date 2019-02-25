@@ -66,11 +66,28 @@ namespace JHEvaluation.StudentScoreSummaryReport
         /// 取得全部學生的資料(只包含一般、輟學)。
         /// </summary>
         /// <returns></returns>
-        public static List<ReportStudent> GetAllStudents()
+        public static List<ReportStudent> GetAllStudents(List<ReportStudent> printStudents)
         {
+            //2019/2/25 俊緯更新 高雄國中 在校成績證明書 效能問題，原本此處抓取了全部的學生的資料，包含已畢業及離校，現在修改成只抓取在校生及使用者所選取的非在校生的資料
             List<ReportStudent> students = new List<ReportStudent>();
             foreach (JHStudentRecord each in JHStudent.SelectAll())
-                students.Add(new ReportStudent(each));
+            {
+                if (each.Status == K12.Data.StudentRecord.StudentStatus.一般 ||
+                    each.Status == K12.Data.StudentRecord.StudentStatus.輟學)
+                {
+                    students.Add(new ReportStudent(each));
+                }
+                else
+                {
+                    foreach (ReportStudent reportStudent in printStudents)
+                    {
+                        if (each.ID == reportStudent.StudentID)
+                        {
+                            students.Add(new ReportStudent(each));
+                        }
+                    }
+                }
+            }
 
             return students;
         }

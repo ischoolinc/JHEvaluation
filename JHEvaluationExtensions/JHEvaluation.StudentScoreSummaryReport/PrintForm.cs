@@ -45,7 +45,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             ConvertToPDF_Worker.WorkerReportsProgress = true;
             ConvertToPDF_Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(ConvertToPDF_Worker_RunWorkerCompleted);
 
-            ConvertToPDF_Worker.ProgressChanged += delegate(object sender, ProgressChangedEventArgs e)
+            ConvertToPDF_Worker.ProgressChanged += delegate (object sender, ProgressChangedEventArgs e)
             {
                 FISCA.Presentation.MotherForm.SetStatusBarMessage(e.UserState.ToString(), e.ProgressPercentage);
             };
@@ -128,8 +128,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
         private void MasterWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             StudentScore.SetClassMapping();
-             PrintStudents = StudentIDs.ToReportStudent();
-            List<ReportStudent> AllStudents = Util.GetAllStudents();
+            PrintStudents = StudentIDs.ToReportStudent();
+            List<ReportStudent> AllStudents = Util.GetAllStudents(PrintStudents);
 
             AllStudents.ToSC().ReadSemesterScore(this);
             AllStudents.ToSC().ReadSemesterHistory(this);
@@ -227,10 +227,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
             PrintStudents.ReadUpdateRecordDate(this);
 
-             e.Result = new Report(PrintStudents, Preference).Print();
+            e.Result = new Report(PrintStudents, Preference).Print();
 
-             e_For_ConvertToPDF_Worker = e;
-  
+            e_For_ConvertToPDF_Worker = e;
+
             Feedback("列印完成", -1);
         }
 
@@ -267,16 +267,16 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                     Util.DisableControls(this);
                     ConvertToPDF_Worker.RunWorkerAsync();
-                    
+
                 }
 
 
             }
-            else 
+            else
             {
                 MsgBox.Show(e.Error.Message);
             }
-            
+
 
             if (Preference.ConvertToPDF)
             {
@@ -333,11 +333,11 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     //document.Save(fbd.SelectedPath + "\\" +fileName+ ".doc");
 
                     if (Preference.ConvertToPDF)
-                    {                        
+                    {
                         string fPath = fbdPath + "\\" + fileName + ".pdf";
-                       
+
                         document.Save(fPath, SaveFormat.Pdf);
-                        
+
                         int percent = (((i + 1) * 100 / doc.Sections.Count));
 
                         ConvertToPDF_Worker.ReportProgress(percent, "PDF轉換中...進行到" + (i + 1) + "/" + doc.Sections.Count + "個檔案");
