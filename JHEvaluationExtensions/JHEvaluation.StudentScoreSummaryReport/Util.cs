@@ -415,9 +415,18 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     minScore = degree.Key;
                 }
             }
+
             XmlDocument xDoc = new XmlDocument();
             xDoc.LoadXml(degreeTemplate[minScore]);
-            string engDegree = xDoc.SelectSingleNode("ScoreMapping/@EngName").InnerText;
+
+            // [ischoolKingdom] Vicky 新增，[02-03][00]成績報表的"在校成績證明書(英文版)等第不符實際需求 項目 ，英文等地顯示BUG
+            if (xDoc.SelectSingleNode("ScoreMapping/@EngName") == null)
+            {
+                // 沒有等第設定 就是空值            
+                return "";
+            }
+
+            string engDegree = xDoc.SelectSingleNode("ScoreMapping/@EngName").InnerText;            
             return engDegree;
         }
 
@@ -532,5 +541,23 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
             return path;
         }
+
+        // [ischoolKingdom] Vicky 新增，[02-03][00]成績報表的"在校成績證明書(英文版)等第不符實際需求 項目 ，英文等地顯示BUG
+        public static bool CheckEnglishMapping()
+        {
+            // 是否有設定英文對照
+            bool hasSetting = false;
+
+            Framework.ConfigData configData = JHSchool.School.Configuration["等第對照表"];
+
+            // 假若 設定對照文件 有EngName 字樣 代表 使用者有儲存英文的對照設定了
+            if (configData["xml"].Contains("EngName"))
+            {
+                hasSetting = true;
+            }
+
+            return hasSetting;
+        }
+
     }
 }
