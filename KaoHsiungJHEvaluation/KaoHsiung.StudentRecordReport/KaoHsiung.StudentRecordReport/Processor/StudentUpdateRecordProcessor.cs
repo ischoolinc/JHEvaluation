@@ -15,6 +15,11 @@ namespace KaoHsiung.StudentRecordReport.Processor
         public StudentUpdateRecordProcessor(DocumentBuilder builder)
         {
             _builder = builder;
+            // 2018/03/22 穎驊註解，
+            // 因應 新版 aspose.Word　修正， 支援學生名字特殊字列印不要錯誤當機問題，
+            // 發現，原本寫法　動態畫表，在換了新aspose.Word 有神奇Bug
+            // MoveToMergeField("學籍狀況"); 會失效，好像游標迷失方向 需要先MoveToDocumentStart() 才行;
+            _builder.MoveToDocumentStart();
             _builder.MoveToMergeField("學籍狀況");
 
             _cell = _builder.CurrentParagraph.ParentNode as Cell;
