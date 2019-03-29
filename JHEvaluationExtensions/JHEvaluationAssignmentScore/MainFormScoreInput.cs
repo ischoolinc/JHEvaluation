@@ -46,7 +46,7 @@ namespace JHEvaluation.AssignmentScore
             lblCourseName.Text = courseRec.Name;
             _StudentSCAtendScoreList = new List<StudentSCAtendScore>();
 
-            this.MinimumSize = this.MaximumSize = this.Size;
+            // this.MinimumSize = this.MaximumSize = this.Size;
 
             // 取得課程評量
             _AssessmentSetupRec = JHAssessmentSetup.SelectByID(courseRec.RefAssessmentSetupID);
