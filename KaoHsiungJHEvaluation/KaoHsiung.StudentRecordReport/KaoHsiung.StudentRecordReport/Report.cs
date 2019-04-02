@@ -385,7 +385,7 @@ namespace KaoHsiung.StudentRecordReport
                     //ReportSaver.SaveDocument(_doc, Global.ReportName, ReportSaver.OutputType.PDF);
                     _doc.Save(fbd.SelectedPath + "\\" + Global.ReportName + ".pdf", SaveFormat.Pdf);
                     MotherForm.SetStatusBarMessage(Global.ReportName + "產生完成");
-                    System.Diagnostics.Process.Start(fbd.SelectedPath + "\\" + Global.ReportName + ".docx");
+                    System.Diagnostics.Process.Start(fbd.SelectedPath + "\\" + Global.ReportName + ".pdf");
                 }
                 else
                 {
