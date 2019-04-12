@@ -251,24 +251,37 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
                 foreach (StudentRecord student in _students)
                 {
                     //如果學生通過畢業審查，應該把標籤拿下來
-                    if (_passList[student.ID])
+                    //if (_passList[student.ID])
+                    //{
+                    //    foreach (JHStudentTagRecord student_tag in JHStudentTag.SelectByStudentID(student.ID))
+                    //    {
+                    //        if (student_tag.Prefix == FailurePrefix)
+                    //            deleteList.Add(student_tag);
+                    //    }
+                    //    continue;
+                    //}
+
+
+                    // 2019/04/12 穎驊 修正 ，因應 #6409 客服 繼斌 找到的問題，
+                    // 先前畢業資格審查 如果再做第二次時， 如果學生 先前有兩個以上的 不符合項目
+                    // 若第二次 審查已經有其中一個條件通過了， 但是 標籤仍無法自動移除，
+                    // 檢查舊邏輯後，發現其需要 全部條件都通過， 才會一起移除
+                    // 在此修改邏輯，無論通過條件數量， 先把學生身上的 舊不符合都先移除
+                    // 在依照 本次檢驗出來 不符合條件加上
+                    foreach (JHStudentTagRecord student_tag in JHStudentTag.SelectByStudentID(student.ID))
                     {
-                        foreach (JHStudentTagRecord student_tag in JHStudentTag.SelectByStudentID(student.ID))
-                        {
-                            if (student_tag.Prefix == FailurePrefix)
-                                deleteList.Add(student_tag);
-                        }
-                        continue;
+                        if (student_tag.Prefix == FailurePrefix)
+                            deleteList.Add(student_tag);
                     }
 
                     if (!_result.ContainsKey(student.ID)) continue;
 
-                    Dictionary<string, JHStudentTagRecord> studentTags = new Dictionary<string, JHStudentTagRecord>();
-                    foreach (JHStudentTagRecord student_tag in JHStudentTag.SelectByStudentID(student.ID))
-                    {
-                        if (!studentTags.ContainsKey(student_tag.RefTagID))
-                            studentTags.Add(student_tag.RefTagID, student_tag);
-                    }
+                    //Dictionary<string, JHStudentTagRecord> studentTags = new Dictionary<string, JHStudentTagRecord>();
+                    //foreach (JHStudentTagRecord student_tag in JHStudentTag.SelectByStudentID(student.ID))
+                    //{
+                    //    if (!studentTags.ContainsKey(student_tag.RefTagID))
+                    //        studentTags.Add(student_tag.RefTagID, student_tag);
+                    //}
 
                     List<ResultDetail> rdList = _result[student.ID];
                     foreach (ResultDetail rd in rdList)
@@ -279,7 +292,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
 
                             foreach (JHTagConfigRecord record in tagList)
                             {
-                                if (record.FullName == fullname && !studentTags.ContainsKey(record.ID))
+                                if (record.FullName == fullname )
                                 {
                                     JHStudentTagRecord r = new JHStudentTagRecord();
                                     r.RefTagID = record.ID;
@@ -292,8 +305,9 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
                     }
                 }
 
-                JHStudentTag.Insert(studentTagsList);
                 JHStudentTag.Delete(deleteList);
+                JHStudentTag.Insert(studentTagsList);
+                
                 #endregion
             }
             catch (Exception ex)
