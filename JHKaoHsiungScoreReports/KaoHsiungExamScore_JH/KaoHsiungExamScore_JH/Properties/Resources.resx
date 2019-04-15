@@ -118,6 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="科目成績單_預設_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\template\科目成績單(預設).doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="領域成績單_預設_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\template\領域成績單(預設).doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="高雄_科目及領域成績單" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\template\高雄_科目及領域成績單.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

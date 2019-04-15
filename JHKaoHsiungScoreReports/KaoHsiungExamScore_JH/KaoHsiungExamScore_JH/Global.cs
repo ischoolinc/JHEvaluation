@@ -23,6 +23,8 @@ namespace KaoHsiungExamScore_JH
 
         public static string _UserConfTypeName = "使用者選擇設定檔";
 
+
+        // [ischoolkingdom] Vicky新增，個人評量成績單建議能增加可列印數量(高雄國中)，移除原本六張預設樣板，新增 領域成績單(預設)、科目成績單(預設)。
         /// <summary>
         /// 設定檔預設名稱
         /// </summary>
@@ -30,12 +32,14 @@ namespace KaoHsiungExamScore_JH
         public static List<string> DefaultConfigNameList()
         {
             List<string> retVal = new List<string>();
-            retVal.Add("領域成績單");
-            retVal.Add("領域成績單(含平時成績)");
-            retVal.Add("科目成績單");
-            retVal.Add("科目成績單(含平時成績)");
-            retVal.Add("科目及領域成績單");
-            retVal.Add("科目及領域成績單(含平時成績)");
+            retVal.Add("領域成績單(預設)");
+            retVal.Add("科目成績單(預設)");
+            //retVal.Add("領域成績單");
+            //retVal.Add("領域成績單(含平時成績)");
+            //retVal.Add("科目成績單");
+            //retVal.Add("科目成績單(含平時成績)");
+            //retVal.Add("科目及領域成績單");
+            //retVal.Add("科目及領域成績單(含平時成績)");
             return retVal;
         }
 

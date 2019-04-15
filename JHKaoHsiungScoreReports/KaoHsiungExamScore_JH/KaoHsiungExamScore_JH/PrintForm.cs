@@ -229,7 +229,7 @@ namespace KaoHsiungExamScore_JH
             _UDTConfigList = DAO.UDTTransfer.GetDefaultConfigNameListByTableName(Global._UDTTableName);
 
             // 沒有設定檔，建立預設設定檔
-            if (_UDTConfigList.Count < 2)
+            if (_UDTConfigList.Count < 2) 
             {
                 bkw.ReportProgress(10);
                 foreach (string name in Global.DefaultConfigNameList())
@@ -247,27 +247,35 @@ namespace KaoHsiungExamScore_JH
 
                     // 設預設樣板
                     switch (name)
-                    {
-                        case "領域成績單":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_領域成績單));
+                    {   // [ischoolkingdom] Vicky新增，個人評量成績單建議能增加可列印數量(高雄國中)，預設改為 領域成績單(預設)、科目成績單(預設)兩張。
+                        case "領域成績單(預設)":
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.領域成績單_預設_));
                             break;
 
-                        case "領域成績單(含平時成績)":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_領域成績單_含平時成績));
+                        case "科目成績單(預設)":
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.科目成績單_預設_));
                             break;
 
-                        case "科目成績單":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_科目成績單));
-                            break;
-                        case "科目成績單(含平時成績)":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_科目成績單_含平時成績));
-                            break;
-                        case "科目及領域成績單":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_科目及領域成績單));
-                            break;
-                        case "科目及領域成績單(含平時成績)":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_科目及領域成績單_含平時成績));
-                            break;
+                            //case "領域成績單":
+                            //    cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_領域成績單));
+                            //    break;
+
+                            //case "領域成績單(含平時成績)":
+                            //    cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_領域成績單_含平時成績));
+                            //    break;
+
+                            //case "科目成績單":
+                            //    cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_科目成績單));
+                            //    break;
+                            //case "科目成績單(含平時成績)":
+                            //    cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_科目成績單_含平時成績));
+                            //    break;
+                            //case "科目及領域成績單":
+                            //    cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_科目及領域成績單));
+                            //    break;
+                            //case "科目及領域成績單(含平時成績)":
+                            //    cn.Template = new Document(new MemoryStream(Properties.Resources.高雄_科目及領域成績單_含平時成績));
+                            //    break;
                     }
 
                     if (cn.Template == null)
@@ -392,8 +400,7 @@ namespace KaoHsiungExamScore_JH
                 if (name.Contains("科目名稱"))
                     _TemplateSubjectNameList.Add(name);
             }
-
-
+        
             // 校名
             string SchoolName = K12.Data.School.ChineseName;
             // 校長
@@ -2227,8 +2234,8 @@ namespace KaoHsiungExamScore_JH
 
                     //(table.ParentNode.ParentNode as Row).RowFormat.LeftIndent = 0;
                     double p = _builder.RowFormat.LeftIndent;
-                    _builder.RowFormat.HeightRule = HeightRule.Exactly;
-                    _builder.RowFormat.Height = 18.0;
+                    _builder.RowFormat.HeightRule = HeightRule.Auto; // [ischoolkingdom] Vicky新增，個人評量成績單建議能增加可列印數量(高雄國中)，調整 缺曠紀錄表格外觀
+                    _builder.RowFormat.Height = 34.0;
                     _builder.RowFormat.LeftIndent = 0;
 
                     // 缺曠名稱

@@ -42,6 +42,7 @@
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\DevComponents.DotNetBar2.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FISCA, Version=2.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -166,6 +167,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +199,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Template\科目成績單%28預設%29.doc" />
+    <None Include="Template\領域成績單%28預設%29.doc" />
     <None Include="Template\高雄_科目及領域成績單.doc" />
     <None Include="Template\高雄_科目及領域成績單_含平時成績.doc" />
     <None Include="Template\高雄_科目成績單.doc" />
