@@ -16,6 +16,7 @@ using JHSchool.Evaluation.Calculation;
 using Aspose.Words.Reporting;
 using Aspose.Words.Tables;
 using FISCA.Data;
+using Campus.ePaperCloud;
 
 namespace HsinChuExamScore_JH
 {
@@ -320,6 +321,12 @@ namespace HsinChuExamScore_JH
         {
             try
             {
+                object[] objArray = (object[])e.Result;
+                MemoryStream memoryStream = (MemoryStream)objArray[0];
+                string reportNameW = "" + objArray[1];
+                ePaperCloud ePaperCloud = new ePaperCloud();
+                ePaperCloud.upload_ePaper(_SelSchoolYear, _SelSemester, reportNameW, "", memoryStream, ePaperCloud.ViewerType.Student, ePaperCloud.FormatType.Docx);
+
                 btnSaveConfig.Enabled = true;
                 btnPrint.Enabled = true;
 
@@ -337,7 +344,6 @@ namespace HsinChuExamScore_JH
                 }
 
                 FISCA.Presentation.MotherForm.SetStatusBarMessage("評量成績報表產生完成");
-                System.Diagnostics.Process.Start(pathW);
             }
             catch (Exception ex)
             {
@@ -944,7 +950,8 @@ namespace HsinChuExamScore_JH
             li2.Add("R0_9");
 
             //抓取排名資料
-            string sql = @"SELECT 
+            string sql = @"
+SELECT 
 	rank_matrix.id AS rank_matrix_id
 	, rank_matrix.school_year
 	, rank_matrix.semester
@@ -2000,6 +2007,7 @@ ORDER BY
                 dt.Columns.Add("領域成績加權平均類別2排名母體底標");
 
                 dt.TableName = StudRec.ID;
+                row["系統編號"] = StudRec.ID;
                 row["StudentID"] = StudRec.ID;
                 row["學校名稱"] = SchoolName;
                 row["學年度"] = _SelSchoolYear;
@@ -2826,12 +2834,15 @@ ORDER BY
 
             try
             {
-                doc.Save(pathW, Aspose.Words.SaveFormat.Doc);
+                //2019/4/19 俊緯更新 完成[190417-01][03] 電子報表及推播功能，聽恩正建議將Save功能移到Complete執行
+                MemoryStream memoryStream = new MemoryStream();
+                doc.Save(memoryStream, SaveFormat.Docx);
+                e.Result = new object[] { memoryStream, reportNameW };
 
             }
             catch (Exception exow)
             {
-
+                throw exow;
             }
             doc = null;
             docList.Clear();
