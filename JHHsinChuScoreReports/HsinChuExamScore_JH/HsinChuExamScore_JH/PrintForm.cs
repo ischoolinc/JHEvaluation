@@ -2007,7 +2007,7 @@ ORDER BY
                 dt.Columns.Add("領域成績加權平均類別2排名母體底標");
 
                 dt.TableName = StudRec.ID;
-                row["系統編號"] = StudRec.ID;
+                row["系統編號"] = "系統編號{" + StudRec.ID + "}";
                 row["StudentID"] = StudRec.ID;
                 row["學校名稱"] = SchoolName;
                 row["學年度"] = _SelSchoolYear;
