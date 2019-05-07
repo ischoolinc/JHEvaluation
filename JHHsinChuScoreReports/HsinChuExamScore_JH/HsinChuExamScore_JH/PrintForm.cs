@@ -323,7 +323,7 @@ namespace HsinChuExamScore_JH
             {
                 object[] objArray = (object[])e.Result;
                 MemoryStream memoryStream = (MemoryStream)objArray[0];
-                string reportNameW = "" + objArray[1];
+                string reportNameW = "" + _SelSchoolYear + "學年度第" + _SelSemester + "學期" + _SelExamName + "" + objArray[1];
                 ePaperCloud ePaperCloud = new ePaperCloud();
                 ePaperCloud.upload_ePaper(_SelSchoolYear, _SelSemester, reportNameW, "", memoryStream, ePaperCloud.ViewerType.Student, ePaperCloud.FormatType.Docx);
 
