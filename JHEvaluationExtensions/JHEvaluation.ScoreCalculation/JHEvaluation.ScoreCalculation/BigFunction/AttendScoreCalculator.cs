@@ -41,6 +41,11 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         decimal? v = attend.Subscores.GetWeightAverageScore();
                         attend.Value = v.HasValue ? v : null;
 
+                        if (attend.Value != null)
+                        {
+                            attend.Value = student.CalculationRule.ParseAttendScore(attend.Value.Value);
+                        }
+
                         attend.Text = attend.Subscores.GetJoinText();
                     }
 
@@ -58,7 +63,12 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         //    attend.Effort = (int)((result >= 5) ? 5 : result);
                         //}
                         CalculateKHAttendEffort(attend);
-                    }
+
+                        if (attend.Value != null)
+                        {
+                            attend.Value = student.CalculationRule.ParseAttendScore(attend.Value.Value);
+                        }
+                    }                    
                 }
             }
 

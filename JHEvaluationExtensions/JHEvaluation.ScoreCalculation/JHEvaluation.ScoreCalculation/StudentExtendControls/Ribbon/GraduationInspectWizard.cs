@@ -18,6 +18,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
     public partial class GraduationInspectWizard : FISCA.Presentation.Controls.BaseForm
     {
         private List<StudentRecord> _errorList;
+        private List<StudentRecord> _ruleErrorList;
         private Dictionary<string, bool> _passList;
         private EvaluationResult _result;
         private List<StudentRecord> _students;
@@ -52,6 +53,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
             #endregion
 
             _errorList = new List<StudentRecord>();
+            _ruleErrorList = new List<StudentRecord>();
             _passList = new Dictionary<string, bool>();
             _result = new EvaluationResult();
 
@@ -419,8 +421,21 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
                 pic_loading.Visible = false;
                 return;
             }
+            else if (_ruleErrorList.Count > 0)
+            {
+                btnExit.Enabled = true;
+
+                JHSchool.Evaluation.Calculation_for_JHEvaluation.ScoreCalculation.ErrorViewer viewer = new JHSchool.Evaluation.Calculation_for_JHEvaluation.ScoreCalculation.ErrorViewer();
+                viewer.SetHeader("學生");
+                foreach (StudentRecord student in _ruleErrorList)
+                    viewer.SetMessage(student, new List<string>(new string[] { "計算規則沒有設定 核可節次別，請至教務作業/成績計算規則 設定" }));
+                viewer.ShowDialog();
+                pic_loading.Visible = false;
+                return;
+
+            }
             else
-            {                
+            {
                 // 加入這段主要在處理當學期還沒有產生學期歷程，資料可以判斷
                 UIConfig._StudentSHistoryRecDict.Clear();
                 Dictionary<string, int> studGradeYearDict = new Dictionary<string, int>();
@@ -470,6 +485,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
             try
             {
                 _errorList.AddRange(Graduation.Instance.CheckSemesterHistories(_students));
+                _ruleErrorList.AddRange(Graduation.Instance.CheckScoreCaculatedRule(_students));
             }
             catch (Exception ex)
             {

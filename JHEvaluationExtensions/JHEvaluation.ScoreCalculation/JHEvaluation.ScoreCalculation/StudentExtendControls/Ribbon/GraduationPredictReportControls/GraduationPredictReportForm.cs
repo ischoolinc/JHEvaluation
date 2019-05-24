@@ -21,6 +21,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
     public partial class GraduationPredictReportForm : FISCA.Presentation.Controls.BaseForm
     {
         private List<StudentRecord> _errorList;
+        private List<StudentRecord> _ruleErrorList;
         private Dictionary<string, bool> _passList;
         private EvaluationResult _result;
         private List<StudentRecord> _students;
@@ -43,6 +44,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
 
             _students = students;
             _errorList = new List<StudentRecord>();
+            _ruleErrorList = new List<StudentRecord>();
             _passList = new Dictionary<string, bool>();
             _result = new EvaluationResult();
             _doc = new Aspose.Words.Document();
@@ -85,6 +87,9 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             {
                 List<StudentRecord> error_list = e.Argument as List<StudentRecord>;
                 error_list.AddRange(Graduation.Instance.CheckSemesterHistories(e.Items));
+
+                List<StudentRecord> _ruleErrorList = e.Argument as List<StudentRecord>;
+                _ruleErrorList.AddRange(Graduation.Instance.CheckScoreCaculatedRule(_students));
             }
             catch (Exception ex)
             {
@@ -114,6 +119,18 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                     viewer.SetMessage(student, new List<string>(new string[] { "學期歷程不完整" }));
                 viewer.ShowDialog();
                 return;
+            }
+            else if(_ruleErrorList.Count > 0)
+            {
+                btnExit.Enabled = true;
+
+                JHSchool.Evaluation.Calculation_for_JHEvaluation.ScoreCalculation.ErrorViewer viewer = new JHSchool.Evaluation.Calculation_for_JHEvaluation.ScoreCalculation.ErrorViewer();
+                viewer.SetHeader("學生");
+                foreach (StudentRecord student in _ruleErrorList)
+                    viewer.SetMessage(student, new List<string>(new string[] { "計算規則沒有設定 核可節次別，請至教務作業/成績計算規則 設定" }));
+                viewer.ShowDialog();                
+                return;
+
             }
             else
             {

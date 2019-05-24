@@ -30,7 +30,12 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ScoreCalcRuleRelated
                 textBoxX1.Visible = false;
                 labelX1.Visible = false;
             }
-                
+            if (_type == "核可節次別")
+            {
+                textBoxX1.Visible = false;
+                labelX1.Visible = false;
+            }
+
             groupPanel1.Text = type;
             flowPanel.Controls.Clear();
         }
@@ -52,6 +57,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ScoreCalcRuleRelated
                             onDataChanged(chk, new EventArgs());
                     };
                 }
+
                 flowPanel.Controls.Add(chk);
             }
             flowPanel.ResumeLayout();

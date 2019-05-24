@@ -15,6 +15,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
         //private Dictionary<string, int> _periodMapping;
         private decimal _amount = 100;
         private List<string> _AvoidList;
+        private List<string> _PeroidList; // 核可節次別 // 2019/05/24 穎驊因應 [#6886][03] 國中畢業判斷，學生出缺部份母數會把不統計的節次類別計入。 項目與佳樺討論過後新增，
         private decimal _dayPeriod;
 
         /// <summary>
@@ -83,6 +84,17 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                 {
                     if (!_AvoidList.Contains(absence))
                         _AvoidList.Add(absence);
+                }
+
+            //核可節次別 // 2019/05/24 穎驊因應 [#6886][03] 國中畢業判斷，學生出缺部份母數會把不統計的節次類別計入。 項目與佳樺討論過後新增，
+            string peroid_types = element.GetAttribute("核可節次別");
+            _PeroidList = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(peroid_types))
+                foreach (string peroid in peroid_types.Split(','))
+                {
+                    if (!_PeroidList.Contains(peroid))
+                        _PeroidList.Add(peroid);
                 }
 
             string amount = element.GetAttribute("節數");
@@ -193,8 +205,8 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                   
                     foreach (AbsenceCountRecord acRecord in record.AbsenceCounts)
                     {
-                        //加總各項核定假別
-                        if (_AvoidDic.ContainsKey(acRecord.Name))
+                        //加總各項核定假別 ，且該節次別 是在核定節次別內
+                        if (_AvoidDic.ContainsKey(acRecord.Name) && _PeroidList.Contains(acRecord.PeriodType))
                         {
                             _AvoidDic[acRecord.Name] += acRecord.Count;
                         }

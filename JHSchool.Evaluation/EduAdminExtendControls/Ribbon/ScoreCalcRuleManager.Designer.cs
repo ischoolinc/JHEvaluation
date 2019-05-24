@@ -271,6 +271,9 @@
             this.btnSave1 = new DevComponents.DotNetBar.ButtonX();
             this.lblName1 = new DevComponents.DotNetBar.LabelX();
             this.tabItem1 = new DevComponents.DotNetBar.TabItem(this.components);
+            this.lblSetAbsence2e = new DevComponents.DotNetBar.LabelX();
+            this.txtSetAbsence2e = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.labelX81 = new DevComponents.DotNetBar.LabelX();
             this.panelEx1.SuspendLayout();
             this.itemPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
@@ -921,7 +924,7 @@
             this.gpDaily.Controls.Add(this.groupPanel2);
             this.gpDaily.Location = new System.Drawing.Point(12, 178);
             this.gpDaily.Name = "gpDaily";
-            this.gpDaily.Size = new System.Drawing.Size(565, 937);
+            this.gpDaily.Size = new System.Drawing.Size(565, 964);
             // 
             // 
             // 
@@ -1378,7 +1381,7 @@
             this.groupPanel8.Controls.Add(this.numTimes4);
             this.groupPanel8.Controls.Add(this.labelX16);
             this.groupPanel8.DrawTitleBox = false;
-            this.groupPanel8.Location = new System.Drawing.Point(3, 827);
+            this.groupPanel8.Location = new System.Drawing.Point(3, 863);
             this.groupPanel8.Name = "groupPanel8";
             this.groupPanel8.Size = new System.Drawing.Size(553, 72);
             // 
@@ -1669,6 +1672,9 @@
             // 
             this.groupPanel6.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel6.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.groupPanel6.Controls.Add(this.labelX81);
+            this.groupPanel6.Controls.Add(this.txtSetAbsence2e);
+            this.groupPanel6.Controls.Add(this.lblSetAbsence2e);
             this.groupPanel6.Controls.Add(this.numOfPeriod);
             this.groupPanel6.Controls.Add(this.labelX80);
             this.groupPanel6.Controls.Add(this.linkLabel1);
@@ -1698,7 +1704,7 @@
             this.groupPanel6.DrawTitleBox = false;
             this.groupPanel6.Location = new System.Drawing.Point(3, 118);
             this.groupPanel6.Name = "groupPanel6";
-            this.groupPanel6.Size = new System.Drawing.Size(553, 233);
+            this.groupPanel6.Size = new System.Drawing.Size(553, 269);
             // 
             // 
             // 
@@ -1758,7 +1764,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(20, 199);
+            this.linkLabel1.Location = new System.Drawing.Point(20, 202);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(86, 17);
             this.linkLabel1.TabIndex = 17;
@@ -2081,7 +2087,7 @@
             this.groupPanel2.Controls.Add(this.gpDaily3);
             this.groupPanel2.Controls.Add(this.gpDaily3b);
             this.groupPanel2.DrawTitleBox = false;
-            this.groupPanel2.Location = new System.Drawing.Point(3, 357);
+            this.groupPanel2.Location = new System.Drawing.Point(3, 393);
             this.groupPanel2.Name = "groupPanel2";
             this.groupPanel2.Size = new System.Drawing.Size(553, 464);
             // 
@@ -4165,6 +4171,47 @@
             this.tabItem1.Name = "tabItem1";
             this.tabItem1.Text = "成績計算規則";
             // 
+            // lblSetAbsence2e
+            // 
+            // 
+            // 
+            // 
+            this.lblSetAbsence2e.BackgroundStyle.Class = "";
+            this.lblSetAbsence2e.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblSetAbsence2e.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSetAbsence2e.ForeColor = System.Drawing.Color.DarkOrange;
+            this.lblSetAbsence2e.Location = new System.Drawing.Point(108, 225);
+            this.lblSetAbsence2e.Name = "lblSetAbsence2e";
+            this.lblSetAbsence2e.Size = new System.Drawing.Size(400, 23);
+            this.lblSetAbsence2e.TabIndex = 20;
+            this.lblSetAbsence2e.Text = "一,二,三,四";
+            // 
+            // txtSetAbsence2e
+            // 
+            // 
+            // 
+            // 
+            this.txtSetAbsence2e.Border.Class = "TextBoxBorder";
+            this.txtSetAbsence2e.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtSetAbsence2e.Location = new System.Drawing.Point(518, 223);
+            this.txtSetAbsence2e.Name = "txtSetAbsence2e";
+            this.txtSetAbsence2e.Size = new System.Drawing.Size(20, 25);
+            this.txtSetAbsence2e.TabIndex = 21;
+            this.txtSetAbsence2e.Visible = false;
+            // 
+            // labelX81
+            // 
+            // 
+            // 
+            // 
+            this.labelX81.BackgroundStyle.Class = "";
+            this.labelX81.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX81.Location = new System.Drawing.Point(29, 225);
+            this.labelX81.Name = "labelX81";
+            this.labelX81.Size = new System.Drawing.Size(76, 23);
+            this.labelX81.TabIndex = 22;
+            this.labelX81.Text = "核可節次別:";
+            // 
             // ScoreCalcRuleManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
@@ -4512,5 +4559,8 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.NumericUpDown numOfPeriod;
         private DevComponents.DotNetBar.LabelX labelX80;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtSetAbsence2e;
+        private DevComponents.DotNetBar.LabelX lblSetAbsence2e;
+        private DevComponents.DotNetBar.LabelX labelX81;
     }
 }

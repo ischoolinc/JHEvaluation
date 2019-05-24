@@ -53,11 +53,11 @@ namespace JHSchool.Evaluation.Calculation
             bool chkInsertShi = false;
 
             // 取得目前學生班級年級
-            Dictionary<string,int> studGrYearDic = new Dictionary<string,int> ();
+            Dictionary<string, int> studGrYearDic = new Dictionary<string, int>();
             foreach (JHStudentRecord stud in JHStudent.SelectByIDs(students.AsKeyList()))
-                if(stud.Class !=null )
-                    if(stud.Class.GradeYear.HasValue)
-                        studGrYearDic.Add(stud.ID,stud.Class.GradeYear.Value );
+                if (stud.Class != null)
+                    if (stud.Class.GradeYear.HasValue)
+                        studGrYearDic.Add(stud.ID, stud.Class.GradeYear.Value);
 
 
             // 取得學生學期歷程
@@ -65,10 +65,10 @@ namespace JHSchool.Evaluation.Calculation
             foreach (JHSemesterHistoryRecord record in JHSemesterHistory.SelectByStudentIDs(students.AsKeyList()))
             {
                 chkInsertShi = true;
-                K12.Data.SemesterHistoryItem shi = new K12.Data.SemesterHistoryItem ();
+                K12.Data.SemesterHistoryItem shi = new K12.Data.SemesterHistoryItem();
                 shi.SchoolYear = UIConfig._UserSetSHSchoolYear;
                 shi.Semester = UIConfig._UserSetSHSemester;
-                
+
                 if (studGrYearDic.ContainsKey(record.RefStudentID))
                     shi.GradeYear = studGrYearDic[record.RefStudentID];
 
@@ -87,7 +87,7 @@ namespace JHSchool.Evaluation.Calculation
                     record.SemesterHistoryItems.Add(shi);
 
                 studentSemesterHistoryRecordDict.Add(record.RefStudentID, record);
-               
+
             }
 
             List<StudentRecord> errorList = new List<StudentRecord>();
@@ -116,7 +116,7 @@ namespace JHSchool.Evaluation.Calculation
 
                     checkSame.Clear();
                     foreach (K12.Data.SemesterHistoryItem shi in studentSemesterHistoryRecordDict[student.ID].SemesterHistoryItems)
-                    {                        
+                    {
                         // 當資料有疑問
                         if (shi.SchoolYear < 1 || shi.Semester < 1 || shi.GradeYear < 1)
                         {
@@ -125,11 +125,11 @@ namespace JHSchool.Evaluation.Calculation
                         }
 
                         // 檢查學期歷程是否有重複(學年度+學期+年級)
-                        string key = shi.SchoolYear.ToString() + shi.Semester.ToString() + shi.GradeYear;                        
+                        string key = shi.SchoolYear.ToString() + shi.Semester.ToString() + shi.GradeYear;
                         if (checkSame.Contains(key))
                         {
                             errorList.Add(student);
-                            continue;                        
+                            continue;
                         }
                         checkSame.Add(key);
                     }
@@ -138,6 +138,36 @@ namespace JHSchool.Evaluation.Calculation
 
             return errorList;
         }
+
+
+        /// <summary>
+        /// 確認成績計算規則 是否有新設定 核可節次別 ( 2019/05/24 穎驊因應 [#6886][03] 國中畢業判斷，學生出缺部份母數會把不統計的節次類別計入。 項目與佳樺討論過後新增，)
+        /// </summary>
+        /// <param name="students"></param>
+        /// <returns></returns>
+        public List<StudentRecord> CheckScoreCaculatedRule(IEnumerable<StudentRecord> students)
+        {
+            List<StudentRecord> errorList = new List<StudentRecord>();
+
+            foreach (StudentRecord student in students)
+            {
+                ScoreCalcRuleRecord rule = student.GetScoreCalcRuleRecord();
+                if (rule != null)
+                {
+                    string peroid_types = rule.Content.GetAttribute("核可節次別");
+
+                    if ("" + peroid_types == "")
+                    {
+                        errorList.Add(student);
+                    }
+                }
+            }
+
+            return errorList;
+        }
+
+
+
 
         //private List<SemesterHistoryRecord> ReadSemesterHistory(List<string> studentIDs)
         //{

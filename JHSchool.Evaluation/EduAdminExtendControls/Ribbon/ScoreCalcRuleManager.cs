@@ -113,6 +113,7 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             DataListener.Add(new TextBoxSource(txtSetAbsence2b));
             DataListener.Add(new TextBoxSource(txtSetAbsence2c));
             DataListener.Add(new TextBoxSource(txtSetAbsence2d));
+            DataListener.Add(new TextBoxSource(txtSetAbsence2e));
             DataListener.Add(new NumericUpDownSource(numOfPeriod));
 
             DataListener.Add(new NumericUpDownSource(numTimes4));
@@ -483,6 +484,8 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                 txtSetAbsence2c.Text = lblSetAbsence2c.Text;
                 lblSetAbsence2d.Text = element.GetAttribute("核可假別");
                 txtSetAbsence2d.Text = lblSetAbsence2d.Text;
+                lblSetAbsence2e.Text = element.GetAttribute("核可節次別");
+                txtSetAbsence2e.Text = lblSetAbsence2e.Text;
 
                 decimal d;
                 if (decimal.TryParse(element.GetAttribute("每日節數"), out d))
@@ -724,7 +727,10 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
 
             if (lblSetAbsence2d.Text.StartsWith("(")) lblSetAbsence2d.Text = lblSetAbsence2d.Text.Substring(1, lblSetAbsence2d.Text.Length - 1);
             if (lblSetAbsence2d.Text.EndsWith(")")) lblSetAbsence2d.Text = lblSetAbsence2d.Text.Substring(0, lblSetAbsence2d.Text.Length - 1);
+            if (lblSetAbsence2e.Text.StartsWith("(")) lblSetAbsence2e.Text = lblSetAbsence2e.Text.Substring(1, lblSetAbsence2e.Text.Length - 1);
+            if (lblSetAbsence2e.Text.EndsWith(")")) lblSetAbsence2e.Text = lblSetAbsence2e.Text.Substring(0, lblSetAbsence2e.Text.Length - 1);
             element.SetAttribute("核可假別", lblSetAbsence2d.Text);
+            element.SetAttribute("核可節次別", lblSetAbsence2e.Text);
             element.SetAttribute("每日節數", numOfPeriod.Value + "");
 
             //DemeritAmountEach
@@ -1085,13 +1091,17 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
 
         private void btnSetAbsence2c_Click(object sender, EventArgs e)
         {
-            PeriodAbsenceSelectionFormNew form = new PeriodAbsenceSelectionFormNew(lblSetAbsence2c.Text, txtSetAbsence2d.Text);
+            // // 2019/05/24 穎驊因應 [#6886][03] 國中畢業判斷，學生出缺部份母數會把不統計的節次類別計入。 項目與佳樺討論過後新增，
+            // 蠻無言的 以前成績計算規則介面是用這種方式傳遞值，這並不是個好寫法，建議以後可以改寫
+            PeriodAbsenceSelectionFormNew form = new PeriodAbsenceSelectionFormNew(lblSetAbsence2c.Text, txtSetAbsence2d.Text, txtSetAbsence2e.Text);
             if (form.ShowDialog() == DialogResult.OK)
             {
                 lblSetAbsence2c.Text = form.Setting;
                 txtSetAbsence2c.Text = form.Setting;
                 lblSetAbsence2d.Text = form.Setting2;
                 txtSetAbsence2d.Text = form.Setting2;
+                lblSetAbsence2e.Text = form.Setting3;
+                txtSetAbsence2e.Text = form.Setting3;
             }
         }
 

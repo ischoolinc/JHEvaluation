@@ -42,6 +42,10 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon.ScoreCalcRuleRelated
             foreach (JHAbsenceMappingInfo info in absenceList)
                 absences.Add(info.Name);
 
+            List<string> periods = new List<string>();
+            foreach (JHPeriodMappingInfo info in periodList)
+                periods.Add(info.Name);
+
             foreach (JHPeriodMappingInfo info in periodList)
             {
                 if (!_panels.ContainsKey(info.Type))

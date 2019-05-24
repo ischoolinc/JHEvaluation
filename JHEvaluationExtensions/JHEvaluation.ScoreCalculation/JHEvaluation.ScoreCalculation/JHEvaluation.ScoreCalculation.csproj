@@ -179,6 +179,7 @@
     <Reference Include="JHSchool.Evaluation, Version=1.0.3.46, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="K12.Data, Version=2.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
