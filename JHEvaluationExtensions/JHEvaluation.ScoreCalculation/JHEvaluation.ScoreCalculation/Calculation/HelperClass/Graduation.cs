@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using JHSchool.Data;
 using JHSchool.Evaluation.Calculation.GraduationConditions;
+using System.Xml;
 
 namespace JHSchool.Evaluation.Calculation
 {
@@ -154,7 +155,8 @@ namespace JHSchool.Evaluation.Calculation
                 ScoreCalcRuleRecord rule = student.GetScoreCalcRuleRecord();
                 if (rule != null)
                 {
-                    string peroid_types = rule.Content.GetAttribute("核可節次別");
+                    XmlElement xml = (XmlElement)rule.Content.SelectSingleNode("畢業條件/日常生活表現畢業條件/條件[@Type='AbsenceAmountAllFraction']");
+                    string peroid_types = xml.GetAttribute("核可節次別");
 
                     if ("" + peroid_types == "")
                     {
