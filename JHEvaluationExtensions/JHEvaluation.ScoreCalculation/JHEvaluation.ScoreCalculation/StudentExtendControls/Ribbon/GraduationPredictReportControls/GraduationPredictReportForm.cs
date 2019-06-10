@@ -88,7 +88,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 List<StudentRecord> error_list = e.Argument as List<StudentRecord>;
                 error_list.AddRange(Graduation.Instance.CheckSemesterHistories(e.Items));
 
-                List<StudentRecord> _ruleErrorList = e.Argument as List<StudentRecord>;
+                //List<StudentRecord> _ruleErrorList = e.Argument as List<StudentRecord>;
                 _ruleErrorList.AddRange(Graduation.Instance.CheckScoreCaculatedRule(_students));
             }
             catch (Exception ex)
