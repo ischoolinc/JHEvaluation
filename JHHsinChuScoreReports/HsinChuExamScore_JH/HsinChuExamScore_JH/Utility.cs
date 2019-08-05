@@ -312,23 +312,23 @@ namespace HsinChuExamScore_JH
             builder.Write("變數");
             builder.Writeln();
 
-            //領域
+            //領域(校排名及班排名)
             builder.Write("領域成績排名");
             builder.StartTable();
             builder.InsertCell();
             builder.Write("領域名稱");
-            builder.InsertCell();
-            builder.Write("領域班排名名次");
-            builder.InsertCell();
-            builder.Write("領域班排名PR值");
-            builder.InsertCell();
-            builder.Write("領域班排名百分比");
             builder.InsertCell();
             builder.Write("領域年排名名次");
             builder.InsertCell();
             builder.Write("領域年排名PR值");
             builder.InsertCell();
             builder.Write("領域年排名百分比");
+            builder.InsertCell();
+            builder.Write("領域班排名名次");
+            builder.InsertCell();
+            builder.Write("領域班排名PR值");
+            builder.InsertCell();
+            builder.Write("領域班排名百分比");
             builder.EndRow();
 
             foreach (string key in new string[]{
@@ -346,17 +346,17 @@ namespace HsinChuExamScore_JH
                 builder.InsertCell();
                 builder.Write(key);
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD " + key + "_領域班排名名次" + " \\* MERGEFORMAT ", "«DCR»");
-                builder.InsertCell();
-                builder.InsertField("MERGEFIELD " + key + "_領域班排名PR值" + " \\* MERGEFORMAT ", "«DCPR»");
-                builder.InsertCell();
-                builder.InsertField("MERGEFIELD " + key + "_領域班排名百分比" + " \\* MERGEFORMAT ", "«DCP»");
-                builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域年排名名次" + " \\* MERGEFORMAT ", "«DYR»");
                 builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域年排名PR值" + " \\* MERGEFORMAT ", "«DYPR»");
                 builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域年排名百分比" + " \\* MERGEFORMAT ", "«DYP»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名名次" + " \\* MERGEFORMAT ", "«DCR»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名PR值" + " \\* MERGEFORMAT ", "«DCPR»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名百分比" + " \\* MERGEFORMAT ", "«DCP»");
                 builder.EndRow();
 
             }
@@ -365,7 +365,197 @@ namespace HsinChuExamScore_JH
 
             builder.Writeln();
 
+            //領域(類別一排名及類別二排名)
+            builder.Write("領域成績排名");
+            builder.StartTable();
+            builder.InsertCell();
+            builder.Write("領域名稱");
+            builder.InsertCell();
+            builder.Write("領域類一排名名次");
+            builder.InsertCell();
+            builder.Write("領域類一排名PR值");
+            builder.InsertCell();
+            builder.Write("領域類一排名百分比");
+            builder.InsertCell();
+            builder.Write("領域類二排名名次");
+            builder.InsertCell();
+            builder.Write("領域類二排名PR值");
+            builder.InsertCell();
+            builder.Write("領域類二排名百分比");
+            builder.EndRow();
 
+            foreach (string key in new string[]{
+                    "語文",
+                    "數學",
+                    "社會",
+                    "自然與生活科技",
+                    "健康與體育",
+                    "藝術與人文",
+                    "綜合活動",
+                    "彈性課程"
+                })
+            {
+
+                builder.InsertCell();
+                builder.Write(key);
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類一排名名次" + " \\* MERGEFORMAT ", "«D1TR»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類一排名PR值" + " \\* MERGEFORMAT ", "«D1TPR»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類一排名百分比" + " \\* MERGEFORMAT ", "«D1TP»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類二排名名次" + " \\* MERGEFORMAT ", "«D2TR»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類二排名PR值" + " \\* MERGEFORMAT ", "«D2TPR»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類二排名百分比" + " \\* MERGEFORMAT ", "«D2TP»");
+                builder.EndRow();
+
+            }
+
+            builder.EndTable();
+
+            builder.Writeln();
+
+            //領域成績五標(年排名及班排名)
+            builder.Write("領域成績五標(年排名及班排名)");
+            builder.StartTable();
+            builder.InsertCell();
+            builder.Write("領域名稱");
+            builder.InsertCell();
+            builder.Write("領域年排名母體頂標");
+            builder.InsertCell();
+            builder.Write("領域年排名母體前標");
+            builder.InsertCell();
+            builder.Write("領域年排名母體平均");
+            builder.InsertCell();
+            builder.Write("領域年排名母體後標");
+            builder.InsertCell();
+            builder.Write("領域年排名母體底標");
+            builder.InsertCell();
+            builder.Write("領域班排名母體頂標");
+            builder.InsertCell();
+            builder.Write("領域班排名母體前標");
+            builder.InsertCell();
+            builder.Write("領域班排名母體平均");
+            builder.InsertCell();
+            builder.Write("領域班排名母體後標");
+            builder.InsertCell();
+            builder.Write("領域班排名母體底標");
+            builder.EndRow();
+
+            foreach (string key in new string[]{
+                    "語文",
+                    "數學",
+                    "社會",
+                    "自然與生活科技",
+                    "健康與體育",
+                    "藝術與人文",
+                    "綜合活動",
+                    "彈性課程"
+                })
+            {
+                builder.InsertCell();
+                builder.Write(key);
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域年排名母體頂標" + " \\* MERGEFORMAT ", "«DY25T»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域年排名母體前標" + " \\* MERGEFORMAT ", "«DY50T»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域年排名母體平均" + " \\* MERGEFORMAT ", "«DYA»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域年排名母體後標" + " \\* MERGEFORMAT ", "«DY50B»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域年排名母體底標" + " \\* MERGEFORMAT ", "«DY25B»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名母體頂標" + " \\* MERGEFORMAT ", "«DC25T»");
+                builder.InsertCell();                           
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名母體前標" + " \\* MERGEFORMAT ", "«DC50T»");
+                builder.InsertCell();                           
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名母體平均" + " \\* MERGEFORMAT ", "«DCA»");
+                builder.InsertCell();                           
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名母體後標" + " \\* MERGEFORMAT ", "«DC50B»");
+                builder.InsertCell();                           
+                builder.InsertField("MERGEFIELD " + key + "_領域班排名母體底標" + " \\* MERGEFORMAT ", "«DC25B»");
+                builder.EndRow();
+
+            }
+
+            builder.EndTable();
+
+            builder.Writeln();
+
+            //領域成績五標(類一排名及類二排名)
+            builder.Write("領域成績五標(類一排名及類二排名)");
+            builder.StartTable();
+            builder.InsertCell();
+            builder.Write("領域名稱");
+            builder.InsertCell();
+            builder.Write("領域類一排名母體頂標");
+            builder.InsertCell();
+            builder.Write("領域類一排名母體前標");
+            builder.InsertCell();
+            builder.Write("領域類一排名母體平均");
+            builder.InsertCell();
+            builder.Write("領域類一排名母體後標");
+            builder.InsertCell();
+            builder.Write("領域類一排名母體底標");
+            builder.InsertCell();
+            builder.Write("領域類二排名母體頂標");
+            builder.InsertCell();
+            builder.Write("領域類二排名母體前標");
+            builder.InsertCell();
+            builder.Write("領域類二排名母體平均");
+            builder.InsertCell();
+            builder.Write("領域類二排名母體後標");
+            builder.InsertCell();
+            builder.Write("領域類二排名母體底標");
+            builder.EndRow();
+
+            foreach (string key in new string[]{
+                    "語文",
+                    "數學",
+                    "社會",
+                    "自然與生活科技",
+                    "健康與體育",
+                    "藝術與人文",
+                    "綜合活動",
+                    "彈性課程"
+                })
+            {
+                builder.InsertCell();
+                builder.Write(key);
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類一排名母體頂標" + " \\* MERGEFORMAT ", "«D1T25T»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類一排名母體前標" + " \\* MERGEFORMAT ", "«D1T50T»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類一排名母體平均" + " \\* MERGEFORMAT ", "«D1TA»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類一排名母體後標" + " \\* MERGEFORMAT ", "«D1T50B»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類一排名母體底標" + " \\* MERGEFORMAT ", "«D1T25B»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類二排名母體頂標" + " \\* MERGEFORMAT ", "«D2T25T»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類二排名母體前標" + " \\* MERGEFORMAT ", "«D2T50T»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類二排名母體平均" + " \\* MERGEFORMAT ", "«D2TA»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類二排名母體後標" + " \\* MERGEFORMAT ", "«D2T50B»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + key + "_領域類二排名母體底標" + " \\* MERGEFORMAT ", "«D2T25B»");
+                builder.EndRow();
+
+            }
+
+            builder.EndTable();
+
+            builder.Writeln();
+
+            //序列化科目資料(年排名及班排名)
+            builder.Write("序列化科目資料(年排名及班排名)");
             foreach (string key in new string[]{
                     "語文",
                     "數學",
@@ -412,6 +602,206 @@ namespace HsinChuExamScore_JH
                     builder.InsertField("MERGEFIELD " + key + "_科目年排名PR值" + i + " \\* MERGEFORMAT ", "«SYPR»");
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + key + "_科目年排名百分比" + i + " \\* MERGEFORMAT ", "«SYP»");
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln();
+
+            }
+
+            //序列化科目資料(類一排名及類二排名)
+            builder.Write("序列化科目資料(類一排名及類二排名)");
+            foreach (string key in new string[]{
+                    "語文",
+                    "數學",
+                    "社會",
+                    "自然與生活科技",
+                    "健康與體育",
+                    "藝術與人文",
+                    "綜合活動",
+                    "彈性課程"
+                })
+            {
+                builder.Write("領域:" + key);
+
+                builder.StartTable();
+                builder.InsertCell();
+                builder.Write("科目類一排名名次");
+                builder.InsertCell();
+                builder.Write("科目類一排名PR值");
+                builder.InsertCell();
+                builder.Write("科目類一排名百分比");
+                builder.InsertCell();
+                builder.Write("科目名稱");
+                builder.InsertCell();
+                builder.Write("科目類二排名名次");
+                builder.InsertCell();
+                builder.Write("科目類二排名PR值");
+                builder.InsertCell();
+                builder.Write("科目類二排名百分比");
+                builder.EndRow();
+
+                for (int i = 1; i <= 7; i++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目名稱" + i + " \\* MERGEFORMAT ", "«SN»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類一排名名次" + i + " \\* MERGEFORMAT ", "«S1TR»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類一排名PR值" + i + " \\* MERGEFORMAT ", "«S1TPR»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類一排名百分比" + i + " \\* MERGEFORMAT ", "«S1TP»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類二排名名次" + i + " \\* MERGEFORMAT ", "«S2TR»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類二排名PR值" + i + " \\* MERGEFORMAT ", "«S2TPR»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類二排名百分比" + i + " \\* MERGEFORMAT ", "«S2TP»");
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln();
+
+            }
+
+            //序列化科目資料五標(年排名及班排名)
+            builder.Write("序列化科目資料五標(年排名及班排名)");
+            foreach (string key in new string[]{
+                    "語文",
+                    "數學",
+                    "社會",
+                    "自然與生活科技",
+                    "健康與體育",
+                    "藝術與人文",
+                    "綜合活動",
+                    "彈性課程"
+                })
+            {
+                builder.Write("領域:" + key);
+
+                builder.StartTable();
+                builder.InsertCell();
+                builder.Write("科目名稱");
+                builder.InsertCell();
+                builder.Write("科目年排名母體頂標");
+                builder.InsertCell();
+                builder.Write("科目年排名母體前標");
+                builder.InsertCell();
+                builder.Write("科目年排名母體平均");
+                builder.InsertCell();
+                builder.Write("科目年排名母體後標");
+                builder.InsertCell();
+                builder.Write("科目年排名母體底標");
+                builder.InsertCell();
+                builder.Write("科目班排名母體頂標");
+                builder.InsertCell();
+                builder.Write("科目班排名母體前標");
+                builder.InsertCell();
+                builder.Write("科目班排名母體平均");
+                builder.InsertCell();
+                builder.Write("科目班排名母體後標");
+                builder.InsertCell();
+                builder.Write("科目班排名母體底標");
+                builder.EndRow();
+
+                for (int i = 1; i <= 7; i++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目名稱" + i + " \\* MERGEFORMAT ", "«SN»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目年排名母體頂標" + i + " \\* MERGEFORMAT ", "«SY25T»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目年排名母體前標" + i + " \\* MERGEFORMAT ", "«SY50T»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目年排名母體平均" + i + " \\* MERGEFORMAT ", "«SYA»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目年排名母體後標" + i + " \\* MERGEFORMAT ", "«SY50B»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目年排名母體底標" + i + " \\* MERGEFORMAT ", "«SY25B»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目班排名母體頂標" + i + " \\* MERGEFORMAT ", "«SC25T»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目班排名母體前標" + i + " \\* MERGEFORMAT ", "«SC50T»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目班排名母體平均" + i + " \\* MERGEFORMAT ", "«SCA»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目班排名母體後標" + i + " \\* MERGEFORMAT ", "«SC50B»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目班排名母體底標" + i + " \\* MERGEFORMAT ", "«SC25B»");
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln();
+
+            }
+
+            //序列化科目資料五標(類一排名及類二排名)
+            builder.Write("序列化科目資料五標(類一排名及類二排名)");
+            foreach (string key in new string[]{
+                    "語文",
+                    "數學",
+                    "社會",
+                    "自然與生活科技",
+                    "健康與體育",
+                    "藝術與人文",
+                    "綜合活動",
+                    "彈性課程"
+                })
+            {
+                builder.Write("領域:" + key);
+
+                builder.StartTable();
+                builder.InsertCell();
+                builder.Write("科目名稱");
+                builder.InsertCell();
+                builder.Write("科目類一排名母體頂標");
+                builder.InsertCell();
+                builder.Write("科目類一排名母體前標");
+                builder.InsertCell();
+                builder.Write("科目類一排名母體平均");
+                builder.InsertCell();
+                builder.Write("科目類一排名母體後標");
+                builder.InsertCell();
+                builder.Write("科目類一排名母體底標");
+                builder.InsertCell();
+                builder.Write("科目類二排名母體頂標");
+                builder.InsertCell();
+                builder.Write("科目類二排名母體前標");
+                builder.InsertCell();
+                builder.Write("科目類二排名母體平均");
+                builder.InsertCell();
+                builder.Write("科目類二排名母體後標");
+                builder.InsertCell();
+                builder.Write("科目類二排名母體底標");
+                builder.EndRow();
+
+                for (int i = 1; i <= 7; i++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目名稱" + i + " \\* MERGEFORMAT ", "«SN»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類一排名母體頂標" + i + " \\* MERGEFORMAT ", "«S1T25T»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類一排名母體前標" + i + " \\* MERGEFORMAT ", "«S1T50T»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類一排名母體平均" + i + " \\* MERGEFORMAT ", "«S1TA»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類一排名母體後標" + i + " \\* MERGEFORMAT ", "«S1T50B»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類一排名母體底標" + i + " \\* MERGEFORMAT ", "«S1T25B»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類二排名母體頂標" + i + " \\* MERGEFORMAT ", "«S2T25T»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類二排名母體前標" + i + " \\* MERGEFORMAT ", "«S2T50T»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類二排名母體平均" + i + " \\* MERGEFORMAT ", "«S2TA»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類二排名母體後標" + i + " \\* MERGEFORMAT ", "«S2T50B»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_科目類二排名母體底標" + i + " \\* MERGEFORMAT ", "«S2T25B»");
                     builder.EndRow();
                 }
                 builder.EndTable();

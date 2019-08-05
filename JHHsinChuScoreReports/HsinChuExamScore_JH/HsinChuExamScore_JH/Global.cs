@@ -77,6 +77,7 @@ namespace HsinChuExamScore_JH
         {
             List<string> retVal = new List<string>();
             // 固定欄位
+            retVal.Add("系統編號");
             retVal.Add("StudentID");
             retVal.Add("學校名稱");
             retVal.Add("學年度");

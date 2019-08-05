@@ -29,13 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cboConfigure = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.lnkDelConfig = new System.Windows.Forms.LinkLabel();
             this.lnkCopyConfig = new System.Windows.Forms.LinkLabel();
             this.labelX11 = new DevComponents.DotNetBar.LabelX();
             this.tabControl1 = new DevComponents.DotNetBar.TabControl();
             this.tabControlPanel1 = new DevComponents.DotNetBar.TabControlPanel();
+            this.dtScoreEdit = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
+            this.labelX7 = new DevComponents.DotNetBar.LabelX();
             this.cboNotRankedFilter = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX6 = new DevComponents.DotNetBar.LabelX();
             this.chkSubjSelAll = new DevComponents.DotNetBar.Controls.CheckBoxX();
@@ -65,16 +67,14 @@
             this.lnkViewMapColumns = new System.Windows.Forms.LinkLabel();
             this.lnkViewTemplate = new System.Windows.Forms.LinkLabel();
             this.lnkChangeTemplate = new System.Windows.Forms.LinkLabel();
-            this.labelX7 = new DevComponents.DotNetBar.LabelX();
-            this.dtScoreEdit = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
             ((System.ComponentModel.ISupportInitialize)(this.tabControl1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabControlPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtScoreEdit)).BeginInit();
             this.tabControlPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAttendanceData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtEnd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtBegin)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dtScoreEdit)).BeginInit();
             this.SuspendLayout();
             // 
             // cboConfigure
@@ -126,7 +126,7 @@
             this.labelX11.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX11.Location = new System.Drawing.Point(15, 13);
             this.labelX11.Name = "labelX11";
-            this.labelX11.Size = new System.Drawing.Size(87, 21);
+            this.labelX11.Size = new System.Drawing.Size(80, 20);
             this.labelX11.TabIndex = 9;
             this.labelX11.Text = "樣板設定檔：";
             // 
@@ -166,10 +166,10 @@
             this.tabControlPanel1.Controls.Add(this.labelX2);
             this.tabControlPanel1.Controls.Add(this.labelX1);
             this.tabControlPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlPanel1.Location = new System.Drawing.Point(0, 28);
+            this.tabControlPanel1.Location = new System.Drawing.Point(0, 27);
             this.tabControlPanel1.Name = "tabControlPanel1";
             this.tabControlPanel1.Padding = new System.Windows.Forms.Padding(1);
-            this.tabControlPanel1.Size = new System.Drawing.Size(534, 275);
+            this.tabControlPanel1.Size = new System.Drawing.Size(534, 276);
             this.tabControlPanel1.Style.BackColor1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(253)))), ((int)(((byte)(254)))));
             this.tabControlPanel1.Style.BackColor2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(157)))), ((int)(((byte)(188)))), ((int)(((byte)(227)))));
             this.tabControlPanel1.Style.Border = DevComponents.DotNetBar.eBorderType.SingleLine;
@@ -179,6 +179,81 @@
             this.tabControlPanel1.Style.GradientAngle = 90;
             this.tabControlPanel1.TabIndex = 1;
             this.tabControlPanel1.TabItem = this.tabItem1;
+            // 
+            // dtScoreEdit
+            // 
+            // 
+            // 
+            // 
+            this.dtScoreEdit.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.dtScoreEdit.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtScoreEdit.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
+            this.dtScoreEdit.ButtonDropDown.Visible = true;
+            this.dtScoreEdit.IsPopupCalendarOpen = false;
+            this.dtScoreEdit.Location = new System.Drawing.Point(360, 61);
+            // 
+            // 
+            // 
+            this.dtScoreEdit.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dtScoreEdit.MonthCalendar.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window;
+            this.dtScoreEdit.MonthCalendar.BackgroundStyle.Class = "";
+            this.dtScoreEdit.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtScoreEdit.MonthCalendar.ClearButtonVisible = true;
+            // 
+            // 
+            // 
+            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
+            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
+            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
+            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
+            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
+            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.Class = "";
+            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtScoreEdit.MonthCalendar.DayNames = new string[] {
+        "日",
+        "一",
+        "二",
+        "三",
+        "四",
+        "五",
+        "六"};
+            this.dtScoreEdit.MonthCalendar.DisplayMonth = new System.DateTime(2013, 4, 1, 0, 0, 0, 0);
+            this.dtScoreEdit.MonthCalendar.MarkedDates = new System.DateTime[0];
+            this.dtScoreEdit.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dtScoreEdit.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
+            this.dtScoreEdit.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
+            this.dtScoreEdit.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.dtScoreEdit.MonthCalendar.NavigationBackgroundStyle.Class = "";
+            this.dtScoreEdit.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtScoreEdit.MonthCalendar.TodayButtonVisible = true;
+            this.dtScoreEdit.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
+            this.dtScoreEdit.Name = "dtScoreEdit";
+            this.dtScoreEdit.Size = new System.Drawing.Size(149, 25);
+            this.dtScoreEdit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.dtScoreEdit.TabIndex = 33;
+            // 
+            // labelX7
+            // 
+            this.labelX7.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelX7.AutoSize = true;
+            this.labelX7.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX7.BackgroundStyle.Class = "";
+            this.labelX7.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX7.Location = new System.Drawing.Point(269, 64);
+            this.labelX7.Name = "labelX7";
+            this.labelX7.Size = new System.Drawing.Size(80, 20);
+            this.labelX7.TabIndex = 32;
+            this.labelX7.Text = "成績校正日期";
             // 
             // cboNotRankedFilter
             // 
@@ -202,9 +277,9 @@
             // 
             this.labelX6.BackgroundStyle.Class = "";
             this.labelX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX6.Location = new System.Drawing.Point(255, 28);
+            this.labelX6.Location = new System.Drawing.Point(255, 29);
             this.labelX6.Name = "labelX6";
-            this.labelX6.Size = new System.Drawing.Size(101, 21);
+            this.labelX6.Size = new System.Drawing.Size(93, 20);
             this.labelX6.TabIndex = 31;
             this.labelX6.Text = "不排名學生類別";
             // 
@@ -219,7 +294,7 @@
             this.chkSubjSelAll.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.chkSubjSelAll.Location = new System.Drawing.Point(86, 99);
             this.chkSubjSelAll.Name = "chkSubjSelAll";
-            this.chkSubjSelAll.Size = new System.Drawing.Size(54, 21);
+            this.chkSubjSelAll.Size = new System.Drawing.Size(48, 20);
             this.chkSubjSelAll.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkSubjSelAll.TabIndex = 30;
             this.chkSubjSelAll.Text = "全選";
@@ -235,7 +310,7 @@
             this.circularProgress1.BackgroundStyle.Class = "";
             this.circularProgress1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.circularProgress1.FocusCuesEnabled = false;
-            this.circularProgress1.Location = new System.Drawing.Point(255, 163);
+            this.circularProgress1.Location = new System.Drawing.Point(255, 164);
             this.circularProgress1.Name = "circularProgress1";
             this.circularProgress1.ProgressBarType = DevComponents.DotNetBar.eCircularProgressType.Dot;
             this.circularProgress1.ProgressColor = System.Drawing.Color.LimeGreen;
@@ -293,9 +368,9 @@
             // 
             this.labelX4.BackgroundStyle.Class = "";
             this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX4.Location = new System.Drawing.Point(22, 99);
+            this.labelX4.Location = new System.Drawing.Point(22, 100);
             this.labelX4.Name = "labelX4";
-            this.labelX4.Size = new System.Drawing.Size(60, 21);
+            this.labelX4.Size = new System.Drawing.Size(54, 20);
             this.labelX4.TabIndex = 25;
             this.labelX4.Text = "列印科目";
             // 
@@ -308,7 +383,7 @@
             this.lvSubject.Border.Class = "ListViewBorder";
             this.lvSubject.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSubject.CheckBoxes = true;
-            this.lvSubject.Location = new System.Drawing.Point(22, 125);
+            this.lvSubject.Location = new System.Drawing.Point(22, 126);
             this.lvSubject.Name = "lvSubject";
             this.lvSubject.Size = new System.Drawing.Size(490, 124);
             this.lvSubject.TabIndex = 4;
@@ -325,9 +400,9 @@
             // 
             this.labelX3.BackgroundStyle.Class = "";
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX3.Location = new System.Drawing.Point(22, 63);
+            this.labelX3.Location = new System.Drawing.Point(22, 64);
             this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(60, 21);
+            this.labelX3.Size = new System.Drawing.Size(54, 20);
             this.labelX3.TabIndex = 23;
             this.labelX3.Text = "試別名稱";
             // 
@@ -341,9 +416,9 @@
             // 
             this.labelX2.BackgroundStyle.Class = "";
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(154, 28);
+            this.labelX2.Location = new System.Drawing.Point(154, 29);
             this.labelX2.Name = "labelX2";
-            this.labelX2.Size = new System.Drawing.Size(34, 21);
+            this.labelX2.Size = new System.Drawing.Size(28, 20);
             this.labelX2.TabIndex = 1;
             this.labelX2.Text = "學期";
             // 
@@ -357,9 +432,9 @@
             // 
             this.labelX1.BackgroundStyle.Class = "";
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(35, 28);
+            this.labelX1.Location = new System.Drawing.Point(35, 29);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(47, 21);
+            this.labelX1.Size = new System.Drawing.Size(41, 20);
             this.labelX1.TabIndex = 5;
             this.labelX1.Text = "學年度";
             // 
@@ -382,10 +457,10 @@
             this.tabControlPanel2.Controls.Add(this.labelX13);
             this.tabControlPanel2.Controls.Add(this.labelX12);
             this.tabControlPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlPanel2.Location = new System.Drawing.Point(0, 28);
+            this.tabControlPanel2.Location = new System.Drawing.Point(0, 27);
             this.tabControlPanel2.Name = "tabControlPanel2";
             this.tabControlPanel2.Padding = new System.Windows.Forms.Padding(1);
-            this.tabControlPanel2.Size = new System.Drawing.Size(534, 275);
+            this.tabControlPanel2.Size = new System.Drawing.Size(534, 276);
             this.tabControlPanel2.Style.BackColor1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(253)))), ((int)(((byte)(254)))));
             this.tabControlPanel2.Style.BackColor2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(157)))), ((int)(((byte)(188)))), ((int)(((byte)(227)))));
             this.tabControlPanel2.Style.Border = DevComponents.DotNetBar.eBorderType.SingleLine;
@@ -407,7 +482,7 @@
             this.chkAttendSelAll.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.chkAttendSelAll.Location = new System.Drawing.Point(168, 73);
             this.chkAttendSelAll.Name = "chkAttendSelAll";
-            this.chkAttendSelAll.Size = new System.Drawing.Size(54, 21);
+            this.chkAttendSelAll.Size = new System.Drawing.Size(48, 20);
             this.chkAttendSelAll.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkAttendSelAll.TabIndex = 31;
             this.chkAttendSelAll.Text = "全選";
@@ -423,9 +498,9 @@
             // 
             this.labelX5.BackgroundStyle.Class = "";
             this.labelX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX5.Location = new System.Drawing.Point(19, 73);
+            this.labelX5.Location = new System.Drawing.Point(19, 74);
             this.labelX5.Name = "labelX5";
-            this.labelX5.Size = new System.Drawing.Size(154, 21);
+            this.labelX5.Size = new System.Drawing.Size(145, 20);
             this.labelX5.TabIndex = 25;
             this.labelX5.Text = "請選擇您要列印的假別：";
             // 
@@ -439,21 +514,21 @@
             this.dgAttendanceData.BackgroundColor = System.Drawing.Color.White;
             this.dgAttendanceData.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgAttendanceData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgAttendanceData.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgAttendanceData.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgAttendanceData.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
             this.dgAttendanceData.Location = new System.Drawing.Point(19, 99);
             this.dgAttendanceData.MultiSelect = false;
             this.dgAttendanceData.Name = "dgAttendanceData";
             this.dgAttendanceData.RowHeadersVisible = false;
             this.dgAttendanceData.RowTemplate.Height = 24;
-            this.dgAttendanceData.Size = new System.Drawing.Size(501, 158);
+            this.dgAttendanceData.Size = new System.Drawing.Size(501, 159);
             this.dgAttendanceData.TabIndex = 2;
             // 
             // dtEnd
@@ -590,9 +665,9 @@
             // 
             this.labelX14.BackgroundStyle.Class = "";
             this.labelX14.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX14.Location = new System.Drawing.Point(257, 44);
+            this.labelX14.Location = new System.Drawing.Point(257, 45);
             this.labelX14.Name = "labelX14";
-            this.labelX14.Size = new System.Drawing.Size(34, 21);
+            this.labelX14.Size = new System.Drawing.Size(28, 20);
             this.labelX14.TabIndex = 21;
             this.labelX14.Text = "結束";
             // 
@@ -606,9 +681,9 @@
             // 
             this.labelX13.BackgroundStyle.Class = "";
             this.labelX13.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX13.Location = new System.Drawing.Point(38, 44);
+            this.labelX13.Location = new System.Drawing.Point(38, 45);
             this.labelX13.Name = "labelX13";
-            this.labelX13.Size = new System.Drawing.Size(34, 21);
+            this.labelX13.Size = new System.Drawing.Size(28, 20);
             this.labelX13.TabIndex = 20;
             this.labelX13.Text = "開始";
             // 
@@ -622,9 +697,9 @@
             // 
             this.labelX12.BackgroundStyle.Class = "";
             this.labelX12.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX12.Location = new System.Drawing.Point(19, 12);
+            this.labelX12.Location = new System.Drawing.Point(19, 13);
             this.labelX12.Name = "labelX12";
-            this.labelX12.Size = new System.Drawing.Size(350, 21);
+            this.labelX12.Size = new System.Drawing.Size(336, 20);
             this.labelX12.TabIndex = 19;
             this.labelX12.Text = "請選擇日期區間：(依區間統計缺曠、獎懲、服務學習時數)";
             // 
@@ -719,81 +794,6 @@
             this.lnkChangeTemplate.Text = "變更套印樣板";
             this.lnkChangeTemplate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkChangeTemplate_LinkClicked);
             // 
-            // labelX7
-            // 
-            this.labelX7.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.labelX7.AutoSize = true;
-            this.labelX7.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX7.BackgroundStyle.Class = "";
-            this.labelX7.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX7.Location = new System.Drawing.Point(269, 63);
-            this.labelX7.Name = "labelX7";
-            this.labelX7.Size = new System.Drawing.Size(87, 21);
-            this.labelX7.TabIndex = 32;
-            this.labelX7.Text = "成績校正日期";
-            // 
-            // dtScoreEdit
-            // 
-            // 
-            // 
-            // 
-            this.dtScoreEdit.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.dtScoreEdit.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtScoreEdit.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
-            this.dtScoreEdit.ButtonDropDown.Visible = true;
-            this.dtScoreEdit.IsPopupCalendarOpen = false;
-            this.dtScoreEdit.Location = new System.Drawing.Point(360, 61);
-            // 
-            // 
-            // 
-            this.dtScoreEdit.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dtScoreEdit.MonthCalendar.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window;
-            this.dtScoreEdit.MonthCalendar.BackgroundStyle.Class = "";
-            this.dtScoreEdit.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtScoreEdit.MonthCalendar.ClearButtonVisible = true;
-            // 
-            // 
-            // 
-            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
-            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
-            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
-            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
-            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.Class = "";
-            this.dtScoreEdit.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtScoreEdit.MonthCalendar.DayNames = new string[] {
-        "日",
-        "一",
-        "二",
-        "三",
-        "四",
-        "五",
-        "六"};
-            this.dtScoreEdit.MonthCalendar.DisplayMonth = new System.DateTime(2013, 4, 1, 0, 0, 0, 0);
-            this.dtScoreEdit.MonthCalendar.MarkedDates = new System.DateTime[0];
-            this.dtScoreEdit.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dtScoreEdit.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
-            this.dtScoreEdit.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
-            this.dtScoreEdit.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
-            this.dtScoreEdit.MonthCalendar.NavigationBackgroundStyle.Class = "";
-            this.dtScoreEdit.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtScoreEdit.MonthCalendar.TodayButtonVisible = true;
-            this.dtScoreEdit.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
-            this.dtScoreEdit.Name = "dtScoreEdit";
-            this.dtScoreEdit.Size = new System.Drawing.Size(149, 25);
-            this.dtScoreEdit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.dtScoreEdit.TabIndex = 33;
-            // 
             // PrintForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
@@ -818,12 +818,12 @@
             this.tabControl1.ResumeLayout(false);
             this.tabControlPanel1.ResumeLayout(false);
             this.tabControlPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtScoreEdit)).EndInit();
             this.tabControlPanel2.ResumeLayout(false);
             this.tabControlPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAttendanceData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtEnd)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtBegin)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dtScoreEdit)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

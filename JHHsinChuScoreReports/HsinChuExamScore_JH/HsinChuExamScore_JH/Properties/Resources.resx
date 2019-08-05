@@ -134,6 +134,6 @@
     <value>..\template\新竹_領域成績單.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="新竹評量成績合併欄位總表" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\template\新竹評量成績合併欄位總表.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\template\新竹_評量成績合併欄位總表.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
