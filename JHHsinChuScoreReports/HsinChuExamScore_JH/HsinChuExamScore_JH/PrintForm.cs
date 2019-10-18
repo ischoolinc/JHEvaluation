@@ -1546,7 +1546,7 @@ ORDER BY
 
 
             List<string> subjColList = new List<string>();
-            foreach (string dName in Global.DomainNameList())
+            foreach (string dName in Global.DomainNameList)
             {
                 for (int i = 1; i <= 12; i++)
                 {
@@ -1929,7 +1929,7 @@ ORDER BY
                     dt.Columns.Add(colName);
 
                 // 新增領域成績欄位
-                foreach (string dName in Global.DomainNameList())
+                foreach (string dName in Global.DomainNameList)
                 {
                     dt.Columns.Add(dName + "_領域加權平均");
                     dt.Columns.Add(dName + "_領域權數");
@@ -2092,7 +2092,7 @@ ORDER BY
                     // 科目
                     int subj = 1;
                     Dictionary<string, int> dNameDict = new Dictionary<string, int>();
-                    foreach (string name in Global.DomainNameList())
+                    foreach (string name in Global.DomainNameList)
                         dNameDict.Add(name, 1);
 
                     foreach (DAO.ExamSubjectScore ess in studExamScoreDict[StudRec.ID]._ExamSubjectScoreDict.Values)
@@ -2102,7 +2102,7 @@ ORDER BY
                             ddname = "彈性課程";
 
                         // 當領域非固定領域，無法處理
-                        if (!Global.DomainNameList().Contains(ddname))
+                        if (!Global.DomainNameList.Contains(ddname))
                         {
                             string errMsg = ddname + "領域相關成績，無法處理。";
                             if (!_ErrorDomainNameList.Contains(errMsg))
@@ -2384,7 +2384,7 @@ ORDER BY
                     foreach (DAO.ExamDomainScore eds in studExamScoreDict[StudRec.ID]._ExamDomainScoreDict.Values)
                     {
                         // 當領域非固定領域，無法處理
-                        if (!Global.DomainNameList().Contains(eds.DomainName))
+                        if (!Global.DomainNameList.Contains(eds.DomainName))
                         {
                             string errMsg = eds.DomainName + "領域相關成績，無法處理。";
                             if (!_ErrorDomainNameList.Contains(errMsg))
@@ -3085,6 +3085,8 @@ ORDER BY
             btnSaveConfig.Enabled = false;
             btnSaveConfig.Enabled = false;
 
+            SetDomainList();
+
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.Close();
             // 執行報表
@@ -3447,8 +3449,64 @@ ORDER BY
         private void lnkViewMapColumns_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
             lnkViewMapColumns.Enabled = false;
+            int sc, ss;
+            if (int.TryParse(cboSchoolYear.Text, out sc))
+            {
+                _SelSchoolYear = sc;
+            }
+            else
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("學年度必填!");
+                return;
+            }
+
+            if (int.TryParse(cboSemester.Text, out ss))
+            {
+                _SelSemester = ss;
+            }
+            else
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("學期必填!");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(cboExam.Text))
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("請選擇試別!");
+                return;
+            }
+            else
+            {
+                bool isEr = true;
+                foreach (ExamRecord ex in _exams)
+                    if (ex.Name == cboExam.Text)
+                    {
+                        _SelExamID = ex.ID;
+                        _SelExamName = ex.Name;
+                        isEr = false;
+                        break;
+                    }
+
+                if (isEr)
+                {
+                    FISCA.Presentation.Controls.MsgBox.Show("試別錯誤，請重新選擇!");
+                    return;
+                }
+            }
+
+            SetDomainList();
+
             Global.ExportMappingFieldWord();
             lnkViewMapColumns.Enabled = true;
+        }
+
+        private void SetDomainList()
+        {
+            Global._SelSchoolYear = _SelSchoolYear;
+            Global._SelSemester = _SelSemester;
+            Global._SelStudentIDList = _StudentIDList;
+            Global._SelExamID = _SelExamID;
+            Global.SetDomainList();
         }
 
         private void chkSubjSelAll_CheckedChanged(object sender, EventArgs e)
