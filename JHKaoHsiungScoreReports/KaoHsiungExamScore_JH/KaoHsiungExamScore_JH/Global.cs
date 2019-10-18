@@ -390,13 +390,13 @@ namespace KaoHsiungExamScore_JH
                     string mName1 = domainName + "_領域加權平均";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD "+mName1 + " \\* MERGEFORMAT ", "«DS" + "»");
-                    mName1 = domainName + "領域平時加權平均";
+                    mName1 = domainName + "_領域平時加權平均";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DA" + "»");
-                    mName1 = domainName + "領域權數";
+                    mName1 = domainName + "_領域權數";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DC" + "»");
-                    mName1 = domainName + "領域努力程度";
+                    mName1 = domainName + "_領域努力程度";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DE" + "»");
                     builder.EndRow();
