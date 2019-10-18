@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cboConfigure = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.lnkDelConfig = new System.Windows.Forms.LinkLabel();
             this.lnkCopyConfig = new System.Windows.Forms.LinkLabel();
@@ -514,14 +514,14 @@
             this.dgAttendanceData.BackgroundColor = System.Drawing.Color.White;
             this.dgAttendanceData.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgAttendanceData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgAttendanceData.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgAttendanceData.DefaultCellStyle = dataGridViewCellStyle5;
             this.dgAttendanceData.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
             this.dgAttendanceData.Location = new System.Drawing.Point(19, 99);
             this.dgAttendanceData.MultiSelect = false;
@@ -812,7 +812,7 @@
             this.Controls.Add(this.labelX11);
             this.DoubleBuffered = true;
             this.Name = "PrintForm";
-            this.Text = "個人評量成績單(新)";
+            this.Text = "個人評量成績單(多樣版)";
             this.Load += new System.EventHandler(this.PrintForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tabControl1)).EndInit();
             this.tabControl1.ResumeLayout(false);

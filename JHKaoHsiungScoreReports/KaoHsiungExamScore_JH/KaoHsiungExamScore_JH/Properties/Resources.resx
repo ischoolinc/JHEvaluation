@@ -145,6 +145,9 @@
   <data name="高雄評量成績合併欄位總表" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\template\高雄評量成績合併欄位總表.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="高雄評量成績合併欄位總表_多樣版" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\template\高雄評量成績合併欄位總表-多樣版.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="高雄評量成績通知單樣板" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\template\高雄評量成績通知單樣板.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
