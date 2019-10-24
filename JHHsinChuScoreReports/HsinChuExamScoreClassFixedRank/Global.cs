@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using FISCA.Data;
+using System.IO;
+using Aspose.Words;
 
 namespace HsinChuExamScoreClassFixedRank
 {
@@ -17,10 +19,15 @@ namespace HsinChuExamScoreClassFixedRank
 
         public static string _UserConfTypeName = "使用者選擇設定檔";
 
-        public static int _SelSchoolYear;
-        public static int _SelSemester;
+        public static string _SelSchoolYear;
+        public static string _SelSemester;
         public static string _SelExamID = "";
         public static List<string> _SelStudentIDList = new List<string>();
+
+        /// <summary>
+        /// 進位四捨五入位數
+        /// </summary>
+        public static int parseNumebr = 2;
 
         /// <summary>
         /// 設定領域名稱
@@ -30,7 +37,7 @@ namespace HsinChuExamScoreClassFixedRank
             DomainNameList.Clear();
 
             // 從學生修課動態取得科目領域名稱
-            if (_SelStudentIDList.Count > 0 && _SelSchoolYear > 0 && _SelSemester > 0 && _SelExamID != "")
+            if (_SelStudentIDList.Count > 0 && _SelSchoolYear != "" && _SelSemester != "" && _SelExamID != "")
             {
                 QueryHelper qh = new QueryHelper();
                 string strSQL = "SELECT DISTINCT " +
@@ -84,7 +91,7 @@ namespace HsinChuExamScoreClassFixedRank
         {
             List<string> retVal = new List<string>();
             retVal.Add("領域成績單");
-            retVal.Add("科目成績單");         
+            retVal.Add("科目成績單");
             return retVal;
         }
 
@@ -95,5 +102,178 @@ namespace HsinChuExamScoreClassFixedRank
         /// <returns></returns>
         public static List<string> DomainNameList = new List<string>();
 
+
+        public static void ExportMappingFieldWord()
+        {
+            string inputReportName = "新竹班級評量成績單合併欄位總表";
+            string reportName = inputReportName;
+
+            string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            path = Path.Combine(path, reportName + ".doc");
+
+            if (File.Exists(path))
+            {
+                int i = 1;
+                while (true)
+                {
+                    string newPath = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + (i++) + Path.GetExtension(path);
+                    if (!File.Exists(newPath))
+                    {
+                        path = newPath;
+                        break;
+                    }
+                }
+            }
+
+            Document tempDoc = new Document(new MemoryStream(Properties.Resources.新竹班級評量成績單合併欄位總表));
+
+            try
+            {
+                #region 動態產生合併欄位
+                // 讀取總表檔案並動態加入合併欄位
+
+                DocumentBuilder builder = new DocumentBuilder(tempDoc);
+                builder.Write("=== 新竹評量成績單合併欄位總表 ===");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("學校名稱");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 學校名稱" + " \\* MERGEFORMAT ", "«學校名稱" + "»");
+                builder.EndRow();
+
+                builder.InsertCell();
+                builder.Write("學年度");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 學年度" + " \\* MERGEFORMAT ", "«學年度" + "»");
+                builder.EndRow();
+
+                builder.InsertCell();
+                builder.Write("學期");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 學期" + " \\* MERGEFORMAT ", "«學期" + "»");
+                builder.EndRow();
+
+                builder.InsertCell();
+                builder.Write("試別名稱");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 試別名稱" + " \\* MERGEFORMAT ", "«試別名稱" + "»");
+                builder.EndRow();
+
+                builder.InsertCell();
+                builder.Write("班級");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 班級" + " \\* MERGEFORMAT ", "«班級" + "»");
+                builder.EndRow();
+                builder.EndTable();
+                builder.Writeln();
+                builder.Writeln();
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分");
+                builder.InsertCell();
+                builder.Write("加權總分");
+                builder.InsertCell();
+                builder.Write("平均");
+                builder.InsertCell();
+                builder.Write("加權平均");
+                builder.InsertCell();
+                builder.Write("總分班排名");
+                builder.InsertCell();
+                builder.Write("加權總分班排名");
+                builder.InsertCell();
+                builder.Write("平均班排名");
+                builder.InsertCell();
+                builder.Write("加權平均班排名");
+                builder.InsertCell();
+                builder.Write("總分年排名");
+                builder.InsertCell();
+                builder.Write("加權總分年排名");
+                builder.InsertCell();
+                builder.Write("平均年排名");
+                builder.InsertCell();
+                builder.Write("加權平均年排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1;studCot <= 50;studCot ++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分" + studCot + " \\* MERGEFORMAT ", "S" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分" + studCot + " \\* MERGEFORMAT ", "SA" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均" + studCot + " \\* MERGEFORMAT ", "A" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均" + studCot + " \\* MERGEFORMAT ", "AA" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分班排名" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分班排名" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均班排名" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均班排名" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分年排名" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分年排名" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均年排名" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均年排名" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "»");
+
+                    builder.EndRow();
+
+
+                }
+
+                builder.EndTable();
+
+
+                #endregion
+
+                tempDoc.Save(path, SaveFormat.Doc);
+                System.Diagnostics.Process.Start(path);
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.SaveFileDialog sd = new System.Windows.Forms.SaveFileDialog();
+                sd.Title = "另存新檔";
+                sd.FileName = reportName + ".doc";
+                sd.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+                if (sd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    try
+                    {
+                        tempDoc.Save(sd.FileName, SaveFormat.Doc);
+                        //System.IO.FileStream stream = new FileStream(sd.FileName, FileMode.Create, FileAccess.Write);
+                        //stream.Write(Properties.Resources.新竹評量成績合併欄位總表, 0, Properties.Resources.新竹評量成績合併欄位總表.Length);
+                        //stream.Flush();
+                        //stream.Close();
+
+                    }
+                    catch
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show("指定路徑無法存取。", "建立檔案失敗", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+            }
+        }
     }
 }

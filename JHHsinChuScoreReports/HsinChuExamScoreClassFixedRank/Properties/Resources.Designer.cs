@@ -63,9 +63,39 @@ namespace HsinChuExamScoreClassFixedRank.Properties {
         /// <summary>
         ///   查詢類型 System.Byte[] 的當地語系化資源。
         /// </summary>
+        internal static byte[] 新竹班級評量成績單合併欄位總表 {
+            get {
+                object obj = ResourceManager.GetObject("新竹班級評量成績單合併欄位總表", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
         internal static byte[] 新竹班級評量成績單樣板 {
             get {
                 object obj = ResourceManager.GetObject("新竹班級評量成績單樣板", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
+        internal static byte[] 新竹科目班級評量成績單 {
+            get {
+                object obj = ResourceManager.GetObject("新竹科目班級評量成績單", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
+        internal static byte[] 新竹領域班級評量成績單 {
+            get {
+                object obj = ResourceManager.GetObject("新竹領域班級評量成績單", resourceCulture);
                 return ((byte[])(obj));
             }
         }

@@ -14,34 +14,34 @@ namespace HsinChuExamScoreClassFixedRank.DAO
     /// </summary>
     public class DataAccess
     {
-        
+
         /// <summary>
         /// 匯出合併欄位總表Word
         /// </summary>
         public static void ExportMappingFieldWord()
         {
-          
+
         }
 
 
         /// <summary>
-        /// 透過班級ID、學年度、學期 取得試別、領域、科目
+        /// 透過班級ID、學年度、學期 取得學生修課試別、領域、科目
         /// </summary>
         /// <param name="SchoolYear"></param>
         /// <param name="Semester"></param>
         /// <param name="ClassIDList"></param>
         /// <returns></returns>
-        public static Dictionary<string,Dictionary<string,List<string>>> GetExamDomainSubjectDictByClass(string SchoolYear,string Semester,List<string> ClassIDList)
+        public static Dictionary<string, Dictionary<string, List<string>>> GetExamDomainSubjectDictByClass(string SchoolYear, string Semester, List<string> ClassIDList)
         {
             Dictionary<string, Dictionary<string, List<string>>> value = new Dictionary<string, Dictionary<string, List<string>>>();
 
             if (ClassIDList.Count > 0)
             {
                 QueryHelper qh = new QueryHelper();
-                string query = "SELECT DISTINCT te_include.ref_exam_id AS exam_id,course.domain,course.subject FROM sc_attend INNER JOIN course ON sc_attend.ref_course_id = course.id INNER JOIN student ON sc_attend.ref_student_id = student.id  INNER JOIN te_include ON course.ref_exam_template_id = te_include.ref_exam_template_id WHERE student.status = 1 AND student.ref_class_id IN("+string.Join(",",ClassIDList.ToArray())+") AND course.school_year = "+SchoolYear+" AND course.semester = "+Semester+" ORDER BY exam_id,domain,subject";
+                string query = "SELECT DISTINCT te_include.ref_exam_id AS exam_id,course.domain,course.subject FROM sc_attend INNER JOIN course ON sc_attend.ref_course_id = course.id INNER JOIN student ON sc_attend.ref_student_id = student.id  INNER JOIN te_include ON course.ref_exam_template_id = te_include.ref_exam_template_id WHERE student.status = 1 AND student.ref_class_id IN(" + string.Join(",", ClassIDList.ToArray()) + ") AND course.school_year = " + SchoolYear + " AND course.semester = " + Semester + " ORDER BY exam_id,domain,subject";
 
                 DataTable dt = qh.Select(query);
-                foreach(DataRow dr in dt.Rows)
+                foreach (DataRow dr in dt.Rows)
                 {
                     string exam_id = dr["exam_id"].ToString();
                     // 領域空白為彈性課程
@@ -71,5 +71,296 @@ namespace HsinChuExamScoreClassFixedRank.DAO
 
             return value;
         }
+
+
+        /// <summary>
+        /// 取得評分樣板上定期，平時是100-定期
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, decimal> GetScorePercentageHS()
+        {
+            Dictionary<string, decimal> returnData = new Dictionary<string, decimal>();
+            FISCA.Data.QueryHelper qh1 = new FISCA.Data.QueryHelper();
+            string query1 = @"SELECT id,CAST(regexp_replace( xpath_string(exam_template.extension,'/Extension/ScorePercentage'), '^$', '0') as integer) AS ScorePercentage  FROM exam_template";
+            System.Data.DataTable dt1 = qh1.Select(query1);
+
+            foreach (System.Data.DataRow dr in dt1.Rows)
+            {
+                string id = dr["id"].ToString();
+                decimal sp = 50;
+                if (decimal.TryParse(dr["ScorePercentage"].ToString(), out sp))
+                    returnData.Add(id, sp);
+                else
+                    returnData.Add(id, 50);
+
+            }
+            return returnData;
+        }
+
+        public static List<ClassInfo> GetClassStudentsByClassID(List<string> ClassIDs)
+        {
+            List<ClassInfo> value = new List<ClassInfo>();
+            // SELECT class.id AS class_id,class.class_name,class.grade_year,student.seat_no,student.name AS student_name FROM student INNER  JOIN Class ON student.ref_class_id = class.id WHERE student.status = 1 AND class.id IN (10,5) ORDER BY class.grade_year,class.display_order,class.class_name,student.seat_no
+            Dictionary<string, ClassInfo> tmpDict = new Dictionary<string, ClassInfo>();
+            if (ClassIDs.Count > 0)
+            {
+
+                QueryHelper qh = new QueryHelper();
+                string query = "SELECT " +
+                    "class.id AS class_id" +
+                    ",class.class_name" +
+                    ",class.grade_year" +
+                    ",student.seat_no" +
+                    ",student.name AS student_name" +
+                    ",student.id AS student_id" +
+                    " FROM student" +
+                    " INNER  JOIN Class" +
+                    " ON student.ref_class_id = class.id" +
+                    " WHERE " +
+                    "student.status = 1 AND" +
+                    " class.id IN (" + string.Join(",", ClassIDs.ToArray()) + ") ORDER BY class.grade_year,class.display_order,class.class_name,student.seat_no";
+
+                DataTable dt = qh.Select(query);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string class_id = dr["class_id"].ToString();
+
+                    if (!tmpDict.ContainsKey(class_id))
+                    {
+                        ClassInfo ci = new ClassInfo();
+                        ci.ClassID = class_id;
+                        ci.ClassName = dr["class_name"].ToString();
+                        int gr = 0;
+                        int.TryParse(dr["grade_year"].ToString(), out gr);
+                        ci.GradeYear = gr;
+                        ci.Students = new List<StudentInfo>();
+                        tmpDict.Add(class_id, ci);
+                    }
+
+                    // 加入學生
+                    StudentInfo si = new StudentInfo();
+                    si.Name = dr["student_name"].ToString();
+                    si.SeatNo = dr["seat_no"].ToString();
+                    si.StudentID = dr["student_id"].ToString();
+                    si.ClassID = class_id;
+
+                    if (tmpDict.ContainsKey(class_id))
+                    {
+                        tmpDict[class_id].Students.Add(si);
+                    }
+                }
+            }
+
+            foreach (string cid in tmpDict.Keys)
+            {
+                value.Add(tmpDict[cid]);
+            }
+            return value;
+        }
+
+
+        /// <summary>
+        /// 載入學生成績
+        /// </summary>
+        /// <param name="ClassInfoList"></param>
+        /// <param name="SchoolYear"></param>
+        /// <param name="Semester"></param>
+        /// <param name="ExamID"></param>
+        /// <returns></returns>
+        public static List<ClassInfo> LoadClassStudentScore(List<ClassInfo> ClassInfoList, string SchoolYear, string Semester, string ExamID, Dictionary<string, decimal> ScorePercentageHS, List<string> ClassIDList)
+        {
+            // 學生領域科目成績
+            Dictionary<string, Dictionary<string, DomainInfo>> tmpDomainDict = new Dictionary<string, Dictionary<string, DomainInfo>>();
+            if (ClassIDList.Count > 0)
+            {
+                QueryHelper qh = new QueryHelper();
+                string query = "SELECT " +
+                    "student.id AS student_id" +
+                    ",course.domain" +
+                    ",course.subject" +
+                    ",course.credit" +
+                    ",sce_take.ref_exam_id AS exam_id" +
+                    ",course.ref_exam_template_id AS template_id" +
+                    ",array_to_string(xpath('/Extension/AssignmentScore/text()',xmlparse(content sce_take.extension)),'') AS assignment_score" +
+                    ",array_to_string(xpath('/Extension/Score/text()',xmlparse(content sce_take.extension)),'') AS f_score" +
+                    " FROM sc_attend INNER JOIN course" +
+                    " ON sc_attend.ref_course_id = course.id INNER JOIN student" +
+                    " ON sc_attend.ref_student_id = student.id INNER JOIN sce_take" +
+                    " ON sce_take.ref_sc_attend_id = sc_attend.id WHERE" +
+                    " sce_take.ref_exam_id = " + ExamID + " AND course.school_year = " + SchoolYear + " AND course.semester = " + Semester + " AND student.ref_class_id IN(" + string.Join(",", ClassIDList.ToArray()) + ") AND student.status = 1";
+
+                DataTable dt = qh.Select(query);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string student_id = dr["student_id"].ToString();
+                    if (!tmpDomainDict.ContainsKey(student_id))
+                        tmpDomainDict.Add(student_id, new Dictionary<string, DomainInfo>());
+
+                    string dName = "彈性課程";
+                    if (dr["domain"] != null && dr["domain"].ToString() != "")
+                        dName = dr["domain"].ToString();
+
+                    if (!tmpDomainDict[student_id].ContainsKey(dName))
+                    {
+                        DomainInfo di = new DomainInfo();
+                        di.Name = dName;
+                        di.SubjectInfoList = new List<SubjectInfo>();
+                        tmpDomainDict[student_id].Add(dName, di);
+                    }
+
+                    // 定期比例預設
+                    decimal sfp = 50 * 0.01M, sfa = 50 * 0.01M;
+
+
+                    string template_id = "";
+
+                    if (dr["template_id"] != null && dr["template_id"].ToString() != "")
+                        template_id = dr["template_id"].ToString();
+
+                    // 處理評量比例
+                    if (ScorePercentageHS.ContainsKey(template_id))
+                    {
+                        sfp = ScorePercentageHS[template_id] * 0.01M;
+                        sfa = (100 - ScorePercentageHS[template_id]) * 0.01M;
+                    }
+
+                    // 科目成績
+                    SubjectInfo si = new SubjectInfo();
+                    si.Name = dr["subject"].ToString();
+                    si.DomainName = dName;
+                    si.Credit = decimal.Parse(dr["credit"].ToString());
+                    si.ScoreAP = sfa;
+                    si.ScoreFP = sfp;
+
+                    if (dr["assignment_score"].ToString() != "")
+                    {
+                        decimal sa;
+                        if (decimal.TryParse(dr["assignment_score"].ToString(), out sa))
+                        {
+                            si.ScoreA = sa;
+                        }
+
+                    }
+                    else
+                    {
+                        si.ScoreA = null;
+                    }
+
+                    if (dr["f_score"].ToString() != "")
+                    {
+                        decimal sf;
+                        if (decimal.TryParse(dr["f_score"].ToString(), out sf))
+                        {
+                            si.ScoreF = sf;
+                        }
+
+                    }
+                    else
+                    {
+                        si.ScoreF = null;
+                    }
+
+                    // 計算科目評量總成績
+                    si.CalcScore();
+
+                    if (tmpDomainDict[student_id].ContainsKey(si.DomainName))
+                    {
+                        tmpDomainDict[student_id][si.DomainName].SubjectInfoList.Add(si);
+                    }
+
+                }
+            }
+
+            // 資料回填
+            foreach (ClassInfo ci in ClassInfoList)
+            {
+                foreach (StudentInfo si in ci.Students)
+                {
+                    if (tmpDomainDict.ContainsKey(si.StudentID))
+                    {
+                        // 先清空
+                        si.DomainInfoList.Clear();
+                        foreach (string doName in tmpDomainDict[si.StudentID].Keys)
+                        {
+                            // 計算領域成績
+                            tmpDomainDict[si.StudentID][doName].CalScore();
+
+                            // 回寫
+                            si.DomainInfoList.Add(tmpDomainDict[si.StudentID][doName]);
+                        }
+                    }
+                }
+            }
+
+            return ClassInfoList;
+        }
+
+
+        /// <summary>
+        /// 取得學生定期評量固定排名
+        /// </summary>
+        /// <param name="SchoolYear"></param>
+        /// <param name="Semester"></param>
+        /// <param name="ExamID"></param>
+        /// <param name="ClassIDList"></param>
+        /// <returns></returns>
+        public static DataTable GetStudentExamRankMatrix(string SchoolYear, string Semester, string ExamID, List<string> ClassIDList)
+        {
+            DataTable value = new DataTable();
+            QueryHelper qh = new QueryHelper();
+            string query = @"
+SELECT 
+	rank_matrix.id AS rank_matrix_id
+	, rank_matrix.school_year
+	, rank_matrix.semester
+	, rank_matrix.grade_year
+	, rank_matrix.item_type
+	, rank_matrix.ref_exam_id
+	, rank_matrix.item_name
+	, rank_matrix.rank_type
+	, rank_matrix.rank_name
+	, class.class_name
+	, student.seat_no
+	, student.student_number
+	, student.name
+	, rank_detail.ref_student_id
+	, rank_detail.rank
+	, rank_detail.pr
+	, rank_detail.percentile
+    , rank_matrix.avg_top_25
+    , rank_matrix.avg_top_50
+    , rank_matrix.avg
+    , rank_matrix.avg_bottom_50
+    , rank_matrix.avg_bottom_25
+    , rank_detail.score
+FROM 
+	rank_matrix
+	LEFT OUTER JOIN rank_detail
+		ON rank_detail.ref_matrix_id = rank_matrix.id
+	LEFT OUTER JOIN student
+		ON student.id = rank_detail.ref_student_id
+	LEFT OUTER JOIN class
+		ON class.id = student.ref_class_id
+WHERE
+	rank_matrix.is_alive = true
+	AND rank_matrix.school_year = '" + SchoolYear + @"'
+    AND rank_matrix.semester = '" + Semester + @"'
+	AND rank_matrix.item_type like '定期評量%'
+	AND rank_matrix.ref_exam_id = '" + ExamID + @"'
+    AND class.id IN (" + string.Join(",", ClassIDList.ToArray()) + ") " +
+    "ORDER BY rank_matrix.id" +
+    ", rank_detail.rank	" +
+    ", class.grade_year" +
+    ", class.display_order" +
+    ", class.class_name" +
+    ", student.seat_no" +
+    ", student.id";
+
+            value = qh.Select(query);
+
+            return value;
+        }
+
     }
 }

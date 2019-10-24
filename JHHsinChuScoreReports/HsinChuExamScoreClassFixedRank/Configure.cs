@@ -115,7 +115,7 @@ namespace HsinChuExamScoreClassFixedRank
         {
             this.ExamRecord = K12.Data.Exam.SelectByID(this.ExamRecordID);
             // 科目
-            this.PrintSubjectList = new List<string>(this.PrintSubjectListString.Split(new string[] { "^^^" }, StringSplitOptions.RemoveEmptyEntries));          
+         //   this.PrintSubjectList = new List<string>(this.PrintSubjectListString.Split(new string[] { "^^^" }, StringSplitOptions.RemoveEmptyEntries));          
 
             this.Template = new Aspose.Words.Document(new MemoryStream(Convert.FromBase64String(this.TemplateStream)));
         }

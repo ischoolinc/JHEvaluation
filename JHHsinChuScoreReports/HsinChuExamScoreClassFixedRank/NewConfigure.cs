@@ -33,7 +33,7 @@ namespace HsinChuExamScoreClassFixedRank
         {
             if (checkBoxX1.Checked)
             {
-                //Template = new Aspose.Words.Document(new MemoryStream(Properties.Resources.新竹_評量成績通知單樣板));
+                Template = new Aspose.Words.Document(new MemoryStream(Properties.Resources.新竹班級評量成績單樣板));
                 this.SubjectLimit = 25;
             }
         }
@@ -55,36 +55,7 @@ namespace HsinChuExamScoreClassFixedRank
                         while (fields.Contains("科目名稱" + (this.SubjectLimit + 1)))
                         {
                             this.SubjectLimit++;
-                        }
-
-                        // 缺曠區間統計
-
-                        this.AttendanceCountLimit = 0;
-                        while (fields.Contains("缺曠區間統計" + (this.AttendanceCountLimit + 1)))
-                        {
-                            this.AttendanceCountLimit++;
-                        }
-
-                        // 缺曠區間明細
-                        this.AttendanceDetailLimit = 0;
-                        while (fields.Contains("缺曠區間明細日期" + (this.AttendanceDetailLimit + 1)))
-                        {
-                            this.AttendanceDetailLimit++;
-                        }
-
-                        // 獎懲區間明細
-                        this.DisciplineDetailLimit = 0;
-                        while (fields.Contains("獎懲區間明細日期" + (this.DisciplineDetailLimit + 1)))
-                        {
-                            this.DisciplineDetailLimit++;
-                        }
-
-                        // 學習服務區間明細
-                        this.ServiceLearningDetailLimit = 0;
-                        while (fields.Contains("學習服務區間明細日期" + (this.ServiceLearningDetailLimit + 1)))
-                        {
-                            this.ServiceLearningDetailLimit++;
-                        }
+                        }                        
                     }
                     catch
                     {
@@ -114,7 +85,7 @@ namespace HsinChuExamScoreClassFixedRank
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             #region 儲存檔案
-            string inputReportName = "新竹_評量成績通知單樣板.doc";
+            string inputReportName = "新竹班級評量成績通知單樣板";
             string reportName = inputReportName;
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
@@ -139,7 +110,7 @@ namespace HsinChuExamScoreClassFixedRank
             try
             {
                 System.IO.FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
-                //stream.Write(Properties.Resources.新竹_評量成績通知單樣板, 0, Properties.Resources.新竹_評量成績通知單樣板.Length);
+                stream.Write(Properties.Resources.新竹班級評量成績單樣板, 0, Properties.Resources.新竹班級評量成績單樣板.Length);
                 stream.Flush();
                 stream.Close();
                 System.Diagnostics.Process.Start(path);

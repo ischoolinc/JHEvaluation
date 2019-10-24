@@ -16,6 +16,7 @@ using JHSchool.Evaluation.Calculation;
 using Aspose.Words.Reporting;
 using Aspose.Words.Tables;
 using FISCA.Data;
+using HsinChuExamScoreClassFixedRank.DAO;
 
 namespace HsinChuExamScoreClassFixedRank.Form
 {
@@ -30,11 +31,27 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
         List<ExamRecord> _exams = new List<ExamRecord>();
 
+        // 評分樣板比例
+        Dictionary<string, decimal> ScorePercentageHSDict = new Dictionary<string, decimal>();
+
+        List<ClassInfo> ClassInfoList = new List<ClassInfo>();
+
+        DataTable dtTable = new DataTable();
+
+        // 錯誤訊息
+        List<string> _ErrorList = new List<string>();
+
+        // 領域錯誤訊息
+        List<string> _ErrorDomainNameList = new List<string>();
+
         BackgroundWorker bgWorkerLoadTemplate;
         BackgroundWorker bgWorkerReport;
         string SelSchoolYear = "";
         string SelSemester = "";
         string SelExamID = "";
+        string SelExamName = "";
+        int parseNumber = 0;
+        List<string> _StudentIDList = new List<string>();
         // 紀錄樣板設定
         List<DAO.UDT_ScoreConfig> _UDTConfigList;
         Dictionary<string, Dictionary<string, List<string>>> CanSelectExamDomainSubjectDict = new Dictionary<string, Dictionary<string, List<string>>>();
@@ -53,29 +70,365 @@ namespace HsinChuExamScoreClassFixedRank.Form
             bgWorkerReport.WorkerReportsProgress = true;
             bgWorkerReport.RunWorkerCompleted += BgWorkerReport_RunWorkerCompleted;
 
-
-
         }
 
         private void BgWorkerReport_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            throw new NotImplementedException();
+            // 產生
+
+
         }
 
         private void BgWorkerReport_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (e.ProgressPercentage == 100)
+                FISCA.Presentation.MotherForm.SetStatusBarMessage("班級評量成績完成");
+            else
+                FISCA.Presentation.MotherForm.SetStatusBarMessage("班級評量成績產生中...", e.ProgressPercentage);
         }
 
         private void BgWorkerReport_DoWork(object sender, DoWorkEventArgs e)
         {
-            throw new NotImplementedException();
+            List<Document> docList = new List<Document>();
+
+            // 取得相關資料
+            bgWorkerReport.ReportProgress(1);
+
+            // 每次合併後放入，最後再合成一張
+            Document docTemplate = _Configure.Template;
+            if (docTemplate == null)
+                docTemplate = new Document(new MemoryStream(Properties.Resources.新竹科目班級評量成績單));
+
+            _ErrorList.Clear();
+            _ErrorDomainNameList.Clear();
+
+            Global.SetDomainList();
+
+            // 校名
+            string SchoolName = K12.Data.School.ChineseName;
+            // 校長
+            string ChancellorChineseName = JHSchool.Data.JHSchoolInfo.ChancellorChineseName;
+            // 教務主任
+            string EduDirectorName = JHSchool.Data.JHSchoolInfo.EduDirectorName;
+
+            // 取得評分樣板
+            ScorePercentageHSDict = DataAccess.GetScorePercentageHS();
+
+            // 取得班級學生
+            ClassInfoList = DataAccess.GetClassStudentsByClassID(_ClassIDList);
+
+            // 取得段考成績
+            ClassInfoList = DataAccess.LoadClassStudentScore(ClassInfoList, SelSchoolYear, SelSemester, SelExamID, ScorePercentageHSDict, _ClassIDList);
+
+            // 取得學生評量固定排名
+            DataTable dtStudentExamRankMatrix = DataAccess.GetStudentExamRankMatrix(SelSchoolYear, SelSemester, SelExamID, _ClassIDList);
+            // debug
+            dtStudentExamRankMatrix.TableName = "dtStudentExamRankMatrix";
+            dtStudentExamRankMatrix.WriteXml(Application.StartupPath + "\\tmp.xml");
+
+            Dictionary<string, Dictionary<string, int>> StudentExamRankMatrixDict = new Dictionary<string, Dictionary<string, int>>();
+            // 建立排名索引
+            if (dtStudentExamRankMatrix != null && dtStudentExamRankMatrix.Rows.Count > 0)
+            {
+
+                foreach (DataRow dr in dtStudentExamRankMatrix.Rows)
+                {
+                    string student_id = dr["ref_student_id"].ToString();
+                    // 定期評量/總計成績 加權總分 班排名
+                    string type = dr["item_type"].ToString() + dr["item_name"].ToString() + dr["rank_type"].ToString();
+                    if (!StudentExamRankMatrixDict.ContainsKey(student_id))
+                        StudentExamRankMatrixDict.Add(student_id, new Dictionary<string, int>());
+
+                    if (!StudentExamRankMatrixDict[student_id].ContainsKey(type))
+                    {
+                        int rank = 0;
+                        int.TryParse(dr["rank"].ToString(), out rank);
+                        StudentExamRankMatrixDict[student_id].Add(type, rank);
+                    }
+                }
+            }
+
+            // 計算學生總成績並將排名放入
+            foreach (ClassInfo ci in ClassInfoList)
+            {
+                foreach (StudentInfo si in ci.Students)
+                {
+                    // 計算成績
+                    si.CalScore();
+
+                    if (StudentExamRankMatrixDict.ContainsKey(si.StudentID))
+                    {
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分班排名"))
+                            si.ClassSumRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分班排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分班排名"))
+                            si.ClassSumRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分班排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均班排名"))
+                            si.ClassAvgRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均班排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均班排名"))
+                            si.ClassAvgRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均班排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分年排名"))
+                            si.YearSumRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分年排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分年排名"))
+                            si.YearSumRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分年排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均年排名"))
+                            si.YearAvgRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均年排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均年排名"))
+                            si.YearAvgRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均年排名"];
+                    }
+                }
+
+                // 計算各項目及格人數
+                ci.CalClassPassCount();
+                ci.CalClassAvgScore();
+            }
+
+            // 合併用 DataTable
+            // 產生合併欄位
+            
+            dtTable.Columns.Add("學校名稱");
+            dtTable.Columns.Add("學年度");
+            dtTable.Columns.Add("學期");
+            dtTable.Columns.Add("試別名稱");
+            dtTable.Columns.Add("班級");
+            // 讀取最大人數
+            int MaxStudentCount = 50;
+
+            foreach (ClassInfo ci in ClassInfoList)
+            {
+                if (ci.Students.Count > MaxStudentCount)
+                    MaxStudentCount = ci.Students.Count;
+            }
+
+            // 學生領域科目
+            for (int studCot = 1; studCot <= MaxStudentCount; studCot++)
+            {
+                dtTable.Columns.Add("姓名" + studCot);
+                dtTable.Columns.Add("座號" + studCot);
+                dtTable.Columns.Add("總分" + studCot);
+                dtTable.Columns.Add("加權總分" + studCot);
+                dtTable.Columns.Add("平均" + studCot);
+                dtTable.Columns.Add("加權平均" + studCot);
+                dtTable.Columns.Add("總分班排名" + studCot);
+                dtTable.Columns.Add("加權總分班排名" + studCot);
+                dtTable.Columns.Add("平均班排名" + studCot);
+                dtTable.Columns.Add("加權平均班排名" + studCot);
+                dtTable.Columns.Add("總分年排名" + studCot);
+                dtTable.Columns.Add("加權總分年排名" + studCot);
+                dtTable.Columns.Add("平均年排名" + studCot);
+                dtTable.Columns.Add("加權平均年排名" + studCot);
+
+                foreach (string dName in Global.DomainNameList)
+                {
+                    dtTable.Columns.Add(dName + "領域成績" + studCot);
+                    dtTable.Columns.Add(dName + "領域學分" + studCot);
+
+                    for (int i = 1; i <= 12; i++)
+                    {
+                        dtTable.Columns.Add(dName + "領域_科目名稱" + studCot + "_" + i);
+                        dtTable.Columns.Add(dName + "領域_科目成績" + studCot + "_" + i);
+                        dtTable.Columns.Add(dName + "領域_科目學分" + studCot + "_" + i);
+
+                    }
+                }
+            }
+
+            // 各領域科目 及格人數與平均
+            foreach (string dName in Global.DomainNameList)
+            {
+                dtTable.Columns.Add(dName + "領域平均");
+                dtTable.Columns.Add(dName + "領域及格人數");
+
+                for (int i = 1; i <= 12; i++)
+                {
+                    dtTable.Columns.Add(dName + "領域_科目平均" + i);
+                    dtTable.Columns.Add(dName + "領域_科目及格人數" + i);
+                }
+            }
+
+            bgWorkerReport.ReportProgress(30);
+
+            // 填入資料
+            foreach (ClassInfo ci in ClassInfoList)
+            {
+                DataRow row = dtTable.NewRow();
+                row["學校名稱"] = SchoolName;
+                row["學年度"] = SelSchoolYear;
+                row["學期"] = SelSemester;
+                row["試別名稱"] = SelExamName;
+                row["班級"] = ci.ClassName;
+
+                int studCot = 1;
+                foreach (StudentInfo si in ci.Students)
+                {
+                    row["姓名" + studCot] = si.Name;
+                    row["座號" + studCot] = si.SeatNo;
+                    if (si.SumScore.HasValue)
+                        row["總分" + studCot] = Math.Round(si.SumScore.Value, parseNumber, MidpointRounding.AwayFromZero);
+                    if (si.SumScoreA.HasValue)
+                        row["加權總分" + studCot] = Math.Round(si.SumScoreA.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.AvgScore.HasValue)
+                        row["平均" + studCot] = Math.Round(si.AvgScore.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.AvgScoreA.HasValue)
+                        row["加權平均" + studCot] = Math.Round(si.AvgScoreA.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.ClassSumRank.HasValue)
+                        row["總分班排名" + studCot] = si.ClassSumRank.Value;
+
+                    if (si.ClassSumRankA.HasValue)
+                        row["加權總分班排名" + studCot] = si.ClassSumRankA.Value;
+
+                    if (si.ClassAvgRank.HasValue)
+                        row["平均班排名" + studCot] = si.ClassAvgRank.Value;
+
+                    if (si.ClassAvgRankA.HasValue)
+                        row["加權平均班排名" + studCot] = si.ClassAvgRankA.Value;
+
+                    if (si.YearSumRank.HasValue)
+                        row["總分年排名" + studCot] = si.YearSumRank.Value;
+
+                    if (si.YearSumRankA.HasValue)
+                        row["加權總分年排名" + studCot] = si.YearSumRankA.Value;
+
+                    if (si.YearAvgRank.HasValue)
+                        row["平均年排名" + studCot] = si.YearAvgRank.Value;
+
+                    if (si.YearAvgRankA.HasValue)
+                        row["加權平均年排名" + studCot] = si.YearAvgRankA.Value;
+
+                    // 領域科目成績
+                    foreach (DomainInfo di in si.DomainInfoList)
+                    {
+                        string d1 = di.Name + "領域成績" + studCot;
+                        if (dtTable.Columns.Contains(d1))
+                        {
+                            if (di.Score.HasValue)
+                                row[d1] = Math.Round(di.Score.Value, parseNumber, MidpointRounding.AwayFromZero);
+                        }
+                        string d2 = di.Name + "領域學分" + studCot;
+                        if (dtTable.Columns.Contains(d2))
+                        {
+                            if (di.Credit.HasValue)
+                            {
+                                row[d2] = di.Credit.Value;
+                            }
+                        }
+
+                        int subjCot = 1;
+                        foreach (SubjectInfo subj in di.SubjectInfoList)
+                        {
+                            string s1Key = di.Name + "領域_科目名稱" + studCot + "_" + subjCot;
+                            string s2Key = di.Name + "領域_科目成績" + studCot + "_" + subjCot;
+                            string s3Key = di.Name + "領域_科目學分" + studCot + "_" + subjCot;
+
+                            if (dtTable.Columns.Contains(s1Key))
+                            {
+                                row[s1Key] = subj.Name;
+                            }
+
+                            if (dtTable.Columns.Contains(s2Key))
+                            {
+                                if (dtTable.Columns.Contains(s2Key))
+                                    if (subj.Score.HasValue)
+                                        row[s2Key] = subj.Score.Value;
+                            }
+                            if (dtTable.Columns.Contains(s3Key))
+                            {
+                                if (subj.Credit.HasValue)
+                                    row[s3Key] = subj.Credit.Value;
+                            }
+
+                            subjCot++;
+                        }
+
+                    }
+
+
+                    studCot += 1;
+                }
+
+
+                dtTable.Rows.Add(row);
+
+                // 處理固定欄位對應
+                Document doc1 = new Document();
+                doc1.Sections.Clear();
+                
+          
+                doc1.MailMerge.Execute(dtTable);
+                doc1.MailMerge.RemoveEmptyParagraphs = true;
+                doc1.MailMerge.DeleteFields();
+                docList.Add(doc1);
+
+            }
+
+            #region Word 合併列印
+            Document doc = new Document();
+
+            doc.Sections.Clear();
+            foreach (Document doc1 in docList)
+                doc.Sections.Add(doc.ImportNode(doc1.Sections[0], true));
+
+            string reportNameW = "新竹班級評量成績單";
+            
+            string pathW = Path.Combine(System.Windows.Forms.Application.StartupPath + "\\Reports", "");
+            if (!Directory.Exists(pathW))
+                Directory.CreateDirectory(pathW);
+            pathW = Path.Combine(pathW, reportNameW + ".doc");
+
+            if (File.Exists(pathW))
+            {
+                int i = 1;
+                while (true)
+                {
+                    string newPathW = Path.GetDirectoryName(pathW) + "\\" + Path.GetFileNameWithoutExtension(pathW) + (i++) + Path.GetExtension(pathW);
+                    if (!File.Exists(newPathW))
+                    {
+                        pathW = newPathW;
+                        break;
+                    }
+                }
+            }
+
+            try
+            {
+              
+                MemoryStream memoryStream = new MemoryStream();
+                doc.Save(memoryStream, SaveFormat.Docx);
+                e.Result = new object[] { memoryStream, reportNameW };
+
+            }
+            catch (Exception exow)
+            {
+                throw exow;
+            }
+            doc = null;
+            docList.Clear();
+
+            GC.Collect();
+            #endregion
+
+
+            //dtTable.TableName = "dtTable";
+            //dtTable.WriteXml(Application.StartupPath + "\\dtT.xml");
+
+
+
+
+            //           dtTable.WriteXmlSchema(Application.StartupPath + "\\dtTsc.xml");
+            bgWorkerReport.ReportProgress(100);
         }
 
         private void BgWorkerLoadTemplate_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-
-
             if (_Configure == null)
                 _Configure = new Configure();
 
@@ -146,15 +499,13 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     // 設預設樣板
                     switch (name)
                     {
-                        //case "領域成績單":
-                        //    cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_領域成績單));
-                        //    break;
+                        case "領域成績單":
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.新竹領域班級評量成績單));
+                            break;
 
-                        //case "科目成績單":
-                        //    cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_科目成績單));
-                        //    break;
-
-             
+                        case "科目成績單":
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.新竹科目班級評量成績單));
+                            break;
                     }
 
                     if (cn.Template == null)
@@ -190,6 +541,82 @@ namespace HsinChuExamScoreClassFixedRank.Form
         private void btnSaveConfig_Click(object sender, EventArgs e)
         {
             //儲存設定
+            if (_Configure == null) return;
+            _Configure.SchoolYear = cboSchoolYear.Text;
+            _Configure.Semester = cboSemester.Text;
+            _Configure.SelSetConfigName = cboConfigure.Text;
+
+            foreach (ExamRecord exm in _exams)
+            {
+                if (exm.Name == cboExam.Text)
+                {
+                    _Configure.ExamRecord = exm;
+                    break;
+                }
+            }
+
+            // 科目
+            foreach (ListViewItem item in lvSubject.Items)
+            {
+                if (item.Checked)
+                {
+                    if (!_Configure.PrintSubjectList.Contains(item.Text))
+                        _Configure.PrintSubjectList.Add(item.Text);
+                }
+                else
+                {
+                    if (_Configure.PrintSubjectList.Contains(item.Text))
+                        _Configure.PrintSubjectList.Remove(item.Text);
+                }
+            }
+
+            foreach (ListViewItem item in lvSubject.Items)
+            {
+                if (item.Checked)
+                {
+                    if (!_Configure.PrintSubjectList.Contains(item.Text))
+                        _Configure.PrintSubjectList.Add(item.Text);
+                }
+                else
+                {
+                    if (_Configure.PrintSubjectList.Contains(item.Text))
+                        _Configure.PrintSubjectList.Remove(item.Text);
+                }
+            }
+
+
+            _Configure.Encode();
+            _Configure.Save();
+
+            #region 樣板設定檔記錄用
+
+            // 記錄使用這選的專案            
+            List<DAO.UDT_ScoreConfig> uList = new List<DAO.UDT_ScoreConfig>();
+            foreach (DAO.UDT_ScoreConfig conf in _UDTConfigList)
+                if (conf.Type == Global._UserConfTypeName)
+                {
+                    conf.Name = cboConfigure.Text;
+                    uList.Add(conf);
+                    break;
+                }
+
+            if (uList.Count > 0)
+            {
+                DAO.UDTTransfer.UpdateConfigData(uList);
+            }
+            else
+            {
+                // 新增
+                List<DAO.UDT_ScoreConfig> iList = new List<DAO.UDT_ScoreConfig>();
+                DAO.UDT_ScoreConfig conf = new DAO.UDT_ScoreConfig();
+                conf.Name = cboConfigure.Text;
+                conf.ProjectName = Global._ProjectName;
+                conf.Type = Global._UserConfTypeName;
+                conf.UDTTableName = Global._UDTTableName;
+                iList.Add(conf);
+                DAO.UDTTransfer.InsertConfigData(iList);
+            }
+            #endregion
         }
 
 
@@ -247,7 +674,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 conf.BeginDate = _Configure.BeginDate;
                 conf.EndDate = _Configure.EndDate;
                 conf.ScoreEditDate = _Configure.ScoreEditDate;
-              
+
                 conf.Encode();
                 conf.Save();
                 _ConfigureList.Add(conf);
@@ -351,28 +778,98 @@ namespace HsinChuExamScoreClassFixedRank.Form
         private void lnkViewMapColumns_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // 產生合併欄位總表
+            lnkViewMapColumns.Enabled = false;
+
+            if (string.IsNullOrEmpty(cboExam.Text))
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("請選擇試別!");
+                lnkViewMapColumns.Enabled = true;
+                return;
+            }
+            else
+            {
+                bool isEr = true;
+                foreach (ExamRecord ex in _exams)
+                    if (ex.Name == cboExam.Text)
+                    {
+                        SelExamID = ex.ID;
+
+                        isEr = false;
+                        break;
+                    }
+
+                if (isEr)
+                {
+                    FISCA.Presentation.Controls.MsgBox.Show("試別錯誤，請重新選擇!");
+                    return;
+                }
+            }
+
+            SetDomainList();
+
+            Global.ExportMappingFieldWord();
+            lnkViewMapColumns.Enabled = true;
+        }
+
+        private void SetDomainList()
+        {
+            Global._SelSchoolYear = SelSchoolYear;
+            Global._SelSemester = SelSemester; ;
+            Global._SelStudentIDList = _StudentIDList;
+            Global._SelExamID = SelExamID;
+            Global.SetDomainList();
         }
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-            // 列印報表
-        }
-
-        private void cboExam_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SelExamID = "";
-            foreach(ExamRecord er in _exams)
+            // 取得試別編號
+            foreach (ExamRecord er in _exams)
             {
                 if (er.Name == cboExam.Text)
                 {
                     SelExamID = er.ID;
+                    SelExamName = er.Name;
                 }
             }
-            
+
+            SelSchoolYear = cboSchoolYear.Text;
+            SelSemester = cboSemester.Text;
+
+            // 四捨五入進位
+            if (!int.TryParse(cboParseNumber.Text, out parseNumber))
+            {
+                MsgBox.Show("平均計算至小數點後需要輸入整數!");
+                return;
+            }
+
+            Global.parseNumebr = parseNumber;
+            Global._SelExamID = SelExamID;
+            Global._SelSchoolYear = SelSchoolYear;
+            Global._SelSemester = SelSemester;
+
+
+            // 列印報表
+            bgWorkerReport.RunWorkerAsync();
+
+
+        }
+
+        private void cboExam_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            foreach (ExamRecord er in _exams)
+            {
+                if (er.Name == cboExam.Text)
+                {
+                    SelExamID = er.ID;
+                    SelExamName = er.Name;
+                }
+            }
+
             LoadDomainSubject();
         }
 
-        private void LoadDomainSubject ()
+        private void LoadDomainSubject()
         {
             // 清空畫面上領域科目
             lvDomain.Items.Clear();
@@ -381,16 +878,16 @@ namespace HsinChuExamScoreClassFixedRank.Form
             List<string> sNameList = new List<string>();
             if (CanSelectExamDomainSubjectDict.ContainsKey(SelExamID))
             {
-                foreach(string dName in CanSelectExamDomainSubjectDict[SelExamID].Keys)
+                foreach (string dName in CanSelectExamDomainSubjectDict[SelExamID].Keys)
                 {
                     dNameList.Add(dName);
 
-                    foreach(string sName in CanSelectExamDomainSubjectDict[SelExamID][dName])
+                    foreach (string sName in CanSelectExamDomainSubjectDict[SelExamID][dName])
                     {
                         if (!sNameList.Contains(sName))
                             sNameList.Add(sName);
                     }
-                }                
+                }
             }
 
             foreach (string dName in dNameList)
@@ -489,7 +986,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         {
                             lvi.Checked = true;
                         }
-                    }                                       
+                    }
                 }
                 else
                 {
@@ -497,7 +994,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     cboSchoolYear.SelectedIndex = -1;
                     cboSemester.SelectedIndex = -1;
                     cboExam.SelectedIndex = -1;
-               
+
                 }
             }
         }
