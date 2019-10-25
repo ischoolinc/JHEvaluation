@@ -117,5 +117,80 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                 }
             }
         }
+
+        /// <summary>
+        /// 計算各項學分數
+        /// </summary>
+        public void CalCredits()
+        {
+            CreditsDict.Clear();
+            // 計算領域
+            foreach (StudentInfo stud in Students)
+            {
+                foreach(DomainInfo di in stud.DomainInfoList)
+                {
+                    string keyDi = di.Name + "領域學分";
+                    if (di.Credit.HasValue)
+                    {
+                        if (!CreditsDict.ContainsKey(keyDi))
+                        {
+                            CreditsDict.Add(keyDi, new List<decimal>());
+                        }
+
+                        if (!CreditsDict[keyDi].Contains(di.Credit.Value))
+                            CreditsDict[keyDi].Add(di.Credit.Value);
+                    }
+
+                    // 科目
+                    foreach(SubjectInfo si in di.SubjectInfoList)
+                    {
+                        if (si.Credit.HasValue)
+                        {
+                            string keySi = di.Name + "領域_" + si.Name + "科目學分";
+                            if (!CreditsDict.ContainsKey(keySi))
+                                CreditsDict.Add(keySi, new List<decimal>());
+
+                            if (!CreditsDict[keySi].Contains(si.Credit.Value))
+                                CreditsDict[keySi].Add(si.Credit.Value);
+                        }                      
+                    }
+                }
+            }
+
+        }
+        /// <summary>
+        /// 各項學分數
+        /// </summary>
+        public Dictionary<string, List<decimal>> CreditsDict = new Dictionary<string, List<decimal>>();
+
+        /// <summary>
+        /// 整理班上領域與科目
+        /// </summary>
+        public void CalClassDomainSubjectName()
+        {
+            ClassDomainSubjectNameDict.Clear();
+            foreach (StudentInfo stud in Students)
+            {
+                foreach (DomainInfo di in stud.DomainInfoList)
+                {
+                    if (!ClassDomainSubjectNameDict.ContainsKey(di.Name))
+                        ClassDomainSubjectNameDict.Add(di.Name, new List<string>());                 
+
+                    // 科目
+                    foreach (SubjectInfo si in di.SubjectInfoList)
+                    {
+                        if (!ClassDomainSubjectNameDict[di.Name].Contains(si.Name))
+                            ClassDomainSubjectNameDict[di.Name].Add(si.Name);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 收集班上有領域與科目資料
+        /// </summary>
+        public Dictionary<string, List<string>> ClassDomainSubjectNameDict = new Dictionary<string, List<string>>();
+
+
     }
 }

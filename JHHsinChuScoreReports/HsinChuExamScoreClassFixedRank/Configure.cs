@@ -110,6 +110,9 @@ namespace HsinChuExamScoreClassFixedRank
             this.PrintSubjectListString = "";
             if (this.PrintSubjectList == null)
                 this.PrintSubjectList = new List<string>();
+            this.PrintDomainListString = "";
+            if (this.PrintDomainList == null)
+                this.PrintDomainList = new List<string>();
 
             foreach (var item in this.PrintSubjectList)
             {
