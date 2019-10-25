@@ -34,9 +34,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
         // 評分樣板比例
         Dictionary<string, decimal> ScorePercentageHSDict = new Dictionary<string, decimal>();
 
-        List<ClassInfo> ClassInfoList = new List<ClassInfo>();
-
-        DataTable dtTable = new DataTable();
+        List<ClassInfo> ClassInfoList = new List<ClassInfo>();       
 
         // 錯誤訊息
         List<string> _ErrorList = new List<string>();
@@ -75,7 +73,86 @@ namespace HsinChuExamScoreClassFixedRank.Form
         private void BgWorkerReport_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // 產生
+            try
+            {
+                object[] objArray = (object[])e.Result;             
 
+                btnSaveConfig.Enabled = true;
+                btnPrint.Enabled = true;
+
+                if (_ErrorList.Count > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    //sb.AppendLine("樣板內科目合併欄位不足，請新增：");
+                    //sb.AppendLine(string.Join(",", _ErrorList.ToArray()));
+                    sb.AppendLine("1.樣板內科目合併欄位不足，請檢查樣板。");
+                    sb.AppendLine("2.如果使用只有領域樣板，請忽略此訊息。");
+                    if (_ErrorDomainNameList.Count > 0)
+                        sb.AppendLine(string.Join(",", _ErrorDomainNameList.ToArray()));
+
+                    FISCA.Presentation.Controls.MsgBox.Show(sb.ToString(), "樣板內科目合併欄位不足", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                }
+
+                #region 儲存檔案
+               
+                string reportName = "" + SelSchoolYear + "學年度第" + SelSemester + "學期" + SelExamName + "新竹班級評量成績單";
+
+                string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                path = Path.Combine(path, reportName + ".doc");
+
+                if (File.Exists(path))
+                {
+                    int i = 1;
+                    while (true)
+                    {
+                        string newPath = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + (i++) + Path.GetExtension(path);
+                        if (!File.Exists(newPath))
+                        {
+                            path = newPath;
+                            break;
+                        }
+                    }
+                }
+
+                Document document = new Document();
+                try
+                {
+                    document = (Document)objArray[0];
+                    document.Save(path, SaveFormat.Doc);
+                    System.Diagnostics.Process.Start(path);
+                }
+                catch
+                {
+                    System.Windows.Forms.SaveFileDialog sd = new System.Windows.Forms.SaveFileDialog();
+                    sd.Title = "另存新檔";
+                    sd.FileName = reportName + ".doc";
+                    sd.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+                    if (sd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        try
+                        {
+                            document.Save(sd.FileName, Aspose.Words.SaveFormat.Doc);
+
+                        }
+                        catch
+                        {
+                            FISCA.Presentation.Controls.MsgBox.Show("指定路徑無法存取。", "建立檔案失敗", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+                }
+                #endregion
+
+
+
+                FISCA.Presentation.MotherForm.SetStatusBarMessage("評量成績報表產生完成");
+            }
+            catch (Exception ex)
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("產生過程發生錯誤," + ex.Message);
+            }
 
         }
 
@@ -89,7 +166,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
         private void BgWorkerReport_DoWork(object sender, DoWorkEventArgs e)
         {
-            List<Document> docList = new List<Document>();
+           
+            DataTable dtTable = new DataTable();
 
             // 取得相關資料
             bgWorkerReport.ReportProgress(1);
@@ -356,64 +434,24 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 }
 
 
-                dtTable.Rows.Add(row);
-
-                // 處理固定欄位對應
-                Document doc1 = new Document();
-                doc1.Sections.Clear();
-                
-          
-                doc1.MailMerge.Execute(dtTable);
-                doc1.MailMerge.RemoveEmptyParagraphs = true;
-                doc1.MailMerge.DeleteFields();
-                docList.Add(doc1);
-
+                dtTable.Rows.Add(row);           
             }
+
+            docTemplate.MailMerge.Execute(dtTable);
+            docTemplate.MailMerge.RemoveEmptyParagraphs = true;
+            docTemplate.MailMerge.DeleteFields();      
 
             #region Word 合併列印
-            Document doc = new Document();
-
-            doc.Sections.Clear();
-            foreach (Document doc1 in docList)
-                doc.Sections.Add(doc.ImportNode(doc1.Sections[0], true));
-
-            string reportNameW = "新竹班級評量成績單";
-            
-            string pathW = Path.Combine(System.Windows.Forms.Application.StartupPath + "\\Reports", "");
-            if (!Directory.Exists(pathW))
-                Directory.CreateDirectory(pathW);
-            pathW = Path.Combine(pathW, reportNameW + ".doc");
-
-            if (File.Exists(pathW))
-            {
-                int i = 1;
-                while (true)
-                {
-                    string newPathW = Path.GetDirectoryName(pathW) + "\\" + Path.GetFileNameWithoutExtension(pathW) + (i++) + Path.GetExtension(pathW);
-                    if (!File.Exists(newPathW))
-                    {
-                        pathW = newPathW;
-                        break;
-                    }
-                }
-            }
 
             try
             {
-              
-                MemoryStream memoryStream = new MemoryStream();
-                doc.Save(memoryStream, SaveFormat.Docx);
-                e.Result = new object[] { memoryStream, reportNameW };
-
+                e.Result = new object[] { docTemplate};
             }
             catch (Exception exow)
             {
                 throw exow;
             }
-            doc = null;
-            docList.Clear();
-
-            GC.Collect();
+         
             #endregion
 
 
@@ -438,9 +476,21 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 cboConfigure.Items.Add(item);
             }
             cboConfigure.Items.Add(new Configure() { Name = "新增" });
+
+
+
             cboExam.Items.Clear();
             foreach (ExamRecord exName in _exams)
                 cboExam.Items.Add(exName.Name);
+
+            if (_ConfigureList.Count > 0)
+            {
+                cboConfigure.SelectedIndex = 0;
+            }
+            else
+            {
+                cboConfigure.SelectedIndex = -1;
+            }
 
             string userSelectConfigName = "";
             // 檢查畫面上是否有使用者選的
@@ -454,7 +504,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             if (!string.IsNullOrEmpty(_Configure.SelSetConfigName))
                 cboConfigure.Text = userSelectConfigName;
 
-
+            btnSaveConfig.Enabled = btnPrint.Enabled = true;
 
         }
 
@@ -478,10 +528,11 @@ namespace HsinChuExamScoreClassFixedRank.Form
             // 檢查預設樣板是否存在
             _UDTConfigList = DAO.UDTTransfer.GetDefaultConfigNameListByTableName(Global._UDTTableName);
 
+            bgWorkerLoadTemplate.ReportProgress(30);
+
             // 沒有設定檔，建立預設設定檔
             if (_UDTConfigList.Count < 2)
-            {
-                bgWorkerLoadTemplate.ReportProgress(30);
+            {             
 
                 foreach (string name in Global.DefaultConfigNameList())
                 {
@@ -515,6 +566,9 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 }
                 if (_UDTConfigList.Count > 0)
                     DAO.UDTTransfer.InsertConfigData(_UDTConfigList);
+            } else
+            {
+
             }
 
 
@@ -546,6 +600,15 @@ namespace HsinChuExamScoreClassFixedRank.Form
             _Configure.Semester = cboSemester.Text;
             _Configure.SelSetConfigName = cboConfigure.Text;
 
+            // 四捨五入進位
+            if (!int.TryParse(cboParseNumber.Text, out parseNumber))
+            {
+                MsgBox.Show("平均計算至小數點後需要輸入整數!");
+                return;
+            }
+
+            _Configure.ParseNumber = parseNumber;
+
             foreach (ExamRecord exm in _exams)
             {
                 if (exm.Name == cboExam.Text)
@@ -570,17 +633,18 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 }
             }
 
-            foreach (ListViewItem item in lvSubject.Items)
+            // 領域
+            foreach (ListViewItem item in lvDomain.Items)
             {
                 if (item.Checked)
                 {
-                    if (!_Configure.PrintSubjectList.Contains(item.Text))
-                        _Configure.PrintSubjectList.Add(item.Text);
+                    if (!_Configure.PrintDomainList.Contains(item.Text))
+                        _Configure.PrintDomainList.Add(item.Text);
                 }
                 else
                 {
-                    if (_Configure.PrintSubjectList.Contains(item.Text))
-                        _Configure.PrintSubjectList.Remove(item.Text);
+                    if (_Configure.PrintDomainList.Contains(item.Text))
+                        _Configure.PrintDomainList.Remove(item.Text);
                 }
             }
 
@@ -911,6 +975,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
         private void cboConfigure_SelectedIndexChanged(object sender, EventArgs e)
         {
+          
             if (cboConfigure.SelectedIndex == cboConfigure.Items.Count - 1)
             {
                 //新增
@@ -918,7 +983,6 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 NewConfigure dialog = new NewConfigure();
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-
                     _Configure = new Configure();
                     _Configure.Name = dialog.ConfigName;
                     _Configure.Template = dialog.Template;
@@ -941,6 +1005,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         }
 
                     }
+                    _Configure.ParseNumber = parseNumber;
                     _ConfigureList.Add(_Configure);
                     cboConfigure.Items.Insert(cboConfigure.SelectedIndex, _Configure);
                     cboConfigure.SelectedIndex = cboConfigure.SelectedIndex - 1;
@@ -964,6 +1029,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         cboSchoolYear.Items.Add(_Configure.SchoolYear);
                     cboSchoolYear.Text = _Configure.SchoolYear;
                     cboSemester.Text = _Configure.Semester;
+                    cboExam.Text = "";
                     if (_Configure.ExamRecord != null)
                     {
                         int idx = 0;
@@ -979,6 +1045,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                     }
 
+                    Global.parseNumebr = parseNumber = _Configure.ParseNumber;
+
                     // 解析科目
                     foreach (ListViewItem lvi in lvSubject.Items)
                     {
@@ -987,6 +1055,17 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             lvi.Checked = true;
                         }
                     }
+
+                    // 解析領域
+                    // 解析科目
+                    foreach (ListViewItem lvi in lvDomain.Items)
+                    {
+                        if (_Configure.PrintDomainList.Contains(lvi.Text))
+                        {
+                            lvi.Checked = true;
+                        }
+                    }
+
                 }
                 else
                 {

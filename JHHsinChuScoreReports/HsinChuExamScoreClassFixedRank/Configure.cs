@@ -8,7 +8,7 @@ using System.IO;
 namespace HsinChuExamScoreClassFixedRank
 {
     [FISCA.UDT.TableName(Global._UDTTableName)]
-    public class Configure: ActiveRecord
+    public class Configure : ActiveRecord
     {
         public Configure()
         {
@@ -57,6 +57,15 @@ namespace HsinChuExamScoreClassFixedRank
         private string PrintSubjectListString { get; set; }
         public List<string> PrintSubjectList { get; set; }
 
+
+        /// <summary>
+        /// 列印領域
+        /// </summary>
+        [FISCA.UDT.Field]
+        private string PrintDomainListString { get; set; }
+        public List<string> PrintDomainList { get; set; }
+
+
         /// <summary>
         /// 開始日期
         /// </summary>
@@ -87,6 +96,9 @@ namespace HsinChuExamScoreClassFixedRank
         [FISCA.UDT.Field]
         public string NotRankedTagNameFilter { get; set; }
 
+        [FISCA.UDT.Field]
+        public int ParseNumber { get; set; }
+
 
         /// <summary>
         /// 在儲存前，把資料填入儲存欄位中
@@ -104,6 +116,11 @@ namespace HsinChuExamScoreClassFixedRank
                 this.PrintSubjectListString += (this.PrintSubjectListString == "" ? "" : "^^^") + item;
             }
 
+            foreach (var item in this.PrintDomainList)
+            {
+                this.PrintDomainListString += (this.PrintDomainListString == "" ? "" : "^^^") + item;
+            }
+
             System.IO.MemoryStream stream = new System.IO.MemoryStream();
             this.Template.Save(stream, Aspose.Words.SaveFormat.Doc);
             this.TemplateStream = Convert.ToBase64String(stream.ToArray());
@@ -114,8 +131,18 @@ namespace HsinChuExamScoreClassFixedRank
         public void Decode()
         {
             this.ExamRecord = K12.Data.Exam.SelectByID(this.ExamRecordID);
+
             // 科目
-         //   this.PrintSubjectList = new List<string>(this.PrintSubjectListString.Split(new string[] { "^^^" }, StringSplitOptions.RemoveEmptyEntries));          
+            if (!string.IsNullOrEmpty(this.PrintSubjectListString))
+                this.PrintSubjectList = new List<string>(this.PrintSubjectListString.Split(new string[] { "^^^" }, StringSplitOptions.RemoveEmptyEntries));
+            else
+                this.PrintSubjectList = new List<string>();
+
+            // 領域
+            if (!string.IsNullOrEmpty(this.PrintDomainListString))
+                this.PrintDomainList = new List<string>(this.PrintDomainListString.Split(new string[] { "^^^" }, StringSplitOptions.RemoveEmptyEntries));
+            else
+                this.PrintDomainList = new List<string>();
 
             this.Template = new Aspose.Words.Document(new MemoryStream(Convert.FromBase64String(this.TemplateStream)));
         }

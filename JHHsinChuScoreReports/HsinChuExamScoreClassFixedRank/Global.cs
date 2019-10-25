@@ -11,7 +11,7 @@ namespace HsinChuExamScoreClassFixedRank
 {
     public class Global
     {
-        public const string _UDTTableName = "ischool.HsinChuExamScoreClassFixedRan.configure";
+        public const string _UDTTableName = "ischool.HsinChuExamScoreClassFixedRank.configure";
 
         public static string _ProjectName = "國中新竹班級評量成績單";
 
@@ -169,8 +169,12 @@ namespace HsinChuExamScoreClassFixedRank
                 builder.InsertField("MERGEFIELD 班級" + " \\* MERGEFORMAT ", "«班級" + "»");
                 builder.EndRow();
                 builder.EndTable();
+
                 builder.Writeln();
                 builder.Writeln();
+
+
+                builder.Writeln("分數與排名");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
@@ -205,7 +209,7 @@ namespace HsinChuExamScoreClassFixedRank
                 builder.EndRow();
 
 
-                for (int studCot = 1;studCot <= 50;studCot ++)
+                for (int studCot = 1; studCot <= 50; studCot++)
                 {
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "»");
@@ -237,11 +241,79 @@ namespace HsinChuExamScoreClassFixedRank
                     builder.InsertField("MERGEFIELD 加權平均年排名" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "»");
 
                     builder.EndRow();
+                }
+                builder.EndTable();
 
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("領域成績與學分");
 
+                foreach (string domainName in DomainNameList)
+                {
+                    builder.StartTable();
+                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                    builder.Writeln("");
+                    builder.Writeln("");
+                    builder.Write("==" + domainName + "領域 ==");
+                    builder.InsertCell();
+                    builder.Write("領域成績");
+                    builder.InsertCell();
+                    builder.Write("領域學分");
+                    builder.EndRow();
+                    for (int studCot = 1; studCot <= 50; studCot++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + domainName + "領域成績" + studCot + " \\* MERGEFORMAT ", "DS" + studCot + "»");
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + domainName + "領域學分" + studCot + " \\* MERGEFORMAT ", "DC" + studCot + "»");
+                        builder.EndRow();
+                    }
+
+                    builder.EndTable();
                 }
 
-                builder.EndTable();
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("領域科目成績與學分");
+                foreach (string domainName in DomainNameList)
+                {
+                    builder.StartTable();
+                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                    builder.Writeln("");
+                    builder.Writeln("");
+                    builder.Write("==" + domainName + "領域科目名稱、成績、學分 ==");
+
+                    for (int cot = 1; cot <= 12; cot++)
+                    {
+                        builder.InsertCell();
+                        builder.Write("科目" + cot);
+                        builder.InsertCell();
+                        builder.Write("成績" + cot);
+                        builder.InsertCell();
+                        builder.Write("學分" + cot);
+                    }
+                    builder.EndRow();
+                    for (int studCot = 1; studCot <= 50; studCot++)
+                    {
+                        // 產生12科目可以使用
+                        for (int cot = 1; cot <= 12; cot++)
+                        {
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + domainName + "領域_科目名稱" + studCot + "_" + cot + " \\* MERGEFORMAT ", "SN" + studCot + "»");
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + domainName + "領域_科目成績" + studCot + "_" + cot + " \\* MERGEFORMAT ", "SS" + studCot + "»");
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + domainName + "領域_科目學分" + studCot + "_" + cot + " \\* MERGEFORMAT ", "SC" + studCot + "»");
+                        }
+                        builder.EndRow();
+
+                    }
+
+                    builder.EndTable();
+                }
+
 
 
                 #endregion
