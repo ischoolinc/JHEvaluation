@@ -112,6 +112,7 @@
             // 
             this.cboExam.DisplayMember = "Text";
             this.cboExam.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboExam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboExam.FormattingEnabled = true;
             this.cboExam.ItemHeight = 19;
             this.cboExam.Location = new System.Drawing.Point(316, 60);

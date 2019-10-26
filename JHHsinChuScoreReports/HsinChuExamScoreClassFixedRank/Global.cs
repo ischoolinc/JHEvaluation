@@ -158,32 +158,40 @@ namespace HsinChuExamScoreClassFixedRank
                 builder.InsertCell();
                 builder.Write("學校名稱");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 學校名稱" + " \\* MERGEFORMAT ", "«學校名稱" + "");
+                builder.InsertField("MERGEFIELD 學校名稱" + " \\* MERGEFORMAT ", "學校名稱" + "");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("學年度");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 學年度" + " \\* MERGEFORMAT ", "«學年度" + "");
+                builder.InsertField("MERGEFIELD 學年度" + " \\* MERGEFORMAT ", "學年度" + "");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("學期");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 學期" + " \\* MERGEFORMAT ", "«學期" + "");
+                builder.InsertField("MERGEFIELD 學期" + " \\* MERGEFORMAT ", "學期" + "");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("試別名稱");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 試別名稱" + " \\* MERGEFORMAT ", "«試別名稱" + "");
+                builder.InsertField("MERGEFIELD 試別名稱" + " \\* MERGEFORMAT ", "試別名稱" + "");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("班級");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 班級" + " \\* MERGEFORMAT ", "«班級" + "");
+                builder.InsertField("MERGEFIELD 班級" + " \\* MERGEFORMAT ", "班級" + "");
                 builder.EndRow();
+
+                builder.InsertCell();
+                builder.Write("班導師");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 班導師" + " \\* MERGEFORMAT ", "班導師" + "");
+                builder.EndRow();
+                
+
                 builder.EndTable();
 
                 builder.Writeln();
@@ -208,6 +216,18 @@ namespace HsinChuExamScoreClassFixedRank
                 builder.Writeln();
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                foreach (string domainName in Global.DomainNameList)
+                {
+
+                    builder.Writeln(domainName + "領域科目名稱");
+                    for (int subj = 1; subj <= 12; subj++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + domainName + "領域_科目" + subj + "名稱" + " \\* MERGEFORMAT ", "SN" + "");
+                    }
+                    builder.EndRow();
+                }
+                builder.Writeln();
                 foreach (string domainName in Global.DomainNameList)
                 {
 
@@ -360,6 +380,70 @@ namespace HsinChuExamScoreClassFixedRank
 
                     builder.EndTable();
                 }
+
+                builder.Writeln("班級領域平均");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                foreach (string domainName in Global.DomainNameList)
+                {
+                    builder.InsertCell();
+                    builder.Write(domainName);
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + domainName + "班級領域平均" + " \\* MERGEFORMAT ", "CDC" + "");
+                    builder.EndRow();
+                }
+
+                builder.EndTable();
+
+                builder.Writeln();
+                builder.Writeln();
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                foreach (string domainName in Global.DomainNameList)
+                {
+
+                    builder.Writeln(domainName + "班級領域科目平均");
+                    for (int subj = 1; subj <= 12; subj++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + domainName + "班級領域_科目平均" + subj + " \\* MERGEFORMAT ", "CSC" + "");
+                    }
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln("班級領域及格人數");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                foreach (string domainName in Global.DomainNameList)
+                {
+                    builder.InsertCell();
+                    builder.Write(domainName);
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + domainName + "班級領域及格人數" + " \\* MERGEFORMAT ", "CDC" + "");
+                    builder.EndRow();
+                }
+
+                builder.EndTable();
+
+                builder.Writeln();
+                builder.Writeln();
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                foreach (string domainName in Global.DomainNameList)
+                {
+
+                    builder.Writeln(domainName + "班級領域科目及格人數");
+                    for (int subj = 1; subj <= 12; subj++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + domainName + "班級領域_科目及格人數" + subj + " \\* MERGEFORMAT ", "CSC" + "");
+                    }
+                    builder.EndRow();
+                }
+                builder.EndTable();
 
 
 

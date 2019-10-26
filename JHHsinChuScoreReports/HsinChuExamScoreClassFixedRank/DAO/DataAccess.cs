@@ -362,5 +362,52 @@ WHERE
             return value;
         }
 
+
+        public static Dictionary<string, string> GetClassTeacherNameDictByClassID(List<string> ClassIDList)
+        {
+            Dictionary<string, string> value = new Dictionary<string, string>();
+            if (ClassIDList.Count > 0)
+            {
+                QueryHelper qh = new QueryHelper();
+                string query = "SELECT " +
+                    "class.id AS class_id" +
+                    ",teacher.teacher_name" +
+                    ",teacher.nickname " +
+                    "FROM " +
+                    "class INNER JOIN teacher " +
+                    "ON class.ref_teacher_id = teacher.id " +
+                    "WHERE teacher.status = 1 AND class.id IN(" + string.Join(",", ClassIDList.ToArray()) + ")";
+
+                DataTable dt = qh.Select(query);
+
+                if (dt != null)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string class_id = dr["class_id"].ToString();
+                        string teacher_name = "", nickname = "";
+                        if (dr["teacher_name"] != null)
+                            teacher_name = dr["teacher_name"].ToString();
+
+                        if (dr["nickname"] != null)
+                        {
+                            nickname = dr["nickname"].ToString();
+                        }
+
+                        if (!value.ContainsKey(class_id))
+                        {
+                            if (!string.IsNullOrWhiteSpace(nickname))
+                            {
+                                teacher_name = teacher_name + "(" + nickname + ")";
+                            }
+                            value.Add(class_id, teacher_name);
+                        }
+                    }
+                }
+
+            }
+            return value;
+        }
+
     }
 }

@@ -47,7 +47,7 @@ namespace HsinChuExamScoreClassFixedRank
         /// 列印試別
         /// </summary>
         [FISCA.UDT.Field]
-        private string ExamRecordID { get; set; }
+        public string ExamRecordID { get; set; }
         public K12.Data.ExamRecord ExamRecord { get; set; }
 
         /// <summary>
