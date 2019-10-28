@@ -43,7 +43,7 @@ namespace HsinChuExamScoreClassFixedRank
             {
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.Title = "上傳樣板";
-                dialog.Filter = "Excel檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+                dialog.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     try
@@ -120,7 +120,7 @@ namespace HsinChuExamScoreClassFixedRank
                 System.Windows.Forms.SaveFileDialog sd = new System.Windows.Forms.SaveFileDialog();
                 sd.Title = "另存新檔";
                 sd.FileName = reportName + ".doc";
-                sd.Filter = "Excel檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+                sd.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
                 if (sd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     try

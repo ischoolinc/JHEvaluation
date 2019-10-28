@@ -1189,6 +1189,11 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     }
 
                     Global.parseNumebr = parseNumber = _Configure.ParseNumber;
+                    if (_Configure.PrintSubjectList == null)
+                        _Configure.PrintSubjectList = new List<string>();
+
+                    if (_Configure.PrintDomainList == null)
+                        _Configure.PrintDomainList = new List<string>();
 
                     // 解析科目
                     foreach (ListViewItem lvi in lvSubject.Items)
