@@ -113,7 +113,10 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                 string k1 = itemName + "總分";
                 if (ClassAvgScoreDict.ContainsKey(k1))
                 {
-                    ClassAvgScoreDict[itemName + "平均"] = Math.Round(ClassAvgScoreDict[k1] / ClassAvgScoreDict[itemName + "個數"], Global.parseNumebr, MidpointRounding.AwayFromZero);
+                    if (ClassAvgScoreDict[itemName + "個數"] > 0)
+                    {
+                        ClassAvgScoreDict[itemName + "平均"] = Math.Round(ClassAvgScoreDict[k1] / ClassAvgScoreDict[itemName + "個數"], Global.parseNumebr, MidpointRounding.AwayFromZero);
+                    }
                 }
             }
         }
@@ -127,7 +130,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
             // 計算領域
             foreach (StudentInfo stud in Students)
             {
-                foreach(DomainInfo di in stud.DomainInfoList)
+                foreach (DomainInfo di in stud.DomainInfoList)
                 {
                     string keyDi = di.Name + "領域學分";
                     if (di.Credit.HasValue)
@@ -142,7 +145,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                     }
 
                     // 科目
-                    foreach(SubjectInfo si in di.SubjectInfoList)
+                    foreach (SubjectInfo si in di.SubjectInfoList)
                     {
                         if (si.Credit.HasValue)
                         {
@@ -152,7 +155,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
 
                             if (!CreditsDict[keySi].Contains(si.Credit.Value))
                                 CreditsDict[keySi].Add(si.Credit.Value);
-                        }                      
+                        }
                     }
                 }
             }
@@ -174,7 +177,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                 foreach (DomainInfo di in stud.DomainInfoList)
                 {
                     if (!ClassDomainSubjectNameDict.ContainsKey(di.Name))
-                        ClassDomainSubjectNameDict.Add(di.Name, new List<string>());                 
+                        ClassDomainSubjectNameDict.Add(di.Name, new List<string>());
 
                     // 科目
                     foreach (SubjectInfo si in di.SubjectInfoList)

@@ -43,6 +43,16 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                 DataTable dt = qh.Select(query);
                 foreach (DataRow dr in dt.Rows)
                 {
+                    string SubjectName = "";
+                    // 科目名稱空白略過
+                    if (dr["subject"] == null)
+                        continue;
+
+                    SubjectName = dr["subject"].ToString();
+
+                    if (string.IsNullOrWhiteSpace(SubjectName))
+                        continue;
+
                     string exam_id = dr["exam_id"].ToString();
                     // 領域空白為彈性課程
                     string domain = "彈性課程";
@@ -51,7 +61,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                         domain = dr["domain"].ToString();
                     }
 
-                    string subject = dr["subject"].ToString();
+                    string subject = SubjectName;// dr["subject"].ToString();
 
                     // 試別
                     if (!value.ContainsKey(exam_id))
@@ -193,6 +203,17 @@ namespace HsinChuExamScoreClassFixedRank.DAO
 
                 foreach (DataRow dr in dt.Rows)
                 {
+                    string SubjectName = "";
+                    // 科目名稱空白不處理
+                    if (dr["subject"] == null)
+                    {
+                        continue;
+                    }
+                    SubjectName = dr["subject"].ToString();
+
+                    if (string.IsNullOrWhiteSpace(SubjectName))
+                        continue;
+
                     string student_id = dr["student_id"].ToString();
                     if (!tmpDomainDict.ContainsKey(student_id))
                         tmpDomainDict.Add(student_id, new Dictionary<string, DomainInfo>());
@@ -227,9 +248,23 @@ namespace HsinChuExamScoreClassFixedRank.DAO
 
                     // 科目成績
                     SubjectInfo si = new SubjectInfo();
-                    si.Name = dr["subject"].ToString();
+                    si.Name = SubjectName;//dr["subject"].ToString();
                     si.DomainName = dName;
-                    si.Credit = decimal.Parse(dr["credit"].ToString());
+
+                    if (dr["credit"] != null)
+                    {
+                        decimal cr;
+                        if (decimal.TryParse(dr["credit"].ToString(), out cr))
+                        {
+                            si.Credit = cr;
+                        }
+                        else
+                            si.Credit = null;
+                    }
+                    else
+                        si.Credit = null;
+
+
                     si.ScoreAP = sfa;
                     si.ScoreFP = sfp;
 

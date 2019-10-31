@@ -560,8 +560,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
             #endregion
 
 
-            dtTable.TableName = "dtTable";
-            dtTable.WriteXml(Application.StartupPath + "\\dtT.xml");
+            //dtTable.TableName = "dtTable";
+            //dtTable.WriteXml(Application.StartupPath + "\\dtT.xml");
 
 
 
@@ -837,6 +837,9 @@ namespace HsinChuExamScoreClassFixedRank.Form
             // 2019/10/22 與佳樺討論，學年度學期使用系統預設，先鎖定不讓使用者更動。
             cboSchoolYear.Text = K12.Data.School.DefaultSchoolYear;
             cboSemester.Text = K12.Data.School.DefaultSemester;
+            for (int i = 0; i <= 3; i++)
+                cboParseNumber.Items.Add(i);
+
             cboSchoolYear.Enabled = false;
             cboSemester.Enabled = false;
             this.MaximumSize = this.MinimumSize = this.Size;
@@ -1015,6 +1018,9 @@ namespace HsinChuExamScoreClassFixedRank.Form
             //儲存設定檔
             SaveConfig();
 
+            Global.SelOnlyDomainList.Clear();
+            Global.SelOnlySubjectList.Clear();
+
             // 取得畫面上勾選領域科目
             SelDomainSubjectDict.Clear();
             // 領域
@@ -1022,7 +1028,11 @@ namespace HsinChuExamScoreClassFixedRank.Form
             {
                 string key = lvi.Name;
                 if (!SelDomainSubjectDict.ContainsKey(key))
+                {
                     SelDomainSubjectDict.Add(key, new List<string>());
+                    if (!Global.SelOnlyDomainList.Contains(key))
+                        Global.SelOnlyDomainList.Add(key);
+                }
             }
 
             foreach (ListViewItem lvi in lvSubject.CheckedItems)
@@ -1031,6 +1041,12 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                 // 檢查自己領域是否有加入
                 string keyD = lvi.Tag.ToString();
+
+                // 只有勾科目沒有領域，只算科目
+                if (!Global.SelOnlyDomainList.Contains(keyD))
+                {
+                    Global.SelOnlySubjectList.Add(lvi.Text);
+                }
 
                 if (!SelDomainSubjectDict.ContainsKey(keyD))
                     SelDomainSubjectDict.Add(keyD, new List<string>());

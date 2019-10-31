@@ -27,6 +27,17 @@ namespace HsinChuExamScoreClassFixedRank
         public static Dictionary<string, List<string>> DomainSubjectDict = new Dictionary<string, List<string>>();
 
         /// <summary>
+        /// 有勾選領域
+        /// </summary>
+        public static List<string> SelOnlyDomainList = new List<string>();
+
+        /// <summary>
+        /// 只有勾選科目
+        /// </summary>
+        public static List<string> SelOnlySubjectList = new List<string>();
+
+
+        /// <summary>
         /// 進位四捨五入位數
         /// </summary>
         public static int parseNumebr = 2;

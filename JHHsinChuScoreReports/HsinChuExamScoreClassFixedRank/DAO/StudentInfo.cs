@@ -16,6 +16,9 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         // 領域與科目
         public List<DomainInfo> DomainInfoList = new List<DomainInfo>();
 
+     
+
+
         /// <summary>
         /// 總分
         /// </summary>
@@ -90,23 +93,66 @@ namespace HsinChuExamScoreClassFixedRank.DAO
             SumScore = SumScoreA = AvgScore = AvgScoreA = 0;
 
             decimal cot = 0; decimal credit = 0;
+
+
+            // 計算全部
+            //foreach (DomainInfo domain in DomainInfoList)
+            //{
+            //    if (domain.Score.HasValue && domain.Credit.HasValue)
+            //    {
+            //        SumScore += domain.Score.Value;
+            //        SumScoreA += domain.Score.Value * domain.Credit.Value;
+
+            //        cot += 1;
+            //        credit += domain.Credit.Value;
+            //    }
+            //}
+            //if (cot > 0)
+            //    AvgScore = SumScore / cot;
+
+            //if (credit > 0)
+            //    AvgScoreA = SumScoreA / credit;
+
+            // 只有領域，依領域為主
             foreach (DomainInfo domain in DomainInfoList)
             {
-                if (domain.Score.HasValue && domain.Credit.HasValue)
+                if (Global.SelOnlyDomainList.Contains(domain.Name))
                 {
-                    SumScore += domain.Score.Value;
-                    SumScoreA += domain.Score.Value * domain.Credit.Value;
+                    if (domain.Score.HasValue && domain.Credit.HasValue)
+                    {
+                        SumScore += domain.Score.Value;
+                        SumScoreA += domain.Score.Value * domain.Credit.Value;
 
-                    cot += 1;
-                    credit += domain.Credit.Value;
+                        cot += 1;
+                        credit += domain.Credit.Value;
+                    }
                 }
             }
-            if (cot > 0)
+
+            // 只有科目來計算
+            foreach (DomainInfo domain in DomainInfoList)
+            {
+                foreach(SubjectInfo subj in domain.SubjectInfoList)
+                {
+                    if (Global.SelOnlySubjectList.Contains(subj.Name))
+                    {
+                        if (subj.Score.HasValue && subj.Credit.HasValue)
+                        {
+                            SumScore += subj.Score.Value;
+                            SumScoreA += subj.Score.Value * subj.Credit.Value;
+
+                            cot += 1;
+                            credit += subj.Credit.Value;
+                        }
+                    }
+                }
+            }
+
+                if (cot > 0)
                 AvgScore = SumScore / cot;
 
             if (credit > 0)
                 AvgScoreA = SumScoreA / credit;
-
-        }       
+        }
     }
 }
