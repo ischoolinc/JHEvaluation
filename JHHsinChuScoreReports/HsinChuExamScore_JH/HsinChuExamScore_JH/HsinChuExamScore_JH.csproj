@@ -133,6 +133,8 @@
     <Compile Include="DAO\DomainRangeCount.cs" />
     <Compile Include="DAO\ExamDomainScore.cs" />
     <Compile Include="DAO\ExamSubjectScore.cs" />
+    <Compile Include="DAO\RankDataInfo.cs" />
+    <Compile Include="DAO\ScoreMappingConfig.cs" />
     <Compile Include="DAO\StudExamScore.cs" />
     <Compile Include="DAO\SubjectDomainName.cs" />
     <Compile Include="DAO\SubjectRangeCount.cs" />

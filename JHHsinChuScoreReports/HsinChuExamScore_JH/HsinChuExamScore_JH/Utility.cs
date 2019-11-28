@@ -6,6 +6,7 @@ using System.Data;
 using FISCA.Data;
 using K12.Data;
 using System.IO;
+using HsinChuExamScore_JH.DAO;
 
 namespace HsinChuExamScore_JH
 {
@@ -303,12 +304,141 @@ namespace HsinChuExamScore_JH
             return returnData;
         }
 
+
+        public static Dictionary<string, Dictionary<string, RankDataInfo>> GetStudentExamRankDict(int SchoolYear, int Semester, string ExamID, List<string> StudentIDList)
+        {
+            Dictionary<string, Dictionary<string, RankDataInfo>> value = new Dictionary<string, Dictionary<string, RankDataInfo>>();
+
+            //抓取排名資料
+            string sql = @"
+SELECT 
+	rank_matrix.id AS rank_matrix_id
+	, rank_matrix.school_year
+	, rank_matrix.semester
+	, rank_matrix.grade_year
+	, rank_matrix.item_type
+	, rank_matrix.ref_exam_id
+	, rank_matrix.item_name
+	, rank_matrix.rank_type
+	, rank_matrix.rank_name
+	, class.class_name
+	, student.seat_no
+	, student.student_number
+	, student.name
+	, rank_detail.ref_student_id
+	,rank_matrix.matrix_count
+    ,rank_matrix.level_gte100
+    ,rank_matrix.level_90
+    ,rank_matrix.level_80
+    ,rank_matrix.level_70
+    ,rank_matrix.level_60
+    ,rank_matrix.level_50
+    ,rank_matrix.level_40
+    ,rank_matrix.level_30
+    ,rank_matrix.level_20
+    ,rank_matrix.level_10
+    ,rank_matrix.level_lt10
+    ,rank_matrix.avg_top_25
+    ,rank_matrix.avg_top_50
+    ,rank_matrix.avg
+    ,rank_matrix.avg_bottom_50
+    ,rank_matrix.avg_bottom_25
+    ,rank_detail.score
+    ,rank_detail.rank
+    ,rank_detail.pr
+    ,rank_detail.percentile
+FROM 
+	rank_matrix
+	LEFT OUTER JOIN rank_detail
+		ON rank_detail.ref_matrix_id = rank_matrix.id
+	LEFT OUTER JOIN student
+		ON student.id = rank_detail.ref_student_id
+	LEFT OUTER JOIN class
+		ON class.id = student.ref_class_id
+WHERE
+	rank_matrix.is_alive = true
+	AND rank_matrix.school_year = " + SchoolYear + "" +
+ "  AND rank_matrix.semester = " + Semester + "" +
+ "	AND rank_matrix.item_type like '定期評量%' AND rank_matrix.ref_exam_id = " + ExamID + "" +
+ "  AND ref_student_id IN (" + string.Join(",", StudentIDList.ToArray()) + ")" +
+ "  ORDER BY rank_matrix.id" +
+ ", rank_detail.rank" +
+ ", class.grade_year" +
+ ", class.display_order" +
+ ", class.class_name" +
+ ", student.seat_no;";
+
+            try
+            {
+                if (StudentIDList.Count > 0 && ExamID != "")
+                {
+                    QueryHelper qh = new QueryHelper();
+                    DataTable datatable = qh.Select(sql);
+
+                    foreach (DataRow dr in datatable.Rows)
+                    {
+                        string student_id = dr["ref_student_id"].ToString();
+                        // 格式:定期評量/總計成績 加權總分 班排名
+                        string type = dr["item_type"].ToString() + dr["item_name"].ToString() + dr["rank_type"].ToString();
+                        if (!value.ContainsKey(student_id))
+                            value.Add(student_id, new Dictionary<string, RankDataInfo>());
+
+                        if (!value[student_id].ContainsKey(type))
+                        {
+                            int matrix_count, level_gte100, level_90, level_80, level_70, level_60, level_50, level_40, level_30, level_20, level_10, level_lt10, rank, pr, percentile;
+                            decimal avg_top_25, avg_top_50, avg, avg_bottom_50, avg_bottom_25;
+
+                            RankDataInfo rdf = new RankDataInfo();
+
+                            if (int.TryParse(dr["matrix_count"].ToString(), out matrix_count)) rdf.matrix_count = matrix_count;
+                            if (int.TryParse(dr["level_gte100"].ToString(), out level_gte100)) rdf.level_gte100 = level_gte100;
+                            if (int.TryParse(dr["level_90"].ToString(), out level_90)) rdf.level_90 = level_90;
+                            if (int.TryParse(dr["level_80"].ToString(), out level_80)) rdf.level_80 = level_80;
+                            if (int.TryParse(dr["level_70"].ToString(), out level_70)) rdf.level_70 = level_70;
+                            if (int.TryParse(dr["level_60"].ToString(), out level_60)) rdf.level_60 = level_60;
+                            if (int.TryParse(dr["level_50"].ToString(), out level_50)) rdf.level_50 = level_50;
+                            if (int.TryParse(dr["level_40"].ToString(), out level_40)) rdf.level_40 = level_40;
+                            if (int.TryParse(dr["level_30"].ToString(), out level_30)) rdf.level_30 = level_30;
+                            if (int.TryParse(dr["level_20"].ToString(), out level_20)) rdf.level_20 = level_20;
+                            if (int.TryParse(dr["level_10"].ToString(), out level_10)) rdf.level_10 = level_10;
+                            if (int.TryParse(dr["level_lt10"].ToString(), out level_lt10)) rdf.level_lt10 = level_lt10;
+
+                            // 和佳樺討論，五標 小數下第2位四捨五入
+                            if (decimal.TryParse(dr["avg_top_25"].ToString(), out avg_top_25))
+                                rdf.avg_top_25 = Math.Round(avg_top_25, 2, MidpointRounding.AwayFromZero);
+                            if (decimal.TryParse(dr["avg_top_50"].ToString(), out avg_top_50))
+                                rdf.avg_top_50 = Math.Round(avg_top_50, MidpointRounding.AwayFromZero);
+                            if (decimal.TryParse(dr["avg"].ToString(), out avg))
+                                rdf.avg = Math.Round(avg, MidpointRounding.AwayFromZero);
+                            if (decimal.TryParse(dr["avg_bottom_50"].ToString(), out avg_bottom_50))
+                                rdf.avg_bottom_50 = Math.Round(avg_bottom_50, MidpointRounding.AwayFromZero);
+                            if (decimal.TryParse(dr["avg_bottom_25"].ToString(), out avg_bottom_25))
+                                rdf.avg_bottom_25 = Math.Round(avg_bottom_25, MidpointRounding.AwayFromZero);
+
+                            if (int.TryParse(dr["rank"].ToString(), out rank)) rdf.rank = rank;
+                            if (int.TryParse(dr["pr"].ToString(), out pr)) rdf.pr = pr;
+                            if (int.TryParse(dr["percentile"].ToString(), out percentile)) rdf.percentile = percentile;
+                                                        
+                            value[student_id].Add(type, rdf);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("讀取學生排名發生錯誤,", ex);
+            }
+
+            return value;
+        }
+
+
         // 建立word 大量功能變數
         public static void CreateFieldTemplate()
         {
             Aspose.Words.Document doc = new Aspose.Words.Document();
             Aspose.Words.DocumentBuilder builder = new Aspose.Words.DocumentBuilder(doc);
-            
+
             builder.Write("變數");
             builder.Writeln();
 
@@ -470,13 +600,13 @@ namespace HsinChuExamScore_JH
                 builder.InsertField("MERGEFIELD " + key + "_領域年排名母體底標" + " \\* MERGEFORMAT ", "«DY25B»");
                 builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域班排名母體頂標" + " \\* MERGEFORMAT ", "«DC25T»");
-                builder.InsertCell();                           
+                builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域班排名母體前標" + " \\* MERGEFORMAT ", "«DC50T»");
-                builder.InsertCell();                           
+                builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域班排名母體平均" + " \\* MERGEFORMAT ", "«DCA»");
-                builder.InsertCell();                           
+                builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域班排名母體後標" + " \\* MERGEFORMAT ", "«DC50B»");
-                builder.InsertCell();                           
+                builder.InsertCell();
                 builder.InsertField("MERGEFIELD " + key + "_領域班排名母體底標" + " \\* MERGEFORMAT ", "«DC25B»");
                 builder.EndRow();
 
@@ -567,7 +697,7 @@ namespace HsinChuExamScore_JH
                     "彈性課程"
                 })
             {
-                builder.Write("領域:" +key);
+                builder.Write("領域:" + key);
 
                 builder.StartTable();
                 builder.InsertCell();

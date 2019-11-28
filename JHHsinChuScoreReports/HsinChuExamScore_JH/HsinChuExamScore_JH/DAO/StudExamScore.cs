@@ -189,6 +189,142 @@ namespace HsinChuExamScore_JH.DAO
         }
 
         /// <summary>
+        /// 評量領域定期加權平均
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetDomainScoreF(bool all)
+        {
+            decimal? score = null;
+            decimal ss = 0;
+            decimal cc = 0;
+            if (all)
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 使用有成績計算加權
+                    if (sc.ScoreF.HasValue && sc.Credit1.HasValue)
+                    {
+                        ss += sc.ScoreF.Value * sc.Credit1.Value;
+                        cc += sc.Credit1.Value;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    // 使用有成績計算加權
+                    if (sc.ScoreF.HasValue && sc.Credit1.HasValue)
+                    {
+                        ss += sc.ScoreF.Value * sc.Credit1.Value;
+                        cc += sc.Credit1.Value;
+                    }
+                }
+            }
+
+            if (cc > 0)
+                score = _Calculator.ParseDomainScore(ss / cc);
+
+            return score;
+        }
+
+
+
+        /// <summary>
+        /// 評量領域總成績平均
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetDomainScore_A(bool all)
+        {
+            decimal? score = null;
+            decimal ss = 0;
+            decimal cc = 0;
+            if (all)
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 使用有成績計算加權
+                    if (sc.ScoreT.HasValue)
+                    {
+                        ss += sc.ScoreT.Value;
+                        cc +=1;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    // 使用有成績計算加權
+                    if (sc.ScoreT.HasValue)
+                    {
+                        ss += sc.ScoreT.Value;
+                        cc +=1;
+                    }
+                }
+            }
+
+            if (cc > 0)
+                score = _Calculator.ParseDomainScore(ss / cc);
+
+            return score;
+        }
+
+        /// <summary>
+        /// 評量領域定期平均
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetDomainScore_F(bool all)
+        {
+            decimal? score = null;
+            decimal ss = 0;
+            decimal cc = 0;
+            if (all)
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 使用有成績計算加權
+                    if (sc.ScoreF.HasValue)
+                    {
+                        ss += sc.ScoreF.Value;
+                        cc += 1;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    // 使用有成績計算加權
+                    if (sc.ScoreF.HasValue)
+                    {
+                        ss += sc.ScoreF.Value;
+                        cc += 1;
+                    }
+                }
+            }
+
+            if (cc > 0)
+                score = _Calculator.ParseDomainScore(ss / cc);
+
+            return score;
+        }
+
+
+
+        /// <summary>
         /// 評量科目定期評量加權平均
         /// </summary>
         /// <returns></returns>
@@ -356,6 +492,129 @@ namespace HsinChuExamScore_JH.DAO
 
             return score;
         }
+
+        /// <summary>
+        /// 評量領域定期總成績加權總分
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetDomainScoreSF(bool all)
+        {
+            decimal? score = null;
+            decimal ss = 0;
+            if (all)
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 使用有成績計算加權
+                    if (sc.ScoreF.HasValue && sc.Credit1.HasValue)
+                    {
+                        ss += sc.ScoreF.Value * sc.Credit1.Value;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    // 使用有成績計算加權
+                    if (sc.ScoreF.HasValue && sc.Credit1.HasValue)
+                    {
+                        ss += sc.ScoreF.Value * sc.Credit1.Value;
+                    }
+                }
+            }
+
+            score = ss;
+
+            return score;
+        }
+
+
+        /// <summary>
+        /// 評量領域總成績加權總分
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetDomainScore_S(bool all)
+        {
+            decimal? score = null;
+            decimal ss = 0;
+            if (all)
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 使用有成績計算加權
+                    if (sc.ScoreT.HasValue)
+                    {
+                        ss += sc.ScoreT.Value;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    // 使用有成績計算加權
+                    if (sc.ScoreT.HasValue)
+                    {
+                        ss += sc.ScoreT.Value;
+                    }
+                }
+            }
+
+            score = ss;
+
+            return score;
+        }
+
+        /// <summary>
+        /// 評量領域定期總成績加權總分
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetDomainScore_SF(bool all)
+        {
+            decimal? score = null;
+            decimal ss = 0;
+            if (all)
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 使用有成績計算加權
+                    if (sc.ScoreF.HasValue)
+                    {
+                        ss += sc.ScoreF.Value;
+                    }
+                }
+            }
+            else
+            {
+                foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+                {
+                    // 過濾彈性課程
+                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                        continue;
+
+                    // 使用有成績計算加權
+                    if (sc.ScoreF.HasValue)
+                    {
+                        ss += sc.ScoreF.Value;
+                    }
+                }
+            }
+
+            score = ss;
+
+            return score;
+        }
+
+
 
         /// <summary>
         /// 評量科目定期評量加權總分
