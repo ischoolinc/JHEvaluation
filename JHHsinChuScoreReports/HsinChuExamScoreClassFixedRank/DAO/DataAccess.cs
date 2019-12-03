@@ -268,7 +268,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                     si.ScoreAP = sfa;
                     si.ScoreFP = sfp;
 
-                    if (dr["assignment_score"].ToString() != "")
+                    if (dr["assignment_score"] != null && dr["assignment_score"].ToString() != "")
                     {
                         decimal sa;
                         if (decimal.TryParse(dr["assignment_score"].ToString(), out sa))
@@ -282,7 +282,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                         si.ScoreA = null;
                     }
 
-                    if (dr["f_score"].ToString() != "")
+                    if (dr["f_score"] != null && dr["f_score"].ToString() != "")
                     {
                         decimal sf;
                         if (decimal.TryParse(dr["f_score"].ToString(), out sf))
@@ -441,6 +441,68 @@ WHERE
                 }
 
             }
+            return value;
+        }
+
+
+        /// <summary>
+        /// 取得班級年級五標及組距
+        /// </summary>
+        /// <param name="SchoolYear"></param>
+        /// <param name="Semester"></param>
+        /// <param name="ExamID"></param>
+        /// <param name="ClassIDList"></param>
+        /// <returns></returns>
+        public static DataTable GetClassExamRankMatrix(string SchoolYear, string Semester, string ExamID, List<string> ClassIDList)
+        {
+            DataTable value = new DataTable();
+            QueryHelper qh = new QueryHelper();
+            // 定期評量:item_type:領域成績、科目成績,rank_type:班排名,年排名
+            string query = @"
+SELECT 
+	DISTINCT rank_matrix.id AS rank_matrix_id
+	, class.id AS class_id
+	, rank_matrix.school_year
+	, rank_matrix.semester
+	, rank_matrix.grade_year
+	, rank_matrix.item_type
+	, rank_matrix.ref_exam_id
+	, rank_matrix.item_name
+	, rank_matrix.rank_type
+	, rank_matrix.rank_name
+	, rank_matrix.matrix_count
+    , rank_matrix.level_gte100
+    , rank_matrix.level_90
+    , rank_matrix.level_80
+    , rank_matrix.level_70
+    , rank_matrix.level_60
+    , rank_matrix.level_50
+    , rank_matrix.level_40
+    , rank_matrix.level_30
+    , rank_matrix.level_20
+    , rank_matrix.level_10
+    , rank_matrix.level_lt10
+    , rank_matrix.avg_top_25
+    , rank_matrix.avg_top_50
+    , rank_matrix.avg
+    , rank_matrix.avg_bottom_50
+    , rank_matrix.avg_bottom_25   
+FROM 
+	rank_matrix
+	LEFT OUTER JOIN rank_detail
+		ON rank_detail.ref_matrix_id = rank_matrix.id
+	LEFT OUTER JOIN student
+		ON student.id = rank_detail.ref_student_id
+	LEFT OUTER JOIN class
+		ON class.id = student.ref_class_id
+WHERE
+	rank_matrix.is_alive = true AND rank_matrix.school_year = " + SchoolYear + @" 
+	AND rank_matrix.semester = " + Semester + @" AND rank_matrix.item_type IN('定期評量/領域成績','定期評量/科目成績','定期評量_定期/領域成績','定期評量_定期/科目成績')
+	AND rank_type IN('班排名','年排名') 
+	AND rank_matrix.ref_exam_id = " + ExamID + @" AND class.id IN(" + string.Join(",", ClassIDList.ToArray()) + ")";
+
+            value = qh.Select(query);
+
             return value;
         }
 

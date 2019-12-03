@@ -13,20 +13,28 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         // 學分數
         public decimal? Credit { get; set; }
 
+        // 加權平均(定期)
+        public decimal? ScoreF { get; set; }
+
         public List<SubjectInfo> SubjectInfoList = new List<SubjectInfo>();
 
         // 計算領域評量總成績
         public void CalScore()
         {
             // 使用加權平均計算
-            decimal sumScore = 0;
-            decimal sumCredit = 0;
+            decimal sumScore = 0,sumCredit = 0,sumScoreF = 0,sumCreditF = 0;
             foreach(SubjectInfo si in SubjectInfoList)
             {
                 if (si.Score.HasValue && si.Credit.HasValue)
                 {
                     sumScore += si.Score.Value * si.Credit.Value;
                     sumCredit += si.Credit.Value;
+                }
+
+                if (si.ScoreF.HasValue && si.Credit.HasValue)
+                {
+                    sumScoreF += si.ScoreF.Value * si.Credit.Value;
+                    sumCreditF += si.Credit.Value;
                 }
             }
 
@@ -38,6 +46,11 @@ namespace HsinChuExamScoreClassFixedRank.DAO
             {
                 Score = sumScore / sumCredit;
                 Credit = sumCredit;
+            }
+
+            if (sumCreditF > 0)
+            {
+                ScoreF = sumScoreF / sumCreditF;
             }
         }
     }

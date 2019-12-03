@@ -207,11 +207,19 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
             // 取得學生評量固定排名
             DataTable dtStudentExamRankMatrix = DataAccess.GetStudentExamRankMatrix(SelSchoolYear, SelSemester, SelExamID, _ClassIDList);
+
+            // 取得固定排名 班級、年級 五標與組距
+            DataTable dtClassExamRankMatrix = DataAccess.GetClassExamRankMatrix(SelSchoolYear, SelSemester, SelExamID, _ClassIDList);
+
             // debug
             //dtStudentExamRankMatrix.TableName = "dtStudentExamRankMatrix";
             //dtStudentExamRankMatrix.WriteXml(Application.StartupPath + "\\tmp.xml");
 
             Dictionary<string, Dictionary<string, int>> StudentExamRankMatrixDict = new Dictionary<string, Dictionary<string, int>>();
+            // 班級五標與組距
+            Dictionary<string, Dictionary<string, DataRow>> ClassExamRankMatrixDict = new Dictionary<string, Dictionary<string, DataRow>>();
+
+
             // 建立排名索引
             if (dtStudentExamRankMatrix != null && dtStudentExamRankMatrix.Rows.Count > 0)
             {
@@ -230,6 +238,20 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         int.TryParse(dr["rank"].ToString(), out rank);
                         StudentExamRankMatrixDict[student_id].Add(type, rank);
                     }
+                }
+            }
+            // 建立索引
+            if (dtClassExamRankMatrix != null && dtClassExamRankMatrix.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dtClassExamRankMatrix.Rows)
+                {
+                    string key = dr["rank_name"].ToString();// 班級 or 年排名
+                    string type = dr["item_type"].ToString() + dr["item_name"].ToString() + dr["rank_type"].ToString();
+                    if (!ClassExamRankMatrixDict.ContainsKey(key))
+                        ClassExamRankMatrixDict.Add(key, new Dictionary<string, DataRow>());
+
+                    if (!ClassExamRankMatrixDict[key].ContainsKey(type))
+                        ClassExamRankMatrixDict[key].Add(type, dr);
                 }
             }
 
@@ -266,6 +288,30 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                         if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均年排名"))
                             si.YearAvgRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均年排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分班排名"))
+                            si.ClassSumRankAF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分班排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分班排名"))
+                            si.ClassSumRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績總分班排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均班排名"))
+                            si.ClassAvgRankAF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權平均班排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均班排名"))
+                            si.ClassAvgRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均班排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分年排名"))
+                            si.YearSumRankAF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分年排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分年排名"))
+                            si.YearSumRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績總分年排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均年排名"))
+                            si.YearAvgRankAF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權平均年排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均年排名"))
+                            si.YearAvgRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均年排名"];
                     }
                 }
 
@@ -323,6 +369,10 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 dtTable.Columns.Add("加權總分" + studCot);
                 dtTable.Columns.Add("平均" + studCot);
                 dtTable.Columns.Add("加權平均" + studCot);
+                dtTable.Columns.Add("總分_定期" + studCot);
+                dtTable.Columns.Add("加權總分_定期" + studCot);
+                dtTable.Columns.Add("平均_定期" + studCot);
+                dtTable.Columns.Add("加權平均_定期" + studCot);
                 dtTable.Columns.Add("總分班排名" + studCot);
                 dtTable.Columns.Add("加權總分班排名" + studCot);
                 dtTable.Columns.Add("平均班排名" + studCot);
@@ -332,17 +382,29 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 dtTable.Columns.Add("平均年排名" + studCot);
                 dtTable.Columns.Add("加權平均年排名" + studCot);
 
+                dtTable.Columns.Add("總分_定期班排名" + studCot);
+                dtTable.Columns.Add("加權總分_定期班排名" + studCot);
+                dtTable.Columns.Add("平均_定期班排名" + studCot);
+                dtTable.Columns.Add("加權平均_定期班排名" + studCot);
+                dtTable.Columns.Add("總分_定期年排名" + studCot);
+                dtTable.Columns.Add("加權總分_定期年排名" + studCot);
+                dtTable.Columns.Add("平均_定期年排名" + studCot);
+                dtTable.Columns.Add("加權平均_定期年排名" + studCot);
+
+
                 foreach (string dName in Global.DomainNameList)
                 {
                     if (SelDomainSubjectDict.ContainsKey(dName))
                     {
                         dtTable.Columns.Add(dName + "領域成績" + studCot);
+                        dtTable.Columns.Add(dName + "領域_定期成績" + studCot);
                         dtTable.Columns.Add(dName + "領域學分" + studCot);
 
                         for (int i = 1; i <= 12; i++)
                         {
                             dtTable.Columns.Add(dName + "領域_科目名稱" + studCot + "_" + i);
                             dtTable.Columns.Add(dName + "領域_科目成績" + studCot + "_" + i);
+                            dtTable.Columns.Add(dName + "領域_科目_定期成績" + studCot + "_" + i);
                             dtTable.Columns.Add(dName + "領域_科目學分" + studCot + "_" + i);
 
                         }
@@ -367,7 +429,130 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 }
             }
 
+            List<string> rankTypeList = new List<string>();
+            rankTypeList.Add("matrix_count");
+            rankTypeList.Add("level_gte100");
+            rankTypeList.Add("level_90");
+            rankTypeList.Add("level_80");
+            rankTypeList.Add("level_70");
+            rankTypeList.Add("level_60");
+            rankTypeList.Add("level_50");
+            rankTypeList.Add("level_40");
+            rankTypeList.Add("level_30");
+            rankTypeList.Add("level_20");
+            rankTypeList.Add("level_10");
+            rankTypeList.Add("level_lt10");
+            rankTypeList.Add("avg_top_25");
+            rankTypeList.Add("avg_top_50");
+            rankTypeList.Add("avg");
+            rankTypeList.Add("avg_bottom_50");
+            rankTypeList.Add("avg_bottom_25");
+
+            // 建立班級、年組距合併欄位 領域
+            List<int> grList = new List<int>();
+            // 班級
+            int clCount = 1;
+            foreach (ClassInfo ci in ClassInfoList)
+            {
+                if (!grList.Contains(ci.GradeYear))
+                    grList.Add(ci.GradeYear);
+
+                dtTable.Columns.Add("班級" + clCount + "_名稱");
+
+                foreach (string dName in SelDomainSubjectDict.Keys)
+                {
+                    foreach (string rt in rankTypeList)
+                    {
+                        dtTable.Columns.Add("班級" + clCount + "_" + dName + "_領域成績_" + rt);
+                        dtTable.Columns.Add("班級" + clCount + "_" + dName + "_領域定期成績_" + rt);
+                    }
+                }
+
+                clCount++;
+            }
+
+            // 年級
+            int grCount = 1;
+            foreach (int gr in grList)
+            {
+                dtTable.Columns.Add("年級" + grCount + "_名稱");
+                foreach (string dName in SelDomainSubjectDict.Keys)
+                {
+                    foreach (string rt in rankTypeList)
+                    {
+                        dtTable.Columns.Add("年級" + grCount + "_" + dName + "_領域成績_" + rt);
+                        dtTable.Columns.Add("年級" + grCount + "_" + dName + "_領域定期成績_" + rt);
+                    }
+                }
+                grCount++;
+            }
+
+            // 建立班級、年組距合併欄位 科目
+            // 班級
+            int clsCount = 1;
+            // 科目數
+            int selSubjCount = 0;
+            foreach (string dName in SelDomainSubjectDict.Keys)
+            {
+                selSubjCount += SelDomainSubjectDict[dName].Count;
+            }
+
+            foreach (ClassInfo ci in ClassInfoList)
+            {
+                if (!grList.Contains(ci.GradeYear))
+                    grList.Add(ci.GradeYear);
+
+                for (int su = 1; su <= selSubjCount; su++)
+                {
+                    dtTable.Columns.Add("班級" + clsCount + "_科目名稱_" + su);
+                    foreach (string rt in rankTypeList)
+                    {
+                        dtTable.Columns.Add("班級" + clsCount + "_科目成績_" + rt + su);
+                        dtTable.Columns.Add("班級" + clsCount + "_科目定期成績_" + rt + su);
+                    }
+                }
+
+
+                clsCount++;
+            }
+
+            // 年級
+            int grsCount = 1;
+            foreach (int gr in grList)
+            {
+                for (int su = 1; su <= selSubjCount; su++)
+                {
+                    dtTable.Columns.Add("年級" + grsCount + "_科目名稱_" + su);
+                    foreach (string rt in rankTypeList)
+                    {
+                        dtTable.Columns.Add("年級" + grsCount + "_科目成績_" + rt + su);
+                        dtTable.Columns.Add("年級" + grsCount + "_科目定期成績_" + rt + su);
+                    }
+                }
+
+                grsCount++;
+            }
+
+            //using (StreamWriter fi = new StreamWriter(Application.StartupPath + "\\test.txt", false))
+            //{
+            //    foreach (DataColumn dc in dtTable.Columns)
+            //    {
+            //        fi.WriteLine(dc.Caption);
+            //    }
+            //}
+
+
             bgWorkerReport.ReportProgress(30);
+
+            Dictionary<int, List<string>> grClassNameDict = new Dictionary<int, List<string>>();
+
+            foreach (ClassInfo ci in ClassInfoList)
+            {
+                if (!grClassNameDict.ContainsKey(ci.GradeYear))
+                    grClassNameDict.Add(ci.GradeYear, new List<string>());
+
+                grClassNameDict[ci.GradeYear].Add(ci.ClassName);
+            }
 
             // 填入資料
             foreach (ClassInfo ci in ClassInfoList)
@@ -433,6 +618,19 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     if (si.AvgScoreA.HasValue)
                         row["加權平均" + studCot] = Math.Round(si.AvgScoreA.Value, parseNumber, MidpointRounding.AwayFromZero);
 
+                    if (si.SumScoreF.HasValue)
+                        row["總分_定期" + studCot] = Math.Round(si.SumScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.SumScoreAF.HasValue)
+                        row["加權總分_定期" + studCot] = Math.Round(si.SumScoreAF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.AvgScoreF.HasValue)
+                        row["平均_定期" + studCot] = Math.Round(si.AvgScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.AvgScoreAF.HasValue)
+                        row["加權平均_定期" + studCot] = Math.Round(si.AvgScoreAF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+
                     if (si.ClassSumRank.HasValue)
                         row["總分班排名" + studCot] = si.ClassSumRank.Value;
 
@@ -457,17 +655,50 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     if (si.YearAvgRankA.HasValue)
                         row["加權平均年排名" + studCot] = si.YearAvgRankA.Value;
 
+                    if (si.ClassSumRankF.HasValue)
+                        row["總分_定期班排名" + studCot] = si.ClassSumRankF.Value;
+
+                    if (si.ClassSumRankAF.HasValue)
+                        row["加權總分_定期班排名" + studCot] = si.ClassSumRankAF.Value;
+
+                    if (si.ClassAvgRankF.HasValue)
+                        row["平均_定期班排名" + studCot] = si.ClassAvgRankF.Value;
+
+                    if (si.ClassAvgRankAF.HasValue)
+                        row["加權平均_定期班排名" + studCot] = si.ClassAvgRankAF.Value;
+
+                    if (si.YearSumRankF.HasValue)
+                        row["總分_定期年排名" + studCot] = si.YearSumRankF.Value;
+
+                    if (si.YearSumRankAF.HasValue)
+                        row["加權總分_定期年排名" + studCot] = si.YearSumRankAF.Value;
+
+                    if (si.YearAvgRankF.HasValue)
+                        row["平均_定期年排名" + studCot] = si.YearAvgRankF.Value;
+
+                    if (si.YearAvgRankAF.HasValue)
+                        row["加權平均_定期年排名" + studCot] = si.YearAvgRankAF.Value;
+
                     // 領域科目成績
                     foreach (DomainInfo di in si.DomainInfoList)
                     {
                         if (SelDomainSubjectDict.ContainsKey(di.Name))
                         {
                             string d1 = di.Name + "領域成績" + studCot;
+                            string d1_1 = di.Name + "領域_定期成績" + studCot;
                             if (dtTable.Columns.Contains(d1))
                             {
                                 if (di.Score.HasValue)
                                     row[d1] = Math.Round(di.Score.Value, parseNumber, MidpointRounding.AwayFromZero);
                             }
+
+                            if (dtTable.Columns.Contains(d1_1))
+                            {
+                                // 定期
+                                if (di.ScoreF.HasValue)
+                                    row[d1_1] = Math.Round(di.ScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
+                            }
+
                             string d2 = di.Name + "領域學分" + studCot;
                             if (dtTable.Columns.Contains(d2))
                             {
@@ -487,6 +718,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                     {
                                         string s1Key = di.Name + "領域_科目名稱" + studCot + "_" + subjCot;
                                         string s2Key = di.Name + "領域_科目成績" + studCot + "_" + subjCot;
+                                        string s2_1Key = di.Name + "領域_科目_定期成績" + studCot + "_" + subjCot;
                                         string s3Key = di.Name + "領域_科目學分" + studCot + "_" + subjCot;
 
                                         if (dtTable.Columns.Contains(s1Key))
@@ -500,6 +732,15 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                                 if (subj.Score.HasValue)
                                                     row[s2Key] = subj.Score.Value;
                                         }
+
+
+                                        if (dtTable.Columns.Contains(s2_1Key))
+                                        {
+                                            if (dtTable.Columns.Contains(s2_1Key))
+                                                if (subj.ScoreF.HasValue)
+                                                    row[s2_1Key] = subj.ScoreF.Value;
+                                        }
+
                                         if (dtTable.Columns.Contains(s3Key))
                                         {
                                             if (subj.Credit.HasValue)
@@ -539,8 +780,228 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     }
                 }
 
-                dtTable.Rows.Add(row);
+
+                int rowClsCount = 1;
+                // 處理班級PR、百分比、五標、組距 領域
+               foreach(int gr in grClassNameDict.Keys)
+                {
+                    foreach (string className in grClassNameDict[gr])
+                    {
+                        row["班級" + rowClsCount + "_名稱"] = className;
+                        if (ClassExamRankMatrixDict.ContainsKey(className))
+                        {
+                            // 領域
+                            foreach (string dName in SelDomainSubjectDict.Keys)
+                            {
+                                string vKey = "定期評量/領域成績" + dName + "班排名";
+                                if (ClassExamRankMatrixDict[className].ContainsKey(vKey))
+                                {
+                                    foreach (string rt in rankTypeList)
+                                    {
+                                        string value = "";
+                                        if (ClassExamRankMatrixDict[className][vKey][rt] != null)
+                                            value = ClassExamRankMatrixDict[className][vKey][rt].ToString();
+
+                                        string cKey = "班級" + rowClsCount + "_" + dName + "_領域成績_" + rt;
+                                        if (dtTable.Columns.Contains(cKey))
+                                        {
+                                            if (cKey.Contains("avg"))
+                                               row[cKey] = parseScore1(value);
+                                            else
+                                                row[cKey] = value;                                           
+                                        }
+                                    }
+                                }
+
+                                vKey = "定期評量_定期/領域成績" + dName + "班排名";
+                                if (ClassExamRankMatrixDict[className].ContainsKey(vKey))
+                                {
+                                    foreach (string rt in rankTypeList)
+                                    {
+                                        string value = "";
+                                        if (ClassExamRankMatrixDict[className][vKey][rt] != null)
+                                            value = ClassExamRankMatrixDict[className][vKey][rt].ToString();
+
+                                        string cKey = "班級" + rowClsCount + "_" + dName + "_領域定期成績_" + rt;
+                                        if (dtTable.Columns.Contains(cKey))
+                                        {
+                                            if (cKey.Contains("avg"))
+                                                row[cKey] = parseScore1(value);
+                                            else
+                                                row[cKey] = value;
+                                        }
+                                    }
+                                }
+                            }
+
+                            // 科目成績
+                            int subjIdex = 1;
+                            foreach (string dName in SelDomainSubjectDict.Keys)
+                            {
+                                foreach (string subjName in SelDomainSubjectDict[dName])
+                                {
+                                    row["班級" + rowClsCount + "_科目名稱_" + subjIdex] = subjName;
+                                    string vKey = "定期評量/科目成績" + subjName + "班排名";
+                                    if (ClassExamRankMatrixDict[className].ContainsKey(vKey))
+                                    {
+                                        foreach (string rt in rankTypeList)
+                                        {
+                                            string value = "";
+                                            if (ClassExamRankMatrixDict[className][vKey][rt] != null)
+                                                value = ClassExamRankMatrixDict[className][vKey][rt].ToString();
+
+                                            string cKey = "班級" + rowClsCount + "_科目成績_" + rt + subjIdex;
+                                            if (dtTable.Columns.Contains(cKey))
+                                            {
+                                                if (cKey.Contains("avg"))
+                                                    row[cKey] = parseScore1(value);
+                                                else
+                                                    row[cKey] = value;
+                                            }
+                                        }
+                                    }
+
+                                    vKey = "定期評量_定期/科目成績" + subjName + "班排名";
+                                    if (ClassExamRankMatrixDict[className].ContainsKey(vKey))
+                                    {
+                                        foreach (string rt in rankTypeList)
+                                        {
+                                            string value = "";
+                                            if (ClassExamRankMatrixDict[className][vKey][rt] != null)
+                                                value = ClassExamRankMatrixDict[className][vKey][rt].ToString();
+
+                                            string cKey = "班級" + rowClsCount + "_科目定期成績_" + rt + subjIdex;
+                                            if (dtTable.Columns.Contains(cKey))
+                                            {
+                                                if (cKey.Contains("avg"))
+                                                    row[cKey] = parseScore1(value);
+                                                else
+                                                    row[cKey] = value;
+                                            }
+                                        }
+                                    }
+                                    subjIdex++;
+                                }
+                            }
+
+
+                            rowClsCount++;
+                        }
+                    }
+                }
+
+
+                int rowGrCount = 1;
+                // 處理年級
+                foreach (int year in grClassNameDict.Keys)
+                {
+                    string gr = year + "年級";
+                    if (ClassExamRankMatrixDict.ContainsKey(gr))
+                    {
+                        row["年級" + rowGrCount + "_名稱"] = gr;
+                        // 領域
+                        foreach (string dName in SelDomainSubjectDict.Keys)
+                        {
+                            string vKey = "定期評量/領域成績" + dName + "年排名";
+                            if (ClassExamRankMatrixDict[gr].ContainsKey(vKey))
+                            {
+                                foreach (string rt in rankTypeList)
+                                {
+                                    string value = "";
+                                    if (ClassExamRankMatrixDict[gr][vKey][rt] != null)
+                                        value = ClassExamRankMatrixDict[gr][vKey][rt].ToString();
+
+                                    string cKey = "年級" + rowGrCount + "_" + dName + "_領域成績_" + rt;
+                                    if (dtTable.Columns.Contains(cKey))
+                                    {
+                                        if (cKey.Contains("avg"))
+                                            row[cKey] = parseScore1(value);
+                                        else
+                                            row[cKey] = value;
+                                    }
+                                }
+                            }
+
+                            vKey = "定期評量_定期/領域成績" + dName + "年排名";
+                            if (ClassExamRankMatrixDict[gr].ContainsKey(vKey))
+                            {
+                                foreach (string rt in rankTypeList)
+                                {
+                                    string value = "";
+                                    if (ClassExamRankMatrixDict[gr][vKey][rt] != null)
+                                        value = ClassExamRankMatrixDict[gr][vKey][rt].ToString();
+
+                                    string cKey = "年級" + rowGrCount + "_" + dName + "_領域定期成績_" + rt;
+                                    if (dtTable.Columns.Contains(cKey))
+                                    {
+                                        if (cKey.Contains("avg"))
+                                            row[cKey] = parseScore1(value);
+                                        else
+                                            row[cKey] = value;
+                                    }
+                                }
+                            }
+                        }
+
+                        // 科目成績
+                        int subjIdex = 1;
+                        foreach (string dName in SelDomainSubjectDict.Keys)
+                        {
+                            foreach (string subjName in SelDomainSubjectDict[dName])
+                            {
+                                row["年級" + rowGrCount + "_科目名稱_" + subjIdex] = subjName;
+                                string vKey = "定期評量/科目成績" + subjName + "年排名";
+                                if (ClassExamRankMatrixDict[gr].ContainsKey(vKey))
+                                {
+                                    foreach (string rt in rankTypeList)
+                                    {
+                                        string value = "";
+                                        if (ClassExamRankMatrixDict[gr][vKey][rt] != null)
+                                            value = ClassExamRankMatrixDict[gr][vKey][rt].ToString();
+
+                                        string cKey = "年級" + rowGrCount + "_科目成績_" + rt + subjIdex;
+                                        if (dtTable.Columns.Contains(cKey))
+                                        {
+                                            if (cKey.Contains("avg"))
+                                                row[cKey] = parseScore1(value);
+                                            else
+                                                row[cKey] = value;
+                                        }
+                                    }
+                                }
+
+                                vKey = "定期評量_定期/科目成績" + subjName + "年排名";
+                                if (ClassExamRankMatrixDict[gr].ContainsKey(vKey))
+                                {
+                                    foreach (string rt in rankTypeList)
+                                    {
+                                        string value = "";
+                                        if (ClassExamRankMatrixDict[gr][vKey][rt] != null)
+                                            value = ClassExamRankMatrixDict[gr][vKey][rt].ToString();
+
+                                        string cKey = "年級" + rowGrCount + "_科目定期成績_" + rt + subjIdex;
+                                        if (dtTable.Columns.Contains(cKey))
+                                        {
+                                            if (cKey.Contains("avg"))
+                                                row[cKey] = parseScore1(value);
+                                            else
+                                                row[cKey] = value;
+                                        }
+                                    }
+                                }
+                                subjIdex++;
+                            }
+                        }
+
+
+                        rowGrCount++;
+                    }
+
+                }
+                    dtTable.Rows.Add(row);
             }
+
+
 
             docTemplate.MailMerge.Execute(dtTable);
             docTemplate.MailMerge.RemoveEmptyParagraphs = true;
@@ -569,6 +1030,20 @@ namespace HsinChuExamScoreClassFixedRank.Form
             //           dtTable.WriteXmlSchema(Application.StartupPath + "\\dtTsc.xml");
             bgWorkerReport.ReportProgress(100);
         }
+
+        public string parseScore1(string str)
+        {
+            string value = "";
+            decimal dc;
+            if (decimal.TryParse(str, out dc))
+            {
+                value = Math.Round(dc, parseNumber).ToString();
+            }
+
+            return value;
+        }
+
+
 
         private void BgWorkerLoadTemplate_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -840,8 +1315,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
             for (int i = 0; i <= 3; i++)
                 cboParseNumber.Items.Add(i);
 
-            cboSchoolYear.Enabled = false;
-            cboSemester.Enabled = false;
+            //cboSchoolYear.Enabled = false;
+            //cboSemester.Enabled = false;
             this.MaximumSize = this.MinimumSize = this.Size;
             bgWorkerLoadTemplate.RunWorkerAsync();
         }

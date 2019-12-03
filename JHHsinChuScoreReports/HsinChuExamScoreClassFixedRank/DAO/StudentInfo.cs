@@ -40,6 +40,28 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         public decimal? AvgScoreA { get; set; }
 
         /// <summary>
+        /// 總分(定期)
+        /// </summary>
+        public decimal? SumScoreF { get; set; }
+
+        /// <summary>
+        /// 加權總分(定期)
+        /// </summary>
+        public decimal? SumScoreAF { get; set; }
+
+        /// <summary>
+        /// 平均(定期)
+        /// </summary>
+        public decimal? AvgScoreF { get; set; }
+
+        /// <summary>
+        /// 加權平均(定期)
+        /// </summary>
+        public decimal? AvgScoreAF { get; set; }
+
+        
+
+        /// <summary>
         /// 平均班排名
         /// </summary>
         public int? ClassAvgRank { get; set; }
@@ -85,14 +107,58 @@ namespace HsinChuExamScoreClassFixedRank.DAO
 
 
         /// <summary>
+        /// 平均班排名(定期)
+        /// </summary>
+        public int? ClassAvgRankF { get; set; }
+
+        /// <summary>
+        /// 加權平均班排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassAvgRankAF { get; set; }
+
+        /// <summary>
+        /// 平均年排名(定期)
+        /// </summary>
+        public int? YearAvgRankF { get; set; }
+
+        /// <summary>
+        /// 加權平均年排名(定期)
+        /// </summary>
+        /// 
+        public int? YearAvgRankAF { get; set; }
+
+        /// <summary>
+        /// 總分班排名(定期)
+        /// </summary>
+        public int? ClassSumRankF { get; set; }
+
+        /// <summary>
+        /// 加權總分班排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassSumRankAF { get; set; }
+
+        /// <summary>
+        /// 總分年排名(定期)
+        /// </summary>
+        public int? YearSumRankF { get; set; }
+
+        /// <summary>
+        /// 加權總分年排名(定期)
+        /// </summary>
+        /// 
+        public int? YearSumRankAF { get; set; }
+
+        /// <summary>
         /// 計算成績
         /// </summary>
         public void CalScore()
         {
             // 初始
-            SumScore = SumScoreA = AvgScore = AvgScoreA = 0;
+            SumScore = SumScoreA = AvgScore = AvgScoreA = SumScoreF = SumScoreAF = AvgScoreF = AvgScoreAF = 0;
 
-            decimal cot = 0; decimal credit = 0;
+            decimal cot = 0, credit = 0, cotF = 0, creditF = 0;
 
 
             // 計算全部
@@ -118,6 +184,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
             {
                 if (Global.SelOnlyDomainList.Contains(domain.Name))
                 {
+                    // 總成績
                     if (domain.Score.HasValue && domain.Credit.HasValue)
                     {
                         SumScore += domain.Score.Value;
@@ -125,6 +192,15 @@ namespace HsinChuExamScoreClassFixedRank.DAO
 
                         cot += 1;
                         credit += domain.Credit.Value;
+                    }
+
+                    // 定期
+                    if (domain.ScoreF.HasValue && domain.Credit.HasValue)
+                    {
+                        SumScoreF += domain.ScoreF.Value;
+                        SumScoreAF += domain.ScoreF.Value * domain.Credit.Value;
+                        cotF += 1;
+                        creditF += domain.Credit.Value;
                     }
                 }
             }
@@ -136,6 +212,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                 {
                     if (Global.SelOnlySubjectList.Contains(subj.Name))
                     {
+                        // 總成績
                         if (subj.Score.HasValue && subj.Credit.HasValue)
                         {
                             SumScore += subj.Score.Value;
@@ -144,15 +221,31 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                             cot += 1;
                             credit += subj.Credit.Value;
                         }
+
+                        // 定期
+                        if (subj.ScoreF.HasValue && subj.Credit.HasValue)
+                        {
+                            SumScoreF += subj.ScoreF.Value;
+                            SumScoreAF += subj.ScoreF.Value * subj.Credit.Value;
+
+                            cotF += 1;
+                            creditF += subj.Credit.Value;
+                        }
                     }
                 }
             }
 
-                if (cot > 0)
+            if (cot > 0)
                 AvgScore = SumScore / cot;
 
             if (credit > 0)
                 AvgScoreA = SumScoreA / credit;
+
+            if (cotF > 0)
+                AvgScoreF = SumScoreF / cotF;
+
+            if (creditF > 0)
+                AvgScoreAF = SumScoreAF / creditF;
         }
     }
 }
