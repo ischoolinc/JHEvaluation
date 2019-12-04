@@ -1068,25 +1068,25 @@ namespace HsinChuExamScore_JH
                 builder.InsertCell();
                 builder.Write("領域成績加權平均(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 領域成績加權平均(不含彈性課程)" + " \\* MERGEFORMAT ", "«DAN" + "»");
+                builder.InsertField("MERGEFIELD 領域成績加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«DAN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("科目定期評量加權平均(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目定期評量加權平均(不含彈性課程)" + " \\* MERGEFORMAT ", "«SFN" + "»");
+                builder.InsertField("MERGEFIELD 科目定期評量加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«SFN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("科目平時評量加權平均(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目平時評量加權平均(不含彈性課程)" + " \\* MERGEFORMAT ", "«SAN" + "»");
+                builder.InsertField("MERGEFIELD 科目平時評量加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«SAN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("科目總成績加權平均(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目總成績加權平均(不含彈性課程)" + " \\* MERGEFORMAT ", "«STN" + "»");
+                builder.InsertField("MERGEFIELD 科目總成績加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«STN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
@@ -1116,25 +1116,25 @@ namespace HsinChuExamScore_JH
                 builder.InsertCell();
                 builder.Write("領域成績加權總分(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 領域成績加權總分(不含彈性課程)" + " \\* MERGEFORMAT ", "«DAN" + "»");
+                builder.InsertField("MERGEFIELD 領域成績加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«DAN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("科目定期評量加權總分(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目定期評量加權總分(不含彈性課程)" + " \\* MERGEFORMAT ", "«SFN" + "»");
+                builder.InsertField("MERGEFIELD 科目定期評量加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«SFN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("科目平時評量加權總分(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目平時評量加權總分(不含彈性課程)" + " \\* MERGEFORMAT ", "«SAN" + "»");
+                builder.InsertField("MERGEFIELD 科目平時評量加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«SAN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("科目總成績加權總分(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目總成績加權總分(不含彈性課程)" + " \\* MERGEFORMAT ", "«STN" + "»");
+                builder.InsertField("MERGEFIELD 科目總成績加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«STN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
@@ -2575,7 +2575,7 @@ namespace HsinChuExamScore_JH
 
                     foreach (string itName in tmpRNameList)
                     {
-                        mName1 = "班級_" + domainName + itName+"F";
+                        mName1 = "班級_" + domainName + "F" + itName;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DR" + "»");
                     }
@@ -2591,7 +2591,7 @@ namespace HsinChuExamScore_JH
 
                     foreach (string itName in tmpRNameList)
                     {
-                        mName1 = "年級_" + domainName + itName + "F";
+                        mName1 = "年級_" + domainName + "F"+itName ;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DR" + "»");
                     }

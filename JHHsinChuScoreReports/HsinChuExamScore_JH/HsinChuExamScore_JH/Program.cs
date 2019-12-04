@@ -23,10 +23,15 @@ namespace HsinChuExamScore_JH
             rbItem1["報表"]["成績相關報表"]["評量成績通知單(固定排名)"].Enable = UserAcl.Current["JH.Student.HsinChuExamScore_JH_Student"].Executable;
             rbItem1["報表"]["成績相關報表"]["評量成績通知單(固定排名)"].Click += delegate
             {
-                if (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0)
+                if (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0 && K12.Presentation.NLDPanels.Student.SelectedSource.Count < 111)
                 {
                     PrintForm pf = new PrintForm(K12.Presentation.NLDPanels.Student.SelectedSource);
                     pf.ShowDialog();
+                }
+                else if (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 110)
+                {
+                    FISCA.Presentation.Controls.MsgBox.Show("請選擇110位以下學生");
+                    return;
                 }
                 else
                 {
@@ -39,18 +44,23 @@ namespace HsinChuExamScore_JH
             rbItem2["報表"]["成績相關報表"]["評量成績通知單(固定排名)"].Enable = UserAcl.Current["JH.Student.HsinChuExamScore_JH_Class"].Executable;
             rbItem2["報表"]["成績相關報表"]["評量成績通知單(固定排名)"].Click += delegate
             {
-                if (K12.Presentation.NLDPanels.Class.SelectedSource.Count > 0)
+                if (K12.Presentation.NLDPanels.Class.SelectedSource.Count > 0 && K12.Presentation.NLDPanels.Class.SelectedSource.Count < 4)
                 {
                     List<string> StudentIDList = Utility.GetClassStudentIDList1ByClassID(K12.Presentation.NLDPanels.Class.SelectedSource);
                     PrintForm pf = new PrintForm(StudentIDList);
                     pf.ShowDialog();
                 }
+                else if (K12.Presentation.NLDPanels.Class.SelectedSource.Count > 3)
+                {
+                    FISCA.Presentation.Controls.MsgBox.Show("請選擇最多3個班級");
+                    return;
+                }
                 else
                 {
                     FISCA.Presentation.Controls.MsgBox.Show("請選擇選班級");
-                    return;                
+                    return;
                 }
-            
+
             };
             // 評量成績通知單
             Catalog catalog1a = RoleAclSource.Instance["學生"]["功能按鈕"];
@@ -61,6 +71,6 @@ namespace HsinChuExamScore_JH
             catalog1b.Add(new RibbonFeature("JH.Student.HsinChuExamScore_JH_Class", "評量成績通知單(固定排名)"));
 
         }
-   
+
     }
 }

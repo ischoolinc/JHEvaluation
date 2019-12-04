@@ -1177,65 +1177,72 @@ namespace HsinChuExamScore_JH
                                 , "地理"
                                 , "公民"));
 
-                    foreach (string subjName in rankSubjectList)
+                    if (StudentExamRankMatrixDict.ContainsKey(StudRec.ID))
                     {
-                        string rtSubjet = "";
-                        // 處理單存科目組距
-                        foreach (string rt in rankTypeList)
+                        foreach (string subjName in rankSubjectList)
                         {
-                            if (rt == "班排名")
-                                rtSubjet = "班級_";
+                            string rtSubjet = "";
 
-                            if (rt == "年排名")
-                                rtSubjet = "年級_";
 
-                            if (rt == "類別1排名")
-                                rtSubjet = "類別1_";
-
-                            if (rt == "類別2排名")
-                                rtSubjet = "類別2_";
-
-                            string keyD1 = "定期評量/科目成績" + subjName + rt;
-                            if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD1))
+                            // 處理單存科目組距
+                            foreach (string rt in rankTypeList)
                             {
-                                row["s" + rtSubjet + "科目名稱" + rnkSubj] = subjName;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R100_u"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_gte100;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R90_99"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_90;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R80_89"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_80;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R70_79"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_70;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R60_69"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_60;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R50_59"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_50;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R40_49"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_40;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R30_39"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_30;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R20_29"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_20;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R10_19"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_10;
-                                row["s" + rtSubjet + "科目" + rnkSubj + "_R0_9"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_lt10;
+                                if (rt == "班排名")
+                                    rtSubjet = "班級_";
+
+                                if (rt == "年排名")
+                                    rtSubjet = "年級_";
+
+                                if (rt == "類別1排名")
+                                    rtSubjet = "類別1_";
+
+                                if (rt == "類別2排名")
+                                    rtSubjet = "類別2_";
+
+                                string keyD1 = "定期評量/科目成績" + subjName + rt;
+                                if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD1))
+                                {
+                                    row["s" + rtSubjet + "科目名稱" + rnkSubj] = subjName;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R100_u"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_gte100;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R90_99"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_90;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R80_89"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_80;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R70_79"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_70;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R60_69"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_60;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R50_59"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_50;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R40_49"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_40;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R30_39"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_30;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R20_29"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_20;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R10_19"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_10;
+                                    row["s" + rtSubjet + "科目" + rnkSubj + "_R0_9"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_lt10;
+                                }
+
+                                keyD1 = "定期評量_定期/科目成績" + subjName + rt;
+                                if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD1))
+                                {
+                                    row["sf" + rtSubjet + "科目名稱" + rnkSubj] = subjName;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R100_u"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_gte100;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R90_99"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_90;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R80_89"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_80;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R70_79"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_70;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R60_69"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_60;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R50_59"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_50;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R40_49"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_40;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R30_39"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_30;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R20_29"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_20;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R10_19"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_10;
+                                    row["sf" + rtSubjet + "科目" + rnkSubj + "_R0_9"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_lt10;
+                                }
                             }
 
-                            keyD1 = "定期評量_定期/科目成績" + subjName + rt;
-                            if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD1))
+                            string keyD2 = "定期評量/科目成績" + subjName + "班排名";
+                            if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD2))
                             {
-                                row["sf" + rtSubjet + "科目名稱" + rnkSubj] = subjName;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R100_u"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_gte100;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R90_99"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_90;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R80_89"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_80;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R70_79"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_70;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R60_69"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_60;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R50_59"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_50;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R40_49"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_40;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R30_39"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_30;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R20_29"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_20;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R10_19"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_10;
-                                row["sf" + rtSubjet + "科目" + rnkSubj + "_R0_9"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_lt10;
+                                rnkSubj++;
                             }
-                        }
-
-                        string keyD2 = "定期評量/科目成績" + subjName + "班排名";
-                        if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD2))
-                        {
-                            rnkSubj++;
                         }
                     }
+
+
 
                     // 領域
                     foreach (DAO.ExamDomainScore eds in studExamScoreDict[StudRec.ID]._ExamDomainScoreDict.Values)
@@ -1597,7 +1604,7 @@ namespace HsinChuExamScore_JH
                 dtAtt.Rows.Add(rowT);
 
                 dt.TableName = "test";
-                //dt.WriteXml(Application.StartupPath + "\\testData.xml");
+                dt.WriteXml(Application.StartupPath + "\\testData.xml");
 
 
                 // 處理固定欄位對應
