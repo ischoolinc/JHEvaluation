@@ -145,6 +145,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="StringComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Template\新竹班級評量成績單合併欄位總表.doc" />

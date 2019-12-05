@@ -17,8 +17,6 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         public List<DomainInfo> DomainInfoList = new List<DomainInfo>();
 
      
-
-
         /// <summary>
         /// 總分
         /// </summary>

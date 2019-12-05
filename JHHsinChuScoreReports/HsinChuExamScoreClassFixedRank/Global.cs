@@ -249,6 +249,7 @@ namespace HsinChuExamScoreClassFixedRank
                     builder.EndRow();
                 }
                 builder.EndTable();
+
                 builder.Writeln("");
                 builder.Writeln("");
                 builder.Writeln("分數與排名");
@@ -894,7 +895,7 @@ namespace HsinChuExamScoreClassFixedRank
                     builder.InsertCell();
                     builder.Write("班級");
                     builder.InsertCell();
-                    builder.Write("科目"+subjCot);
+                    builder.Write("科目" + subjCot);
                     foreach (string rk1 in rankType1List)
                     {
                         builder.InsertCell();
@@ -908,7 +909,7 @@ namespace HsinChuExamScoreClassFixedRank
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
                         builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_科目名稱_"+ subjCot + " \\* MERGEFORMAT ", "N" + "");
+                        builder.InsertField("MERGEFIELD 班級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
                         foreach (string rk1 in rankType1VList)
                         {
                             builder.InsertCell();
@@ -1191,10 +1192,82 @@ namespace HsinChuExamScoreClassFixedRank
                     builder.EndTable();
                 }
 
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("領域名稱與科目名稱");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("學生領域名稱");
+                builder.InsertCell();
+                builder.Write("學生科目名稱");
+                builder.EndRow();
+
+                for (int r = 1; r <= 30; r++)
+                {
+                    builder.InsertCell();
+                    builder.Write("" + r);
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 學生_領域名稱" + r + " \\* MERGEFORMAT ", "領");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 學生_科目名稱" + r + " \\* MERGEFORMAT ", "科");
+                    builder.EndRow();
+                }
+                builder.EndTable();
 
 
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("學生領域分開成績");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.Write("" + studCot);
+                    for (int ss = 1; ss <= 10; ss++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 學生_領域名稱" + studCot + "_" + ss + " \\* MERGEFORMAT ", "N" + ss);
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 學生_領域成績" + studCot + "_" + ss + " \\* MERGEFORMAT ", "S" + ss);
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 學生_領域_定期成績" + studCot + "_" + ss + " \\* MERGEFORMAT ", "S" + ss);
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 學生_領域學分" + studCot + "_" + ss + " \\* MERGEFORMAT ", "C" + ss);
 
+                    }
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("學生科目分開成績");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.Write("" + studCot);
+                    for (int ss = 1; ss <= 10; ss++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 學生_科目名稱" + studCot + "_" + ss + " \\* MERGEFORMAT ", "N" + ss);
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 學生_科目成績" + studCot + "_" + ss + " \\* MERGEFORMAT ", "S" + ss);
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 學生_科目_定期成績" + studCot + "_" + ss + " \\* MERGEFORMAT ", "S" + ss);
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 學生_科目學分" + studCot + "_" + ss + " \\* MERGEFORMAT ", "C" + ss);
+
+                    }
+                    builder.EndRow();
+                }
+                builder.EndTable();
 
                 #endregion
 
