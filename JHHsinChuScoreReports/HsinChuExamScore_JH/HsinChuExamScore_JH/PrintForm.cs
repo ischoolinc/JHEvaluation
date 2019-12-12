@@ -1603,8 +1603,8 @@ namespace HsinChuExamScore_JH
                 dt.Rows.Add(row);
                 dtAtt.Rows.Add(rowT);
 
-                dt.TableName = "test";
-                dt.WriteXml(Application.StartupPath + "\\testData.xml");
+                //dt.TableName = "test";
+                //dt.WriteXml(Application.StartupPath + "\\testData.xml");
 
 
                 // 處理固定欄位對應

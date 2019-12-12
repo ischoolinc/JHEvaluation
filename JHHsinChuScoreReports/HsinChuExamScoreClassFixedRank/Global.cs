@@ -581,616 +581,925 @@ namespace HsinChuExamScoreClassFixedRank
                 rankType2VList.Add("level_90");
                 rankType2VList.Add("level_gte100");
 
-                // 班級領域成績五標
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("班級領域成績五標");
 
-                foreach (string dName in Global.DomainNameList)
-                {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.Write(dName + " 班級領域成績五標");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
-                    builder.InsertCell();
-                    builder.Write("班級");
-                    foreach (string rk1 in rankType1List)
-                    {
-                        builder.InsertCell();
-                        builder.Write(rk1);
-                    }
-                    builder.EndRow();
-
-                    // 班級
-                    for (int cla = 1; cla <= 20; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk1 in rankType1VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 班級" + cla + "_" + dName + "_領域成績_" + rk1 + " \\* MERGEFORMAT ", "CR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
-                }
-
-
+                // 產生五標資料
                 // 班級領域定期成績五標
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("班級領域定期成績五標");
+                builder.Writeln("班級、年級領域定期成績五標-領域成績");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
-                foreach (string dName in Global.DomainNameList)
+                builder.InsertCell();
+                builder.Write("名稱");
+                for (int ss = 1; ss <= 12; ss++)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.Write(dName + " 班級領域定期成績五標");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("班級");
-                    foreach (string rk1 in rankType1List)
+                    builder.Write("領域" + ss);
+                }
+                builder.EndRow();
+
+                int tmpCol = 0;
+                foreach (string rk1 in rankType1List)
+                {
+                    builder.InsertCell();
+                    builder.Write("班級_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk1);
+                        builder.InsertField("MERGEFIELD 班級_領域成績_" + ss + "_" + rankType1VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-
-                    // 班級
-                    for (int cla = 1; cla <= 20; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk1 in rankType1VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 班級" + cla + "_" + dName + "_領域定期成績_" + rk1 + " \\* MERGEFORMAT ", "CR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
-
-                // 年級領域成績五標              
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("年級領域成績五標");
-
-                foreach (string dName in Global.DomainNameList)
+                tmpCol = 0;
+                foreach (string rk1 in rankType1List)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.Write(dName + " 年級領域成績五標");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("年級");
-                    foreach (string rk1 in rankType1List)
+                    builder.Write("年級_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk1);
+                        builder.InsertField("MERGEFIELD 年級_領域成績_" + ss + "_" + rankType1VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-
-                    // 年級
-                    for (int cla = 1; cla <= 12; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk1 in rankType1VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 年級" + cla + "_" + dName + "_領域成績_" + rk1 + " \\* MERGEFORMAT ", "GR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
-
-
-                // 年級領域定期成績五標
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("年級領域定期成績五標");
-
-                foreach (string dName in Global.DomainNameList)
+                tmpCol = 0;
+                foreach (string rk1 in rankType1List)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.Write(dName + " 年級領域定期成績五標");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("年級");
-                    foreach (string rk1 in rankType1List)
+                    builder.Write("班級定期_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk1);
+                        builder.InsertField("MERGEFIELD 班級_領域定期成績_" + ss + "_" + rankType1VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-
-                    // 年級
-                    for (int cla = 1; cla <= 12; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk1 in rankType1VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 年級" + cla + "_" + dName + "_領域定期成績_" + rk1 + " \\* MERGEFORMAT ", "GR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
-
-
-                // 班級領域成績組距
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("班級領域成績組距");
-
-                foreach (string dName in Global.DomainNameList)
+                tmpCol = 0;
+                foreach (string rk1 in rankType1List)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.Write(dName + " 班級領域成績組距");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("班級");
-                    foreach (string rk2 in rankType2List)
+                    builder.Write("年級定期_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk2);
+                        builder.InsertField("MERGEFIELD 年級_領域定期成績_" + ss + "_" + rankType1VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-
-                    // 班級
-                    for (int cla = 1; cla <= 20; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk2 in rankType2VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 班級" + cla + "_" + dName + "_領域成績_" + rk2 + " \\* MERGEFORMAT ", "CR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
 
+                builder.EndTable();
 
+                // 產生五標資料
+                // 班級科目定期成績五標
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("班級、年級科目定期成績五標-科目成績");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("名稱");
+                for (int ss = 1; ss <= 12; ss++)
+                {
+                    builder.InsertCell();
+                    builder.Write("科目" + ss);
+                }
+                builder.EndRow();
+
+                tmpCol = 0;
+                foreach (string rk1 in rankType1List)
+                {
+                    builder.InsertCell();
+                    builder.Write("班級_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 班級_科目成績_" + ss + "_" + rankType1VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
+                    }
+                    builder.EndRow();
+                    tmpCol++;
+                }
+                tmpCol = 0;
+                foreach (string rk1 in rankType1List)
+                {
+                    builder.InsertCell();
+                    builder.Write("年級_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 年級_科目成績_" + ss + "_" + rankType1VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
+                    }
+                    builder.EndRow();
+                    tmpCol++;
+                }
+                tmpCol = 0;
+                foreach (string rk1 in rankType1List)
+                {
+                    builder.InsertCell();
+                    builder.Write("班級定期_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 班級_科目定期成績_" + ss + "_" + rankType1VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
+                    }
+                    builder.EndRow();
+                    tmpCol++;
+                }
+                tmpCol = 0;
+                foreach (string rk1 in rankType1List)
+                {
+                    builder.InsertCell();
+                    builder.Write("年級定期_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 年級_科目定期成績_" + ss + "_" + rankType1VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
+                    }
+                    builder.EndRow();
+                    tmpCol++;
+                }
+
+                builder.EndTable();
+
+
+                // 產生組距資料
                 // 班級領域定期成績組距
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("班級領域定期成績組距");
+                builder.Writeln("班級、年級領域定期成績組距-領域成績");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
-                foreach (string dName in Global.DomainNameList)
+                builder.InsertCell();
+                builder.Write("名稱");
+                for (int ss = 1; ss <= 12; ss++)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.Write(dName + " 班級領域定期成績組距");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("班級");
-                    foreach (string rk2 in rankType2List)
+                    builder.Write("領域" + ss);
+                }
+                builder.EndRow();
+
+                tmpCol = 0;
+                foreach (string rk1 in rankType2List)
+                {
+                    builder.InsertCell();
+                    builder.Write("班級_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk2);
+                        builder.InsertField("MERGEFIELD 班級_領域成績_" + ss + "_" + rankType2VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-
-                    // 班級
-                    for (int cla = 1; cla <= 20; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk2 in rankType2VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 班級" + cla + "_" + dName + "_領域定期成績_" + rk2 + " \\* MERGEFORMAT ", "CR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
-
-                // 年級領域成績組距
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("年級領域成績組距");
-
-                foreach (string dName in Global.DomainNameList)
+                tmpCol = 0;
+                foreach (string rk1 in rankType2List)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.Write(dName + " 年級領域成績組距");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("年級");
-                    foreach (string rk2 in rankType2List)
+                    builder.Write("年級_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk2);
+                        builder.InsertField("MERGEFIELD 年級_領域成績_" + ss + "_" + rankType2VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-
-                    // 年級
-                    for (int cla = 1; cla <= 12; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk2 in rankType2VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 年級" + cla + "_" + dName + "_領域成績_" + rk2 + " \\* MERGEFORMAT ", "GR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
-
-                // 年級領域定期成績組距
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("年級領域定期成績組距");
-
-                foreach (string dName in Global.DomainNameList)
+                tmpCol = 0;
+                foreach (string rk1 in rankType2List)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.Write(dName + " 年級領域定期成績組距");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("年級");
-                    foreach (string rk2 in rankType2List)
+                    builder.Write("班級定期_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk2);
+                        builder.InsertField("MERGEFIELD 班級_領域定期成績_" + ss + "_" + rankType2VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-
-                    // 年級
-                    for (int cla = 1; cla <= 12; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk2 in rankType2VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 年級" + cla + "_" + dName + "_領域定期成績_" + rk2 + " \\* MERGEFORMAT ", "GR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
-
-
-                // 班級科目成績五標
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("班級科目成績五標");
-                for (int subjCot = 1; subjCot <= 7; subjCot++)
+                tmpCol = 0;
+                foreach (string rk1 in rankType2List)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("班級");
-                    builder.InsertCell();
-                    builder.Write("科目" + subjCot);
-                    foreach (string rk1 in rankType1List)
+                    builder.Write("年級定期_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk1);
+                        builder.InsertField("MERGEFIELD 年級_領域定期成績_" + ss + "_" + rankType2VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-                    // 班級
-                    for (int cla = 1; cla <= 10; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk1 in rankType1VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 班級" + cla + "_科目成績_" + rk1 + subjCot + " \\* MERGEFORMAT ", "CR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
 
+                builder.EndTable();
 
 
-                // 班級科目定期成績五標     
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("班級科目定期成績五標");
-                for (int subjCot = 1; subjCot <= 10; subjCot++)
-                {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
-                    builder.InsertCell();
-                    builder.Write("班級");
-                    builder.InsertCell();
-                    builder.Write("科目" + subjCot);
-                    foreach (string rk1 in rankType1List)
-                    {
-                        builder.InsertCell();
-                        builder.Write(rk1);
-                    }
-                    builder.EndRow();
-                    // 班級
-                    for (int cla = 1; cla <= 10; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk1 in rankType1VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 班級" + cla + "_科目定期成績_" + rk1 + subjCot + " \\* MERGEFORMAT ", "CR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
-                }
-
-
-                // 年級科目成績五標
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("年級科目成績五標");
-                for (int subjCot = 1; subjCot <= 7; subjCot++)
-                {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
-                    builder.InsertCell();
-                    builder.Write("年級");
-                    builder.InsertCell();
-                    builder.Write("科目" + subjCot);
-                    foreach (string rk1 in rankType1List)
-                    {
-                        builder.InsertCell();
-                        builder.Write(rk1);
-                    }
-                    builder.EndRow();
-                    // 年級
-                    for (int cla = 1; cla <= 10; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk1 in rankType1VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 年級" + cla + "_科目成績_" + rk1 + subjCot + " \\* MERGEFORMAT ", "GR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
-                }
-
-
-                // 年級科目定期成績五標
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("年級科目定期成績五標");
-                for (int subjCot = 1; subjCot <= 7; subjCot++)
-                {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
-                    builder.InsertCell();
-                    builder.Write("年級");
-                    builder.InsertCell();
-                    builder.Write("科目" + subjCot);
-                    foreach (string rk1 in rankType1List)
-                    {
-                        builder.InsertCell();
-                        builder.Write(rk1);
-                    }
-                    builder.EndRow();
-                    // 年級
-                    for (int cla = 1; cla <= 10; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk1 in rankType1VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 年級" + cla + "_科目定期成績_" + rk1 + subjCot + " \\* MERGEFORMAT ", "GR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
-                }
-
-                // 班級科目成績組距
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("班級科目成績組距");
-                for (int subjCot = 1; subjCot <= 7; subjCot++)
-                {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
-                    builder.InsertCell();
-                    builder.Write("班級");
-                    builder.InsertCell();
-                    builder.Write("科目" + subjCot);
-                    foreach (string rk2 in rankType2List)
-                    {
-                        builder.InsertCell();
-                        builder.Write(rk2);
-                    }
-                    builder.EndRow();
-                    // 班級
-                    for (int cla = 1; cla <= 10; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk2 in rankType2VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 班級" + cla + "_科目成績_" + rk2 + subjCot + " \\* MERGEFORMAT ", "CR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
-                }
-
+                // 產生組距資料
                 // 班級科目定期成績組距
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("班級科目定期成績組距");
-                for (int subjCot = 1; subjCot <= 7; subjCot++)
+                builder.Writeln("班級、年級科目定期成績組距-科目成績");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("名稱");
+                for (int ss = 1; ss <= 12; ss++)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("班級");
+                    builder.Write("科目" + ss);
+                }
+                builder.EndRow();
+
+                tmpCol = 0;
+                foreach (string rk1 in rankType2List)
+                {
                     builder.InsertCell();
-                    builder.Write("科目" + subjCot);
-                    foreach (string rk2 in rankType2List)
+                    builder.Write("班級_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk2);
+                        builder.InsertField("MERGEFIELD 班級_科目成績_" + ss + "_" + rankType2VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-                    // 班級
-                    for (int cla = 1; cla <= 10; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 班級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk2 in rankType2VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 班級" + cla + "_科目定期成績_" + rk2 + subjCot + " \\* MERGEFORMAT ", "CR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
-
-
-                // 年級科目成績組距
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("年級科目成績組距");
-                for (int subjCot = 1; subjCot <= 7; subjCot++)
+                tmpCol = 0;
+                foreach (string rk1 in rankType2List)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("年級");
-                    builder.InsertCell();
-                    builder.Write("科目" + subjCot);
-                    foreach (string rk2 in rankType2List)
+                    builder.Write("年級_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk2);
+                        builder.InsertField("MERGEFIELD 年級_科目成績_" + ss + "_" + rankType2VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-                    // 班級
-                    for (int cla = 1; cla <= 10; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk2 in rankType2VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 年級" + cla + "_科目成績_" + rk2 + subjCot + " \\* MERGEFORMAT ", "GR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
-
-
-                // 年級科目定期成績組距
-                builder.Writeln("");
-                builder.Writeln("");
-                builder.Writeln("年級科目定期成績組距");
-                for (int subjCot = 1; subjCot <= 7; subjCot++)
+                tmpCol = 0;
+                foreach (string rk1 in rankType2List)
                 {
-                    builder.Writeln("");
-                    builder.Writeln("");
-                    builder.StartTable();
-                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
-                    builder.Write("年級");
-                    builder.InsertCell();
-                    builder.Write("科目" + subjCot);
-                    foreach (string rk2 in rankType2List)
+                    builder.Write("班級定期_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
                     {
                         builder.InsertCell();
-                        builder.Write(rk2);
+                        builder.InsertField("MERGEFIELD 班級_科目定期成績_" + ss + "_" + rankType2VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
                     }
                     builder.EndRow();
-                    // 班級
-                    for (int cla = 1; cla <= 10; cla++)
-                    {
-
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD 年級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
-                        foreach (string rk2 in rankType2VList)
-                        {
-                            builder.InsertCell();
-                            builder.InsertField("MERGEFIELD 年級" + cla + "_科目定期成績_" + rk2 + subjCot + " \\* MERGEFORMAT ", "GR" + "");
-                        }
-                        builder.EndRow();
-                    }
-                    builder.EndTable();
+                    tmpCol++;
                 }
+                tmpCol = 0;
+                foreach (string rk1 in rankType2List)
+                {
+                    builder.InsertCell();
+                    builder.Write("年級定期_" + rk1);
+
+                    for (int ss = 1; ss <= 12; ss++)
+                    {
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD 年級_科目定期成績_" + ss + "_" + rankType2VList[tmpCol] + " \\* MERGEFORMAT ", "CR" + "");
+                    }
+                    builder.EndRow();
+                    tmpCol++;
+                }
+
+                builder.EndTable();
+
+                //// 班級領域成績五標
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("班級領域成績五標");
+
+                //foreach (string dName in Global.DomainNameList)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.Write(dName + " 班級領域成績五標");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("班級");
+                //    foreach (string rk1 in rankType1List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk1);
+                //    }
+                //    builder.EndRow();
+
+                //    // 班級
+                //    for (int cla = 1; cla <= 20; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk1 in rankType1VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 班級" + cla + "_" + dName + "_領域成績_" + rk1 + " \\* MERGEFORMAT ", "CR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+
+
+
+                //// 班級領域定期成績五標
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("班級領域定期成績五標");
+
+                //foreach (string dName in Global.DomainNameList)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.Write(dName + " 班級領域定期成績五標");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("班級");
+                //    foreach (string rk1 in rankType1List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk1);
+                //    }
+                //    builder.EndRow();
+
+                //    // 班級
+                //    for (int cla = 1; cla <= 20; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk1 in rankType1VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 班級" + cla + "_" + dName + "_領域定期成績_" + rk1 + " \\* MERGEFORMAT ", "CR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+                //// 年級領域成績五標              
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("年級領域成績五標");
+
+                //foreach (string dName in Global.DomainNameList)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.Write(dName + " 年級領域成績五標");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("年級");
+                //    foreach (string rk1 in rankType1List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk1);
+                //    }
+                //    builder.EndRow();
+
+                //    // 年級
+                //    for (int cla = 1; cla <= 12; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk1 in rankType1VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 年級" + cla + "_" + dName + "_領域成績_" + rk1 + " \\* MERGEFORMAT ", "GR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+
+                //// 年級領域定期成績五標
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("年級領域定期成績五標");
+
+                //foreach (string dName in Global.DomainNameList)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.Write(dName + " 年級領域定期成績五標");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("年級");
+                //    foreach (string rk1 in rankType1List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk1);
+                //    }
+                //    builder.EndRow();
+
+                //    // 年級
+                //    for (int cla = 1; cla <= 12; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk1 in rankType1VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 年級" + cla + "_" + dName + "_領域定期成績_" + rk1 + " \\* MERGEFORMAT ", "GR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+
+                //// 班級領域成績組距
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("班級領域成績組距");
+
+                //foreach (string dName in Global.DomainNameList)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.Write(dName + " 班級領域成績組距");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("班級");
+                //    foreach (string rk2 in rankType2List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk2);
+                //    }
+                //    builder.EndRow();
+
+                //    // 班級
+                //    for (int cla = 1; cla <= 20; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk2 in rankType2VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 班級" + cla + "_" + dName + "_領域成績_" + rk2 + " \\* MERGEFORMAT ", "CR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+
+                //// 班級領域定期成績組距
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("班級領域定期成績組距");
+
+                //foreach (string dName in Global.DomainNameList)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.Write(dName + " 班級領域定期成績組距");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("班級");
+                //    foreach (string rk2 in rankType2List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk2);
+                //    }
+                //    builder.EndRow();
+
+                //    // 班級
+                //    for (int cla = 1; cla <= 20; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk2 in rankType2VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 班級" + cla + "_" + dName + "_領域定期成績_" + rk2 + " \\* MERGEFORMAT ", "CR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+                //// 年級領域成績組距
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("年級領域成績組距");
+
+                //foreach (string dName in Global.DomainNameList)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.Write(dName + " 年級領域成績組距");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("年級");
+                //    foreach (string rk2 in rankType2List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk2);
+                //    }
+                //    builder.EndRow();
+
+                //    // 年級
+                //    for (int cla = 1; cla <= 12; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk2 in rankType2VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 年級" + cla + "_" + dName + "_領域成績_" + rk2 + " \\* MERGEFORMAT ", "GR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+                //// 年級領域定期成績組距
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("年級領域定期成績組距");
+
+                //foreach (string dName in Global.DomainNameList)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.Write(dName + " 年級領域定期成績組距");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("年級");
+                //    foreach (string rk2 in rankType2List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk2);
+                //    }
+                //    builder.EndRow();
+
+                //    // 年級
+                //    for (int cla = 1; cla <= 12; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk2 in rankType2VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 年級" + cla + "_" + dName + "_領域定期成績_" + rk2 + " \\* MERGEFORMAT ", "GR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+
+                //// 班級科目成績五標
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("班級科目成績五標");
+                //for (int subjCot = 1; subjCot <= 7; subjCot++)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("班級");
+                //    builder.InsertCell();
+                //    builder.Write("科目" + subjCot);
+                //    foreach (string rk1 in rankType1List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk1);
+                //    }
+                //    builder.EndRow();
+                //    // 班級
+                //    for (int cla = 1; cla <= 10; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk1 in rankType1VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 班級" + cla + "_科目成績_" + rk1 + subjCot + " \\* MERGEFORMAT ", "CR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+
+
+                //// 班級科目定期成績五標     
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("班級科目定期成績五標");
+                //for (int subjCot = 1; subjCot <= 10; subjCot++)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("班級");
+                //    builder.InsertCell();
+                //    builder.Write("科目" + subjCot);
+                //    foreach (string rk1 in rankType1List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk1);
+                //    }
+                //    builder.EndRow();
+                //    // 班級
+                //    for (int cla = 1; cla <= 10; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk1 in rankType1VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 班級" + cla + "_科目定期成績_" + rk1 + subjCot + " \\* MERGEFORMAT ", "CR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+
+                //// 年級科目成績五標
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("年級科目成績五標");
+                //for (int subjCot = 1; subjCot <= 7; subjCot++)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("年級");
+                //    builder.InsertCell();
+                //    builder.Write("科目" + subjCot);
+                //    foreach (string rk1 in rankType1List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk1);
+                //    }
+                //    builder.EndRow();
+                //    // 年級
+                //    for (int cla = 1; cla <= 10; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk1 in rankType1VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 年級" + cla + "_科目成績_" + rk1 + subjCot + " \\* MERGEFORMAT ", "GR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+
+                //// 年級科目定期成績五標
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("年級科目定期成績五標");
+                //for (int subjCot = 1; subjCot <= 7; subjCot++)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("年級");
+                //    builder.InsertCell();
+                //    builder.Write("科目" + subjCot);
+                //    foreach (string rk1 in rankType1List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk1);
+                //    }
+                //    builder.EndRow();
+                //    // 年級
+                //    for (int cla = 1; cla <= 10; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk1 in rankType1VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 年級" + cla + "_科目定期成績_" + rk1 + subjCot + " \\* MERGEFORMAT ", "GR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+                //// 班級科目成績組距
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("班級科目成績組距");
+                //for (int subjCot = 1; subjCot <= 7; subjCot++)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("班級");
+                //    builder.InsertCell();
+                //    builder.Write("科目" + subjCot);
+                //    foreach (string rk2 in rankType2List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk2);
+                //    }
+                //    builder.EndRow();
+                //    // 班級
+                //    for (int cla = 1; cla <= 10; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk2 in rankType2VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 班級" + cla + "_科目成績_" + rk2 + subjCot + " \\* MERGEFORMAT ", "CR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+                //// 班級科目定期成績組距
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("班級科目定期成績組距");
+                //for (int subjCot = 1; subjCot <= 7; subjCot++)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("班級");
+                //    builder.InsertCell();
+                //    builder.Write("科目" + subjCot);
+                //    foreach (string rk2 in rankType2List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk2);
+                //    }
+                //    builder.EndRow();
+                //    // 班級
+                //    for (int cla = 1; cla <= 10; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 班級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk2 in rankType2VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 班級" + cla + "_科目定期成績_" + rk2 + subjCot + " \\* MERGEFORMAT ", "CR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+
+                //// 年級科目成績組距
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("年級科目成績組距");
+                //for (int subjCot = 1; subjCot <= 7; subjCot++)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("年級");
+                //    builder.InsertCell();
+                //    builder.Write("科目" + subjCot);
+                //    foreach (string rk2 in rankType2List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk2);
+                //    }
+                //    builder.EndRow();
+                //    // 班級
+                //    for (int cla = 1; cla <= 10; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk2 in rankType2VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 年級" + cla + "_科目成績_" + rk2 + subjCot + " \\* MERGEFORMAT ", "GR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
+
+
+                //// 年級科目定期成績組距
+                //builder.Writeln("");
+                //builder.Writeln("");
+                //builder.Writeln("年級科目定期成績組距");
+                //for (int subjCot = 1; subjCot <= 7; subjCot++)
+                //{
+                //    builder.Writeln("");
+                //    builder.Writeln("");
+                //    builder.StartTable();
+                //    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                //    builder.InsertCell();
+                //    builder.Write("年級");
+                //    builder.InsertCell();
+                //    builder.Write("科目" + subjCot);
+                //    foreach (string rk2 in rankType2List)
+                //    {
+                //        builder.InsertCell();
+                //        builder.Write(rk2);
+                //    }
+                //    builder.EndRow();
+                //    // 班級
+                //    for (int cla = 1; cla <= 10; cla++)
+                //    {
+
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_名稱" + " \\* MERGEFORMAT ", "N" + "");
+                //        builder.InsertCell();
+                //        builder.InsertField("MERGEFIELD 年級" + cla + "_科目名稱_" + subjCot + " \\* MERGEFORMAT ", "N" + "");
+                //        foreach (string rk2 in rankType2VList)
+                //        {
+                //            builder.InsertCell();
+                //            builder.InsertField("MERGEFIELD 年級" + cla + "_科目定期成績_" + rk2 + subjCot + " \\* MERGEFORMAT ", "GR" + "");
+                //        }
+                //        builder.EndRow();
+                //    }
+                //    builder.EndTable();
+                //}
 
                 builder.Writeln("");
                 builder.Writeln("");
@@ -1198,6 +1507,8 @@ namespace HsinChuExamScoreClassFixedRank
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
+                builder.InsertCell();
+                builder.Write("");
                 builder.InsertCell();
                 builder.Write("學生領域名稱");
                 builder.InsertCell();
