@@ -1455,8 +1455,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
             #endregion
 
 
-            dtTable.TableName = "dtTable";
-            dtTable.WriteXml(Application.StartupPath + "\\dtT.xml");
+            //dtTable.TableName = "dtTable";
+            //dtTable.WriteXml(Application.StartupPath + "\\dtT.xml");
 
 
 
@@ -1528,7 +1528,22 @@ namespace HsinChuExamScoreClassFixedRank.Form
             if (!string.IsNullOrEmpty(_Configure.SelSetConfigName))
                 cboConfigure.Text = userSelectConfigName;
 
-            CanSelectExamDomainSubjectDict = DAO.DataAccess.GetExamDomainSubjectDictByClass(cboSchoolYear.Text, cboSemester.Text, _ClassIDList);
+            ReloadCanSelectDomainSubject(cboSchoolYear.Text, cboSemester.Text, _ClassIDList, _Configure.ExamRecordID);
+
+            btnSaveConfig.Enabled = btnPrint.Enabled = true;
+
+        }
+
+        /// <summary>
+        /// 重新讀取可選科目領域
+        /// </summary>
+        /// <param name="SchoolYear"></param>
+        /// <param name="Semester"></param>
+        /// <param name="_ClassIDList"></param>
+        /// <param name="ExamID"></param>
+        private void ReloadCanSelectDomainSubject(string SchoolYear,string Semester,List<string> _ClassIDList,string ExamID)
+        {
+            CanSelectExamDomainSubjectDict = DAO.DataAccess.GetExamDomainSubjectDictByClass(SchoolYear, Semester, _ClassIDList, ExamID);
             LoadDomainSubject();
             // 解析科目
             foreach (ListViewItem lvi in lvSubject.Items)
@@ -1548,10 +1563,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     lvi.Checked = true;
                 }
             }
-
-            btnSaveConfig.Enabled = btnPrint.Enabled = true;
-
         }
+
 
         private void BgWorkerLoadTemplate_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -2029,7 +2042,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 }
             }
 
-            LoadDomainSubject();
+            ReloadCanSelectDomainSubject(cboSchoolYear.Text,cboSemester.Text,_ClassIDList, SelExamID);
         }
 
         private void LoadDomainSubject()
