@@ -15,6 +15,8 @@ HsinChuJHEvaluation(新竹國中成績模組，新竹特有功能畫面、計算
 
 KaoHsiungJHEvaluation(高雄國中成績模組，高雄特有功能畫面、計算、報表功能)
 
+DomainScoreReport(領域成績單：學生成績預警通知單、班級成績預警通知單、領域不及格人數統計表)
+
 
 
 
