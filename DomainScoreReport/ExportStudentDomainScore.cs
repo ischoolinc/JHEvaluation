@@ -11,6 +11,9 @@ using K12.Data;
 using K12.Data.Configuration;
 using Aspose.Words;
 using Campus.Report;
+using FISCA.Presentation;
+using System.ComponentModel;
+using Aspose.Words.Reporting;
 
 namespace DomainScoreReport
 {
@@ -24,6 +27,7 @@ namespace DomainScoreReport
         private List<string> listDomainName = new List<string>();
         private Dictionary<string, StudentRec> dicStudentByID = new Dictionary<string, StudentRec>();
         private QueryHelper qh = new QueryHelper();
+        private BackgroundWorker bg = new BackgroundWorker();
 
         public ExportStudentDomainScore(List<string>listIDs)
         {
@@ -44,6 +48,98 @@ namespace DomainScoreReport
             // 讀取樣板
             Stream stream = new MemoryStream(Properties.Resources.StudentDoaminScore_template);
             docTemplat = new Document(stream);
+
+            InitailizeBackGroundWorker();
+        }
+
+        private void InitailizeBackGroundWorker()
+        {
+            bg.WorkerReportsProgress = true;
+            bg.DoWork += new DoWorkEventHandler(BackGroundWork_DoWork);
+            bg.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackGroundWork_RunWorkerCompleted);
+            bg.ProgressChanged += new ProgressChangedEventHandler(BackGroundWork_ProgressChanged);
+        }
+
+        private void BackGroundWork_DoWork(object sender, DoWorkEventArgs e)
+        {
+            int progress = 0;
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            Document doc = new Document();
+            doc.RemoveAllChildren();
+
+            // 取得學生領域成績
+            bool isSuccess = GetStudentDomainScore();
+            if (isSuccess)
+            {
+                worker.ReportProgress(progress += 10);
+                if (dtRsp.Rows.Count > 0)
+                {
+                    // 資料整理
+                    ParseData();
+                    worker.ReportProgress(progress += 30);
+
+                    DataTable dt = ParseMergeSource();
+                    int n = 70 / dt.Rows.Count;
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        Document eachDoc = new Document();
+                        eachDoc.Sections.Clear();
+                        eachDoc.Sections.Add(eachDoc.ImportNode(docTemplat.FirstSection, true));
+                        eachDoc.MailMerge.CleanupOptions = MailMergeCleanupOptions.RemoveEmptyParagraphs;
+                        eachDoc.MailMerge.Execute(row);
+
+                        doc.Sections.Add(doc.ImportNode(eachDoc.Sections[0], true));
+                        worker.ReportProgress(progress += n);
+                    }
+
+                    e.Result = doc;
+                }
+                else
+                {
+                    worker.ReportProgress(progress += 70);
+                    e.Result = null;
+                }
+            }
+        }
+
+        private void BackGroundWork_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            MotherForm.SetStatusBarMessage("成績預警通知單 產生中:", e.ProgressPercentage);
+        }
+
+        private void BackGroundWork_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Document doc = (Document)e.Result;
+
+            if (doc != null)
+            {
+                string path = $"{Application.StartupPath}\\Reports\\成績預警通知單.docx";
+                int i = 1;
+                while (File.Exists(path))
+                {
+                    string docName = Path.GetFileNameWithoutExtension(path);
+
+                    string newPath = $"{Path.GetDirectoryName(path)}\\成績預警通知單{i++}{Path.GetExtension(path)}";
+
+                    path = newPath;
+                }
+
+                doc.Save(path, SaveFormat.Docx);
+                MotherForm.SetStatusBarMessage("成績預警通知單 產生完成");
+
+                DialogResult result = MsgBox.Show($"{path}\n成績預警通知單產生完成，是否立刻開啟？", "訊息", MessageBoxButtons.YesNo);
+
+                if (DialogResult.Yes == result)
+                {
+                    System.Diagnostics.Process.Start(path);
+                }
+            }
+            else
+            {
+                MotherForm.SetStatusBarMessage("沒有成績資料，無法產生成績預警通知單。");
+            }
         }
 
         /// <summary>
@@ -51,41 +147,9 @@ namespace DomainScoreReport
         /// </summary>
         public void Export()
         {
-            bool isSuccess = GetStudentDomainScore();
-            if (isSuccess)
+            if (!bg.IsBusy)
             {
-                if (dtRsp.Rows.Count > 0)
-                {
-                    ParseData();
-
-                    List<string> listPath = new List<string>();
-                    string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    DataTable dt = ParseMergeSource();
-                    foreach (DataRow row in dt.Rows)
-                    {
-                        Document doc = (Document)docTemplat.Clone(true);
-                        doc.MailMerge.Execute(row);
-                        string _path = $"{path}\\{ row["student_name"]}_成績預警通知單.docx";
-                        doc.Save(_path, SaveFormat.Docx);
-                        listPath.Add(_path);
-                        //ReportSaver.SaveDocument(doc, $"{"" + row["student_name"]}_成績預警通知單");
-                    }
-
-                    DialogResult result =　MsgBox.Show("成績預警通知單產生完成，是否立刻開啟？", "訊息", MessageBoxButtons.YesNo);
-
-                    if (DialogResult.Yes == result)
-                    {
-                        foreach (string _path in listPath)
-                        {
-                            using (FileStream fs = new FileStream(_path, FileMode.Open));
-                        }
-                    }
-
-                }
-                else
-                {
-                    MsgBox.Show("沒有資料。");
-                }
+                bg.RunWorkerAsync();
             }
         }
 
@@ -239,7 +303,6 @@ ORDER BY
                     SchoolYearSemester ss = dicStudentByID[id].dicSchoolYear[key];
                     row[$"{s}_school_year"] = $"{ss.SchoolYear}學年度";
                     row[$"{s}_semester"] = $"第{ss.Semester}學期";
-
                     
                     int sd = 1;
                     float sTotalScore = 0;
@@ -280,7 +343,27 @@ ORDER BY
 
                 int d = 0;
                 int passDomainCount = 0;
-                foreach (string key in dicStudentByID[id].dicDomainByName.Keys)
+                // sort domain name
+                List<string> listDomain = dicStudentByID[id].dicDomainByName.Keys.ToList();
+                listDomain.Sort(delegate (string a, string b) {
+                    int aIndex = listDomainName.FindIndex(name => name == a);
+                    int bIndex = listDomainName.FindIndex(name => name == b);
+
+                    if (aIndex > bIndex)
+                    {
+                        return 1;
+                    }
+                    else if (aIndex == bIndex)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                });
+
+                foreach (string key in listDomain)
                 {
                     d++;
                     DomainRec dr = dicStudentByID[id].dicDomainByName[key];
@@ -289,7 +372,7 @@ ORDER BY
                     // 領域平均
                     row[$"{d}_domain_avg"] = dr.AvgScore;
 
-                    if (dr.AvgScore > 60)
+                    if (dr.AvgScore >= 60)
                     {
                         passDomainCount++;
                     }
