@@ -31,8 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ExportClassDomainScore.cs" />
     <Compile Include="ExportStudentDomainScore.cs" />
+    <Compile Include="frmExportClassDomainScore.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmExportClassDomainScore.Designer.cs">
+      <DependentUpon>frmExportClassDomainScore.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmExportDomainScore.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -113,6 +118,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="frmExportClassDomainScore.resx">
+      <DependentUpon>frmExportClassDomainScore.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmExportDomainScore.resx">
       <DependentUpon>frmExportDomainScore.cs</DependentUpon>
     </EmbeddedResource>
@@ -122,7 +130,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\StudentDoaminScore_template.doc" />
+    <None Include="Resources\ClassDomainScore_template.docx" />
+    <None Include="Resources\StudentDoaminScore_template.docx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

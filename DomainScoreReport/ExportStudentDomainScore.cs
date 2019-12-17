@@ -281,7 +281,7 @@ ORDER BY
         private DataTable ParseMergeSource()
         {
             string schoolName = School.ChineseName;
-            DataTable dt = MakeDataTable();
+            DataTable dt = CreateDataTable();
             
             foreach (string id in dicStudentByID.Keys)
             {
@@ -385,7 +385,7 @@ ORDER BY
             return dt;
         }
 
-        private DataTable MakeDataTable()
+        private DataTable CreateDataTable()
         {
             DataTable table = new DataTable();
             DataColumn col;
@@ -474,36 +474,36 @@ ORDER BY
 
             return table;
         }
-    }
 
-    class StudentRec
-    {
-        public string ID;
-        public string ClassName;
-        public string SeatNo;
-        public string Name;
-        public Dictionary<string, DomainRec> dicDomainByName = new Dictionary<string, DomainRec>();
-        public Dictionary<string, SchoolYearSemester> dicSchoolYear = new Dictionary<string, SchoolYearSemester>();
-        public Dictionary<string, Dictionary<string, string>> dicScoreByDomainBySchoolYear = new Dictionary<string, Dictionary<string, string>>();
-        public Dictionary<string, string> dicAvgScoreByDomain = new Dictionary<string, string>();
-    }
-
-    class SchoolYearSemester
-    {
-        public string SchoolYear;
-        public string Semester;
-    }
-
-    class DomainRec
-    {
-        public string Name;
-        public float TotalScore;
-        public float ScoreCount;
-        public double AvgScore;
-
-        public void Calc()
+        private class StudentRec
         {
-            AvgScore = Math.Round(TotalScore / ScoreCount, 2);
+            public string ID;
+            public string ClassName;
+            public string SeatNo;
+            public string Name;
+            public Dictionary<string, DomainRec> dicDomainByName = new Dictionary<string, DomainRec>();
+            public Dictionary<string, SchoolYearSemester> dicSchoolYear = new Dictionary<string, SchoolYearSemester>();
+            public Dictionary<string, Dictionary<string, string>> dicScoreByDomainBySchoolYear = new Dictionary<string, Dictionary<string, string>>();
+            public Dictionary<string, string> dicAvgScoreByDomain = new Dictionary<string, string>();
+        }
+
+        private class SchoolYearSemester
+        {
+            public string SchoolYear;
+            public string Semester;
+        }
+
+        private class DomainRec
+        {
+            public string Name;
+            public float TotalScore;
+            public float ScoreCount;
+            public double AvgScore;
+
+            public void Calc()
+            {
+                AvgScore = Math.Round(TotalScore / ScoreCount, 2);
+            }
         }
     }
 }

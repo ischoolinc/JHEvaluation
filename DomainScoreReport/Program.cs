@@ -39,7 +39,7 @@ namespace DomainScoreReport
                 {
                     if (NLDPanels.Class.SelectedSource.Count > 0)
                     {
-                        (new ExportClassDomainScore(NLDPanels.Class.SelectedSource)).Export();
+                        (new frmExportClassDomainScore(NLDPanels.Class.SelectedSource)).Show();
                     }
                     else
                     {
