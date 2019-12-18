@@ -56,7 +56,7 @@
             this.cbxSemester.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxSemester.FormattingEnabled = true;
             this.cbxSemester.ItemHeight = 23;
-            this.cbxSemester.Location = new System.Drawing.Point(265, 12);
+            this.cbxSemester.Location = new System.Drawing.Point(260, 12);
             this.cbxSemester.Name = "cbxSemester";
             this.cbxSemester.Size = new System.Drawing.Size(90, 29);
             this.cbxSemester.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -68,7 +68,7 @@
             this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExport.BackColor = System.Drawing.Color.Transparent;
             this.btnExport.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExport.Location = new System.Drawing.Point(214, 108);
+            this.btnExport.Location = new System.Drawing.Point(194, 98);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(75, 23);
             this.btnExport.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -82,7 +82,7 @@
             this.btnLeave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLeave.BackColor = System.Drawing.Color.Transparent;
             this.btnLeave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnLeave.Location = new System.Drawing.Point(295, 108);
+            this.btnLeave.Location = new System.Drawing.Point(275, 98);
             this.btnLeave.Name = "btnLeave";
             this.btnLeave.Size = new System.Drawing.Size(75, 23);
             this.btnLeave.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -112,7 +112,7 @@
             // 
             this.labelX2.BackgroundStyle.Class = "";
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(215, 15);
+            this.labelX2.Location = new System.Drawing.Point(210, 15);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(44, 23);
             this.labelX2.TabIndex = 5;
@@ -122,7 +122,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 143);
+            this.ClientSize = new System.Drawing.Size(362, 133);
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.labelX1);
             this.Controls.Add(this.btnLeave);
@@ -130,8 +130,8 @@
             this.Controls.Add(this.cbxSemester);
             this.Controls.Add(this.cbxSchoolYear);
             this.DoubleBuffered = true;
-            this.MaximumSize = new System.Drawing.Size(400, 190);
-            this.MinimumSize = new System.Drawing.Size(400, 190);
+            this.MaximumSize = new System.Drawing.Size(380, 180);
+            this.MinimumSize = new System.Drawing.Size(380, 180);
             this.Name = "frmExportClassDomainScore";
             this.Text = "班級成績預警通知單";
             this.Load += new System.EventHandler(this.frmExportClassDomainScore_Load);

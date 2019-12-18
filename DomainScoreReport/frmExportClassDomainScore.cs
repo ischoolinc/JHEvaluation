@@ -30,11 +30,22 @@ namespace DomainScoreReport
         private Dictionary<string, string> dicClassNameByID = new Dictionary<string, string>();
         private Dictionary<string, StudentRec> dicStuRecByID = new Dictionary<string, StudentRec>();
         private Dictionary<string, List<string>> dicDomainNameByClassID = new Dictionary<string, List<string>>();
+        private BackgroundWorker bgWorker = new BackgroundWorker();
+        private int percentage = 0;
 
         public frmExportClassDomainScore(List<string>listIDs)
         {
             InitializeComponent();
+            InitializeBackgroundWorker();
             listClassID = listIDs;
+        }
+
+        private void InitializeBackgroundWorker()
+        {
+            bgWorker.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
+            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
+            bgWorker.ProgressChanged += new ProgressChangedEventHandler(BackgroundWorker_ProgressChanged);
+            bgWorker.WorkerReportsProgress = true;
         }
 
         private void frmExportClassDomainScore_Load(object sender, EventArgs e)
@@ -73,23 +84,46 @@ namespace DomainScoreReport
 
         private void btnExport_Click(object sender, EventArgs e)
         {
+            if (!bgWorker.IsBusy)
+            {
+                ParameterRec data = new ParameterRec();
+                data.SchoolYear = cbxSchoolYear.SelectedItem.ToString();
+                data.Semester = cbxSemester.SelectedItem.ToString();
+                data.ClassIDs = string.Join(",", listClassID);
+
+                bgWorker.RunWorkerAsync(data);
+            }
+        }
+
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            ParameterRec data = (ParameterRec)e.Argument;
+            
             Document doc = new Document();
+            doc.RemoveAllChildren();
+            int progress = 0;
             // 取得學年度學期班級學生領域成績
-            DataTable dt = GetClassStudentDomainScore();
+            DataTable dt = GetClassStudentDomainScore(data);
+            bgWorker.ReportProgress(progress += 10);
             // 資料解析
             ParseData(dt);
+            bgWorker.ReportProgress(progress += 10);
             // 資料填寫
-            DataTable table = FillMergeFiledData();
+            DataTable table = FillMergeFiledData(data);
+            bgWorker.ReportProgress(progress += 10);
 
+            int p = 70 / table.Rows.Count;
             foreach (DataRow row in table.Rows)
             {
                 Document eachDoc = new Document();
                 eachDoc.Sections.Clear();
-                eachDoc.Sections.Add(eachDoc.ImportNode(docTemplate.FirstSection, true));
+                Section section = (Section)eachDoc.ImportNode(docTemplate.FirstSection, true);
+                eachDoc.AppendChild(section);
                 eachDoc.MailMerge.CleanupOptions = MailMergeCleanupOptions.RemoveEmptyParagraphs;
                 eachDoc.MailMerge.Execute(row);
 
                 doc.Sections.Add(doc.ImportNode(eachDoc.Sections[0], true));
+                bgWorker.ReportProgress(progress += p);
             }
 
             string path = $"{Application.StartupPath}\\Reports\\班級成績預警通知單.docx";
@@ -97,15 +131,20 @@ namespace DomainScoreReport
             while (File.Exists(path))
             {
                 string docName = Path.GetFileNameWithoutExtension(path);
-
                 string newPath = $"{Path.GetDirectoryName(path)}\\成績預警通知單{i++}{Path.GetExtension(path)}";
 
                 path = newPath;
             }
 
             doc.Save(path, SaveFormat.Docx);
-            MotherForm.SetStatusBarMessage("班級成績預警通知單 產生完成");
+            e.Result = path;
+        }
 
+        private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            string path = (string)e.Result;
+
+            MotherForm.SetStatusBarMessage("班級成績預警通知單 產生完成");
             DialogResult result = MsgBox.Show($"{path}\n班級成績預警通知單產生完成，是否立刻開啟？", "訊息", MessageBoxButtons.YesNo);
 
             if (DialogResult.Yes == result)
@@ -114,7 +153,12 @@ namespace DomainScoreReport
             }
         }
 
-        private DataTable GetClassStudentDomainScore()
+        private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            MotherForm.SetStatusBarMessage("班級成績預警通知單 產生中:", e.ProgressPercentage);
+        }
+
+        private DataTable GetClassStudentDomainScore(ParameterRec data)
         {
             string sql = string.Format(@"
 WITH data_row AS (
@@ -128,38 +172,47 @@ WITH data_row AS (
 		student
 	WHERE
 		ref_class_id IN ({2})
-)
+), domain_score AS(
+    SELECT
+        student.id
+        , student.name
+        , student.seat_no
+        , class.id AS class_id
+        , class.class_name
+	    --, sems_subj_score_ext.ref_student_id
+	    , sems_subj_score_ext.semester
+	    , sems_subj_score_ext.school_year
+	    , array_to_string(xpath('/Domain/@原始成績', subj_score_ele), '')::text AS 原始成績
+	    , array_to_string(xpath('/Domain/@成績', subj_score_ele), '')::text AS 成績
+	    , array_to_string(xpath('/Domain/@領域', subj_score_ele), '')::text AS 領域
+    FROM (
+		    SELECT 
+			    sems_subj_score.*
+			    , unnest(xpath('/root/Domains/Domain', xmlparse(content '<root>' || score_info || '</root>'))) as subj_score_ele
+		    FROM 
+			    sems_subj_score 
+			    INNER JOIN target_student
+				    ON target_student.id = sems_subj_score.ref_student_id 
+	    ) as sems_subj_score_ext
+        LEFT OUTER JOIN student
+            ON student.id = sems_subj_score_ext.ref_student_id
+        LEFT OUTER JOIN class
+            ON class.id = student.ref_class_id
+        INNER JOIN data_row
+    	    ON data_row.school_year = sems_subj_score_ext.school_year
+    	    AND data_row.semester = sems_subj_score_ext.semester
+    ORDER BY
+	    sems_subj_score_ext.grade_year 
+        , class.display_order
+        , student.seat_no
+) -- 篩除沒有 domain 的資料 
 SELECT
-    student.id
-    , student.name
-    , student.seat_no
-    , class.id AS class_id
-    , class.class_name
-	--, sems_subj_score_ext.ref_student_id
-	, sems_subj_score_ext.semester
-	, sems_subj_score_ext.school_year
-	, array_to_string(xpath('/Domain/@原始成績', subj_score_ele), '')::text AS 原始成績
-	, array_to_string(xpath('/Domain/@成績', subj_score_ele), '')::text AS 成績
-	, array_to_string(xpath('/Domain/@領域', subj_score_ele), '')::text AS 領域
-FROM (
-		SELECT 
-			sems_subj_score.*
-			, unnest(xpath('/root/Domains/Domain', xmlparse(content '<root>' || score_info || '</root>'))) as subj_score_ele
-		FROM 
-			sems_subj_score 
-			INNER JOIN target_student
-				ON target_student.id = sems_subj_score.ref_student_id 
-	) as sems_subj_score_ext
-    LEFT OUTER JOIN student
-        ON student.id = sems_subj_score_ext.ref_student_id
-    LEFT OUTER JOIN class
-        ON class.id = student.ref_class_id
-    INNER JOIN data_row
-    	ON data_row.school_year = sems_subj_score_ext.school_year
-    	AND data_row.semester = sems_subj_score_ext.semester
-ORDER BY
-	sems_subj_score_ext.grade_year 
-                ", cbxSchoolYear.SelectedItem, cbxSemester.SelectedItem, string.Join(",", listClassID));
+    *
+FROM
+    domain_score
+WHERE
+    領域 <> ''
+                ", data.SchoolYear, data.Semester, data.ClassIDs);
 
             return qh.Select(sql);
         }
@@ -250,7 +303,7 @@ ORDER BY
                 table.Columns.Add(col);
 
                 // 領域成績
-                for (int d = 1; d <= 7; d++)
+                for (int d = 1; d <= 8; d++)
                 {
                     col = new DataColumn();
                     col.DataType = Type.GetType("System.String");
@@ -283,7 +336,7 @@ ORDER BY
             return table;
         }
 
-        private DataTable FillMergeFiledData()
+        private DataTable FillMergeFiledData(ParameterRec data)
         {
             DataTable dt = CreateMergeFiledTable();
             
@@ -292,8 +345,8 @@ ORDER BY
                 DataRow row = dt.NewRow();
 
                 row["school_name"] = School.ChineseName;
-                row["school_year"] = cbxSchoolYear.SelectedItem;
-                row["semester"] = cbxSemester.SelectedItem;
+                row["school_year"] = data.SchoolYear;
+                row["semester"] = data.Semester;
                 row["class_name"] = dicClassNameByID[classID];
 
                 // 班級領域清單
@@ -339,6 +392,10 @@ ORDER BY
                 int s = 1;
                 foreach (string stuID in dicStuDomainScore.Keys)
                 {
+                    StudentRec stuRec = dicStuRecByID[stuID];
+                    row[$"seat_no_{s}"] = stuRec.SeatNo;
+                    row[$"name_{s}"] = stuRec.Name;
+
                     int d = 1;
                     int sc = 0;
                     int passCount = 0;
@@ -360,8 +417,6 @@ ORDER BY
                         }
                         d++;
                     }
-                    s++;
-
                     if (sc > 0)
                     {
                         // 平均成績
@@ -369,6 +424,7 @@ ORDER BY
                         // 領域及格數
                         row[$"stu_{s}_pass_count"] = passCount;
                     }
+                    s++;
                 }
 
                 dt.Rows.Add(row);
@@ -388,6 +444,11 @@ ORDER BY
             public string Name;
         }
 
-        
+        private class ParameterRec
+        {
+            public string SchoolYear;
+            public string Semester;
+            public string ClassIDs;
+        }
     }
 }
