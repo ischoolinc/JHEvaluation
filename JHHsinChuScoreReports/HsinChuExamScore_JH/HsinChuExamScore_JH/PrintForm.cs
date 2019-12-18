@@ -280,7 +280,7 @@ namespace HsinChuExamScore_JH
                     }
 
                     if (cn.Template == null)
-                        cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_評量成績通知單樣板));
+                        cn.Template = new Document(new MemoryStream(Properties.Resources.新竹評量成績單樣板_固定排名_科目_領域__doc1));
                     cn.Encode();
                     cn.Save();
                 }
@@ -360,7 +360,7 @@ namespace HsinChuExamScore_JH
             // 每次合併後放入，最後再合成一張
             Document docTemplate = _Configure.Template;
             if (docTemplate == null)
-                docTemplate = new Document(new MemoryStream(Properties.Resources.新竹_評量成績通知單樣板));
+                docTemplate = new Document(new MemoryStream(Properties.Resources.新竹評量成績單樣板_固定排名_科目_領域__doc1));
 
             _ErrorList.Clear();
             _ErrorDomainNameList.Clear();
@@ -2267,7 +2267,7 @@ namespace HsinChuExamScore_JH
                     try
                     {
                         System.IO.FileStream stream = new FileStream(sd.FileName, FileMode.Create, FileAccess.Write);
-                        stream.Write(Properties.Resources.新竹_評量成績通知單樣板, 0, Properties.Resources.新竹_評量成績通知單樣板.Length);
+                        stream.Write(Properties.Resources.新竹評量成績單樣板_固定排名_科目_領域__doc1, 0, Properties.Resources.新竹評量成績單樣板_固定排名_科目_領域__doc1.Length);
                         stream.Flush();
                         stream.Close();
 

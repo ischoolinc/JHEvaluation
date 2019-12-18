@@ -32,7 +32,7 @@ namespace HsinChuExamScore_JH
         {
             if (checkBoxX1.Checked)
             {
-                Template = new Aspose.Words.Document(new MemoryStream(Properties.Resources.新竹_評量成績通知單樣板));
+                Template = new Aspose.Words.Document(new MemoryStream(Properties.Resources.新竹評量成績單樣板_固定排名_科目_領域__doc1));
                 this.SubjectLimit = 25;
             }
         }
@@ -138,7 +138,7 @@ namespace HsinChuExamScore_JH
             try
             {                
                 System.IO.FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
-                stream.Write(Properties.Resources.新竹_評量成績通知單樣板, 0, Properties.Resources.新竹_評量成績通知單樣板.Length);
+                stream.Write(Properties.Resources.新竹評量成績單樣板_固定排名_科目_領域__doc1, 0, Properties.Resources.新竹評量成績單樣板_固定排名_科目_領域__doc1.Length);
                 stream.Flush();
                 stream.Close();
                 System.Diagnostics.Process.Start(path);
@@ -154,7 +154,7 @@ namespace HsinChuExamScore_JH
                     try
                     {                
                         System.IO.FileStream stream = new FileStream(sd.FileName, FileMode.Create, FileAccess.Write);
-                        stream.Write(Properties.Resources.新竹_評量成績通知單樣板, 0, Properties.Resources.新竹_評量成績通知單樣板.Length);
+                        stream.Write(Properties.Resources.新竹評量成績單樣板_固定排名_科目_領域__doc1, 0, Properties.Resources.新竹評量成績單樣板_固定排名_科目_領域__doc1.Length);
                         stream.Flush();
                         stream.Close();
 

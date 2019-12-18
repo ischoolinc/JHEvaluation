@@ -103,16 +103,6 @@ namespace HsinChuExamScore_JH.Properties {
         /// <summary>
         ///   查詢類型 System.Byte[] 的當地語系化資源。
         /// </summary>
-        internal static byte[] 新竹_評量成績通知單樣板 {
-            get {
-                object obj = ResourceManager.GetObject("新竹_評量成績通知單樣板", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類型 System.Byte[] 的當地語系化資源。
-        /// </summary>
         internal static byte[] 新竹_領域成績單 {
             get {
                 object obj = ResourceManager.GetObject("新竹_領域成績單", resourceCulture);
@@ -126,6 +116,16 @@ namespace HsinChuExamScore_JH.Properties {
         internal static byte[] 新竹評量成績合併欄位總表 {
             get {
                 object obj = ResourceManager.GetObject("新竹評量成績合併欄位總表", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
+        internal static byte[] 新竹評量成績單樣板_固定排名_科目_領域__doc1 {
+            get {
+                object obj = ResourceManager.GetObject("新竹評量成績單樣板_固定排名_科目_領域__doc1", resourceCulture);
                 return ((byte[])(obj));
             }
         }
