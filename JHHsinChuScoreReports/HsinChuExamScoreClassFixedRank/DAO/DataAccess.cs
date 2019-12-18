@@ -35,10 +35,10 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         {
             Dictionary<string, Dictionary<string, List<string>>> value = new Dictionary<string, Dictionary<string, List<string>>>();
 
-            if (ClassIDList.Count > 0)
+            if (ClassIDList.Count > 0 && SchoolYear != "" && Semester != "" && ExamID != "")
             {
                 QueryHelper qh = new QueryHelper();
-                string query = "SELECT te_include.ref_exam_id AS exam_id,course.domain,course.subject FROM sc_attend INNER JOIN course ON sc_attend.ref_course_id = course.id INNER JOIN student ON sc_attend.ref_student_id = student.id  INNER JOIN te_include ON course.ref_exam_template_id = te_include.ref_exam_template_id WHERE student.status = 1 AND course.ref_class_id IN(" + string.Join(",", ClassIDList.ToArray()) + ") AND course.school_year = " + SchoolYear + " AND course.semester = " + Semester + " AND te_include.ref_exam_id = " + ExamID + " ORDER BY domain,subject";
+                string query = "SELECT te_include.ref_exam_id AS exam_id,course.domain,course.subject FROM sc_attend INNER JOIN course ON sc_attend.ref_course_id = course.id INNER JOIN student ON sc_attend.ref_student_id = student.id  INNER JOIN te_include ON course.ref_exam_template_id = te_include.ref_exam_template_id WHERE student.status = 1 AND student.ref_class_id IN(" + string.Join(",", ClassIDList.ToArray()) + ") AND course.school_year = " + SchoolYear + " AND course.semester = " + Semester + " AND te_include.ref_exam_id = " + ExamID + " ORDER BY domain,subject";
 
                 DataTable dt = qh.Select(query);
                 foreach (DataRow dr in dt.Rows)
@@ -199,7 +199,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                     " ON sce_take.ref_sc_attend_id = sc_attend.id " +
                     " INNER JOIN te_include ON course.ref_exam_template_id = te_include.ref_exam_template_id AND sce_take.ref_exam_id = te_include.ref_exam_id" +
                     " WHERE" +
-                    " te_include.ref_exam_id = " + ExamID + " AND course.school_year = " + SchoolYear + " AND course.semester = " + Semester + " AND course.ref_class_id IN(" + string.Join(",", ClassIDList.ToArray()) + ") AND student.status = 1";
+                    " te_include.ref_exam_id = " + ExamID + " AND course.school_year = " + SchoolYear + " AND course.semester = " + Semester + " AND student.ref_class_id IN(" + string.Join(",", ClassIDList.ToArray()) + ") AND student.status = 1";
 
                 DataTable dt = qh.Select(query);
 

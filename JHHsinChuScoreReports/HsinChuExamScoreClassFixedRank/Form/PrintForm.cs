@@ -364,7 +364,9 @@ namespace HsinChuExamScoreClassFixedRank.Form
             for (int ss = 1; ss <= 30; ss++)
             {
                 dtTable.Columns.Add("學生_科目名稱" + ss);
+                dtTable.Columns.Add("學生_科目學分" + ss);
                 dtTable.Columns.Add("學生_領域名稱" + ss);
+                dtTable.Columns.Add("學生_領域學分" + ss);
             }
 
             // 學生領域科目
@@ -567,6 +569,11 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
             bgWorkerReport.ReportProgress(30);
 
+
+            // 單存科目或領域 學分數使用
+            Dictionary<string, List<decimal>> tmpSubjectCreditDict = new Dictionary<string, List<decimal>>();
+            Dictionary<string, List<decimal>> tmpDomainCreditDict = new Dictionary<string, List<decimal>>();
+
             Dictionary<int, List<string>> grClassNameDict = new Dictionary<int, List<string>>();
 
             foreach (ClassInfo ci in ClassInfoList)
@@ -624,7 +631,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 , "公民"));
             }
 
-           
+
             // 填入資料
             foreach (ClassInfo ci in ClassInfoList)
             {
@@ -676,7 +683,10 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 // 成績索引
                 Dictionary<string, DomainInfo> tmpDomainInfoDict = new Dictionary<string, DomainInfo>();
                 Dictionary<string, SubjectInfo> tmpSubjectInfoDict = new Dictionary<string, SubjectInfo>();
-           
+
+                tmpDomainCreditDict.Clear();
+                tmpSubjectCreditDict.Clear();
+
 
                 // 填入學生資料
                 int studCot = 1;
@@ -787,6 +797,12 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             {
                                 if (di.Credit.HasValue)
                                 {
+                                    if (!tmpDomainCreditDict.ContainsKey(di.Name))
+                                        tmpDomainCreditDict.Add(di.Name, new List<decimal>());
+
+                                    if (!tmpDomainCreditDict[di.Name].Contains(di.Credit.Value))
+                                        tmpDomainCreditDict[di.Name].Add(di.Credit.Value);
+
                                     row[d2] = di.Credit.Value;
                                 }
                             }
@@ -830,7 +846,16 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                         if (dtTable.Columns.Contains(s3Key))
                                         {
                                             if (subj.Credit.HasValue)
+                                            {
                                                 row[s3Key] = subj.Credit.Value;
+
+                                                if (!tmpSubjectCreditDict.ContainsKey(subj.Name))
+                                                    tmpSubjectCreditDict.Add(subj.Name, new List<decimal>());
+
+                                                if (!tmpSubjectCreditDict[subj.Name].Contains(subj.Credit.Value))
+                                                    tmpSubjectCreditDict[subj.Name].Add(subj.Credit.Value);
+                                            }
+
                                         }
                                     }
                                 }
@@ -845,7 +870,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     foreach (string dName in SelDomainNameList)
                     {
                         if (tmpDomainInfoDict.ContainsKey(dName))
-                        {  
+                        {
                             DomainInfo di = tmpDomainInfoDict[dName];
                             string da1 = "學生_領域名稱" + studCot + "_" + daCount;
                             string da2 = "學生_領域成績" + studCot + "_" + daCount;
@@ -875,7 +900,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 {
                                     row[da4] = di.Credit.Value;
                                 }
-                            }                          
+                            }
                         }
                         daCount++;
                     }
@@ -886,7 +911,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     {
                         if (tmpSubjectInfoDict.ContainsKey(sName))
                         {
-                            
+
 
                             SubjectInfo sia = tmpSubjectInfoDict[sName];
                             string sa1 = "學生_科目名稱" + studCot + "_" + saCount;
@@ -917,7 +942,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 {
                                     row[sa4] = sia.Credit.Value;
                                 }
-                            }                          
+                            }
 
                         }
                         saCount++;
@@ -930,12 +955,22 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 foreach (string dName in SelDomainNameList)
                 {
                     row["學生_領域名稱" + t_d] = dName;
+
+                    if (tmpDomainCreditDict.ContainsKey(dName))
+                    {
+                        row["學生_領域學分" + t_d] = string.Join(",", tmpDomainCreditDict[dName].ToArray());
+                    }
+
                     t_d++;
                 }
                 t_d = 1;
                 foreach (string sName in SelSubjectNameList)
                 {
                     row["學生_科目名稱" + t_d] = sName;
+                    if (tmpSubjectCreditDict.ContainsKey(sName))
+                    {
+                        row["學生_科目學分" + t_d] = string.Join(",", tmpSubjectCreditDict[sName].ToArray());
+                    }
                     t_d++;
                 }
 
@@ -1461,7 +1496,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
 
 
-            //           dtTable.WriteXmlSchema(Application.StartupPath + "\\dtTsc.xml");
+
             bgWorkerReport.ReportProgress(100);
         }
 
@@ -1541,14 +1576,14 @@ namespace HsinChuExamScoreClassFixedRank.Form
         /// <param name="Semester"></param>
         /// <param name="_ClassIDList"></param>
         /// <param name="ExamID"></param>
-        private void ReloadCanSelectDomainSubject(string SchoolYear,string Semester,List<string> _ClassIDList,string ExamID)
+        private void ReloadCanSelectDomainSubject(string SchoolYear, string Semester, List<string> _ClassIDList, string ExamID)
         {
             CanSelectExamDomainSubjectDict = DAO.DataAccess.GetExamDomainSubjectDictByClass(SchoolYear, Semester, _ClassIDList, ExamID);
             LoadDomainSubject();
             // 解析科目
             foreach (ListViewItem lvi in lvSubject.Items)
             {
-                if (_Configure.PrintSubjectList.Contains(lvi.Text))
+                if (_Configure.PrintSubjectList != null && _Configure.PrintSubjectList.Contains(lvi.Text))
                 {
                     lvi.Checked = true;
                 }
@@ -1558,7 +1593,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             // 解析科目
             foreach (ListViewItem lvi in lvDomain.Items)
             {
-                if (_Configure.PrintDomainList.Contains(lvi.Text))
+                if (_Configure.PrintDomainList != null && _Configure.PrintDomainList.Contains(lvi.Text))
                 {
                     lvi.Checked = true;
                 }
@@ -1631,7 +1666,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             }
 
 
-            bgWorkerLoadTemplate.ReportProgress(50);     
+            bgWorkerLoadTemplate.ReportProgress(50);
 
             bgWorkerLoadTemplate.ReportProgress(80);
             // 取的設定資料
@@ -2042,7 +2077,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 }
             }
 
-            ReloadCanSelectDomainSubject(cboSchoolYear.Text,cboSemester.Text,_ClassIDList, SelExamID);
+            ReloadCanSelectDomainSubject(cboSchoolYear.Text, cboSemester.Text, _ClassIDList, SelExamID);
         }
 
         private void LoadDomainSubject()
@@ -2075,6 +2110,21 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
         private void cboConfigure_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+            // 清空預設
+            foreach (ListViewItem lvi in lvSubject.Items)
+            {
+                lvi.Checked = false;
+            }
+
+            
+            // 清空預設
+            foreach (ListViewItem lvi in lvDomain.Items)
+            {
+                lvi.Checked = false;
+            }
+
+
             if (cboConfigure.SelectedIndex == cboConfigure.Items.Count - 1)
             {
                 //新增
