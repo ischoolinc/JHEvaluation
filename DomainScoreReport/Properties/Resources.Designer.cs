@@ -73,6 +73,16 @@ namespace DomainScoreReport.Properties {
         /// <summary>
         ///   查詢類型 System.Byte[] 的當地語系化資源。
         /// </summary>
+        internal static byte[] SchoolDomainScore_template {
+            get {
+                object obj = ResourceManager.GetObject("SchoolDomainScore_template", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
         internal static byte[] StudentDoaminScore_template {
             get {
                 object obj = ResourceManager.GetObject("StudentDoaminScore_template", resourceCulture);

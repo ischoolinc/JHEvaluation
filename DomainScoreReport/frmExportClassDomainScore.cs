@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System.IO;
+using System.Xml;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using System.ComponentModel;
+using System.Collections.Generic;
+using FISCA.Data;
+using FISCA.Presentation;
 using FISCA.Presentation.Controls;
 using K12.Data;
 using K12.Data.Configuration;
-using FISCA.Data;
 using Aspose.Words;
-using System.IO;
-using System.Xml;
 using Aspose.Words.Reporting;
-using FISCA.Presentation;
 
 namespace DomainScoreReport
 {
@@ -31,7 +28,6 @@ namespace DomainScoreReport
         private Dictionary<string, StudentRec> dicStuRecByID = new Dictionary<string, StudentRec>();
         private Dictionary<string, List<string>> dicDomainNameByClassID = new Dictionary<string, List<string>>();
         private BackgroundWorker bgWorker = new BackgroundWorker();
-        private int percentage = 0;
 
         public frmExportClassDomainScore(List<string>listIDs)
         {
@@ -265,7 +261,6 @@ WHERE
         private DataTable CreateMergeFiledTable()
         {
             DataTable table = new DataTable();
-
             DataColumn col;
 
             col = new DataColumn();

@@ -56,7 +56,7 @@ namespace DomainScoreReport
                 MotherForm.RibbonBarItems["教務作業", "資料統計"]["報表"]["領域不及格人數統計表"].Enable = UserAcl.Current[code].Executable;
                 MotherForm.RibbonBarItems["教務作業", "資料統計"]["報表"]["領域不及格人數統計表"].Click += delegate
                 {
-                    (new frmExportDomainScore()).Show();
+                    (new frmExportSchoolDomainScore()).Show();
                 };
             }
             #endregion

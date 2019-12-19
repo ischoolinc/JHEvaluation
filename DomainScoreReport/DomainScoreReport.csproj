@@ -38,11 +38,11 @@
     <Compile Include="frmExportClassDomainScore.Designer.cs">
       <DependentUpon>frmExportClassDomainScore.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmExportDomainScore.cs">
+    <Compile Include="frmExportSchoolDomainScore.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmExportDomainScore.Designer.cs">
-      <DependentUpon>frmExportDomainScore.cs</DependentUpon>
+    <Compile Include="frmExportSchoolDomainScore.Designer.cs">
+      <DependentUpon>frmExportSchoolDomainScore.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -121,8 +121,8 @@
     <EmbeddedResource Include="frmExportClassDomainScore.resx">
       <DependentUpon>frmExportClassDomainScore.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmExportDomainScore.resx">
-      <DependentUpon>frmExportDomainScore.cs</DependentUpon>
+    <EmbeddedResource Include="frmExportSchoolDomainScore.resx">
+      <DependentUpon>frmExportSchoolDomainScore.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ClassDomainScore_template.docx" />
+    <None Include="Resources\SchoolDomainScore_template.docx" />
     <None Include="Resources\StudentDoaminScore_template.docx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
