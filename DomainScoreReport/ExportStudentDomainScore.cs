@@ -239,29 +239,33 @@ ORDER BY
                     string domain = "" + row["領域"];
                     string ssKey = schoolYear + semester;
 
-                    // 成績
-                    if (!stuRec.dicScoreByDomainBySchoolYear.ContainsKey(ssKey))
+                    // 沒有領域就忽略
+                    if (domain != "")
                     {
-                        stuRec.dicScoreByDomainBySchoolYear.Add(ssKey, new Dictionary<string, ScoreRec>());
-                    }
-                    ScoreRec sr = new ScoreRec();
-                    sr.Score = "" + row["成績"];
-                    sr.Power = "" + row["權數"];
-                    sr.OriginScore = "" + row["原始成績"];
+                        // 成績
+                        if (!stuRec.dicScoreByDomainBySchoolYear.ContainsKey(ssKey))
+                        {
+                            stuRec.dicScoreByDomainBySchoolYear.Add(ssKey, new Dictionary<string, ScoreRec>());
+                        }
+                        ScoreRec sr = new ScoreRec();
+                        sr.Score = "" + row["成績"];
+                        sr.Power = "" + row["權數"];
+                        sr.OriginScore = "" + row["原始成績"];
 
-                    stuRec.dicScoreByDomainBySchoolYear[ssKey].Add(domain, sr);
-                    // 領域
-                    if (!stuRec.listDomainFromStu.Contains(domain))
-                    {
-                        stuRec.listDomainFromStu.Add(domain);
-                    }
-                    // 學年度學期
-                    if (!stuRec.dicSchoolYear.Keys.Contains(ssKey))
-                    {
-                        SchoolYearSemester ss = new SchoolYearSemester();
-                        ss.SchoolYear = schoolYear;
-                        ss.Semester = semester;
-                        stuRec.dicSchoolYear.Add(ssKey, ss);
+                        stuRec.dicScoreByDomainBySchoolYear[ssKey].Add(domain, sr);
+                        // 領域
+                        if (!stuRec.listDomainFromStu.Contains(domain))
+                        {
+                            stuRec.listDomainFromStu.Add(domain);
+                        }
+                        // 學年度學期
+                        if (!stuRec.dicSchoolYear.Keys.Contains(ssKey))
+                        {
+                            SchoolYearSemester ss = new SchoolYearSemester();
+                            ss.SchoolYear = schoolYear;
+                            ss.Semester = semester;
+                            stuRec.dicSchoolYear.Add(ssKey, ss);
+                        }
                     }
                 }
             }

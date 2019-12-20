@@ -23,7 +23,7 @@ namespace DomainScoreReport
         private Document docTemplate;
         private List<string> listClassID = new List<string>();
         private QueryHelper qh = new QueryHelper();
-        private Dictionary<string, Dictionary<string, Dictionary<string, float>>> dicClassStuDomainScore = new Dictionary<string, Dictionary<string, Dictionary<string, float>>>();
+        private Dictionary<string, Dictionary<string, Dictionary<string, ScoreRec>>> dicClassStuDomainScore = new Dictionary<string, Dictionary<string, Dictionary<string, ScoreRec>>>();
         private Dictionary<string, string> dicClassNameByID = new Dictionary<string, string>();
         private Dictionary<string, StudentRec> dicStuRecByID = new Dictionary<string, StudentRec>();
         private Dictionary<string, List<string>> dicDomainNameByClassID = new Dictionary<string, List<string>>();
@@ -168,46 +168,40 @@ WITH data_row AS (
 		student
 	WHERE
 		ref_class_id IN ({2})
-), domain_score AS(
-    SELECT
-        student.id
-        , student.name
-        , student.seat_no
-        , class.id AS class_id
-        , class.class_name
-	    --, sems_subj_score_ext.ref_student_id
-	    , sems_subj_score_ext.semester
-	    , sems_subj_score_ext.school_year
-	    , array_to_string(xpath('/Domain/@原始成績', subj_score_ele), '')::text AS 原始成績
-	    , array_to_string(xpath('/Domain/@成績', subj_score_ele), '')::text AS 成績
-	    , array_to_string(xpath('/Domain/@領域', subj_score_ele), '')::text AS 領域
-    FROM (
-		    SELECT 
-			    sems_subj_score.*
-			    , unnest(xpath('/root/Domains/Domain', xmlparse(content '<root>' || score_info || '</root>'))) as subj_score_ele
-		    FROM 
-			    sems_subj_score 
-			    INNER JOIN target_student
-				    ON target_student.id = sems_subj_score.ref_student_id 
-	    ) as sems_subj_score_ext
-        LEFT OUTER JOIN student
-            ON student.id = sems_subj_score_ext.ref_student_id
-        LEFT OUTER JOIN class
-            ON class.id = student.ref_class_id
-        INNER JOIN data_row
-    	    ON data_row.school_year = sems_subj_score_ext.school_year
-    	    AND data_row.semester = sems_subj_score_ext.semester
-    ORDER BY
-	    sems_subj_score_ext.grade_year 
-        , class.display_order
-        , student.seat_no
-) -- 篩除沒有 domain 的資料 
+        AND status IN(1, 2)
+)
 SELECT
-    *
-FROM
-    domain_score
-WHERE
-    領域 <> ''
+    student.id
+    , student.name
+    , student.seat_no
+    , class.id AS class_id
+    , class.class_name
+	, sems_subj_score_ext.semester
+	, sems_subj_score_ext.school_year
+	, array_to_string(xpath('/Domain/@原始成績', subj_score_ele), '')::text AS 原始成績
+	, array_to_string(xpath('/Domain/@成績', subj_score_ele), '')::text AS 成績
+	, array_to_string(xpath('/Domain/@領域', subj_score_ele), '')::text AS 領域
+    , array_to_string(xpath('/Domain/@權數', subj_score_ele), '')::text AS 權數
+FROM (
+		SELECT 
+			sems_subj_score.*
+			, unnest(xpath('/root/Domains/Domain', xmlparse(content '<root>' || score_info || '</root>'))) as subj_score_ele
+		FROM 
+			sems_subj_score 
+			INNER JOIN target_student
+				ON target_student.id = sems_subj_score.ref_student_id 
+	) as sems_subj_score_ext
+    LEFT OUTER JOIN student
+        ON student.id = sems_subj_score_ext.ref_student_id
+    LEFT OUTER JOIN class
+        ON class.id = student.ref_class_id
+    INNER JOIN data_row
+    	ON data_row.school_year = sems_subj_score_ext.school_year
+    	AND data_row.semester = sems_subj_score_ext.semester
+ORDER BY
+	sems_subj_score_ext.grade_year 
+    , class.display_order
+    , student.seat_no
                 ", data.SchoolYear, data.Semester, data.ClassIDs);
 
             return qh.Select(sql);
@@ -220,40 +214,48 @@ WHERE
                 string classID = "" + row["class_id"];
                 string studentID = "" + row["id"];
                 string domain = "" + row["領域"];
-                float score = float.Parse("" + row["成績"] == "" ? "0" : "" + row["成績"]);
 
-                // 成績資料
-                if (!dicClassStuDomainScore.ContainsKey(classID))
+                if (domain != "")
                 {
-                    dicClassStuDomainScore.Add(classID, new Dictionary<string, Dictionary<string, float>>());
-                }
-                if (!dicClassStuDomainScore[classID].ContainsKey(studentID))
-                {
-                    dicClassStuDomainScore[classID].Add(studentID, new Dictionary<string, float>());
-                }
-                dicClassStuDomainScore[classID][studentID].Add(domain, score);
-                // 班級資料
-                if (!dicClassNameByID.ContainsKey(classID))
-                {
-                    dicClassNameByID.Add(classID, "" + row["class_name"]);
-                }
-                // 學生資料
-                if (!dicStuRecByID.ContainsKey(studentID))
-                {
-                    StudentRec stuRec = new StudentRec();
-                    stuRec.SeatNo = "" + row["seat_no"];
-                    stuRec.Name = "" + row["name"];
+                    // 成績資料
+                    if (!dicClassStuDomainScore.ContainsKey(classID))
+                    {
+                        dicClassStuDomainScore.Add(classID, new Dictionary<string, Dictionary<string, ScoreRec>>());
+                    }
+                    if (!dicClassStuDomainScore[classID].ContainsKey(studentID))
+                    {
+                        dicClassStuDomainScore[classID].Add(studentID, new Dictionary<string, ScoreRec>());
+                    }
 
-                    dicStuRecByID.Add(studentID, stuRec);
-                }
-                // 班級領域資料
-                if (!dicDomainNameByClassID.ContainsKey(classID))
-                {
-                    dicDomainNameByClassID.Add(classID, new List<string>());
-                }
-                if (!dicDomainNameByClassID[classID].Contains(domain))
-                {
-                    dicDomainNameByClassID[classID].Add(domain);
+                    ScoreRec sr = new ScoreRec();
+                    sr.Score = "" + row["成績"];
+                    sr.OriginScore = "" + row["原始成績"];
+                    sr.Power = "" + row["權數"];
+
+                    dicClassStuDomainScore[classID][studentID].Add(domain, sr);
+                    // 班級資料
+                    if (!dicClassNameByID.ContainsKey(classID))
+                    {
+                        dicClassNameByID.Add(classID, "" + row["class_name"]);
+                    }
+                    // 學生資料
+                    if (!dicStuRecByID.ContainsKey(studentID))
+                    {
+                        StudentRec stuRec = new StudentRec();
+                        stuRec.SeatNo = "" + row["seat_no"];
+                        stuRec.Name = "" + row["name"];
+
+                        dicStuRecByID.Add(studentID, stuRec);
+                    }
+                    // 班級領域資料
+                    if (!dicDomainNameByClassID.ContainsKey(classID))
+                    {
+                        dicDomainNameByClassID.Add(classID, new List<string>());
+                    }
+                    if (!dicDomainNameByClassID[classID].Contains(domain))
+                    {
+                        dicDomainNameByClassID[classID].Add(domain);
+                    }
                 }
             }
         }
@@ -383,7 +385,7 @@ WHERE
                 }
                 
                 // 學生
-                Dictionary<string, Dictionary<string, float>> dicStuDomainScore = dicClassStuDomainScore[classID];
+                Dictionary<string, Dictionary<string, ScoreRec>> dicStuDomainScore = dicClassStuDomainScore[classID];
                 int s = 1;
                 foreach (string stuID in dicStuDomainScore.Keys)
                 {
@@ -394,17 +396,22 @@ WHERE
                     int d = 1;
                     int sc = 0;
                     int passCount = 0;
+                    float totalPower = 0;
                     float totalScore = 0;
                     // 領域成績
                     foreach (string domain in listDomain)
                     {
                         if (dicStuDomainScore[stuID].ContainsKey(domain))
                         {
-                            float score = dicStuDomainScore[stuID][domain];
-                            row[$"stu_{s}_domain_{d}"] = score;
-                            totalScore += score;
+                            string score = dicStuDomainScore[stuID][domain].Score;
+                            string originScore = dicStuDomainScore[stuID][domain].OriginScore;
+                            string power = dicStuDomainScore[stuID][domain].Power;
+                            row[$"stu_{s}_domain_{d}"] = score == originScore ? score : $"*{score}";
 
-                            if (score >= 60)
+                            totalScore += FloatParser(score) * FloatParser(power);
+                            totalPower += FloatParser(power);
+
+                            if (FloatParser(score) >= 60)
                             {
                                 passCount++;
                             }
@@ -414,8 +421,12 @@ WHERE
                     }
                     if (sc > 0)
                     {
-                        // 平均成績
-                        row[$"stu_{s}_avg_score"] = Math.Round(totalScore / sc, 2);
+                        // 沒有權重就不幫你算
+                        if (totalPower > 0)
+                        {
+                            // 平均成績
+                            row[$"stu_{s}_avg_score"] = Math.Round(totalScore / totalPower, 2);
+                        }
                         // 領域及格數
                         row[$"stu_{s}_pass_count"] = passCount;
                     }
@@ -426,6 +437,11 @@ WHERE
             }
 
             return dt;
+        }
+
+        private float FloatParser(string data)
+        {
+            return float.Parse(data == "" ? "0" : data);
         }
 
         private void btnLeave_Click(object sender, EventArgs e)
@@ -444,6 +460,22 @@ WHERE
             public string SchoolYear;
             public string Semester;
             public string ClassIDs;
+        }
+
+        private class ScoreRec
+        {
+            /// <summary>
+            /// 成績
+            /// </summary>
+            public string Score;
+            /// <summary>
+            /// 原始成績
+            /// </summary>
+            public string OriginScore;
+            /// <summary>
+            /// 權數 
+            /// </summary>
+            public string Power;
         }
     }
 }
