@@ -3,16 +3,15 @@ using System.Xml;
 using System.Data;
 using System.Linq;
 using System.IO;
+using System.ComponentModel;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using FISCA.Data;
+using FISCA.Presentation;
 using FISCA.Presentation.Controls;
 using K12.Data;
 using K12.Data.Configuration;
 using Aspose.Words;
-using Campus.Report;
-using FISCA.Presentation;
-using System.ComponentModel;
 using Aspose.Words.Reporting;
 
 namespace DomainScoreReport
@@ -46,7 +45,7 @@ namespace DomainScoreReport
             }
 
             // 讀取樣板
-            Stream stream = new MemoryStream(Properties.Resources.StudentDoaminScore_template);
+            Stream stream = new MemoryStream(Properties.Resources.StudentDomainScore_template);
             docTemplat = new Document(stream);
 
             InitailizeBackGroundWorker();
@@ -79,7 +78,7 @@ namespace DomainScoreReport
                     ParseData();
                     worker.ReportProgress(progress += 30);
 
-                    DataTable dt = ParseMergeSource();
+                    DataTable dt = FillMergeFiledData();
                     int n = 70 / dt.Rows.Count;
 
                     foreach (DataRow row in dt.Rows)
@@ -172,12 +171,12 @@ SELECT
     , student.name
     , student.seat_no
     , class.class_name
-	--, sems_subj_score_ext.ref_student_id
 	, sems_subj_score_ext.semester
 	, sems_subj_score_ext.school_year
 	, array_to_string(xpath('/Domain/@原始成績', subj_score_ele), '')::text AS 原始成績
 	, array_to_string(xpath('/Domain/@成績', subj_score_ele), '')::text AS 成績
 	, array_to_string(xpath('/Domain/@領域', subj_score_ele), '')::text AS 領域
+    , array_to_string(xpath('/Domain/@權數', subj_score_ele), '')::text AS 權數
 FROM (
 		SELECT 
 			sems_subj_score.*
@@ -195,6 +194,8 @@ ORDER BY
 	sems_subj_score_ext.grade_year
 	, school_year
 	, semester
+    , class.display_order
+    , student.seat_no
             ", string.Join(",", listStudentIDs));
 
             try
@@ -236,24 +237,24 @@ ORDER BY
                     string schoolYear = "" + row["school_year"];
                     string semester = "" + row["semester"];
                     string domain = "" + row["領域"];
-                    string score = "" + row["成績"];
                     string ssKey = schoolYear + semester;
 
                     // 成績
                     if (!stuRec.dicScoreByDomainBySchoolYear.ContainsKey(ssKey))
                     {
-                        stuRec.dicScoreByDomainBySchoolYear.Add(ssKey, new Dictionary<string, string>());
+                        stuRec.dicScoreByDomainBySchoolYear.Add(ssKey, new Dictionary<string, ScoreRec>());
                     }
-                    stuRec.dicScoreByDomainBySchoolYear[ssKey].Add(domain, score);
+                    ScoreRec sr = new ScoreRec();
+                    sr.Score = "" + row["成績"];
+                    sr.Power = "" + row["權數"];
+                    sr.OriginScore = "" + row["原始成績"];
+
+                    stuRec.dicScoreByDomainBySchoolYear[ssKey].Add(domain, sr);
                     // 領域
-                    if (!stuRec.dicDomainByName.Keys.Contains(domain))
+                    if (!stuRec.listDomainFromStu.Contains(domain))
                     {
-                        DomainRec domainRec = new DomainRec();
-                        domainRec.Name = domain;
-                        stuRec.dicDomainByName.Add(domain, domainRec);
+                        stuRec.listDomainFromStu.Add(domain);
                     }
-                    stuRec.dicDomainByName[domain].TotalScore += float.Parse("" + row["成績"] == "" ? "0" : "" + row["成績"]);
-                    stuRec.dicDomainByName[domain].ScoreCount += 1;
                     // 學年度學期
                     if (!stuRec.dicSchoolYear.Keys.Contains(ssKey))
                     {
@@ -265,23 +266,32 @@ ORDER BY
                 }
             }
 
-            // 計算平均
+            // 領域根據對照表做排序
             foreach (string id in dicStudentByID.Keys)
             {
-                foreach (DomainRec doc in dicStudentByID[id].dicDomainByName.Values)
-                {
-                    doc.Calc();
-                }
+                dicStudentByID[id].listDomainFromStu.Sort(delegate (string a, string b) {
+                    int aIndex = listDomainName.FindIndex(name => name == a);
+                    int bIndex = listDomainName.FindIndex(name => name == b);
+
+                    if (aIndex > bIndex)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                });
             }
         }
 
         /// <summary>
         /// 將資料解析為 doc merge 格式
         /// </summary>
-        private DataTable ParseMergeSource()
+        private DataTable FillMergeFiledData()
         {
             string schoolName = School.ChineseName;
-            DataTable dt = CreateDataTable();
+            DataTable dt = CreateMergeFieldTable();
             
             foreach (string id in dicStudentByID.Keys)
             {
@@ -294,90 +304,133 @@ ORDER BY
                 row["seat_no"] = dicStudentByID[id].SeatNo;
                 row["student_name"] = dicStudentByID[id].Name;
 
-                int s = 1;
-                double tTotalScore = 0;
-                int tCount = 0;
-                // 學年度學期
+                // 領域及格數
+                int passCount = 0;
+                // 領域加權平均清單
+                List<double> listDomainAvgScore = new List<double>();
+                // 領域
+                int d = 1;
+                foreach (string domain in dicStudentByID[id].listDomainFromStu)
+                {
+                    // 領域名稱
+                    row[$"{d}_domain"] = domain;
+                    // 領域個學期分數與權重清單
+                    List<ScoreRec> listScore = new List<ScoreRec>();
+
+                    // 學年度學期
+                    int s = 1;
+                    foreach (string key in dicStudentByID[id].dicSchoolYear.Keys)
+                    {
+                        SchoolYearSemester ss = dicStudentByID[id].dicSchoolYear[key];
+                        if (d == 1)
+                        {
+                            row[$"{s}_school_year"] = $"{ss.SchoolYear}學年度";
+                            row[$"{s}_semester"] = $"第{ss.Semester}學期";
+                        }
+                        // 成績
+                        if (dicStudentByID[id].dicScoreByDomainBySchoolYear.ContainsKey(key))
+                        {
+                            if (dicStudentByID[id].dicScoreByDomainBySchoolYear[key].ContainsKey(domain))
+                            {
+                                string score = dicStudentByID[id].dicScoreByDomainBySchoolYear[key][domain].Score;
+                                string originScore = dicStudentByID[id].dicScoreByDomainBySchoolYear[key][domain].OriginScore;
+                                string power = dicStudentByID[id].dicScoreByDomainBySchoolYear[key][domain].Power;
+                                row[$"{d}_domain_{s}_score"] = score == originScore ? score : $"*{score}";
+                                row[$"{d}_d_{s}_p"] = power;
+
+                                ScoreRec sr = new ScoreRec();
+                                sr.Score = score;
+                                sr.Power = power;
+
+                                listScore.Add(sr);
+                            }
+                        }
+                        s++;
+                    }
+
+                    // 領域平均
+                    if (listScore.Count > 0)
+                    {
+                        float totalScore = 0;
+                        float totalPower = 0;
+                        foreach (ScoreRec sr in listScore)
+                        {
+                            totalScore += FloatParser(sr.Score) * FloatParser(sr.Power);
+                            totalPower += FloatParser(sr.Power);
+                        }
+                        // 沒有權重就不幫你算
+                        if (totalPower != 0)
+                        {
+                            double avgScore = Math.Round(totalScore / totalPower, 2);
+                            row[$"{d}_domain_avg"] = avgScore;
+                            listDomainAvgScore.Add(avgScore);
+
+                            if (avgScore > 60)
+                            {
+                                passCount++;
+                            }
+                        }
+                    }
+
+                    // 及格數
+                    row["pass_domain_count"] = passCount;
+                    d++;
+                }
+
+                // 學期各領域平均
+                int sIndex = 1;
                 foreach (string key in dicStudentByID[id].dicSchoolYear.Keys)
                 {
-                    SchoolYearSemester ss = dicStudentByID[id].dicSchoolYear[key];
-                    row[$"{s}_school_year"] = $"{ss.SchoolYear}學年度";
-                    row[$"{s}_semester"] = $"第{ss.Semester}學期";
-                    
-                    int sd = 1;
-                    float sTotalScore = 0;
-                    int sCount = 0;
-                    // 領域
-                    foreach (string domainName in dicStudentByID[id].dicDomainByName.Keys)
+                    // 學年度學期各領域成績資料
+                    List<ScoreRec> listScore = new List<ScoreRec>();
+                    foreach (string domain in dicStudentByID[id].listDomainFromStu)
                     {
-                        // 成績
-                        if (dicStudentByID[id].dicScoreByDomainBySchoolYear[key].ContainsKey(domainName))
+                        if (dicStudentByID[id].dicScoreByDomainBySchoolYear.ContainsKey(key))
                         {
-                            row[$"{sd}_domain_{s}_score"] = dicStudentByID[id].dicScoreByDomainBySchoolYear[key][domainName];
-                            sTotalScore += float.Parse(dicStudentByID[id].dicScoreByDomainBySchoolYear[key][domainName]);
-                            sCount++;
+                            if (dicStudentByID[id].dicScoreByDomainBySchoolYear[key].ContainsKey(domain))
+                            {
+                                string score = dicStudentByID[id].dicScoreByDomainBySchoolYear[key][domain].Score;
+                                string power = dicStudentByID[id].dicScoreByDomainBySchoolYear[key][domain].Power;
+
+                                ScoreRec sr = new ScoreRec();
+                                sr.Score = score;
+                                sr.Power = power;
+
+                                listScore.Add(sr);
+                            }
                         }
-                        else
+                    }
+
+                    if (listScore.Count > 0)
+                    {
+                        float totalScore = 0;
+                        float totalPower = 0;
+                        foreach (ScoreRec sr in listScore)
                         {
-                            row[$"{sd}_domain_{s}_score"] = "";
+                            totalScore += FloatParser(sr.Score) * FloatParser(sr.Power);
+                            totalPower += FloatParser(sr.Power);
                         }
-                        sd++;
+                        // 沒有權重就不幫你算
+                        if (totalPower != 0)
+                        {
+                            row[$"{sIndex}_all_domain_avg"] = Math.Round(totalScore / totalPower, 2);
+                        }
                     }
 
-                    // 學期領域平均
-                    if (sTotalScore > 0 && sCount > 0)
-                    {
-                        double avg = Math.Round(sTotalScore / sCount, 2);
-                        row[$"{s}_all_domain_avg"] = avg;
-                        tTotalScore += avg;
-                        tCount++;
-                    }
-                    s++;
+                    sIndex++;
                 }
 
-                // 總平均
-                if (tTotalScore > 0 && tCount > 0)
+                // 總平均(算術平均)
+                if (listDomainAvgScore.Count > 0)
                 {
-                    row["all_domain_avg"] = Math.Round(tTotalScore / tCount, 2);
+                    double totalScore = 0;
+                    foreach (double score in listDomainAvgScore)
+                    {
+                        totalScore += score;
+                    }
+
+                    row["all_domain_avg"] = Math.Round(totalScore / listDomainAvgScore.Count, 2);
                 }
-
-                int d = 0;
-                int passDomainCount = 0;
-                // sort domain name
-                List<string> listDomain = dicStudentByID[id].dicDomainByName.Keys.ToList();
-                listDomain.Sort(delegate (string a, string b) {
-                    int aIndex = listDomainName.FindIndex(name => name == a);
-                    int bIndex = listDomainName.FindIndex(name => name == b);
-
-                    if (aIndex > bIndex)
-                    {
-                        return 1;
-                    }
-                    else if (aIndex == bIndex)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return -1;
-                    }
-                });
-
-                foreach (string key in listDomain)
-                {
-                    d++;
-                    DomainRec dr = dicStudentByID[id].dicDomainByName[key];
-                    // 領域名稱
-                    row[$"{d}_domain"] = dr.Name;
-                    // 領域平均
-                    row[$"{d}_domain_avg"] = dr.AvgScore;
-
-                    if (dr.AvgScore >= 60)
-                    {
-                        passDomainCount++;
-                    }
-                }
-                row["pass_domain_count"] = passDomainCount;
 
                 dt.Rows.Add(row);
             }
@@ -385,7 +438,7 @@ ORDER BY
             return dt;
         }
 
-        private DataTable CreateDataTable()
+        private DataTable CreateMergeFieldTable()
         {
             DataTable table = new DataTable();
             DataColumn col;
@@ -459,6 +512,11 @@ ORDER BY
                     col.DataType = Type.GetType("System.String");
                     col.ColumnName = $"{i}_domain_{n}_score";
                     table.Columns.Add(col);
+
+                    col = new DataColumn();
+                    col.DataType = Type.GetType("System.String");
+                    col.ColumnName = $"{i}_d_{n}_p";
+                    table.Columns.Add(col);
                 }
             }
 
@@ -475,16 +533,20 @@ ORDER BY
             return table;
         }
 
+        private float FloatParser(string data)
+        {
+            return float.Parse(data == "" ? "0" : data);
+        }
+
         private class StudentRec
         {
             public string ID;
             public string ClassName;
             public string SeatNo;
             public string Name;
-            public Dictionary<string, DomainRec> dicDomainByName = new Dictionary<string, DomainRec>();
+            public List<string> listDomainFromStu = new List<string>();
             public Dictionary<string, SchoolYearSemester> dicSchoolYear = new Dictionary<string, SchoolYearSemester>();
-            public Dictionary<string, Dictionary<string, string>> dicScoreByDomainBySchoolYear = new Dictionary<string, Dictionary<string, string>>();
-            public Dictionary<string, string> dicAvgScoreByDomain = new Dictionary<string, string>();
+            public Dictionary<string, Dictionary<string, ScoreRec>> dicScoreByDomainBySchoolYear = new Dictionary<string, Dictionary<string, ScoreRec>>();
         }
 
         private class SchoolYearSemester
@@ -493,17 +555,20 @@ ORDER BY
             public string Semester;
         }
 
-        private class DomainRec
+        private class ScoreRec
         {
-            public string Name;
-            public float TotalScore;
-            public float ScoreCount;
-            public double AvgScore;
-
-            public void Calc()
-            {
-                AvgScore = Math.Round(TotalScore / ScoreCount, 2);
-            }
+            /// <summary>
+            /// 成績
+            /// </summary>
+            public string Score;
+            /// <summary>
+            /// 原始成績
+            /// </summary>
+            public string OriginScore;
+            /// <summary>
+            /// 權數
+            /// </summary>
+            public string Power;
         }
     }
 }

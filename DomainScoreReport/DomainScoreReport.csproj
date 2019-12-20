@@ -132,7 +132,7 @@
   <ItemGroup>
     <None Include="Resources\ClassDomainScore_template.docx" />
     <None Include="Resources\SchoolDomainScore_template.docx" />
-    <None Include="Resources\StudentDoaminScore_template.docx" />
+    <None Include="Resources\StudentDomainScore_template.docx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
