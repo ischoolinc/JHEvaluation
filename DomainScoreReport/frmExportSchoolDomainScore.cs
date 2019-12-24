@@ -1,5 +1,5 @@
-﻿using FISCA.Presentation.Controls;
-using System;
+﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,11 +7,11 @@ using System.Windows.Forms;
 using System.IO;
 using K12.Data;
 using FISCA.Data;
-using Aspose.Words;
+using Aspose.Cells;
 using K12.Data.Configuration;
 using System.Xml;
-using Aspose.Words.Reporting;
 using FISCA.Presentation;
+using FISCA.Presentation.Controls;
 
 namespace DomainScoreReport
 {
@@ -20,7 +20,7 @@ namespace DomainScoreReport
         private const string ConfigName = "JHEvaluation_Subject_Ordinal";
         private const string ColumnKey = "DomainOrdinal";
         private QueryHelper qh = new QueryHelper();
-        private Document docTemplate;
+        private Workbook wbTemplate;
         /// <summary>
         /// 領域對照表
         /// </summary>
@@ -31,15 +31,30 @@ namespace DomainScoreReport
         /// 取前7個
         /// </summary>
         private List<string> listDomainFromData = new List<string>();
-        private Dictionary<string, StudentRec> dicStuRecByID = new Dictionary<string, StudentRec>();
+        /// <summary>
+        /// 年級清單
+        /// </summary>
+        private List<string> listGradeYear = new List<string>();
+        /// <summary>
+        /// 學生領域資料
+        /// </summary>
+        private Dictionary<string, Dictionary<string, StudentRec>> dicStuRecByIDSemester = new Dictionary<string, Dictionary<string, StudentRec>>();
         /// <summary>
         /// 領域不及格數
         /// </summary>
         private Dictionary<string, Dictionary<string, int>> dicUnPassCountByDomainGradeYear = new Dictionary<string, Dictionary<string, int>>();
         /// <summary>
+        /// 總計 領域不及格數
+        /// </summary>
+        private Dictionary<string, int> dicTotalCountByDomain = new Dictionary<string, int>();
+        /// <summary>
         /// 不及格領域數人數
         /// </summary>
         private Dictionary<string, Dictionary<int, int>> dicUnPassCountByUnPassGradeYear = new Dictionary<string, Dictionary<int, int>>();
+        /// <summary>
+        /// 總計 不及格領域數 總人數
+        /// </summary>
+        private Dictionary<int, int> dicTotalCountByUnPass = new Dictionary<int, int>();
         private BackgroundWorker bgWorker = new BackgroundWorker();
 
         public frmExportSchoolDomainScore()
@@ -67,9 +82,11 @@ namespace DomainScoreReport
             cbxRange.Items.Add("補考後");
             cbxRange.SelectedIndex = 0;
             // 載入樣板
-            Stream stream = new MemoryStream(Properties.Resources.SchoolDomainScore_template);
-            docTemplate = new Document(stream);
-
+            {
+                Stream wbStream = new MemoryStream(Properties.Resources.SchoolDomainScore_template);
+                wbTemplate = new Workbook(wbStream);
+            }
+            
             // 取得領域對照表
             ConfigData cd = School.Configuration[ConfigName];
             {
@@ -119,18 +136,10 @@ namespace DomainScoreReport
             ParseData(dt, data.Range);
             bgWorker.ReportProgress(progress += 15);
 
-            DataTable table = FillMergeFiledData();
+            Workbook wb = FillWorkBookData(data);
             bgWorker.ReportProgress(progress += 25);
 
-            Document doc = new Document();
-            doc.Sections.Clear();
-            Section section = (Section)doc.ImportNode(docTemplate.FirstSection, true);
-            doc.AppendChild(section);
-            doc.MailMerge.CleanupOptions = MailMergeCleanupOptions.RemoveEmptyParagraphs;
-            doc.MailMerge.Execute(table);
-            bgWorker.ReportProgress(progress += 25);
-
-            string path = $"{Application.StartupPath}\\Reports\\領域不及格人數統計表.docx";
+            string path = $"{Application.StartupPath}\\Reports\\領域不及格人數統計表.xlsx";
             int i = 1;
             while (File.Exists(path))
             {
@@ -139,7 +148,7 @@ namespace DomainScoreReport
                 path = newPath;
             }
 
-            doc.Save(path, SaveFormat.Docx);
+            wb.Save(path, SaveFormat.Xlsx);
             bgWorker.ReportProgress(100);
             e.Result = path;
         }
@@ -154,6 +163,8 @@ namespace DomainScoreReport
             {
                 System.Diagnostics.Process.Start(path);
             }
+
+            this.Close();
         }
 
         private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -163,12 +174,26 @@ namespace DomainScoreReport
 
         private DataTable GetDomainScore(string schoolYear, string semester)
         {
+            string condition = "";
+            if (cbxIsSchoolYear.Checked)
+            {
+                condition = string.Format(@"
+WHERE
+    class.grade_year IS NOT NULL
+    AND sems_subj_score_ext.school_year = {0}
+                    ", schoolYear);
+            }
+            else
+            {
+                condition = string.Format(@"
+WHERE
+    class.grade_year IS NOT NULL
+    AND sems_subj_score_ext.school_year = {0}
+    AND sems_subj_score_ext.semester = {1}
+                    ", schoolYear, semester);
+            }
             string sql = string.Format(@"
-WITH data_row AS (
-	SELECT
-	    {0}::INT AS school_year
-	    , {1}::INT AS semester
-), target_student AS(
+WITH target_student AS(
 	SELECT
 		*
 	FROM
@@ -198,40 +223,35 @@ FROM (
 		ON student.id = sems_subj_score_ext.ref_student_id
 	LEFT OUTER JOIN class
 	    ON class.id = student.ref_class_id
-	INNER JOIN data_row
-	    ON data_row.school_year = sems_subj_score_ext.school_year
-	    AND data_row.semester = sems_subj_score_ext.semester
-WHERE
-    class.grade_year IS NOT NULL
+    {0}
 ORDER BY
 	sems_subj_score_ext.grade_year
-            ", schoolYear, semester);
+            ", condition);
 
             return qh.Select(sql);
         }
 
         private void ParseData(DataTable dt, string range)
         {
-            dicUnPassCountByDomainGradeYear = new Dictionary<string, Dictionary<string, int>>();
-            dicUnPassCountByUnPassGradeYear = new Dictionary<string, Dictionary<int, int>>();
-            dicStuRecByID = new Dictionary<string, StudentRec>();
-            listDomainFromData.Clear();
-
-            // 資料整理
+            // 學生資料整理
             foreach (DataRow row in dt.Rows)
             {
-                // 學生資料整理
                 string stuID = "" + row["ref_student_id"];
                 string domain = "" + row["領域"];
+                string gradeYear = "" + row["grade_year"];
+                string semester = "" + row["semester"];
 
-                if (!dicStuRecByID.ContainsKey(stuID))
+                if (!dicStuRecByIDSemester.ContainsKey(semester))
                 {
-                    dicStuRecByID.Add(stuID, new StudentRec());
+                    dicStuRecByIDSemester.Add(semester, new Dictionary<string, StudentRec>());
                 }
-                StudentRec stuRec = dicStuRecByID[stuID];
+                if (!dicStuRecByIDSemester[semester].ContainsKey(stuID))
+                {
+                    dicStuRecByIDSemester[semester].Add(stuID, new StudentRec());
+                }
+                StudentRec stuRec = dicStuRecByIDSemester[semester][stuID];
                 stuRec.ID = stuID;
-                stuRec.GradeYear = "" + row["grade_year"];
-
+                stuRec.GradeYear = gradeYear;
                 if (domain != "")
                 {
                     if (!stuRec.dicScoreByDomain.ContainsKey(domain))
@@ -244,10 +264,16 @@ ORDER BY
                     domainRec.ReTestScore = "" + row["補考成績"];
                     domainRec.Score = "" + row["成績"];
 
-                    // 領域資料整理
+                    // 領域清單
                     if (!listDomainFromData.Contains(domain))
                     {
                         listDomainFromData.Add(domain);
+                    }
+
+                    //  年級清單
+                    if (!listGradeYear.Contains(gradeYear))
+                    {
+                        listGradeYear.Add(gradeYear);
                     }
                 }
             }
@@ -255,107 +281,142 @@ ORDER BY
             // 領域資料排序與刪除
             listDomainFromData = DomainListParse(listDomainFromData);
 
-            // 統計「學生領域不及格數」、「年級領域不及格數」
-            foreach (string stuID in dicStuRecByID.Keys)
+            // 統計「學生領域不及格數」、「年級領域不及格數」(區分補考前後)
+            foreach (string semester in dicStuRecByIDSemester.Keys)
             {
-                StudentRec stuRec = dicStuRecByID[stuID];
-                string gradeYear = stuRec.GradeYear;
-
-                foreach (string domain in listDomainFromData)
+                foreach (string stuID in dicStuRecByIDSemester[semester].Keys)
                 {
-                    if (stuRec.dicScoreByDomain.ContainsKey(domain))
+                    StudentRec stuRec = dicStuRecByIDSemester[semester][stuID];
+                    string gradeYear = stuRec.GradeYear;
+
+                    foreach (string domain in listDomainFromData)
                     {
-                        DomainRec domainRec = stuRec.dicScoreByDomain[domain];
-
-                        #region 學生領域不及格數
+                        if (stuRec.dicScoreByDomain.ContainsKey(domain))
                         {
-                            if (domainRec.OriginScore != "")
-                            {
-                                stuRec.OriginScoreUnPassCount += FloatParse(domainRec.OriginScore) < 60 ? 1 : 0;
-                            }
-                            if (domainRec.ReTestScore != "")
-                            {
-                                stuRec.ReTestScoreUnPassCount += FloatParse(domainRec.ReTestScore) < 60 ? 1 : 0;
-                            }
-                            if (domainRec.Score != "")
-                            {
-                                stuRec.ScoreUnPassCount += FloatParse(domainRec.Score) < 60 ? 1 : 0;
-                            }
-                        }
-                        #endregion
+                            DomainRec domainRec = stuRec.dicScoreByDomain[domain];
 
-                        #region 年級領域不及格數
-                        {
-                            string score;
-                            if (range == "補考前")
+                            #region 學生領域不及格數
                             {
-                                score = domainRec.Score;
-                            }
-                            else
-                            {
-                                score = domainRec.ReTestScore;
-                            }
-
-                            if (score != "")
-                            {
-                                // 年級
-                                if (!dicUnPassCountByDomainGradeYear.ContainsKey(gradeYear))
+                                if (domainRec.OriginScore != "")
                                 {
-                                    dicUnPassCountByDomainGradeYear.Add(stuRec.GradeYear, new Dictionary<string, int>());
+                                    stuRec.OriginScoreUnPassCount += FloatParse(domainRec.OriginScore) < 60 ? 1 : 0;
+                                }
+                                if (domainRec.ReTestScore != "")
+                                {
+                                    stuRec.ReTestScoreUnPassCount += FloatParse(domainRec.ReTestScore) < 60 ? 1 : 0;
+                                }
+                                if (domainRec.Score != "")
+                                {
+                                    stuRec.ScoreUnPassCount += FloatParse(domainRec.Score) < 60 ? 1 : 0;
+                                }
+                            }
+                            #endregion
+
+                            #region 年級領域不及格數
+                            {
+                                string score;
+                                if (range == "補考前")
+                                {
+                                    score = domainRec.OriginScore;
+                                }
+                                else
+                                {
+                                    score = domainRec.Score;
                                 }
 
-                                // 領域
-                                Dictionary<string, int> dicUnPassCountByDomain = dicUnPassCountByDomainGradeYear[gradeYear];
-                                if (!dicUnPassCountByDomain.ContainsKey(domain))
+                                if (score != "")
                                 {
-                                    dicUnPassCountByDomain.Add(domain, 0);
-                                }
+                                    // 年級
+                                    if (!dicUnPassCountByDomainGradeYear.ContainsKey(gradeYear))
+                                    {
+                                        dicUnPassCountByDomainGradeYear.Add(stuRec.GradeYear, new Dictionary<string, int>());
+                                    }
 
-                                dicUnPassCountByDomain[domain] += FloatParse(score) < 60 ? 1 : 0;
+                                    // 領域
+                                    Dictionary<string, int> dicUnPassCountByDomain = dicUnPassCountByDomainGradeYear[gradeYear];
+                                    if (!dicUnPassCountByDomain.ContainsKey(domain))
+                                    {
+                                        dicUnPassCountByDomain.Add(domain, 0);
+                                    }
+
+                                    dicUnPassCountByDomain[domain] += FloatParse(score) < 60 ? 1 : 0;
+                                }
                             }
+                            #endregion
                         }
-                        #endregion
                     }
                 }
             }
 
-            // 領域不及格數人數統計
-            foreach (string stuID in dicStuRecByID.Keys)
+            // 領域不及格數人數統計 (區分補考前後)
+            foreach (string semester in dicStuRecByIDSemester.Keys)
             {
-                StudentRec stuRec = dicStuRecByID[stuID];
-                int unPassCount = 0;
+                foreach (string stuID in dicStuRecByIDSemester[semester].Keys)
+                {
+                    StudentRec stuRec = dicStuRecByIDSemester[semester][stuID];
+                    int unPassCount = 0;
 
-                if (range == "補考前")
-                {
-                    unPassCount = stuRec.ScoreUnPassCount;
-                }
-                else
-                {
-                    unPassCount = stuRec.ReTestScoreUnPassCount;
-                }
-
-                if (unPassCount > 0)
-                {
-                    if (!dicUnPassCountByUnPassGradeYear.ContainsKey(stuRec.GradeYear))
+                    if (range == "補考前")
                     {
-                        dicUnPassCountByUnPassGradeYear.Add(stuRec.GradeYear, new Dictionary<int, int>());
+                        unPassCount = stuRec.OriginScoreUnPassCount;
                     }
-                    Dictionary<int, int> dicUnPassCountByUnPass = dicUnPassCountByUnPassGradeYear[stuRec.GradeYear];
-
-                    if (!dicUnPassCountByUnPass.ContainsKey(unPassCount))
+                    else
                     {
-                        dicUnPassCountByUnPass.Add(unPassCount, 0);
+                        unPassCount = stuRec.ScoreUnPassCount;
                     }
-                    dicUnPassCountByUnPass[unPassCount] += 1;
+
+                    if (unPassCount > 0)
+                    {
+                        if (!dicUnPassCountByUnPassGradeYear.ContainsKey(stuRec.GradeYear))
+                        {
+                            dicUnPassCountByUnPassGradeYear.Add(stuRec.GradeYear, new Dictionary<int, int>());
+                        }
+                        Dictionary<int, int> dicUnPassCountByUnPass = dicUnPassCountByUnPassGradeYear[stuRec.GradeYear];
+
+                        if (!dicUnPassCountByUnPass.ContainsKey(unPassCount))
+                        {
+                            dicUnPassCountByUnPass.Add(unPassCount, 0);
+                        }
+                        dicUnPassCountByUnPass[unPassCount] += 1;
+                    }
                 }
-                
             }
+
+            // 總計 領域不及格數 (區分補考前後)
+            foreach (string domain in listDomainFromData)
+            {
+                if (!dicTotalCountByDomain.ContainsKey(domain))
+                {
+                    dicTotalCountByDomain.Add(domain, 0);
+                }
+            }
+            foreach (string gradeyear in dicUnPassCountByDomainGradeYear.Keys)
+            {
+                foreach (string domain in dicUnPassCountByDomainGradeYear[gradeyear].Keys)
+                {
+                    dicTotalCountByDomain[domain] += dicUnPassCountByDomainGradeYear[gradeyear][domain];
+                }
+            }
+            // 總計 不及格領域數總人數 (區分補考前後)
+            for (int i = 1; i <= listDomainFromData.Count; i++)
+            {
+                dicTotalCountByUnPass.Add(i, 0);
+            }
+            foreach (string gradeyear in dicUnPassCountByUnPassGradeYear.Keys)
+            {
+                foreach (int unpass in dicUnPassCountByUnPassGradeYear[gradeyear].Keys)
+                {
+                    dicTotalCountByUnPass[unpass] += dicUnPassCountByUnPassGradeYear[gradeyear][unpass];
+                }
+            }
+
+            // 年級清單排序
+            listGradeYear.Sort();
         }
 
         /// <summary>
         /// 解析領域清單
-        /// 1. 根據領域對照表排序
-        /// 2. 最多七個領域多的刪除
+        /// 根據領域對照表排序
         /// </summary>
         /// <returns></returns>
         private List<string> DomainListParse(List<string> listData)
@@ -375,144 +436,155 @@ ORDER BY
                 }
             });
 
-            if (listData.Count > 7)
-            {
-                listData.RemoveRange(7, listData.Count - 7);
-            }
-
             return listData;
         }
 
-        private DataTable CreatMergeFiledTable()
+        private Workbook FillWorkBookData(ParameterRec data)
         {
-            DataTable table = new DataTable();
-            DataColumn col;
+            Workbook prototype = new Workbook();
+            prototype.Copy(wbTemplate);
+            Worksheet ps = prototype.Worksheets[0];
 
-            col = new DataColumn();
-            col.DataType = Type.GetType("System.String");
-            col.ColumnName = "school_year";
-            table.Columns.Add(col);
+            Workbook wb = new Workbook();
+            wb.Copy(prototype);
+            Worksheet ws = wb.Worksheets[0];
+            
+            Range colRange = ps.Cells.CreateRange(2, 1, 1, 1);
+            Range rowRange = ps.Cells.CreateRange(3, 1, false);
 
-            col = new DataColumn();
-            col.DataType = Type.GetType("System.String");
-            col.ColumnName = "semester";
-            table.Columns.Add(col);
+            int rowIndex = 0;
+            int colIndex = 0;
+            int domainCount = listDomainFromData.Count;
+            
+            string title = cbxIsSchoolYear.Checked ? $"{data.SchoolYear}學年度 {data.Semester}學期 領域不及格人數統計表"
+                    : $"{data.SchoolYear}學年度 領域不及格人數統計表";
+            ws.Cells.Merge(rowIndex, 0, 1, listDomainFromData.Count * 2);
+            ws.Cells[rowIndex++, 0].PutValue(title);
 
-            for (int i = 1; i <= 7; i++)
+            // 各學習領域學生成績評量情形
             {
-                col = new DataColumn();
-                col.DataType = Type.GetType("System.String");
-                col.ColumnName = $"domain_{i}";
-                table.Columns.Add(col);
+                ws.Cells.Merge(1, 1, 1, domainCount);
 
-                col = new DataColumn();
-                col.DataType = Type.GetType("System.String");
-                col.ColumnName = $"domain_{i}_unpass_count";
-                table.Columns.Add(col);
+                Range range = ws.Cells.CreateRange(1, 1, 1, domainCount);
+                range.SetOutlineBorders(CellBorderType.Thin, Color.Black);
+                range.PutValue("各學習領域學生成績評量情形", false, false);
 
-                col = new DataColumn();
-                col.DataType = Type.GetType("System.String");
-                col.ColumnName = $"unpass_{i}_stu_count";
-                table.Columns.Add(col);
-
-                for (int y = 1; y <= 3; y++)
-                {
-                    col = new DataColumn();
-                    col.DataType = Type.GetType("System.String");
-                    col.ColumnName = $"grade_year_{y}_domain_{i}_unpass_count";
-                    table.Columns.Add(col);
-
-                    col = new DataColumn();
-
-                    col.DataType = Type.GetType("System.String");
-                    col.ColumnName = $"grade_year_{y}_unpass_{i}_stu_count";
-                    table.Columns.Add(col);
-                }
+                Cell cell = ws.Cells.GetCell(1, 1);
+                Style style = cell.GetStyle();
+                style.HorizontalAlignment = TextAlignmentType.Center;
+                cell.SetStyle(style);
             }
+            // 學生成績評量不及格領域數情形
+            {
+                ws.Cells.Merge(1, domainCount + 1, 1, domainCount);
+                
+                Range range = ws.Cells.CreateRange(1, domainCount + 1, 1, domainCount);
+                range.SetOutlineBorders(CellBorderType.Thin, Color.Black);
+                range.PutValue("學生成績評量不及格領域數情形", false, false);
 
-            col = new DataColumn();
-            col.DataType = Type.GetType("System.String");
-            col.ColumnName = "year";
-            table.Columns.Add(col);
+                Cell cell = ws.Cells.GetCell(1, domainCount + 1);
+                Style style = cell.GetStyle();
+                style.HorizontalAlignment = TextAlignmentType.Center;
+                cell.SetStyle(style);
+            }
+            rowIndex++;
 
-            col = new DataColumn();
-            col.DataType = Type.GetType("System.String");
-            col.ColumnName = "month";
-            table.Columns.Add(col);
-
-            col = new DataColumn();
-            col.DataType = Type.GetType("System.String");
-            col.ColumnName = "day";
-            table.Columns.Add(col);
-
-            return table;
-        }
-
-        private DataTable FillMergeFiledData()
-        {
-            DataTable dt = CreatMergeFiledTable();
-            DataRow row = dt.NewRow();
-
-            row["school_year"] = School.DefaultSchoolYear;
-            row["semester"] = School.DefaultSemester;
-            row["year"] = DateTime.Now.Year;
-            row["month"] = DateTime.Now.Month;
-            row["day"] = DateTime.Now.Day;
-
-            int d = 1;
+            colIndex = 1;
+            // 領域
             foreach (string domain in listDomainFromData)
             {
-                row[$"domain_{d}"] = domain;
-
-                int unPassTotalCount = 0;
-                for (int y = 1; y <= 3; y++)
-                {
-                    string gradeYear = $"{y}";
-                    if (dicUnPassCountByDomainGradeYear.ContainsKey(gradeYear))
-                    {
-                        if (dicUnPassCountByDomainGradeYear[gradeYear].ContainsKey(domain))
-                        {
-                            row[$"grade_year_{y}_domain_{d}_unpass_count"] = dicUnPassCountByDomainGradeYear[gradeYear][domain];
-                            unPassTotalCount += dicUnPassCountByDomainGradeYear[gradeYear][domain];
-                        }
-                    }
-                }
-                row[$"domain_{d}_unpass_count"] = unPassTotalCount;
-
-                d++;
+                Range range = ws.Cells.CreateRange(rowIndex, colIndex, 1, 1);
+                range.CopyStyle(colRange);
+                range.ColumnWidth = colRange.ColumnWidth;
+                ws.Cells[rowIndex, colIndex++].PutValue(domain);
             }
 
-            for (int i = 1; i <= 7; i++)
+            // 不及格數
+            for (int i = 1; i <= listDomainFromData.Count; i++)
             {
-                int unPassTotalCount = 0;
-                for (int y = 1; y <= 3; y++)
+                Range range = ws.Cells.CreateRange(rowIndex, colIndex, 1, 1);
+                range.CopyStyle(colRange);
+                range.ColumnWidth = colRange.ColumnWidth;
+                ws.Cells[rowIndex, colIndex++].PutValue($"{i}個學習領域不及格人數");
+            }
+
+            rowIndex++;
+            // 年級
+            foreach (string gradeYear in listGradeYear)
+            {
+                colIndex = 0;
+
+                if (rowIndex > 3)
                 {
-                    string gradeYear = $"{y}";
+                    ws.Cells.InsertRow(rowIndex);
+                }
+                ws.Cells.CreateRange(rowIndex, 1, false).CopyStyle(rowRange);
+                ws.Cells[rowIndex, colIndex++].PutValue($"{gradeYear}年級");
+
+                // 領域不及格人數
+                foreach (string domain in listDomainFromData)
+                {
+                    Range range = ws.Cells.CreateRange(rowIndex, colIndex, 1, 1);
+                    range.CopyStyle(colRange);
+
+                    if (dicUnPassCountByDomainGradeYear[gradeYear].ContainsKey(domain))
+                    {
+                        int unPassCount = dicUnPassCountByDomainGradeYear[gradeYear][domain];
+                        ws.Cells[rowIndex, colIndex++].PutValue(unPassCount);
+                    }
+                    else
+                    {
+                        ws.Cells[rowIndex, colIndex++].PutValue(0);
+                    }
+                }
+
+                // 不及格領域人數
+                for (int i = 1; i <= listDomainFromData.Count; i++)
+                {
+                    Range range = ws.Cells.CreateRange(rowIndex, colIndex, 1, 1);
+                    range.CopyStyle(colRange);
+
                     if (dicUnPassCountByUnPassGradeYear.ContainsKey(gradeYear))
                     {
                         if (dicUnPassCountByUnPassGradeYear[gradeYear].ContainsKey(i))
                         {
-                            row[$"grade_year_{y}_unpass_{i}_stu_count"] = dicUnPassCountByUnPassGradeYear[gradeYear][i];
-                            unPassTotalCount += dicUnPassCountByUnPassGradeYear[gradeYear][i];
+                            int unPassCount = dicUnPassCountByUnPassGradeYear[gradeYear][i];
+                            ws.Cells[rowIndex, colIndex++].PutValue(unPassCount);
                         }
                         else
                         {
-                            row[$"grade_year_{y}_unpass_{i}_stu_count"] = 0;
+                            ws.Cells[rowIndex, colIndex++].PutValue(0);
                         }
                     }
-                    else
-                    {
-                        row[$"grade_year_{y}_unpass_{i}_stu_count"] = 0;
-                    }
                 }
-
-                row[$"unpass_{i}_stu_count"] = unPassTotalCount;
-                
+                rowIndex++;
             }
 
-            dt.Rows.Add(row);
+            colIndex = 1;
+            // 總計 領域
+            foreach (string domain in listDomainFromData)
+            {
+                Range range = ws.Cells.CreateRange(rowIndex, colIndex, 1, 1);
+                range.CopyStyle(colRange);
 
-            return dt;
+                ws.Cells[rowIndex, colIndex++].PutValue(dicTotalCountByDomain[domain]);
+            }
+            // 總計 不及格領域數
+            foreach (int i in dicTotalCountByUnPass.Keys)
+            {
+                Range range = ws.Cells.CreateRange(rowIndex, colIndex, 1, 1);
+                range.CopyStyle(colRange);
+
+                ws.Cells[rowIndex, colIndex++].PutValue(dicTotalCountByUnPass[i]);
+            }
+            rowIndex++;
+
+            int year = DateTime.Now.Year - 1911;
+            int month = DateTime.Now.Month;
+            int day = DateTime.Now.Day;
+
+            ws.Cells[rowIndex, 0].PutValue($"列印日期: {year}年{month}月{day}日");
+            return wb;
         }
 
         private float FloatParse(string score)
@@ -530,9 +602,9 @@ ORDER BY
             public string ID;
             public string GradeYear;
             public Dictionary<string, DomainRec> dicScoreByDomain = new Dictionary<string, DomainRec>();
-            public int OriginScoreUnPassCount;
-            public int ScoreUnPassCount;
-            public int ReTestScoreUnPassCount;
+            public int OriginScoreUnPassCount = 0;
+            public int ScoreUnPassCount = 0;
+            public int ReTestScoreUnPassCount = 0;
         }
 
         private class DomainRec

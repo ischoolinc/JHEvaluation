@@ -36,6 +36,7 @@
             this.btnLeave = new DevComponents.DotNetBar.ButtonX();
             this.labelX3 = new DevComponents.DotNetBar.LabelX();
             this.cbxRange = new DevComponents.DotNetBar.Controls.ComboBoxEx();
+            this.cbxIsSchoolYear = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.SuspendLayout();
             // 
             // labelX1
@@ -98,7 +99,7 @@
             this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExport.BackColor = System.Drawing.Color.Transparent;
             this.btnExport.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExport.Location = new System.Drawing.Point(214, 118);
+            this.btnExport.Location = new System.Drawing.Point(214, 143);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(75, 23);
             this.btnExport.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -112,7 +113,7 @@
             this.btnLeave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLeave.BackColor = System.Drawing.Color.Transparent;
             this.btnLeave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnLeave.Location = new System.Drawing.Point(295, 118);
+            this.btnLeave.Location = new System.Drawing.Point(295, 143);
             this.btnLeave.Name = "btnLeave";
             this.btnLeave.Size = new System.Drawing.Size(75, 23);
             this.btnLeave.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -128,7 +129,7 @@
             // 
             this.labelX3.BackgroundStyle.Class = "";
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX3.Location = new System.Drawing.Point(12, 66);
+            this.labelX3.Location = new System.Drawing.Point(12, 59);
             this.labelX3.Name = "labelX3";
             this.labelX3.Size = new System.Drawing.Size(75, 23);
             this.labelX3.TabIndex = 6;
@@ -141,17 +142,33 @@
             this.cbxRange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxRange.FormattingEnabled = true;
             this.cbxRange.ItemHeight = 23;
-            this.cbxRange.Location = new System.Drawing.Point(93, 63);
+            this.cbxRange.Location = new System.Drawing.Point(93, 56);
             this.cbxRange.Name = "cbxRange";
             this.cbxRange.Size = new System.Drawing.Size(121, 29);
             this.cbxRange.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cbxRange.TabIndex = 7;
             // 
+            // cbxIsSchoolYear
+            // 
+            this.cbxIsSchoolYear.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.cbxIsSchoolYear.BackgroundStyle.Class = "";
+            this.cbxIsSchoolYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.cbxIsSchoolYear.Location = new System.Drawing.Point(12, 104);
+            this.cbxIsSchoolYear.Name = "cbxIsSchoolYear";
+            this.cbxIsSchoolYear.Size = new System.Drawing.Size(202, 23);
+            this.cbxIsSchoolYear.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cbxIsSchoolYear.TabIndex = 9;
+            this.cbxIsSchoolYear.Text = "已學年為單位統計";
+            // 
             // frmExportSchoolDomainScore
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 153);
+            this.ClientSize = new System.Drawing.Size(382, 178);
+            this.Controls.Add(this.cbxIsSchoolYear);
             this.Controls.Add(this.cbxRange);
             this.Controls.Add(this.labelX3);
             this.Controls.Add(this.btnLeave);
@@ -161,8 +178,8 @@
             this.Controls.Add(this.cbxSchoolYear);
             this.Controls.Add(this.labelX1);
             this.DoubleBuffered = true;
-            this.MaximumSize = new System.Drawing.Size(400, 200);
-            this.MinimumSize = new System.Drawing.Size(400, 200);
+            this.MaximumSize = new System.Drawing.Size(400, 225);
+            this.MinimumSize = new System.Drawing.Size(400, 225);
             this.Name = "frmExportSchoolDomainScore";
             this.Text = "領域不及格人數統計表";
             this.Load += new System.EventHandler(this.frmExportSchoolDomainScore_Load);
@@ -180,5 +197,6 @@
         private DevComponents.DotNetBar.ButtonX btnLeave;
         private DevComponents.DotNetBar.LabelX labelX3;
         private DevComponents.DotNetBar.Controls.ComboBoxEx cbxRange;
+        private DevComponents.DotNetBar.Controls.CheckBoxX cbxIsSchoolYear;
     }
 }

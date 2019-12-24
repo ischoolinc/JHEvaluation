@@ -53,6 +53,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="library\Aspose.Cells_201402.dll" />
+    <Content Include="library\Aspose.Cells_201402.xml" />
     <Content Include="library\Aspose.Words_201402.dll" />
     <Content Include="library\Aspose.Words_201402.xml" />
     <Content Include="library\Campus.Report.dll" />
@@ -71,6 +73,11 @@
     <Content Include="library\K12.Presentation.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells_201402, Version=7.7.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\Aspose.Cells_201402.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Aspose.Words_201402, Version=14.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>library\Aspose.Words_201402.dll</HintPath>
@@ -127,12 +134,14 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ClassDomainScore_template.docx" />
-    <None Include="Resources\SchoolDomainScore_template.docx" />
+    <None Include="Resources\SchoolDomainScore_template.xlsx" />
     <None Include="Resources\StudentDomainScore_template.docx" />
+    <None Include="Resources\_SchoolDomainScore_template.docx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

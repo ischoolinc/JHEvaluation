@@ -122,9 +122,12 @@
     <value>..\resources\classdomainscore_template.docx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="SchoolDomainScore_template" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SchoolDomainScore_template.docx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\Resources\SchoolDomainScore_template.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="StudentDomainScore_template" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\studentdomainscore_template.docx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_SchoolDomainScore_template" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\_SchoolDomainScore_template.docx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
