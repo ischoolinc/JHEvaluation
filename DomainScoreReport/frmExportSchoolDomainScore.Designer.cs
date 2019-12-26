@@ -161,7 +161,7 @@
             this.cbxIsSchoolYear.Size = new System.Drawing.Size(202, 23);
             this.cbxIsSchoolYear.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cbxIsSchoolYear.TabIndex = 9;
-            this.cbxIsSchoolYear.Text = "已學年為單位統計";
+            this.cbxIsSchoolYear.Text = "以學年為單位統計";
             // 
             // frmExportSchoolDomainScore
             // 
