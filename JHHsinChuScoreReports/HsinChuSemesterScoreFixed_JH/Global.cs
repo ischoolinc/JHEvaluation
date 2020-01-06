@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Windows.Forms;
+using FISCA.Data;
+using System.Data;
+using Aspose.Words;
 
 namespace HsinChuSemesterScoreFixed_JH
 {
@@ -55,6 +60,66 @@ namespace HsinChuSemesterScoreFixed_JH
         public static void ExportMappingFieldWord()
         {
 
+            #region 儲存檔案
+            string inputReportName = "學期成績單合併欄位總表";
+            string reportName = inputReportName;
+
+            string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            path = Path.Combine(path, reportName + ".doc");
+
+            if (File.Exists(path))
+            {
+                int i = 1;
+                while (true)
+                {
+                    string newPath = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + (i++) + Path.GetExtension(path);
+                    if (!File.Exists(newPath))
+                    {
+                        path = newPath;
+                        break;
+                    }
+                }
+            }
+
+            Document tempDoc = new Document(new MemoryStream(Properties.Resources.學期成績單合併欄位總表));
+
+            try
+            {
+                #region 動態產生合併欄位
+                // 讀取總表檔案並動態加入合併欄位
+
+              
+
+                #endregion
+                tempDoc.Save(path, SaveFormat.Doc);
+                
+                System.Diagnostics.Process.Start(path);
+
+
+            }
+            catch
+            {
+                System.Windows.Forms.SaveFileDialog sd = new System.Windows.Forms.SaveFileDialog();
+                sd.Title = "另存新檔";
+                sd.FileName = reportName + ".doc";
+                sd.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+                if (sd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    try
+                    {
+                        tempDoc.Save(sd.FileName, SaveFormat.Doc);
+                       
+                    }
+                    catch
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show("指定路徑無法存取。", "建立檔案失敗", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+            }
+            #endregion
         }
     }
 }

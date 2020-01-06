@@ -63,6 +63,16 @@ namespace HsinChuSemesterScoreFixed_JH.Properties {
         /// <summary>
         ///   查詢類型 System.Byte[] 的當地語系化資源。
         /// </summary>
+        internal static byte[] 學期成績單合併欄位總表 {
+            get {
+                object obj = ResourceManager.GetObject("學期成績單合併欄位總表", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
         internal static byte[] 新竹學期成績單樣板_固定排名_科目_領域 {
             get {
                 object obj = ResourceManager.GetObject("新竹學期成績單樣板_固定排名_科目_領域", resourceCulture);

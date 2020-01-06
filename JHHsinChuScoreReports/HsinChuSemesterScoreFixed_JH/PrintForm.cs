@@ -28,14 +28,16 @@ namespace HsinChuSemesterScoreFixed_JH
 
         List<string> _StudentIDList;
 
-
+        DataTable dt = new DataTable();
         private List<string> typeList = new List<string>();
 
         BackgroundWorker _bgWorkReport;
         DocumentBuilder _builder;
         BackgroundWorker _bgWorkerLoadData;
 
-
+        string NeeedReScoreMark = "";
+        string ReScoreMark = "";
+        string FailScoreMark = "";
 
         // 錯誤訊息
         List<string> _ErrorList = new List<string>();
@@ -73,7 +75,60 @@ namespace HsinChuSemesterScoreFixed_JH
             _bgWorkerLoadData.RunWorkerCompleted += _bgWorkerLoadData_RunWorkerCompleted;
             _bgWorkerLoadData.WorkerReportsProgress = true;
             _bgWorkerLoadData.ProgressChanged += _bgWorkerLoadData_ProgressChanged;
+            _bgWorkReport.DoWork += _bgWorkReport_DoWork;
+            _bgWorkReport.RunWorkerCompleted += _bgWorkReport_RunWorkerCompleted;
+            _bgWorkReport.WorkerReportsProgress = true;
+            _bgWorkReport.ProgressChanged += _bgWorkReport_ProgressChanged;
+
             _StudentIDList = StudIDList;
+
+        }
+
+        private void _bgWorkReport_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("學期成績報表產生中...", e.ProgressPercentage);
+        }
+
+        private void _bgWorkReport_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+           
+        }
+
+        private void _bgWorkReport_DoWork(object sender, DoWorkEventArgs e)
+        {
+            _bgWorkReport.ReportProgress(1);
+            dt.Clear();
+
+            // 建立合併欄位
+            dt.Columns.Add("列印日期");
+            dt.Columns.Add("學校名稱");
+            dt.Columns.Add("學年度");
+            dt.Columns.Add("學期");
+            dt.Columns.Add("系統編號");
+            dt.Columns.Add("姓名");
+            dt.Columns.Add("英文姓名");
+            dt.Columns.Add("班級");
+            dt.Columns.Add("座號");
+            dt.Columns.Add("學號");
+            dt.Columns.Add("大功");
+            dt.Columns.Add("小功");
+            dt.Columns.Add("嘉獎");
+            dt.Columns.Add("大過");
+            dt.Columns.Add("小過");
+            dt.Columns.Add("警告");
+            dt.Columns.Add("上課天數");
+            dt.Columns.Add("學習領域成績");
+            dt.Columns.Add("學習領域原始成績");
+            dt.Columns.Add("課程學習成績");
+            dt.Columns.Add("課程學習原始成績");
+            dt.Columns.Add("班導師");
+            dt.Columns.Add("教務主任");
+            dt.Columns.Add("校長");
+            dt.Columns.Add("服務學習時數");
+            dt.Columns.Add("文字描述");
+
+
+
 
         }
 
