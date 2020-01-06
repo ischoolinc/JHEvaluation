@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D342023B-423A-45EF-A4EF-2F39B69EF26E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DomainScoreReport</RootNamespace>
+    <AssemblyName>DomainScoreReport</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ExportStudentDomainScore.cs" />
+    <Compile Include="frmExportClassDomainScore.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmExportClassDomainScore.Designer.cs">
+      <DependentUpon>frmExportClassDomainScore.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmExportSchoolDomainScore.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmExportSchoolDomainScore.Designer.cs">
+      <DependentUpon>frmExportSchoolDomainScore.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="library\Aspose.Cells_201402.dll" />
+    <Content Include="library\Aspose.Cells_201402.xml" />
+    <Content Include="library\Aspose.Words_201402.dll" />
+    <Content Include="library\Aspose.Words_201402.xml" />
+    <Content Include="library\Campus.Report.dll" />
+    <Content Include="library\Campus.Report.pdb" />
+    <Content Include="library\FISCA.Data.dll" />
+    <Content Include="library\FISCA.Data.pdb" />
+    <Content Include="library\FISCA.Data.xml" />
+    <Content Include="library\FISCA.dll" />
+    <Content Include="library\FISCA.pdb" />
+    <Content Include="library\FISCA.Permission.dll" />
+    <Content Include="library\FISCA.Permission.xml" />
+    <Content Include="library\FISCA.xml" />
+    <Content Include="library\K12.Data.dll" />
+    <Content Include="library\K12.Data.xml" />
+    <Content Include="library\K12.Presentation.dll" />
+    <Content Include="library\K12.Presentation.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Aspose.Cells_201402, Version=7.7.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\Aspose.Cells_201402.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Aspose.Words_201402, Version=14.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\Aspose.Words_201402.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Campus.Report, Version=1.0.0.11, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\Campus.Report.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04" />
+    <Reference Include="FISCA, Version=2.1.1.22, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\FISCA.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.Data, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\FISCA.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.Permission, Version=1.2.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\FISCA.Permission.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.Presentation">
+      <HintPath>Z:\Github_ischool\JHEvaluation\JHSchool.Evaluation\library\FISCA.Presentation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="K12.Data, Version=2.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\K12.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="K12.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\K12.Presentation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmExportClassDomainScore.resx">
+      <DependentUpon>frmExportClassDomainScore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmExportSchoolDomainScore.resx">
+      <DependentUpon>frmExportSchoolDomainScore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ClassDomainScore_template.docx" />
+    <None Include="Resources\SchoolDomainScore_template.xlsx" />
+    <None Include="Resources\StudentDomainScore_template.docx" />
+    <None Include="Resources\_SchoolDomainScore_template.docx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
