@@ -107,12 +107,39 @@ namespace HsinChuSemesterScoreFixed_JH
             {
                 #region 動態產生合併欄位
                 // 讀取總表檔案並動態加入合併欄位
+                Aspose.Words.DocumentBuilder builder = new Aspose.Words.DocumentBuilder(tempDoc);
+                builder.MoveToDocumentEnd();
 
-              
+                List<string> plist = K12.Data.PeriodMapping.SelectAll().Select(x => x.Type).Distinct().ToList();
+                List<string> alist = K12.Data.AbsenceMapping.SelectAll().Select(x => x.Name).ToList();
+                builder.Writeln();
+                builder.Writeln();
+                builder.Writeln("缺曠動態產生合併欄位");
+                builder.StartTable();
+
+                builder.InsertCell();
+                builder.Write("缺曠名稱與合併欄位");
+                builder.EndRow();
+
+                foreach (string pp in plist)
+                {
+                    foreach (string aa in alist)
+                    {
+
+                        string key = pp + "_" + aa;
+
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + key + " \\* MERGEFORMAT ", "«" + key + "»");
+                        builder.EndRow();
+                    }
+                }
+
+                builder.EndTable();
+
 
                 #endregion
                 tempDoc.Save(path, SaveFormat.Doc);
-                
+
                 System.Diagnostics.Process.Start(path);
 
 
@@ -128,7 +155,7 @@ namespace HsinChuSemesterScoreFixed_JH
                     try
                     {
                         tempDoc.Save(sd.FileName, SaveFormat.Doc);
-                       
+
                     }
                     catch
                     {

@@ -247,9 +247,16 @@ namespace HsinChuSemesterScoreFixed_JH
                 }
             }
 
-            //假別欄位
-            for (int i = 1; i <= Global.SupportAbsentCount; i++)
-                dt.Columns.Add("列印假別" + i);
+            // 缺曠欄位
+            foreach(string aa in alist)
+            {
+                foreach (string pp in plist)
+                {
+                    string key = pp + "_" + aa;
+                    if (!dt.Columns.Contains(key))
+                        dt.Columns.Add(key);
+                }
+            }
 
             //日常生活表現欄位
             foreach (string key in Global.DLBehaviorRef.Keys)
@@ -272,6 +279,88 @@ namespace HsinChuSemesterScoreFixed_JH
                         dt.Columns.Add(key + "_Item_Degree" + itemIndex);
                         dt.Columns.Add(key + "_Item_Description" + itemIndex);
                     }
+                }
+            }
+
+            // 
+
+            List<string> rank_typeList = new List<string>();
+            rank_typeList.Add("班排名");
+            rank_typeList.Add("年排名");
+            rank_typeList.Add("類別1排名");
+            rank_typeList.Add("類別2排名");
+
+            List<string> item_typeList = new List<string>();
+            item_typeList.Add("科目成績");
+            item_typeList.Add("科目成績(原始)");
+            item_typeList.Add("領域成績");
+            item_typeList.Add("領域成績(原始)");
+            item_typeList.Add("總計成績");
+            item_typeList.Add("總計成績(原始)");
+
+            //item_name：
+            //科目成績：科目名稱
+            //領域成績:領域名稱
+            //總計成績：學習領域總成績、課程學習總成績
+
+            // 排名、母數、pr、五標、組距
+            List<string> r2List = new List<string>();
+            r2List.Add("rank");
+            r2List.Add("matrix_count");
+            r2List.Add("pr");
+            r2List.Add("percentile");
+            r2List.Add("avg_top_25");
+            r2List.Add("avg_top_50");
+            r2List.Add("avg");
+            r2List.Add("avg_bottom_50");
+            r2List.Add("avg_bottom_25");
+            r2List.Add("level_gte100");
+            r2List.Add("level_90");
+            r2List.Add("level_80");
+            r2List.Add("level_70");
+            r2List.Add("level_60");
+            r2List.Add("level_50");
+            r2List.Add("level_40");
+            r2List.Add("level_30");
+            r2List.Add("level_20");
+            r2List.Add("level_10");
+            r2List.Add("level_lt10");
+
+            // 科目排
+            for (int i = 1; i <= Global.SupportSubjectCount; i++)
+            {
+                foreach (string rn in rank_typeList)
+                {
+                    foreach (string r2 in r2List)
+                    {
+                        dt.Columns.Add("科目成績" + i + "_" + rn + "_" + r2);
+                        dt.Columns.Add("科目成績(原始)" + i + "_" + rn + "_" + r2);
+                    }
+                }
+            }
+
+            // 領域排
+            for (int i = 1; i <= Global.SupportDomainCount; i++)
+            {
+                foreach (string rn in rank_typeList)
+                {
+                    foreach (string r2 in r2List)
+                    {
+                        dt.Columns.Add("領域成績" + i + "_" + rn + "_" + r2);
+                        dt.Columns.Add("領域成績(原始)" + i + "_" + rn + "_" + r2);
+                    }
+                }
+            }
+
+            // 總計成績
+            foreach (string rn in rank_typeList)
+            {
+                foreach (string r2 in r2List)
+                {
+                    dt.Columns.Add("總計成績_學習領域總成績" + "_" + rn + "_" + r2);
+                    dt.Columns.Add("總計成績(原始)_學習領域總成績" + "_" + rn + "_" + r2);
+                    dt.Columns.Add("總計成績_課程學習總成績" + "_" + rn + "_" + r2);
+                    dt.Columns.Add("總計成績(原始)_課程學習總成績" + "_" + rn + "_" + r2);
                 }
             }
 
@@ -355,6 +444,9 @@ namespace HsinChuSemesterScoreFixed_JH
                 Dictionary<string, DomainScore> DomainScoreDict = new Dictionary<string, DomainScore>();
                 Dictionary<string, List<SubjectScore>> DomainSubjScoreDict = new Dictionary<string, List<SubjectScore>>();
 
+                // 取得學期成績排名、五標、分數區間
+                Dictionary<string, Dictionary<string, DataRow>> SemsScoreRankMatrixDataDict = Utility.GetSemsScoreRankMatrixData(_Configure.SchoolYear, _Configure.Semester, _StudentIDList);
+
 
                 _bgWorkReport.ReportProgress(60);
 
@@ -416,7 +508,7 @@ namespace HsinChuSemesterScoreFixed_JH
                     row["科目補考成績" + count] = subj.ScoreMakeup.HasValue ? subj.ScoreMakeup.Value + "" : string.Empty;
                     row["科目成績等第" + count] = subj.Score.HasValue ? _ScoreMappingConfig.ParseScoreName(subj.Score.Value) : string.Empty;
                     row["科目原始成績等第" + count] = subj.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreName(subj.ScoreOrigin.Value) : string.Empty;
-                    row["科目補考成績等第" + count] = subj.ScoreMakeup.HasValue ? _ScoreMappingConfig.ParseScoreName(subj.ScoreMakeup.Value) : string.Empty;                                       
+                    row["科目補考成績等第" + count] = subj.ScoreMakeup.HasValue ? _ScoreMappingConfig.ParseScoreName(subj.ScoreMakeup.Value) : string.Empty;
 
                     if (subj.ScoreMakeup.HasValue)
                         row["科目補考成績標示" + count] = _Configure.ReScoreMark;
@@ -425,7 +517,7 @@ namespace HsinChuSemesterScoreFixed_JH
                     {
                         row["科目需補考標示" + count] = _Configure.NeeedReScoreMark;
                         row["科目不及格標示" + count] = _Configure.FailScoreMark;
-                    }                      
+                    }
 
                 }
 
@@ -486,7 +578,7 @@ namespace HsinChuSemesterScoreFixed_JH
                     row["領域原始成績等第" + count] = domain.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreName(domain.ScoreOrigin.Value) : string.Empty;
                     row["領域補考成績等第" + count] = domain.ScoreMakeup.HasValue ? _ScoreMappingConfig.ParseScoreName(domain.ScoreMakeup.Value) : string.Empty;
 
-                    if (domain.Score.HasValue && domain.Score.Value < 60 )
+                    if (domain.Score.HasValue && domain.Score.Value < 60)
                     {
                         row["領域需補考標示" + count] = _Configure.NeeedReScoreMark;
                         row["領域不及格標示" + count] = _Configure.FailScoreMark;
@@ -515,7 +607,7 @@ namespace HsinChuSemesterScoreFixed_JH
                         row[dName + "領域成績等第"] = domain.Score.HasValue ? _ScoreMappingConfig.ParseScoreName(domain.Score.Value) : string.Empty;
                         row[dName + "原始成績等第"] = domain.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreName(domain.ScoreOrigin.Value) : string.Empty;
                         row[dName + "補考成績等第"] = domain.ScoreMakeup.HasValue ? _ScoreMappingConfig.ParseScoreName(domain.ScoreMakeup.Value) : string.Empty;
-                        
+
                         if (domain.Score.HasValue && domain.Score.Value < 60)
                         {
                             row[dName + "領域需補考標示"] = _Configure.NeeedReScoreMark;
@@ -546,20 +638,13 @@ namespace HsinChuSemesterScoreFixed_JH
                 {
                     string key = Global.GetKey(acr.PeriodType, acr.Name);
 
-                    //filedName是 "列印假別1~20"
-                    foreach (string filedName in allowAbsentDic.Keys)
+                    if (dt.Columns.Contains(key))
                     {
-                        foreach (string item in allowAbsentDic[filedName])
-                        {
-                            if (key == item)
-                            {
-                                int count = 0;
-                                int.TryParse(row[filedName] + "", out count);
+                        int count = 0;
+                        int.TryParse(row[key] + "", out count);
 
-                                count += acr.Count;
-                                row[filedName] = count;
-                            }
-                        }
+                        count += acr.Count;
+                        row[key] = count;
                     }
                 }
 
@@ -580,6 +665,14 @@ namespace HsinChuSemesterScoreFixed_JH
             }
 
             _bgWorkReport.ReportProgress(100);
+
+            #region 將 DataTable 內合併欄位產生出來
+            StreamWriter sw = new StreamWriter(Application.StartupPath + "\\學期成績單合併欄位.txt");
+            foreach (DataColumn dc in dt.Columns)
+                sw.WriteLine(dc.Caption);
+
+            sw.Close();
+            #endregion
 
             Document doc = _Configure.Template;
             doc.MailMerge.Execute(dt);
@@ -889,6 +982,9 @@ namespace HsinChuSemesterScoreFixed_JH
             lnkViewMapColumns.Enabled = enable;
             btnSaveConfig.Enabled = enable;
             btnPrint.Enabled = enable;
+            txtFailScoreMark.Enabled = enable;
+            txtNeeedReScoreMark.Enabled = enable;
+            txtReScoreMark.Enabled = enable;
         }
 
 

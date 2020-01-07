@@ -83,6 +83,7 @@
     <Reference Include="JHSchool.Behavior, Version=1.0.18.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Behavior.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
