@@ -56,10 +56,10 @@ namespace HsinChuSemesterScoreFixed_JH
         public static List<string> DefaultConfigNameList()
         {
             List<string> retVal = new List<string>();
-            retVal.Add("領域成績單");
-            retVal.Add("科目成績單");
-            retVal.Add("科目及領域成績單_領域組距");
-            retVal.Add("科目及領域成績單_科目組距");
+            //retVal.Add("領域成績單");
+            //retVal.Add("科目成績單");
+            //retVal.Add("科目及領域成績單_領域組距");
+            //retVal.Add("科目及領域成績單_科目組距");
             return retVal;
         }
 

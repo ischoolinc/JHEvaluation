@@ -32,9 +32,6 @@ namespace HsinChuSemesterScoreFixed_JH
         DocumentBuilder _builder;
         BackgroundWorker _bgWorkerLoadData;
 
-        string NeeedReScoreMark = "";
-        string ReScoreMark = "";
-        string FailScoreMark = "";
         List<StudentRecord> _Students = new List<StudentRecord>();
 
         // 錯誤訊息
@@ -116,6 +113,7 @@ namespace HsinChuSemesterScoreFixed_JH
             ePaperCloud ePaperCloud = new ePaperCloud();
             ePaperCloud.upload_ePaper(_SelSchoolYear, _SelSemester, reportName, "", memoryStream, ePaperCloud.ViewerType.Student, ePaperCloud.FormatType.Docx);
 
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("");
         }
 
         private void _bgWorkReport_DoWork(object sender, DoWorkEventArgs e)
@@ -168,6 +166,9 @@ namespace HsinChuSemesterScoreFixed_JH
                 dt.Columns.Add("科目成績等第" + i);
                 dt.Columns.Add("科目原始成績等第" + i);
                 dt.Columns.Add("科目補考成績等第" + i);
+                dt.Columns.Add("科目需補考標示" + i);
+                dt.Columns.Add("科目補考成績標示" + i);
+                dt.Columns.Add("科目不及格標示" + i);
             }
 
             //領域欄位
@@ -182,6 +183,10 @@ namespace HsinChuSemesterScoreFixed_JH
                 dt.Columns.Add("領域成績等第" + i);
                 dt.Columns.Add("領域原始成績等第" + i);
                 dt.Columns.Add("領域補考成績等第" + i);
+                dt.Columns.Add("領域需補考標示" + i);
+                dt.Columns.Add("領域補考成績標示" + i);
+                dt.Columns.Add("領域不及格標示" + i);
+
             }
 
 
@@ -202,6 +207,8 @@ namespace HsinChuSemesterScoreFixed_JH
             DomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
             DomainNameList.Add("彈性課程");
 
+            _bgWorkReport.ReportProgress(20);
+
             // 指定領域合併
             foreach (string dName in DomainNameList)
             {
@@ -214,6 +221,10 @@ namespace HsinChuSemesterScoreFixed_JH
                 dt.Columns.Add(dName + "領域成績等第");
                 dt.Columns.Add(dName + "原始成績等第");
                 dt.Columns.Add(dName + "補考成績等第");
+                dt.Columns.Add(dName + "領域需補考標示");
+                dt.Columns.Add(dName + "領域補考成績標示");
+                dt.Columns.Add(dName + "領域不及格標示");
+
             }
 
             foreach (string dName in DomainNameList)
@@ -230,6 +241,9 @@ namespace HsinChuSemesterScoreFixed_JH
                     dt.Columns.Add(dName + "_科目成績等第" + j);
                     dt.Columns.Add(dName + "_科目原始成績等第" + j);
                     dt.Columns.Add(dName + "_科目補考成績等第" + j);
+                    dt.Columns.Add(dName + "_科目需補考標示" + j);
+                    dt.Columns.Add(dName + "_科目補考成績標示" + j);
+                    dt.Columns.Add(dName + "_科目不及格標示" + j);
                 }
             }
 
@@ -277,7 +291,7 @@ namespace HsinChuSemesterScoreFixed_JH
             string 教務主任 = K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("EduDirectorName").InnerText;
 
 
-
+            _bgWorkReport.ReportProgress(40);
 
 
             //基本資料
@@ -342,7 +356,7 @@ namespace HsinChuSemesterScoreFixed_JH
                 Dictionary<string, List<SubjectScore>> DomainSubjScoreDict = new Dictionary<string, List<SubjectScore>>();
 
 
-
+                _bgWorkReport.ReportProgress(60);
 
                 #region 科目成績照領域排序
                 var jsSubjects = new List<SubjectScore>(jsr.Subjects.Values);
@@ -402,7 +416,16 @@ namespace HsinChuSemesterScoreFixed_JH
                     row["科目補考成績" + count] = subj.ScoreMakeup.HasValue ? subj.ScoreMakeup.Value + "" : string.Empty;
                     row["科目成績等第" + count] = subj.Score.HasValue ? _ScoreMappingConfig.ParseScoreName(subj.Score.Value) : string.Empty;
                     row["科目原始成績等第" + count] = subj.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreName(subj.ScoreOrigin.Value) : string.Empty;
-                    row["科目補考成績等第" + count] = subj.ScoreMakeup.HasValue ? _ScoreMappingConfig.ParseScoreName(subj.ScoreMakeup.Value) : string.Empty;
+                    row["科目補考成績等第" + count] = subj.ScoreMakeup.HasValue ? _ScoreMappingConfig.ParseScoreName(subj.ScoreMakeup.Value) : string.Empty;                                       
+
+                    if (subj.ScoreMakeup.HasValue)
+                        row["科目補考成績標示" + count] = _Configure.ReScoreMark;
+
+                    if (subj.Score.HasValue && subj.Score.Value < 60)
+                    {
+                        row["科目需補考標示" + count] = _Configure.NeeedReScoreMark;
+                        row["科目不及格標示" + count] = _Configure.FailScoreMark;
+                    }                      
 
                 }
 
@@ -425,6 +448,16 @@ namespace HsinChuSemesterScoreFixed_JH
                             row[dName + "_科目成績等第" + si] = ss.Score.HasValue ? _ScoreMappingConfig.ParseScoreName(ss.Score.Value) : string.Empty;
                             row[dName + "_科目原始成績等第" + si] = ss.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreName(ss.ScoreOrigin.Value) : string.Empty;
                             row[dName + "_科目補考成績等第" + si] = ss.ScoreMakeup.HasValue ? _ScoreMappingConfig.ParseScoreName(ss.ScoreMakeup.Value) : string.Empty;
+
+                            if (ss.Score.HasValue && ss.Score.Value < 60)
+                            {
+                                row[dName + "_科目需補考標示" + si] = _Configure.NeeedReScoreMark;
+                                row[dName + "_科目不及格標示" + si] = _Configure.FailScoreMark;
+                            }
+
+                            if (ss.ScoreMakeup.HasValue)
+                                row["科目補考成績標示" + count] = _Configure.ReScoreMark;
+
                             si++;
                         }
                     }
@@ -453,7 +486,14 @@ namespace HsinChuSemesterScoreFixed_JH
                     row["領域原始成績等第" + count] = domain.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreName(domain.ScoreOrigin.Value) : string.Empty;
                     row["領域補考成績等第" + count] = domain.ScoreMakeup.HasValue ? _ScoreMappingConfig.ParseScoreName(domain.ScoreMakeup.Value) : string.Empty;
 
+                    if (domain.Score.HasValue && domain.Score.Value < 60 )
+                    {
+                        row["領域需補考標示" + count] = _Configure.NeeedReScoreMark;
+                        row["領域不及格標示" + count] = _Configure.FailScoreMark;
+                    }
 
+                    if (domain.ScoreMakeup.HasValue)
+                        row["領域補考成績標示" + count] = _Configure.ReScoreMark;
 
                     if (!string.IsNullOrWhiteSpace(domain.Text))
                         _文字描述.Add(domain.Domain + " : " + domain.Text);
@@ -475,12 +515,24 @@ namespace HsinChuSemesterScoreFixed_JH
                         row[dName + "領域成績等第"] = domain.Score.HasValue ? _ScoreMappingConfig.ParseScoreName(domain.Score.Value) : string.Empty;
                         row[dName + "原始成績等第"] = domain.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreName(domain.ScoreOrigin.Value) : string.Empty;
                         row[dName + "補考成績等第"] = domain.ScoreMakeup.HasValue ? _ScoreMappingConfig.ParseScoreName(domain.ScoreMakeup.Value) : string.Empty;
+                        
+                        if (domain.Score.HasValue && domain.Score.Value < 60)
+                        {
+                            row[dName + "領域需補考標示"] = _Configure.NeeedReScoreMark;
+                            row[dName + "領域不及格標示"] = _Configure.FailScoreMark;
+                        }
+
+                        if (domain.ScoreMakeup.HasValue)
+                            row[dName + "領域補考成績標示"] = _Configure.ReScoreMark;
+
                     }
                 }
 
 
                 row["文字描述"] = string.Join(Environment.NewLine, _文字描述);
             }
+
+            _bgWorkReport.ReportProgress(80);
             //預設學年度學期物件
             JHSchool.Behavior.BusinessLogic.SchoolYearSemester sysm = new JHSchool.Behavior.BusinessLogic.SchoolYearSemester(_SelSchoolYear, _SelSemester);
 
@@ -526,6 +578,8 @@ namespace HsinChuSemesterScoreFixed_JH
                 foreach (string key in Global.DLBehaviorRef.Keys)
                     SetDLBehaviorData(key, Global.DLBehaviorRef[key], textScore, row);
             }
+
+            _bgWorkReport.ReportProgress(100);
 
             Document doc = _Configure.Template;
             doc.MailMerge.Execute(dt);
