@@ -31,6 +31,24 @@ namespace HsinChuSemesterScoreFixed_JH
 
         public static List<string> _SelStudentIDList = new List<string>();
 
+        public const int SupportSubjectCount = 40, SupportDomainCount = 30, SupportAbsentCount = 20;
+
+        public static Dictionary<string, string> DLBehaviorRef = new Dictionary<string, string>()
+        {
+            {"日常行為表現","DailyBehavior/Item"},
+            {"團體活動表現","GroupActivity/Item"},
+            {"公共服務表現","PublicService/Item"},
+            {"校內外特殊表現","SchoolSpecial/Item"},
+            {"具體建議","DailyLifeRecommend"},
+            {"其他表現","OtherRecommend"},
+            {"綜合評語","DailyLifeRecommend"}
+        };
+
+        public static string GetKey(params string[] list)
+        {
+            return string.Join("_", list);
+        }
+
         /// <summary>
         /// 設定檔預設名稱
         /// </summary>

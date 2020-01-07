@@ -80,22 +80,21 @@
       <HintPath>Library\FISCA.UDT.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="HsinChu.JHEvaluation.Data, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JHSchool.Behavior, Version=1.0.18.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\HsinChu.JHEvaluation.Data.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>Library\JHSchool.Behavior.dll</HintPath>
     </Reference>
     <Reference Include="JHSchool.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JHSchool.Evaluation, Version=1.0.0.38, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JHSchool.Evaluation, Version=1.0.3.55, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="K12.Data, Version=1.8.0.2, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="K12.Data, Version=2.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\K12.Data.dll</HintPath>
       <Private>False</Private>
@@ -167,14 +166,19 @@
     <Content Include="Library\FISCA.UDT.dll" />
     <Content Include="Library\FISCA.UDT.pdb" />
     <Content Include="Library\FISCA.UDT.xml" />
-    <Content Include="Library\HsinChu.JHEvaluation.Data.dll" />
+    <Content Include="Library\JHSchool.Behavior.dll" />
+    <Content Include="Library\JHSchool.Behavior.pdb" />
     <Content Include="Library\JHSchool.Data.dll" />
     <Content Include="Library\JHSchool.Data.pdb" />
     <Content Include="Library\JHSchool.Data.xml" />
     <Content Include="Library\JHSchool.Evaluation.dll" />
     <Content Include="Library\JHSchool.Evaluation.pdb" />
     <Content Include="Library\K12.Data.dll" />
+    <Content Include="Library\K12.Data.pdb" />
+    <Content Include="Library\K12.Data.xml" />
     <Content Include="Library\K12.Presentation.dll" />
+    <Content Include="Library\K12.Presentation.pdb" />
+    <Content Include="Library\K12.Presentation.xml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
