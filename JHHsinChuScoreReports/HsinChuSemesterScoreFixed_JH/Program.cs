@@ -23,12 +23,12 @@ namespace HsinChuSemesterScoreFixed_JH
             rbItem1["報表"]["成績相關報表"]["學期成績通知單(固定排名)"].Enable = UserAcl.Current["9C776D1D-5C08-482A-95EB-91CBD965011C"].Executable;
             rbItem1["報表"]["成績相關報表"]["學期成績通知單(固定排名)"].Click += delegate
             {
-                if (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0 && K12.Presentation.NLDPanels.Student.SelectedSource.Count < 111)
+                if (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0)
                 {
                     PrintForm pf = new PrintForm(K12.Presentation.NLDPanels.Student.SelectedSource);
                     pf.ShowDialog();
                 }
-               
+
                 else
                 {
                     FISCA.Presentation.Controls.MsgBox.Show("請選擇選學生");
@@ -40,13 +40,13 @@ namespace HsinChuSemesterScoreFixed_JH
             rbItem2["報表"]["成績相關報表"]["學期成績通知單(固定排名)"].Enable = UserAcl.Current["9C776D1D-5C08-482A-95EB-91CBD965011C"].Executable;
             rbItem2["報表"]["成績相關報表"]["學期成績通知單(固定排名)"].Click += delegate
             {
-                if (K12.Presentation.NLDPanels.Class.SelectedSource.Count > 0 && K12.Presentation.NLDPanels.Class.SelectedSource.Count < 4)
+                if (K12.Presentation.NLDPanels.Class.SelectedSource.Count > 0)
                 {
                     List<string> StudentIDList = Utility.GetClassStudentIDList1ByClassID(K12.Presentation.NLDPanels.Class.SelectedSource);
                     PrintForm pf = new PrintForm(StudentIDList);
                     pf.ShowDialog();
                 }
-                
+
                 else
                 {
                     FISCA.Presentation.Controls.MsgBox.Show("請選擇選班級");
@@ -58,7 +58,7 @@ namespace HsinChuSemesterScoreFixed_JH
             Catalog catalog1a = RoleAclSource.Instance["學生"]["功能按鈕"];
             catalog1a.Add(new RibbonFeature("9C776D1D-5C08-482A-95EB-91CBD965011C", "學期成績通知單(固定排名)"));
 
-          
+
         }
 
 

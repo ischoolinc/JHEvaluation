@@ -8,6 +8,9 @@ using System.Windows.Forms;
 using FISCA.Data;
 using System.Data;
 using Aspose.Words;
+using JHSchool.Data;
+using K12.Data;
+
 
 namespace HsinChuSemesterScoreFixed_JH
 {
@@ -136,6 +139,462 @@ namespace HsinChuSemesterScoreFixed_JH
 
                 builder.EndTable();
 
+                // 動態計算領域
+                List<JHSemesterScoreRecord> SemesterScoreRecordList = JHSemesterScore.SelectBySchoolYearAndSemester(_SelStudentIDList, _SelSchoolYear, _SelSemester);
+
+                // 領域名稱
+                List<string> DomainNameList = new List<string>();
+
+                foreach (JHSemesterScoreRecord SemsScore in SemesterScoreRecordList)
+                {
+                    foreach (string dn in SemsScore.Domains.Keys)
+                    {
+                        if (!DomainNameList.Contains(dn))
+                            DomainNameList.Add(dn);
+                    }
+                }
+                DomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+                DomainNameList.Add("彈性課程");
+
+                List<string> m1 = new List<string>();
+                List<string> m2a = new List<string>();
+                List<string> m2b = new List<string>();
+
+                m1.Add("班排名");
+                m1.Add("年排名");
+                m1.Add("類別1排名");
+                m1.Add("類別2排名");
+
+                m2a.Add("rank");
+                m2a.Add("matrix_count");
+                m2a.Add("pr");
+                m2a.Add("percentile");
+                m2a.Add("avg_top_25");
+                m2a.Add("avg_top_50");
+                m2a.Add("avg");
+                m2a.Add("avg_bottom_50");
+                m2a.Add("avg_bottom_25");
+
+                m2b.Add("level_gte100");
+                m2b.Add("level_90");
+                m2b.Add("level_80");
+                m2b.Add("level_70");
+                m2b.Add("level_60");
+                m2b.Add("level_50");
+                m2b.Add("level_40");
+                m2b.Add("level_30");
+                m2b.Add("level_20");
+                m2b.Add("level_10");
+                m2b.Add("level_lt10");
+
+
+                // 領域排名 排名、母數、五標
+                foreach (string dName in DomainNameList)
+                {
+                    builder.Writeln();
+                    builder.Writeln();
+                    string dn = dName + "領域成績排名 排名、母數、五標";
+                    builder.Writeln(dn);
+                    builder.StartTable();
+                    builder.InsertCell();
+                    builder.Write("名稱");
+                    builder.InsertCell();
+                    builder.Write("排名");
+                    builder.InsertCell();
+                    builder.Write("排名母數");
+                    builder.InsertCell();
+                    builder.Write("PR");
+                    builder.InsertCell();
+                    builder.Write("百分比");
+                    builder.InsertCell();
+                    builder.Write("頂標");
+                    builder.InsertCell();
+                    builder.Write("高標");
+                    builder.InsertCell();
+                    builder.Write("均標");
+                    builder.InsertCell();
+                    builder.Write("低標");
+                    builder.InsertCell();
+                    builder.Write("底標");
+                    builder.EndRow();
+                    foreach (string m in m1)
+                    {
+                        builder.InsertCell();
+                        builder.Write(m);
+                        foreach (string nn in m2a)
+                        {
+                            string dd = dName + "領域成績_" + m + "_" + nn;
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + dd + " \\* MERGEFORMAT ", "«R»");
+                        }
+                        builder.EndRow();
+                    }
+
+                    builder.EndTable();
+                }
+
+
+                // 領域(原始)排名 排名、母數、五標
+                foreach (string dName in DomainNameList)
+                {
+                    builder.Writeln();
+                    builder.Writeln();
+                    string dn = dName + "領域成績原始)排名 排名、母數、五標";
+                    builder.Writeln(dn);
+                    builder.StartTable();
+                    builder.InsertCell();
+                    builder.Write("名稱");
+                    builder.InsertCell();
+                    builder.Write("排名");
+                    builder.InsertCell();
+                    builder.Write("排名母數");
+                    builder.InsertCell();
+                    builder.Write("PR");
+                    builder.InsertCell();
+                    builder.Write("百分比");
+                    builder.InsertCell();
+                    builder.Write("頂標");
+                    builder.InsertCell();
+                    builder.Write("高標");
+                    builder.InsertCell();
+                    builder.Write("均標");
+                    builder.InsertCell();
+                    builder.Write("低標");
+                    builder.InsertCell();
+                    builder.Write("底標");
+                    builder.EndRow();
+                    foreach (string m in m1)
+                    {
+                        builder.InsertCell();
+                        builder.Write(m);
+                        foreach (string nn in m2a)
+                        {
+                            string dd = dName + "領域成績(原始)_" + m + "_" + nn;
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + dd + " \\* MERGEFORMAT ", "«R»");
+                        }
+                        builder.EndRow();
+                    }
+
+                    builder.EndTable();
+                }
+
+
+                // 領域排名 組距
+                foreach (string dName in DomainNameList)
+                {
+                    builder.Writeln();
+                    builder.Writeln();
+                    string dn = dName + "領域成績排名 組距";
+                    builder.Writeln(dn);
+                    builder.StartTable();
+                    builder.InsertCell();
+                    builder.Write("名稱");
+                    builder.InsertCell();
+                    builder.Write("100以上");
+                    builder.InsertCell();
+                    builder.Write("90以上小於100");
+                    builder.InsertCell();
+                    builder.Write("80以上小於90");
+                    builder.InsertCell();
+                    builder.Write("70以上小於80");
+                    builder.InsertCell();
+                    builder.Write("60以上小於70");
+                    builder.InsertCell();
+                    builder.Write("50以上小於60");
+                    builder.InsertCell();
+                    builder.Write("40以上小於50");
+                    builder.InsertCell();
+                    builder.Write("30以上小於40");
+                    builder.InsertCell();
+                    builder.Write("20以上小於30");
+                    builder.InsertCell();
+                    builder.Write("10以上小於20");
+                    builder.InsertCell();
+                    builder.Write("10以下");
+                    builder.EndRow();
+                    foreach (string m in m1)
+                    {
+                        builder.InsertCell();
+                        builder.Write(m);
+                        foreach (string nn in m2b)
+                        {
+                            string dd = dName + "領域成績_" + m + "_" + nn;
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + dd + " \\* MERGEFORMAT ", "«R»");
+                        }
+                        builder.EndRow();
+                    }
+
+                    builder.EndTable();
+                }
+
+                // 領域排名(原始) 組距
+                foreach (string dName in DomainNameList)
+                {
+                    builder.Writeln();
+                    builder.Writeln();
+                    string dn = dName + "領域成績(原始)排名 組距";
+                    builder.Writeln(dn);
+                    builder.StartTable();
+                    builder.InsertCell();
+                    builder.Write("名稱");
+                    builder.InsertCell();
+                    builder.Write("100以上");
+                    builder.InsertCell();
+                    builder.Write("90以上小於100");
+                    builder.InsertCell();
+                    builder.Write("80以上小於90");
+                    builder.InsertCell();
+                    builder.Write("70以上小於80");
+                    builder.InsertCell();
+                    builder.Write("60以上小於70");
+                    builder.InsertCell();
+                    builder.Write("50以上小於60");
+                    builder.InsertCell();
+                    builder.Write("40以上小於50");
+                    builder.InsertCell();
+                    builder.Write("30以上小於40");
+                    builder.InsertCell();
+                    builder.Write("20以上小於30");
+                    builder.InsertCell();
+                    builder.Write("10以上小於20");
+                    builder.InsertCell();
+                    builder.Write("10以下");
+                    builder.EndRow();
+                    foreach (string m in m1)
+                    {
+                        builder.InsertCell();
+                        builder.Write(m);
+                        foreach (string nn in m2b)
+                        {
+                            string dd = dName + "領域成績(原始)_" + m + "_" + nn;
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + dd + " \\* MERGEFORMAT ", "«R»");
+                        }
+                        builder.EndRow();
+                    }
+
+                    builder.EndTable();
+                }
+
+                // 領域-科目排名 排名、母數、五標
+                foreach (string dName in DomainNameList)
+                {
+                    builder.Writeln();
+                    builder.Writeln();
+                    string dn = dName + "領域-科目成績排名 排名、母數、五標";
+                    builder.Writeln(dn);
+                    builder.StartTable();
+                    foreach (string m in m1)
+                    {
+                        builder.Writeln(m);
+                        builder.InsertCell();
+                        builder.Write("名稱");
+                        builder.InsertCell();
+                        builder.Write("排名");
+                        builder.InsertCell();
+                        builder.Write("排名母數");
+                        builder.InsertCell();
+                        builder.Write("PR");
+                        builder.InsertCell();
+                        builder.Write("百分比");
+                        builder.InsertCell();
+                        builder.Write("頂標");
+                        builder.InsertCell();
+                        builder.Write("高標");
+                        builder.InsertCell();
+                        builder.Write("均標");
+                        builder.InsertCell();
+                        builder.Write("低標");
+                        builder.InsertCell();
+                        builder.Write("底標");
+                        builder.EndRow();
+
+                        for (int i = 1; i <= 12; i++)
+                        {
+                            builder.InsertCell();
+                            string dsn = dName + "_科目排名名稱" + i;
+                            builder.InsertField("MERGEFIELD " + dsn + " \\* MERGEFORMAT ", "«N" + i + "»");
+                            foreach (string nn in m2a)
+                            {
+                                string dd = dName + "_科目成績" + i + "_" + m + "_" + nn;
+                                builder.InsertCell();
+                                builder.InsertField("MERGEFIELD " + dd + " \\* MERGEFORMAT ", "«R" + i + "»");
+                            }
+                            builder.EndRow();
+                        }
+
+                    }
+
+                    builder.EndTable();
+                }
+
+                // 領域-科目排名 排名、母數、五標
+                foreach (string dName in DomainNameList)
+                {
+                    builder.Writeln();
+                    builder.Writeln();
+                    string dn = dName + "領域-科目成績(原始)排名 排名、母數、五標";
+                    builder.Writeln(dn);
+                    builder.StartTable();
+                    foreach (string m in m1)
+                    {
+                        builder.Writeln(m);
+                        builder.InsertCell();
+                        builder.Write("名稱");
+                        builder.InsertCell();
+                        builder.Write("排名");
+                        builder.InsertCell();
+                        builder.Write("排名母數");
+                        builder.InsertCell();
+                        builder.Write("PR");
+                        builder.InsertCell();
+                        builder.Write("百分比");
+                        builder.InsertCell();
+                        builder.Write("頂標");
+                        builder.InsertCell();
+                        builder.Write("高標");
+                        builder.InsertCell();
+                        builder.Write("均標");
+                        builder.InsertCell();
+                        builder.Write("低標");
+                        builder.InsertCell();
+                        builder.Write("底標");
+                        builder.EndRow();
+
+                        for (int i = 1; i <= 12; i++)
+                        {
+                            builder.InsertCell();
+                            string dsn = dName + "_科目排名名稱" + i;
+                            builder.InsertField("MERGEFIELD " + dsn + " \\* MERGEFORMAT ", "«N" + i + "»");
+                            foreach (string nn in m2a)
+                            {
+                                string dd = dName + "_科目成績(原始)" + i + "_" + m + "_" + nn;
+                                builder.InsertCell();
+                                builder.InsertField("MERGEFIELD " + dd + " \\* MERGEFORMAT ", "«R" + i + "»");
+                            }
+                            builder.EndRow();
+                        }
+
+                    }
+
+                    builder.EndTable();
+                }
+
+                // 領域-科目排名 組距
+                foreach (string dName in DomainNameList)
+                {
+                    builder.Writeln();
+                    builder.Writeln();
+                    string dn = dName + "領域-科目成績排名 組距";
+                    builder.Writeln(dn);
+                    builder.StartTable();
+                    foreach (string m in m1)
+                    {
+                        builder.Writeln(m);
+                        builder.InsertCell();
+                        builder.Write("名稱");
+                        builder.InsertCell();
+                        builder.Write("100以上");
+                        builder.InsertCell();
+                        builder.Write("90以上小於100");
+                        builder.InsertCell();
+                        builder.Write("80以上小於90");
+                        builder.InsertCell();
+                        builder.Write("70以上小於80");
+                        builder.InsertCell();
+                        builder.Write("60以上小於70");
+                        builder.InsertCell();
+                        builder.Write("50以上小於60");
+                        builder.InsertCell();
+                        builder.Write("40以上小於50");
+                        builder.InsertCell();
+                        builder.Write("30以上小於40");
+                        builder.InsertCell();
+                        builder.Write("20以上小於30");
+                        builder.InsertCell();
+                        builder.Write("10以上小於20");
+                        builder.InsertCell();
+                        builder.Write("10以下");
+                        builder.EndRow();
+
+                        for (int i = 1; i <= 12; i++)
+                        {
+                            builder.InsertCell();
+                            string dsn = dName + "_科目排名名稱" + i;
+                            builder.InsertField("MERGEFIELD " + dsn + " \\* MERGEFORMAT ", "«N" + i + "»");
+                            foreach (string nn in m2b)
+                            {
+                                string dd = dName + "_科目成績" + i + "_" + m + "_" + nn;
+                                builder.InsertCell();
+                                builder.InsertField("MERGEFIELD " + dd + " \\* MERGEFORMAT ", "«R" + i + "»");
+                            }
+                            builder.EndRow();
+                        }
+
+
+                    }
+
+                    builder.EndTable();
+                }
+
+                // 領域-科目(原始)排名 組距
+                foreach (string dName in DomainNameList)
+                {
+                    builder.Writeln();
+                    builder.Writeln();
+                    string dn = dName + "領域-科目成績(原始)排名 組距";
+                    builder.Writeln(dn);
+                    builder.StartTable();
+                    foreach (string m in m1)
+                    {
+                        builder.Writeln(m);
+                        builder.InsertCell();
+                        builder.Write("名稱");
+                        builder.InsertCell();
+                        builder.Write("100以上");
+                        builder.InsertCell();
+                        builder.Write("90以上小於100");
+                        builder.InsertCell();
+                        builder.Write("80以上小於90");
+                        builder.InsertCell();
+                        builder.Write("70以上小於80");
+                        builder.InsertCell();
+                        builder.Write("60以上小於70");
+                        builder.InsertCell();
+                        builder.Write("50以上小於60");
+                        builder.InsertCell();
+                        builder.Write("40以上小於50");
+                        builder.InsertCell();
+                        builder.Write("30以上小於40");
+                        builder.InsertCell();
+                        builder.Write("20以上小於30");
+                        builder.InsertCell();
+                        builder.Write("10以上小於20");
+                        builder.InsertCell();
+                        builder.Write("10以下");
+                        builder.EndRow();
+
+                        for (int i = 1; i <= 12; i++)
+                        {
+                            builder.InsertCell();
+                            string dsn = dName + "_科目排名名稱" + i;
+                            builder.InsertField("MERGEFIELD " + dsn + " \\* MERGEFORMAT ", "«N" + i + "»");
+                            foreach (string nn in m2b)
+                            {
+                                string dd = dName + "_科目成績(原始)" + i + "_" + m + "_" + nn;
+                                builder.InsertCell();
+                                builder.InsertField("MERGEFIELD " + dd + " \\* MERGEFORMAT ", "«R" + i + "»");
+                            }
+                            builder.EndRow();
+                        }
+
+
+                    }
+
+                    builder.EndTable();
+                }
 
                 #endregion
                 tempDoc.Save(path, SaveFormat.Doc);
