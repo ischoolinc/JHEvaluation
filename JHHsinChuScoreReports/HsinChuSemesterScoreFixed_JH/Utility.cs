@@ -12,9 +12,9 @@ namespace HsinChuSemesterScoreFixed_JH
     class Utility
     {
         // 類別1名稱
-        public static string StudentTag1 = "";
+        public static Dictionary<string, string> StudentTag1Dict = new Dictionary<string, string>();
         // 類別2名稱
-        public static string StudentTag2 = "";
+        public static Dictionary<string, string> StudentTag2Dict = new Dictionary<string, string>();
         /// <summary>
         /// 透過 ClassID 取得學生為一般，依照年級、班級名稱、座號排序
         /// </summary>
@@ -138,7 +138,7 @@ namespace HsinChuSemesterScoreFixed_JH
         /// <param name="Semester"></param>
         /// <param name="StudentIDList"></param>
         /// <returns></returns>
-        public static Dictionary<string, Dictionary<string, Dictionary<string,string>>> GetSemsScoreRankMatrixDataValue(string SchoolYear, string Semester, List<string> StudentIDList)
+        public static Dictionary<string, Dictionary<string, Dictionary<string, string>>> GetSemsScoreRankMatrixDataValue(string SchoolYear, string Semester, List<string> StudentIDList)
         {
             Dictionary<string, Dictionary<string, Dictionary<string, string>>> value = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
 
@@ -245,6 +245,8 @@ namespace HsinChuSemesterScoreFixed_JH
             //dt.WriteXmlSchema(Application.StartupPath + "\\d5s.xml");
             //dt.WriteXml(Application.StartupPath + "\\d5d.xml");
 
+            StudentTag1Dict.Clear();
+            StudentTag2Dict.Clear();
             // student id key
             // key = item_type + item_name +  rank_name 
             foreach (DataRow dr in dt.Rows)
@@ -258,13 +260,19 @@ namespace HsinChuSemesterScoreFixed_JH
                 if (key == "學期/總計成績_課程學習總成績_類別1排名")
                 {
                     if (dr["rank_name"] != null)
-                        StudentTag1 = dr["rank_name"].ToString();
+                    {
+                        if (!StudentTag1Dict.ContainsKey(sid))
+                            StudentTag1Dict.Add(sid, dr["rank_name"].ToString());
+                    }                    
                 }
 
                 if (key == "學期/總計成績_課程學習總成績_類別2排名")
                 {
                     if (dr["rank_name"] != null)
-                        StudentTag2 = dr["rank_name"].ToString();
+                    {
+                        if (!StudentTag2Dict.ContainsKey(sid))
+                            StudentTag2Dict.Add(sid, dr["rank_name"].ToString());
+                    }                       
                 }
                 if (!value[sid].ContainsKey(key))
                     value[sid].Add(key, new Dictionary<string, string>());

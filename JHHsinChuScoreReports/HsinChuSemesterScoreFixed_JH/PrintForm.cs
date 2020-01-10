@@ -559,10 +559,23 @@ namespace HsinChuSemesterScoreFixed_JH
                 {
                     if (_StudentRowDict.ContainsKey(jsr.RefStudentID))
                     {
+
                         DataRow row = _StudentRowDict[jsr.RefStudentID];
                         _文字描述.Clear();
 
                         string StudentID = jsr.RefStudentID;
+
+                        // 學生類別
+                        if (Utility.StudentTag1Dict.ContainsKey(StudentID))
+                        {
+                            row["學期類別排名1"] = Utility.StudentTag1Dict[StudentID];
+                        }
+
+                        if (Utility.StudentTag2Dict.ContainsKey(StudentID))
+                        {
+                            row["學期類別排名2"] = Utility.StudentTag2Dict[StudentID];
+                        }
+
                         //學習領域成績
 
                         row["學習領域成績"] = jsr.LearnDomainScore.HasValue ? jsr.LearnDomainScore.Value + "" : string.Empty;
@@ -872,7 +885,7 @@ namespace HsinChuSemesterScoreFixed_JH
 
                                                 }
                                             }
-                                            
+
                                         }
                                     }
 
