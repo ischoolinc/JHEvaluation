@@ -278,16 +278,24 @@ namespace HsinChuSemesterScoreFixed_JH
                     }
                 }
 
+
+                List<string> paList = new List<string>();
                 // 缺曠欄位
                 foreach (string aa in alist)
                 {
                     foreach (string pp in plist)
                     {
                         string key = pp + "_" + aa;
-                        if (!dt.Columns.Contains(key))
+                        if (!paList.Contains(key))
+                        {
                             dt.Columns.Add(key);
+                            paList.Add(key);
+                        }
+
                     }
                 }
+
+
 
                 //日常生活表現欄位
                 foreach (string key in Global.DLBehaviorRef.Keys)
@@ -981,7 +989,12 @@ namespace HsinChuSemesterScoreFixed_JH
                             }
                         }
 
+
                         // 學務相關資料
+                        // 缺曠預設填0
+                        foreach (string str in paList)
+                            row[str] = 0;
+
                         if (AutoSummaryRecordDict.ContainsKey(student.ID))
                         {
                             AutoSummaryRecord asr = AutoSummaryRecordDict[student.ID];
@@ -1020,7 +1033,7 @@ namespace HsinChuSemesterScoreFixed_JH
                         row["文字描述"] = string.Join(Environment.NewLine, _文字描述);
 
                     }
-                    
+
 
                     dt.Rows.Add(row);
 
@@ -1042,15 +1055,15 @@ namespace HsinChuSemesterScoreFixed_JH
 
                 _bgWorkReport.ReportProgress(100);
 
-                #region 將 DataTable 內合併欄位產生出來
-                StreamWriter sw = new StreamWriter(Application.StartupPath + "\\學期成績單合併欄位.txt");
-                foreach (DataColumn dc in dt.Columns)
-                    sw.WriteLine(dc.Caption);
-                sw.Close();
-                #endregion
+                //#region 將 DataTable 內合併欄位產生出來
+                //StreamWriter sw = new StreamWriter(Application.StartupPath + "\\學期成績單合併欄位.txt");
+                //foreach (DataColumn dc in dt.Columns)
+                //    sw.WriteLine(dc.Caption);
+                //sw.Close();
+                //#endregion
 
-                dt.TableName = "score";
-                dt.WriteXml(Application.StartupPath + "\\score.xml");
+                //dt.TableName = "score";
+                //dt.WriteXml(Application.StartupPath + "\\score.xml");
 
 
                 Document doc = _Configure.Template;
@@ -1082,7 +1095,7 @@ namespace HsinChuSemesterScoreFixed_JH
                 K12.Data.Configuration.ConfigData cd = K12.Data.School.Configuration["DLBehaviorConfig"];
                 if (!string.IsNullOrEmpty(cd["DailyBehavior"]))
                 {
-                    string key = "日常行為表現";
+                    string key = "日常生活表現程度";
                     //日常行為表現
                     XElement e1 = XElement.Parse(cd["DailyBehavior"]);
                     string name = e1.Attribute("Name").Value;
@@ -1094,52 +1107,52 @@ namespace HsinChuSemesterScoreFixed_JH
                         _DLBehaviorConfigItemNameDict.Add(key, items);
                 }
 
-                if (!string.IsNullOrEmpty(cd["GroupActivity"]))
-                {
-                    string key = "團體活動表現";
-                    //團體活動表現
-                    XElement e4 = XElement.Parse(cd["GroupActivity"]);
-                    string name = e4.Attribute("Name").Value;
-                    retVal.Add(key, name);
+                //if (!string.IsNullOrEmpty(cd["GroupActivity"]))
+                //{
+                //    string key = "團體活動表現";
+                //    //團體活動表現
+                //    XElement e4 = XElement.Parse(cd["GroupActivity"]);
+                //    string name = e4.Attribute("Name").Value;
+                //    retVal.Add(key, name);
 
-                    // 團體活動表現
-                    List<string> items = ParseItems(e4);
-                    if (items.Count > 0)
-                        _DLBehaviorConfigItemNameDict.Add(key, items);
+                //    // 團體活動表現
+                //    List<string> items = ParseItems(e4);
+                //    if (items.Count > 0)
+                //        _DLBehaviorConfigItemNameDict.Add(key, items);
 
-                }
+                //}
 
-                if (!string.IsNullOrEmpty(cd["PublicService"]))
-                {
-                    string key = "公共服務表現";
-                    //公共服務表現
-                    XElement e5 = XElement.Parse(cd["PublicService"]);
-                    string name = e5.Attribute("Name").Value;
-                    retVal.Add(key, name);
-                    List<string> items = ParseItems(e5);
-                    if (items.Count > 0)
-                        _DLBehaviorConfigItemNameDict.Add(key, items);
+                //if (!string.IsNullOrEmpty(cd["PublicService"]))
+                //{
+                //    string key = "公共服務表現";
+                //    //公共服務表現
+                //    XElement e5 = XElement.Parse(cd["PublicService"]);
+                //    string name = e5.Attribute("Name").Value;
+                //    retVal.Add(key, name);
+                //    List<string> items = ParseItems(e5);
+                //    if (items.Count > 0)
+                //        _DLBehaviorConfigItemNameDict.Add(key, items);
 
-                }
+                //}
 
-                if (!string.IsNullOrEmpty(cd["SchoolSpecial"]))
-                {
-                    string key = "校內外特殊表現";
-                    //校內外特殊表現,新竹沒有子項目，高雄有子項目
-                    XElement e6 = XElement.Parse(cd["SchoolSpecial"]);
-                    string name = e6.Attribute("Name").Value;
-                    retVal.Add(key, name);
-                    List<string> items = ParseItems(e6);
-                    if (items.Count > 0)
-                        _DLBehaviorConfigItemNameDict.Add(key, items);
-                }
+                //if (!string.IsNullOrEmpty(cd["SchoolSpecial"]))
+                //{
+                //    string key = "校內外特殊表現";
+                //    //校內外特殊表現,新竹沒有子項目，高雄有子項目
+                //    XElement e6 = XElement.Parse(cd["SchoolSpecial"]);
+                //    string name = e6.Attribute("Name").Value;
+                //    retVal.Add(key, name);
+                //    List<string> items = ParseItems(e6);
+                //    if (items.Count > 0)
+                //        _DLBehaviorConfigItemNameDict.Add(key, items);
+                //}
 
                 if (!string.IsNullOrEmpty(cd["OtherRecommend"]))
                 {
                     //其他表現
                     XElement e2 = XElement.Parse(cd["OtherRecommend"]);
                     string name = e2.Attribute("Name").Value;
-                    retVal.Add("其他表現", name);
+                    retVal.Add("團體活動表現", name);
                 }
 
                 if (!string.IsNullOrEmpty(cd["DailyLifeRecommend"]))
@@ -1147,8 +1160,8 @@ namespace HsinChuSemesterScoreFixed_JH
                     //日常生活表現具體建議
                     XElement e3 = XElement.Parse(cd["DailyLifeRecommend"]);
                     string name = e3.Attribute("Name").Value;
-                    retVal.Add("具體建議", name);  // 高雄
-                    retVal.Add("綜合評語", name);  // 新竹
+                    //    retVal.Add("具體建議", name);  // 高雄
+                    retVal.Add("日常生活表現具體建議", name);  // 新竹
                 }
             }
             catch (Exception ex)
@@ -1708,6 +1721,8 @@ namespace HsinChuSemesterScoreFixed_JH
                 FISCA.Presentation.Controls.MsgBox.Show("學期必填!");
                 return;
             }
+
+            lnkViewMapColumns.Enabled = false;
 
             Global._SelSchoolYear = _SelSchoolYear;
             Global._SelSemester = _SelSemester;

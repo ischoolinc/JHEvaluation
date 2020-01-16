@@ -10,6 +10,7 @@ using System.Data;
 using Aspose.Words;
 using JHSchool.Data;
 using K12.Data;
+using System.Xml.Linq;
 
 
 namespace HsinChuSemesterScoreFixed_JH
@@ -38,19 +39,40 @@ namespace HsinChuSemesterScoreFixed_JH
 
         public static Dictionary<string, string> DLBehaviorRef = new Dictionary<string, string>()
         {
-            {"日常行為表現","DailyBehavior/Item"},
-            {"團體活動表現","GroupActivity/Item"},
-            {"公共服務表現","PublicService/Item"},
-            {"校內外特殊表現","SchoolSpecial/Item"},
-            {"具體建議","DailyLifeRecommend"},
-            {"其他表現","OtherRecommend"},
-            {"綜合評語","DailyLifeRecommend"}
+            {"日常生活表現程度","DailyBehavior/Item"},
+            //{"團體活動表現","GroupActivity/Item"},
+            //{"公共服務表現","PublicService/Item"},
+            //{"校內外特殊表現","SchoolSpecial/Item"},
+            {"日常生活表現具體建議","DailyLifeRecommend"},
+            {"團體活動表現","OtherRecommend"},
+            //{"綜合評語","DailyLifeRecommend"}
         };
 
         public static string GetKey(params string[] list)
         {
             return string.Join("_", list);
         }
+
+
+        /// <summary>
+        /// XML 內解析子項目名稱
+        /// </summary>
+        /// <param name="elm"></param>
+        /// <returns></returns>
+        private static List<string> ParseItems(XElement elm)
+        {
+            List<string> retVal = new List<string>();
+
+            foreach (XElement subElm in elm.Elements("Item"))
+            {
+                // 因為社團功能，所以要將"社團活動" 字不放入
+                string name = subElm.Attribute("Name").Value;
+                if (name != "社團活動")
+                    retVal.Add(name);
+            }
+            return retVal;
+        }
+
 
         /// <summary>
         /// 設定檔預設名稱
@@ -138,6 +160,63 @@ namespace HsinChuSemesterScoreFixed_JH
                 }
 
                 builder.EndTable();
+
+
+                // 日常生活表現
+                builder.Writeln();
+                builder.Writeln();
+                builder.Writeln("日常生活表現評量");
+                builder.StartTable();
+                builder.InsertCell();
+                builder.Write("分類");
+                builder.InsertCell();
+                builder.Write("名稱");
+                builder.InsertCell();
+                builder.Write("建議內容");
+                builder.EndRow();
+
+                foreach (string key in DLBehaviorRef.Keys)
+                {
+                    builder.InsertCell();
+                    builder.Write(key);
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_Name" + " \\* MERGEFORMAT ", "«" + key + "名稱»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + "_Description" + " \\* MERGEFORMAT ", "«" + key + "建議內容»");
+                    builder.EndRow();
+
+                }
+                builder.EndTable();
+
+                // 日常生活表現
+                builder.Writeln();
+                builder.Writeln();
+                builder.Writeln("日常生活表現評量子項目");
+                builder.StartTable();
+                builder.InsertCell();
+                builder.Write("項目");
+                builder.InsertCell();
+                builder.Write("指標");
+                builder.InsertCell();
+                builder.Write("表現程度");
+                builder.EndRow();
+
+                for (int i = 1; i <= 7; i++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "日常生活表現程度_Item_Name" + i + " \\* MERGEFORMAT ", "«項目" + i + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "日常生活表現程度_Item_Degree" + i + " \\* MERGEFORMAT ", "«指標" + i + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "日常生活表現程度_Item_Description" + i + " \\* MERGEFORMAT ", "«表現" + i + "»");
+                    builder.EndRow();
+                }
+
+                builder.EndTable();
+
+
+
+
 
                 // 動態計算領域
                 List<JHSemesterScoreRecord> SemesterScoreRecordList = JHSemesterScore.SelectBySchoolYearAndSemester(_SelStudentIDList, _SelSchoolYear, _SelSemester);
