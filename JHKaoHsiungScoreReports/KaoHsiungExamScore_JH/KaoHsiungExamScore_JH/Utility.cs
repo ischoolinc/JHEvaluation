@@ -220,7 +220,7 @@ namespace KaoHsiungExamScore_JH
         {
             Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> retVal = new Dictionary<string, Dictionary<string, DAO.SubjectDomainName>>();
             QueryHelper qh = new QueryHelper();
-            string query = "select ref_student_id,course.domain,course.subject,course.credit from sc_attend inner join course on sc_attend.ref_course_id=course.id inner join te_include on course.ref_exam_template_id = te_include.ref_exam_template_id where sc_attend.ref_student_id in(" + string.Join(",", StudentIDList.ToArray()) + ") and course.id in(" + string.Join(",", CourseIDList.ToArray()) + ") and te_include.ref_exam_id=" + examID;
+            string query = "select ref_student_id,sc_attend.id sc_attend_id, course.domain,course.subject,course.credit from sc_attend inner join course on sc_attend.ref_course_id=course.id inner join te_include on course.ref_exam_template_id = te_include.ref_exam_template_id where sc_attend.ref_student_id in(" + string.Join(",", StudentIDList.ToArray()) + ") and course.id in(" + string.Join(",", CourseIDList.ToArray()) + ") and te_include.ref_exam_id=" + examID;
             DataTable dt = qh.Select(query);
             foreach (DataRow dr in dt.Rows)
             {
@@ -242,6 +242,7 @@ namespace KaoHsiungExamScore_JH
                     DAO.SubjectDomainName sdn = new DAO.SubjectDomainName();
                     sdn.SubjectName = subjectName;
                     sdn.DomainName = domainName;
+                    sdn.SCAttendID = dr["sc_attend_id"].ToString();
                     decimal credit;
                     if (decimal.TryParse(dr["credit"].ToString(), out credit))
                     {
