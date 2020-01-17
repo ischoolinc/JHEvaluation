@@ -255,7 +255,7 @@
             this.groupPanel1.Controls.Add(this.labelX1);
             this.groupPanel1.Location = new System.Drawing.Point(25, 86);
             this.groupPanel1.Name = "groupPanel1";
-            this.groupPanel1.Size = new System.Drawing.Size(384, 71);
+            this.groupPanel1.Size = new System.Drawing.Size(542, 71);
             // 
             // 
             // 
@@ -287,7 +287,7 @@
             this.groupPanel1.StyleMouseOver.Class = "";
             this.groupPanel1.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel1.TabIndex = 47;
-            this.groupPanel1.Text = "成績標示";
+            this.groupPanel1.Text = "成績未取得學分狀態標示設定";
             // 
             // txtFailScoreMark
             // 
@@ -296,7 +296,7 @@
             // 
             this.txtFailScoreMark.Border.Class = "TextBoxBorder";
             this.txtFailScoreMark.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtFailScoreMark.Location = new System.Drawing.Point(317, 9);
+            this.txtFailScoreMark.Location = new System.Drawing.Point(441, 9);
             this.txtFailScoreMark.Name = "txtFailScoreMark";
             this.txtFailScoreMark.Size = new System.Drawing.Size(48, 25);
             this.txtFailScoreMark.TabIndex = 2;
@@ -308,7 +308,7 @@
             // 
             this.txtReScoreMark.Border.Class = "TextBoxBorder";
             this.txtReScoreMark.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtReScoreMark.Location = new System.Drawing.Point(204, 9);
+            this.txtReScoreMark.Location = new System.Drawing.Point(276, 9);
             this.txtReScoreMark.Name = "txtReScoreMark";
             this.txtReScoreMark.Size = new System.Drawing.Size(48, 25);
             this.txtReScoreMark.TabIndex = 1;
@@ -320,7 +320,7 @@
             // 
             this.txtNeeedReScoreMark.Border.Class = "TextBoxBorder";
             this.txtNeeedReScoreMark.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtNeeedReScoreMark.Location = new System.Drawing.Point(75, 9);
+            this.txtNeeedReScoreMark.Location = new System.Drawing.Point(124, 9);
             this.txtNeeedReScoreMark.Name = "txtNeeedReScoreMark";
             this.txtNeeedReScoreMark.Size = new System.Drawing.Size(48, 25);
             this.txtNeeedReScoreMark.TabIndex = 0;
@@ -333,11 +333,11 @@
             // 
             this.labelX3.BackgroundStyle.Class = "";
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX3.Location = new System.Drawing.Point(264, 11);
+            this.labelX3.Location = new System.Drawing.Point(335, 11);
             this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(47, 21);
+            this.labelX3.Size = new System.Drawing.Size(101, 21);
             this.labelX3.TabIndex = 2;
-            this.labelX3.Text = "不及格";
+            this.labelX3.Text = "不及格成績加註";
             // 
             // labelX2
             // 
@@ -347,11 +347,11 @@
             // 
             this.labelX2.BackgroundStyle.Class = "";
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(138, 11);
+            this.labelX2.Location = new System.Drawing.Point(188, 11);
             this.labelX2.Name = "labelX2";
-            this.labelX2.Size = new System.Drawing.Size(60, 21);
+            this.labelX2.Size = new System.Drawing.Size(87, 21);
             this.labelX2.TabIndex = 1;
-            this.labelX2.Text = "補考成績";
+            this.labelX2.Text = "補考成績加註";
             // 
             // labelX1
             // 
@@ -363,9 +363,9 @@
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.Location = new System.Drawing.Point(21, 11);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(47, 21);
+            this.labelX1.Size = new System.Drawing.Size(101, 21);
             this.labelX1.TabIndex = 0;
-            this.labelX1.Text = "需補考";
+            this.labelX1.Text = "需補考成績加註";
             // 
             // PrintForm
             // 

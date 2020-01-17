@@ -23,7 +23,7 @@ namespace HsinChuSemesterScoreFixed_JH
         FISCA.UDT.AccessHelper _AccessHelper = new FISCA.UDT.AccessHelper();
 
         List<string> _StudentIDList;
-        Dictionary<string, DataRow> _StudentRowDict = new Dictionary<string, DataRow>();
+        //   Dictionary<string, DataRow> _StudentRowDict = new Dictionary<string, DataRow>();
         DataTable dt = new DataTable();
         private List<string> typeList = new List<string>();
         List<string> _文字描述 = new List<string>();
@@ -216,6 +216,13 @@ namespace HsinChuSemesterScoreFixed_JH
 
                 //學期科目及領域成績
                 List<JHSemesterScoreRecord> SemesterScoreRecordList = JHSemesterScore.SelectBySchoolYearAndSemester(_StudentIDList, _SelSchoolYear, _SelSemester);
+                Dictionary<string, JHSemesterScoreRecord> SemesterScoreRecordDict = new Dictionary<string, JHSemesterScoreRecord>();
+                foreach (JHSemesterScoreRecord rec in SemesterScoreRecordList)
+                {
+
+                    if (!SemesterScoreRecordDict.ContainsKey(rec.RefStudentID))
+                        SemesterScoreRecordDict.Add(rec.RefStudentID, rec);
+                }
 
                 // 領域名稱
                 List<string> DomainNameList = new List<string>();
@@ -271,16 +278,24 @@ namespace HsinChuSemesterScoreFixed_JH
                     }
                 }
 
+
+                List<string> paList = new List<string>();
                 // 缺曠欄位
                 foreach (string aa in alist)
                 {
                     foreach (string pp in plist)
                     {
                         string key = pp + "_" + aa;
-                        if (!dt.Columns.Contains(key))
+                        if (!paList.Contains(key))
+                        {
                             dt.Columns.Add(key);
+                            paList.Add(key);
+                        }
+
                     }
                 }
+
+
 
                 //日常生活表現欄位
                 foreach (string key in Global.DLBehaviorRef.Keys)
@@ -456,6 +471,46 @@ namespace HsinChuSemesterScoreFixed_JH
                 _bgWorkReport.ReportProgress(40);
 
 
+                //上課天數
+                Dictionary<string, SemesterHistoryItem> SemesterHistoryRecordDict = new Dictionary<string, SemesterHistoryItem>();
+                List<SemesterHistoryRecord> SemesterHistoryRecordList = K12.Data.SemesterHistory.SelectByStudentIDs(_StudentIDList);
+                if (SemesterHistoryRecordList != null)
+                {
+                    foreach (SemesterHistoryRecord shr in SemesterHistoryRecordList)
+                    {
+                        foreach (SemesterHistoryItem shi in shr.SemesterHistoryItems)
+                        {
+                            if (shi.SchoolYear == _SelSchoolYear && shi.Semester == _SelSemester)
+                            {
+                                if (!SemesterHistoryRecordDict.ContainsKey(shr.RefStudentID))
+                                    SemesterHistoryRecordDict.Add(shr.RefStudentID, shi);
+                            }
+                        }
+                    }
+                }
+
+
+                // 取得學期成績排名、五標、分數區間
+                //Dictionary<string, Dictionary<string, DataRow>> SemsScoreRankMatrixDataDict = Utility.GetSemsScoreRankMatrixData(_Configure.SchoolYear, _Configure.Semester, _StudentIDList);
+                // 取得學期成績排名、五標、分數區間
+                Dictionary<string, Dictionary<string, Dictionary<string, string>>> SemsScoreRankMatrixDataValueDict = Utility.GetSemsScoreRankMatrixDataValue(_Configure.SchoolYear, _Configure.Semester, _StudentIDList);
+
+
+
+                //預設學年度學期物件
+                JHSchool.Behavior.BusinessLogic.SchoolYearSemester sysm = new JHSchool.Behavior.BusinessLogic.SchoolYearSemester(_SelSchoolYear, _SelSemester);
+                Dictionary<string, AutoSummaryRecord> AutoSummaryRecordDict = new Dictionary<string, AutoSummaryRecord>();
+                //AutoSummary
+                foreach (AutoSummaryRecord asr in AutoSummary.Select(_Students.Select(x => x.ID), new JHSchool.Behavior.BusinessLogic.SchoolYearSemester[] { sysm }))
+                {
+                    if (!AutoSummaryRecordDict.ContainsKey(asr.RefStudentID))
+                    {
+                        AutoSummaryRecordDict.Add(asr.RefStudentID, asr);
+                    }
+                }
+
+
+
                 //基本資料
                 foreach (StudentRecord student in _Students)
                 {
@@ -517,50 +572,16 @@ namespace HsinChuSemesterScoreFixed_JH
                     }
 
 
-
-
-                    dt.Rows.Add(row);
-
-                    _StudentRowDict.Add(student.ID, row);
-                }
-
-
-                //上課天數
-                List<SemesterHistoryRecord> SemesterHistoryRecordList = K12.Data.SemesterHistory.SelectByStudentIDs(_StudentIDList);
-                if (SemesterHistoryRecordList != null)
-                {
-                    foreach (SemesterHistoryRecord shr in SemesterHistoryRecordList)
+                    // 上課天數
+                    if (SemesterHistoryRecordDict.ContainsKey(student.ID))
                     {
-                        if (_StudentRowDict.ContainsKey(shr.RefStudentID))
-                        {
-                            DataRow row = _StudentRowDict[shr.RefStudentID];
-
-                            foreach (SemesterHistoryItem shi in shr.SemesterHistoryItems)
-                            {
-                                if (shi.SchoolYear == _SelSchoolYear && shi.Semester == _SelSemester)
-                                    row["上課天數"] = shi.SchoolDayCount + "";
-                            }
-                        }
+                        row["上課天數"] = SemesterHistoryRecordDict[student.ID].SchoolDayCount;
                     }
-                }
 
-
-                // 取得學期成績排名、五標、分數區間
-                //Dictionary<string, Dictionary<string, DataRow>> SemsScoreRankMatrixDataDict = Utility.GetSemsScoreRankMatrixData(_Configure.SchoolYear, _Configure.Semester, _StudentIDList);
-                // 取得學期成績排名、五標、分數區間
-                Dictionary<string, Dictionary<string, Dictionary<string, string>>> SemsScoreRankMatrixDataValueDict = Utility.GetSemsScoreRankMatrixDataValue(_Configure.SchoolYear, _Configure.Semester, _StudentIDList);
-
-
-
-
-                _bgWorkReport.ReportProgress(60);
-                //學期科目及領域成績
-                foreach (JHSemesterScoreRecord jsr in SemesterScoreRecordList)
-                {
-                    if (_StudentRowDict.ContainsKey(jsr.RefStudentID))
+                    // 學期科目及領域成績
+                    if (SemesterScoreRecordDict.ContainsKey(student.ID))
                     {
-
-                        DataRow row = _StudentRowDict[jsr.RefStudentID];
+                        JHSemesterScoreRecord jsr = SemesterScoreRecordDict[student.ID];
                         _文字描述.Clear();
 
                         string StudentID = jsr.RefStudentID;
@@ -639,16 +660,16 @@ namespace HsinChuSemesterScoreFixed_JH
                             {
                                 foreach (string rt in rank_typeList)
                                 {
-                                    ssKey = "學期/" + scoreName + "_" + rt;
+                                    //  ssKey = "學期/" + scoreName + "_" + rt;
 
-                                    if (SemsScoreRankMatrixDataValueDict[StudentID].ContainsKey(ssKey))
+                                    if (SemsScoreRankMatrixDataValueDict[StudentID].ContainsKey("學期/" + scoreName + "_" + rt))
                                     {
                                         // 排名、pr 五標、組距
                                         foreach (string item2 in r2List)
                                         {
-                                            if (SemsScoreRankMatrixDataValueDict[StudentID][ssKey].ContainsKey(item2))
+                                            if (SemsScoreRankMatrixDataValueDict[StudentID]["學期/" + scoreName + "_" + rt].ContainsKey(item2))
                                             {
-                                                row[scoreName + "_" + rt + "_" + item2] = SemsScoreRankMatrixDataValueDict[StudentID][ssKey][item2];
+                                                row[scoreName + "_" + rt + "_" + item2] = SemsScoreRankMatrixDataValueDict[StudentID]["學期/" + scoreName + "_" + rt][item2];
                                             }
 
                                         }
@@ -718,17 +739,17 @@ namespace HsinChuSemesterScoreFixed_JH
                                 {
                                     foreach (string rt in rank_typeList)
                                     {
-                                        ssKey = "學期/" + scoreName + "_" + subj.Subject + "_" + rt;
+                                        //   ssKey = "學期/" + scoreName + "_" + subj.Subject + "_" + rt;
 
-                                        if (SemsScoreRankMatrixDataValueDict[StudentID].ContainsKey(ssKey))
+                                        if (SemsScoreRankMatrixDataValueDict[StudentID].ContainsKey("學期/" + scoreName + "_" + subj.Subject + "_" + rt))
                                         {
                                             // 排名、pr 五標、組距
                                             foreach (string item2 in r2List)
                                             {
-                                                if (SemsScoreRankMatrixDataValueDict[StudentID][ssKey].ContainsKey(item2))
+                                                if (SemsScoreRankMatrixDataValueDict[StudentID]["學期/" + scoreName + "_" + subj.Subject + "_" + rt].ContainsKey(item2))
                                                 {
-                                                    string kk2 = scoreName + count + "_" + rt + "_" + item2;
-                                                    row[kk2] = SemsScoreRankMatrixDataValueDict[StudentID][ssKey][item2];
+                                                    // string kk2 = scoreName + count + "_" + rt + "_" + item2;
+                                                    row[scoreName + count + "_" + rt + "_" + item2] = SemsScoreRankMatrixDataValueDict[StudentID]["學期/" + scoreName + "_" + subj.Subject + "_" + rt][item2];
                                                 }
 
                                             }
@@ -787,15 +808,15 @@ namespace HsinChuSemesterScoreFixed_JH
                                         {
                                             foreach (string rn in rank_typeList)
                                             {
-                                                string dssKey = "學期/" + scoreName + "_" + ss.Subject + "_" + rn;
-                                                if (SemsScoreRankMatrixDataValueDict[StudentID].ContainsKey(dssKey))
+                                                //   string dssKey = "學期/" + scoreName + "_" + ss.Subject + "_" + rn;
+                                                if (SemsScoreRankMatrixDataValueDict[StudentID].ContainsKey("學期/" + scoreName + "_" + ss.Subject + "_" + rn))
                                                 {
                                                     foreach (string r in r2List)
                                                     {
-                                                        if (SemsScoreRankMatrixDataValueDict[StudentID][dssKey].ContainsKey(r))
+                                                        if (SemsScoreRankMatrixDataValueDict[StudentID]["學期/" + scoreName + "_" + ss.Subject + "_" + rn].ContainsKey(r))
                                                         {
-                                                            string kv = dName + "_" + scoreName + si + "_" + rn + "_" + r;
-                                                            row[kv] = SemsScoreRankMatrixDataValueDict[StudentID][dssKey][r];
+                                                            //  string kv = dName + "_" + scoreName + si + "_" + rn + "_" + r;
+                                                            row[dName + "_" + scoreName + si + "_" + rn + "_" + r] = SemsScoreRankMatrixDataValueDict[StudentID]["學期/" + scoreName + "_" + ss.Subject + "_" + rn][r];
                                                         }
 
                                                     }
@@ -870,17 +891,17 @@ namespace HsinChuSemesterScoreFixed_JH
                                     {
                                         foreach (string rt in rank_typeList)
                                         {
-                                            ssKey = "學期/" + scoreName + "_" + dName + "_" + rt;
-                                            if (SemsScoreRankMatrixDataValueDict[StudentID].ContainsKey(ssKey))
+                                            // ssKey = "學期/" + scoreName + "_" + dName + "_" + rt;
+                                            if (SemsScoreRankMatrixDataValueDict[StudentID].ContainsKey("學期/" + scoreName + "_" + dName + "_" + rt))
                                             {
                                                 // 排名、pr 五標、組距
                                                 foreach (string item2 in r2List)
                                                 {
-                                                    if (SemsScoreRankMatrixDataValueDict[StudentID][ssKey].ContainsKey(item2))
+                                                    if (SemsScoreRankMatrixDataValueDict[StudentID]["學期/" + scoreName + "_" + dName + "_" + rt].ContainsKey(item2))
                                                     {
-                                                        string kk2 = scoreName + count + "_" + rt + "_" + item2;
+                                                        //  string kk2 = scoreName + count + "_" + rt + "_" + item2;
 
-                                                        row[kk2] = SemsScoreRankMatrixDataValueDict[StudentID][ssKey][item2];
+                                                        row[scoreName + count + "_" + rt + "_" + item2] = SemsScoreRankMatrixDataValueDict[StudentID]["學期/" + scoreName + "_" + dName + "_" + rt][item2];
                                                     }
 
                                                 }
@@ -938,17 +959,17 @@ namespace HsinChuSemesterScoreFixed_JH
                                     {
                                         foreach (string rn in rank_typeList)
                                         {
-                                            string dssKey = "學期/" + scoreName + "_" + domain.Domain + "_" + rn;
+                                            // string dssKey = "學期/" + scoreName + "_" + domain.Domain + "_" + rn;
 
-                                            if (SemsScoreRankMatrixDataValueDict[StudentID].ContainsKey(dssKey))
+                                            if (SemsScoreRankMatrixDataValueDict[StudentID].ContainsKey("學期/" + scoreName + "_" + domain.Domain + "_" + rn))
                                             {
                                                 foreach (string r in r2List)
                                                 {
-                                                    if (SemsScoreRankMatrixDataValueDict[StudentID][dssKey].ContainsKey(r))
+                                                    if (SemsScoreRankMatrixDataValueDict[StudentID]["學期/" + scoreName + "_" + domain.Domain + "_" + rn].ContainsKey(r))
                                                     {
-                                                        string kv = domain.Domain + scoreName + "_" + rn + "_" + r;
+                                                        // string kv = domain.Domain + scoreName + "_" + rn + "_" + r;
 
-                                                        row[kv] = SemsScoreRankMatrixDataValueDict[StudentID][dssKey][r];
+                                                        row[domain.Domain + scoreName + "_" + rn + "_" + r] = SemsScoreRankMatrixDataValueDict[StudentID]["學期/" + scoreName + "_" + domain.Domain + "_" + rn][r];
 
                                                     }
 
@@ -969,12 +990,60 @@ namespace HsinChuSemesterScoreFixed_JH
                         }
 
 
+                        // 學務相關資料
+                        // 缺曠預設填0
+                        foreach (string str in paList)
+                            row[str] = 0;
+
+                        if (AutoSummaryRecordDict.ContainsKey(student.ID))
+                        {
+                            AutoSummaryRecord asr = AutoSummaryRecordDict[student.ID];
+                            //缺曠
+                            foreach (AbsenceCountRecord acr in asr.AbsenceCounts)
+                            {
+                                string key = Global.GetKey(acr.PeriodType, acr.Name);
+
+                                if (dt.Columns.Contains(key))
+                                {
+                                    int counta = 0;
+                                    int.TryParse(row[key] + "", out counta);
+
+                                    counta += acr.Count;
+                                    row[key] = counta;
+                                }
+                            }
+
+                            //獎懲
+                            row["大功"] = asr.MeritA;
+                            row["小功"] = asr.MeritB;
+                            row["嘉獎"] = asr.MeritC;
+                            row["大過"] = asr.DemeritA;
+                            row["小過"] = asr.DemeritB;
+                            row["警告"] = asr.DemeritC;
+
+                            //日常生活表現
+                            JHMoralScoreRecord msr = asr.MoralScore;
+                            XmlElement textScore = (msr != null && msr.TextScore != null) ? msr.TextScore : K12.Data.XmlHelper.LoadXml("<TextScore/>");
+
+                            foreach (string key in Global.DLBehaviorRef.Keys)
+                                SetDLBehaviorData(key, Global.DLBehaviorRef[key], textScore, row);
+                        }
+
 
                         row["文字描述"] = string.Join(Environment.NewLine, _文字描述);
+
                     }
 
 
+                    dt.Rows.Add(row);
+
+                    //_StudentRowDict.Add(student.ID, row);
                 }
+
+
+
+
+
 
                 _bgWorkReport.ReportProgress(90);
 
@@ -982,48 +1051,7 @@ namespace HsinChuSemesterScoreFixed_JH
 
 
 
-                //預設學年度學期物件
-                JHSchool.Behavior.BusinessLogic.SchoolYearSemester sysm = new JHSchool.Behavior.BusinessLogic.SchoolYearSemester(_SelSchoolYear, _SelSemester);
 
-                //AutoSummary
-                foreach (AutoSummaryRecord asr in AutoSummary.Select(_Students.Select(x => x.ID), new JHSchool.Behavior.BusinessLogic.SchoolYearSemester[] { sysm }))
-                {
-                    if (_StudentRowDict.ContainsKey(asr.RefStudentID))
-                    {
-                        DataRow row = _StudentRowDict[asr.RefStudentID];
-
-                        //缺曠
-                        foreach (AbsenceCountRecord acr in asr.AbsenceCounts)
-                        {
-                            string key = Global.GetKey(acr.PeriodType, acr.Name);
-
-                            if (dt.Columns.Contains(key))
-                            {
-                                int count = 0;
-                                int.TryParse(row[key] + "", out count);
-
-                                count += acr.Count;
-                                row[key] = count;
-                            }
-                        }
-
-                        //獎懲
-                        row["大功"] = asr.MeritA;
-                        row["小功"] = asr.MeritB;
-                        row["嘉獎"] = asr.MeritC;
-                        row["大過"] = asr.DemeritA;
-                        row["小過"] = asr.DemeritB;
-                        row["警告"] = asr.DemeritC;
-
-                        //日常生活表現
-                        JHMoralScoreRecord msr = asr.MoralScore;
-                        XmlElement textScore = (msr != null && msr.TextScore != null) ? msr.TextScore : K12.Data.XmlHelper.LoadXml("<TextScore/>");
-
-                        foreach (string key in Global.DLBehaviorRef.Keys)
-                            SetDLBehaviorData(key, Global.DLBehaviorRef[key], textScore, row);
-                    }
-
-                }
 
                 _bgWorkReport.ReportProgress(100);
 
@@ -1067,7 +1095,7 @@ namespace HsinChuSemesterScoreFixed_JH
                 K12.Data.Configuration.ConfigData cd = K12.Data.School.Configuration["DLBehaviorConfig"];
                 if (!string.IsNullOrEmpty(cd["DailyBehavior"]))
                 {
-                    string key = "日常行為表現";
+                    string key = "日常生活表現程度";
                     //日常行為表現
                     XElement e1 = XElement.Parse(cd["DailyBehavior"]);
                     string name = e1.Attribute("Name").Value;
@@ -1079,52 +1107,52 @@ namespace HsinChuSemesterScoreFixed_JH
                         _DLBehaviorConfigItemNameDict.Add(key, items);
                 }
 
-                if (!string.IsNullOrEmpty(cd["GroupActivity"]))
-                {
-                    string key = "團體活動表現";
-                    //團體活動表現
-                    XElement e4 = XElement.Parse(cd["GroupActivity"]);
-                    string name = e4.Attribute("Name").Value;
-                    retVal.Add(key, name);
+                //if (!string.IsNullOrEmpty(cd["GroupActivity"]))
+                //{
+                //    string key = "團體活動表現";
+                //    //團體活動表現
+                //    XElement e4 = XElement.Parse(cd["GroupActivity"]);
+                //    string name = e4.Attribute("Name").Value;
+                //    retVal.Add(key, name);
 
-                    // 團體活動表現
-                    List<string> items = ParseItems(e4);
-                    if (items.Count > 0)
-                        _DLBehaviorConfigItemNameDict.Add(key, items);
+                //    // 團體活動表現
+                //    List<string> items = ParseItems(e4);
+                //    if (items.Count > 0)
+                //        _DLBehaviorConfigItemNameDict.Add(key, items);
 
-                }
+                //}
 
-                if (!string.IsNullOrEmpty(cd["PublicService"]))
-                {
-                    string key = "公共服務表現";
-                    //公共服務表現
-                    XElement e5 = XElement.Parse(cd["PublicService"]);
-                    string name = e5.Attribute("Name").Value;
-                    retVal.Add(key, name);
-                    List<string> items = ParseItems(e5);
-                    if (items.Count > 0)
-                        _DLBehaviorConfigItemNameDict.Add(key, items);
+                //if (!string.IsNullOrEmpty(cd["PublicService"]))
+                //{
+                //    string key = "公共服務表現";
+                //    //公共服務表現
+                //    XElement e5 = XElement.Parse(cd["PublicService"]);
+                //    string name = e5.Attribute("Name").Value;
+                //    retVal.Add(key, name);
+                //    List<string> items = ParseItems(e5);
+                //    if (items.Count > 0)
+                //        _DLBehaviorConfigItemNameDict.Add(key, items);
 
-                }
+                //}
 
-                if (!string.IsNullOrEmpty(cd["SchoolSpecial"]))
-                {
-                    string key = "校內外特殊表現";
-                    //校內外特殊表現,新竹沒有子項目，高雄有子項目
-                    XElement e6 = XElement.Parse(cd["SchoolSpecial"]);
-                    string name = e6.Attribute("Name").Value;
-                    retVal.Add(key, name);
-                    List<string> items = ParseItems(e6);
-                    if (items.Count > 0)
-                        _DLBehaviorConfigItemNameDict.Add(key, items);
-                }
+                //if (!string.IsNullOrEmpty(cd["SchoolSpecial"]))
+                //{
+                //    string key = "校內外特殊表現";
+                //    //校內外特殊表現,新竹沒有子項目，高雄有子項目
+                //    XElement e6 = XElement.Parse(cd["SchoolSpecial"]);
+                //    string name = e6.Attribute("Name").Value;
+                //    retVal.Add(key, name);
+                //    List<string> items = ParseItems(e6);
+                //    if (items.Count > 0)
+                //        _DLBehaviorConfigItemNameDict.Add(key, items);
+                //}
 
                 if (!string.IsNullOrEmpty(cd["OtherRecommend"]))
                 {
                     //其他表現
                     XElement e2 = XElement.Parse(cd["OtherRecommend"]);
                     string name = e2.Attribute("Name").Value;
-                    retVal.Add("其他表現", name);
+                    retVal.Add("團體活動表現", name);
                 }
 
                 if (!string.IsNullOrEmpty(cd["DailyLifeRecommend"]))
@@ -1132,8 +1160,8 @@ namespace HsinChuSemesterScoreFixed_JH
                     //日常生活表現具體建議
                     XElement e3 = XElement.Parse(cd["DailyLifeRecommend"]);
                     string name = e3.Attribute("Name").Value;
-                    retVal.Add("具體建議", name);  // 高雄
-                    retVal.Add("綜合評語", name);  // 新竹
+                    //    retVal.Add("具體建議", name);  // 高雄
+                    retVal.Add("日常生活表現具體建議", name);  // 新竹
                 }
             }
             catch (Exception ex)
@@ -1693,6 +1721,8 @@ namespace HsinChuSemesterScoreFixed_JH
                 FISCA.Presentation.Controls.MsgBox.Show("學期必填!");
                 return;
             }
+
+            lnkViewMapColumns.Enabled = false;
 
             Global._SelSchoolYear = _SelSchoolYear;
             Global._SelSemester = _SelSemester;
