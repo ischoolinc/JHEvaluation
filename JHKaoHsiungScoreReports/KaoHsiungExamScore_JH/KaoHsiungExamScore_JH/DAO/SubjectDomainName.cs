@@ -7,6 +7,9 @@ namespace KaoHsiungExamScore_JH.DAO
 {
     public class SubjectDomainName
     {
+        // 2020/1/16 新增。
+        public string SCAttendID { get; set; }
+
         public string SubjectName { get; set; }
 
         public string DomainName { get; set; }

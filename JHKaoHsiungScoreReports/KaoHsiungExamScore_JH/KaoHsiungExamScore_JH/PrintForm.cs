@@ -528,9 +528,49 @@ namespace KaoHsiungExamScore_JH
             // 取得這次該修課程
             Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> StudCourseDict = Utility.GetStudentSCAttendCourse(_StudentIDList, CourseDict.Keys.ToList(), _SelExamID);
 
-
             // 處理評量成績科目
             Dictionary<string, DAO.StudExamScore> studExamScoreDict = new Dictionary<string, DAO.StudExamScore>();
+
+            // 2020/1/16 新增，解決沒有評量成績時「平時成績」資料出不了問題。
+            foreach (var stud in StudCourseDict) // 每一個學生
+            {
+                var subjs = stud.Value;
+                var studId = stud.Key;
+
+                foreach (var subj in subjs) // 每一個修課記錄
+                {
+                    var subjName = subj.Key;
+                    var scid = subj.Value.SCAttendID;
+
+                    if (!_SelSubjNameList.Contains(subjName)) continue; // 判斷是否畫面上有選課該科目。
+
+                    // 成績計算規則
+                    ScoreCalculator studentCalculator = defaultScoreCalculator;
+                    if (calcIDCache.ContainsKey(studId) && calcCache.ContainsKey(calcIDCache[studId]))
+                        studentCalculator = calcCache[calcIDCache[studId]];
+
+                    if (!studExamScoreDict.ContainsKey(studId))
+                        studExamScoreDict.Add(studId, new DAO.StudExamScore(studentCalculator));
+
+                    DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
+                    ess.DomainName = subj.Value.DomainName;
+                    ess.SubjectName = subjName;
+
+                    // 平時成績
+                    if (AssignmentScoreDict.ContainsKey(scid))
+                        ess.AssignmentScore = AssignmentScoreDict[scid];
+
+                    // 文字描述
+                    ess.Credit = subj.Value.Credit;
+
+                    // 依科目成績計算規則四捨五入
+                    if (ess.AssignmentScore.HasValue)
+                        ess.AssignmentScore = studentCalculator.ParseSubjectScore(ess.AssignmentScore.Value);
+
+                    studExamScoreDict[studId]._ExamSubjectScoreDict.Add(subjName, ess);
+                }
+            }
+
             foreach (string studID in _StudentIDList)
             {
                 // 成績計算規則
@@ -538,11 +578,11 @@ namespace KaoHsiungExamScore_JH
                 if (calcIDCache.ContainsKey(studID) && calcCache.ContainsKey(calcIDCache[studID]))
                     studentCalculator = calcCache[calcIDCache[studID]];
 
+                if (!studExamScoreDict.ContainsKey(studID))
+                    studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
+
                 if (Score1Dict.ContainsKey(studID))
                 {
-                    if (!studExamScoreDict.ContainsKey(studID))
-                        studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
-
                     foreach (KH.JHSCETakeRecord rec in Score1Dict[studID])
                     {
                         if (rec.RefExamID == _SelExamID && CourseDict.ContainsKey(rec.RefCourseID))
@@ -555,43 +595,37 @@ namespace KaoHsiungExamScore_JH
                             string SubjecName = cr.Subject;
 
                             // 勾選科目
-                            if (_SelSubjNameList.Contains(SubjecName))
+                            if (!_SelSubjNameList.Contains(SubjecName)) continue;
+
+                            if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(SubjecName))
                             {
-                                if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(SubjecName))
+                                if (StudCourseDict.ContainsKey(studID))
                                 {
-                                    DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
-                                    ess.DomainName = cr.Domain;
-                                    ess.SubjectName = SubjecName;
-                                    // 努力程度                                     
-                                    ess.Effort = rec.Effort;
-                                    // 評量分數
-                                    ess.Score = rec.Score;
-                                    // 平時成績
-                                    if (AssignmentScoreDict.ContainsKey(rec.RefSCAttendID))
-                                        ess.AssignmentScore = AssignmentScoreDict[rec.RefSCAttendID];
-                                    // 文字描述
-                                    ess.Text = rec.Text;
-                                    ess.Credit = cr.Credit;
-                                    if (StudCourseDict.ContainsKey(studID))
+                                    if (StudCourseDict[studID].ContainsKey(SubjecName)) // 有修課才加入
                                     {
-                                        // 有修課才加入
-                                        if (StudCourseDict[studID].ContainsKey(SubjecName))
-                                        {
-                                            // 依科目成績計算規則四捨五入
-                                            if (ess.AssignmentScore.HasValue)
-                                                ess.AssignmentScore = studentCalculator.ParseSubjectScore(ess.AssignmentScore.Value);
-
-                                            if (ess.Score.HasValue)
-                                                ess.Score = studentCalculator.ParseSubjectScore(ess.Score.Value);
-
-                                            studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, ess);
-                                        }
+                                        studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, new DAO.ExamSubjectScore());
                                     }
                                 }
                             }
+
+                            DAO.ExamSubjectScore ess = studExamScoreDict[studID]._ExamSubjectScoreDict[SubjecName];
+
+                            // 努力程度                                     
+                            ess.Effort = rec.Effort;
+                            // 評量分數
+                            ess.Score = rec.Score;
+
+                            // 文字描述
+                            ess.Text = rec.Text;
+                            ess.Credit = cr.Credit;
+
+                            if (ess.Score.HasValue)
+                                ess.Score = studentCalculator.ParseSubjectScore(ess.Score.Value);
+
                         }
                     }
                 }
+
                 if (StudCourseDict.ContainsKey(studID))
                 {
                     if (!studExamScoreDict.ContainsKey(studID))
