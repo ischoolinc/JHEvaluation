@@ -70,6 +70,7 @@
             this.cboConfigure.Size = new System.Drawing.Size(273, 25);
             this.cboConfigure.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboConfigure.TabIndex = 0;
+            this.cboConfigure.SelectedIndexChanged += new System.EventHandler(this.cboConfigure_SelectedIndexChanged);
             // 
             // lnkDelConfig
             // 
@@ -131,6 +132,7 @@
             this.cboSchoolYear.Size = new System.Drawing.Size(69, 25);
             this.cboSchoolYear.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboSchoolYear.TabIndex = 3;
+            this.cboSchoolYear.SelectedIndexChanged += new System.EventHandler(this.cboSchoolYear_SelectedIndexChanged);
             // 
             // labelX2
             // 

@@ -33,7 +33,7 @@ namespace HsinChuSemesterClassFixedRank
         {
             if (checkBoxX1.Checked)
             {
-                Template = new Aspose.Words.Document(new MemoryStream(Properties.Resources.新竹學期成績單合併欄位總表));
+                Template = new Aspose.Words.Document(new MemoryStream(Properties.Resources.新竹班級學期成績單樣板));
                 this.SubjectLimit = 25;
             }
         }

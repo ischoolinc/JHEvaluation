@@ -119,6 +119,7 @@
       <DependentUpon>CloneConfigure.cs</DependentUpon>
     </Compile>
     <Compile Include="Configure.cs" />
+    <Compile Include="DAO\DataAccess.cs" />
     <Compile Include="DAO\UDTTransfer.cs" />
     <Compile Include="DAO\UDT_ScoreConfig.cs" />
     <Compile Include="Global.cs" />
