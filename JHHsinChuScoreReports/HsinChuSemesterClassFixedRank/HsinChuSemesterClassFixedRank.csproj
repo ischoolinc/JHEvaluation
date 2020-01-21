@@ -75,11 +75,6 @@
       <HintPath>Library\FISCA.UDT.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="HsinChu.JHEvaluation.Data, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\HsinChu.JHEvaluation.Data.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="JHSchool.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Data.dll</HintPath>
@@ -159,14 +154,17 @@
     <Content Include="Library\FISCA.UDT.dll" />
     <Content Include="Library\FISCA.UDT.pdb" />
     <Content Include="Library\FISCA.UDT.xml" />
-    <Content Include="Library\HsinChu.JHEvaluation.Data.dll" />
     <Content Include="Library\JHSchool.Data.dll" />
     <Content Include="Library\JHSchool.Data.pdb" />
     <Content Include="Library\JHSchool.Data.xml" />
     <Content Include="Library\JHSchool.Evaluation.dll" />
     <Content Include="Library\JHSchool.Evaluation.pdb" />
     <Content Include="Library\K12.Data.dll" />
+    <Content Include="Library\K12.Data.pdb" />
+    <Content Include="Library\K12.Data.xml" />
     <Content Include="Library\K12.Presentation.dll" />
+    <Content Include="Library\K12.Presentation.pdb" />
+    <Content Include="Library\K12.Presentation.xml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
