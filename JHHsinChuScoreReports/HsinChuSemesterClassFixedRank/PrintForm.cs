@@ -496,17 +496,25 @@ namespace HsinChuSemesterClassFixedRank
             // 班級領域 科目 1,2,3
             foreach (string dName in dNameList)
             {
+
                 foreach (string rk in rkList)
                 {
                     foreach (string r2 in cr2List)
                     {
                         dtTable.Columns.Add("班級_" + dName + "領域_" + rk + "_" + r2);
                         dtTable.Columns.Add("班級_" + dName + "領域(原始)_" + rk + "_" + r2);
+                    }
+                }
 
-                        for (int si = 1; si <= 12; si++)
+
+                for (int si = 1; si <= 12; si++)
+                {
+                    dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_名稱");
+                    foreach (string rk in rkList)
+                    {
+                        foreach (string r2 in cr2List)
                         {
                             dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_" + rk + "_" + r2);
-
                             dtTable.Columns.Add("班級_" + dName + "領域(原始)_科目" + si + "_" + rk + "_" + r2);
                         }
                     }
@@ -890,6 +898,22 @@ namespace HsinChuSemesterClassFixedRank
                                     }
                                 }
 
+                                // 科目
+                                int subjIdx = 1;
+                                foreach (string sName in SelDomainSubjectDict[class_id][dName])
+                                {
+                                    // 學期/總計成績_課程學習總成績_年排名
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績_" + sName + "_" + rk))
+                                    {
+                                        row["班級_" + dName + "領域_科目" + subjIdx + "_名稱"] = sName;
+                                        foreach (string r2 in cr2List)
+                                        {
+                                            row["班級_" + dName + "領域_科目" + subjIdx + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績_" + sName + "_" + rk][r2];
+                                        }
+                                    }
+                                    subjIdx++;
+                                }
+
 
                                 // 學期/總計成績_課程學習總成績_年排名  原始
                                 if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績(原始)_" + dName + "_" + rk))
@@ -901,6 +925,21 @@ namespace HsinChuSemesterClassFixedRank
                                         {
                                             row["班級_" + dName + "領域(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk][r2];
                                         }
+                                    }
+
+                                    // 科目
+                                    subjIdx = 1;
+                                    foreach (string sName in SelDomainSubjectDict[class_id][dName])
+                                    {
+                                        // 學期/總計成績_課程學習總成績_年排名
+                                        if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績(原始)_" + sName + "_" + rk))
+                                        {                                            
+                                            foreach (string r2 in cr2List)
+                                            {
+                                                row["班級_" + dName + "領域(原始)_科目" + subjIdx + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + sName + "_" + rk][r2];
+                                            }
+                                        }
+                                        subjIdx++;
                                     }
                                 }
                             }
