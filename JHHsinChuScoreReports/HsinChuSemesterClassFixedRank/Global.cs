@@ -24,16 +24,6 @@ namespace HsinChuSemesterClassFixedRank
         public static List<string> _SelClassIDList = new List<string>();
         public static Dictionary<string, List<string>> DomainSubjectDict = new Dictionary<string, List<string>>();
 
-        /// <summary>
-        /// 有勾選領域
-        /// </summary>
-        public static List<string> SelOnlyDomainList = new List<string>();
-
-        /// <summary>
-        /// 只有勾選科目
-        /// </summary>
-        public static List<string> SelOnlySubjectList = new List<string>();
-
 
         public static void ExportMappingFieldWord()
         {

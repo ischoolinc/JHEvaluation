@@ -40,6 +40,10 @@ namespace HsinChuSemesterClassFixedRank
         // 畫面上可選領域與科目
         Dictionary<string, List<string>> CanSelectDomainSubjectDict = new Dictionary<string, List<string>>();
 
+        // 班級可選領域科目整理
+        Dictionary<string, Dictionary<string, List<string>>> ClassDomainSubjectNameDict = new Dictionary<string, Dictionary<string, List<string>>>();
+
+
         // 錯誤訊息
         List<string> _ErrorList = new List<string>();
 
@@ -52,7 +56,7 @@ namespace HsinChuSemesterClassFixedRank
         public Configure _Configure { get; private set; }
 
         // 畫面上所勾選領域科目        
-        Dictionary<string, List<string>> SelDomainSubjectDict = new Dictionary<string, List<string>>();
+        Dictionary<string, Dictionary<string, List<string>>> SelDomainSubjectDict = new Dictionary<string, Dictionary<string, List<string>>>();
 
         BackgroundWorker bgWorkerLoadTemplate;
         BackgroundWorker bgWorkerReport;
@@ -213,9 +217,9 @@ namespace HsinChuSemesterClassFixedRank
                 }
             }
 
-            foreach(string key in ClassSemsScoreRankMatrixDataValueDict.Keys)
+            foreach (string key in ClassSemsScoreRankMatrixDataValueDict.Keys)
             {
-                foreach(string k1 in ClassSemsScoreRankMatrixDataValueDict[key].Keys)
+                foreach (string k1 in ClassSemsScoreRankMatrixDataValueDict[key].Keys)
                 {
                     if (!tmpClassList.Contains(k1))
                         tmpClassList.Add(k1);
@@ -229,6 +233,18 @@ namespace HsinChuSemesterClassFixedRank
             foreach (string key in tmpClassList)
                 swClass.WriteLine(key);
             swClass.Close();
+
+
+            // 所領域科目排序
+            foreach (string classID in SelDomainSubjectDict.Keys)
+            {
+                foreach (string dName in SelDomainSubjectDict[classID].Keys)
+                {
+                    SelDomainSubjectDict[classID][dName].Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+                }
+            }
+
+
 
 
             #region 產生合併欄位 Columns
@@ -305,12 +321,30 @@ namespace HsinChuSemesterClassFixedRank
                     maxStudent = ClassStudentDict[key].Count;
             }
 
+            List<string> dNameList = new List<string>();
+            foreach (string cid in SelDomainSubjectDict.Keys)
+            {
+                foreach (string name in SelDomainSubjectDict[cid].Keys)
+                {
+                    if (!dNameList.Contains(name))
+                        dNameList.Add(name);
+                }
+            }
+
 
             // 學生合併欄位
             for (int studIdx = 1; studIdx <= maxStudent; studIdx++)
             {
                 dtTable.Columns.Add("姓名" + studIdx);
                 dtTable.Columns.Add("座號" + studIdx);
+
+                dtTable.Columns.Add("學生" + studIdx + "_領域需補考標示");
+                dtTable.Columns.Add("學生" + studIdx + "_領域補考成績標示");
+                dtTable.Columns.Add("學生" + studIdx + "_領域不及格標示");
+                dtTable.Columns.Add("學生" + studIdx + "_科目需補考標示");
+                dtTable.Columns.Add("學生" + studIdx + "_科目補考成績標示");
+                dtTable.Columns.Add("學生" + studIdx + "_科目不及格標示");
+
                 // 總計成績合併欄位
                 // 學生1_課程學習總成績_班排名_rank
                 foreach (string r1 in r1List)
@@ -327,6 +361,41 @@ namespace HsinChuSemesterClassFixedRank
 
                 }
 
+                // 產生領域_科目1,2,3合併欄位
+                // 領域1,2 合併欄位             
+                // 取各班最大聯集
+                foreach (string dName in dNameList)
+                {
+                    dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_學分");
+                    dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_成績");
+                    dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_成績");
+
+                    for (int si = 1; si <= 12; si++)
+                    {
+                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_名稱");
+                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_學分");
+                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_成績");
+                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_科目" + si + "_成績");
+                    }
+
+                    foreach (string rk in rkList)
+                    {
+                        foreach (string r2 in r2List)
+                        {
+                            dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_" + rk + "_" + r2);
+                            dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_" + rk + "_" + r2);
+
+                            for (int si = 1; si <= 12; si++)
+                            {
+                                dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_" + rk + "_" + r2);
+                                dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_科目" + si + "_" + rk + "_" + r2);
+                            }
+                        }
+                    }
+                }
+
+
+
                 // 領域1,2 合併欄位
                 for (int dIdx = 1; dIdx <= SelDomainIdxDict.Keys.Count; dIdx++)
                 {
@@ -335,6 +404,7 @@ namespace HsinChuSemesterClassFixedRank
                     dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_學分");
                     dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_成績");
                     dtTable.Columns.Add("學生" + studIdx + "_領域(原始)" + dIdx + "_成績");
+
 
                     foreach (string rk in rkList)
                     {
@@ -356,6 +426,7 @@ namespace HsinChuSemesterClassFixedRank
                     dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_學分");
                     dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_成績");
                     dtTable.Columns.Add("學生" + studIdx + "_科目(原始)" + sIdx + "_成績");
+
 
                     foreach (string rk in rkList)
                     {
@@ -384,6 +455,7 @@ namespace HsinChuSemesterClassFixedRank
                 }
 
             }
+
 
             // 領域1,2 合併欄位
             for (int dIdx = 1; dIdx <= SelDomainIdxDict.Keys.Count; dIdx++)
@@ -420,6 +492,30 @@ namespace HsinChuSemesterClassFixedRank
                 }
 
             }
+
+            // 班級領域 科目 1,2,3
+            foreach (string dName in dNameList)
+            {
+                foreach (string rk in rkList)
+                {
+                    foreach (string r2 in cr2List)
+                    {
+                        dtTable.Columns.Add("班級_" + dName + "領域_" + rk + "_" + r2);
+                        dtTable.Columns.Add("班級_" + dName + "領域(原始)_" + rk + "_" + r2);
+
+                        for (int si = 1; si <= 12; si++)
+                        {
+                            dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_" + rk + "_" + r2);
+
+                            dtTable.Columns.Add("班級_" + dName + "領域(原始)_科目" + si + "_" + rk + "_" + r2);
+                        }
+                    }
+
+                }
+
+
+            }
+
 
 
 
@@ -541,6 +637,49 @@ namespace HsinChuSemesterClassFixedRank
                                 }
                             }
 
+                            // 領域 科目1,2,3
+                            if (SelDomainSubjectDict.ContainsKey(class_id))
+                            {
+                                foreach (string dName in SelDomainSubjectDict[class_id].Keys)
+                                {
+                                    if (studSemsScoreRec.Domains.ContainsKey(dName))
+                                    {
+                                        // 學生5_領域2_名稱
+
+                                        if (studSemsScoreRec.Domains[dName].Credit.HasValue)
+                                            row["學生" + studIdx + "_" + dName + "領域_學分"] = studSemsScoreRec.Domains[dName].Credit.Value;
+
+                                        if (studSemsScoreRec.Domains[dName].Score.HasValue)
+                                            row["學生" + studIdx + "_" + dName + "領域_成績"] = studSemsScoreRec.Domains[dName].Score.Value;
+
+                                        if (studSemsScoreRec.Domains[dName].ScoreOrigin.HasValue)
+                                            row["學生" + studIdx + "_" + dName + "領域(原始)_成績"] = studSemsScoreRec.Domains[dName].ScoreOrigin.Value;
+
+                                    }
+                                    // 科目
+                                    int subjIdx = 1;
+                                    foreach (string sName in SelDomainSubjectDict[class_id][dName])
+                                    {
+                                        if (studSemsScoreRec.Subjects.ContainsKey(sName))
+                                        {
+                                            // 學生5_科目2_名稱
+                                            row["學生" + studIdx + "_" + dName + "領域_科目" + subjIdx + "_名稱"] = sName;
+                                            if (studSemsScoreRec.Subjects[sName].Credit.HasValue)
+                                                row["學生" + studIdx + "_" + dName + "領域_科目" + subjIdx + "_學分"] = studSemsScoreRec.Subjects[sName].Credit.Value;
+
+                                            if (studSemsScoreRec.Subjects[sName].Score.HasValue)
+                                                row["學生" + studIdx + "_" + dName + "領域_科目" + subjIdx + "_成績"] = studSemsScoreRec.Subjects[sName].Score.Value;
+
+                                            if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
+                                                row["學生" + studIdx + "_" + dName + "領域(原始)_科目" + subjIdx + "_成績"] = studSemsScoreRec.Subjects[sName].ScoreOrigin.Value;
+
+                                        }
+
+                                        subjIdx++;
+                                    }
+                                }
+                            }
+
                             // 處理學期領域成績、排名、五標、組距
                             foreach (string dName in SelDomainIdxDict.Keys)
                             {
@@ -556,6 +695,17 @@ namespace HsinChuSemesterClassFixedRank
 
                                     if (studSemsScoreRec.Domains[dName].ScoreOrigin.HasValue)
                                         row["學生" + studIdx + "_領域(原始)" + SelDomainIdxDict[dName] + "_成績"] = studSemsScoreRec.Domains[dName].ScoreOrigin.Value;
+
+
+                                    if (studSemsScoreRec.Domains[dName].Score.HasValue && studSemsScoreRec.Domains[dName].Score.Value < 60)
+                                    {
+                                        row["學生" + studIdx + "_領域需補考標示"] = _Configure.NeeedReScoreMark;
+                                        row["學生" + studIdx + "_領域不及格標示"] = _Configure.FailScoreMark;
+                                    }
+
+                                    if (studSemsScoreRec.Domains[dName].ScoreMakeup.HasValue)
+                                        row["學生" + studIdx + "_領域補考成績標示"] = _Configure.ReScoreMark;
+
 
                                     foreach (string rk in rkList)
                                     {
@@ -608,6 +758,16 @@ namespace HsinChuSemesterClassFixedRank
                                     if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
                                         row["學生" + studIdx + "_科目(原始)" + SelSubjectIdxDict[sName] + "_成績"] = studSemsScoreRec.Subjects[sName].ScoreOrigin.Value;
 
+                                    if (studSemsScoreRec.Subjects[sName].ScoreMakeup.HasValue)
+                                        row["學生" + studIdx + "_科目補考成績標示"] = _Configure.ReScoreMark;
+
+                                    if (studSemsScoreRec.Subjects[sName].Score.HasValue && studSemsScoreRec.Subjects[sName].Score.Value < 60)
+                                    {
+                                        row["學生" + studIdx + "_科目需補考標示"] = _Configure.NeeedReScoreMark;
+                                        row["學生" + studIdx + "_科目不及格標示"] = _Configure.FailScoreMark;
+                                    }
+
+
                                     foreach (string rk in rkList)
                                     {
                                         // 學期/總計成績_課程學習總成績_年排名
@@ -644,10 +804,6 @@ namespace HsinChuSemesterClassFixedRank
 
                         }
 
-
-
-
-
                         studIdx++;
                     }
                 }
@@ -667,7 +823,7 @@ namespace HsinChuSemesterClassFixedRank
                                 if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_學習領域總成績_" + rk].ContainsKey(r2))
                                 {
                                     row["班級_課程學習總成績_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_學習領域總成績_" + rk][r2];
-                                }                                
+                                }
                             }
                         }
 
@@ -712,9 +868,119 @@ namespace HsinChuSemesterClassFixedRank
                     }
 
 
-                    // 領域成績 五標、組距
+                    // 班級領域-科目1,2,3  五標、組距
+                    if (SelDomainSubjectDict.ContainsKey(class_id))
+                    {
+                        // 領域
+                        foreach (string dName in SelDomainSubjectDict[class_id].Keys)
+                        {
+                            foreach (string rk in rkList)
+                            {
+                                // 學期/總計成績_課程學習總成績_年排名
+                                if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績_" + dName + "_" + rk))
+                                {
+                                    // 學生5_領域2_班排名_rank
+                                    foreach (string r2 in cr2List)
+                                    {
+                                        if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk].ContainsKey(r2))
+                                        {
+                                            row["班級_" + dName + "領域_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk][r2];
 
-                    // 科目成績 五標、組距
+                                        }
+                                    }
+                                }
+
+
+                                // 學期/總計成績_課程學習總成績_年排名  原始
+                                if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績(原始)_" + dName + "_" + rk))
+                                {
+                                    // 班級_領域2_班排名_rank
+                                    foreach (string r2 in cr2List)
+                                    {
+                                        if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk].ContainsKey(r2))
+                                        {
+                                            row["班級_" + dName + "領域(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk][r2];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // 班級領域成績 五標、組距 
+                    foreach (string dName in SelDomainIdxDict.Keys)
+                    {
+                        // 班級_領域2_名稱
+                        row["班級_領域" + SelDomainIdxDict[dName] + "_名稱"] = dName;
+
+                        foreach (string rk in rkList)
+                        {
+                            // 學期/總計成績_課程學習總成績_年排名
+                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績_" + dName + "_" + rk))
+                            {
+                                // 學生5_領域2_班排名_rank
+                                foreach (string r2 in r2List)
+                                {
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk].ContainsKey(r2))
+                                    {
+                                        row["班級_領域" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk][r2];
+                                    }
+                                }
+                            }
+
+
+                            // 學期/總計成績_課程學習總成績_年排名  原始
+                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績(原始)_" + dName + "_" + rk))
+                            {
+                                // 班級_領域2_班排名_rank
+                                foreach (string r2 in r2List)
+                                {
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk].ContainsKey(r2))
+                                    {
+                                        row["班級_領域(原始)" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk][r2];
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // 班級 科目成績 五標、組距                   
+                    foreach (string dName in SelDomainIdxDict.Keys)
+                    {
+
+                        // 班級_科目2_名稱
+                        row["班級_科目" + SelDomainIdxDict[dName] + "_名稱"] = dName;
+
+                        foreach (string rk in rkList)
+                        {
+                            // 學期/總計成績_課程學習總成績_年排名
+                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績_" + dName + "_" + rk))
+                            {
+                                // 學生5_科目2_班排名_rank
+                                foreach (string r2 in r2List)
+                                {
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績_" + dName + "_" + rk].ContainsKey(r2))
+                                    {
+                                        row["班級_科目" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績_" + dName + "_" + rk][r2];
+                                    }
+                                }
+                            }
+
+
+                            // 學期/總計成績_課程學習總成績_年排名  原始
+                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績(原始)_" + dName + "_" + rk))
+                            {
+                                // 班級_科目2_班排名_rank
+                                foreach (string r2 in r2List)
+                                {
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + dName + "_" + rk].ContainsKey(r2))
+                                    {
+                                        row["班級_科目(原始)" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + dName + "_" + rk][r2];
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
 
@@ -789,7 +1055,6 @@ namespace HsinChuSemesterClassFixedRank
             {
                 LoadStudentSemesterScore(sc, ss, StudentClassIDDict.Keys.ToList());
             }
-
             ReloadCanSelectDomainSubject();
 
             btnSaveConfig.Enabled = btnPrint.Enabled = true;
@@ -922,6 +1187,9 @@ namespace HsinChuSemesterClassFixedRank
             ClassDomainNameDict.Clear();
             ClassSubjectNameDict.Clear();
             CanSelectDomainSubjectDict.Clear();
+            ClassDomainSubjectNameDict.Clear();
+
+
             CanSelectDomainSubjectDict.Add("彈性課程", new List<string>());
 
             foreach (JHSemesterScoreRecord rec in SemesterScoreRecordLList)
@@ -934,6 +1202,10 @@ namespace HsinChuSemesterClassFixedRank
                     if (!ClassDomainNameDict.ContainsKey(StudentClassIDDict[rec.RefStudentID]))
                         ClassDomainNameDict.Add(StudentClassIDDict[rec.RefStudentID], new List<string>());
 
+                    if (!ClassDomainSubjectNameDict.ContainsKey(StudentClassIDDict[rec.RefStudentID]))
+                        ClassDomainSubjectNameDict.Add(StudentClassIDDict[rec.RefStudentID], new Dictionary<string, List<string>>());
+
+
                     foreach (string key in rec.Domains.Keys)
                     {
                         if (!ClassDomainNameDict[StudentClassIDDict[rec.RefStudentID]].Contains(key))
@@ -941,6 +1213,10 @@ namespace HsinChuSemesterClassFixedRank
 
                         if (!CanSelectDomainSubjectDict.ContainsKey(key))
                             CanSelectDomainSubjectDict.Add(key, new List<string>());
+
+
+                        if (!ClassDomainSubjectNameDict[StudentClassIDDict[rec.RefStudentID]].ContainsKey(key))
+                            ClassDomainSubjectNameDict[StudentClassIDDict[rec.RefStudentID]].Add(key, new List<string>());
                     }
 
                     if (!ClassSubjectNameDict.ContainsKey(StudentClassIDDict[rec.RefStudentID]))
@@ -958,6 +1234,13 @@ namespace HsinChuSemesterClassFixedRank
                         {
                             if (!CanSelectDomainSubjectDict["彈性課程"].Contains(ss.Subject))
                                 CanSelectDomainSubjectDict["彈性課程"].Add(ss.Subject);
+
+                            if (!ClassDomainSubjectNameDict[StudentClassIDDict[rec.RefStudentID]].ContainsKey("彈性課程"))
+                                ClassDomainSubjectNameDict[StudentClassIDDict[rec.RefStudentID]].Add("彈性課程", new List<string>());
+
+                            if (!ClassDomainSubjectNameDict[StudentClassIDDict[rec.RefStudentID]]["彈性課程"].Contains(ss.Subject))
+                                ClassDomainSubjectNameDict[StudentClassIDDict[rec.RefStudentID]]["彈性課程"].Add(ss.Subject);
+
                         }
                         else
                         {
@@ -966,6 +1249,12 @@ namespace HsinChuSemesterClassFixedRank
                                 if (!CanSelectDomainSubjectDict[ss.Domain].Contains(ss.Subject))
                                     CanSelectDomainSubjectDict[ss.Domain].Add(ss.Subject);
                             }
+
+                            if (!ClassDomainSubjectNameDict[StudentClassIDDict[rec.RefStudentID]].ContainsKey(ss.Domain))
+                                ClassDomainSubjectNameDict[StudentClassIDDict[rec.RefStudentID]].Add(ss.Domain, new List<string>());
+
+                            if (!ClassDomainSubjectNameDict[StudentClassIDDict[rec.RefStudentID]][ss.Domain].Contains(ss.Subject))
+                                ClassDomainSubjectNameDict[StudentClassIDDict[rec.RefStudentID]][ss.Domain].Add(ss.Subject);
                         }
 
                     }
@@ -982,34 +1271,68 @@ namespace HsinChuSemesterClassFixedRank
             //儲存設定檔
             SaveConfig();
 
-            Global.SelOnlyDomainList.Clear();
-            Global.SelOnlySubjectList.Clear();
 
             // 取得畫面上勾選領域科目
             SelDomainSubjectDict.Clear();
             SelDomainIdxDict.Clear();
             SelSubjectIdxDict.Clear();
 
+            // 各班畫面上勾選領域科目
+            foreach (string cid in _ClassIDList)
+            {
+                SelDomainSubjectDict.Add(cid, new Dictionary<string, List<string>>());
+                if (ClassDomainSubjectNameDict.ContainsKey(cid))
+                {
+                    foreach (ListViewItem lvi in lvDomain.CheckedItems)
+                    {
+                        if (ClassDomainSubjectNameDict[cid].ContainsKey(lvi.Name))
+                        {
+                            SelDomainSubjectDict[cid].Add(lvi.Name, new List<string>());
+                        }
+                    }
+
+                    foreach (ListViewItem lvi in lvSubject.CheckedItems)
+                    {
+                        string key = lvi.Name;
+
+                        // 檢查自己領域是否有加入
+                        string keyD = lvi.Tag.ToString();
+
+                        if (!SelDomainSubjectDict[cid].ContainsKey(keyD))
+                            SelDomainSubjectDict[cid].Add(keyD, new List<string>());
+
+                        if (ClassDomainSubjectNameDict[cid].ContainsKey(keyD))
+                        {
+                            if (ClassDomainSubjectNameDict[cid][keyD].Contains(lvi.Text))
+                                SelDomainSubjectDict[cid][keyD].Add(lvi.Text);
+                        }
+                    }
+
+                }
+            }
+
             int sd = 1;
+            List<string> tmpDomainNameList = new List<string>();
             // 領域
             foreach (ListViewItem lvi in lvDomain.CheckedItems)
             {
                 string key = lvi.Name;
-                if (!SelDomainSubjectDict.ContainsKey(key))
-                {
-                    SelDomainSubjectDict.Add(key, new List<string>());
-                    if (!Global.SelOnlyDomainList.Contains(key))
-                        Global.SelOnlyDomainList.Add(key);
-                }
 
-                if (!SelDomainIdxDict.ContainsKey(key))
-                {
-                    SelDomainIdxDict.Add(key, sd);
-                    sd++;
-                }
+                if (!tmpDomainNameList.Contains(key))
+                    tmpDomainNameList.Add(key);
+
+            }
+
+            tmpDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+
+            foreach (string name in tmpDomainNameList)
+            {
+                SelDomainIdxDict.Add(name, sd);
+                sd++;
             }
 
             int ss = 1;
+            List<string> tmpSubjNameList = new List<string>();
             foreach (ListViewItem lvi in lvSubject.CheckedItems)
             {
                 string key = lvi.Name;
@@ -1017,24 +1340,20 @@ namespace HsinChuSemesterClassFixedRank
                 // 檢查自己領域是否有加入
                 string keyD = lvi.Tag.ToString();
 
-                // 只有勾科目沒有領域，只算科目
-                if (!Global.SelOnlyDomainList.Contains(keyD))
-                {
-                    Global.SelOnlySubjectList.Add(lvi.Text);
-                }
-
-                if (!SelDomainSubjectDict.ContainsKey(keyD))
-                    SelDomainSubjectDict.Add(keyD, new List<string>());
-
-                if (!SelDomainSubjectDict[keyD].Contains(lvi.Text))
-                    SelDomainSubjectDict[keyD].Add(lvi.Text);
-
-                if (!SelSubjectIdxDict.ContainsKey(lvi.Text))
-                {
-                    SelSubjectIdxDict.Add(lvi.Text, ss);
-                    ss++;
-                }
+                if (!tmpSubjNameList.Contains(lvi.Text))
+                    tmpSubjNameList.Add(lvi.Text);
             }
+
+            tmpSubjNameList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+
+
+            foreach (string name in tmpSubjNameList)
+            {
+                SelSubjectIdxDict.Add(name, ss);
+                ss++;
+            }
+
+
 
             // 列印報表
             bgWorkerReport.RunWorkerAsync();
