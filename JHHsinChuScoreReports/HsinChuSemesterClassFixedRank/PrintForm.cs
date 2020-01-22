@@ -338,12 +338,7 @@ namespace HsinChuSemesterClassFixedRank
                 dtTable.Columns.Add("姓名" + studIdx);
                 dtTable.Columns.Add("座號" + studIdx);
 
-                dtTable.Columns.Add("學生" + studIdx + "_領域需補考標示");
-                dtTable.Columns.Add("學生" + studIdx + "_領域補考成績標示");
-                dtTable.Columns.Add("學生" + studIdx + "_領域不及格標示");
-                dtTable.Columns.Add("學生" + studIdx + "_科目需補考標示");
-                dtTable.Columns.Add("學生" + studIdx + "_科目補考成績標示");
-                dtTable.Columns.Add("學生" + studIdx + "_科目不及格標示");
+
 
                 // 總計成績合併欄位
                 // 學生1_課程學習總成績_班排名_rank
@@ -369,6 +364,7 @@ namespace HsinChuSemesterClassFixedRank
                     dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_學分");
                     dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_成績");
                     dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_成績");
+
 
                     for (int si = 1; si <= 12; si++)
                     {
@@ -404,6 +400,9 @@ namespace HsinChuSemesterClassFixedRank
                     dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_學分");
                     dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_成績");
                     dtTable.Columns.Add("學生" + studIdx + "_領域(原始)" + dIdx + "_成績");
+                    dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_需補考標示");
+                    dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_補考成績標示");
+                    dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_不及格標示");
 
 
                     foreach (string rk in rkList)
@@ -426,6 +425,9 @@ namespace HsinChuSemesterClassFixedRank
                     dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_學分");
                     dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_成績");
                     dtTable.Columns.Add("學生" + studIdx + "_科目(原始)" + sIdx + "_成績");
+                    dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_需補考標示");
+                    dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_補考成績標示");
+                    dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_不及格標示");
 
 
                     foreach (string rk in rkList)
@@ -707,12 +709,12 @@ namespace HsinChuSemesterClassFixedRank
 
                                     if (studSemsScoreRec.Domains[dName].Score.HasValue && studSemsScoreRec.Domains[dName].Score.Value < 60)
                                     {
-                                        row["學生" + studIdx + "_領域需補考標示"] = _Configure.NeeedReScoreMark;
-                                        row["學生" + studIdx + "_領域不及格標示"] = _Configure.FailScoreMark;
+                                        row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_需補考標示"] = _Configure.NeeedReScoreMark;
+                                        row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_不及格標示"] = _Configure.FailScoreMark;
                                     }
 
                                     if (studSemsScoreRec.Domains[dName].ScoreMakeup.HasValue)
-                                        row["學生" + studIdx + "_領域補考成績標示"] = _Configure.ReScoreMark;
+                                        row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_補考成績標示"] = _Configure.ReScoreMark;
 
 
                                     foreach (string rk in rkList)
@@ -767,12 +769,12 @@ namespace HsinChuSemesterClassFixedRank
                                         row["學生" + studIdx + "_科目(原始)" + SelSubjectIdxDict[sName] + "_成績"] = studSemsScoreRec.Subjects[sName].ScoreOrigin.Value;
 
                                     if (studSemsScoreRec.Subjects[sName].ScoreMakeup.HasValue)
-                                        row["學生" + studIdx + "_科目補考成績標示"] = _Configure.ReScoreMark;
+                                        row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_補考成績標示"] = _Configure.ReScoreMark;
 
                                     if (studSemsScoreRec.Subjects[sName].Score.HasValue && studSemsScoreRec.Subjects[sName].Score.Value < 60)
                                     {
-                                        row["學生" + studIdx + "_科目需補考標示"] = _Configure.NeeedReScoreMark;
-                                        row["學生" + studIdx + "_科目不及格標示"] = _Configure.FailScoreMark;
+                                        row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_需補考標示"] = _Configure.NeeedReScoreMark;
+                                        row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_不及格標示"] = _Configure.FailScoreMark;
                                     }
 
 
@@ -933,7 +935,7 @@ namespace HsinChuSemesterClassFixedRank
                                     {
                                         // 學期/總計成績_課程學習總成績_年排名
                                         if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績(原始)_" + sName + "_" + rk))
-                                        {                                            
+                                        {
                                             foreach (string r2 in cr2List)
                                             {
                                                 row["班級_" + dName + "領域(原始)_科目" + subjIdx + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + sName + "_" + rk][r2];
