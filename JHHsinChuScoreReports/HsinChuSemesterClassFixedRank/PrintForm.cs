@@ -1582,6 +1582,11 @@ namespace HsinChuSemesterClassFixedRank
 
         private void lnkViewMapColumns_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            Global.domainNameList.Clear();
+            foreach (ListViewItem lvi in lvDomain.Items)
+            {
+                Global.domainNameList.Add(lvi.Text);
+            }
 
             // 產生合併欄位總表
             lnkViewMapColumns.Enabled = false;
