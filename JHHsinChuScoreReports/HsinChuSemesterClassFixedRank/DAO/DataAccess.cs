@@ -364,6 +364,7 @@ namespace HsinChuSemesterClassFixedRank.DAO
                     {
                         if (!ClassTag1Dict.ContainsKey(sid))
                             ClassTag1Dict.Add(sid, dr["rank_name"].ToString());
+                                               
                     }
                 }
 

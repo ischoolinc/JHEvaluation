@@ -94,7 +94,7 @@ namespace HsinChuSemesterClassFixedRank
             // 產生
             try
             {
-                object[] objArray = (object[])e.Result;
+                Document doc = (Document)e.Result;
 
                 btnSaveConfig.Enabled = true;
                 btnPrint.Enabled = true;
@@ -138,7 +138,8 @@ namespace HsinChuSemesterClassFixedRank
                 Document document = new Document();
                 try
                 {
-                    document = (Document)objArray[0];
+                    if (doc != null)
+                        document = doc;
                     document.Save(path, SaveFormat.Doc);
                     System.Diagnostics.Process.Start(path);
                 }
@@ -202,37 +203,37 @@ namespace HsinChuSemesterClassFixedRank
 
             Dictionary<string, Dictionary<string, Dictionary<string, string>>> ClassSemsScoreRankMatrixDataValueDict = DataAccess.GetClassSemsScoreRankMatrixDataValue(_Configure.SchoolYear, _Configure.Semester, _ClassIDList);
 
+            // debug
+            //StreamWriter sw = new StreamWriter(Application.StartupPath + "\\學生五標排名組距.txt");
+            //StreamWriter swClass = new StreamWriter(Application.StartupPath + "\\班級五標排名組距.txt");
+            //List<string> tmpList = new List<string>();
+            //List<string> tmpClassList = new List<string>();
 
-            StreamWriter sw = new StreamWriter(Application.StartupPath + "\\學生五標排名組距.txt");
-            StreamWriter swClass = new StreamWriter(Application.StartupPath + "\\班級五標排名組距.txt");
-            List<string> tmpList = new List<string>();
-            List<string> tmpClassList = new List<string>();
+            //foreach (string key in SemsScoreRankMatrixDataValueDict.Keys)
+            //{
+            //    foreach (string key1 in SemsScoreRankMatrixDataValueDict[key].Keys)
+            //    {
+            //        if (!tmpList.Contains(key1))
+            //            tmpList.Add(key1);
+            //    }
+            //}
 
-            foreach (string key in SemsScoreRankMatrixDataValueDict.Keys)
-            {
-                foreach (string key1 in SemsScoreRankMatrixDataValueDict[key].Keys)
-                {
-                    if (!tmpList.Contains(key1))
-                        tmpList.Add(key1);
-                }
-            }
+            //foreach (string key in ClassSemsScoreRankMatrixDataValueDict.Keys)
+            //{
+            //    foreach (string k1 in ClassSemsScoreRankMatrixDataValueDict[key].Keys)
+            //    {
+            //        if (!tmpClassList.Contains(k1))
+            //            tmpClassList.Add(k1);
+            //    }
+            //}
 
-            foreach (string key in ClassSemsScoreRankMatrixDataValueDict.Keys)
-            {
-                foreach (string k1 in ClassSemsScoreRankMatrixDataValueDict[key].Keys)
-                {
-                    if (!tmpClassList.Contains(k1))
-                        tmpClassList.Add(k1);
-                }
-            }
+            //foreach (string key in tmpList)
+            //    sw.WriteLine(key);
+            //sw.Close();
 
-            foreach (string key in tmpList)
-                sw.WriteLine(key);
-            sw.Close();
-
-            foreach (string key in tmpClassList)
-                swClass.WriteLine(key);
-            swClass.Close();
+            //foreach (string key in tmpClassList)
+            //    swClass.WriteLine(key);
+            //swClass.Close();
 
 
             // 所領域科目排序
@@ -1035,14 +1036,14 @@ namespace HsinChuSemesterClassFixedRank
 
 
 
-            // debug
-            dtTable.TableName = "debug";
-            dtTable.WriteXml(Application.StartupPath + "\\debug.xml");
+            //// debug
+            //dtTable.TableName = "debug";
+            //dtTable.WriteXml(Application.StartupPath + "\\debug.xml");
 
-
-
-
-
+            Document doc = _Configure.Template;
+            doc.MailMerge.Execute(dtTable);
+            doc.MailMerge.DeleteFields();
+            e.Result = doc;
         }
 
         private void BgWorkerLoadTemplate_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -1583,9 +1584,11 @@ namespace HsinChuSemesterClassFixedRank
         private void lnkViewMapColumns_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Global.domainNameList.Clear();
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("班級學期成績合併欄位總表產生中...");
             foreach (ListViewItem lvi in lvDomain.Items)
             {
-                Global.domainNameList.Add(lvi.Text);
+                if (lvi.Checked)
+                    Global.domainNameList.Add(lvi.Text);
             }
 
             // 產生合併欄位總表
@@ -1593,6 +1596,7 @@ namespace HsinChuSemesterClassFixedRank
 
             Global.ExportMappingFieldWord();
             lnkViewMapColumns.Enabled = true;
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("");
         }
 
         private void PrintForm_Load(object sender, EventArgs e)
