@@ -597,6 +597,54 @@ namespace HsinChuExamScore_JH
 
             }
 
+            List<string> tmpDomainList = new List<string>();
+
+            List<string> tmpSubjectList = new List<string>();
+            // 成績排序
+            foreach (string studID in studExamScoreDict.Keys)
+            {
+                tmpDomainList.Clear();
+                tmpSubjectList.Clear();
+                Dictionary<string, DAO.ExamSubjectScore> tmpSubjectScore = new Dictionary<string, ExamSubjectScore>();
+                Dictionary<string, DAO.ExamDomainScore> tmpDomainScore = new Dictionary<string, ExamDomainScore>();
+
+                foreach (string dname in studExamScoreDict[studID]._ExamDomainScoreDict.Keys)
+                {
+                    tmpDomainList.Add(dname);
+                    tmpDomainScore.Add(dname, studExamScoreDict[studID]._ExamDomainScoreDict[dname]);
+                }
+
+                foreach (string sname in studExamScoreDict[studID]._ExamSubjectScoreDict.Keys)
+                {
+                    tmpSubjectList.Add(sname);
+                    tmpSubjectScore.Add(sname, studExamScoreDict[studID]._ExamSubjectScoreDict[sname]);
+                }
+
+                // 排序
+                tmpDomainList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動", ""));
+
+                tmpSubjectList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+
+
+
+
+                studExamScoreDict[studID]._ExamDomainScoreDict.Clear();
+                studExamScoreDict[studID]._ExamSubjectScoreDict.Clear();
+
+                foreach (string dname in tmpDomainList)
+                {
+                    if (tmpDomainScore.ContainsKey(dname))
+                        studExamScoreDict[studID]._ExamDomainScoreDict.Add(dname, tmpDomainScore[dname]);
+                }
+
+                foreach (string sname in tmpSubjectList)
+                {
+                    if (tmpSubjectScore.ContainsKey(sname))
+                        studExamScoreDict[studID]._ExamSubjectScoreDict.Add(sname, tmpSubjectScore[sname]);
+                }
+            }
+
+
             _bgWorkReport.ReportProgress(45);
 
             // 缺曠資料區間統計
@@ -882,6 +930,8 @@ namespace HsinChuExamScore_JH
                 foreach (string colName in subjColList)
                     dt.Columns.Add(colName);
 
+                Global.DomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+
                 // 新增各領域成績與排名，與佳樺討論，個人評量各領域只提供從科目計算來的加權平均
                 foreach (string dName in Global.DomainNameList)
                 {
@@ -912,6 +962,22 @@ namespace HsinChuExamScore_JH
                             dt.Columns.Add(rt + dName + "F_" + li);
                         }
                     }
+
+                    // 領域-科目1,2,3 組距
+                    for (int subjIdx = 1; subjIdx <= 7; subjIdx++)
+                    {
+                        foreach (string rt in rankDSTypeList)
+                        {
+                            dt.Columns.Add(rt + dName + "領域_科目名稱" + subjIdx);
+                            foreach (string li in li2)
+                            {
+                                dt.Columns.Add(rt + dName + "領域_科目" + subjIdx + "_" + li);
+                                dt.Columns.Add(rt + dName + "領域_科目" + subjIdx + "F_" + li);
+                            }
+                        }
+                    }
+
+
                 }
 
 
@@ -1156,6 +1222,90 @@ namespace HsinChuExamScore_JH
 
                     }
 
+                    // 處理領域-科目成績
+                    Dictionary<string, List<DAO.ExamSubjectScore>> DomainSubjectDict = new Dictionary<string, List<ExamSubjectScore>>();
+
+                    foreach (DAO.ExamSubjectScore ess in studExamScoreDict[StudRec.ID]._ExamSubjectScoreDict.Values)
+                    {
+                        string dname = "";
+                        if (ess.DomainName == "")
+                            dname = "彈性課程";
+                        else
+                            dname = ess.DomainName;
+
+
+
+                            if (!DomainSubjectDict.ContainsKey(dname))
+                            DomainSubjectDict.Add(dname, new List<ExamSubjectScore>());
+
+                        DomainSubjectDict[dname].Add(ess);
+                    }
+                    // 領域-科目
+                    int subdIdx = 1;
+                    foreach (string dname in DomainSubjectDict.Keys)
+                    {
+                        subdIdx = 1;
+                        foreach (DAO.ExamSubjectScore ess in DomainSubjectDict[dname])
+                        {
+                            if (StudentExamRankMatrixDict.ContainsKey(StudRec.ID))
+                            {
+                                string rtSubjet = "";
+                                // 處理單存科目組距
+                                foreach (string rt in rankTypeList)
+                                {
+                                    if (rt == "班排名")
+                                        rtSubjet = "班級_";
+
+                                    if (rt == "年排名")
+                                        rtSubjet = "年級_";
+
+                                    if (rt == "類別1排名")
+                                        rtSubjet = "類別1_";
+
+                                    if (rt == "類別2排名")
+                                        rtSubjet = "類別2_";
+
+                                    string keyD1 = "定期評量/科目成績" + ess.SubjectName + rt;
+                                    if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD1))
+                                    {
+                                        //班級_語文領域_科目1_R100_u
+                                        //班級_語文領域_科目名稱1
+                                        row[rtSubjet + dname + "領域_科目名稱" + subdIdx] = ess.SubjectName;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R100_u"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_gte100;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R90_99"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_90;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R80_89"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_80;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R70_79"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_70;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R60_69"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_60;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R50_59"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_50;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R40_49"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_40;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R30_39"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_30;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R20_29"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_20;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R10_19"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_10;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "_R0_9"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_lt10;
+                                    }
+
+                                    keyD1 = "定期評量_定期/科目成績" + ess.SubjectName + rt;
+                                    if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD1))
+                                    {
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R100_u"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_gte100;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R90_99"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_90;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R80_89"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_80;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R70_79"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_70;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R60_69"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_60;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R50_59"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_50;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R40_49"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_40;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R30_39"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_30;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R20_29"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_20;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R10_19"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_10;
+                                        row[rtSubjet + dname + "領域_科目" + subdIdx + "F_R0_9"] = StudentExamRankMatrixDict[StudRec.ID][keyD1].level_lt10;
+                                    }
+                                }
+                            }
+
+                            subdIdx++;
+                        }
+                    }
+
 
                     // 處理單獨科目組距
                     List<string> rankSubjectList = new List<string>();
@@ -1165,17 +1315,8 @@ namespace HsinChuExamScore_JH
                             rankSubjectList.Add(ess.SubjectName);
                     }
 
-                    rankSubjectList.Sort(new StringComparer("國文"
-                                , "英文"
-                                , "數學"
-                                , "理化"
-                                , "生物"
-                                , "社會"
-                                , "物理"
-                                , "化學"
-                                , "歷史"
-                                , "地理"
-                                , "公民"));
+                    rankSubjectList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+
 
                     if (StudentExamRankMatrixDict.ContainsKey(StudRec.ID))
                     {

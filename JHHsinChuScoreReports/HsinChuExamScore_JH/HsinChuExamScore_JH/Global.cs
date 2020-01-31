@@ -3153,6 +3153,124 @@ namespace HsinChuExamScore_JH
                 builder.Writeln();
 
 
+                // 領域-科目1,2,3 組距
+                List<string> rrKNameList = new List<string>();
+                rrKNameList.Add("班級_");
+                rrKNameList.Add("年級_");
+                rrKNameList.Add("類別1_");
+                rrKNameList.Add("類別2_");
+
+                // 總成績
+                foreach (string rk in rrKNameList)
+                {
+                    foreach (string dname in Global.DomainNameList)
+                    {
+                        builder.Writeln(dname + "領域-科目 " + rk + "組距");
+                        builder.StartTable();
+                        builder.InsertCell();
+                        builder.Write("領域科目名稱");
+                        builder.InsertCell();
+                        builder.Write("0-9");
+                        builder.InsertCell();
+                        builder.Write("10-19");
+                        builder.InsertCell();
+                        builder.Write("20-29");
+                        builder.InsertCell();
+                        builder.Write("30-39");
+                        builder.InsertCell();
+                        builder.Write("40-49");
+                        builder.InsertCell();
+                        builder.Write("50-59");
+                        builder.InsertCell();
+                        builder.Write("60-69");
+                        builder.InsertCell();
+                        builder.Write("70-79");
+                        builder.InsertCell();
+                        builder.Write("80-89");
+                        builder.InsertCell();
+                        builder.Write("90-99");
+                        builder.InsertCell();
+                        builder.Write("100以上");
+                        builder.EndRow();
+
+                        for (int i = 1; i <= 5; i++)
+                        {
+                            //                    班級_語文領域_科目名稱7
+                            //班級_語文領域_科目7_R100_u
+
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + rk + dname + "領域_科目名稱" + i + " \\* MERGEFORMAT ", "«N" + i + "»");
+
+                            foreach (string r in tmpRNameList)
+                            {
+                                builder.InsertCell();
+                                builder.InsertField("MERGEFIELD " + rk + dname + "領域_科目" + i + r + " \\* MERGEFORMAT ", "«R" + i + "»");
+                            }
+
+                            builder.EndRow();
+                        }
+
+                        builder.EndTable();
+                        builder.Writeln();
+                    }
+                }
+
+                // 定期成績
+                foreach (string rk in rrKNameList)
+                {
+                    foreach (string dname in Global.DomainNameList)
+                    {
+                        builder.Writeln(dname + "領域-科目定期 " + rk + "組距");
+                        builder.StartTable();
+                        builder.InsertCell();
+                        builder.Write("領域科目名稱");
+                        builder.InsertCell();
+                        builder.Write("0-9");
+                        builder.InsertCell();
+                        builder.Write("10-19");
+                        builder.InsertCell();
+                        builder.Write("20-29");
+                        builder.InsertCell();
+                        builder.Write("30-39");
+                        builder.InsertCell();
+                        builder.Write("40-49");
+                        builder.InsertCell();
+                        builder.Write("50-59");
+                        builder.InsertCell();
+                        builder.Write("60-69");
+                        builder.InsertCell();
+                        builder.Write("70-79");
+                        builder.InsertCell();
+                        builder.Write("80-89");
+                        builder.InsertCell();
+                        builder.Write("90-99");
+                        builder.InsertCell();
+                        builder.Write("100以上");
+                        builder.EndRow();
+
+                        for (int i = 1; i <= 5; i++)
+                        {
+                            //                    班級_語文領域_科目名稱7
+                            //班級_語文領域_科目7F_R100_u
+
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + rk + dname + "領域_科目名稱" + i + " \\* MERGEFORMAT ", "«N" + i + "»");
+
+                            foreach (string r in tmpRNameList)
+                            {
+                                builder.InsertCell();
+                                builder.InsertField("MERGEFIELD " + rk + dname + "領域_科目" + i + "F" + r + " \\* MERGEFORMAT ", "«R" + i + "»");
+                            }
+
+                            builder.EndRow();
+                        }
+
+                        builder.EndTable();
+                        builder.Writeln();
+                    }
+                }
+
+
                 builder.Writeln();
                 builder.Writeln();
 
