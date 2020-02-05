@@ -144,6 +144,8 @@
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.labelX1);
             this.DoubleBuffered = true;
+            this.MaximumSize = new System.Drawing.Size(311, 155);
+            this.MinimumSize = new System.Drawing.Size(311, 155);
             this.Name = "ReDomainForTeacherForm";
             this.Text = "領域補考名單";
             this.Load += new System.EventHandler(this.ReDomainForTeacherForm_Load);

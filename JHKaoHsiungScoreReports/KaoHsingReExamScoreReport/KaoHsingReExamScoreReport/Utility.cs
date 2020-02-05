@@ -1,20 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Xml;
 using System.Text;
-using KaoHsingReExamScoreReport.DAO;
+using System.Linq;
+using System.Data;
+using System.Windows.Forms;
+using System.Collections.Generic;
+using FISCA.Presentation.Controls;
 using JHSchool.Data;
 using K12.Data;
-using System.Windows.Forms;
-using System.IO;
+using KaoHsingReExamScoreReport.DAO;
 using Aspose.Cells;
-using FISCA.Presentation.Controls;
 
 namespace KaoHsingReExamScoreReport
 {
     public class Utility
     {
-
         /// <summary>
         /// 取得領域成績並判斷是否及格
         /// </summary>
@@ -50,13 +51,12 @@ namespace KaoHsingReExamScoreReport
                             sd.DomainScoreDict.Add(ds.Domain, 0);
                         }
 
-
                         if (ds.Score.HasValue)
-                        {
-                            
+                        {                            
                             sd.DomainScoreDict[ds.Domain] = ds.Score.Value;
-                            if (ds.Score.Value >= passScore)
+                            if (ds.Score.Value >= passScore) {
                                 sd.DomainScorePassDict[ds.Domain] = true;
+                            }
                         }
                     }
                 }

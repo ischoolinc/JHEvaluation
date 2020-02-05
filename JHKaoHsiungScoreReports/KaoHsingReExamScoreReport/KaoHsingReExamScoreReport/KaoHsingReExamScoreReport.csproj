@@ -172,9 +172,12 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ReTestDomainReport_ForSchool.xlsx" />
+    <None Include="Resources\ReTestDomainReport_ForTeacher.xlsx" />
     <None Include="Template\給班導師樣版.xlsx" />
     <None Include="Template\給試務樣版.xlsx" />
     <None Include="Template\領域補考通知單範本.doc" />
