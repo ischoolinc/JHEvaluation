@@ -418,7 +418,7 @@ WHERE
                             if (int.TryParse(dr["rank"].ToString(), out rank)) rdf.rank = rank;
                             if (int.TryParse(dr["pr"].ToString(), out pr)) rdf.pr = pr;
                             if (int.TryParse(dr["percentile"].ToString(), out percentile)) rdf.percentile = percentile;
-                                                        
+
                             value[student_id].Add(type, rdf);
                         }
                     }
@@ -428,6 +428,35 @@ WHERE
             {
                 throw new Exception("讀取學生排名發生錯誤,", ex);
             }
+
+            return value;
+        }
+
+
+        public static List<string> GetSCETakeIDsByExamID(List<string> IDList, string ExamID)
+        {
+            List<string> value = new List<string>();
+
+            if (IDList.Count > 0 && ExamID != "")
+            {
+                string qry = @"
+SELECT
+    sce_take.id
+FROM 
+    sc_attend INNER JOIN sce_take
+ON sce_take.ref_sc_attend_id = sc_attend.id
+WHERE sc_attend.ref_student_id IN(" + string.Join(",", IDList.ToArray()) + @") AND sce_take.ref_exam_id =" + ExamID + @"";
+                QueryHelper qh = new QueryHelper();
+
+                DataTable dt = qh.Select(qry);
+                if (dt != null)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        value.Add(dr["id"].ToString());
+                    }
+                }
+            }                 
 
             return value;
         }

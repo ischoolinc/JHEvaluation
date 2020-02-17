@@ -404,33 +404,35 @@ namespace HsinChuExamScore_JH
             // 所選學生資料
             List<StudentRecord> StudRecList = Student.SelectByIDs(_StudentIDList);
 
-            // 班級年級區分,沒有年級不處理
-            Dictionary<int, List<StudentRecord>> studGradeDict = new Dictionary<int, List<StudentRecord>>();
-            List<string> studIDAllList = new List<string>();
-            foreach (StudentRecord studRec in Student.SelectAll())
-            {
-                // 不排名學生ID
-                if (notRankStudIDList.Contains(studRec.ID))
-                    continue;
 
-                if (studRec.Status == StudentRecord.StudentStatus.一般)
-                {
-                    if (ClassDict.ContainsKey(studRec.RefClassID))
-                    {
-                        if (ClassDict[studRec.RefClassID].GradeYear.HasValue)
-                        {
-                            int gr = ClassDict[studRec.RefClassID].GradeYear.Value;
+            // 因為讀取固定排名，這段不需要即時處理
+            //// 班級年級區分,沒有年級不處理
+            //Dictionary<int, List<StudentRecord>> studGradeDict = new Dictionary<int, List<StudentRecord>>();
+            //List<string> studIDAllList = new List<string>();
+            //foreach (StudentRecord studRec in Student.SelectAll())
+            //{
+            //    // 不排名學生ID
+            //    if (notRankStudIDList.Contains(studRec.ID))
+            //        continue;
 
-                            if (!studGradeDict.ContainsKey(gr))
-                                studGradeDict.Add(gr, new List<StudentRecord>());
+            //    if (studRec.Status == StudentRecord.StudentStatus.一般)
+            //    {
+            //        if (ClassDict.ContainsKey(studRec.RefClassID))
+            //        {
+            //            if (ClassDict[studRec.RefClassID].GradeYear.HasValue)
+            //            {
+            //                int gr = ClassDict[studRec.RefClassID].GradeYear.Value;
 
-                            studIDAllList.Add(studRec.ID);
-                            studGradeDict[gr].Add(studRec);
-                        }
-                    }
+            //                if (!studGradeDict.ContainsKey(gr))
+            //                    studGradeDict.Add(gr, new List<StudentRecord>());
 
-                }
-            }
+            //                studIDAllList.Add(studRec.ID);
+            //                studGradeDict[gr].Add(studRec);
+            //            }
+            //        }
+
+            //    }
+            //}
             _bgWorkReport.ReportProgress(15);
 
             #region 取得學生成績計算規則
@@ -469,9 +471,17 @@ namespace HsinChuExamScore_JH
                 CourseDict.Add(co.ID, co);
             }
 
+
+            
+
             // 取評量成績
             Dictionary<string, List<HC.JHSCETakeRecord>> Score1Dict = new Dictionary<string, List<HC.JHSCETakeRecord>>();
-            foreach (JHSCETakeRecord record in JHSCETake.SelectByStudentAndCourse(studIDAllList, CourseDict.Keys.ToList()))
+
+            // 取得所選學生評量成績
+            List<string> sceIDs = Utility.GetSCETakeIDsByExamID(_StudentIDList, _SelExamID);
+            List<JHSCETakeRecord> studSCETake = JHSCETake.SelectByIDs(sceIDs);
+
+            foreach (JHSCETakeRecord record in studSCETake)
             {
                 if (record.RefExamID == _SelExamID)
                 {
