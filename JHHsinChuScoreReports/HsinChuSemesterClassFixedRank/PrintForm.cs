@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using JHSchool.Evaluation.Calculation;
 
 namespace HsinChuSemesterClassFixedRank
 {
@@ -50,7 +51,7 @@ namespace HsinChuSemesterClassFixedRank
         /// <summary>
         /// 第幾位四捨五入
         /// </summary>
-        int ParseNumber = 0;
+      //  int ParseNumber = 0;
 
         // 領域錯誤訊息
         List<string> _ErrorDomainNameList = new List<string>();
@@ -179,252 +180,322 @@ namespace HsinChuSemesterClassFixedRank
 
         private void BgWorkerReport_DoWork(object sender, DoWorkEventArgs e)
         {
-            DataTable dtTable = new DataTable();
 
-            // 取得相關資料
-            bgWorkerReport.ReportProgress(1);
-
-            // 每次合併後放入，最後再合成一張
-            Document docTemplate = _Configure.Template;
-            if (docTemplate == null)
-                docTemplate = new Document(new MemoryStream(Properties.Resources.新竹班級學期成績單樣板));
-
-            _ErrorList.Clear();
-            _ErrorDomainNameList.Clear();
-
-            // 校名
-            string SchoolName = K12.Data.School.ChineseName;
-            // 校長
-            string ChancellorChineseName = JHSchool.Data.JHSchoolInfo.ChancellorChineseName;
-            // 教務主任
-            string EduDirectorName = JHSchool.Data.JHSchoolInfo.EduDirectorName;
-
-            // 取得班導師
-            Dictionary<string, string> ClassTeacherNameDict = DataAccess.GetClassTeacherNameDictByClassID(_ClassIDList);
-
-            // 取得學生學期成績排名、五標、分數區間
-            Dictionary<string, Dictionary<string, Dictionary<string, string>>> SemsScoreRankMatrixDataValueDict = DataAccess.GetSemsScoreRankMatrixDataValue(_Configure.SchoolYear, _Configure.Semester, StudentClassIDDict.Keys.ToList());
-
-            Dictionary<string, Dictionary<string, Dictionary<string, string>>> ClassSemsScoreRankMatrixDataValueDict = DataAccess.GetClassSemsScoreRankMatrixDataValue(_Configure.SchoolYear, _Configure.Semester, _ClassIDList);
-
-            // debug
-            //StreamWriter sw = new StreamWriter(Application.StartupPath + "\\學生五標排名組距.txt");
-            //StreamWriter swClass = new StreamWriter(Application.StartupPath + "\\班級五標排名組距.txt");
-            //List<string> tmpList = new List<string>();
-            //List<string> tmpClassList = new List<string>();
-
-            //foreach (string key in SemsScoreRankMatrixDataValueDict.Keys)
-            //{
-            //    foreach (string key1 in SemsScoreRankMatrixDataValueDict[key].Keys)
-            //    {
-            //        if (!tmpList.Contains(key1))
-            //            tmpList.Add(key1);
-            //    }
-            //}
-
-            //foreach (string key in ClassSemsScoreRankMatrixDataValueDict.Keys)
-            //{
-            //    foreach (string k1 in ClassSemsScoreRankMatrixDataValueDict[key].Keys)
-            //    {
-            //        if (!tmpClassList.Contains(k1))
-            //            tmpClassList.Add(k1);
-            //    }
-            //}
-
-            //foreach (string key in tmpList)
-            //    sw.WriteLine(key);
-            //sw.Close();
-
-            //foreach (string key in tmpClassList)
-            //    swClass.WriteLine(key);
-            //swClass.Close();
-
-
-            // 所領域科目排序
-            foreach (string classID in SelDomainSubjectDict.Keys)
+            try
             {
-                foreach (string dName in SelDomainSubjectDict[classID].Keys)
+                DataTable dtTable = new DataTable();
+
+                // 取得相關資料
+                bgWorkerReport.ReportProgress(1);
+
+                // 每次合併後放入，最後再合成一張
+                Document docTemplate = _Configure.Template;
+                if (docTemplate == null)
+                    docTemplate = new Document(new MemoryStream(Properties.Resources.新竹班級學期成績單樣板));
+
+                _ErrorList.Clear();
+                _ErrorDomainNameList.Clear();
+
+                // 校名
+                string SchoolName = K12.Data.School.ChineseName;
+                // 校長
+                string ChancellorChineseName = JHSchool.Data.JHSchoolInfo.ChancellorChineseName;
+                // 教務主任
+                string EduDirectorName = JHSchool.Data.JHSchoolInfo.EduDirectorName;
+
+                // 取得班導師
+                Dictionary<string, string> ClassTeacherNameDict = DataAccess.GetClassTeacherNameDictByClassID(_ClassIDList);
+
+                // 取得學生學期成績排名、五標、分數區間
+                Dictionary<string, Dictionary<string, Dictionary<string, string>>> SemsScoreRankMatrixDataValueDict = DataAccess.GetSemsScoreRankMatrixDataValue(_Configure.SchoolYear, _Configure.Semester, StudentClassIDDict.Keys.ToList());
+
+                Dictionary<string, Dictionary<string, Dictionary<string, string>>> ClassSemsScoreRankMatrixDataValueDict = DataAccess.GetClassSemsScoreRankMatrixDataValue(_Configure.SchoolYear, _Configure.Semester, _ClassIDList);
+                bgWorkerReport.ReportProgress(10);
+                // debug
+                //StreamWriter sw = new StreamWriter(Application.StartupPath + "\\學生五標排名組距.txt");
+                //StreamWriter swClass = new StreamWriter(Application.StartupPath + "\\班級五標排名組距.txt");
+                //List<string> tmpList = new List<string>();
+                //List<string> tmpClassList = new List<string>();
+
+                //foreach (string key in SemsScoreRankMatrixDataValueDict.Keys)
+                //{
+                //    foreach (string key1 in SemsScoreRankMatrixDataValueDict[key].Keys)
+                //    {
+                //        if (!tmpList.Contains(key1))
+                //            tmpList.Add(key1);
+                //    }
+                //}
+
+                //foreach (string key in ClassSemsScoreRankMatrixDataValueDict.Keys)
+                //{
+                //    foreach (string k1 in ClassSemsScoreRankMatrixDataValueDict[key].Keys)
+                //    {
+                //        if (!tmpClassList.Contains(k1))
+                //            tmpClassList.Add(k1);
+                //    }
+                //}
+
+                //foreach (string key in tmpList)
+                //    sw.WriteLine(key);
+                //sw.Close();
+
+                //foreach (string key in tmpClassList)
+                //    swClass.WriteLine(key);
+                //swClass.Close();
+
+
+                // 所領域科目排序
+                foreach (string classID in SelDomainSubjectDict.Keys)
                 {
-                    SelDomainSubjectDict[classID][dName].Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
-                }
-            }
-
-
-
-
-            #region 產生合併欄位 Columns
-
-            //// 全部
-            //List<string> r2List = new List<string>();
-            //r2List.Add("rank");
-            //r2List.Add("matrix_count");
-            //r2List.Add("pr");
-            //r2List.Add("percentile");
-            //r2List.Add("avg_top_25");
-            //r2List.Add("avg_top_50");
-            //r2List.Add("avg");
-            //r2List.Add("avg_bottom_50");
-            //r2List.Add("avg_bottom_25");
-            //r2List.Add("level_gte100");
-            //r2List.Add("level_90");
-            //r2List.Add("level_80");
-            //r2List.Add("level_70");
-            //r2List.Add("level_60");
-            //r2List.Add("level_50");
-            //r2List.Add("level_40");
-            //r2List.Add("level_30");
-            //r2List.Add("level_20");
-            //r2List.Add("level_10");
-            //r2List.Add("level_lt10");
-
-            // 加入學生常用 排名、PR、百分比
-            List<string> r2List = new List<string>();
-            r2List.Add("rank");
-            r2List.Add("pr");
-            r2List.Add("percentile");
-
-            // 班級排名
-            List<string> cr2List = new List<string>();
-            cr2List.Add("matrix_count");
-            cr2List.Add("avg_top_25");
-            cr2List.Add("avg_top_50");
-            cr2List.Add("avg");
-            cr2List.Add("avg_bottom_50");
-            cr2List.Add("avg_bottom_25");
-            cr2List.Add("level_gte100");
-            cr2List.Add("level_90");
-            cr2List.Add("level_80");
-            cr2List.Add("level_70");
-            cr2List.Add("level_60");
-            cr2List.Add("level_50");
-            cr2List.Add("level_40");
-            cr2List.Add("level_30");
-            cr2List.Add("level_20");
-            cr2List.Add("level_10");
-            cr2List.Add("level_lt10");
-
-            List<string> r1List = new List<string>();
-            r1List.Add("課程學習總成績");
-            r1List.Add("學習領域總成績");
-            r1List.Add("課程學習總成績(原始)");
-            r1List.Add("學習領域總成績(原始)");
-
-            List<string> rkList = new List<string>();
-            rkList.Add("班排名");
-            rkList.Add("年排名");
-            rkList.Add("類別1排名");
-            rkList.Add("類別2排名");
-
-
-            dtTable.Columns.Add("學校名稱");
-            dtTable.Columns.Add("學年度");
-            dtTable.Columns.Add("學期");
-            dtTable.Columns.Add("班級");
-            dtTable.Columns.Add("班導師");
-            dtTable.Columns.Add("類別1排名名稱");
-            dtTable.Columns.Add("類別2排名名稱");
-
-            int maxStudent = 30;
-
-            foreach (string key in ClassStudentDict.Keys)
-            {
-                if (ClassStudentDict[key].Count > maxStudent)
-                    maxStudent = ClassStudentDict[key].Count;
-            }
-
-            List<string> dNameList = new List<string>();
-            foreach (string cid in SelDomainSubjectDict.Keys)
-            {
-                foreach (string name in SelDomainSubjectDict[cid].Keys)
-                {
-                    if (!dNameList.Contains(name))
-                        dNameList.Add(name);
-                }
-            }
-
-
-            // 學生合併欄位
-            for (int studIdx = 1; studIdx <= maxStudent; studIdx++)
-            {
-                dtTable.Columns.Add("姓名" + studIdx);
-                dtTable.Columns.Add("座號" + studIdx);
-
-
-
-                // 總計成績合併欄位
-                // 學生1_課程學習總成績_班排名_rank
-                foreach (string r1 in r1List)
-                {
-                    dtTable.Columns.Add("學生" + studIdx + "_" + r1 + "_成績");
-
-                    foreach (string rk in rkList)
+                    foreach (string dName in SelDomainSubjectDict[classID].Keys)
                     {
-                        // 先放排名   --五標、PR、百分比、組距
-                        foreach (string r2 in r2List)
-                        {
-                            dtTable.Columns.Add("學生" + studIdx + "_" + r1 + "_" + rk + "_" + r2);
-                        }
+                        SelDomainSubjectDict[classID][dName].Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
                     }
-
                 }
 
-                // 產生領域_科目1,2,3合併欄位
-                // 領域1,2 合併欄位             
-                // 取各班最大聯集
-                foreach (string dName in dNameList)
+
+
+
+                #region 產生合併欄位 Columns
+
+                //// 全部
+                //List<string> r2List = new List<string>();
+                //r2List.Add("rank");
+                //r2List.Add("matrix_count");
+                //r2List.Add("pr");
+                //r2List.Add("percentile");
+                //r2List.Add("avg_top_25");
+                //r2List.Add("avg_top_50");
+                //r2List.Add("avg");
+                //r2List.Add("avg_bottom_50");
+                //r2List.Add("avg_bottom_25");
+                //r2List.Add("level_gte100");
+                //r2List.Add("level_90");
+                //r2List.Add("level_80");
+                //r2List.Add("level_70");
+                //r2List.Add("level_60");
+                //r2List.Add("level_50");
+                //r2List.Add("level_40");
+                //r2List.Add("level_30");
+                //r2List.Add("level_20");
+                //r2List.Add("level_10");
+                //r2List.Add("level_lt10");
+
+                // 加入學生常用 排名、PR、百分比
+                List<string> r2List = new List<string>();
+                r2List.Add("rank");
+                r2List.Add("pr");
+                r2List.Add("percentile");
+
+                // 班級排名
+                List<string> cr2List = new List<string>();
+                cr2List.Add("matrix_count");
+                cr2List.Add("avg_top_25");
+                cr2List.Add("avg_top_50");
+                cr2List.Add("avg");
+                cr2List.Add("avg_bottom_50");
+                cr2List.Add("avg_bottom_25");
+                cr2List.Add("level_gte100");
+                cr2List.Add("level_90");
+                cr2List.Add("level_80");
+                cr2List.Add("level_70");
+                cr2List.Add("level_60");
+                cr2List.Add("level_50");
+                cr2List.Add("level_40");
+                cr2List.Add("level_30");
+                cr2List.Add("level_20");
+                cr2List.Add("level_10");
+                cr2List.Add("level_lt10");
+
+                List<string> r1List = new List<string>();
+                r1List.Add("課程學習總成績");
+                r1List.Add("學習領域總成績");
+                r1List.Add("課程學習總成績(原始)");
+                r1List.Add("學習領域總成績(原始)");
+
+                List<string> rkList = new List<string>();
+                rkList.Add("班排名");
+                rkList.Add("年排名");
+                rkList.Add("類別1排名");
+                rkList.Add("類別2排名");
+
+
+                dtTable.Columns.Add("學校名稱");
+                dtTable.Columns.Add("學年度");
+                dtTable.Columns.Add("學期");
+                dtTable.Columns.Add("班級");
+                dtTable.Columns.Add("班導師");
+                dtTable.Columns.Add("類別1排名名稱");
+                dtTable.Columns.Add("類別2排名名稱");
+
+                int maxStudent = 30;
+
+                foreach (string key in ClassStudentDict.Keys)
                 {
-                    dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_學分");
-                    dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_成績");
-                    dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_成績");
+                    if (ClassStudentDict[key].Count > maxStudent)
+                        maxStudent = ClassStudentDict[key].Count;
+                }
 
-
-                    for (int si = 1; si <= 12; si++)
+                List<string> dNameList = new List<string>();
+                foreach (string cid in SelDomainSubjectDict.Keys)
+                {
+                    foreach (string name in SelDomainSubjectDict[cid].Keys)
                     {
-                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_名稱");
-                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_學分");
-                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_成績");
-                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_科目" + si + "_成績");
+                        if (!dNameList.Contains(name))
+                            dNameList.Add(name);
                     }
+                }
 
-                    foreach (string rk in rkList)
+
+                // 學生合併欄位
+                for (int studIdx = 1; studIdx <= maxStudent; studIdx++)
+                {
+                    dtTable.Columns.Add("姓名" + studIdx);
+                    dtTable.Columns.Add("座號" + studIdx);
+
+
+
+                    // 總計成績合併欄位
+                    // 學生1_課程學習總成績_班排名_rank
+                    foreach (string r1 in r1List)
                     {
-                        // 排名 
-                        foreach (string r2 in r2List)
-                        {
-                            dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_" + rk + "_" + r2);
-                            dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_" + rk + "_" + r2);
+                        dtTable.Columns.Add("學生" + studIdx + "_" + r1 + "_成績");
 
-                            for (int si = 1; si <= 12; si++)
+                        foreach (string rk in rkList)
+                        {
+                            // 先放排名   --五標、PR、百分比、組距
+                            foreach (string r2 in r2List)
                             {
-                                dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_" + rk + "_" + r2);
-                                dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_科目" + si + "_" + rk + "_" + r2);
+                                dtTable.Columns.Add("學生" + studIdx + "_" + r1 + "_" + rk + "_" + r2);
+                            }
+                        }
+
+                    }
+
+                    // 產生領域_科目1,2,3合併欄位
+                    // 領域1,2 合併欄位             
+                    // 取各班最大聯集
+                    foreach (string dName in dNameList)
+                    {
+                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_學分");
+                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_成績");
+                        dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_成績");
+
+
+                        for (int si = 1; si <= 12; si++)
+                        {
+                            dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_名稱");
+                            dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_學分");
+                            dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_成績");
+                            dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_科目" + si + "_成績");
+                        }
+
+                        foreach (string rk in rkList)
+                        {
+                            // 排名 
+                            foreach (string r2 in r2List)
+                            {
+                                dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_" + rk + "_" + r2);
+                                dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_" + rk + "_" + r2);
+
+                                for (int si = 1; si <= 12; si++)
+                                {
+                                    dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_" + rk + "_" + r2);
+                                    dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_科目" + si + "_" + rk + "_" + r2);
+                                }
                             }
                         }
                     }
+
+
+
+                    // 領域1,2 合併欄位
+                    for (int dIdx = 1; dIdx <= SelDomainIdxDict.Keys.Count; dIdx++)
+                    {
+                        // 學生1_領域1_成績
+                        dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_名稱");
+                        dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_學分");
+                        dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_成績");
+                        dtTable.Columns.Add("學生" + studIdx + "_領域(原始)" + dIdx + "_成績");
+                        dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_需補考標示");
+                        dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_補考成績標示");
+                        dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_不及格標示");
+
+
+                        foreach (string rk in rkList)
+                        {
+                            // 排名 --五標、PR、百分比、組距
+                            foreach (string r2 in r2List)
+                            {
+                                dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_" + rk + "_" + r2);
+                                dtTable.Columns.Add("學生" + studIdx + "_領域(原始)" + dIdx + "_" + rk + "_" + r2);
+                            }
+                        }
+
+                    }
+
+                    // 科目1,2 合併欄位
+                    for (int sIdx = 1; sIdx <= SelSubjectIdxDict.Keys.Count; sIdx++)
+                    {
+                        // 學生1_科目1_成績
+                        dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_名稱");
+                        dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_學分");
+                        dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_成績");
+                        dtTable.Columns.Add("學生" + studIdx + "_科目(原始)" + sIdx + "_成績");
+                        dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_需補考標示");
+                        dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_補考成績標示");
+                        dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_不及格標示");
+
+
+                        foreach (string rk in rkList)
+                        {
+                            // 排名 -- 五標、PR、百分比、組距
+                            foreach (string r2 in r2List)
+                            {
+                                dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_" + rk + "_" + r2);
+                                dtTable.Columns.Add("學生" + studIdx + "_科目(原始)" + sIdx + "_" + rk + "_" + r2);
+                            }
+                        }
+
+                    }
                 }
 
+
+                // 班級合併欄位
+                foreach (string r1 in r1List)
+                {
+                    foreach (string rk in rkList)
+                    {
+                        // 五標、PR、百分比、組距
+                        foreach (string r2 in cr2List)
+                        {
+                            dtTable.Columns.Add("班級_" + r1 + "_" + rk + "_" + r2);
+                        }
+                    }
+
+                }
 
 
                 // 領域1,2 合併欄位
                 for (int dIdx = 1; dIdx <= SelDomainIdxDict.Keys.Count; dIdx++)
                 {
-                    // 學生1_領域1_成績
-                    dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_名稱");
-                    dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_學分");
-                    dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_成績");
-                    dtTable.Columns.Add("學生" + studIdx + "_領域(原始)" + dIdx + "_成績");
-                    dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_需補考標示");
-                    dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_補考成績標示");
-                    dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_不及格標示");
+                    // 班級_領域1_成績
+                    dtTable.Columns.Add("班級_領域" + dIdx + "_名稱");
+                    dtTable.Columns.Add("班級_領域" + dIdx + "_學分");
 
+                    // 班級_領域1_平均,及格人數
+                    dtTable.Columns.Add("班級_領域" + dIdx + "_平均");
+                    dtTable.Columns.Add("班級_領域(原始)" + dIdx + "_平均");
+                    dtTable.Columns.Add("班級_領域" + dIdx + "_及格人數");
+                    dtTable.Columns.Add("班級_領域(原始)" + dIdx + "_及格人數");
 
                     foreach (string rk in rkList)
                     {
-                        // 排名 --五標、PR、百分比、組距
-                        foreach (string r2 in r2List)
+                        // 五標、PR、百分比、組距
+                        foreach (string r2 in cr2List)
                         {
-                            dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_" + rk + "_" + r2);
-                            dtTable.Columns.Add("學生" + studIdx + "_領域(原始)" + dIdx + "_" + rk + "_" + r2);
+                            dtTable.Columns.Add("班級_領域" + dIdx + "_" + rk + "_" + r2);
+                            dtTable.Columns.Add("班級_領域(原始)" + dIdx + "_" + rk + "_" + r2);
                         }
                     }
 
@@ -433,729 +504,758 @@ namespace HsinChuSemesterClassFixedRank
                 // 科目1,2 合併欄位
                 for (int sIdx = 1; sIdx <= SelSubjectIdxDict.Keys.Count; sIdx++)
                 {
-                    // 學生1_科目1_成績
-                    dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_名稱");
-                    dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_學分");
-                    dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_成績");
-                    dtTable.Columns.Add("學生" + studIdx + "_科目(原始)" + sIdx + "_成績");
-                    dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_需補考標示");
-                    dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_補考成績標示");
-                    dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_不及格標示");
+                    // 班級1_科目1_成績
+                    dtTable.Columns.Add("班級_科目" + sIdx + "_名稱");
+                    dtTable.Columns.Add("班級_科目" + sIdx + "_學分");
 
+                    // 班級_科目1_平均,及格人數
+                    dtTable.Columns.Add("班級_科目" + sIdx + "_平均");
+                    dtTable.Columns.Add("班級_科目(原始)" + sIdx + "_平均");
+                    dtTable.Columns.Add("班級_科目" + sIdx + "_及格人數");
+                    dtTable.Columns.Add("班級_科目(原始)" + sIdx + "_及格人數");
 
                     foreach (string rk in rkList)
                     {
-                        // 排名 -- 五標、PR、百分比、組距
-                        foreach (string r2 in r2List)
+                        // 五標、PR、百分比、組距
+                        foreach (string r2 in cr2List)
                         {
-                            dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_" + rk + "_" + r2);
-                            dtTable.Columns.Add("學生" + studIdx + "_科目(原始)" + sIdx + "_" + rk + "_" + r2);
+                            dtTable.Columns.Add("班級_科目" + sIdx + "_" + rk + "_" + r2);
+                            dtTable.Columns.Add("班級_科目(原始)" + sIdx + "_" + rk + "_" + r2);
                         }
                     }
 
                 }
-            }
 
-
-            // 班級合併欄位
-            foreach (string r1 in r1List)
-            {
-                foreach (string rk in rkList)
+                // 班級領域 科目 1,2,3
+                foreach (string dName in dNameList)
                 {
-                    // 五標、PR、百分比、組距
-                    foreach (string r2 in cr2List)
-                    {
-                        dtTable.Columns.Add("班級_" + r1 + "_" + rk + "_" + r2);
-                    }
-                }
-
-            }
-
-
-            // 領域1,2 合併欄位
-            for (int dIdx = 1; dIdx <= SelDomainIdxDict.Keys.Count; dIdx++)
-            {
-                // 班級_領域1_成績
-                dtTable.Columns.Add("班級_領域" + dIdx + "_名稱");
-                dtTable.Columns.Add("班級_領域" + dIdx + "_學分");
-
-                // 班級_領域1_平均,及格人數
-                dtTable.Columns.Add("班級_領域" + dIdx + "_平均");
-                dtTable.Columns.Add("班級_領域(原始)" + dIdx + "_平均");
-                dtTable.Columns.Add("班級_領域" + dIdx + "_及格人數");
-                dtTable.Columns.Add("班級_領域(原始)" + dIdx + "_及格人數");
-
-                foreach (string rk in rkList)
-                {
-                    // 五標、PR、百分比、組距
-                    foreach (string r2 in cr2List)
-                    {
-                        dtTable.Columns.Add("班級_領域" + dIdx + "_" + rk + "_" + r2);
-                        dtTable.Columns.Add("班級_領域(原始)" + dIdx + "_" + rk + "_" + r2);
-                    }
-                }
-
-            }
-
-            // 科目1,2 合併欄位
-            for (int sIdx = 1; sIdx <= SelSubjectIdxDict.Keys.Count; sIdx++)
-            {
-                // 班級1_科目1_成績
-                dtTable.Columns.Add("班級_科目" + sIdx + "_名稱");
-                dtTable.Columns.Add("班級_科目" + sIdx + "_學分");
-
-                // 班級_科目1_平均,及格人數
-                dtTable.Columns.Add("班級_科目" + sIdx + "_平均");
-                dtTable.Columns.Add("班級_科目(原始)" + sIdx + "_平均");
-                dtTable.Columns.Add("班級_科目" + sIdx + "_及格人數");
-                dtTable.Columns.Add("班級_科目(原始)" + sIdx + "_及格人數");
-
-                foreach (string rk in rkList)
-                {
-                    // 五標、PR、百分比、組距
-                    foreach (string r2 in cr2List)
-                    {
-                        dtTable.Columns.Add("班級_科目" + sIdx + "_" + rk + "_" + r2);
-                        dtTable.Columns.Add("班級_科目(原始)" + sIdx + "_" + rk + "_" + r2);
-                    }
-                }
-
-            }
-
-            // 班級領域 科目 1,2,3
-            foreach (string dName in dNameList)
-            {
-
-                foreach (string rk in rkList)
-                {
-                    foreach (string r2 in cr2List)
-                    {
-                        dtTable.Columns.Add("班級_" + dName + "領域_" + rk + "_" + r2);
-                        dtTable.Columns.Add("班級_" + dName + "領域(原始)_" + rk + "_" + r2);
-                    }
-                }
-
-
-                for (int si = 1; si <= 12; si++)
-                {
-                    dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_名稱");
-                    dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_學分");
-                    dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_平均");
-                    dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_及格人數");
-                    dtTable.Columns.Add("班級_" + dName + "領域(原始)_科目" + si + "_平均");
-                    dtTable.Columns.Add("班級_" + dName + "領域(原始)_科目" + si + "_及格人數");
 
                     foreach (string rk in rkList)
                     {
                         foreach (string r2 in cr2List)
                         {
-                            dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_" + rk + "_" + r2);
-                            dtTable.Columns.Add("班級_" + dName + "領域(原始)_科目" + si + "_" + rk + "_" + r2);
+                            dtTable.Columns.Add("班級_" + dName + "領域_" + rk + "_" + r2);
+                            dtTable.Columns.Add("班級_" + dName + "領域(原始)_" + rk + "_" + r2);
                         }
                     }
 
-                }
 
-
-            }
-
-            #region 各位學生即時計算加權總分、總分、加權平均、平均
-
-            List<string> tmpStudScoreItemList = new List<string>();
-            tmpStudScoreItemList.Add("領域總計_加權總分");
-            tmpStudScoreItemList.Add("領域總計_總分");
-            tmpStudScoreItemList.Add("領域總計_加權平均");
-            tmpStudScoreItemList.Add("領域總計_平均");
-            tmpStudScoreItemList.Add("科目總計_加權總分");
-            tmpStudScoreItemList.Add("科目總計_總分");
-            tmpStudScoreItemList.Add("科目總計_加權平均");
-            tmpStudScoreItemList.Add("科目總計_平均");
-            tmpStudScoreItemList.Add("領域(原始)總計_加權總分");
-            tmpStudScoreItemList.Add("領域(原始)總計_總分");
-            tmpStudScoreItemList.Add("領域(原始)總計_加權平均");
-            tmpStudScoreItemList.Add("領域(原始)總計_平均");
-            tmpStudScoreItemList.Add("科目(原始)總計_加權總分");
-            tmpStudScoreItemList.Add("科目(原始)總計_總分");
-            tmpStudScoreItemList.Add("科目(原始)總計_加權平均");
-            tmpStudScoreItemList.Add("科目(原始)總計_平均");
-
-            for (int studIdx = 1; studIdx <= maxStudent; studIdx++)
-            {
-                foreach (string item in tmpStudScoreItemList)
-                {
-                    dtTable.Columns.Add("學生" + studIdx + "_" + item);
-                }
-            }
-            #endregion
-
-
-
-            //StreamWriter sw1 = new StreamWriter(Application.StartupPath + "\\合併欄位.txt");
-            //StringBuilder sb1 = new StringBuilder();
-            //foreach (DataColumn dc in dtTable.Columns)
-            //    sb1.AppendLine(dc.Caption);
-
-            //sw1.Write(sb1.ToString());
-            //sw1.Close();
-
-
-            #endregion
-
-            #region 填入資料
-
-            // 各領域、各科目 學分數、平均、及格人數
-            Dictionary<string, List<decimal>> tmpCreditDict = new Dictionary<string, List<decimal>>();
-            Dictionary<string, ScoreItemR> tmpScoreItemRDict = new Dictionary<string, ScoreItemR>();
-
-            Dictionary<string, ScoreItemC> tmpScoreItemCDict = new Dictionary<string, ScoreItemC>();
-
-            // 排序後班級
-            foreach (string class_id in ClassTeacherNameDict.Keys)
-            {
-                DataRow row = dtTable.NewRow();
-
-                tmpCreditDict.Clear();
-                tmpScoreItemRDict.Clear();
-                tmpScoreItemCDict.Clear();
-
-                row["學校名稱"] = K12.Data.School.ChineseName;
-                row["學年度"] = _Configure.SchoolYear;
-                row["學期"] = _Configure.Semester;
-                if (ClassRecordDict.ContainsKey(class_id))
-                    row["班級"] = ClassRecordDict[class_id].Name;
-
-                row["班導師"] = ClassTeacherNameDict[class_id];
-
-                if (DataAccess.ClassTag1Dict.ContainsKey(class_id))
-                    row["類別1排名名稱"] = DataAccess.ClassTag1Dict[class_id];
-
-                if (DataAccess.ClassTag2Dict.ContainsKey(class_id))
-                    row["類別2排名名稱"] = DataAccess.ClassTag2Dict[class_id];
-
-
-                // 填入學生資料
-                if (ClassStudentDict.ContainsKey(class_id))
-                {
-                    int studIdx = 1;
-                    foreach (StudentRecord studRec in ClassStudentDict[class_id])
+                    for (int si = 1; si <= 12; si++)
                     {
-                        row["姓名" + studIdx] = studRec.Name;
-                        if (studRec.SeatNo.HasValue)
-                            row["座號" + studIdx] = studRec.SeatNo.Value;
+                        dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_名稱");
+                        dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_學分");
+                        dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_平均");
+                        dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_及格人數");
+                        dtTable.Columns.Add("班級_" + dName + "領域(原始)_科目" + si + "_平均");
+                        dtTable.Columns.Add("班級_" + dName + "領域(原始)_科目" + si + "_及格人數");
 
-                        if (StudentSemesterScoreRecordDict.ContainsKey(studRec.ID))
+                        foreach (string rk in rkList)
                         {
-                            JHSemesterScoreRecord studSemsScoreRec = StudentSemesterScoreRecordDict[studRec.ID];
-                            // 處理學期總計成績、排名、五標、組距
-                            // 學生1_課程學習總成績_成績
-                            if (studSemsScoreRec.CourseLearnScore.HasValue)
-                                row["學生" + studIdx + "_課程學習總成績_成績"] = studSemsScoreRec.CourseLearnScore.Value;
-
-                            if (studSemsScoreRec.CourseLearnScoreOrigin.HasValue)
-                                row["學生" + studIdx + "_課程學習總成績(原始)_成績"] = studSemsScoreRec.CourseLearnScoreOrigin.Value;
-
-                            // 學生1_學習領域總成績_成績
-                            if (studSemsScoreRec.LearnDomainScore.HasValue)
-                                row["學生" + studIdx + "_學習領域總成績_成績"] = studSemsScoreRec.LearnDomainScore.Value;
-
-                            if (studSemsScoreRec.LearnDomainScoreOrigin.HasValue)
-                                row["學生" + studIdx + "_學習領域總成績(原始)_成績"] = studSemsScoreRec.LearnDomainScoreOrigin.Value;
-
-                            // 處理固定排名相關
-                            // 學生1_課程學習總成績_班排名_rank
-                            if (SemsScoreRankMatrixDataValueDict.ContainsKey(studRec.ID))
+                            foreach (string r2 in cr2List)
                             {
-                                // 班、年..
-                                foreach (string rk in rkList)
-                                {
-                                    // 學期/總計成績_課程學習總成績_年排名
-                                    if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/總計成績_課程學習總成績_" + rk))
-                                    {
-                                        foreach (string r2 in r2List)
-                                        {
-                                            if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績_課程學習總成績_" + rk].ContainsKey(r2))
-                                            {
-                                                row["學生" + studIdx + "_課程學習總成績_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績_課程學習總成績_" + rk][r2];
-                                            }
-                                        }
-                                    }
-
-                                    // 學期/總計成績_課程學習總成績_年排名
-                                    if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/總計成績(原始)_課程學習總成績_" + rk))
-                                    {
-                                        foreach (string r2 in r2List)
-                                        {
-                                            if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績(原始)_課程學習總成績_" + rk].ContainsKey(r2))
-                                            {
-                                                row["學生" + studIdx + "_課程學習總成績(原始)_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績(原始)_課程學習總成績_" + rk][r2];
-                                            }
-                                        }
-                                    }
-
-                                    // 學期/總計成績_學習領域總成績_年排名
-                                    if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/總計成績_學習領域總成績_" + rk))
-                                    {
-                                        foreach (string r2 in r2List)
-                                        {
-                                            if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績_學習領域總成績_" + rk].ContainsKey(r2))
-                                            {
-                                                row["學生" + studIdx + "_學習領域總成績_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績_學習領域總成績_" + rk][r2];
-                                            }
-                                        }
-                                    }
-
-                                    // 學期/總計成績_學習領域總成績_年排名
-                                    if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/總計成績(原始)_學習領域總成績_" + rk))
-                                    {
-                                        foreach (string r2 in r2List)
-                                        {
-                                            if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績(原始)_學習領域總成績_" + rk].ContainsKey(r2))
-                                            {
-                                                row["學生" + studIdx + "_學習領域總成績(原始)_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績(原始)_學習領域總成績_" + rk][r2];
-                                            }
-                                        }
-                                    }
-
-                                }
+                                dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_" + rk + "_" + r2);
+                                dtTable.Columns.Add("班級_" + dName + "領域(原始)_科目" + si + "_" + rk + "_" + r2);
                             }
+                        }
 
-                            // 領域 科目1,2,3
-                            if (SelDomainSubjectDict.ContainsKey(class_id))
+                    }
+
+
+                }
+
+                #region 各位學生即時計算加權總分、總分、加權平均、平均
+
+                List<string> tmpStudScoreItemList = new List<string>();
+                tmpStudScoreItemList.Add("領域總計_加權總分");
+                tmpStudScoreItemList.Add("領域總計_總分");
+                tmpStudScoreItemList.Add("領域總計_加權平均");
+                tmpStudScoreItemList.Add("領域總計_平均");
+                tmpStudScoreItemList.Add("科目總計_加權總分");
+                tmpStudScoreItemList.Add("科目總計_總分");
+                tmpStudScoreItemList.Add("科目總計_加權平均");
+                tmpStudScoreItemList.Add("科目總計_平均");
+                tmpStudScoreItemList.Add("領域(原始)總計_加權總分");
+                tmpStudScoreItemList.Add("領域(原始)總計_總分");
+                tmpStudScoreItemList.Add("領域(原始)總計_加權平均");
+                tmpStudScoreItemList.Add("領域(原始)總計_平均");
+                tmpStudScoreItemList.Add("科目(原始)總計_加權總分");
+                tmpStudScoreItemList.Add("科目(原始)總計_總分");
+                tmpStudScoreItemList.Add("科目(原始)總計_加權平均");
+                tmpStudScoreItemList.Add("科目(原始)總計_平均");
+
+                for (int studIdx = 1; studIdx <= maxStudent; studIdx++)
+                {
+                    foreach (string item in tmpStudScoreItemList)
+                    {
+                        dtTable.Columns.Add("學生" + studIdx + "_" + item);
+                    }
+                }
+                #endregion
+
+
+
+                //StreamWriter sw1 = new StreamWriter(Application.StartupPath + "\\合併欄位.txt");
+                //StringBuilder sb1 = new StringBuilder();
+                //foreach (DataColumn dc in dtTable.Columns)
+                //    sb1.AppendLine(dc.Caption);
+
+                //sw1.Write(sb1.ToString());
+                //sw1.Close();
+
+                bgWorkerReport.ReportProgress(30);
+                #endregion
+
+                #region 填入資料
+
+                // 各領域、各科目 學分數、平均、及格人數
+                Dictionary<string, List<decimal>> tmpCreditDict = new Dictionary<string, List<decimal>>();
+                Dictionary<string, ScoreItemR> tmpScoreItemRDict = new Dictionary<string, ScoreItemR>();
+
+                Dictionary<string, ScoreItemC> tmpScoreItemCDict = new Dictionary<string, ScoreItemC>();
+
+
+                #region 取得學生成績計算規則
+                ScoreCalculator defaultScoreCalculator = new ScoreCalculator(null);
+
+                //key: ScoreCalcRuleID
+                Dictionary<string, ScoreCalculator> calcCache = new Dictionary<string, ScoreCalculator>();
+                //key: StudentID, val: ScoreCalcRuleID
+                Dictionary<string, string> calcIDCache = new Dictionary<string, string>();
+                List<string> scoreCalcRuleIDList = new List<string>();
+                foreach (string class_id in ClassTeacherNameDict.Keys)
+                {
+                    foreach (StudentRecord student in ClassStudentDict[class_id])
+                    {
+                        //calcCache.Add(student.ID, new ScoreCalculator(student.ScoreCalcRule));
+                        string calcID = string.Empty;
+                        if (!string.IsNullOrEmpty(student.OverrideScoreCalcRuleID))
+                            calcID = student.OverrideScoreCalcRuleID;
+                        else if (student.Class != null && !string.IsNullOrEmpty(student.Class.RefScoreCalcRuleID))
+                            calcID = student.Class.RefScoreCalcRuleID;
+
+                        if (!string.IsNullOrEmpty(calcID))
+                            calcIDCache.Add(student.ID, calcID);
+                    }
+                    foreach (JHScoreCalcRuleRecord record in JHScoreCalcRule.SelectByIDs(calcIDCache.Values))
+                    {
+                        if (!calcCache.ContainsKey(record.ID))
+                            calcCache.Add(record.ID, new ScoreCalculator(record));
+                    }
+                }
+
+
+
+                #endregion
+
+
+                bgWorkerReport.ReportProgress(40);
+                // 排序後班級
+                foreach (string class_id in ClassTeacherNameDict.Keys)
+                {
+                    DataRow row = dtTable.NewRow();
+
+                    tmpCreditDict.Clear();
+                    tmpScoreItemRDict.Clear();
+                    tmpScoreItemCDict.Clear();
+
+                    row["學校名稱"] = K12.Data.School.ChineseName;
+                    row["學年度"] = _Configure.SchoolYear;
+                    row["學期"] = _Configure.Semester;
+                    if (ClassRecordDict.ContainsKey(class_id))
+                        row["班級"] = ClassRecordDict[class_id].Name;
+
+                    row["班導師"] = ClassTeacherNameDict[class_id];
+
+                    if (DataAccess.ClassTag1Dict.ContainsKey(class_id))
+                        row["類別1排名名稱"] = DataAccess.ClassTag1Dict[class_id];
+
+                    if (DataAccess.ClassTag2Dict.ContainsKey(class_id))
+                        row["類別2排名名稱"] = DataAccess.ClassTag2Dict[class_id];
+
+
+                    // 填入學生資料
+                    if (ClassStudentDict.ContainsKey(class_id))
+                    {
+                        int studIdx = 1;
+                        foreach (StudentRecord studRec in ClassStudentDict[class_id])
+                        {
+
+                            // 成績計算規則
+                            ScoreCalculator studentCalculator = defaultScoreCalculator;
+                            if (calcIDCache.ContainsKey(studRec.ID) && calcCache.ContainsKey(calcIDCache[studRec.ID]))
+                                studentCalculator = calcCache[calcIDCache[studRec.ID]];
+
+
+                            row["姓名" + studIdx] = studRec.Name;
+                            if (studRec.SeatNo.HasValue)
+                                row["座號" + studIdx] = studRec.SeatNo.Value;
+
+                            if (StudentSemesterScoreRecordDict.ContainsKey(studRec.ID))
                             {
-                                foreach (string dName in SelDomainSubjectDict[class_id].Keys)
+                                JHSemesterScoreRecord studSemsScoreRec = StudentSemesterScoreRecordDict[studRec.ID];
+                                // 處理學期總計成績、排名、五標、組距
+                                // 學生1_課程學習總成績_成績
+                                if (studSemsScoreRec.CourseLearnScore.HasValue)
+                                    row["學生" + studIdx + "_課程學習總成績_成績"] = studSemsScoreRec.CourseLearnScore.Value;
+
+                                if (studSemsScoreRec.CourseLearnScoreOrigin.HasValue)
+                                    row["學生" + studIdx + "_課程學習總成績(原始)_成績"] = studSemsScoreRec.CourseLearnScoreOrigin.Value;
+
+                                // 學生1_學習領域總成績_成績
+                                if (studSemsScoreRec.LearnDomainScore.HasValue)
+                                    row["學生" + studIdx + "_學習領域總成績_成績"] = studSemsScoreRec.LearnDomainScore.Value;
+
+                                if (studSemsScoreRec.LearnDomainScoreOrigin.HasValue)
+                                    row["學生" + studIdx + "_學習領域總成績(原始)_成績"] = studSemsScoreRec.LearnDomainScoreOrigin.Value;
+
+                                // 處理固定排名相關
+                                // 學生1_課程學習總成績_班排名_rank
+                                if (SemsScoreRankMatrixDataValueDict.ContainsKey(studRec.ID))
+                                {
+                                    // 班、年..
+                                    foreach (string rk in rkList)
+                                    {
+                                        // 學期/總計成績_課程學習總成績_年排名
+                                        if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/總計成績_課程學習總成績_" + rk))
+                                        {
+                                            foreach (string r2 in r2List)
+                                            {
+                                                if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績_課程學習總成績_" + rk].ContainsKey(r2))
+                                                {
+                                                    row["學生" + studIdx + "_課程學習總成績_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績_課程學習總成績_" + rk][r2];
+                                                }
+                                            }
+                                        }
+
+                                        // 學期/總計成績_課程學習總成績_年排名
+                                        if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/總計成績(原始)_課程學習總成績_" + rk))
+                                        {
+                                            foreach (string r2 in r2List)
+                                            {
+                                                if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績(原始)_課程學習總成績_" + rk].ContainsKey(r2))
+                                                {
+                                                    row["學生" + studIdx + "_課程學習總成績(原始)_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績(原始)_課程學習總成績_" + rk][r2];
+                                                }
+                                            }
+                                        }
+
+                                        // 學期/總計成績_學習領域總成績_年排名
+                                        if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/總計成績_學習領域總成績_" + rk))
+                                        {
+                                            foreach (string r2 in r2List)
+                                            {
+                                                if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績_學習領域總成績_" + rk].ContainsKey(r2))
+                                                {
+                                                    row["學生" + studIdx + "_學習領域總成績_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績_學習領域總成績_" + rk][r2];
+                                                }
+                                            }
+                                        }
+
+                                        // 學期/總計成績_學習領域總成績_年排名
+                                        if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/總計成績(原始)_學習領域總成績_" + rk))
+                                        {
+                                            foreach (string r2 in r2List)
+                                            {
+                                                if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績(原始)_學習領域總成績_" + rk].ContainsKey(r2))
+                                                {
+                                                    row["學生" + studIdx + "_學習領域總成績(原始)_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/總計成績(原始)_學習領域總成績_" + rk][r2];
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                                // 領域 科目1,2,3
+                                if (SelDomainSubjectDict.ContainsKey(class_id))
+                                {
+                                    foreach (string dName in SelDomainSubjectDict[class_id].Keys)
+                                    {
+                                        if (studSemsScoreRec.Domains.ContainsKey(dName))
+                                        {
+                                            // 學生5_領域2_名稱
+
+                                            if (studSemsScoreRec.Domains[dName].Credit.HasValue)
+                                                row["學生" + studIdx + "_" + dName + "領域_學分"] = studSemsScoreRec.Domains[dName].Credit.Value;
+
+                                            if (studSemsScoreRec.Domains[dName].Score.HasValue)
+                                                row["學生" + studIdx + "_" + dName + "領域_成績"] = studSemsScoreRec.Domains[dName].Score.Value;
+
+                                            if (studSemsScoreRec.Domains[dName].ScoreOrigin.HasValue)
+                                                row["學生" + studIdx + "_" + dName + "領域(原始)_成績"] = studSemsScoreRec.Domains[dName].ScoreOrigin.Value;
+
+                                        }
+                                        // 科目
+                                        int subjIdx = 1;
+                                        foreach (string sName in SelDomainSubjectDict[class_id][dName])
+                                        {
+                                            if (studSemsScoreRec.Subjects.ContainsKey(sName))
+                                            {
+                                                // 學生5_科目2_名稱
+                                                row["學生" + studIdx + "_" + dName + "領域_科目" + subjIdx + "_名稱"] = sName;
+                                                if (studSemsScoreRec.Subjects[sName].Credit.HasValue)
+                                                {
+                                                    row["學生" + studIdx + "_" + dName + "領域_科目" + subjIdx + "_學分"] = studSemsScoreRec.Subjects[sName].Credit.Value;
+
+                                                    // 班級_語文領域_科目1_學分
+                                                    string kk = "班級_" + dName + "領域_科目" + subjIdx + "_學分";
+
+                                                    if (!tmpCreditDict.ContainsKey(kk))
+                                                        tmpCreditDict.Add(kk, new List<decimal>());
+
+                                                    if (!tmpCreditDict[kk].Contains(studSemsScoreRec.Subjects[sName].Credit.Value))
+                                                        tmpCreditDict[kk].Add(studSemsScoreRec.Subjects[sName].Credit.Value);
+
+                                                }
+
+
+                                                if (studSemsScoreRec.Subjects[sName].Score.HasValue)
+                                                {
+                                                    row["學生" + studIdx + "_" + dName + "領域_科目" + subjIdx + "_成績"] = studSemsScoreRec.Subjects[sName].Score.Value;
+
+                                                    // 班級_語文領域_科目1_平均
+                                                    // 班級_語文領域_科目1_及格人數
+                                                    // 班級_語文領域(原始)_科目1_平均
+                                                    // 班級_語文領域(原始)_科目1_及格人數
+
+                                                    string kka1 = "班級_" + dName + "領域_科目" + subjIdx + "_平均";
+                                                    if (!tmpScoreItemRDict.ContainsKey(kka1))
+                                                    {
+                                                        ScoreItemR sr = new ScoreItemR();
+                                                        sr.ScoreKey = kka1;
+                                                        sr.ScoreOriginKey = "班級_" + dName + "領域(原始)_科目" + subjIdx + "_平均";
+                                                        sr.PassCountKey = "班級_" + dName + "領域_科目" + subjIdx + "_及格人數";
+                                                        sr.PassOriginKey = "班級_" + dName + "領域(原始)_科目" + subjIdx + "_及格人數";
+
+                                                        tmpScoreItemRDict.Add(kka1, sr);
+                                                    }
+
+                                                    tmpScoreItemRDict[kka1].AddScore(studSemsScoreRec.Subjects[sName].Score.Value);
+
+
+
+
+                                                    // 加入原始成績
+                                                    if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
+                                                    {
+                                                        tmpScoreItemRDict[kka1].AddScoreOrigin(studSemsScoreRec.Subjects[sName].ScoreOrigin.Value);
+                                                    }
+                                                }
+
+                                                if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
+                                                    row["學生" + studIdx + "_" + dName + "領域(原始)_科目" + subjIdx + "_成績"] = studSemsScoreRec.Subjects[sName].ScoreOrigin.Value;
+
+
+
+                                            }
+
+                                            subjIdx++;
+                                        }
+                                    }
+                                }
+
+
+
+                                // 處理學期領域成績、排名、五標、組距
+                                foreach (string dName in SelDomainIdxDict.Keys)
                                 {
                                     if (studSemsScoreRec.Domains.ContainsKey(dName))
                                     {
                                         // 學生5_領域2_名稱
-
+                                        row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_名稱"] = dName;
                                         if (studSemsScoreRec.Domains[dName].Credit.HasValue)
-                                            row["學生" + studIdx + "_" + dName + "領域_學分"] = studSemsScoreRec.Domains[dName].Credit.Value;
+                                        {
+
+                                            // 加入班級領域1,2,3 學分
+                                            string kk = "班級_領域" + SelDomainIdxDict[dName] + "_學分";
+
+                                            if (!tmpCreditDict.ContainsKey(kk))
+                                                tmpCreditDict.Add(kk, new List<decimal>());
+
+                                            if (!tmpCreditDict[kk].Contains(studSemsScoreRec.Domains[dName].Credit.Value))
+                                                tmpCreditDict[kk].Add(studSemsScoreRec.Domains[dName].Credit.Value);
+
+
+                                            row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_學分"] = studSemsScoreRec.Domains[dName].Credit.Value;
+                                        }
+
 
                                         if (studSemsScoreRec.Domains[dName].Score.HasValue)
-                                            row["學生" + studIdx + "_" + dName + "領域_成績"] = studSemsScoreRec.Domains[dName].Score.Value;
+                                        {
+                                            row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_成績"] = studSemsScoreRec.Domains[dName].Score.Value;
+
+                                            string kka1 = "班級_領域" + SelDomainIdxDict[dName] + "_平均";
+                                            if (!tmpScoreItemRDict.ContainsKey(kka1))
+                                            {
+                                                ScoreItemR sr = new ScoreItemR();
+                                                sr.ScoreKey = kka1;
+                                                sr.ScoreOriginKey = "班級_領域(原始)" + SelDomainIdxDict[dName] + "_平均";
+                                                sr.PassCountKey = "班級_領域" + SelDomainIdxDict[dName] + "_及格人數";
+                                                sr.PassOriginKey = "班級_領域(原始)" + SelDomainIdxDict[dName] + "_及格人數";
+
+                                                tmpScoreItemRDict.Add(kka1, sr);
+                                            }
+
+                                            tmpScoreItemRDict[kka1].AddScore(studSemsScoreRec.Domains[dName].Score.Value);
+
+                                            // 加入原始成績
+                                            if (studSemsScoreRec.Domains[dName].ScoreOrigin.HasValue)
+                                            {
+                                                tmpScoreItemRDict[kka1].AddScoreOrigin(studSemsScoreRec.Domains[dName].ScoreOrigin.Value);
+                                            }
+
+                                            // 處理領域總計成績計算
+                                            string keyS = "學生" + studIdx + "_領域總計成績";
+
+                                            if (!tmpScoreItemCDict.ContainsKey(keyS))
+                                            {
+                                                ScoreItemC sic = new ScoreItemC();
+                                                sic.ItemName = keyS;
+                                                tmpScoreItemCDict.Add(keyS, sic);
+                                            }
+
+                                            tmpScoreItemCDict[keyS].AddCredit(studSemsScoreRec.Domains[dName].Credit.Value);
+
+                                            tmpScoreItemCDict[keyS].AddScore(studSemsScoreRec.Domains[dName].Score.Value);
+                                            tmpScoreItemCDict[keyS].AddScore(studSemsScoreRec.Domains[dName].Score.Value, studSemsScoreRec.Domains[dName].Credit.Value);
+
+                                            if (studSemsScoreRec.Domains[dName].ScoreOrigin.HasValue)
+                                            {
+                                                tmpScoreItemCDict[keyS].AddOriginScore(studSemsScoreRec.Domains[dName].ScoreOrigin.Value);
+                                                tmpScoreItemCDict[keyS].AddOriginScore(studSemsScoreRec.Domains[dName].ScoreOrigin.Value, studSemsScoreRec.Domains[dName].Credit.Value);
+                                            }
+
+                                            tmpScoreItemCDict[keyS].CalScore(studentCalculator, "domain");
+                                        }
 
                                         if (studSemsScoreRec.Domains[dName].ScoreOrigin.HasValue)
-                                            row["學生" + studIdx + "_" + dName + "領域(原始)_成績"] = studSemsScoreRec.Domains[dName].ScoreOrigin.Value;
+                                        {
+
+
+                                            row["學生" + studIdx + "_領域(原始)" + SelDomainIdxDict[dName] + "_成績"] = studSemsScoreRec.Domains[dName].ScoreOrigin.Value;
+
+                                        }
+
+                                        if (studSemsScoreRec.Domains[dName].Score.HasValue && studSemsScoreRec.Domains[dName].Score.Value < 60)
+                                        {
+                                            row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_需補考標示"] = _Configure.NeeedReScoreMark;
+                                            row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_不及格標示"] = _Configure.FailScoreMark;
+                                        }
+
+                                        if (studSemsScoreRec.Domains[dName].ScoreMakeup.HasValue)
+                                            row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_補考成績標示"] = _Configure.ReScoreMark;
+
+
+                                        foreach (string rk in rkList)
+                                        {
+                                            // 學期/總計成績_課程學習總成績_年排名
+                                            if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/領域成績_" + dName + "_" + rk))
+                                            {
+                                                // 學生5_領域2_班排名_rank
+                                                foreach (string r2 in r2List)
+                                                {
+                                                    if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/領域成績_" + dName + "_" + rk].ContainsKey(r2))
+                                                    {
+                                                        row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/領域成績_" + dName + "_" + rk][r2];
+                                                    }
+                                                }
+                                            }
+
+
+                                            // 學期/總計成績_課程學習總成績_年排名  原始
+                                            if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/領域成績(原始)_" + dName + "_" + rk))
+                                            {
+                                                // 學生5_領域2_班排名_rank
+                                                foreach (string r2 in r2List)
+                                                {
+                                                    if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/領域成績(原始)_" + dName + "_" + rk].ContainsKey(r2))
+                                                    {
+                                                        row["學生" + studIdx + "_領域(原始)" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/領域成績(原始)_" + dName + "_" + rk][r2];
+                                                    }
+                                                }
+                                            }
+
+                                        }
 
                                     }
+                                }
+
+
+                                // 處理學期科目成績、排名、五標、組距
+                                foreach (string sName in SelSubjectIdxDict.Keys)
+                                {
+                                    if (studSemsScoreRec.Subjects.ContainsKey(sName))
+                                    {
+                                        // 學生5_科目2_名稱
+                                        row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_名稱"] = sName;
+
+                                        if (studSemsScoreRec.Subjects[sName].Credit.HasValue)
+                                        {
+                                            row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_學分"] = studSemsScoreRec.Subjects[sName].Credit.Value;
+
+                                            // 加入班級科目1,2,3 學分
+                                            string kk = "班級_科目" + SelSubjectIdxDict[sName] + "_學分";
+                                            if (!tmpCreditDict.ContainsKey(kk))
+                                                tmpCreditDict.Add(kk, new List<decimal>());
+
+                                            if (!tmpCreditDict[kk].Contains(studSemsScoreRec.Subjects[sName].Credit.Value))
+                                                tmpCreditDict[kk].Add(studSemsScoreRec.Subjects[sName].Credit.Value);
+                                        }
+
+
+                                        if (studSemsScoreRec.Subjects[sName].Score.HasValue)
+                                        {
+                                            row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_成績"] = studSemsScoreRec.Subjects[sName].Score.Value;
+
+                                            string kka1 = "班級_科目" + SelSubjectIdxDict[sName] + "_平均";
+                                            if (!tmpScoreItemRDict.ContainsKey(kka1))
+                                            {
+                                                ScoreItemR sr = new ScoreItemR();
+                                                sr.ScoreKey = kka1;
+                                                sr.ScoreOriginKey = "班級_科目(原始)" + SelSubjectIdxDict[sName] + "_平均";
+                                                sr.PassCountKey = "班級_科目" + SelSubjectIdxDict[sName] + "_及格人數";
+                                                sr.PassOriginKey = "班級_科目(原始)" + SelSubjectIdxDict[sName] + "_及格人數";
+
+                                                tmpScoreItemRDict.Add(kka1, sr);
+                                            }
+
+                                            tmpScoreItemRDict[kka1].AddScore(studSemsScoreRec.Subjects[sName].Score.Value);
+
+                                            // 原始成績
+                                            if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
+                                            {
+                                                tmpScoreItemRDict[kka1].AddScoreOrigin(studSemsScoreRec.Subjects[sName].ScoreOrigin.Value);
+                                            }
+
+                                            // 處理領域總計成績計算
+                                            string keyS = "學生" + studIdx + "_科目總計成績";
+                                            if (!tmpScoreItemCDict.ContainsKey(keyS))
+                                            {
+                                                ScoreItemC sic = new ScoreItemC();
+                                                sic.ItemName = keyS;
+                                                tmpScoreItemCDict.Add(keyS, sic);
+                                            }
+
+                                            tmpScoreItemCDict[keyS].AddCredit(studSemsScoreRec.Subjects[sName].Credit.Value);
+                                            tmpScoreItemCDict[keyS].AddScore(studSemsScoreRec.Subjects[sName].Score.Value);
+                                            tmpScoreItemCDict[keyS].AddScore(studSemsScoreRec.Subjects[sName].Score.Value, studSemsScoreRec.Subjects[sName].Credit.Value);
+
+                                            if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
+                                            {
+                                                tmpScoreItemCDict[keyS].AddOriginScore(studSemsScoreRec.Subjects[sName].ScoreOrigin.Value);
+                                                tmpScoreItemCDict[keyS].AddOriginScore(studSemsScoreRec.Subjects[sName].ScoreOrigin.Value, studSemsScoreRec.Subjects[sName].Credit.Value);
+                                            }
+
+                                            tmpScoreItemCDict[keyS].CalScore(studentCalculator, "subject");
+                                        }
+
+
+                                        if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
+                                        {
+                                            row["學生" + studIdx + "_科目(原始)" + SelSubjectIdxDict[sName] + "_成績"] = studSemsScoreRec.Subjects[sName].ScoreOrigin.Value;
+
+                                        }
+
+
+                                        if (studSemsScoreRec.Subjects[sName].ScoreMakeup.HasValue)
+                                            row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_補考成績標示"] = _Configure.ReScoreMark;
+
+                                        if (studSemsScoreRec.Subjects[sName].Score.HasValue && studSemsScoreRec.Subjects[sName].Score.Value < 60)
+                                        {
+                                            row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_需補考標示"] = _Configure.NeeedReScoreMark;
+                                            row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_不及格標示"] = _Configure.FailScoreMark;
+                                        }
+
+
+                                        foreach (string rk in rkList)
+                                        {
+                                            // 學期/總計成績_課程學習總成績_年排名
+                                            if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/科目成績_" + sName + "_" + rk))
+                                            {
+                                                // 學生5_科目2_班排名_rank
+                                                foreach (string r2 in r2List)
+                                                {
+                                                    if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/科目成績_" + sName + "_" + rk].ContainsKey(r2))
+                                                    {
+                                                        row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/科目成績_" + sName + "_" + rk][r2];
+                                                    }
+                                                }
+                                            }
+
+
+                                            // 學期/科目成績_xx_年排名  原始
+                                            if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/科目成績(原始)_" + sName + "_" + rk))
+                                            {
+                                                // 學生5_科目2_班排名_rank
+                                                foreach (string r2 in r2List)
+                                                {
+                                                    if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/科目成績(原始)_" + sName + "_" + rk].ContainsKey(r2))
+                                                    {
+                                                        row["學生" + studIdx + "_科目(原始)" + SelSubjectIdxDict[sName] + "_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/科目成績(原始)_" + sName + "_" + rk][r2];
+                                                    }
+                                                }
+                                            }
+
+                                        }
+
+                                    }
+                                }
+
+                            }
+
+                            studIdx++;
+                        }
+                    }
+
+                   
+                    // 填入班級 五標、組距
+                    if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey(class_id))
+                    {
+                        // 總計成績 五標、組距
+                        foreach (string rk in rkList)
+                        {
+                            if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績_學習領域總成績_" + rk))
+                            {
+                                // 班級_課程學習總成績_班排名_matrix_count
+                                foreach (string r2 in cr2List)
+                                {
+                                    if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_學習領域總成績_" + rk].ContainsKey(r2))
+                                    {
+                                        row["班級_課程學習總成績_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_學習領域總成績_" + rk][r2];
+                                    }
+                                }
+                            }
+
+                            if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績(原始)_學習領域總成績_" + rk))
+                            {
+                                // 班級_課程學習總成績_班排名_matrix_count
+                                foreach (string r2 in cr2List)
+                                {
+                                    if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_學習領域總成績_" + rk].ContainsKey(r2))
+                                    {
+                                        row["班級_學習領域總成績(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_學習領域總成績_" + rk][r2];
+                                    }
+                                }
+                            }
+
+                            if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績_課程學習總成績_" + rk))
+                            {
+                                // 班級_課程學習總成績_班排名_matrix_count
+                                foreach (string r2 in cr2List)
+                                {
+                                    if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_課程學習總成績_" + rk].ContainsKey(r2))
+                                    {
+                                        row["班級_課程學習總成績_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_課程學習總成績_" + rk][r2];
+                                    }
+                                }
+                            }
+
+                            if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績(原始)_課程學習總成績_" + rk))
+                            {
+                                // 班級_課程學習總成績_班排名_matrix_count
+                                foreach (string r2 in cr2List)
+                                {
+                                    if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_課程學習總成績_" + rk].ContainsKey(r2))
+                                    {
+                                        row["班級_課程學習總成績(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_課程學習總成績_" + rk][r2];
+                                    }
+                                }
+                            }
+
+
+
+                        }
+
+
+                        // 班級領域-科目1,2,3  五標、組距
+                        if (SelDomainSubjectDict.ContainsKey(class_id))
+                        {
+                            // 領域
+                            foreach (string dName in SelDomainSubjectDict[class_id].Keys)
+                            {
+                                foreach (string rk in rkList)
+                                {
+                                    // 學期/總計成績_課程學習總成績_年排名
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績_" + dName + "_" + rk))
+                                    {
+                                        // 學生5_領域2_班排名_rank
+                                        foreach (string r2 in cr2List)
+                                        {
+                                            if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk].ContainsKey(r2))
+                                            {
+                                                row["班級_" + dName + "領域_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk][r2];
+
+                                            }
+                                        }
+                                    }
+
                                     // 科目
                                     int subjIdx = 1;
                                     foreach (string sName in SelDomainSubjectDict[class_id][dName])
                                     {
-                                        if (studSemsScoreRec.Subjects.ContainsKey(sName))
+                                        // 學期/總計成績_課程學習總成績_年排名
+                                        if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績_" + sName + "_" + rk))
                                         {
-                                            // 學生5_科目2_名稱
-                                            row["學生" + studIdx + "_" + dName + "領域_科目" + subjIdx + "_名稱"] = sName;
-                                            if (studSemsScoreRec.Subjects[sName].Credit.HasValue)
+                                            row["班級_" + dName + "領域_科目" + subjIdx + "_名稱"] = sName;
+                                            foreach (string r2 in cr2List)
                                             {
-                                                row["學生" + studIdx + "_" + dName + "領域_科目" + subjIdx + "_學分"] = studSemsScoreRec.Subjects[sName].Credit.Value;
-
-                                                // 班級_語文領域_科目1_學分
-                                                string kk = "班級_" + dName + "領域_科目" + subjIdx + "_學分";
-
-                                                if (!tmpCreditDict.ContainsKey(kk))
-                                                    tmpCreditDict.Add(kk, new List<decimal>());
-
-                                                if (!tmpCreditDict[kk].Contains(studSemsScoreRec.Subjects[sName].Credit.Value))
-                                                    tmpCreditDict[kk].Add(studSemsScoreRec.Subjects[sName].Credit.Value);
-
+                                                row["班級_" + dName + "領域_科目" + subjIdx + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績_" + sName + "_" + rk][r2];
                                             }
-
-
-                                            if (studSemsScoreRec.Subjects[sName].Score.HasValue)
-                                            {
-                                                row["學生" + studIdx + "_" + dName + "領域_科目" + subjIdx + "_成績"] = studSemsScoreRec.Subjects[sName].Score.Value;
-
-                                                // 班級_語文領域_科目1_平均
-                                                // 班級_語文領域_科目1_及格人數
-                                                // 班級_語文領域(原始)_科目1_平均
-                                                // 班級_語文領域(原始)_科目1_及格人數
-
-                                                string kka1 = "班級_" + dName + "領域_科目" + subjIdx + "_平均";
-                                                if (!tmpScoreItemRDict.ContainsKey(kka1))
-                                                {
-                                                    ScoreItemR sr = new ScoreItemR();
-                                                    sr.ScoreKey = kka1;
-                                                    sr.ScoreOriginKey = "班級_" + dName + "領域(原始)_科目" + subjIdx + "_平均";
-                                                    sr.PassCountKey = "班級_" + dName + "領域_科目" + subjIdx + "_及格人數";
-                                                    sr.PassOriginKey = "班級_" + dName + "領域(原始)_科目" + subjIdx + "_及格人數";
-
-                                                    tmpScoreItemRDict.Add(kka1, sr);
-                                                }
-
-                                                tmpScoreItemRDict[kka1].AddScore(studSemsScoreRec.Subjects[sName].Score.Value);
-
-
-
-
-                                                // 加入原始成績
-                                                if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
-                                                {
-                                                    tmpScoreItemRDict[kka1].AddScoreOrigin(studSemsScoreRec.Subjects[sName].ScoreOrigin.Value);
-                                                }
-                                            }
-
-                                            if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
-                                                row["學生" + studIdx + "_" + dName + "領域(原始)_科目" + subjIdx + "_成績"] = studSemsScoreRec.Subjects[sName].ScoreOrigin.Value;
-
-
-
                                         }
-
                                         subjIdx++;
                                     }
-                                }
-                            }
 
 
-
-                            // 處理學期領域成績、排名、五標、組距
-                            foreach (string dName in SelDomainIdxDict.Keys)
-                            {
-                                if (studSemsScoreRec.Domains.ContainsKey(dName))
-                                {
-                                    // 學生5_領域2_名稱
-                                    row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_名稱"] = dName;
-                                    if (studSemsScoreRec.Domains[dName].Credit.HasValue)
+                                    // 學期/總計成績_課程學習總成績_年排名  原始
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績(原始)_" + dName + "_" + rk))
                                     {
-
-                                        // 加入班級領域1,2,3 學分
-                                        string kk = "班級_領域" + SelDomainIdxDict[dName] + "_學分";
-
-                                        if (!tmpCreditDict.ContainsKey(kk))
-                                            tmpCreditDict.Add(kk, new List<decimal>());
-
-                                        if (!tmpCreditDict[kk].Contains(studSemsScoreRec.Domains[dName].Credit.Value))
-                                            tmpCreditDict[kk].Add(studSemsScoreRec.Domains[dName].Credit.Value);
-
-
-                                        row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_學分"] = studSemsScoreRec.Domains[dName].Credit.Value;
-                                    }
-
-
-                                    if (studSemsScoreRec.Domains[dName].Score.HasValue)
-                                    {
-                                        row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_成績"] = studSemsScoreRec.Domains[dName].Score.Value;
-
-                                        string kka1 = "班級_領域" + SelDomainIdxDict[dName] + "_平均";
-                                        if (!tmpScoreItemRDict.ContainsKey(kka1))
+                                        // 班級_領域2_班排名_rank
+                                        foreach (string r2 in cr2List)
                                         {
-                                            ScoreItemR sr = new ScoreItemR();
-                                            sr.ScoreKey = kka1;
-                                            sr.ScoreOriginKey = "班級_領域(原始)" + SelDomainIdxDict[dName] + "_平均";
-                                            sr.PassCountKey = "班級_領域" + SelDomainIdxDict[dName] + "_及格人數";
-                                            sr.PassOriginKey = "班級_領域(原始)" + SelDomainIdxDict[dName] + "_及格人數";
-
-                                            tmpScoreItemRDict.Add(kka1, sr);
-                                        }
-
-                                        tmpScoreItemRDict[kka1].AddScore(studSemsScoreRec.Domains[dName].Score.Value);
-
-                                        // 加入原始成績
-                                        if (studSemsScoreRec.Domains[dName].ScoreOrigin.HasValue)
-                                        {
-                                            tmpScoreItemRDict[kka1].AddScoreOrigin(studSemsScoreRec.Domains[dName].ScoreOrigin.Value);
-                                        }
-
-                                        // 處理領域總計成績計算
-                                        string keyS = "學生" + studIdx + "_領域總計成績";
-
-                                        if (!tmpScoreItemCDict.ContainsKey(keyS))
-                                        {
-                                            ScoreItemC sic = new ScoreItemC();
-                                            sic.ItemName = keyS;
-                                            tmpScoreItemCDict.Add(keyS, sic);
-                                        }
-
-                                        tmpScoreItemCDict[keyS].AddCredit(studSemsScoreRec.Domains[dName].Credit.Value);
-
-                                        tmpScoreItemCDict[keyS].AddScore(studSemsScoreRec.Domains[dName].Score.Value);
-                                        tmpScoreItemCDict[keyS].AddScore(studSemsScoreRec.Domains[dName].Score.Value, studSemsScoreRec.Domains[dName].Credit.Value);
-
-                                        if (studSemsScoreRec.Domains[dName].ScoreOrigin.HasValue)
-                                        {
-                                            tmpScoreItemCDict[keyS].AddOriginScore(studSemsScoreRec.Domains[dName].ScoreOrigin.Value);
-                                            tmpScoreItemCDict[keyS].AddOriginScore(studSemsScoreRec.Domains[dName].ScoreOrigin.Value, studSemsScoreRec.Domains[dName].Credit.Value);
-                                        }
-
-                                        tmpScoreItemCDict[keyS].CalScore(ParseNumber);
-                                    }
-
-                                    if (studSemsScoreRec.Domains[dName].ScoreOrigin.HasValue)
-                                    {
-
-
-                                        row["學生" + studIdx + "_領域(原始)" + SelDomainIdxDict[dName] + "_成績"] = studSemsScoreRec.Domains[dName].ScoreOrigin.Value;
-
-                                    }
-
-                                    if (studSemsScoreRec.Domains[dName].Score.HasValue && studSemsScoreRec.Domains[dName].Score.Value < 60)
-                                    {
-                                        row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_需補考標示"] = _Configure.NeeedReScoreMark;
-                                        row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_不及格標示"] = _Configure.FailScoreMark;
-                                    }
-
-                                    if (studSemsScoreRec.Domains[dName].ScoreMakeup.HasValue)
-                                        row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_補考成績標示"] = _Configure.ReScoreMark;
-
-
-                                    foreach (string rk in rkList)
-                                    {
-                                        // 學期/總計成績_課程學習總成績_年排名
-                                        if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/領域成績_" + dName + "_" + rk))
-                                        {
-                                            // 學生5_領域2_班排名_rank
-                                            foreach (string r2 in r2List)
+                                            if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk].ContainsKey(r2))
                                             {
-                                                if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/領域成績_" + dName + "_" + rk].ContainsKey(r2))
-                                                {
-                                                    row["學生" + studIdx + "_領域" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/領域成績_" + dName + "_" + rk][r2];
-                                                }
+                                                row["班級_" + dName + "領域(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk][r2];
                                             }
                                         }
 
-
-                                        // 學期/總計成績_課程學習總成績_年排名  原始
-                                        if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/領域成績(原始)_" + dName + "_" + rk))
+                                        // 科目
+                                        subjIdx = 1;
+                                        foreach (string sName in SelDomainSubjectDict[class_id][dName])
                                         {
-                                            // 學生5_領域2_班排名_rank
-                                            foreach (string r2 in r2List)
+                                            // 學期/總計成績_課程學習總成績_年排名
+                                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績(原始)_" + sName + "_" + rk))
                                             {
-                                                if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/領域成績(原始)_" + dName + "_" + rk].ContainsKey(r2))
+                                                foreach (string r2 in cr2List)
                                                 {
-                                                    row["學生" + studIdx + "_領域(原始)" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/領域成績(原始)_" + dName + "_" + rk][r2];
+                                                    row["班級_" + dName + "領域(原始)_科目" + subjIdx + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + sName + "_" + rk][r2];
                                                 }
                                             }
+                                            subjIdx++;
                                         }
-
                                     }
-
-                                }
-                            }
-
-
-                            // 處理學期科目成績、排名、五標、組距
-                            foreach (string sName in SelSubjectIdxDict.Keys)
-                            {
-                                if (studSemsScoreRec.Subjects.ContainsKey(sName))
-                                {
-                                    // 學生5_科目2_名稱
-                                    row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_名稱"] = sName;
-
-                                    if (studSemsScoreRec.Subjects[sName].Credit.HasValue)
-                                    {
-                                        row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_學分"] = studSemsScoreRec.Subjects[sName].Credit.Value;
-
-                                        // 加入班級科目1,2,3 學分
-                                        string kk = "班級_科目" + SelSubjectIdxDict[sName] + "_學分";
-                                        if (!tmpCreditDict.ContainsKey(kk))
-                                            tmpCreditDict.Add(kk, new List<decimal>());
-
-                                        if (!tmpCreditDict[kk].Contains(studSemsScoreRec.Subjects[sName].Credit.Value))
-                                            tmpCreditDict[kk].Add(studSemsScoreRec.Subjects[sName].Credit.Value);
-                                    }
-
-
-                                    if (studSemsScoreRec.Subjects[sName].Score.HasValue)
-                                    {
-                                        row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_成績"] = studSemsScoreRec.Subjects[sName].Score.Value;
-
-                                        string kka1 = "班級_科目" + SelSubjectIdxDict[sName] + "_平均";
-                                        if (!tmpScoreItemRDict.ContainsKey(kka1))
-                                        {
-                                            ScoreItemR sr = new ScoreItemR();
-                                            sr.ScoreKey = kka1;
-                                            sr.ScoreOriginKey = "班級_科目(原始)" + SelSubjectIdxDict[sName] + "_平均";
-                                            sr.PassCountKey = "班級_科目" + SelSubjectIdxDict[sName] + "_及格人數";
-                                            sr.PassOriginKey = "班級_科目(原始)" + SelSubjectIdxDict[sName] + "_及格人數";
-
-                                            tmpScoreItemRDict.Add(kka1, sr);
-                                        }
-
-                                        tmpScoreItemRDict[kka1].AddScore(studSemsScoreRec.Subjects[sName].Score.Value);
-
-                                        // 原始成績
-                                        if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
-                                        {
-                                            tmpScoreItemRDict[kka1].AddScoreOrigin(studSemsScoreRec.Subjects[sName].ScoreOrigin.Value);
-                                        }
-
-                                        // 處理領域總計成績計算
-                                        string keyS = "學生" + studIdx + "_科目總計成績";
-                                        if (!tmpScoreItemCDict.ContainsKey(keyS))
-                                        {
-                                            ScoreItemC sic = new ScoreItemC();
-                                            sic.ItemName = keyS;
-                                            tmpScoreItemCDict.Add(keyS, sic);
-                                        }
-
-                                        tmpScoreItemCDict[keyS].AddCredit(studSemsScoreRec.Subjects[sName].Credit.Value);
-                                        tmpScoreItemCDict[keyS].AddScore(studSemsScoreRec.Subjects[sName].Score.Value);
-                                        tmpScoreItemCDict[keyS].AddScore(studSemsScoreRec.Subjects[sName].Score.Value, studSemsScoreRec.Subjects[sName].Credit.Value);
-
-                                        if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
-                                        {
-                                            tmpScoreItemCDict[keyS].AddOriginScore(studSemsScoreRec.Subjects[sName].ScoreOrigin.Value);
-                                            tmpScoreItemCDict[keyS].AddOriginScore(studSemsScoreRec.Subjects[sName].ScoreOrigin.Value, studSemsScoreRec.Subjects[sName].Credit.Value);
-                                        }
-
-                                        tmpScoreItemCDict[keyS].CalScore(ParseNumber);
-                                    }
-
-
-                                    if (studSemsScoreRec.Subjects[sName].ScoreOrigin.HasValue)
-                                    {
-                                        row["學生" + studIdx + "_科目(原始)" + SelSubjectIdxDict[sName] + "_成績"] = studSemsScoreRec.Subjects[sName].ScoreOrigin.Value;
-
-                                    }
-
-
-                                    if (studSemsScoreRec.Subjects[sName].ScoreMakeup.HasValue)
-                                        row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_補考成績標示"] = _Configure.ReScoreMark;
-
-                                    if (studSemsScoreRec.Subjects[sName].Score.HasValue && studSemsScoreRec.Subjects[sName].Score.Value < 60)
-                                    {
-                                        row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_需補考標示"] = _Configure.NeeedReScoreMark;
-                                        row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_不及格標示"] = _Configure.FailScoreMark;
-                                    }
-
-
-                                    foreach (string rk in rkList)
-                                    {
-                                        // 學期/總計成績_課程學習總成績_年排名
-                                        if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/科目成績_" + sName + "_" + rk))
-                                        {
-                                            // 學生5_科目2_班排名_rank
-                                            foreach (string r2 in r2List)
-                                            {
-                                                if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/科目成績_" + sName + "_" + rk].ContainsKey(r2))
-                                                {
-                                                    row["學生" + studIdx + "_科目" + SelSubjectIdxDict[sName] + "_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/科目成績_" + sName + "_" + rk][r2];
-                                                }
-                                            }
-                                        }
-
-
-                                        // 學期/科目成績_xx_年排名  原始
-                                        if (SemsScoreRankMatrixDataValueDict[studRec.ID].ContainsKey("學期/科目成績(原始)_" + sName + "_" + rk))
-                                        {
-                                            // 學生5_科目2_班排名_rank
-                                            foreach (string r2 in r2List)
-                                            {
-                                                if (SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/科目成績(原始)_" + sName + "_" + rk].ContainsKey(r2))
-                                                {
-                                                    row["學生" + studIdx + "_科目(原始)" + SelSubjectIdxDict[sName] + "_" + rk + "_" + r2] = SemsScoreRankMatrixDataValueDict[studRec.ID]["學期/科目成績(原始)_" + sName + "_" + rk][r2];
-                                                }
-                                            }
-                                        }
-
-                                    }
-
-                                }
-                            }
-
-                        }
-
-                        studIdx++;
-                    }
-                }
-
-
-                // 填入班級 五標、組距
-                if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey(class_id))
-                {
-                    // 總計成績 五標、組距
-                    foreach (string rk in rkList)
-                    {
-                        if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績_學習領域總成績_" + rk))
-                        {
-                            // 班級_課程學習總成績_班排名_matrix_count
-                            foreach (string r2 in cr2List)
-                            {
-                                if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_學習領域總成績_" + rk].ContainsKey(r2))
-                                {
-                                    row["班級_課程學習總成績_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_學習領域總成績_" + rk][r2];
                                 }
                             }
                         }
 
-                        if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績(原始)_學習領域總成績_" + rk))
+                        // 班級領域成績 五標、組距 
+                        foreach (string dName in SelDomainIdxDict.Keys)
                         {
-                            // 班級_課程學習總成績_班排名_matrix_count
-                            foreach (string r2 in cr2List)
-                            {
-                                if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_學習領域總成績_" + rk].ContainsKey(r2))
-                                {
-                                    row["班級_學習領域總成績(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_學習領域總成績_" + rk][r2];
-                                }
-                            }
-                        }
+                            // 班級_領域2_名稱
+                            row["班級_領域" + SelDomainIdxDict[dName] + "_名稱"] = dName;
 
-                        if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績_課程學習總成績_" + rk))
-                        {
-                            // 班級_課程學習總成績_班排名_matrix_count
-                            foreach (string r2 in cr2List)
-                            {
-                                if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_課程學習總成績_" + rk].ContainsKey(r2))
-                                {
-                                    row["班級_課程學習總成績_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_課程學習總成績_" + rk][r2];
-                                }
-                            }
-                        }
-
-                        if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績(原始)_課程學習總成績_" + rk))
-                        {
-                            // 班級_課程學習總成績_班排名_matrix_count
-                            foreach (string r2 in cr2List)
-                            {
-                                if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_課程學習總成績_" + rk].ContainsKey(r2))
-                                {
-                                    row["班級_課程學習總成績(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_課程學習總成績_" + rk][r2];
-                                }
-                            }
-                        }
-
-
-
-                    }
-
-
-                    // 班級領域-科目1,2,3  五標、組距
-                    if (SelDomainSubjectDict.ContainsKey(class_id))
-                    {
-                        // 領域
-                        foreach (string dName in SelDomainSubjectDict[class_id].Keys)
-                        {
                             foreach (string rk in rkList)
                             {
                                 // 學期/總計成績_課程學習總成績_年排名
                                 if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績_" + dName + "_" + rk))
                                 {
                                     // 學生5_領域2_班排名_rank
-                                    foreach (string r2 in cr2List)
+                                    foreach (string r2 in r2List)
                                     {
                                         if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk].ContainsKey(r2))
                                         {
-                                            row["班級_" + dName + "領域_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk][r2];
-
+                                            row["班級_領域" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk][r2];
                                         }
                                     }
-                                }
-
-                                // 科目
-                                int subjIdx = 1;
-                                foreach (string sName in SelDomainSubjectDict[class_id][dName])
-                                {
-                                    // 學期/總計成績_課程學習總成績_年排名
-                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績_" + sName + "_" + rk))
-                                    {
-                                        row["班級_" + dName + "領域_科目" + subjIdx + "_名稱"] = sName;
-                                        foreach (string r2 in cr2List)
-                                        {
-                                            row["班級_" + dName + "領域_科目" + subjIdx + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績_" + sName + "_" + rk][r2];
-                                        }
-                                    }
-                                    subjIdx++;
                                 }
 
 
@@ -1163,196 +1263,151 @@ namespace HsinChuSemesterClassFixedRank
                                 if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績(原始)_" + dName + "_" + rk))
                                 {
                                     // 班級_領域2_班排名_rank
-                                    foreach (string r2 in cr2List)
+                                    foreach (string r2 in r2List)
                                     {
                                         if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk].ContainsKey(r2))
                                         {
-                                            row["班級_" + dName + "領域(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk][r2];
+                                            row["班級_領域(原始)" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk][r2];
                                         }
                                     }
+                                }
+                            }
+                        }
 
-                                    // 科目
-                                    subjIdx = 1;
-                                    foreach (string sName in SelDomainSubjectDict[class_id][dName])
+                        // 班級 科目成績 五標、組距                   
+                        foreach (string sName in SelSubjectIdxDict.Keys)
+                        {
+
+                            // 班級_科目2_名稱
+                            row["班級_科目" + SelSubjectIdxDict[sName] + "_名稱"] = sName;
+
+                            foreach (string rk in rkList)
+                            {
+                                // 學期/總計成績_課程學習總成績_年排名
+                                if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績_" + sName + "_" + rk))
+                                {
+                                    // 學生5_科目2_班排名_rank
+                                    foreach (string r2 in r2List)
                                     {
-                                        // 學期/總計成績_課程學習總成績_年排名
-                                        if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績(原始)_" + sName + "_" + rk))
+                                        if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績_" + sName + "_" + rk].ContainsKey(r2))
                                         {
-                                            foreach (string r2 in cr2List)
-                                            {
-                                                row["班級_" + dName + "領域(原始)_科目" + subjIdx + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + sName + "_" + rk][r2];
-                                            }
+                                            row["班級_科目" + SelSubjectIdxDict[sName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績_" + sName + "_" + rk][r2];
                                         }
-                                        subjIdx++;
+                                    }
+                                }
+
+
+                                // 學期/總計成績_課程學習總成績_年排名  原始
+                                if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績(原始)_" + sName + "_" + rk))
+                                {
+                                    // 班級_科目2_班排名_rank
+                                    foreach (string r2 in r2List)
+                                    {
+                                        if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + sName + "_" + rk].ContainsKey(r2))
+                                        {
+                                            row["班級_科目(原始)" + SelSubjectIdxDict[sName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + sName + "_" + rk][r2];
+                                        }
                                     }
                                 }
                             }
                         }
+
                     }
 
-                    // 班級領域成績 五標、組距 
-                    foreach (string dName in SelDomainIdxDict.Keys)
+                    #region 填入班級學分、及格人數、平均
+                    // 填入班級學分、及格人數、平均
+                    foreach (string key in tmpCreditDict.Keys)
                     {
-                        // 班級_領域2_名稱
-                        row["班級_領域" + SelDomainIdxDict[dName] + "_名稱"] = dName;
+                        if (dtTable.Columns.Contains(key))
+                            row[key] = string.Join(",", tmpCreditDict[key].ToArray());
+                    }
 
-                        foreach (string rk in rkList)
+                    foreach (string key in tmpScoreItemRDict.Keys)
+                    {
+                        ScoreItemR sr = tmpScoreItemRDict[key];
+                        if (dtTable.Columns.Contains(sr.ScoreKey))
                         {
-                            // 學期/總計成績_課程學習總成績_年排名
-                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績_" + dName + "_" + rk))
-                            {
-                                // 學生5_領域2_班排名_rank
-                                foreach (string r2 in r2List)
-                                {
-                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk].ContainsKey(r2))
-                                    {
-                                        row["班級_領域" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk][r2];
-                                    }
-                                }
-                            }
-
-
-                            // 學期/總計成績_課程學習總成績_年排名  原始
-                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績(原始)_" + dName + "_" + rk))
-                            {
-                                // 班級_領域2_班排名_rank
-                                foreach (string r2 in r2List)
-                                {
-                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk].ContainsKey(r2))
-                                    {
-                                        row["班級_領域(原始)" + SelDomainIdxDict[dName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk][r2];
-                                    }
-                                }
-                            }
+                            row[sr.ScoreKey] = sr.GetAvgScore(defaultScoreCalculator, "domain");
                         }
-                    }
 
-                    // 班級 科目成績 五標、組距                   
-                    foreach (string sName in SelSubjectIdxDict.Keys)
-                    {
-
-                        // 班級_科目2_名稱
-                        row["班級_科目" + SelSubjectIdxDict[sName] + "_名稱"] = sName;
-
-                        foreach (string rk in rkList)
+                        if (dtTable.Columns.Contains(sr.ScoreOriginKey))
                         {
-                            // 學期/總計成績_課程學習總成績_年排名
-                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績_" + sName + "_" + rk))
-                            {
-                                // 學生5_科目2_班排名_rank
-                                foreach (string r2 in r2List)
-                                {
-                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績_" + sName + "_" + rk].ContainsKey(r2))
-                                    {
-                                        row["班級_科目" + SelSubjectIdxDict[sName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績_" + sName + "_" + rk][r2];
-                                    }
-                                }
-                            }
+                            row[sr.ScoreOriginKey] = sr.GetAvgScoreOrigin(defaultScoreCalculator, "domain");
+                        }
 
+                        if (dtTable.Columns.Contains(sr.PassCountKey))
+                        {
+                            row[sr.PassCountKey] = sr.GetPassScoreCount();
+                        }
 
-                            // 學期/總計成績_課程學習總成績_年排名  原始
-                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績(原始)_" + sName + "_" + rk))
-                            {
-                                // 班級_科目2_班排名_rank
-                                foreach (string r2 in r2List)
-                                {
-                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + sName + "_" + rk].ContainsKey(r2))
-                                    {
-                                        row["班級_科目(原始)" + SelSubjectIdxDict[sName] + "_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + sName + "_" + rk][r2];
-                                    }
-                                }
-                            }
+                        if (dtTable.Columns.Contains(sr.PassOriginKey))
+                        {
+                            row[sr.PassOriginKey] = sr.GetPassScoreOriginCount();
+                        }
+                    }
+                    #endregion
+
+                    #region 填入學生各類總計
+                    for (int studIdx = 1; studIdx <= maxStudent; studIdx++)
+                    {
+                        string keyD = "學生" + studIdx + "_領域總計成績";
+                        string keyS = "學生" + studIdx + "_科目總計成績";
+
+                        if (tmpScoreItemCDict.ContainsKey(keyD))
+                        {
+                            row["學生" + studIdx + "_領域總計_加權總分"] = tmpScoreItemCDict[keyD].SumScoreA;
+                            row["學生" + studIdx + "_領域總計_總分"] = tmpScoreItemCDict[keyD].SumScore;
+                            row["學生" + studIdx + "_領域總計_加權平均"] = tmpScoreItemCDict[keyD].AvgScoreA;
+                            row["學生" + studIdx + "_領域總計_平均"] = tmpScoreItemCDict[keyD].AvgScore;
+                            row["學生" + studIdx + "_領域(原始)總計_加權總分"] = tmpScoreItemCDict[keyD].SumScoreOriginA;
+                            row["學生" + studIdx + "_領域(原始)總計_總分"] = tmpScoreItemCDict[keyD].SumScoreOrigin;
+                            row["學生" + studIdx + "_領域(原始)總計_加權平均"] = tmpScoreItemCDict[keyD].AvgScoreOriginA;
+                            row["學生" + studIdx + "_領域(原始)總計_平均"] = tmpScoreItemCDict[keyD].AvgScoreOrigin;
+                        }
+
+                        if (tmpScoreItemCDict.ContainsKey(keyS))
+                        {
+                            row["學生" + studIdx + "_科目總計_加權總分"] = tmpScoreItemCDict[keyS].SumScoreA;
+                            row["學生" + studIdx + "_科目總計_總分"] = tmpScoreItemCDict[keyS].SumScore;
+                            row["學生" + studIdx + "_科目總計_加權平均"] = tmpScoreItemCDict[keyS].AvgScoreA;
+                            row["學生" + studIdx + "_科目總計_平均"] = tmpScoreItemCDict[keyS].AvgScore;
+                            row["學生" + studIdx + "_科目(原始)總計_加權總分"] = tmpScoreItemCDict[keyS].SumScoreOriginA;
+                            row["學生" + studIdx + "_科目(原始)總計_總分"] = tmpScoreItemCDict[keyS].SumScoreOrigin;
+                            row["學生" + studIdx + "_科目(原始)總計_加權平均"] = tmpScoreItemCDict[keyS].AvgScoreOriginA;
+                            row["學生" + studIdx + "_科目(原始)總計_平均"] = tmpScoreItemCDict[keyS].AvgScoreOrigin;
                         }
                     }
 
+                    #endregion
+
+
+                    dtTable.Rows.Add(row);
                 }
 
-                #region 填入班級學分、及格人數、平均
-                // 填入班級學分、及格人數、平均
-                foreach (string key in tmpCreditDict.Keys)
-                {
-                    if (dtTable.Columns.Contains(key))
-                        row[key] = string.Join(",", tmpCreditDict[key].ToArray());
-                }
-
-                foreach (string key in tmpScoreItemRDict.Keys)
-                {
-                    ScoreItemR sr = tmpScoreItemRDict[key];
-                    if (dtTable.Columns.Contains(sr.ScoreKey))
-                    {
-                        row[sr.ScoreKey] = sr.GetAvgScore(ParseNumber);
-                    }
-
-                    if (dtTable.Columns.Contains(sr.ScoreOriginKey))
-                    {
-                        row[sr.ScoreOriginKey] = sr.GetAvgScoreOrigin(ParseNumber);
-                    }
-
-                    if (dtTable.Columns.Contains(sr.PassCountKey))
-                    {
-                        row[sr.PassCountKey] = sr.GetPassScoreCount();
-                    }
-
-                    if (dtTable.Columns.Contains(sr.PassOriginKey))
-                    {
-                        row[sr.PassOriginKey] = sr.GetPassScoreOriginCount();
-                    }
-                }
-                #endregion
-
-                #region 填入學生各類總計
-                for (int studIdx = 1; studIdx <= maxStudent; studIdx++)
-                {
-                    string keyD = "學生" + studIdx + "_領域總計成績";
-                    string keyS = "學生" + studIdx + "_科目總計成績";
-
-                    if (tmpScoreItemCDict.ContainsKey(keyD))
-                    {
-                        row["學生" + studIdx + "_領域總計_加權總分"] = tmpScoreItemCDict[keyD].SumScoreA;
-                        row["學生" + studIdx + "_領域總計_總分"] = tmpScoreItemCDict[keyD].SumScore;
-                        row["學生" + studIdx + "_領域總計_加權平均"] = tmpScoreItemCDict[keyD].AvgScoreA;
-                        row["學生" + studIdx + "_領域總計_平均"] = tmpScoreItemCDict[keyD].AvgScore;
-                        row["學生" + studIdx + "_領域(原始)總計_加權總分"] = tmpScoreItemCDict[keyD].SumScoreOriginA;
-                        row["學生" + studIdx + "_領域(原始)總計_總分"] = tmpScoreItemCDict[keyD].SumScoreOrigin;
-                        row["學生" + studIdx + "_領域(原始)總計_加權平均"] = tmpScoreItemCDict[keyD].AvgScoreOriginA;
-                        row["學生" + studIdx + "_領域(原始)總計_平均"] = tmpScoreItemCDict[keyD].AvgScoreOrigin;
-                    }
-
-                    if (tmpScoreItemCDict.ContainsKey(keyS))
-                    {
-                        row["學生" + studIdx + "_科目總計_加權總分"] = tmpScoreItemCDict[keyS].SumScoreA;
-                        row["學生" + studIdx + "_科目總計_總分"] = tmpScoreItemCDict[keyS].SumScore;
-                        row["學生" + studIdx + "_科目總計_加權平均"] = tmpScoreItemCDict[keyS].AvgScoreA;
-                        row["學生" + studIdx + "_科目總計_平均"] = tmpScoreItemCDict[keyS].AvgScore;
-                        row["學生" + studIdx + "_科目(原始)總計_加權總分"] = tmpScoreItemCDict[keyS].SumScoreOriginA;
-                        row["學生" + studIdx + "_科目(原始)總計_總分"] = tmpScoreItemCDict[keyS].SumScoreOrigin;
-                        row["學生" + studIdx + "_科目(原始)總計_加權平均"] = tmpScoreItemCDict[keyS].AvgScoreOriginA;
-                        row["學生" + studIdx + "_科目(原始)總計_平均"] = tmpScoreItemCDict[keyS].AvgScoreOrigin;
-                    }
-                }
+                bgWorkerReport.ReportProgress(80);
 
                 #endregion
 
 
-                dtTable.Rows.Add(row);
+
+                // debug
+                //dtTable.TableName = "debug";
+                //dtTable.WriteXml(Application.StartupPath + "\\debug.xml");
+
+                //return;
+
+
+                Document doc = _Configure.Template;
+                doc.MailMerge.Execute(dtTable);
+                doc.MailMerge.DeleteFields();
+                e.Result = doc;
+                bgWorkerReport.ReportProgress(100);
             }
-
-
-            #endregion
-
-
-
-            //// debug
-            //dtTable.TableName = "debug";
-            //dtTable.WriteXml(Application.StartupPath + "\\debug.xml");
-
-            //return;
-
-
-            Document doc = _Configure.Template;
-            doc.MailMerge.Execute(dtTable);
-            doc.MailMerge.DeleteFields();
-            e.Result = doc;
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+          
         }
 
         private void BgWorkerLoadTemplate_ProgressChanged(object sender, ProgressChangedEventArgs e)

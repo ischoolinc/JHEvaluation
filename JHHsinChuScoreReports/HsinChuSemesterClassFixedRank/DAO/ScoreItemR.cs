@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JHSchool.Evaluation.Calculation;
 
 namespace HsinChuSemesterClassFixedRank.DAO
 {
@@ -69,12 +70,21 @@ namespace HsinChuSemesterClassFixedRank.DAO
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
-        public decimal GetAvgScore(int num)
+        public decimal GetAvgScore(ScoreCalculator cal, string scoreType)
         {
             decimal value = 0;
+
             if (ScoreList.Count > 0)
             {
-                value = Math.Round(ScoreList.Average(), num, MidpointRounding.AwayFromZero);
+                if (scoreType == "subject")
+                {
+                    value = cal.ParseSubjectScore(ScoreList.Average());
+                }
+
+                if (scoreType == "domain")
+                {
+                    value = cal.ParseDomainScore(ScoreList.Average());
+                }
             }
             return value;
         }
@@ -84,12 +94,21 @@ namespace HsinChuSemesterClassFixedRank.DAO
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
-        public decimal GetAvgScoreOrigin(int num)
+        public decimal GetAvgScoreOrigin(ScoreCalculator cal, string scoreType)
         {
             decimal value = 0;
             if (ScoreOriginList.Count > 0)
             {
-                value = Math.Round(ScoreOriginList.Average(), num, MidpointRounding.AwayFromZero);
+                if (scoreType == "subject")
+                {
+                    value = cal.ParseSubjectScore(ScoreOriginList.Average());
+                }
+
+                if (scoreType == "domain")
+                {
+                    value = cal.ParseDomainScore(ScoreOriginList.Average());
+                }
+
             }
             return value;
         }

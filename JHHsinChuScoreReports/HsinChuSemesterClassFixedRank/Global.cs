@@ -1127,7 +1127,7 @@ namespace HsinChuSemesterClassFixedRank
             #region 科目成績標示
             builder.Writeln("科目成績標示：");
 
-            for (int i = 1; i <= 19; i += 3)
+            for (int i = 1; i <= 30; i += 3)
             {
                 builder.StartTable();
                 builder.InsertCell(); builder.Write("座號");

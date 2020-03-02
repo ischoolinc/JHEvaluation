@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JHSchool.Evaluation.Calculation;
 
 namespace HsinChuSemesterClassFixedRank.DAO
 {
@@ -85,7 +86,7 @@ namespace HsinChuSemesterClassFixedRank.DAO
         /// <summary>
         /// 計算總計,傳入平均四捨五入數
         /// </summary>
-        public void CalScore(int num)
+        public void CalScore(ScoreCalculator cal,string scoreType)
         {
             // 總分
             SumScore = ScoreList.Sum();
@@ -96,15 +97,29 @@ namespace HsinChuSemesterClassFixedRank.DAO
             int cCot = CreditList.Count();
             decimal sCot = CreditList.Sum();
 
-            // 平均
-            if (cCot > 0)
-                AvgScore = Math.Round(SumScore / cCot, num, MidpointRounding.AwayFromZero);
+            if (scoreType =="subject")
+            {
+                // 平均
+                if (cCot > 0)
+                    AvgScore = cal.ParseSubjectScore(SumScore / cCot);
 
-            // 加權平均
-            if (sCot > 0)
-                AvgScoreA = Math.Round(SumScoreA / sCot, num, MidpointRounding.AwayFromZero);
+                // 加權平均
+                if (sCot > 0)
+                    AvgScoreA = cal.ParseSubjectScore(SumScoreA / sCot);
+            }
 
+            if (scoreType == "domain")
+            {
+                // 平均
+                if (cCot > 0)
+                    AvgScore = cal.ParseDomainScore(SumScore / cCot);
 
+                // 加權平均
+                if (sCot > 0)
+                    AvgScoreA = cal.ParseDomainScore(SumScoreA / sCot);
+            }
+
+           
             // 原始成績
             // 總分
             SumScoreOrigin = ScoreOriginList.Sum();
@@ -112,13 +127,30 @@ namespace HsinChuSemesterClassFixedRank.DAO
             // 加權總分
             SumScoreOriginA = ScoreOriginListA.Sum();
 
-            // 平均
-            if (cCot > 0)
-                AvgScoreOrigin = Math.Round(SumScoreOrigin / cCot, num, MidpointRounding.AwayFromZero);
 
-            // 加權平均
-            if (sCot > 0)
-                AvgScoreOriginA = Math.Round(SumScoreOriginA / sCot, num, MidpointRounding.AwayFromZero);
+            if (scoreType == "subject")
+            {
+                // 平均
+                if (cCot > 0)
+                    AvgScoreOrigin = cal.ParseSubjectScore(SumScoreOrigin / cCot);
+
+                // 加權平均
+                if (sCot > 0)
+                    AvgScoreOriginA = cal.ParseSubjectScore(SumScoreOriginA / sCot);
+            }
+
+            if (scoreType == "domain")
+            {
+                // 平均
+                if (cCot > 0)
+                    AvgScoreOrigin = cal.ParseDomainScore(SumScoreOrigin / cCot);
+
+                // 加權平均
+                if (sCot > 0)
+                    AvgScoreOriginA = cal.ParseDomainScore(SumScoreOriginA / sCot);
+            }
+
+             
         }
     }
 }
