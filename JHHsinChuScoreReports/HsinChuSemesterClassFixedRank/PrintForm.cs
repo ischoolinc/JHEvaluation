@@ -711,7 +711,7 @@ namespace HsinChuSemesterClassFixedRank
                                     {
                                         if (!studSubjectNameList.Contains(sName))
                                             studSubjectNameList.Add(sName);
-                                    }                                  
+                                    }
                                 }
                             }
                         }
@@ -1827,7 +1827,13 @@ namespace HsinChuSemesterClassFixedRank
 
 
             // 列印報表
-            bgWorkerReport.RunWorkerAsync();
+            if (tmpDomainNameList.Count > 0 || tmpSubjNameList.Count > 0)
+                bgWorkerReport.RunWorkerAsync();
+            else
+            {
+                MsgBox.Show("請勾選科目或領域。");
+                return;
+            }
 
         }
 
@@ -2156,6 +2162,24 @@ namespace HsinChuSemesterClassFixedRank
         private void cboSchoolYear_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void lnkDelConfig_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (_Configure == null) return;
+
+            if (MessageBox.Show("樣板刪除後將無法回復，確定刪除樣板?", "刪除樣板", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.OK)
+            {
+                _ConfigureList.Remove(_Configure);
+                if (_Configure.UID != "")
+                {
+                    _Configure.Deleted = true;
+                    _Configure.Save();
+                }
+                var conf = _Configure;
+                cboConfigure.SelectedIndex = -1;
+                cboConfigure.Items.Remove(conf);
+            }
         }
     }
 }

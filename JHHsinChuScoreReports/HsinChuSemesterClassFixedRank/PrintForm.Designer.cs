@@ -82,6 +82,7 @@
             this.lnkDelConfig.TabIndex = 2;
             this.lnkDelConfig.TabStop = true;
             this.lnkDelConfig.Text = "刪除設定檔";
+            this.lnkDelConfig.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkDelConfig_LinkClicked);
             // 
             // lnkCopyConfig
             // 
