@@ -37,6 +37,8 @@ namespace HsinChuSemesterClassFixedRank
 
         Dictionary<string, int> SelDomainIdxDict = new Dictionary<string, int>();
         Dictionary<string, int> SelSubjectIdxDict = new Dictionary<string, int>();
+        List<string> tmpDomainNameList = new List<string>();
+        List<string> tmpSubjNameList = new List<string>();
 
         // 畫面上可選領域與科目
         Dictionary<string, List<string>> CanSelectDomainSubjectDict = new Dictionary<string, List<string>>();
@@ -410,7 +412,7 @@ namespace HsinChuSemesterClassFixedRank
 
 
                     // 領域1,2 合併欄位
-                    for (int dIdx = 1; dIdx <= SelDomainIdxDict.Keys.Count; dIdx++)
+                    for (int dIdx = 1; dIdx <= 15; dIdx++)
                     {
                         // 學生1_領域1_成績
                         dtTable.Columns.Add("學生" + studIdx + "_領域" + dIdx + "_名稱");
@@ -435,7 +437,7 @@ namespace HsinChuSemesterClassFixedRank
                     }
 
                     // 科目1,2 合併欄位
-                    for (int sIdx = 1; sIdx <= SelSubjectIdxDict.Keys.Count; sIdx++)
+                    for (int sIdx = 1; sIdx <= 30; sIdx++)
                     {
                         // 學生1_科目1_成績
                         dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_名稱");
@@ -477,7 +479,7 @@ namespace HsinChuSemesterClassFixedRank
 
 
                 // 領域1,2 合併欄位
-                for (int dIdx = 1; dIdx <= SelDomainIdxDict.Keys.Count; dIdx++)
+                for (int dIdx = 1; dIdx <= 15; dIdx++)
                 {
                     // 班級_領域1_成績
                     dtTable.Columns.Add("班級_領域" + dIdx + "_名稱");
@@ -502,7 +504,7 @@ namespace HsinChuSemesterClassFixedRank
                 }
 
                 // 科目1,2 合併欄位
-                for (int sIdx = 1; sIdx <= SelSubjectIdxDict.Keys.Count; sIdx++)
+                for (int sIdx = 1; sIdx <= 30; sIdx++)
                 {
                     // 班級1_科目1_成績
                     dtTable.Columns.Add("班級_科目" + sIdx + "_名稱");
@@ -562,6 +564,8 @@ namespace HsinChuSemesterClassFixedRank
 
 
                 }
+
+
 
                 #region 各位學生即時計算加權總分、總分、加權平均、平均
 
@@ -652,6 +656,10 @@ namespace HsinChuSemesterClassFixedRank
 
 
                 bgWorkerReport.ReportProgress(40);
+
+                List<string> studDomainNameList = new List<string>();
+                List<string> studSubjectNameList = new List<string>();
+
                 // 排序後班級
                 foreach (string class_id in ClassTeacherNameDict.Keys)
                 {
@@ -675,13 +683,67 @@ namespace HsinChuSemesterClassFixedRank
                     if (DataAccess.ClassTag2Dict.ContainsKey(class_id))
                         row["類別2排名名稱"] = DataAccess.ClassTag2Dict[class_id];
 
+                    studDomainNameList.Clear();
+                    studSubjectNameList.Clear();
+
 
                     // 填入學生資料
                     if (ClassStudentDict.ContainsKey(class_id))
                     {
+                        // 取得各班成績且畫面上有勾選
+                        foreach (StudentRecord studRec in ClassStudentDict[class_id])
+                        {
+                            if (StudentSemesterScoreRecordDict.ContainsKey(studRec.ID))
+                            {
+                                JHSemesterScoreRecord studSemsScoreRec = StudentSemesterScoreRecordDict[studRec.ID];
+                                foreach (string dName in studSemsScoreRec.Domains.Keys)
+                                {
+                                    if (tmpDomainNameList.Contains(dName))
+                                    {
+                                        if (!studDomainNameList.Contains(dName))
+                                            studDomainNameList.Add(dName);
+                                    }
+                                }
+
+                                foreach (string sName in studSemsScoreRec.Subjects.Keys)
+                                {
+                                    if (tmpSubjNameList.Contains(sName))
+                                    {
+                                        if (!studSubjectNameList.Contains(sName))
+                                            studSubjectNameList.Add(sName);
+                                    }                                  
+                                }
+                            }
+                        }
+
+                        // 排序
+                        studDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+
+                        studSubjectNameList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+
+                        SelDomainIdxDict.Clear();
+                        SelSubjectIdxDict.Clear();
+
+                        // 動態建立合併欄位
+                        int sd = 1;
+                        foreach (string name in studDomainNameList)
+                        {
+                            SelDomainIdxDict.Add(name, sd);
+                            sd++;
+                        }
+
+                        int ss = 1;
+                        foreach (string name in studSubjectNameList)
+                        {
+                            SelSubjectIdxDict.Add(name, ss);
+                            ss++;
+                        }
+
+
                         int studIdx = 1;
                         foreach (StudentRecord studRec in ClassStudentDict[class_id])
                         {
+
 
                             // 成績計算規則
                             ScoreCalculator studentCalculator = defaultScoreCalculator;
@@ -1110,7 +1172,7 @@ namespace HsinChuSemesterClassFixedRank
                         }
                     }
 
-                   
+
                     // 填入班級 五標、組距
                     if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey(class_id))
                     {
@@ -1410,7 +1472,7 @@ namespace HsinChuSemesterClassFixedRank
             {
                 Console.WriteLine(ex.Message);
             }
-          
+
         }
 
         private void BgWorkerLoadTemplate_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -1721,7 +1783,7 @@ namespace HsinChuSemesterClassFixedRank
             }
 
             int sd = 1;
-            List<string> tmpDomainNameList = new List<string>();
+            tmpDomainNameList.Clear();
             // 領域
             foreach (ListViewItem lvi in lvDomain.CheckedItems)
             {
@@ -1734,14 +1796,14 @@ namespace HsinChuSemesterClassFixedRank
 
             tmpDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
 
-            foreach (string name in tmpDomainNameList)
-            {
-                SelDomainIdxDict.Add(name, sd);
-                sd++;
-            }
+            //foreach (string name in tmpDomainNameList)
+            //{
+            //    SelDomainIdxDict.Add(name, sd);
+            //    sd++;
+            //}
 
             int ss = 1;
-            List<string> tmpSubjNameList = new List<string>();
+            tmpSubjNameList.Clear();
             foreach (ListViewItem lvi in lvSubject.CheckedItems)
             {
                 string key = lvi.Name;
@@ -1756,11 +1818,11 @@ namespace HsinChuSemesterClassFixedRank
             tmpSubjNameList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
 
 
-            foreach (string name in tmpSubjNameList)
-            {
-                SelSubjectIdxDict.Add(name, ss);
-                ss++;
-            }
+            //foreach (string name in tmpSubjNameList)
+            //{
+            //    SelSubjectIdxDict.Add(name, ss);
+            //    ss++;
+            //}
 
 
 
