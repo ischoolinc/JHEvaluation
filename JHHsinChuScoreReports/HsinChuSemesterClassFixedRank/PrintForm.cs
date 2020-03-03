@@ -624,6 +624,9 @@ namespace HsinChuSemesterClassFixedRank
                 List<string> scoreCalcRuleIDList = new List<string>();
                 foreach (string class_id in ClassTeacherNameDict.Keys)
                 {
+                    if (!ClassStudentDict.ContainsKey(class_id))
+                        continue;
+
                     foreach (StudentRecord student in ClassStudentDict[class_id])
                     {
                         //calcCache.Add(student.ID, new ScoreCalculator(student.ScoreCalcRule));
