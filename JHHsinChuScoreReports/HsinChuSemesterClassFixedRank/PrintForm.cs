@@ -2183,14 +2183,15 @@ namespace HsinChuSemesterClassFixedRank
             if (MessageBox.Show("樣板刪除後將無法回復，確定刪除樣板?", "刪除樣板", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.OK)
             {
                 _ConfigureList.Remove(_Configure);
+                var conf = _Configure;
+                cboConfigure.Items.Remove(conf);
                 if (_Configure.UID != "")
                 {
                     _Configure.Deleted = true;
                     _Configure.Save();
                 }
-                var conf = _Configure;
-                cboConfigure.SelectedIndex = -1;
-                cboConfigure.Items.Remove(conf);
+             
+                cboConfigure.SelectedIndex = -1;              
             }
         }
 
