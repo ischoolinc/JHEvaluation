@@ -1455,9 +1455,9 @@ namespace HsinChuSemesterClassFixedRank
 
 
 
-               //// debug
-               // dtTable.TableName = "debug";
-               // dtTable.WriteXml(Application.StartupPath + "\\debug.xml");
+                //// debug
+                // dtTable.TableName = "debug";
+                // dtTable.WriteXml(Application.StartupPath + "\\debug.xml");
 
                 //return;
 
@@ -2039,6 +2039,18 @@ namespace HsinChuSemesterClassFixedRank
             cboSchoolYear.Text = K12.Data.School.DefaultSchoolYear;
             cboSemester.Text = K12.Data.School.DefaultSemester;
 
+            int sy;
+            if (int.TryParse(K12.Data.School.DefaultSchoolYear, out sy))
+            {
+                for (int i = (sy - 3); i <= (sy + 3); i++)
+                {
+                    cboSchoolYear.Items.Add(i.ToString());
+                }
+            }
+
+            cboSemester.Items.Add("1");
+            cboSemester.Items.Add("2");
+
             userControlEnable(false);
             this.MaximumSize = this.MinimumSize = this.Size;
             bgWorkerLoadTemplate.RunWorkerAsync();
@@ -2161,7 +2173,7 @@ namespace HsinChuSemesterClassFixedRank
 
         private void cboSchoolYear_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            ReloadCanSelectDomainSubject();
         }
 
         private void lnkDelConfig_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -2180,6 +2192,49 @@ namespace HsinChuSemesterClassFixedRank
                 cboConfigure.SelectedIndex = -1;
                 cboConfigure.Items.Remove(conf);
             }
+        }
+
+        private void lnkCopyConfig_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (_Configure == null) return;
+            CloneConfigure dialog = new CloneConfigure() { ParentName = _Configure.Name };
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                Configure conf = new Configure();
+                conf.Name = dialog.NewConfigureName;
+
+                conf.PrintSubjectList.AddRange(_Configure.PrintSubjectList);
+                conf.SchoolYear = _Configure.SchoolYear;
+                conf.Semester = _Configure.Semester;
+                conf.SubjectLimit = _Configure.SubjectLimit;
+                conf.Template = _Configure.Template;
+                conf.Encode();
+                conf.Save();
+                _ConfigureList.Add(conf);
+                cboConfigure.Items.Insert(cboConfigure.Items.Count - 1, conf);
+                cboConfigure.SelectedIndex = cboConfigure.Items.Count - 2;
+            }
+        }
+
+        private void cboSemester_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ReploadSchoolYearSemester();
+        }
+
+        private void ReploadSchoolYearSemester()
+        {
+            userControlEnable(false);
+            int sc = 0, ss = 0;
+            int.TryParse(cboSchoolYear.Text, out sc);
+            int.TryParse(cboSemester.Text, out ss);
+
+            if (sc > 0 && ss > 0 && StudentClassIDDict.Keys.Count > 0)
+            {
+                LoadStudentSemesterScore(sc, ss, StudentClassIDDict.Keys.ToList());
+            }
+            ReloadCanSelectDomainSubject();
+
+            userControlEnable(true);
         }
     }
 }

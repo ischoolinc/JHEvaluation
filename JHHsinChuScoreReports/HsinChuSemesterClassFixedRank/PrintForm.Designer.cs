@@ -94,6 +94,7 @@
             this.lnkCopyConfig.TabIndex = 1;
             this.lnkCopyConfig.TabStop = true;
             this.lnkCopyConfig.Text = "複製設定檔";
+            this.lnkCopyConfig.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkCopyConfig_LinkClicked);
             // 
             // labelX11
             // 
@@ -121,6 +122,7 @@
             this.cboSemester.Size = new System.Drawing.Size(48, 25);
             this.cboSemester.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboSemester.TabIndex = 4;
+            this.cboSemester.SelectedIndexChanged += new System.EventHandler(this.cboSemester_SelectedIndexChanged);
             // 
             // cboSchoolYear
             // 
