@@ -1314,7 +1314,7 @@ namespace HsinChuSemesterClassFixedRank
                                 if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績_" + dName + "_" + rk))
                                 {
                                     // 學生5_領域2_班排名_rank
-                                    foreach (string r2 in r2List)
+                                    foreach (string r2 in cr2List)
                                     {
                                         if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績_" + dName + "_" + rk].ContainsKey(r2))
                                         {
@@ -1328,7 +1328,7 @@ namespace HsinChuSemesterClassFixedRank
                                 if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/領域成績(原始)_" + dName + "_" + rk))
                                 {
                                     // 班級_領域2_班排名_rank
-                                    foreach (string r2 in r2List)
+                                    foreach (string r2 in cr2List)
                                     {
                                         if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/領域成績(原始)_" + dName + "_" + rk].ContainsKey(r2))
                                         {
@@ -1352,7 +1352,7 @@ namespace HsinChuSemesterClassFixedRank
                                 if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績_" + sName + "_" + rk))
                                 {
                                     // 學生5_科目2_班排名_rank
-                                    foreach (string r2 in r2List)
+                                    foreach (string r2 in cr2List)
                                     {
                                         if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績_" + sName + "_" + rk].ContainsKey(r2))
                                         {
@@ -1366,7 +1366,7 @@ namespace HsinChuSemesterClassFixedRank
                                 if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/科目成績(原始)_" + sName + "_" + rk))
                                 {
                                     // 班級_科目2_班排名_rank
-                                    foreach (string r2 in r2List)
+                                    foreach (string r2 in cr2List)
                                     {
                                         if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/科目成績(原始)_" + sName + "_" + rk].ContainsKey(r2))
                                         {
@@ -1455,9 +1455,9 @@ namespace HsinChuSemesterClassFixedRank
 
 
 
-                // debug
-                //dtTable.TableName = "debug";
-                //dtTable.WriteXml(Application.StartupPath + "\\debug.xml");
+               //// debug
+               // dtTable.TableName = "debug";
+               // dtTable.WriteXml(Application.StartupPath + "\\debug.xml");
 
                 //return;
 
