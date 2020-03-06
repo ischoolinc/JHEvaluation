@@ -194,8 +194,12 @@ ORDER BY
 	sems_subj_score_ext.grade_year
 	, school_year
 	, semester
+    , class.grade_year
     , class.display_order
+    , class.class_name
     , student.seat_no
+    , student.student_number
+    , student.id
             ", string.Join(",", listStudentIDs));
 
             try
@@ -382,6 +386,9 @@ ORDER BY
                 }
 
                 // 學期各領域平均
+                // 個學期領域平均的算術平均
+                double allTotalScore = 0;
+                int scoreCount = 0;
                 int sIndex = 1;
                 foreach (string key in dicStudentByID[id].dicSchoolYear.Keys)
                 {
@@ -417,7 +424,10 @@ ORDER BY
                         // 沒有權重就不幫你算
                         if (totalPower != 0)
                         {
-                            row[$"{sIndex}_all_domain_avg"] = Math.Round(totalScore / totalPower, 2);
+                            double score = Math.Round(totalScore / totalPower, 2);
+                            row[$"{sIndex}_all_domain_avg"] = score;
+                            allTotalScore += score;
+                            scoreCount++;
                         }
                     }
 
@@ -427,13 +437,13 @@ ORDER BY
                 // 總平均(算術平均)
                 if (listDomainAvgScore.Count > 0)
                 {
-                    double totalScore = 0;
-                    foreach (double score in listDomainAvgScore)
-                    {
-                        totalScore += score;
-                    }
+                    //foreach (double score in listDomainAvgScore)
+                    //{
+                    //    totalScore += score;
+                    //}
+                    double avgScore = Math.Round(allTotalScore / scoreCount, 2);
 
-                    row["all_domain_avg"] = Math.Round(totalScore / listDomainAvgScore.Count, 2);
+                    row["all_domain_avg"] = avgScore;
                 }
 
                 dt.Rows.Add(row);
