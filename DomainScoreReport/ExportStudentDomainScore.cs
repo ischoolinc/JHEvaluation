@@ -360,16 +360,18 @@ ORDER BY
                     if (listScore.Count > 0)
                     {
                         float totalScore = 0;
-                        float totalPower = 0;
+                        //float totalPower = 0;
+                        int domainScoreCount = 0;
                         foreach (ScoreRec sr in listScore)
                         {
-                            totalScore += FloatParser(sr.Score) * FloatParser(sr.Power);
-                            totalPower += FloatParser(sr.Power);
+                            //totalScore += FloatParser(sr.Score) * FloatParser(sr.Power);
+                            //totalPower += FloatParser(sr.Power);
+                            totalScore += FloatParser(sr.Score);
+                            domainScoreCount++;
                         }
-                        // 沒有權重就不幫你算
-                        if (totalPower != 0)
+                        if (totalScore != 0)
                         {
-                            double avgScore = Math.Round(totalScore / totalPower, 2);
+                            double avgScore = Math.Round(totalScore / domainScoreCount, 2);
                             row[$"{d}_domain_avg"] = avgScore;
                             listDomainAvgScore.Add(avgScore);
 
@@ -378,6 +380,18 @@ ORDER BY
                                 passCount++;
                             }
                         }
+                        // 沒有權重就不幫你算
+                        //if (totalPower != 0)
+                        //{
+                        //    double avgScore = Math.Round(totalScore / totalPower, 2);
+                        //    row[$"{d}_domain_avg"] = avgScore;
+                        //    listDomainAvgScore.Add(avgScore);
+
+                        //    if (avgScore > 60)
+                        //    {
+                        //        passCount++;
+                        //    }
+                        //}
                     }
 
                     // 及格數
