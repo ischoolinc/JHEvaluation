@@ -150,6 +150,7 @@ namespace KaoHsiungExamScore_JH
             retVal.Add("聯絡地址");
             retVal.Add("其他地址");
             retVal.Add("領域成績加權平均");
+            retVal.Add("領域成績加權平均(不含彈性課程)");
             retVal.Add("科目評量分數加權平均");
             retVal.Add("科目平時成績加權平均");            
             // 獎懲名稱
@@ -248,11 +249,19 @@ namespace KaoHsiungExamScore_JH
                 builder.InsertCell();
                 builder.InsertField("MERGEFIELD 姓名" + " \\* MERGEFORMAT ", "«姓名" + "»");
                 builder.EndRow();
+
                 builder.InsertCell();
                 builder.Write("領域成績加權平均");
                 builder.InsertCell();
                 builder.InsertField("MERGEFIELD 領域成績加權平均" + " \\* MERGEFORMAT ", "«DA" + "»");
                 builder.EndRow();
+
+                builder.InsertCell();
+                builder.Write("領域成績加權平均(不含彈性課程)");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 領域成績加權平均(不含彈性課程)" + " \\* MERGEFORMAT ", "«DA" + "»");
+                builder.EndRow();
+
                 builder.InsertCell();
                 builder.Write("科目評量分數加權平均");
                 builder.InsertCell();

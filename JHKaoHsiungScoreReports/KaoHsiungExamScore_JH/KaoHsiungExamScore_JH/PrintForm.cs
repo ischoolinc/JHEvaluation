@@ -1355,6 +1355,9 @@ namespace KaoHsiungExamScore_JH
                     if (studExamScoreDict[StudRec.ID].GetDomainScoreA().HasValue)
                         row["領域成績加權平均"] = studExamScoreDict[StudRec.ID].GetDomainScoreA().Value;
 
+                    if (studExamScoreDict[StudRec.ID].GetDomainScoreAA().HasValue)
+                        row["領域成績加權平均(不含彈性課程)"] = studExamScoreDict[StudRec.ID].GetDomainScoreAA().Value;
+
                     if (studExamScoreDict[StudRec.ID].GetSubjectScoreAA().HasValue)
                         row["科目平時成績加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAA().Value;
 
@@ -1653,6 +1656,7 @@ namespace KaoHsiungExamScore_JH
             DisSelect();
             _SelSchoolYear = int.Parse(K12.Data.School.DefaultSchoolYear);
             _SelSemester = int.Parse(K12.Data.School.DefaultSemester);
+            this.MaximumSize = this.MinimumSize = this.Size;
 
             bkw.RunWorkerAsync();
         }

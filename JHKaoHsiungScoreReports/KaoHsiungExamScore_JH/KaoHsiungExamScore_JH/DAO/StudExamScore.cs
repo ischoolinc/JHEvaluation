@@ -45,10 +45,10 @@ namespace KaoHsiungExamScore_JH.DAO
         /// 成績計算規則
         /// </summary>
         ScoreCalculator _Calculator;
-        
+
         public StudExamScore(ScoreCalculator studentCalculator)
-        { 
-            _Calculator=studentCalculator;
+        {
+            _Calculator = studentCalculator;
         }
 
         public void CalcSubjectToDomain()
@@ -64,7 +64,7 @@ namespace KaoHsiungExamScore_JH.DAO
                 string keys = ess.DomainName + ss;
                 string keyc = ess.DomainName + sc;
                 string keyc1 = ess.DomainName + sc1;
-                string keya=ess.DomainName+sa;
+                string keya = ess.DomainName + sa;
 
                 if (!DomainNameList.Contains(ess.DomainName))
                     DomainNameList.Add(ess.DomainName);
@@ -75,13 +75,13 @@ namespace KaoHsiungExamScore_JH.DAO
                 if (!scDict.ContainsKey(keya)) scDict.Add(keya, new List<decimal>());
 
                 // 評量加權
-                if(ess.Score.HasValue && ess.Credit.HasValue)
-                    if(ess.Credit.Value>0)
+                if (ess.Score.HasValue && ess.Credit.HasValue)
+                    if (ess.Credit.Value > 0)
                         scDict[keys].Add(_Calculator.ParseSubjectScore(ess.Score.Value * ess.Credit.Value));
 
                 // 平時加權
-                if(ess.AssignmentScore.HasValue && ess.Credit.HasValue)
-                    if(ess.Credit.HasValue)
+                if (ess.AssignmentScore.HasValue && ess.Credit.HasValue)
+                    if (ess.Credit.HasValue)
                         scDict[keya].Add(_Calculator.ParseSubjectScore(ess.AssignmentScore.Value * ess.Credit.Value));
 
                 // 學分數加總
@@ -94,7 +94,7 @@ namespace KaoHsiungExamScore_JH.DAO
             }
 
             foreach (string name in DomainNameList)
-             {
+            {
                 ExamDomainScore eds = new ExamDomainScore();
                 // 處理彈性課程
                 if (string.IsNullOrEmpty(name))
@@ -102,28 +102,28 @@ namespace KaoHsiungExamScore_JH.DAO
                 else
                     eds.DomainName = name;
 
-                string skeyC=eds.DomainName + sc;
-                string skeyC1=eds.DomainName + sc1;
-                if(scDict.ContainsKey(skeyC))
+                string skeyC = eds.DomainName + sc;
+                string skeyC1 = eds.DomainName + sc1;
+                if (scDict.ContainsKey(skeyC))
                     eds.Credit = scDict[skeyC].Sum();
-                if(scDict.ContainsKey(skeyC1))
+                if (scDict.ContainsKey(skeyC1))
                     eds.Credit1 = scDict[skeyC1].Sum();
 
                 // 有學分數有成績才進入計算
                 // 評量加權
                 string skeyS = eds.DomainName + ss;
-                string skeyA=eds.DomainName + sa;
-                if(eds.Credit1.HasValue)
-                    if(eds.Credit1.Value>0)
-                        if(scDict.ContainsKey(skeyS))
+                string skeyA = eds.DomainName + sa;
+                if (eds.Credit1.HasValue)
+                    if (eds.Credit1.Value > 0)
+                        if (scDict.ContainsKey(skeyS))
                             eds.Score = _Calculator.ParseDomainScore(scDict[skeyS].Sum() / eds.Credit1.Value);
-                
+
                 // 平時加權
                 if (eds.Credit1.HasValue)
-                    if(eds.Credit1.Value>0)
-                        if(scDict.ContainsKey(skeyA))
+                    if (eds.Credit1.Value > 0)
+                        if (scDict.ContainsKey(skeyA))
                             eds.AssignmentScore = _Calculator.ParseDomainScore(scDict[skeyA].Sum() / eds.Credit1.Value);
-        
+
                 _ExamDomainScoreDict.Add(name, eds);
             }
 
@@ -135,11 +135,12 @@ namespace KaoHsiungExamScore_JH.DAO
         /// <returns></returns>
         public decimal? GetDomainScoreA()
         {
-            decimal? score=null;
-            decimal ss = 0;            
-            decimal  cc = 0;
+            decimal? score = null;
+            decimal ss = 0;
+            decimal cc = 0;
             foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
             {
+
                 //  使用有成績去計算加權
                 if (sc.Score.HasValue && sc.Credit1.HasValue)
                 {
@@ -149,10 +150,42 @@ namespace KaoHsiungExamScore_JH.DAO
             }
 
             if (cc > 0)
-                score = _Calculator.ParseDomainScore(ss/cc);
+                score = _Calculator.ParseDomainScore(ss / cc);
 
             return score;
         }
+
+
+        /// <summary>
+        /// 評量領域加權平均(不含彈性課程)
+        /// </summary>
+        /// <returns></returns>
+        public decimal? GetDomainScoreAA()
+        {
+            decimal? score = null;
+            decimal ss = 0;
+            decimal cc = 0;
+            // 不含彈性課程
+            foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
+            {
+                if (sc.DomainName == "彈性課程")
+                    continue;
+
+                //  使用有成績去計算加權
+                if (sc.Score.HasValue && sc.Credit1.HasValue)
+                {
+                    ss += sc.Score.Value * sc.Credit1.Value;
+                    cc += sc.Credit1.Value;
+                }
+            }
+
+            if (cc > 0)
+                score = _Calculator.ParseDomainScore(ss / cc);
+
+            return score;
+        }
+
+
 
         /// <summary>
         /// 評量科目評量分數加權平均
@@ -166,7 +199,7 @@ namespace KaoHsiungExamScore_JH.DAO
             foreach (ExamSubjectScore sc in _ExamSubjectScoreDict.Values)
             {
                 if (sc.Score.HasValue && sc.Credit.HasValue)
-                {                    
+                {
                     ss += sc.Score.Value * sc.Credit.Value;
                     cc += sc.Credit.Value;
                 }
@@ -200,6 +233,6 @@ namespace KaoHsiungExamScore_JH.DAO
                 score = _Calculator.ParseSubjectScore(ss / cc);
 
             return score;
-        }    
+        }
     }
 }
