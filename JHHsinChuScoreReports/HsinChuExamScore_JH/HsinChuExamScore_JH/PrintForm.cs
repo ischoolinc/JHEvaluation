@@ -82,7 +82,7 @@ namespace HsinChuExamScore_JH
         private string _SelExamName = "";
         private string _SelExamID = "";
         private string _SelNotRankedFilter = "";
-        
+
 
         private string _SelRefExamName = "";
         private string _SelRefExamID = "";
@@ -159,7 +159,7 @@ namespace HsinChuExamScore_JH
                 cboRefExam.Items.Add(exName.Name);
             }
 
-            circularProgress1.Hide(); 
+            circularProgress1.Hide();
             if (_ConfigureList.Count > 0)
             {
                 cboConfigure.SelectedIndex = 0;
@@ -473,7 +473,7 @@ namespace HsinChuExamScore_JH
             }
 
 
-            
+
 
             // 取評量成績
             Dictionary<string, List<HC.JHSCETakeRecord>> Score1Dict = new Dictionary<string, List<HC.JHSCETakeRecord>>();
@@ -842,7 +842,7 @@ namespace HsinChuExamScore_JH
                 }
             }
 
-           
+
 
 
 
@@ -933,7 +933,7 @@ namespace HsinChuExamScore_JH
                 // 新增自訂欄位  Jean
                 foreach (string userDefineField in this._UserDefineFields)
                 {
-                    dt.Columns.Add(userDefineField+"-自訂欄位");
+                    dt.Columns.Add(userDefineField + "-自訂欄位");
                 }
 
 
@@ -1103,12 +1103,14 @@ namespace HsinChuExamScore_JH
 
 
                 // 新增自訂欄位資訊(動態產生)
-                foreach (string stuID in UserDefineDict.Keys)
+
+                if (StudShiDict.ContainsKey(StudRec.ID))
                 {
                     foreach (string fieldName in this._UserDefineFields)
                     {
-                        if ( UserDefineDict[stuID].ContainsKey(fieldName)) {
-                        row[fieldName+"-自訂欄位"]=UserDefineDict[stuID][fieldName]; // 取得某學生下某自訂欄位之值
+                        if (UserDefineDict[StudRec.ID].ContainsKey(fieldName))
+                        {
+                            row[fieldName + "-自訂欄位"] = UserDefineDict[StudRec.ID][fieldName]; // 取得某學生下某自訂欄位之值
                         }
                     }
                 }
@@ -1276,7 +1278,7 @@ namespace HsinChuExamScore_JH
 
 
 
-                            if (!DomainSubjectDict.ContainsKey(dname))
+                        if (!DomainSubjectDict.ContainsKey(dname))
                             DomainSubjectDict.Add(dname, new List<ExamSubjectScore>());
 
                         DomainSubjectDict[dname].Add(ess);
@@ -1918,7 +1920,7 @@ namespace HsinChuExamScore_JH
             _SelSemester = int.Parse(K12.Data.School.DefaultSemester);
             _ScoreMappingConfig.LoadData();
             //Jean todo 
-             _UserDefineFields = Global.GetUserDefineFields(); // 載入自訂欄位
+            _UserDefineFields = Global.GetUserDefineFields(); // 載入自訂欄位
 
             bkw.RunWorkerAsync();
         }
@@ -2658,7 +2660,7 @@ namespace HsinChuExamScore_JH
                             if (dataDict.ContainsKey(name))
                                 _builder.Write(dataDict[name].ToString());
                             else
-                                _builder.Write("");
+                                _builder.Write("0");
                         }
                         _builder.EndRow();
 
