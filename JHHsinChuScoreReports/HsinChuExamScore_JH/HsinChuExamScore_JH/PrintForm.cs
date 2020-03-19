@@ -28,7 +28,7 @@ namespace HsinChuExamScore_JH
         private Dictionary<string, List<string>> _ExamSubjects = new Dictionary<string, List<string>>();
         private Dictionary<string, List<string>> _ExamSubjectFull = new Dictionary<string, List<string>>();
         List<string> _StudentIDList;
-
+        List<string> UserDefineField; // 裝自訂欄位
         // 缺曠區間統計
         Dictionary<string, Dictionary<string, int>> _AttendanceDict = new Dictionary<string, Dictionary<string, int>>();
 
@@ -83,13 +83,14 @@ namespace HsinChuExamScore_JH
         private string _SelExamID = "";
         private string _SelNotRankedFilter = "";
 
+
         private string _SelRefExamName = "";
         private string _SelRefExamID = "";
 
         ScoreMappingConfig _ScoreMappingConfig = new ScoreMappingConfig();
 
         private List<ExamRecord> _exams = new List<ExamRecord>();
-
+        private List<string> _UserDefineFields; // 裝自訂欄位有哪一些
         private Dictionary<string, List<string>> _StudTagDict = new Dictionary<string, List<string>>();
 
         // 紀錄樣板設定
@@ -472,7 +473,7 @@ namespace HsinChuExamScore_JH
             }
 
 
-            
+
 
             // 取評量成績
             Dictionary<string, List<HC.JHSCETakeRecord>> Score1Dict = new Dictionary<string, List<HC.JHSCETakeRecord>>();
@@ -682,6 +683,11 @@ namespace HsinChuExamScore_JH
                     AddressRecordDict.Add(rec.RefStudentID, rec);
             }
 
+            //Jean 取得生自訂欄位資訊
+            Dictionary<string, Dictionary<string, string>> UserDefineDict = Utility.GetStudUserDefineInfo(_StudentIDList);
+
+
+
 
             // 領域組距
             List<string> li2 = new List<string>();
@@ -836,6 +842,10 @@ namespace HsinChuExamScore_JH
                 }
             }
 
+
+
+
+
             List<string> subjColList = new List<string>();
             foreach (string dName in Global.DomainNameList)
             {
@@ -920,6 +930,12 @@ namespace HsinChuExamScore_JH
                 dt.Columns.Add("領域成績平均");
                 dt.Columns.Add("領域定期成績平均");
 
+                // 新增自訂欄位  Jean
+                foreach (string userDefineField in this._UserDefineFields)
+                {
+                    dt.Columns.Add(userDefineField + "-自訂欄位");
+                }
+
 
 
                 // 獎懲名稱
@@ -934,6 +950,9 @@ namespace HsinChuExamScore_JH
                 dt.Columns.Add("區間開始日期");
                 dt.Columns.Add("區間結束日期");
                 dt.Columns.Add("成績校正日期");
+
+                // todo 增加自訂欄位 全部抓出來
+
 
 
                 // 新增科目成績欄位
@@ -1081,6 +1100,20 @@ namespace HsinChuExamScore_JH
 
                 row["學號"] = StudRec.StudentNumber;
                 row["姓名"] = StudRec.Name;
+
+
+                // 新增自訂欄位資訊(動態產生)
+
+                if (StudShiDict.ContainsKey(StudRec.ID))
+                {
+                    foreach (string fieldName in this._UserDefineFields)
+                    {
+                        if (UserDefineDict[StudRec.ID].ContainsKey(fieldName))
+                        {
+                            row[fieldName + "-自訂欄位"] = UserDefineDict[StudRec.ID][fieldName]; // 取得某學生下某自訂欄位之值
+                        }
+                    }
+                }
 
 
                 // 傳入 ID當 Key
@@ -1245,7 +1278,7 @@ namespace HsinChuExamScore_JH
 
 
 
-                            if (!DomainSubjectDict.ContainsKey(dname))
+                        if (!DomainSubjectDict.ContainsKey(dname))
                             DomainSubjectDict.Add(dname, new List<ExamSubjectScore>());
 
                         DomainSubjectDict[dname].Add(ess);
@@ -1886,7 +1919,8 @@ namespace HsinChuExamScore_JH
             _SelSchoolYear = int.Parse(K12.Data.School.DefaultSchoolYear);
             _SelSemester = int.Parse(K12.Data.School.DefaultSemester);
             _ScoreMappingConfig.LoadData();
-
+            //Jean todo 
+            _UserDefineFields = Global.GetUserDefineFields(); // 載入自訂欄位
 
             bkw.RunWorkerAsync();
         }
@@ -2626,7 +2660,7 @@ namespace HsinChuExamScore_JH
                             if (dataDict.ContainsKey(name))
                                 _builder.Write(dataDict[name].ToString());
                             else
-                                _builder.Write("");
+                                _builder.Write("0");
                         }
                         _builder.EndRow();
 

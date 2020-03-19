@@ -31,7 +31,7 @@ namespace HsinChuExamScore_JH
         public static string _SelRefsExamID = "";
 
         public static List<string> _SelStudentIDList = new List<string>();
-
+        // public static List<string> UserDefineFields = new List<string>();
         /// <summary>
         /// 設定檔預設名稱
         /// </summary>
@@ -42,7 +42,7 @@ namespace HsinChuExamScore_JH
             retVal.Add("領域成績單");
             retVal.Add("科目成績單");
             retVal.Add("科目及領域成績單_領域組距");
-            retVal.Add("科目及領域成績單_科目組距");          
+            retVal.Add("科目及領域成績單_科目組距");
             return retVal;
         }
 
@@ -107,7 +107,7 @@ namespace HsinChuExamScore_JH
         /// 固定領域名稱
         /// </summary>
         /// <returns></returns>
-        public static List<string> DomainNameList = new List<string>();       
+        public static List<string> DomainNameList = new List<string>();
 
         /// <summary>
         /// 取得獎懲名稱
@@ -115,12 +115,28 @@ namespace HsinChuExamScore_JH
         /// <returns></returns>
         public static List<string> GetDisciplineNameList()
         {
-            return new string[] { "大功", "小功", "嘉獎", "大過", "小過", "警告"}.ToList();
+            return new string[] { "大功", "小功", "嘉獎", "大過", "小過", "警告" }.ToList();
         }
-                
 
         /// <summary>
-        /// 匯出合併欄位總表Word
+        /// 取得自訂欄位
+        /// </summary>
+        public static List<string>  GetUserDefineFields()
+        {
+
+            List<string> UserDefineFields = new List<string>();
+            QueryHelper qh = new QueryHelper();
+            DataTable dt = qh.Select("SELECT fieldname FROM $stud.userdefinedata GROUP BY fieldname");
+            foreach (DataRow dr in dt.Rows)
+            {
+                UserDefineFields.Add(dr["fieldname"].ToString());
+            }
+            return UserDefineFields;
+        }
+
+    
+        /// <summary>
+        /// 匯出合併欄位總表Word 註:20200318為符合南榮自訂欄位需求增加自訂欄位變數
         /// </summary>
         public static void ExportMappingFieldWord()
         {
@@ -162,7 +178,7 @@ namespace HsinChuExamScore_JH
 
                 DocumentBuilder builder = new DocumentBuilder(tempDoc);
                 builder.Write("=== 新竹評量成績單合併欄位總表 ===");
-                builder.StartTable();              
+                builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
                 builder.InsertCell();
@@ -225,6 +241,15 @@ namespace HsinChuExamScore_JH
                 builder.InsertField("MERGEFIELD 姓名" + " \\* MERGEFORMAT ", "«姓名" + "»");
                 builder.EndRow();
 
+                // Jean 新增自訂欄位 *不存在記憶體裡因為 這裡是靜態空間 如行政人員及時增加自訂欄位 會抓不到最新的
+                foreach (string  userDefine in GetUserDefineFields())
+                {
+                    builder.InsertCell();
+                    builder.Write(userDefine + "-自訂欄位");
+                    builder.InsertCell();
+                    builder.InsertField($"MERGEFIELD {userDefine}-自訂欄位  \\* MERGEFORMAT ", $"«{userDefine}-自訂欄位»");
+                    builder.EndRow();
+                }
 
                 foreach (string rt in rankTypeList)
                 {
@@ -236,7 +261,7 @@ namespace HsinChuExamScore_JH
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + rt + "加權平均" + " \\* MERGEFORMAT ", "«DA" + "»");
                         builder.EndRow();
-                    }                  
+                    }
 
                     builder.InsertCell();
                     builder.Write(rt + "加權平均班排名名次");
@@ -439,7 +464,7 @@ namespace HsinChuExamScore_JH
                         builder.InsertField("MERGEFIELD " + rt + "平均" + " \\* MERGEFORMAT ", "«DA" + "»");
                         builder.EndRow();
                     }
-                   
+
 
                     builder.InsertCell();
                     builder.Write(rt + "平均班排名名次");
@@ -641,7 +666,7 @@ namespace HsinChuExamScore_JH
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + rt + "加權總分" + " \\* MERGEFORMAT ", "«DA" + "»");
                         builder.EndRow();
-                    }                   
+                    }
 
                     builder.InsertCell();
                     builder.Write(rt + "加權總分班排名名次");
@@ -843,7 +868,7 @@ namespace HsinChuExamScore_JH
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + rt + "總分" + " \\* MERGEFORMAT ", "«DA" + "»");
                         builder.EndRow();
-                    }                        
+                    }
 
                     builder.InsertCell();
                     builder.Write(rt + "總分班排名名次");
@@ -1903,7 +1928,7 @@ namespace HsinChuExamScore_JH
                 builder.Writeln("序列化科目資料(年排名及班排名)");
                 foreach (string domainName in DomainNameList)
                 {
-                    builder.Write(domainName+"領域");
+                    builder.Write(domainName + "領域");
                     string mName1 = "";
 
                     builder.StartTable();
@@ -1924,7 +1949,7 @@ namespace HsinChuExamScore_JH
                     builder.Write("科目年排名百分比");
                     builder.EndRow();
 
-                    for (int sj = 1 ;sj <= 12;sj++)
+                    for (int sj = 1; sj <= 12; sj++)
                     {
                         mName1 = domainName + "_科目名稱" + sj;
                         builder.InsertCell();
@@ -1954,7 +1979,7 @@ namespace HsinChuExamScore_JH
                     builder.Writeln();
                     builder.Writeln();
                 }
-                
+
                 builder.Writeln("序列化科目資料(類別1排名及類別2排名)");
                 foreach (string domainName in DomainNameList)
                 {
@@ -2084,7 +2109,7 @@ namespace HsinChuExamScore_JH
                     builder.Writeln();
                     builder.Writeln();
                 }
-                
+
                 builder.Writeln("序列化科目資料五標(類別1排名及類別2排名)");
                 foreach (string domainName in DomainNameList)
                 {
@@ -2470,13 +2495,13 @@ namespace HsinChuExamScore_JH
                 foreach (string domainName in DomainNameList)
                 {
                     builder.InsertCell();
-                    builder.Write("班級_"+ domainName);
-                  
+                    builder.Write("班級_" + domainName);
+
                     string mName1 = "";
 
-                    foreach(string itName in tmpRNameList)
+                    foreach (string itName in tmpRNameList)
                     {
-                        mName1 = "班級_"+domainName + itName;
+                        mName1 = "班級_" + domainName + itName;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DR" + "»");
                     }
@@ -2591,7 +2616,7 @@ namespace HsinChuExamScore_JH
 
                     foreach (string itName in tmpRNameList)
                     {
-                        mName1 = "年級_" + domainName + "F"+itName ;
+                        mName1 = "年級_" + domainName + "F" + itName;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DR" + "»");
                     }
@@ -2634,7 +2659,7 @@ namespace HsinChuExamScore_JH
                 builder.Writeln();
                 builder.Writeln();
 
-               
+
 
                 foreach (string domainName in DomainNameList)
                 {
@@ -2774,16 +2799,16 @@ namespace HsinChuExamScore_JH
                 builder.EndRow();
 
 
-                for (int ss = 1; ss <= 30; ss ++)
+                for (int ss = 1; ss <= 30; ss++)
                 {
                     string sName1 = "";
-                    sName1 = "s班級_科目名稱" + ss ;
+                    sName1 = "s班級_科目名稱" + ss;
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + sName1 + " \\* MERGEFORMAT ", "«N" + "»");
 
                     foreach (string itName in tmpRNameList)
                     {
-                        
+
                         sName1 = "s班級_科目" + ss + itName;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + sName1 + " \\* MERGEFORMAT ", "«SR" + "»");
@@ -2844,7 +2869,7 @@ namespace HsinChuExamScore_JH
                 builder.EndTable();
                 builder.Writeln();
                 builder.Writeln();
-                
+
 
                 builder.Writeln("科目年級組距(總成績)");
                 builder.StartTable();
@@ -3276,7 +3301,7 @@ namespace HsinChuExamScore_JH
 
                 #endregion
                 tempDoc.Save(path, SaveFormat.Doc);
-             
+
 
 
                 //System.IO.FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);

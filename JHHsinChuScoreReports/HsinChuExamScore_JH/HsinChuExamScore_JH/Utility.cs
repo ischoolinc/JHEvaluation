@@ -456,10 +456,46 @@ WHERE sc_attend.ref_student_id IN(" + string.Join(",", IDList.ToArray()) + @") A
                         value.Add(dr["id"].ToString());
                     }
                 }
-            }                 
+            }
 
             return value;
         }
+
+        /// <summary>
+        /// 取得學生的自訂欄位
+        /// </summary>
+        /// <returns></returns>
+
+        public static Dictionary<string, Dictionary<string, string>> GetStudUserDefineInfo(List<string> studentIDs)
+        {
+            Dictionary<string, Dictionary<string, string>> userDefineInfo = new Dictionary<string, Dictionary<string, string>>();
+            QueryHelper qh = new QueryHelper();
+            string sql = $"SELECT *FROM $stud.userdefinedata WHERE refid IN ('{String.Join("','", studentIDs)}')";
+            DataTable dt = qh.Select(sql);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                string studentID = dr["refid"] + "";
+                string fieldName = dr["fieldname"] + "";
+                string value = dr["value"] + "";
+
+                if (!userDefineInfo.ContainsKey(studentID))
+                {
+                    userDefineInfo.Add(studentID, new Dictionary<string, string>());
+                }
+                if (!userDefineInfo[studentID].ContainsKey(fieldName)) 
+                {
+                    userDefineInfo[studentID].Add(fieldName, value);
+                }
+
+            }
+
+            return userDefineInfo;
+        }
+
+
+
+
 
 
         // 建立word 大量功能變數

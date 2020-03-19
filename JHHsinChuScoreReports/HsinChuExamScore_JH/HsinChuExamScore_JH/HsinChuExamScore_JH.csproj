@@ -195,6 +195,7 @@
   <ItemGroup>
     <EmbeddedResource Include="CloneConfigure.resx">
       <DependentUpon>CloneConfigure.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="NewConfigure.resx">
       <DependentUpon>NewConfigure.cs</DependentUpon>
