@@ -20,6 +20,9 @@ namespace HsinChuExamScoreClassFixedRank
         public static string _SelSchoolYear;
         public static string _SelSemester;
         public static string _SelExamID = "";
+        public static string _SelRefExamID = "";
+
+
         public static List<string> _SelStudentIDList = new List<string>();
         public static List<string> _SelClassIDList = new List<string>();
         public static Dictionary<string, List<string>> DomainSubjectDict = new Dictionary<string, List<string>>();
@@ -252,7 +255,7 @@ namespace HsinChuExamScoreClassFixedRank
 
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("分數與排名");
+                builder.Writeln("總計分數與總計班排名,年排名");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
@@ -324,7 +327,7 @@ namespace HsinChuExamScoreClassFixedRank
 
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("分數與排名(定期)");
+                builder.Writeln("總計分數與總計班排名,年排名(定期)");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
@@ -393,6 +396,597 @@ namespace HsinChuExamScoreClassFixedRank
                     builder.EndRow();
                 }
                 builder.EndTable();
+
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計分數與總計類別1,類別2 排名");
+                builder.StartTable();
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分");
+                builder.InsertCell();
+                builder.Write("加權總分");
+                builder.InsertCell();
+                builder.Write("平均");
+                builder.InsertCell();
+                builder.Write("加權平均");
+                builder.InsertCell();
+                builder.Write("總分類別1排名");
+                builder.InsertCell();
+                builder.Write("加權總分類別1排名");
+                builder.InsertCell();
+                builder.Write("平均類別1排名");
+                builder.InsertCell();
+                builder.Write("加權平均類別1排名");
+                builder.InsertCell();
+                builder.Write("總分類別2排名");
+                builder.InsertCell();
+                builder.Write("加權總分類別2排名");
+                builder.InsertCell();
+                builder.Write("平均類別2排名");
+                builder.InsertCell();
+                builder.Write("加權平均類別2排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分" + studCot + " \\* MERGEFORMAT ", "S" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分" + studCot + " \\* MERGEFORMAT ", "SA" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均" + studCot + " \\* MERGEFORMAT ", "A" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均" + studCot + " \\* MERGEFORMAT ", "AA" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分類別1排名" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分類別1排名" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均類別1排名" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均類別1排名" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分類別2排名" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分類別2排名" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均類別2排名" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均類別2排名" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計分數與總計類別1,類別2 排名(定期)");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分(定期)");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)");
+                builder.InsertCell();
+                builder.Write("平均(定期)");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)");
+                builder.InsertCell();
+                builder.Write("總分(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("平均(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("總分(定期)類別2排名");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)類別2排名");
+                builder.InsertCell();
+                builder.Write("平均(定期)類別2排名");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)類別2排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期" + studCot + " \\* MERGEFORMAT ", "S" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期" + studCot + " \\* MERGEFORMAT ", "SA" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期" + studCot + " \\* MERGEFORMAT ", "A" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期" + studCot + " \\* MERGEFORMAT ", "AA" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期類別1排名" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期類別1排名" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期類別1排名" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期類別1排名" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期類別2排名" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期類別2排名" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期類別2排名" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期類別2排名" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計分數與總計班排名,年排名  (參考試別)");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分班排名");
+                builder.InsertCell();
+                builder.Write("加權總分班排名");
+                builder.InsertCell();
+                builder.Write("平均班排名");
+                builder.InsertCell();
+                builder.Write("加權平均班排名");
+                builder.InsertCell();
+                builder.Write("總分年排名");
+                builder.InsertCell();
+                builder.Write("加權總分年排名");
+                builder.InsertCell();
+                builder.Write("平均年排名");
+                builder.InsertCell();
+                builder.Write("加權平均年排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分班排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分班排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均班排名_參考試別" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均班排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分年排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分年排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均年排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均年排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計分數與總計班排名,年排名(定期) (參考試別)");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分(定期)班排名");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)班排名");
+                builder.InsertCell();
+                builder.Write("平均(定期)班排名");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)班排名");
+                builder.InsertCell();
+                builder.Write("總分(定期)年排名");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)年排名");
+                builder.InsertCell();
+                builder.Write("平均(定期)年排名");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)年排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期班排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期班排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期班排名_參考試別" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期班排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期年排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期年排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期年排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期年排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計分數與總計類別1,類別2 排名 (參考試別)");
+                builder.StartTable();
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分類別1排名");
+                builder.InsertCell();
+                builder.Write("加權總分類別1排名");
+                builder.InsertCell();
+                builder.Write("平均類別1排名");
+                builder.InsertCell();
+                builder.Write("加權平均類別1排名");
+                builder.InsertCell();
+                builder.Write("總分類別2排名");
+                builder.InsertCell();
+                builder.Write("加權總分類別2排名");
+                builder.InsertCell();
+                builder.Write("平均類別2排名");
+                builder.InsertCell();
+                builder.Write("加權平均類別2排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分類別1排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分類別1排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均類別1排名_參考試別" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均類別1排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分類別2排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分類別2排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均類別2排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均類別2排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計分數與總計類別1,類別2 排名(定期) (參考試別)");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("平均(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("總分(定期)類別2排名");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)類別2排名");
+                builder.InsertCell();
+                builder.Write("平均(定期)類別2排名");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)類別2排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期類別1排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期類別1排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期類別1排名_參考試別" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期類別1排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期類別2排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期類別2排名_參考試別" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期類別2排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期類別2排名_參考試別" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計分數與總計班排名,年排名  (進退步)");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分班排名");
+                builder.InsertCell();
+                builder.Write("加權總分班排名");
+                builder.InsertCell();
+                builder.Write("平均班排名");
+                builder.InsertCell();
+                builder.Write("加權平均班排名");
+                builder.InsertCell();
+                builder.Write("總分年排名");
+                builder.InsertCell();
+                builder.Write("加權總分年排名");
+                builder.InsertCell();
+                builder.Write("平均年排名");
+                builder.InsertCell();
+                builder.Write("加權平均年排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分班排名_進退步" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分班排名_進退步" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均班排名_進退步" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均班排名_進退步" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分年排名_進退步" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分年排名_進退步" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均年排名_進退步" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均年排名_進退步" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計分數與總計班排名,年排名(定期) (進退步)");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分(定期)班排名");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)班排名");
+                builder.InsertCell();
+                builder.Write("平均(定期)班排名");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)班排名");
+                builder.InsertCell();
+                builder.Write("總分(定期)年排名");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)年排名");
+                builder.InsertCell();
+                builder.Write("平均(定期)年排名");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)年排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期班排名_進退步" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期班排名_進退步" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期班排名_進退步" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期班排名_進退步" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期年排名_進退步" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期年排名_進退步" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期年排名_進退步" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期年排名_進退步" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計分數與總計類別1,類別2 排名 (進退步)");
+                builder.StartTable();
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分類別1排名");
+                builder.InsertCell();
+                builder.Write("加權總分類別1排名");
+                builder.InsertCell();
+                builder.Write("平均類別1排名");
+                builder.InsertCell();
+                builder.Write("加權平均類別1排名");
+                builder.InsertCell();
+                builder.Write("總分類別2排名");
+                builder.InsertCell();
+                builder.Write("加權總分類別2排名");
+                builder.InsertCell();
+                builder.Write("平均類別2排名");
+                builder.InsertCell();
+                builder.Write("加權平均類別2排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分類別1排名_進退步" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分類別1排名_進退步" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均類別1排名_進退步" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均類別1排名_進退步" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分類別2排名_進退步" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分類別2排名_進退步" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均類別2排名_進退步" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均類別2排名_進退步" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計分數與總計類別1,類別2 排名(定期) (進退步)");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+                builder.InsertCell();
+                builder.Write("總分(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("平均(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)類別1排名");
+                builder.InsertCell();
+                builder.Write("總分(定期)類別2排名");
+                builder.InsertCell();
+                builder.Write("加權總分(定期)類別2排名");
+                builder.InsertCell();
+                builder.Write("平均(定期)類別2排名");
+                builder.InsertCell();
+                builder.Write("加權平均(定期)類別2排名");
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期類別1排名_進退步" + studCot + " \\* MERGEFORMAT ", "SCR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期類別1排名_進退步" + studCot + " \\* MERGEFORMAT ", "SACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期類別1排名_進退步" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期類別1排名_進退步" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期類別2排名_進退步" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期類別2排名_進退步" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期類別2排名_進退步" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期類別2排名_進退步" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.EndRow();
+                }
+                builder.EndTable();
+
+
 
 
                 builder.Writeln("");
@@ -642,7 +1236,7 @@ namespace HsinChuExamScoreClassFixedRank
 
                 builder.InsertCell();
                 builder.Write("名稱");
-                for (int ss = 1; ss <= 20; ss++)
+                for (int ss = 1; ss <= 12; ss++)
                 {
                     builder.InsertCell();
                     builder.Write("領域" + ss);
