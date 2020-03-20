@@ -608,20 +608,22 @@ namespace KaoHsiungExamScore_JH
                                 }
                             }
 
-                            DAO.ExamSubjectScore ess = studExamScoreDict[studID]._ExamSubjectScoreDict[SubjecName];
+                            if (studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(SubjecName))
+                            {
+                                DAO.ExamSubjectScore ess = studExamScoreDict[studID]._ExamSubjectScoreDict[SubjecName];
 
-                            // 努力程度                                     
-                            ess.Effort = rec.Effort;
-                            // 評量分數
-                            ess.Score = rec.Score;
+                                // 努力程度                                     
+                                ess.Effort = rec.Effort;
+                                // 評量分數
+                                ess.Score = rec.Score;
 
-                            // 文字描述
-                            ess.Text = rec.Text;
-                            ess.Credit = cr.Credit;
+                                // 文字描述
+                                ess.Text = rec.Text;
+                                ess.Credit = cr.Credit;
 
-                            if (ess.Score.HasValue)
-                                ess.Score = studentCalculator.ParseSubjectScore(ess.Score.Value);
-
+                                if (ess.Score.HasValue)
+                                    ess.Score = studentCalculator.ParseSubjectScore(ess.Score.Value);
+                            }
                         }
                     }
                 }
