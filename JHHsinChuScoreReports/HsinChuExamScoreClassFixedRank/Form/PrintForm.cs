@@ -408,6 +408,34 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         #endregion
 
 
+
+                        #region 學生總計班排名 (參考試別)
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分班排名"))
+                            si.ClassSumRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分班排名"))
+                            si.ClassSumRefRank = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均班排名"))
+                            si.ClassAvgRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均班排名"))
+                            si.ClassAvgRefRank = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分班排名"))
+                            si.ClassSumRefRankAF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分班排名"))
+                            si.ClassSumRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績總分班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均班排名"))
+                            si.ClassAvgRefRankAF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權平均班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均班排名"))
+                            si.ClassAvgRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均班排名"];
+
+                        #endregion
+
                         #region 學生總計年排名(參考試別)
                         if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分年排名"))
                             si.YearSumRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分年排名"];
@@ -435,7 +463,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             si.YearAvgRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均年排名"];
                         #endregion
 
-                        #region 學生總計類別1排名
+                        #region 學生總計類別1排名 (參考試別)
                         if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分類別1排名"))
                             si.ClassType1SumRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分類別1排名"];
 
@@ -462,7 +490,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             si.ClassType1AvgRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均類別1排名"];
                         #endregion
 
-                        #region 學生總計類別2排名
+                        #region 學生總計類別2排名  (參考試別)
                         if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分類別2排名"))
                             si.ClassType2SumRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分類別2排名"];
 
@@ -2009,8 +2037,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
             #endregion
 
 
-            dtTable.TableName = "dtTable";
-            dtTable.WriteXml(Application.StartupPath + "\\dtT.xml");
+            //dtTable.TableName = "dtTable";
+            //dtTable.WriteXml(Application.StartupPath + "\\dtT.xml");
 
 
 
