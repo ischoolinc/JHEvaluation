@@ -407,8 +407,11 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             si.ClassType2AvgRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均類別2排名"];
                         #endregion
 
+                        
+                    }
 
-
+                    if (StudentRefExamRankMatrixDict.ContainsKey(si.StudentID))
+                    {
                         #region 學生總計班排名 (參考試別)
                         if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分班排名"))
                             si.ClassSumRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分班排名"];
@@ -516,10 +519,9 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均類別2排名"))
                             si.ClassType2AvgRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均類別2排名"];
                         #endregion
-
-
-
                     }
+
+
                 }
 
                 // 計算各項目及格人數
@@ -985,9 +987,24 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 tmpDomainCreditDict.Clear();
                 tmpSubjectCreditDict.Clear();
 
+                // 自己班上有的科目名稱
+                List<string> hasSubjectNameList = new List<string>();
 
-                // 填入學生資料
-                int studCot = 1;
+                foreach (StudentInfo si in ci.Students)
+                {
+                    foreach (DomainInfo di in si.DomainInfoList)
+                    {
+                        foreach(SubjectInfo subj in di.SubjectInfoList)
+                        {
+                            if (!hasSubjectNameList.Contains(subj.Name))
+                                hasSubjectNameList.Add(subj.Name);
+                        }
+                    }
+                }
+
+
+                    // 填入學生資料
+                    int studCot = 1;
                 foreach (StudentInfo si in ci.Students)
                 {
                     row["姓名" + studCot] = si.Name;
@@ -1358,55 +1375,60 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                             foreach (string ssName in SelDomainSubjectDict[di.Name])
                             {
-                                foreach (SubjectInfo subj in di.SubjectInfoList)
+                                // 班上學生有這再處理
+                                if (hasSubjectNameList.Contains(ssName))
                                 {
-                                    if (!tmpSubjectInfoDict.ContainsKey(subj.Name))
-                                        tmpSubjectInfoDict.Add(subj.Name, subj);
-
-                                    if (subj.Name == ssName)
+                                    foreach (SubjectInfo subj in di.SubjectInfoList)
                                     {
-                                        string s1Key = di.Name + "領域_科目名稱" + studCot + "_" + subjCot;
-                                        string s2Key = di.Name + "領域_科目成績" + studCot + "_" + subjCot;
-                                        string s2_1Key = di.Name + "領域_科目_定期成績" + studCot + "_" + subjCot;
-                                        string s3Key = di.Name + "領域_科目學分" + studCot + "_" + subjCot;
+                                        if (!tmpSubjectInfoDict.ContainsKey(subj.Name))
+                                            tmpSubjectInfoDict.Add(subj.Name, subj);
 
-                                        if (dtTable.Columns.Contains(s1Key))
+                                        if (subj.Name == ssName)
                                         {
-                                            row[s1Key] = subj.Name;
-                                        }
+                                            string s1Key = di.Name + "領域_科目名稱" + studCot + "_" + subjCot;
+                                            string s2Key = di.Name + "領域_科目成績" + studCot + "_" + subjCot;
+                                            string s2_1Key = di.Name + "領域_科目_定期成績" + studCot + "_" + subjCot;
+                                            string s3Key = di.Name + "領域_科目學分" + studCot + "_" + subjCot;
 
-                                        if (dtTable.Columns.Contains(s2Key))
-                                        {
-                                            if (dtTable.Columns.Contains(s2Key))
-                                                if (subj.Score.HasValue)
-                                                    row[s2Key] = subj.Score.Value;
-                                        }
-
-
-                                        if (dtTable.Columns.Contains(s2_1Key))
-                                        {
-                                            if (dtTable.Columns.Contains(s2_1Key))
-                                                if (subj.ScoreF.HasValue)
-                                                    row[s2_1Key] = subj.ScoreF.Value;
-                                        }
-
-                                        if (dtTable.Columns.Contains(s3Key))
-                                        {
-                                            if (subj.Credit.HasValue)
+                                            if (dtTable.Columns.Contains(s1Key))
                                             {
-                                                row[s3Key] = subj.Credit.Value;
-
-                                                if (!tmpSubjectCreditDict.ContainsKey(subj.Name))
-                                                    tmpSubjectCreditDict.Add(subj.Name, new List<decimal>());
-
-                                                if (!tmpSubjectCreditDict[subj.Name].Contains(subj.Credit.Value))
-                                                    tmpSubjectCreditDict[subj.Name].Add(subj.Credit.Value);
+                                                row[s1Key] = subj.Name;
                                             }
 
+                                            if (dtTable.Columns.Contains(s2Key))
+                                            {
+                                                if (dtTable.Columns.Contains(s2Key))
+                                                    if (subj.Score.HasValue)
+                                                        row[s2Key] = subj.Score.Value;
+                                            }
+
+
+                                            if (dtTable.Columns.Contains(s2_1Key))
+                                            {
+                                                if (dtTable.Columns.Contains(s2_1Key))
+                                                    if (subj.ScoreF.HasValue)
+                                                        row[s2_1Key] = subj.ScoreF.Value;
+                                            }
+
+                                            if (dtTable.Columns.Contains(s3Key))
+                                            {
+                                                if (subj.Credit.HasValue)
+                                                {
+                                                    row[s3Key] = subj.Credit.Value;
+
+                                                    if (!tmpSubjectCreditDict.ContainsKey(subj.Name))
+                                                        tmpSubjectCreditDict.Add(subj.Name, new List<decimal>());
+
+                                                    if (!tmpSubjectCreditDict[subj.Name].Contains(subj.Credit.Value))
+                                                        tmpSubjectCreditDict[subj.Name].Add(subj.Credit.Value);
+                                                }
+
+                                            }
                                         }
                                     }
-                                }
-                                subjCot++;
+                                    subjCot++;
+                                }                              
+                               
                             }
                         }
 
