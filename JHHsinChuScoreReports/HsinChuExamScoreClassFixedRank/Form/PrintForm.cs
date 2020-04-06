@@ -709,6 +709,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             dtTable.Columns.Add(dName + "領域_科目名稱" + studCot + "_" + i);
                             dtTable.Columns.Add(dName + "領域_科目成績" + studCot + "_" + i);
                             dtTable.Columns.Add(dName + "領域_科目_定期成績" + studCot + "_" + i);
+                            dtTable.Columns.Add(dName + "領域_科目_平時成績" + studCot + "_" + i);
                             dtTable.Columns.Add(dName + "領域_科目學分" + studCot + "_" + i);
 
                         }
@@ -721,6 +722,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     dtTable.Columns.Add("學生_科目名稱" + studCot + "_" + ss);
                     dtTable.Columns.Add("學生_科目成績" + studCot + "_" + ss);
                     dtTable.Columns.Add("學生_科目_定期成績" + studCot + "_" + ss);
+                    dtTable.Columns.Add("學生_科目_平時成績" + studCot + "_" + ss);
+
                     dtTable.Columns.Add("學生_科目學分" + studCot + "_" + ss);
 
                     dtTable.Columns.Add("學生_領域名稱" + studCot + "_" + ss);
@@ -1389,6 +1392,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                             string s2Key = di.Name + "領域_科目成績" + studCot + "_" + subjCot;
                                             string s2_1Key = di.Name + "領域_科目_定期成績" + studCot + "_" + subjCot;
                                             string s3Key = di.Name + "領域_科目學分" + studCot + "_" + subjCot;
+                                            string s4Key = di.Name + "領域_科目_平時成績" + studCot + "_" + subjCot;
+
 
                                             if (dtTable.Columns.Contains(s1Key))
                                             {
@@ -1402,7 +1407,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                                         row[s2Key] = subj.Score.Value;
                                             }
 
-
+                                            // 定期成績
                                             if (dtTable.Columns.Contains(s2_1Key))
                                             {
                                                 if (dtTable.Columns.Contains(s2_1Key))
@@ -1423,6 +1428,14 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                                         tmpSubjectCreditDict[subj.Name].Add(subj.Credit.Value);
                                                 }
 
+                                            }
+
+                                            // 平時成績
+                                            if (dtTable.Columns.Contains(s4Key))
+                                            {
+                                                if (dtTable.Columns.Contains(s4Key))
+                                                    if (subj.ScoreA.HasValue)
+                                                        row[s4Key] = subj.ScoreA.Value;
                                             }
                                         }
                                     }
@@ -1487,6 +1500,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             string sa2 = "學生_科目成績" + studCot + "_" + saCount;
                             string sa3 = "學生_科目_定期成績" + studCot + "_" + saCount;
                             string sa4 = "學生_科目學分" + studCot + "_" + saCount;
+                            string sa5 = "學生_科目_平時成績" + studCot + "_" + saCount;
 
                             if (dtTable.Columns.Contains(sa1))
                             {
@@ -1511,6 +1525,13 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 {
                                     row[sa4] = sia.Credit.Value;
                                 }
+                            }
+
+                            if (dtTable.Columns.Contains(sa5))
+                            {
+                                // 平時成績
+                                if (sia.ScoreA.HasValue)
+                                    row[sa5] = Math.Round(sia.ScoreA.Value, parseNumber, MidpointRounding.AwayFromZero);
                             }
 
                         }
