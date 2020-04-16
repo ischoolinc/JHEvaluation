@@ -29,12 +29,22 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cboConfigure = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.lnkDelConfig = new System.Windows.Forms.LinkLabel();
             this.lnkCopyConfig = new System.Windows.Forms.LinkLabel();
             this.labelX11 = new DevComponents.DotNetBar.LabelX();
             this.tabControl1 = new DevComponents.DotNetBar.TabControl();
+            this.tabControlPanel2 = new DevComponents.DotNetBar.TabControlPanel();
+            this.chkAttendSelAll = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.labelX5 = new DevComponents.DotNetBar.LabelX();
+            this.dgAttendanceData = new DevComponents.DotNetBar.Controls.DataGridViewX();
+            this.dtEnd = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
+            this.dtBegin = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
+            this.labelX14 = new DevComponents.DotNetBar.LabelX();
+            this.labelX13 = new DevComponents.DotNetBar.LabelX();
+            this.labelX12 = new DevComponents.DotNetBar.LabelX();
+            this.tabItem2 = new DevComponents.DotNetBar.TabItem(this.components);
             this.tabControlPanel1 = new DevComponents.DotNetBar.TabControlPanel();
             this.cboRefExam = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX8 = new DevComponents.DotNetBar.LabelX();
@@ -51,16 +61,6 @@
             this.labelX2 = new DevComponents.DotNetBar.LabelX();
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.tabItem1 = new DevComponents.DotNetBar.TabItem(this.components);
-            this.tabControlPanel2 = new DevComponents.DotNetBar.TabControlPanel();
-            this.chkAttendSelAll = new DevComponents.DotNetBar.Controls.CheckBoxX();
-            this.labelX5 = new DevComponents.DotNetBar.LabelX();
-            this.dgAttendanceData = new DevComponents.DotNetBar.Controls.DataGridViewX();
-            this.dtEnd = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
-            this.dtBegin = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
-            this.labelX14 = new DevComponents.DotNetBar.LabelX();
-            this.labelX13 = new DevComponents.DotNetBar.LabelX();
-            this.labelX12 = new DevComponents.DotNetBar.LabelX();
-            this.tabItem2 = new DevComponents.DotNetBar.TabItem(this.components);
             this.btnSaveConfig = new DevComponents.DotNetBar.ButtonX();
             this.btnPrint = new DevComponents.DotNetBar.ButtonX();
             this.btnCancel = new DevComponents.DotNetBar.ButtonX();
@@ -69,12 +69,12 @@
             this.lnkChangeTemplate = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.tabControl1)).BeginInit();
             this.tabControl1.SuspendLayout();
-            this.tabControlPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtScoreEdit)).BeginInit();
             this.tabControlPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAttendanceData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtEnd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtBegin)).BeginInit();
+            this.tabControlPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtScoreEdit)).BeginInit();
             this.SuspendLayout();
             // 
             // cboConfigure
@@ -134,8 +134,8 @@
             // 
             this.tabControl1.BackColor = System.Drawing.Color.Transparent;
             this.tabControl1.CanReorderTabs = true;
-            this.tabControl1.Controls.Add(this.tabControlPanel2);
             this.tabControl1.Controls.Add(this.tabControlPanel1);
+            this.tabControl1.Controls.Add(this.tabControlPanel2);
             this.tabControl1.Location = new System.Drawing.Point(15, 53);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedTabFont = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold);
@@ -147,6 +147,271 @@
             this.tabControl1.Tabs.Add(this.tabItem1);
             this.tabControl1.Tabs.Add(this.tabItem2);
             this.tabControl1.Text = "tabControl1";
+            // 
+            // tabControlPanel2
+            // 
+            this.tabControlPanel2.CanvasColor = System.Drawing.Color.Transparent;
+            this.tabControlPanel2.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.tabControlPanel2.Controls.Add(this.chkAttendSelAll);
+            this.tabControlPanel2.Controls.Add(this.labelX5);
+            this.tabControlPanel2.Controls.Add(this.dgAttendanceData);
+            this.tabControlPanel2.Controls.Add(this.dtEnd);
+            this.tabControlPanel2.Controls.Add(this.dtBegin);
+            this.tabControlPanel2.Controls.Add(this.labelX14);
+            this.tabControlPanel2.Controls.Add(this.labelX13);
+            this.tabControlPanel2.Controls.Add(this.labelX12);
+            this.tabControlPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlPanel2.Location = new System.Drawing.Point(0, 28);
+            this.tabControlPanel2.Name = "tabControlPanel2";
+            this.tabControlPanel2.Padding = new System.Windows.Forms.Padding(1);
+            this.tabControlPanel2.Size = new System.Drawing.Size(534, 267);
+            this.tabControlPanel2.Style.BackColor1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(253)))), ((int)(((byte)(254)))));
+            this.tabControlPanel2.Style.BackColor2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(157)))), ((int)(((byte)(188)))), ((int)(((byte)(227)))));
+            this.tabControlPanel2.Style.Border = DevComponents.DotNetBar.eBorderType.SingleLine;
+            this.tabControlPanel2.Style.BorderColor.Color = System.Drawing.Color.FromArgb(((int)(((byte)(146)))), ((int)(((byte)(165)))), ((int)(((byte)(199)))));
+            this.tabControlPanel2.Style.BorderSide = ((DevComponents.DotNetBar.eBorderSide)(((DevComponents.DotNetBar.eBorderSide.Left | DevComponents.DotNetBar.eBorderSide.Right) 
+            | DevComponents.DotNetBar.eBorderSide.Bottom)));
+            this.tabControlPanel2.Style.GradientAngle = 90;
+            this.tabControlPanel2.TabIndex = 2;
+            this.tabControlPanel2.TabItem = this.tabItem2;
+            // 
+            // chkAttendSelAll
+            // 
+            this.chkAttendSelAll.AutoSize = true;
+            this.chkAttendSelAll.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.chkAttendSelAll.BackgroundStyle.Class = "";
+            this.chkAttendSelAll.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.chkAttendSelAll.Location = new System.Drawing.Point(168, 73);
+            this.chkAttendSelAll.Name = "chkAttendSelAll";
+            this.chkAttendSelAll.Size = new System.Drawing.Size(54, 21);
+            this.chkAttendSelAll.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.chkAttendSelAll.TabIndex = 31;
+            this.chkAttendSelAll.Text = "全選";
+            this.chkAttendSelAll.CheckedChanged += new System.EventHandler(this.chkAttendSelAll_CheckedChanged);
+            // 
+            // labelX5
+            // 
+            this.labelX5.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelX5.AutoSize = true;
+            this.labelX5.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX5.BackgroundStyle.Class = "";
+            this.labelX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX5.Location = new System.Drawing.Point(19, 73);
+            this.labelX5.Name = "labelX5";
+            this.labelX5.Size = new System.Drawing.Size(154, 21);
+            this.labelX5.TabIndex = 25;
+            this.labelX5.Text = "請選擇您要列印的假別：";
+            // 
+            // dgAttendanceData
+            // 
+            this.dgAttendanceData.AllowUserToAddRows = false;
+            this.dgAttendanceData.AllowUserToDeleteRows = false;
+            this.dgAttendanceData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgAttendanceData.BackgroundColor = System.Drawing.Color.White;
+            this.dgAttendanceData.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dgAttendanceData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgAttendanceData.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dgAttendanceData.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
+            this.dgAttendanceData.Location = new System.Drawing.Point(19, 99);
+            this.dgAttendanceData.MultiSelect = false;
+            this.dgAttendanceData.Name = "dgAttendanceData";
+            this.dgAttendanceData.RowHeadersVisible = false;
+            this.dgAttendanceData.RowTemplate.Height = 24;
+            this.dgAttendanceData.Size = new System.Drawing.Size(501, 150);
+            this.dgAttendanceData.TabIndex = 2;
+            // 
+            // dtEnd
+            // 
+            // 
+            // 
+            // 
+            this.dtEnd.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.dtEnd.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtEnd.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
+            this.dtEnd.ButtonDropDown.Visible = true;
+            this.dtEnd.IsPopupCalendarOpen = false;
+            this.dtEnd.Location = new System.Drawing.Point(297, 38);
+            // 
+            // 
+            // 
+            this.dtEnd.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dtEnd.MonthCalendar.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window;
+            this.dtEnd.MonthCalendar.BackgroundStyle.Class = "";
+            this.dtEnd.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtEnd.MonthCalendar.ClearButtonVisible = true;
+            // 
+            // 
+            // 
+            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
+            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
+            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
+            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
+            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
+            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.Class = "";
+            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtEnd.MonthCalendar.DayNames = new string[] {
+        "日",
+        "一",
+        "二",
+        "三",
+        "四",
+        "五",
+        "六"};
+            this.dtEnd.MonthCalendar.DisplayMonth = new System.DateTime(2012, 11, 1, 0, 0, 0, 0);
+            this.dtEnd.MonthCalendar.MarkedDates = new System.DateTime[0];
+            this.dtEnd.MonthCalendar.MaxDate = new System.DateTime(3000, 12, 31, 0, 0, 0, 0);
+            this.dtEnd.MonthCalendar.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
+            this.dtEnd.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dtEnd.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
+            this.dtEnd.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
+            this.dtEnd.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.dtEnd.MonthCalendar.NavigationBackgroundStyle.Class = "";
+            this.dtEnd.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtEnd.MonthCalendar.TodayButtonVisible = true;
+            this.dtEnd.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
+            this.dtEnd.Name = "dtEnd";
+            this.dtEnd.Size = new System.Drawing.Size(143, 25);
+            this.dtEnd.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.dtEnd.TabIndex = 1;
+            // 
+            // dtBegin
+            // 
+            // 
+            // 
+            // 
+            this.dtBegin.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.dtBegin.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtBegin.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
+            this.dtBegin.ButtonDropDown.Visible = true;
+            this.dtBegin.IsPopupCalendarOpen = false;
+            this.dtBegin.Location = new System.Drawing.Point(79, 38);
+            this.dtBegin.MaxDate = new System.DateTime(3000, 12, 31, 0, 0, 0, 0);
+            this.dtBegin.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
+            // 
+            // 
+            // 
+            this.dtBegin.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dtBegin.MonthCalendar.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window;
+            this.dtBegin.MonthCalendar.BackgroundStyle.Class = "";
+            this.dtBegin.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtBegin.MonthCalendar.ClearButtonVisible = true;
+            // 
+            // 
+            // 
+            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
+            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
+            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
+            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
+            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
+            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.Class = "";
+            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtBegin.MonthCalendar.DayNames = new string[] {
+        "日",
+        "一",
+        "二",
+        "三",
+        "四",
+        "五",
+        "六"};
+            this.dtBegin.MonthCalendar.DisplayMonth = new System.DateTime(2012, 11, 1, 0, 0, 0, 0);
+            this.dtBegin.MonthCalendar.MarkedDates = new System.DateTime[0];
+            this.dtBegin.MonthCalendar.MaxDate = new System.DateTime(3000, 12, 31, 0, 0, 0, 0);
+            this.dtBegin.MonthCalendar.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
+            this.dtBegin.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dtBegin.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
+            this.dtBegin.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
+            this.dtBegin.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.dtBegin.MonthCalendar.NavigationBackgroundStyle.Class = "";
+            this.dtBegin.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dtBegin.MonthCalendar.TodayButtonVisible = true;
+            this.dtBegin.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
+            this.dtBegin.Name = "dtBegin";
+            this.dtBegin.Size = new System.Drawing.Size(143, 25);
+            this.dtBegin.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.dtBegin.TabIndex = 0;
+            // 
+            // labelX14
+            // 
+            this.labelX14.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelX14.AutoSize = true;
+            this.labelX14.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX14.BackgroundStyle.Class = "";
+            this.labelX14.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX14.Location = new System.Drawing.Point(257, 40);
+            this.labelX14.Name = "labelX14";
+            this.labelX14.Size = new System.Drawing.Size(34, 21);
+            this.labelX14.TabIndex = 21;
+            this.labelX14.Text = "結束";
+            // 
+            // labelX13
+            // 
+            this.labelX13.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelX13.AutoSize = true;
+            this.labelX13.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX13.BackgroundStyle.Class = "";
+            this.labelX13.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX13.Location = new System.Drawing.Point(38, 40);
+            this.labelX13.Name = "labelX13";
+            this.labelX13.Size = new System.Drawing.Size(34, 21);
+            this.labelX13.TabIndex = 20;
+            this.labelX13.Text = "開始";
+            // 
+            // labelX12
+            // 
+            this.labelX12.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelX12.AutoSize = true;
+            this.labelX12.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX12.BackgroundStyle.Class = "";
+            this.labelX12.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX12.Location = new System.Drawing.Point(19, 8);
+            this.labelX12.Name = "labelX12";
+            this.labelX12.Size = new System.Drawing.Size(350, 21);
+            this.labelX12.TabIndex = 19;
+            this.labelX12.Text = "請選擇日期區間：(依區間統計缺曠、獎懲、服務學習時數)";
+            // 
+            // tabItem2
+            // 
+            this.tabItem2.AttachedControl = this.tabControlPanel2;
+            this.tabItem2.Name = "tabItem2";
+            this.tabItem2.Text = "缺曠、獎懲、服務學習時數";
             // 
             // tabControlPanel1
             // 
@@ -193,6 +458,7 @@
             this.cboRefExam.Size = new System.Drawing.Size(156, 25);
             this.cboRefExam.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboRefExam.TabIndex = 34;
+            this.cboRefExam.SelectedIndexChanged += new System.EventHandler(this.cboRefExam_SelectedIndexChanged);
             // 
             // labelX8
             // 
@@ -390,6 +656,7 @@
             this.lvSubject.Border.Class = "ListViewBorder";
             this.lvSubject.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSubject.CheckBoxes = true;
+            this.lvSubject.HideSelection = false;
             this.lvSubject.Location = new System.Drawing.Point(22, 125);
             this.lvSubject.Name = "lvSubject";
             this.lvSubject.Size = new System.Drawing.Size(490, 124);
@@ -450,271 +717,6 @@
             this.tabItem1.AttachedControl = this.tabControlPanel1;
             this.tabItem1.Name = "tabItem1";
             this.tabItem1.Text = "成績";
-            // 
-            // tabControlPanel2
-            // 
-            this.tabControlPanel2.CanvasColor = System.Drawing.Color.Transparent;
-            this.tabControlPanel2.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
-            this.tabControlPanel2.Controls.Add(this.chkAttendSelAll);
-            this.tabControlPanel2.Controls.Add(this.labelX5);
-            this.tabControlPanel2.Controls.Add(this.dgAttendanceData);
-            this.tabControlPanel2.Controls.Add(this.dtEnd);
-            this.tabControlPanel2.Controls.Add(this.dtBegin);
-            this.tabControlPanel2.Controls.Add(this.labelX14);
-            this.tabControlPanel2.Controls.Add(this.labelX13);
-            this.tabControlPanel2.Controls.Add(this.labelX12);
-            this.tabControlPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlPanel2.Location = new System.Drawing.Point(0, 28);
-            this.tabControlPanel2.Name = "tabControlPanel2";
-            this.tabControlPanel2.Padding = new System.Windows.Forms.Padding(1);
-            this.tabControlPanel2.Size = new System.Drawing.Size(534, 267);
-            this.tabControlPanel2.Style.BackColor1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(253)))), ((int)(((byte)(254)))));
-            this.tabControlPanel2.Style.BackColor2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(157)))), ((int)(((byte)(188)))), ((int)(((byte)(227)))));
-            this.tabControlPanel2.Style.Border = DevComponents.DotNetBar.eBorderType.SingleLine;
-            this.tabControlPanel2.Style.BorderColor.Color = System.Drawing.Color.FromArgb(((int)(((byte)(146)))), ((int)(((byte)(165)))), ((int)(((byte)(199)))));
-            this.tabControlPanel2.Style.BorderSide = ((DevComponents.DotNetBar.eBorderSide)(((DevComponents.DotNetBar.eBorderSide.Left | DevComponents.DotNetBar.eBorderSide.Right) 
-            | DevComponents.DotNetBar.eBorderSide.Bottom)));
-            this.tabControlPanel2.Style.GradientAngle = 90;
-            this.tabControlPanel2.TabIndex = 2;
-            this.tabControlPanel2.TabItem = this.tabItem2;
-            // 
-            // chkAttendSelAll
-            // 
-            this.chkAttendSelAll.AutoSize = true;
-            this.chkAttendSelAll.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.chkAttendSelAll.BackgroundStyle.Class = "";
-            this.chkAttendSelAll.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.chkAttendSelAll.Location = new System.Drawing.Point(168, 73);
-            this.chkAttendSelAll.Name = "chkAttendSelAll";
-            this.chkAttendSelAll.Size = new System.Drawing.Size(54, 21);
-            this.chkAttendSelAll.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.chkAttendSelAll.TabIndex = 31;
-            this.chkAttendSelAll.Text = "全選";
-            this.chkAttendSelAll.CheckedChanged += new System.EventHandler(this.chkAttendSelAll_CheckedChanged);
-            // 
-            // labelX5
-            // 
-            this.labelX5.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.labelX5.AutoSize = true;
-            this.labelX5.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX5.BackgroundStyle.Class = "";
-            this.labelX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX5.Location = new System.Drawing.Point(19, 73);
-            this.labelX5.Name = "labelX5";
-            this.labelX5.Size = new System.Drawing.Size(154, 21);
-            this.labelX5.TabIndex = 25;
-            this.labelX5.Text = "請選擇您要列印的假別：";
-            // 
-            // dgAttendanceData
-            // 
-            this.dgAttendanceData.AllowUserToAddRows = false;
-            this.dgAttendanceData.AllowUserToDeleteRows = false;
-            this.dgAttendanceData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgAttendanceData.BackgroundColor = System.Drawing.Color.White;
-            this.dgAttendanceData.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dgAttendanceData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgAttendanceData.DefaultCellStyle = dataGridViewCellStyle3;
-            this.dgAttendanceData.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
-            this.dgAttendanceData.Location = new System.Drawing.Point(19, 99);
-            this.dgAttendanceData.MultiSelect = false;
-            this.dgAttendanceData.Name = "dgAttendanceData";
-            this.dgAttendanceData.RowHeadersVisible = false;
-            this.dgAttendanceData.RowTemplate.Height = 24;
-            this.dgAttendanceData.Size = new System.Drawing.Size(501, 150);
-            this.dgAttendanceData.TabIndex = 2;
-            // 
-            // dtEnd
-            // 
-            // 
-            // 
-            // 
-            this.dtEnd.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.dtEnd.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtEnd.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
-            this.dtEnd.ButtonDropDown.Visible = true;
-            this.dtEnd.IsPopupCalendarOpen = false;
-            this.dtEnd.Location = new System.Drawing.Point(297, 38);
-            // 
-            // 
-            // 
-            this.dtEnd.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dtEnd.MonthCalendar.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window;
-            this.dtEnd.MonthCalendar.BackgroundStyle.Class = "";
-            this.dtEnd.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtEnd.MonthCalendar.ClearButtonVisible = true;
-            // 
-            // 
-            // 
-            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
-            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
-            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
-            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
-            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.Class = "";
-            this.dtEnd.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtEnd.MonthCalendar.DayNames = new string[] {
-        "日",
-        "一",
-        "二",
-        "三",
-        "四",
-        "五",
-        "六"};
-            this.dtEnd.MonthCalendar.DisplayMonth = new System.DateTime(2012, 11, 1, 0, 0, 0, 0);
-            this.dtEnd.MonthCalendar.MarkedDates = new System.DateTime[0];
-            this.dtEnd.MonthCalendar.MaxDate = new System.DateTime(3000, 12, 31, 0, 0, 0, 0);
-            this.dtEnd.MonthCalendar.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
-            this.dtEnd.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dtEnd.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
-            this.dtEnd.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
-            this.dtEnd.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
-            this.dtEnd.MonthCalendar.NavigationBackgroundStyle.Class = "";
-            this.dtEnd.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtEnd.MonthCalendar.TodayButtonVisible = true;
-            this.dtEnd.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
-            this.dtEnd.Name = "dtEnd";
-            this.dtEnd.Size = new System.Drawing.Size(143, 25);
-            this.dtEnd.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.dtEnd.TabIndex = 1;
-            // 
-            // dtBegin
-            // 
-            // 
-            // 
-            // 
-            this.dtBegin.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.dtBegin.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtBegin.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
-            this.dtBegin.ButtonDropDown.Visible = true;
-            this.dtBegin.IsPopupCalendarOpen = false;
-            this.dtBegin.Location = new System.Drawing.Point(79, 38);
-            this.dtBegin.MaxDate = new System.DateTime(3000, 12, 31, 0, 0, 0, 0);
-            this.dtBegin.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
-            // 
-            // 
-            // 
-            this.dtBegin.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dtBegin.MonthCalendar.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window;
-            this.dtBegin.MonthCalendar.BackgroundStyle.Class = "";
-            this.dtBegin.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtBegin.MonthCalendar.ClearButtonVisible = true;
-            // 
-            // 
-            // 
-            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
-            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
-            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
-            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
-            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.Class = "";
-            this.dtBegin.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtBegin.MonthCalendar.DayNames = new string[] {
-        "日",
-        "一",
-        "二",
-        "三",
-        "四",
-        "五",
-        "六"};
-            this.dtBegin.MonthCalendar.DisplayMonth = new System.DateTime(2012, 11, 1, 0, 0, 0, 0);
-            this.dtBegin.MonthCalendar.MarkedDates = new System.DateTime[0];
-            this.dtBegin.MonthCalendar.MaxDate = new System.DateTime(3000, 12, 31, 0, 0, 0, 0);
-            this.dtBegin.MonthCalendar.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
-            this.dtBegin.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dtBegin.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
-            this.dtBegin.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
-            this.dtBegin.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
-            this.dtBegin.MonthCalendar.NavigationBackgroundStyle.Class = "";
-            this.dtBegin.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dtBegin.MonthCalendar.TodayButtonVisible = true;
-            this.dtBegin.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
-            this.dtBegin.Name = "dtBegin";
-            this.dtBegin.Size = new System.Drawing.Size(143, 25);
-            this.dtBegin.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.dtBegin.TabIndex = 0;
-            // 
-            // labelX14
-            // 
-            this.labelX14.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.labelX14.AutoSize = true;
-            this.labelX14.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX14.BackgroundStyle.Class = "";
-            this.labelX14.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX14.Location = new System.Drawing.Point(257, 40);
-            this.labelX14.Name = "labelX14";
-            this.labelX14.Size = new System.Drawing.Size(34, 21);
-            this.labelX14.TabIndex = 21;
-            this.labelX14.Text = "結束";
-            // 
-            // labelX13
-            // 
-            this.labelX13.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.labelX13.AutoSize = true;
-            this.labelX13.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX13.BackgroundStyle.Class = "";
-            this.labelX13.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX13.Location = new System.Drawing.Point(38, 40);
-            this.labelX13.Name = "labelX13";
-            this.labelX13.Size = new System.Drawing.Size(34, 21);
-            this.labelX13.TabIndex = 20;
-            this.labelX13.Text = "開始";
-            // 
-            // labelX12
-            // 
-            this.labelX12.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.labelX12.AutoSize = true;
-            this.labelX12.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX12.BackgroundStyle.Class = "";
-            this.labelX12.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX12.Location = new System.Drawing.Point(19, 8);
-            this.labelX12.Name = "labelX12";
-            this.labelX12.Size = new System.Drawing.Size(350, 21);
-            this.labelX12.TabIndex = 19;
-            this.labelX12.Text = "請選擇日期區間：(依區間統計缺曠、獎懲、服務學習時數)";
-            // 
-            // tabItem2
-            // 
-            this.tabItem2.AttachedControl = this.tabControlPanel2;
-            this.tabItem2.Name = "tabItem2";
-            this.tabItem2.Text = "缺曠、獎懲、服務學習時數";
             // 
             // btnSaveConfig
             // 
@@ -823,14 +825,14 @@
             this.Load += new System.EventHandler(this.PrintForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tabControl1)).EndInit();
             this.tabControl1.ResumeLayout(false);
-            this.tabControlPanel1.ResumeLayout(false);
-            this.tabControlPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtScoreEdit)).EndInit();
             this.tabControlPanel2.ResumeLayout(false);
             this.tabControlPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAttendanceData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtEnd)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtBegin)).EndInit();
+            this.tabControlPanel1.ResumeLayout(false);
+            this.tabControlPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtScoreEdit)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

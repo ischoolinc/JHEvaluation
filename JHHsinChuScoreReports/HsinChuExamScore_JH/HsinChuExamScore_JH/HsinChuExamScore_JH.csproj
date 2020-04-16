@@ -131,13 +131,17 @@
     </Compile>
     <Compile Include="Configure.cs" />
     <Compile Include="DAO\DomainRangeCount.cs" />
+    <Compile Include="DAO\EnumScoreComposition.cs" />
+    <Compile Include="DAO\EnumScoreType.cs" />
     <Compile Include="DAO\ExamDomainScore.cs" />
     <Compile Include="DAO\ExamSubjectScore.cs" />
+    <Compile Include="DAO\IScore.cs" />
     <Compile Include="DAO\RankDataInfo.cs" />
     <Compile Include="DAO\ScoreMappingConfig.cs" />
     <Compile Include="DAO\StudExamScore.cs" />
     <Compile Include="DAO\SubjectDomainName.cs" />
     <Compile Include="DAO\SubjectRangeCount.cs" />
+    <Compile Include="DAO\TotalCalculateWays.cs" />
     <Compile Include="DAO\UDTTransfer.cs" />
     <Compile Include="DAO\UDT_ScoreConfig.cs" />
     <Compile Include="Global.cs" />

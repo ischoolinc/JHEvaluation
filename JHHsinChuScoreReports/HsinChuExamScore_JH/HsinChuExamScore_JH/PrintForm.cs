@@ -23,6 +23,13 @@ namespace HsinChuExamScore_JH
 {
     public partial class PrintForm : BaseForm, IFieldMergingCallback
     {
+
+        private Boolean HasReferenceExam = false;
+        private Type _ScoreCompositions = typeof(EnumScoreComposition); // 取得 EnumScoreComposition  (總成績,定期評量,平時評量)
+        string[] itemNames = new string[] { "平均", "總分" };
+        Dictionary<string, string> itemTypesMapping = new Dictionary<string, string>() {
+                        {"定期評量_定期/總計成績","定期成績"},
+                        {"定期評量/總計成績","成績"}}; //因資料庫內 itemTypes用詞過長 轉換為較短並符合其他合併欄位命名方式的欄位
         private FISCA.UDT.AccessHelper _AccessHelper = new FISCA.UDT.AccessHelper();
 
         private Dictionary<string, List<string>> _ExamSubjects = new Dictionary<string, List<string>>();
@@ -44,6 +51,9 @@ namespace HsinChuExamScore_JH
 
         private List<string> typeList = new List<string>();
         private List<string> absenceList = new List<string>();
+        /// <summary>
+        /// 勾選的科目
+        /// </summary>
         private List<string> _SelSubjNameList = new List<string>();
         private List<string> _SelAttendanceList = new List<string>();
 
@@ -51,7 +61,7 @@ namespace HsinChuExamScore_JH
         private DocumentBuilder _builder;
         BackgroundWorker bkw;
 
-        // 錯誤訊息
+        /// 錯誤訊息
         List<string> _ErrorList = new List<string>();
 
         // 領域錯誤訊息
@@ -90,7 +100,11 @@ namespace HsinChuExamScore_JH
         ScoreMappingConfig _ScoreMappingConfig = new ScoreMappingConfig();
 
         private List<ExamRecord> _exams = new List<ExamRecord>();
-        private List<string> _UserDefineFields; // 裝自訂欄位有哪一些
+
+        /// <summary>
+        /// 裝有那些自訂欄位
+        /// </summary>
+        private List<string> _UserDefineFields; 
         private Dictionary<string, List<string>> _StudTagDict = new Dictionary<string, List<string>>();
 
         // 紀錄樣板設定
@@ -464,29 +478,38 @@ namespace HsinChuExamScore_JH
 
             #endregion
 
-            // 課程資料
-            Dictionary<string, JHCourseRecord> CourseDict = new Dictionary<string, JHCourseRecord>();
 
+            Dictionary<string, JHCourseRecord> CourseDict = new Dictionary<string, JHCourseRecord>();
+            // 1.課程資料   取得當 學年 度學期 課程資訊
             foreach (JHCourseRecord co in JHCourse.SelectBySchoolYearAndSemester(_SelSchoolYear, _SelSemester))
             {
                 CourseDict.Add(co.ID, co);
             }
 
 
-
-
             // 取評量成績
             Dictionary<string, List<HC.JHSCETakeRecord>> Score1Dict = new Dictionary<string, List<HC.JHSCETakeRecord>>();
 
-            // 取得所選學生評量成績
-            List<string> sceIDs = Utility.GetSCETakeIDsByExamID(_StudentIDList, _SelExamID);
-            List<JHSCETakeRecord> studSCETake = JHSCETake.SelectByIDs(sceIDs);
-
-            foreach (JHSCETakeRecord record in studSCETake)
+            // Scetake取得所選學生評量成績  這邊有點冗 但不想動太多原本的邏輯 所以先不改
+            // 取得定期評量資訊
+            List<string> sceTakes; // sceTakeID 清單
+            if (!this.HasReferenceExam) //如果不包含參考試別
             {
-                if (record.RefExamID == _SelExamID)
-                {
+                sceTakes = Utility.GetSCETakeIDsByExamID(_StudentIDList, _SelSchoolYear, _SelSemester, this._SelExamID);
+            }
+            else
+            {
+                sceTakes = Utility.GetSCETakeIDsByExamID(_StudentIDList, _SelSchoolYear, _SelSemester, this._SelExamID, this._SelRefExamID);
+            }
 
+            // 用sce_take 取得學生修課 試別 成績 
+            List<JHSCETakeRecord> studSCETake = JHSCETake.SelectByIDs(sceTakes);
+
+            // todo 1.取得成績
+            foreach (JHSCETakeRecord record in studSCETake) // 取得成績後給
+            {
+                if (record.RefExamID == _SelExamID || record.RefExamID == this._SelRefExamID) //過濾試別 (如果修課記錄上識別==選擇試別或參考識別)
+                {
                     if (!Score1Dict.ContainsKey(record.RefStudentID))
                         Score1Dict.Add(record.RefStudentID, new List<HC.JHSCETakeRecord>());
 
@@ -494,16 +517,20 @@ namespace HsinChuExamScore_JH
                 }
             }
 
+            // TODO 
             // 取得這次該修課程
             Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> StudCourseDict = Utility.GetStudentSCAttendCourse(_StudentIDList, CourseDict.Keys.ToList(), _SelExamID);
-
+            //  Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> StudCourseDict = Utility.GetStudentSCAttendCourse(_StudentIDList, CourseDict.Keys.ToList(), _SelRefExamID);
             // 取得評量設定比例
             Dictionary<string, decimal> ScorePercentageHSDict = Utility.GetScorePercentageHS();
 
             _bgWorkReport.ReportProgress(30);
 
+
+
             // 處理評量成績科目
             Dictionary<string, DAO.StudExamScore> studExamScoreDict = new Dictionary<string, DAO.StudExamScore>();
+
             foreach (string studID in _StudentIDList)
             {
                 // 成績計算規則
@@ -515,10 +542,10 @@ namespace HsinChuExamScore_JH
                 {
                     if (!studExamScoreDict.ContainsKey(studID))
                         studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
-
+                    // 取得成績
                     foreach (HC.JHSCETakeRecord rec in Score1Dict[studID])
                     {
-                        if (rec.RefExamID == _SelExamID && CourseDict.ContainsKey(rec.RefCourseID))
+                        if ((rec.RefExamID == _SelExamID || rec.RefExamID == _SelRefExamID) && CourseDict.ContainsKey(rec.RefCourseID))
                         {
                             JHCourseRecord cr = CourseDict[rec.RefCourseID];
 
@@ -527,34 +554,68 @@ namespace HsinChuExamScore_JH
                             // 勾選科目
                             if (_SelSubjNameList.Contains(SubjecName))
                             {
+                                DAO.ExamSubjectScore examSubjectScore;
                                 if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(SubjecName))
                                 {
-                                    DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
-                                    ess.DomainName = cr.Domain;
-                                    ess.SubjectName = SubjecName;
-                                    ess.ScoreA = rec.AssignmentScore;
-                                    ess.ScoreF = rec.Score;
+                                    examSubjectScore = new DAO.ExamSubjectScore();
+                                    studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, examSubjectScore);
+                                }
+                                else
+                                {
+                                    examSubjectScore = (ExamSubjectScore)studExamScoreDict[studID]._ExamSubjectScoreDict[SubjecName];
+                                }
+                                
 
-                                    if (ess.ScoreA.HasValue && ess.ScoreF.HasValue)
+
+
+                                    examSubjectScore.DomainName = cr.Domain;
+                                    examSubjectScore.SubjectName = SubjecName;
+
+                                    if (rec.RefExamID == this._SelExamID) //如果是本次選擇類別
                                     {
-                                        if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
-                                        {
-                                            // 取得定期，評量由100-定期
-                                            decimal f = ScorePercentageHSDict[cr.RefAssessmentSetupID] * 0.01M;
-                                            decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID]) * 0.01M;
-                                            ess.ScoreT = ess.ScoreA.Value * a + ess.ScoreF.Value * f;
-                                        }
-                                        else
-                                            ess.ScoreT = ess.ScoreA.Value * 0.5M + ess.ScoreF.Value * 0.5M; // 沒有設定預設50,50
+                                        examSubjectScore.ScoreA = rec.AssignmentScore;
+                                        examSubjectScore.ScoreF = rec.Score;
+                                    if (examSubjectScore.ScoreT.HasValue)
+                                        examSubjectScore.ScoreT = studentCalculator.ParseSubjectScore(examSubjectScore.ScoreT.Value);
 
-                                        // 原本
-                                        //ess.ScoreT = (ess.ScoreA.Value + ess.ScoreF.Value) / 2;
+                                    examSubjectScore.Text = rec.Text;
+                                    examSubjectScore.Credit = cr.Credit;
+
+                                }
+                                    else if (rec.RefExamID == this._SelRefExamID) //處理參考試別
+                                    {
+                                        examSubjectScore.RefScoreA = rec.AssignmentScore;
+                                        examSubjectScore.RefScoreF = rec.Score;
                                     }
-                                    if (ess.ScoreA.HasValue && ess.ScoreF.HasValue == false)
-                                        ess.ScoreT = ess.ScoreA.Value;
 
-                                    if (ess.ScoreA.HasValue == false && ess.ScoreF.HasValue)
-                                        ess.ScoreT = ess.ScoreF.Value;
+
+
+                                    if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
+                                    {
+                                        // 取得定期，評量由100-定期
+                                        // decimal f = ScorePercentageHSDict[cr.RefAssessmentSetupID] * 0.01M;
+                                        // 計算所有成績
+                                        examSubjectScore.GetTotalScore(this.HasReferenceExam, ScorePercentageHSDict[cr.RefAssessmentSetupID]);
+                                        //decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID]) * 0.01M;
+                                    }
+                                    else
+                                    {
+                                        examSubjectScore.GetTotalScore(this.HasReferenceExam, 0.5M);
+                                    }
+
+                                    //examSubjectScore.ScoreT = examSubjectScore.ScoreA.Value * a + examSubjectScore.ScoreF.Value * f;
+                                    //}
+                                    //else
+                                    //    examSubjectScore.ScoreT = examSubjectScore.ScoreA.Value * 0.5M + examSubjectScore.ScoreF.Value * 0.5M; // 沒有設定預設50,50
+
+                                    // 原本
+                                    //ess.ScoreT = (ess.ScoreA.Value + ess.ScoreF.Value) / 2;
+
+                                    //if (examSubjectScore.ScoreA.HasValue && examSubjectScore.ScoreF.HasValue == false)
+                                    //    examSubjectScore.ScoreT = examSubjectScore.ScoreA.Value;
+
+                                    //if (examSubjectScore.ScoreA.HasValue == false && examSubjectScore.ScoreF.HasValue)
+                                    //    examSubjectScore.ScoreT = examSubjectScore.ScoreF.Value;
 
                                     // 依照成績計算規則科目方式處理進位，只有總成績。
                                     // 平時
@@ -565,18 +626,13 @@ namespace HsinChuExamScore_JH
                                     //if (ess.ScoreF.HasValue)
                                     //    ess.ScoreF = studentCalculator.ParseSubjectScore(ess.ScoreF.Value);
 
-                                    if (ess.ScoreT.HasValue)
-                                        ess.ScoreT = studentCalculator.ParseSubjectScore(ess.ScoreT.Value);
-
-                                    ess.Text = rec.Text;
-                                    ess.Credit = cr.Credit;
-                                    studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, ess);
-                                }
+                                    // 進位 
+                                 
                             }
                         }
                     }
                     // 計算領域成績
-                    studExamScoreDict[studID].CalcSubjectToDomain();
+                    studExamScoreDict[studID].CalcSubjectToDomain("");
                 }
 
                 if (StudCourseDict.ContainsKey(studID))
@@ -585,8 +641,12 @@ namespace HsinChuExamScore_JH
                         studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
                     if (studExamScoreDict[studID]._ExamSubjectScoreDict == null)
                     {
-                        studExamScoreDict[studID]._ExamSubjectScoreDict = new Dictionary<string, DAO.ExamSubjectScore>();
-                        studExamScoreDict[studID]._ExamDomainScoreDict = new Dictionary<string, DAO.ExamDomainScore>();
+                        studExamScoreDict[studID]._ExamSubjectScoreDict = new Dictionary<string, IScore>();
+                        studExamScoreDict[studID]._ExamDomainScoreDict = new Dictionary<string, IScore>();
+                        if (this.HasReferenceExam)
+                        {
+                            studExamScoreDict[studID]._RefExamSubjectScoreDict = new Dictionary<string, IScore>();
+                        }
                     }
                     foreach (KeyValuePair<string, DAO.SubjectDomainName> data in StudCourseDict[studID])
                     {
@@ -616,8 +676,9 @@ namespace HsinChuExamScore_JH
             {
                 tmpDomainList.Clear();
                 tmpSubjectList.Clear();
-                Dictionary<string, DAO.ExamSubjectScore> tmpSubjectScore = new Dictionary<string, ExamSubjectScore>();
-                Dictionary<string, DAO.ExamDomainScore> tmpDomainScore = new Dictionary<string, ExamDomainScore>();
+                Dictionary<string, IScore> tmpSubjectScore = new Dictionary<string, IScore>();
+                Dictionary<string, IScore> tmpDomainScore = new Dictionary<string, IScore>();
+                Dictionary<string, IScore> refSubject = new Dictionary<string, IScore>();
 
                 foreach (string dname in studExamScoreDict[studID]._ExamDomainScoreDict.Keys)
                 {
@@ -632,9 +693,13 @@ namespace HsinChuExamScore_JH
                 }
 
                 // 排序
-                tmpDomainList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動", ""));
+                //tmpDomainList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動", ""));
 
-                tmpSubjectList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+                tmpDomainList.Sort(new StringComparer(Utility.GetDominOrder().ToArray()));
+
+
+                // tmpSubjectList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+                tmpSubjectList.Sort(new StringComparer(Utility.GetSubjectOrder().ToArray()));
 
 
 
@@ -788,15 +853,22 @@ namespace HsinChuExamScore_JH
             List<string> rankDataTypeList = new List<string>();
 
 
-            socreItem1List.Add("領域成績");
-            socreItem1List.Add("領域定期成績");
-            socreItem1List.Add("參考領域成績");
-            socreItem1List.Add("參考領域定期成績");
+            //socreItem1List.Add("領域成績");
+            //socreItem1List.Add("領域定期成績");
+            //socreItem1List.Add("參考領域成績");
+            //socreItem1List.Add("參考領域定期成績");
+
+            socreItem1List.Add("科目成績");
+            socreItem1List.Add("科目定期成績");
+            socreItem1List.Add("參考科目成績");
+            socreItem1List.Add("參考科目定期成績");
+
 
             scoreTypeList.Add("加權平均");
-            scoreTypeList.Add("平均");
             scoreTypeList.Add("加權總分");
+            scoreTypeList.Add("平均");
             scoreTypeList.Add("總分");
+
 
             rankTypeList.Add("班排名");
             rankTypeList.Add("年排名");
@@ -816,12 +888,19 @@ namespace HsinChuExamScore_JH
             rankDataTypeList.Add("母體平均");
             rankDataTypeList.Add("母體後標");
             rankDataTypeList.Add("母體底標");
+            rankDataTypeList.Add("母體人數");
 
             List<string> domainLi = new List<string>();
 
             List<string> subjLi = new List<string>();
+
             subjLi.Add("科目名稱");
             subjLi.Add("科目權數");
+            // todo : 新增 參考 識別定期評量
+            subjLi.Add("參考試別科目定期評量");
+            subjLi.Add("參考試別科目平時評量");
+            subjLi.Add("參考試別科目總成績");
+
             subjLi.Add("科目定期評量");
             subjLi.Add("科目平時評量");
             subjLi.Add("科目總成績");
@@ -841,9 +920,6 @@ namespace HsinChuExamScore_JH
                     subjLi.Add("科目定期" + rt + rdt);
                 }
             }
-
-
-
 
 
             List<string> subjColList = new List<string>();
@@ -909,28 +985,93 @@ namespace HsinChuExamScore_JH
                 dt.Columns.Add("其他地址");
                 dt.Columns.Add("領域成績加權平均");
                 dt.Columns.Add("領域定期成績加權平均");
-                dt.Columns.Add("科目定期評量加權平均");
-                dt.Columns.Add("科目平時評量加權平均");
-                dt.Columns.Add("科目總成績加權平均");
+                dt.Columns.Add("科目定期成績加權平均");
+                dt.Columns.Add("科目平時成績加權平均");
+                //dt.Columns.Add("科目總成績加權平均");
+                dt.Columns.Add("科目成績加權平均");
                 dt.Columns.Add("領域成績加權平均(不含彈性)");
-                dt.Columns.Add("科目定期評量加權平均(不含彈性)");
-                dt.Columns.Add("科目平時評量加權平均(不含彈性)");
-                dt.Columns.Add("科目總成績加權平均(不含彈性)");
+                dt.Columns.Add("科目定期成績加權平均(不含彈性)");
+                dt.Columns.Add("科目平時成績加權平均(不含彈性)");
+                //dt.Columns.Add("科目總成績加權平均(不含彈性)");
+                dt.Columns.Add("科目成績加權平均(不含彈性)");
+                //dt.Columns.Add("科目成績平均(不含彈性)");
                 dt.Columns.Add("領域成績加權總分");
                 dt.Columns.Add("領域定期成績加權總分");
-                dt.Columns.Add("科目定期評量加權總分");
-                dt.Columns.Add("科目平時評量加權總分");
-                dt.Columns.Add("科目總成績加權總分");
+                dt.Columns.Add("科目定期成績加權總分");
+                dt.Columns.Add("科目平時成績加權總分");
+                dt.Columns.Add("科目成績加權總分");
+                //dt.Columns.Add("科目成績總分");
                 dt.Columns.Add("領域成績加權總分(不含彈性)");
-                dt.Columns.Add("科目定期評量加權總分(不含彈性)");
-                dt.Columns.Add("科目平時評量加權總分(不含彈性)");
-                dt.Columns.Add("科目總成績加權總分(不含彈性)");
+                dt.Columns.Add("科目定期成績加權總分(不含彈性)");
+                dt.Columns.Add("科目平時成績加權總分(不含彈性)"); 
+               // dt.Columns.Add("科目總成績加權總分(不含彈性)"); 
+
+                dt.Columns.Add("科目平時評量總分(不含彈性)");
+                dt.Columns.Add("科目成績加權總分(不含彈性)"); 
+               // dt.Columns.Add("科目成績總分(不含彈性)"); 
                 dt.Columns.Add("領域成績總分");
                 dt.Columns.Add("領域定期成績總分");
                 dt.Columns.Add("領域成績平均");
                 dt.Columns.Add("領域定期成績平均");
 
-                // 新增自訂欄位  Jean
+               
+
+                #region 在dt加上科目相關header
+
+                //增加科目相關欄位 by Jean *以上科目相關先註解
+                string scoreTarget = "科目";
+                //string[] ScoreCompositions = new string[] { "定期評量", "平時評量", "總成績" };
+                string[] ScoreCaculateWays = new string[] { "平均", "平均(不含彈性)", "總分", "總分(不含彈性)" };
+
+                foreach (EnumScoreComposition scoreComposition in Enum.GetValues(_ScoreCompositions)) // 為保持一致性 從列舉裡面取得用詞
+                {
+                    foreach (string scoreCaculateWay in ScoreCaculateWays)
+                    {
+                        dt.Columns.Add($"{scoreTarget}{scoreComposition}{scoreCaculateWay}");
+                    }
+                }
+
+
+                #endregion
+
+                foreach (string itemName in itemNames) //平均 總分 => 基本上這兩個 就是從科目來的
+                {
+                    foreach (string rankType in rankTypeList) // 年排名 班排名 類別1排名 類別2排名 
+                    {
+                        foreach (string itemType in itemTypesMapping.Keys)
+                        {
+
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}名次");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}PR值");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType }百分比");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType }母體頂標");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType }母體前標");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType }母體平均");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType }母體後標");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}母體底標");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}母體人數");
+
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R100_u");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R90_99");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R80_89");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R70_79");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R60_69");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R50_59");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R40_49");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R30_39");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R20_29");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R10_19");
+                            //dt.Columns.Add($"{scoreTarget}{itemTypesMapping[itemType]}{itemName}{rankType}R0_9");
+
+                        }
+                    }
+                }
+
+
+
+
+
+                // 新增自訂欄位 依華商需求 增加自訂欄位
                 foreach (string userDefineField in this._UserDefineFields)
                 {
                     dt.Columns.Add(userDefineField + "-自訂欄位");
@@ -955,11 +1096,18 @@ namespace HsinChuExamScore_JH
 
 
 
+
+
+
+
+
+                // todo 
                 // 新增科目成績欄位
                 foreach (string colName in subjColList)
                     dt.Columns.Add(colName);
 
-                Global.DomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+                //Global.DomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+                Global.DomainNameList.Sort(new StringComparer(Utility.GetDominOrder().ToArray()));
 
                 // 新增各領域成績與排名，與佳樺討論，個人評量各領域只提供從科目計算來的加權平均
                 foreach (string dName in Global.DomainNameList)
@@ -1009,6 +1157,7 @@ namespace HsinChuExamScore_JH
 
                 }
 
+                // todo
 
                 // 加入科目用組距
                 foreach (string rt in rankDSTypeList)
@@ -1108,9 +1257,13 @@ namespace HsinChuExamScore_JH
                 {
                     foreach (string fieldName in this._UserDefineFields)
                     {
-                        if (UserDefineDict[StudRec.ID].ContainsKey(fieldName))
+                        if (UserDefineDict.ContainsKey(StudRec.ID) && UserDefineDict[StudRec.ID].ContainsKey(fieldName))
                         {
                             row[fieldName + "-自訂欄位"] = UserDefineDict[StudRec.ID][fieldName]; // 取得某學生下某自訂欄位之值
+                        }
+                        else
+                        {
+                            row[fieldName + "-自訂欄位"] = "";
                         }
                     }
                 }
@@ -1160,9 +1313,11 @@ namespace HsinChuExamScore_JH
                     foreach (string name in Global.DomainNameList)
                         dNameDict.Add(name, 1);
 
-                    foreach (DAO.ExamSubjectScore ess in studExamScoreDict[StudRec.ID]._ExamSubjectScoreDict.Values)
+                    foreach (string dicKey in studExamScoreDict[StudRec.ID]._ExamSubjectScoreDict.Keys)
                     {
-                        string ddname = ess.DomainName;
+                        ExamSubjectScore examSubjScore = (ExamSubjectScore)studExamScoreDict[StudRec.ID]._ExamSubjectScoreDict[dicKey];
+
+                        string ddname = examSubjScore.DomainName;
                         if (ddname == "")
                             ddname = "彈性課程";
 
@@ -1181,6 +1336,36 @@ namespace HsinChuExamScore_JH
                             dNameDict[ddname]++;
                         }
 
+                        //Jean 參考
+                        //foreach (string item in subjLi)
+                        //{
+                        //    if (item.Contains("參考"))
+                        //    {
+                        //        string key = ddname + "_" + item + subj;
+
+                        //        switch (item)
+                        //        {
+                        //            case "參考試別科目定期評量":
+                        //                if (ess.ScoreF.HasValue)
+                        //                    row[key] = studExamScoreDict[StudRec.ID].ess.;
+                        //                break;
+                        //            case "參考試別科目總成績":
+                        //                if (ess.ScoreF.HasValue)
+                        //                    row[key] = "test2";
+                        //                //row[key] = _ScoreMappingConfig.ParseScoreName(ess.ScoreF.Value);
+
+                        //                break;
+                        //            case "參考試別科目平時評量":
+                        //                if (ess.ScoreA.HasValue)
+                        //                    row[key] = "test3";
+                        //                //row[key] = ess.ScoreA.Value;
+                        //                break;
+
+                        //        }
+                        //    }
+                        //}
+
+                        // TODO:  取得參考識別之資料
 
                         foreach (string item in subjLi)
                         {
@@ -1189,7 +1374,7 @@ namespace HsinChuExamScore_JH
                             switch (item)
                             {
                                 case "科目名稱":
-                                    row[key] = ess.SubjectName;
+                                    row[key] = examSubjScore.SubjectName;
                                     if (!_TemplateSubjectNameList.Contains(key))
                                     {
                                         if (!_ErrorList.Contains(key))
@@ -1197,37 +1382,78 @@ namespace HsinChuExamScore_JH
                                     }
                                     break;
                                 case "科目權數":
-                                    if (ess.Credit.HasValue)
-                                        row[key] = ess.Credit.Value;
+                                    if (examSubjScore.Credit.HasValue)
+                                        row[key] = examSubjScore.Credit.Value;
                                     break;
                                 case "科目定期評量":
-                                    if (ess.ScoreF.HasValue)
-                                        row[key] = ess.ScoreF.Value;
+                                    if (examSubjScore.ScoreF.HasValue)
+                                        row[key] = examSubjScore.ScoreF.Value;
                                     break;
                                 case "科目定期評量等第":
-                                    if (ess.ScoreF.HasValue)
-                                        row[key] = _ScoreMappingConfig.ParseScoreName(ess.ScoreF.Value);
+                                    if (examSubjScore.ScoreF.HasValue)
+                                        row[key] = _ScoreMappingConfig.ParseScoreName(examSubjScore.ScoreF.Value);
                                     break;
                                 case "科目平時評量":
-                                    if (ess.ScoreA.HasValue)
-                                        row[key] = ess.ScoreA.Value;
+                                    if (examSubjScore.ScoreA.HasValue)
+                                        row[key] = examSubjScore.ScoreA.Value;
                                     break;
                                 case "科目平時評量等第":
-                                    if (ess.ScoreA.HasValue)
-                                        row[key] = _ScoreMappingConfig.ParseScoreName(ess.ScoreA.Value);
+                                    if (examSubjScore.ScoreA.HasValue)
+                                        row[key] = _ScoreMappingConfig.ParseScoreName(examSubjScore.ScoreA.Value);
                                     break;
                                 case "科目總成績":
-                                    if (ess.ScoreT.HasValue)
-                                        row[key] = ess.ScoreT.Value;
+                                    if (examSubjScore.ScoreT.HasValue)
+                                        row[key] = examSubjScore.ScoreT.Value;
                                     break;
                                 case "科目總成績等第":
-                                    if (ess.ScoreT.HasValue)
-                                        row[key] = _ScoreMappingConfig.ParseScoreName(ess.ScoreT.Value);
+                                    if (examSubjScore.ScoreT.HasValue)
+                                        row[key] = _ScoreMappingConfig.ParseScoreName(examSubjScore.ScoreT.Value);
                                     break;
                                 case "科目文字評量":
-                                    row[key] = ess.Text;
+                                    row[key] = examSubjScore.Text;
                                     break;
+
+                                case "參考試別科目定期評量":
+                                    if (examSubjScore.ScoreF.HasValue)
+                                        row[key] = examSubjScore.RefScoreF;
+                                    break;
+
+                                case "參考試別科目平時評量":
+                                    if (examSubjScore.RefScoreA.HasValue)
+                                        row[key] = examSubjScore.RefScoreA;
+                                    //row[key] = ess.ScoreA.Value;
+                                    break;
+                                case "參考試別科目總成績":
+                                    if (examSubjScore.RefScoreT.HasValue)
+                                        row[key] = examSubjScore.RefScoreT;
+                                    //row[key] = _ScoreMappingConfig.ParseScoreName(ess.ScoreF.Value);
+                                    break;
+
+
                             }
+
+                            // 處理參考試別成績 
+
+                            // string refkey = ddname + "_" + item + subj;
+
+                            //switch (item)
+                            //{
+                            //    case "參考試別科目定期評量":
+                            //        if (examSubjScore.ScoreF.HasValue)
+                            //            row[key] = examSubjScore.RefScoreF;
+                            //        break;
+
+                            //    case "參考試別科目平時評量":
+                            //        if (examSubjScore.RefScoreA.HasValue)
+                            //            row[key] = examSubjScore.RefScoreA;
+                            //        //row[key] = ess.ScoreA.Value;
+                            //        break;
+                            //    case "參考試別科目總成績":
+                            //        if (examSubjScore.RefScoreT.HasValue)
+                            //            row[key] = examSubjScore.RefScoreT;
+                            //        //row[key] = _ScoreMappingConfig.ParseScoreName(ess.ScoreF.Value);
+                            //        break;
+                            //}
                         }
 
 
@@ -1235,9 +1461,10 @@ namespace HsinChuExamScore_JH
                         {
                             foreach (string rt in rankTypeList)
                             {
-                                string keyD = "定期評量/科目成績" + ess.SubjectName + rt;
+                                string keyD = "定期評量/科目成績" + examSubjScore.SubjectName + rt;
                                 if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD))
                                 {
+                                    // todo 
                                     row[ddname + "_科目" + rt + "名次" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].rank;
                                     row[ddname + "_科目" + rt + "PR值" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr;
                                     row[ddname + "_科目" + rt + "百分比" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].percentile;
@@ -1246,9 +1473,10 @@ namespace HsinChuExamScore_JH
                                     row[ddname + "_科目" + rt + "母體平均" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg;
                                     row[ddname + "_科目" + rt + "母體後標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_50;
                                     row[ddname + "_科目" + rt + "母體底標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_25;
+                                    row[ddname + "_科目" + rt + "母體人數" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].matrix_count;
                                 }
 
-                                keyD = "定期評量_定期/科目成績" + ess.SubjectName + rt;
+                                keyD = "定期評量_定期/科目成績" + examSubjScore.SubjectName + rt;
                                 if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD))
                                 {
                                     row[ddname + "_科目定期" + rt + "名次" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].rank;
@@ -1259,12 +1487,14 @@ namespace HsinChuExamScore_JH
                                     row[ddname + "_科目定期" + rt + "母體平均" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg;
                                     row[ddname + "_科目定期" + rt + "母體後標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_50;
                                     row[ddname + "_科目定期" + rt + "母體底標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_25;
+                                    row[ddname + "_科目定期" + rt + "母體人數" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].matrix_count;
                                 }
                             }
                         }
 
                     }
 
+                    //  Jean  
                     // 處理領域-科目成績
                     Dictionary<string, List<DAO.ExamSubjectScore>> DomainSubjectDict = new Dictionary<string, List<ExamSubjectScore>>();
 
@@ -1358,7 +1588,7 @@ namespace HsinChuExamScore_JH
                             rankSubjectList.Add(ess.SubjectName);
                     }
 
-                    rankSubjectList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+                    rankSubjectList.Sort(new StringComparer(Utility.GetSubjectOrder().ToArray()));
 
 
                     if (StudentExamRankMatrixDict.ContainsKey(StudRec.ID))
@@ -1490,6 +1720,7 @@ namespace HsinChuExamScore_JH
                                     row[eds.DomainName + "_領域" + rt + "母體平均"] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg;
                                     row[eds.DomainName + "_領域" + rt + "母體後標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_50;
                                     row[eds.DomainName + "_領域" + rt + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_25;
+                                    row[eds.DomainName + "_領域" + rt + "母體人數"] = StudentExamRankMatrixDict[StudRec.ID][keyD].matrix_count;
 
                                     string rowRt = "班級_";
                                     if (rt == "年排名")
@@ -1527,6 +1758,7 @@ namespace HsinChuExamScore_JH
                                     row[eds.DomainName + "_領域定期" + rt + "母體平均"] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg;
                                     row[eds.DomainName + "_領域定期" + rt + "母體後標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_50;
                                     row[eds.DomainName + "_領域定期" + rt + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_25;
+                                    row[eds.DomainName + "_領域定期" + rt + "母體人數"] = StudentExamRankMatrixDict[StudRec.ID][keyD].matrix_count;
 
 
                                     string rowRt = "班級_";
@@ -1560,36 +1792,47 @@ namespace HsinChuExamScore_JH
                 // 加權平均
                 if (studExamScoreDict.ContainsKey(StudRec.ID))
                 {
-                    if (studExamScoreDict[StudRec.ID].GetDomainScoreA(true).HasValue)
-                        row["領域成績加權平均"] = studExamScoreDict[StudRec.ID].GetDomainScoreA(true).Value;
+                    if (studExamScoreDict[StudRec.ID].GetDomainWAvgScoreA(true).HasValue)
+                        row["領域成績加權平均"] = studExamScoreDict[StudRec.ID].GetDomainWAvgScoreA(true).Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetDomainScoreF(true).HasValue)
-                        row["領域定期成績加權平均"] = studExamScoreDict[StudRec.ID].GetDomainScoreF(true).Value;
+                    if (studExamScoreDict[StudRec.ID].GetDomainWAvgScoreF(true).HasValue)
+                        row["領域定期成績加權平均"] = studExamScoreDict[StudRec.ID].GetDomainWAvgScoreF(true).Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAA(true).HasValue)
-                        row["科目平時評量加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAA(true).Value;
+                    //// Jean 增加領域算術平均 
+                    //if (studExamScoreDict[StudRec.ID].GetDomainArithmeticMeanScoreA(true).HasValue)
+                    //    row["領域成績算數平均"] = studExamScoreDict[StudRec.ID].GetDomainWAvgScoreA(true).Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAF(true).HasValue)
-                        row["科目定期評量加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAF(true).Value;
-
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAT(true).HasValue)
-                        row["科目總成績加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAT(true).Value;
+                    //// Jean 增加領域算術平均 
+                    //if (studExamScoreDict[StudRec.ID].GetDomainArithmeticMeanScoreF(true).HasValue)
+                    //    row["領域定期成績算數平均"] = studExamScoreDict[StudRec.ID].GetDomainWAvgScoreF(true).Value;
 
 
-                    if (studExamScoreDict[StudRec.ID].GetDomainScoreA(false).HasValue)
-                        row["領域成績加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetDomainScoreA(false).Value;
+                    //科目 加權平均 (含彈性)
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAA(true, "").HasValue)
+                        row["科目平時成績加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAA(true, "").Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAA(false).HasValue)
-                        row["科目平時評量加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAA(false).Value;
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAF(true, "").HasValue)
+                        row["科目定期成績加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAF(true, "").Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAF(false).HasValue)
-                        row["科目定期評量加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAF(false).Value;
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAT(true, "").HasValue)
+                        row["科目成績加權平均"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAT(true, "").Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAT(false).HasValue)
-                        row["科目總成績加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAT(false).Value;
+                    // 科目 加權平均(不含彈性)
+                    if (studExamScoreDict[StudRec.ID].GetDomainWAvgScoreA(false).HasValue)
+                        row["領域成績加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetDomainWAvgScoreA(false).Value;
+
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAA(false, "").HasValue)
+                        row["科目平時成績加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAA(false, "").Value;
+
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAF(false, "").HasValue)
+                        row["科目定期成績加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAF(false, "").Value;
+
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreAT(false, "").HasValue)
+                        //row["科目總成績加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAT(false,"").Value;
+                        row["科目成績加權平均(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreAT(false, "").Value;
                 }
 
-                // 加權總分
+                //  領域 加權總分 (含彈性)
                 if (studExamScoreDict.ContainsKey(StudRec.ID))
                 {
                     if (studExamScoreDict[StudRec.ID].GetDomainScoreS(true).HasValue)
@@ -1597,34 +1840,33 @@ namespace HsinChuExamScore_JH
 
                     if (studExamScoreDict[StudRec.ID].GetDomainScoreSF(true).HasValue)
                         row["領域定期成績加權總分"] = studExamScoreDict[StudRec.ID].GetDomainScoreSF(true).Value;
-
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreSA(true).HasValue)
-                        row["科目平時評量加權總分"] = studExamScoreDict[StudRec.ID].GetSubjectScoreSA(true).Value;
-
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreSF(true).HasValue)
-                        row["科目定期評量加權總分"] = studExamScoreDict[StudRec.ID].GetSubjectScoreSF(true).Value;
-
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreST(true).HasValue)
-                        row["科目總成績加權總分"] = studExamScoreDict[StudRec.ID].GetSubjectScoreST(true).Value;
-
-
                     if (studExamScoreDict[StudRec.ID].GetDomainScoreS(false).HasValue)
                         row["領域成績加權總分(不含彈性)"] = studExamScoreDict[StudRec.ID].GetDomainScoreS(false).Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreSA(false).HasValue)
-                        row["科目平時評量加權總分(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreSA(false).Value;
+                    // 科目 加權總分(不含彈性)
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreSA(true, "").HasValue)
+                        row["科目平時成績加權總分"] = studExamScoreDict[StudRec.ID].GetSubjectScoreSA(true, "").Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreSF(false).HasValue)
-                        row["科目定期評量加權總分(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreSF(false).Value;
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreSF(true, "").HasValue)
+                        row["科目定期成績加權總分"] = studExamScoreDict[StudRec.ID].GetSubjectScoreSF(true, "").Value;
 
-                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreST(false).HasValue)
-                        row["科目總成績加權總分(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreST(false).Value;
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreST(true, "").HasValue)
+                        row["科目成績加權總分"] = studExamScoreDict[StudRec.ID].GetSubjectScoreST(true, "").Value;
+
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreSA(false, "").HasValue)
+                        row["科目平時成績加權總分(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreSA(false, "").Value;
+
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreSF(false, "").HasValue)
+                        row["科目定期成績加權總分(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreSF(false, "").Value;
+
+                    if (studExamScoreDict[StudRec.ID].GetSubjectScoreST(false, "").HasValue)
+                        row["科目成績加權總分(不含彈性)"] = studExamScoreDict[StudRec.ID].GetSubjectScoreST(false, "").Value;
                 }
 
 
-
-                // 總分
-                // 平均
+                // 領域
+                // 算數總分
+                // 算數平均
                 if (studExamScoreDict.ContainsKey(StudRec.ID))
                 {
 
@@ -1641,7 +1883,51 @@ namespace HsinChuExamScore_JH
                         row["領域定期成績平均"] = studExamScoreDict[StudRec.ID].GetDomainScore_F(true).Value;
 
                 }
-                // 處理總計排名
+
+                // todo 科目 Jean  
+                // (算數平均、算術總分) *(科目總成績 、科目定期成績)
+                // 
+                // 這邊以列舉內的項目 下去組合 保持 用詞一致性
+                if (studExamScoreDict.ContainsKey(StudRec.ID))
+                {
+                    //增加科目相關欄位 by Jean *以上科目相關先註解
+                    string _scoreTarget = "科目";
+                    string[] _ScoreCaculateWays = new string[] { "平均", "平均(不含彈性)", "總分", "總分(不含彈性)" }; //這邊只增加算術相關成績 所以不從列舉中取得
+
+
+                    // Type _ScoreCompositions = typeof(EnumScoreComposition);
+
+                    Enum.TryParse(_scoreTarget, out EnumScoreType enumScoreType); // 將"科目"字串轉換為  enum 已符合下面
+
+                    foreach (EnumScoreComposition scoreComposition in Enum.GetValues(_ScoreCompositions)) // 用列舉裡面的 (成績,定期評量,平時評量)
+                    {
+                        foreach (string scoreCaculateWay in _ScoreCaculateWays) // 用陣列裡面("平均", "平均(不含彈性)", "總分", "總分(不含彈性))
+                        {
+                            if (scoreCaculateWay.Contains("平均"))
+                            {
+                                if (studExamScoreDict[StudRec.ID].GetDomainScore_A(true).HasValue)
+                                    row[$"{_scoreTarget}{scoreComposition}{scoreCaculateWay}"] = studExamScoreDict[StudRec.ID].GetScoreArithmeticＭean( //
+                                                                                                                    Global.CheckIfContainFlex(scoreCaculateWay) // 確認是否包含彈性
+                                                                                                                    , enumScoreType
+                                                                                                                    , scoreComposition).Value;
+                            }
+                            else if (scoreCaculateWay.Contains("總分"))
+                            {
+                                if (studExamScoreDict[StudRec.ID].GetDomainScore_A(true).HasValue)
+                                    row[$"{_scoreTarget}{scoreComposition}{scoreCaculateWay}"] = studExamScoreDict[StudRec.ID].GetScoreArithmeticTotal( // 取得算數平均
+                                                                                                                    Global.CheckIfContainFlex(scoreCaculateWay) // 確認是否包含彈性
+                                                                                                                    , enumScoreType
+                                                                                                                    , scoreComposition).Value;
+                            }
+                        }
+                    }
+                }
+
+
+
+
+
+                // 處理總計排名 // 領域成績  //刪除功能變數 因為固定排名的 總計成績是從科目直接計算來得 沒有所謂領域總計成績 Jean Dele
                 if (StudentExamRankMatrixDict.ContainsKey(StudRec.ID))
                 {
                     foreach (string st in scoreTypeList)
@@ -1651,127 +1937,219 @@ namespace HsinChuExamScore_JH
                             string key = "定期評量/總計成績" + st + rt;
                             if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(key))
                             {
-                                row["領域成績" + st + rt + "名次"] = StudentExamRankMatrixDict[StudRec.ID][key].rank;
-                                row["領域成績" + st + rt + "PR值"] = StudentExamRankMatrixDict[StudRec.ID][key].pr;
-                                row["領域成績" + st + rt + "百分比"] = StudentExamRankMatrixDict[StudRec.ID][key].percentile;
-                                row["領域成績" + st + rt + "母體頂標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_25;
-                                row["領域成績" + st + rt + "母體前標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_50;
-                                row["領域成績" + st + rt + "母體平均"] = StudentExamRankMatrixDict[StudRec.ID][key].avg;
-                                row["領域成績" + st + rt + "母體後標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
-                                row["領域成績" + st + rt + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
+                                row["科目成績" + st + rt + "名次"] = StudentExamRankMatrixDict[StudRec.ID][key].rank;
+                                row["科目成績" + st + rt + "PR值"] = StudentExamRankMatrixDict[StudRec.ID][key].pr;
+                                row["科目成績" + st + rt + "百分比"] = StudentExamRankMatrixDict[StudRec.ID][key].percentile;
+                                row["科目成績" + st + rt + "母體頂標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_25;
+                                row["科目成績" + st + rt + "母體前標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_50;
+                                row["科目成績" + st + rt + "母體平均"] = StudentExamRankMatrixDict[StudRec.ID][key].avg;
+                                row["科目成績" + st + rt + "母體後標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
+                                row["科目成績" + st + rt + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
+                                row["科目成績" + st + rt + "母體人數"] = StudentExamRankMatrixDict[StudRec.ID][key].matrix_count;
 
                                 if (st.Contains("平均"))
                                 {
-                                    row["領域成績" + st + rt + "R100_u"] = StudentExamRankMatrixDict[StudRec.ID][key].level_gte100;
-                                    row["領域成績" + st + rt + "R90_99"] = StudentExamRankMatrixDict[StudRec.ID][key].level_90;
-                                    row["領域成績" + st + rt + "R80_89"] = StudentExamRankMatrixDict[StudRec.ID][key].level_80;
-                                    row["領域成績" + st + rt + "R70_79"] = StudentExamRankMatrixDict[StudRec.ID][key].level_70;
-                                    row["領域成績" + st + rt + "R60_69"] = StudentExamRankMatrixDict[StudRec.ID][key].level_60;
-                                    row["領域成績" + st + rt + "R50_59"] = StudentExamRankMatrixDict[StudRec.ID][key].level_50;
-                                    row["領域成績" + st + rt + "R40_49"] = StudentExamRankMatrixDict[StudRec.ID][key].level_40;
-                                    row["領域成績" + st + rt + "R30_39"] = StudentExamRankMatrixDict[StudRec.ID][key].level_30;
-                                    row["領域成績" + st + rt + "R20_29"] = StudentExamRankMatrixDict[StudRec.ID][key].level_20;
-                                    row["領域成績" + st + rt + "R10_19"] = StudentExamRankMatrixDict[StudRec.ID][key].level_10;
-                                    row["領域成績" + st + rt + "R0_9"] = StudentExamRankMatrixDict[StudRec.ID][key].level_lt10;
+                                    row["科目成績" + st + rt + "R100_u"] = StudentExamRankMatrixDict[StudRec.ID][key].level_gte100;
+                                    row["科目成績" + st + rt + "R90_99"] = StudentExamRankMatrixDict[StudRec.ID][key].level_90;
+                                    row["科目成績" + st + rt + "R80_89"] = StudentExamRankMatrixDict[StudRec.ID][key].level_80;
+                                    row["科目成績" + st + rt + "R70_79"] = StudentExamRankMatrixDict[StudRec.ID][key].level_70;
+                                    row["科目成績" + st + rt + "R60_69"] = StudentExamRankMatrixDict[StudRec.ID][key].level_60;
+                                    row["科目成績" + st + rt + "R50_59"] = StudentExamRankMatrixDict[StudRec.ID][key].level_50;
+                                    row["科目成績" + st + rt + "R40_49"] = StudentExamRankMatrixDict[StudRec.ID][key].level_40;
+                                    row["科目成績" + st + rt + "R30_39"] = StudentExamRankMatrixDict[StudRec.ID][key].level_30;
+                                    row["科目成績" + st + rt + "R20_29"] = StudentExamRankMatrixDict[StudRec.ID][key].level_20;
+                                    row["科目成績" + st + rt + "R10_19"] = StudentExamRankMatrixDict[StudRec.ID][key].level_10;
+                                    row["科目成績" + st + rt + "R0_9"] = StudentExamRankMatrixDict[StudRec.ID][key].level_lt10;
                                 }
                             }
 
                             key = "定期評量_定期/總計成績" + st + rt;
                             if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(key))
                             {
-                                row["領域定期成績" + st + rt + "名次"] = StudentExamRankMatrixDict[StudRec.ID][key].rank;
-                                row["領域定期成績" + st + rt + "PR值"] = StudentExamRankMatrixDict[StudRec.ID][key].pr;
-                                row["領域定期成績" + st + rt + "百分比"] = StudentExamRankMatrixDict[StudRec.ID][key].percentile;
-                                row["領域定期成績" + st + rt + "母體頂標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_25;
-                                row["領域定期成績" + st + rt + "母體前標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_50;
-                                row["領域定期成績" + st + rt + "母體平均"] = StudentExamRankMatrixDict[StudRec.ID][key].avg;
-                                row["領域定期成績" + st + rt + "母體後標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
-                                row["領域定期成績" + st + rt + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
+                                row["科目定期成績" + st + rt + "名次"] = StudentExamRankMatrixDict[StudRec.ID][key].rank;
+                                row["科目定期成績" + st + rt + "PR值"] = StudentExamRankMatrixDict[StudRec.ID][key].pr;
+                                row["科目定期成績" + st + rt + "百分比"] = StudentExamRankMatrixDict[StudRec.ID][key].percentile;
+                                row["科目定期成績" + st + rt + "母體頂標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_25;
+                                row["科目定期成績" + st + rt + "母體前標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_50;
+                                row["科目定期成績" + st + rt + "母體平均"] = StudentExamRankMatrixDict[StudRec.ID][key].avg;
+                                row["科目定期成績" + st + rt + "母體後標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
+                                row["科目定期成績" + st + rt + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
+                                row["科目定期成績" + st + rt + "母體人數"] = StudentExamRankMatrixDict[StudRec.ID][key].matrix_count;
 
                                 if (rt.Contains("平均"))
                                 {
-                                    row["領域定期成績" + st + rt + "R100_u"] = StudentExamRankMatrixDict[StudRec.ID][key].level_gte100;
-                                    row["領域定期成績" + st + rt + "R90_99"] = StudentExamRankMatrixDict[StudRec.ID][key].level_90;
-                                    row["領域定期成績" + st + rt + "R80_89"] = StudentExamRankMatrixDict[StudRec.ID][key].level_80;
-                                    row["領域定期成績" + st + rt + "R70_79"] = StudentExamRankMatrixDict[StudRec.ID][key].level_70;
-                                    row["領域定期成績" + st + rt + "R60_69"] = StudentExamRankMatrixDict[StudRec.ID][key].level_60;
-                                    row["領域定期成績" + st + rt + "R50_59"] = StudentExamRankMatrixDict[StudRec.ID][key].level_50;
-                                    row["領域定期成績" + st + rt + "R40_49"] = StudentExamRankMatrixDict[StudRec.ID][key].level_40;
-                                    row["領域定期成績" + st + rt + "R30_39"] = StudentExamRankMatrixDict[StudRec.ID][key].level_30;
-                                    row["領域定期成績" + st + rt + "R20_29"] = StudentExamRankMatrixDict[StudRec.ID][key].level_20;
-                                    row["領域定期成績" + st + rt + "R10_19"] = StudentExamRankMatrixDict[StudRec.ID][key].level_10;
-                                    row["領域定期成績" + st + rt + "R0_9"] = StudentExamRankMatrixDict[StudRec.ID][key].level_lt10;
+                                    row["科目定期成績" + st + rt + "R100_u"] = StudentExamRankMatrixDict[StudRec.ID][key].level_gte100;
+                                    row["科目定期成績" + st + rt + "R90_99"] = StudentExamRankMatrixDict[StudRec.ID][key].level_90;
+                                    row["科目定期成績" + st + rt + "R80_89"] = StudentExamRankMatrixDict[StudRec.ID][key].level_80;
+                                    row["科目定期成績" + st + rt + "R70_79"] = StudentExamRankMatrixDict[StudRec.ID][key].level_70;
+                                    row["科目定期成績" + st + rt + "R60_69"] = StudentExamRankMatrixDict[StudRec.ID][key].level_60;
+                                    row["科目定期成績" + st + rt + "R50_59"] = StudentExamRankMatrixDict[StudRec.ID][key].level_50;
+                                    row["科目定期成績" + st + rt + "R40_49"] = StudentExamRankMatrixDict[StudRec.ID][key].level_40;
+                                    row["科目定期成績" + st + rt + "R30_39"] = StudentExamRankMatrixDict[StudRec.ID][key].level_30;
+                                    row["科目定期成績" + st + rt + "R20_29"] = StudentExamRankMatrixDict[StudRec.ID][key].level_20;
+                                    row["科目定期成績" + st + rt + "R10_19"] = StudentExamRankMatrixDict[StudRec.ID][key].level_10;
+                                    row["科目定期成績" + st + rt + "R0_9"] = StudentExamRankMatrixDict[StudRec.ID][key].level_lt10;
                                 }
                             }
                         }
                     }
                 }
 
+
+                // 處理科目算術平均   
+                if (StudentExamRankMatrixDict.ContainsKey(StudRec.ID))
+                {
+                    //給科目 算術平均 及 算術總分用
+                    //string[] itemTypes= new string[] { "定期評量_定期/總計成績", "定期評量/總計成績" };
+
+
+                    // 2020/03/23 定期評量/總計成績 =>(定期加平時) Jean
+                    string scoreType = (EnumScoreType.科目).ToString();  //科目 領域 參考科目
+
+                    foreach (string itemName in itemNames) //平均 總分 => 基本上這兩個 就是從科目來的
+                    {
+                        foreach (string rankType in rankTypeList) // 年排名 班排名 類別1排名 類別2排名 
+                        {
+                            foreach (string itemType in itemTypesMapping.Keys)
+                            {
+                                string key = itemType + itemName + rankType;
+
+                                if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(key))
+                                {
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}名次"] = StudentExamRankMatrixDict[StudRec.ID][key].rank;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}PR值"] = StudentExamRankMatrixDict[StudRec.ID][key].pr;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}百分比"] = StudentExamRankMatrixDict[StudRec.ID][key].percentile;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體頂標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_25;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體前標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_50;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體平均"] = StudentExamRankMatrixDict[StudRec.ID][key].avg;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體後標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體底標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體人數"] = StudentExamRankMatrixDict[StudRec.ID][key].matrix_count;
+
+
+                                    if (itemName.Contains("平均"))
+                                    {
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R100_u"] = StudentExamRankMatrixDict[StudRec.ID][key].level_gte100;
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R90_99"] = StudentExamRankMatrixDict[StudRec.ID][key].level_90;
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R80_89"] = StudentExamRankMatrixDict[StudRec.ID][key].level_80;
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R70_79"] = StudentExamRankMatrixDict[StudRec.ID][key].level_70;
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R60_69"] = StudentExamRankMatrixDict[StudRec.ID][key].level_60;
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R50_59"] = StudentExamRankMatrixDict[StudRec.ID][key].level_50;
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R40_49"] = StudentExamRankMatrixDict[StudRec.ID][key].level_40;
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R30_39"] = StudentExamRankMatrixDict[StudRec.ID][key].level_30;
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R20_29"] = StudentExamRankMatrixDict[StudRec.ID][key].level_20;
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R10_19"] = StudentExamRankMatrixDict[StudRec.ID][key].level_10;
+                                        row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}R0_9"] = StudentExamRankMatrixDict[StudRec.ID][key].level_lt10;
+                                    }
+                                }
+
+                            }
+
+                            //key = "定期評量_定期/總計成績" + itemName + rankType;
+                            //if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(key))
+                            //{
+                            //    row["領域定期成績" + itemName + rankType + "名次"] = StudentExamRankMatrixDict[StudRec.ID][key].rank;
+                            //    row["領域定期成績" + itemName + rankType + "PR值"] = StudentExamRankMatrixDict[StudRec.ID][key].pr;
+                            //    row["領域定期成績" + itemName + rankType + "百分比"] = StudentExamRankMatrixDict[StudRec.ID][key].percentile;
+                            //    row["領域定期成績" + itemName + rankType + "母體頂標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_25;
+                            //    row["領域定期成績" + itemName + rankType + "母體前標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_top_50;
+                            //    row["領域定期成績" + itemName + rankType + "母體平均"] = StudentExamRankMatrixDict[StudRec.ID][key].avg;
+                            //    row["領域定期成績" + itemName + rankType + "母體後標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
+                            //    row["領域定期成績" + itemName + rankType + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
+
+                            //    if (rankType.Contains("平均"))
+                            //    {
+                            //        row["領域定期成績" + itemName + rankType + "R100_u"] = StudentExamRankMatrixDict[StudRec.ID][key].level_gte100;
+                            //        row["領域定期成績" + itemName + rankType + "R90_99"] = StudentExamRankMatrixDict[StudRec.ID][key].level_90;
+                            //        row["領域定期成績" + itemName + rankType + "R80_89"] = StudentExamRankMatrixDict[StudRec.ID][key].level_80;
+                            //        row["領域定期成績" + itemName + rankType + "R70_79"] = StudentExamRankMatrixDict[StudRec.ID][key].level_70;
+                            //        row["領域定期成績" + itemName + rankType + "R60_69"] = StudentExamRankMatrixDict[StudRec.ID][key].level_60;
+                            //        row["領域定期成績" + itemName + rankType + "R50_59"] = StudentExamRankMatrixDict[StudRec.ID][key].level_50;
+                            //        row["領域定期成績" + itemName + rankType + "R40_49"] = StudentExamRankMatrixDict[StudRec.ID][key].level_40;
+                            //        row["領域定期成績" + itemName + rankType + "R30_39"] = StudentExamRankMatrixDict[StudRec.ID][key].level_30;
+                            //        row["領域定期成績" + itemName + rankType + "R20_29"] = StudentExamRankMatrixDict[StudRec.ID][key].level_20;
+                            //        row["領域定期成績" + itemName + rankType + "R10_19"] = StudentExamRankMatrixDict[StudRec.ID][key].level_10;
+                            //        row["領域定期成績" + itemName + rankType + "R0_9"] = StudentExamRankMatrixDict[StudRec.ID][key].level_lt10;
+                            //    }
+                            //}
+                        }
+                    }
+                }
+
+
                 // 處理參考總計成績排名
                 if (StudentRefExamRankMatrixDict.ContainsKey(StudRec.ID))
                 {
-                    foreach (string st in scoreTypeList)
+                    foreach (string st in scoreTypeList) //加權平均 加權總分
                     {
                         foreach (string rt in rankTypeList)
                         {
                             string key = "定期評量/總計成績" + st + rt;
                             if (StudentRefExamRankMatrixDict[StudRec.ID].ContainsKey(key))
                             {
-                                row["參考領域成績" + st + rt + "名次"] = StudentRefExamRankMatrixDict[StudRec.ID][key].rank;
-                                row["參考領域成績" + st + rt + "PR值"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr;
-                                row["參考領域成績" + st + rt + "百分比"] = StudentRefExamRankMatrixDict[StudRec.ID][key].percentile;
-                                row["參考領域成績" + st + rt + "母體頂標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_top_25;
-                                row["參考領域成績" + st + rt + "母體前標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_top_50;
-                                row["參考領域成績" + st + rt + "母體平均"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg;
-                                row["參考領域成績" + st + rt + "母體後標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
-                                row["參考領域成績" + st + rt + "母體底標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
+                                row["參考科目成績" + st + rt + "名次"] = StudentRefExamRankMatrixDict[StudRec.ID][key].rank;
+                                row["參考科目成績" + st + rt + "PR值"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr;
+                                row["參考科目成績" + st + rt + "百分比"] = StudentRefExamRankMatrixDict[StudRec.ID][key].percentile;
+                                row["參考科目成績" + st + rt + "母體頂標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_top_25;
+                                row["參考科目成績" + st + rt + "母體前標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_top_50;
+                                row["參考科目成績" + st + rt + "母體平均"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg;
+                                row["參考科目成績" + st + rt + "母體後標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
+                                row["參考科目成績" + st + rt + "母體底標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
+                                row["參考科目成績" + st + rt + "母體人數"] = StudentRefExamRankMatrixDict[StudRec.ID][key].matrix_count;
 
                                 if (st.Contains("平均"))
                                 {
-                                    row["參考領域成績" + st + rt + "R100_u"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_gte100;
-                                    row["參考領域成績" + st + rt + "R90_99"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_90;
-                                    row["參考領域成績" + st + rt + "R80_89"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_80;
-                                    row["參考領域成績" + st + rt + "R70_79"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_70;
-                                    row["參考領域成績" + st + rt + "R60_69"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_60;
-                                    row["參考領域成績" + st + rt + "R50_59"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_50;
-                                    row["參考領域成績" + st + rt + "R40_49"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_40;
-                                    row["參考領域成績" + st + rt + "R30_39"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_30;
-                                    row["參考領域成績" + st + rt + "R20_29"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_20;
-                                    row["參考領域成績" + st + rt + "R10_19"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_10;
-                                    row["參考領域成績" + st + rt + "R0_9"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_lt10;
+                                    row["參考科目成績" + st + rt + "R100_u"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_gte100;
+                                    row["參考科目成績" + st + rt + "R90_99"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_90;
+                                    row["參考科目成績" + st + rt + "R80_89"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_80;
+                                    row["參考科目成績" + st + rt + "R70_79"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_70;
+                                    row["參考科目成績" + st + rt + "R60_69"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_60;
+                                    row["參考科目成績" + st + rt + "R50_59"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_50;
+                                    row["參考科目成績" + st + rt + "R40_49"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_40;
+                                    row["參考科目成績" + st + rt + "R30_39"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_30;
+                                    row["參考科目成績" + st + rt + "R20_29"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_20;
+                                    row["參考科目成績" + st + rt + "R10_19"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_10;
+                                    row["參考科目成績" + st + rt + "R0_9"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_lt10;
                                 }
                             }
 
                             key = "定期評量_定期/總計成績" + st + rt;
                             if (StudentRefExamRankMatrixDict[StudRec.ID].ContainsKey(key))
                             {
-                                row["參考領域定期成績" + st + rt + "名次"] = StudentRefExamRankMatrixDict[StudRec.ID][key].rank;
-                                row["參考領域定期成績" + st + rt + "PR值"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr;
-                                row["參考領域定期成績" + st + rt + "百分比"] = StudentRefExamRankMatrixDict[StudRec.ID][key].percentile;
-                                row["參考領域定期成績" + st + rt + "母體頂標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_top_25;
-                                row["參考領域定期成績" + st + rt + "母體前標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_top_50;
-                                row["參考領域定期成績" + st + rt + "母體平均"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg;
-                                row["參考領域定期成績" + st + rt + "母體後標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
-                                row["參考領域定期成績" + st + rt + "母體底標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
+                                row["參考科目定期成績" + st + rt + "名次"] = StudentRefExamRankMatrixDict[StudRec.ID][key].rank;
+                                row["參考科目定期成績" + st + rt + "PR值"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr;
+                                row["參考科目定期成績" + st + rt + "百分比"] = StudentRefExamRankMatrixDict[StudRec.ID][key].percentile;
+                                row["參考科目定期成績" + st + rt + "母體頂標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_top_25;
+                                row["參考科目定期成績" + st + rt + "母體前標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_top_50;
+                                row["參考科目定期成績" + st + rt + "母體平均"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg;
+                                row["參考科目定期成績" + st + rt + "母體後標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
+                                row["參考科目定期成績" + st + rt + "母體底標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
+                                row["參考科目定期成績" + st + rt + "母體人數"] = StudentRefExamRankMatrixDict[StudRec.ID][key].matrix_count;
 
                                 if (st.Contains("平均"))
                                 {
-                                    row["參考領域定期成績" + st + rt + "R100_u"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_gte100;
-                                    row["參考領域定期成績" + st + rt + "R90_99"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_90;
-                                    row["參考領域定期成績" + st + rt + "R80_89"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_80;
-                                    row["參考領域定期成績" + st + rt + "R70_79"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_70;
-                                    row["參考領域定期成績" + st + rt + "R60_69"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_60;
-                                    row["參考領域定期成績" + st + rt + "R50_59"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_50;
-                                    row["參考領域定期成績" + st + rt + "R40_49"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_40;
-                                    row["參考領域定期成績" + st + rt + "R30_39"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_30;
-                                    row["參考領域定期成績" + st + rt + "R20_29"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_20;
-                                    row["參考領域定期成績" + st + rt + "R10_19"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_10;
-                                    row["參考領域定期成績" + st + rt + "R0_9"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_lt10;
+                                    row["參考科目定期成績" + st + rt + "R100_u"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_gte100;
+                                    row["參考科目定期成績" + st + rt + "R90_99"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_90;
+                                    row["參考科目定期成績" + st + rt + "R80_89"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_80;
+                                    row["參考科目定期成績" + st + rt + "R70_79"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_70;
+                                    row["參考科目定期成績" + st + rt + "R60_69"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_60;
+                                    row["參考科目定期成績" + st + rt + "R50_59"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_50;
+                                    row["參考科目定期成績" + st + rt + "R40_49"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_40;
+                                    row["參考科目定期成績" + st + rt + "R30_39"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_30;
+                                    row["參考科目定期成績" + st + rt + "R20_29"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_20;
+                                    row["參考科目定期成績" + st + rt + "R10_19"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_10;
+                                    row["參考科目定期成績" + st + rt + "R0_9"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_lt10;
                                 }
                             }
                         }
                     }
                 }
+
+                //新增參考科目  
+
+
+
+
 
 
                 row["服務學習時數"] = "";
@@ -1814,8 +2192,17 @@ namespace HsinChuExamScore_JH
 
                 doc1.Sections.Add(doc1.ImportNode(docAtt.Sections[0], true));
                 doc1.MailMerge.Execute(dt);
+
+                //foreach (DataColumn cols in dt.Columns)
+                //{
+                //    if (doc1.MailMerge.GetFieldNames().Contains(cols.ColumnName)) 
+                //    {
+                    
+                //    }
+                //} 
+               
                 doc1.MailMerge.RemoveEmptyParagraphs = true;
-                doc1.MailMerge.DeleteFields();
+               doc1.MailMerge.DeleteFields();
                 docList.Add(doc1);
 
             }
@@ -1897,17 +2284,23 @@ namespace HsinChuExamScore_JH
             foreach (var list in _ExamSubjectFull.Values)
             {
                 #region 排序
-                list.Sort(new StringComparer("國文"
-                                , "英文"
-                                , "數學"
-                                , "理化"
-                                , "生物"
-                                , "社會"
-                                , "物理"
-                                , "化學"
-                                , "歷史"
-                                , "地理"
-                                , "公民"));
+                //list.Sort(new StringComparer("國文"
+                //                , "英文"
+                //                , "數學"
+                //                , "理化"
+                //                , "生物"
+                //                , "社會"
+                //                , "物理"
+                //                , "化學"
+                //                , "歷史"
+                //                , "地理"
+                //                , "公民"));
+
+
+                list.Sort(new StringComparer(Utility.GetSubjectOrder().ToArray()));
+
+
+
                 #endregion
             }
         }
@@ -2072,6 +2465,7 @@ namespace HsinChuExamScore_JH
             }
             else
             {
+
                 bool isEr = true;
                 foreach (ExamRecord ex in _exams)
                     if (ex.Name == cboExam.Text)
@@ -2091,6 +2485,7 @@ namespace HsinChuExamScore_JH
 
             if (!string.IsNullOrEmpty(cboRefExam.Text))
             {
+                this.HasReferenceExam = true;
                 bool isEr = true;
                 foreach (ExamRecord ex in _exams)
                     if (ex.Name == cboRefExam.Text)
@@ -2566,7 +2961,7 @@ namespace HsinChuExamScore_JH
 
             SetDomainList();
 
-            Global.ExportMappingFieldWord();
+            Global.ExportMappingFieldWord(); // 產生合併欄位 
             lnkViewMapColumns.Enabled = true;
         }
 
@@ -2692,6 +3087,11 @@ namespace HsinChuExamScore_JH
         }
 
         private void tabControlPanel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cboRefExam_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

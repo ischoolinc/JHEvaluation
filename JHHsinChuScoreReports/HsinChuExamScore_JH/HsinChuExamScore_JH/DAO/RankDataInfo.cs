@@ -31,5 +31,6 @@ namespace HsinChuExamScore_JH.DAO
         public int rank = 0;  // 排名
         public int pr = 0;  // PR
         public int percentile = 0;  // 百分比
+      
     }
 }

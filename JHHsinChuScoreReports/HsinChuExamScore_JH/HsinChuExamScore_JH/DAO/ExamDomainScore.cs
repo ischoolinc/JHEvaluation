@@ -8,7 +8,7 @@ namespace HsinChuExamScore_JH.DAO
     /// <summary>
     /// 評量領域成績
     /// </summary>
-    public class ExamDomainScore
+    public class ExamDomainScore : IScore
     {
         /// <summary>
         /// 領域名稱
@@ -39,6 +39,22 @@ namespace HsinChuExamScore_JH.DAO
         /// 領域定期成績
         /// </summary>
         public decimal? ScoreF { get; set; }
+
+
+        /// <summary>
+        /// (參考試別) 總成績
+        /// </summary>
+        public decimal? RefScoreT { get; set; }
+
+        /// <summary>
+        /// (參考試別) 平時成績
+        /// </summary>
+         public decimal? RefScoreA { get; set; }
+
+        /// <summary>
+        /// (參考試别) 定期評量
+        /// </summary>
+       public  decimal? RefScoreF { get; set; }
 
     }
 }

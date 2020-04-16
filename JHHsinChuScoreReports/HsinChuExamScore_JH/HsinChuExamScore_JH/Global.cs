@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using FISCA.Data;
 using System.Data;
 using Aspose.Words;
+using HsinChuExamScore_JH.DAO;
 
 namespace HsinChuExamScore_JH
 {
@@ -48,6 +49,26 @@ namespace HsinChuExamScore_JH
 
         #endregion
 
+
+        /// <summary>
+        /// 用傳入字串 去確認是否有含彈性課程 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static Boolean CheckIfContainFlex(string text)
+        {
+            if (text.Contains("不含彈性"))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+
+
         /// <summary>
         /// 設定領域名稱
         /// </summary>
@@ -79,7 +100,10 @@ namespace HsinChuExamScore_JH
                     string domain = dr["domain"].ToString();
                     if (!DomainNameList.Contains(domain))
                         DomainNameList.Add(domain);
+
                 }
+
+                DomainNameList.Sort(new StringComparer(Utility.GetDominOrder().ToArray()));
             }
             else
             {
@@ -121,7 +145,7 @@ namespace HsinChuExamScore_JH
         /// <summary>
         /// 取得自訂欄位
         /// </summary>
-        public static List<string>  GetUserDefineFields()
+        public static List<string> GetUserDefineFields()
         {
 
             List<string> UserDefineFields = new List<string>();
@@ -134,7 +158,7 @@ namespace HsinChuExamScore_JH
             return UserDefineFields;
         }
 
-    
+
         /// <summary>
         /// 匯出合併欄位總表Word 註:20200318為符合南榮自訂欄位需求增加自訂欄位變數
         /// </summary>
@@ -170,11 +194,11 @@ namespace HsinChuExamScore_JH
                 #region 動態產生合併欄位
                 // 讀取總表檔案並動態加入合併欄位
 
-                List<string> rankTypeList = new List<string>();
-                rankTypeList.Add("領域成績");
-                rankTypeList.Add("領域定期成績");
-                rankTypeList.Add("參考領域成績");
-                rankTypeList.Add("參考領域定期成績");
+                List<string> ScoreComposition = new List<string>();
+                ScoreComposition.Add("科目成績");
+                ScoreComposition.Add("科目定期成績");
+                ScoreComposition.Add("參考科目成績");
+                ScoreComposition.Add("參考科目定期成績");
 
                 DocumentBuilder builder = new DocumentBuilder(tempDoc);
                 builder.Write("=== 新竹評量成績單合併欄位總表 ===");
@@ -242,7 +266,8 @@ namespace HsinChuExamScore_JH
                 builder.EndRow();
 
                 // Jean 新增自訂欄位 *不存在記憶體裡因為 這裡是靜態空間 如行政人員及時增加自訂欄位 會抓不到最新的
-                foreach (string  userDefine in GetUserDefineFields())
+                foreach (string userDefine in GetUserDefineFields())
+
                 {
                     builder.InsertCell();
                     builder.Write(userDefine + "-自訂欄位");
@@ -251,844 +276,1051 @@ namespace HsinChuExamScore_JH
                     builder.EndRow();
                 }
 
-                foreach (string rt in rankTypeList)
+                // Jean增加總計成績 算術平均 算數總分
+                
+                string[] itemNames = new string[] { "平均", "總分" };
+                Dictionary<string, string> itemTypesMapping = new Dictionary<string, string>() {
+                        {"定期評量_定期/總計成績","成績"},
+                        {"定期評量/總計成績","定期成績"}}; // 因資料庫內 itemTypes用詞過長 轉換為較短並符合其他合併欄位命名方式的欄位
+
+                string[] martrixCols = new string[] { "名次", "PR值", "百分比", "母體頂標", "母體前標", "母體平均", "母體後標", "母體底標", "母體人數" }; // 固定排名統計值
+                string[] _rankTypes = { "班排名", "年排名", "類別1排名", "類別2排名" };
+
+            
+                //  原本的變數改成用迴圈寫 
+
+                string[] _itemNames = new string[] { "加權平均", "加權總分" };
+                //string[] _rankTypes = new string[] { "班排名", "年排名", "類別1排名", "類別2排名" };
+                string[] matrixColumns = new string[] { "名次", "PR值", "百分比", "母體頂標", "母體前標", "母體平均", "母體後標", "母體底標", "母體人數" }; // 固定排名統計值
+
+
+             
+
+
+                // 科目加權平均
+                foreach (string composition in ScoreComposition) //  1. 科目成績   2.科目定期成績  3.參考科目成績  4.參考科目定期成績
                 {
+                                                         
+                    foreach (string itemName in itemNames) //平均 總分 => 基本上這兩個 就是從科目來的
+                    {
+
+                          
+                        //if (!composition.Contains("參考"))
+                        //{
+                        //    builder.InsertCell();
+                        //    builder.Write($"{composition}{itemName}");
+                        //    builder.InsertCell();
+                        //    builder.InsertField($"MERGEFIELD  {composition}{itemName}" + " \\* MERGEFORMAT ", $"« {composition}{itemName}" + "»");
+                        //    builder.EndRow();
+                        //}
+
+                        foreach (string rankType in _rankTypes) // 年排名 班排名 類別1排名 類別2排名 
+                        {
+                            builder.InsertCell();
+                            builder.Write($"------------【{composition} {itemName} {rankType}】------------");
+                            builder.InsertCell();
+                            builder.Write($"---------------------------------------------------------------");
+                            builder.EndRow();
+
+                            // foreach (string itemType in itemTypesMapping.Keys)
+                            {  // 處理成績
+                                foreach (string matrixCol in martrixCols)
+                                {
+                                    builder.InsertCell();
+                                    builder.Write($"{composition}{itemName}{rankType}{matrixCol}");
+                                    builder.InsertCell();
+                                    builder.InsertField($"MERGEFIELD {composition}{itemName}{rankType}{matrixCol}   \\* MERGEFORMAT ", $"«{composition}{itemName}{rankType}{matrixCol}»");
+                                    builder.EndRow();
+                                }
+                            }
+                       
+                        }
+                                                                     
+                    }
+                    
+                    // 加權平均
+                    foreach (string itemName in _itemNames)  //"加權平均" ,  "加權總分" 
+                    {
+                        // 處理成績
+                        //if (!composition.Contains("參考"))
+                        //{
+                        //    builder.InsertCell();
+                        //    builder.Write($"{composition}{itemName}");
+                        //    builder.InsertCell();
+                        //    builder.InsertField($"MERGEFIELD  {composition}{itemName}" + " \\* MERGEFORMAT ", $"«{composition}{itemName}" + "»");
+                        //    builder.EndRow();
+                        //}
+                        // 處理 固定排名相關資料
+                        foreach (string ranktype in _rankTypes)  //"班排名", "年排名" , "類別1排名" , "類別2排名"
+                        {
+
+                            builder.InsertCell();
+                            builder.Write($"------------【{composition} {itemName} {ranktype}】------------");
+                            builder.InsertCell();
+                            builder.Write($"--------------------------------------------------------------");
+                            builder.EndRow();
+
+
+                            foreach (string matrixCol in matrixColumns) // "名次", "PR值", "百分比" , "母體頂標" , "母體前標",  "母體平均", "母體後標" , "母體底標" , "母體人數" 
+                            {
+
+                                // if (!rankType.Contains("參考"))
+                                {
+                                    builder.InsertCell();
+                                    builder.Write($"{composition}{itemName}{ranktype}{matrixCol}");
+                                    builder.InsertCell();
+                                    builder.InsertField($"MERGEFIELD  {composition}{itemName}{ranktype}{matrixCol}" + " \\* MERGEFORMAT ", $"«{composition}{itemName}{ranktype}{matrixCol}" + "»");
+                                    builder.EndRow();
+                                }
+                            }
+                        }
+                    }
+                
                     // 領域加權平均
-                    if (!rt.Contains("參考"))
-                    {
-                        builder.InsertCell();
-                        builder.Write(rt + "加權平均");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD " + rt + "加權平均" + " \\* MERGEFORMAT ", "«DA" + "»");
-                        builder.EndRow();
-                    }
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均班排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名名次" + " \\* MERGEFORMAT ", "«DACR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均班排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名PR值" + " \\* MERGEFORMAT ", "«DACPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均班排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名百分比" + " \\* MERGEFORMAT ", "«DACP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均班排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體頂標" + " \\* MERGEFORMAT ", "«DAC25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均班排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體前標" + " \\* MERGEFORMAT ", "«DAC50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均班排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體平均" + " \\* MERGEFORMAT ", "«DACA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均班排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體後標" + " \\* MERGEFORMAT ", "«DAC50B " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均班排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體底標" + " \\* MERGEFORMAT ", "«DAC25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均年排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名名次" + " \\* MERGEFORMAT ", "«DAYR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均年排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名PR值" + " \\* MERGEFORMAT ", "«DAYPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均年排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名百分比" + " \\* MERGEFORMAT ", "«DAYP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均年排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體頂標" + " \\* MERGEFORMAT ", "«DAY25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均年排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體前標" + " \\* MERGEFORMAT ", "«DAY50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均年排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體平均" + " \\* MERGEFORMAT ", "«DAYA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均年排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體後標" + " \\* MERGEFORMAT ", "«DAY50B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均年排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體底標" + " \\* MERGEFORMAT ", "«DAY25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別1排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名名次" + " \\* MERGEFORMAT ", "«D1TR " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別1排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名PR值" + " \\* MERGEFORMAT ", "«D1TPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別1排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名百分比" + " \\* MERGEFORMAT ", "«D1TP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別1排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體頂標" + " \\* MERGEFORMAT ", "«DA1T25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別1排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體前標" + " \\* MERGEFORMAT ", "«DA1T50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別1排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體平均" + " \\* MERGEFORMAT ", "«DA1TA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別1排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體後標" + " \\* MERGEFORMAT ", "«DA1T50B " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別1排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體底標" + " \\* MERGEFORMAT ", "«DA1T25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別2排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名名次" + " \\* MERGEFORMAT ", "«D2TR " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別2排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名PR值" + " \\* MERGEFORMAT ", "«D2TPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別2排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名百分比" + " \\* MERGEFORMAT ", "«D2TP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別2排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體頂標" + " \\* MERGEFORMAT ", "«DA2T25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別2排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體前標" + " \\* MERGEFORMAT ", "«DA2T50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別2排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體平均" + " \\* MERGEFORMAT ", "«DA2TA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別2排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體後標" + " \\* MERGEFORMAT ", "«DA2T50B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權平均類別2排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體底標" + " \\* MERGEFORMAT ", "«DA2T25B" + "»");
-                    builder.EndRow();
-
-                    if (!rt.Contains("參考"))
-                    {
-                        // 平均
-                        builder.InsertCell();
-                        builder.Write(rt + "平均");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD " + rt + "平均" + " \\* MERGEFORMAT ", "«DA" + "»");
-                        builder.EndRow();
-                    }
-
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均班排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均班排名名次" + " \\* MERGEFORMAT ", "«DACR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均班排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均班排名PR值" + " \\* MERGEFORMAT ", "«DACPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均班排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均班排名百分比" + " \\* MERGEFORMAT ", "«DACP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均班排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體頂標" + " \\* MERGEFORMAT ", "«DAC25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均班排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體前標" + " \\* MERGEFORMAT ", "«DAC50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均班排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體平均" + " \\* MERGEFORMAT ", "«DACA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均班排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體後標" + " \\* MERGEFORMAT ", "«DAC50B " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均班排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體底標" + " \\* MERGEFORMAT ", "«DAC25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均年排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均年排名名次" + " \\* MERGEFORMAT ", "«DAYR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均年排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均年排名PR值" + " \\* MERGEFORMAT ", "«DAYPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均年排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均年排名百分比" + " \\* MERGEFORMAT ", "«DAYP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均年排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體頂標" + " \\* MERGEFORMAT ", "«DAY25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均年排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體前標" + " \\* MERGEFORMAT ", "«DAY50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均年排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體平均" + " \\* MERGEFORMAT ", "«DAYA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均年排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體後標" + " \\* MERGEFORMAT ", "«DAY50B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均年排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體底標" + " \\* MERGEFORMAT ", "«DAY25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別1排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名名次" + " \\* MERGEFORMAT ", "«D1TR " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別1排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名PR值" + " \\* MERGEFORMAT ", "«D1TPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別1排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名百分比" + " \\* MERGEFORMAT ", "«D1TP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別1排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體頂標" + " \\* MERGEFORMAT ", "«DA1T25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別1排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體前標" + " \\* MERGEFORMAT ", "«DA1T50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別1排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體平均" + " \\* MERGEFORMAT ", "«DA1TA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別1排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體後標" + " \\* MERGEFORMAT ", "«DA1T50B " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別1排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體底標" + " \\* MERGEFORMAT ", "«DA1T25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別2排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名名次" + " \\* MERGEFORMAT ", "«D2TR " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別2排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名PR值" + " \\* MERGEFORMAT ", "«D2TPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別2排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名百分比" + " \\* MERGEFORMAT ", "«D2TP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別2排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體頂標" + " \\* MERGEFORMAT ", "«DA2T25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別2排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體前標" + " \\* MERGEFORMAT ", "«DA2T50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別2排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體平均" + " \\* MERGEFORMAT ", "«DA2TA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別2排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體後標" + " \\* MERGEFORMAT ", "«DA2T50B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "平均類別2排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體底標" + " \\* MERGEFORMAT ", "«DA2T25B" + "»");
-                    builder.EndRow();
-
-                    if (!rt.Contains("參考"))
-                    {
-                        // 加權總分
-                        builder.InsertCell();
-                        builder.Write(rt + "加權總分");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD " + rt + "加權總分" + " \\* MERGEFORMAT ", "«DA" + "»");
-                        builder.EndRow();
-                    }
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分班排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名名次" + " \\* MERGEFORMAT ", "«DACR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分班排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名PR值" + " \\* MERGEFORMAT ", "«DACPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分班排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名百分比" + " \\* MERGEFORMAT ", "«DACP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分班排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體頂標" + " \\* MERGEFORMAT ", "«DAC25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分班排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體前標" + " \\* MERGEFORMAT ", "«DAC50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分班排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體平均" + " \\* MERGEFORMAT ", "«DACA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分班排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體後標" + " \\* MERGEFORMAT ", "«DAC50B " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分班排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體底標" + " \\* MERGEFORMAT ", "«DAC25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分年排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名名次" + " \\* MERGEFORMAT ", "«DAYR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分年排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名PR值" + " \\* MERGEFORMAT ", "«DAYPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分年排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名百分比" + " \\* MERGEFORMAT ", "«DAYP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分年排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體頂標" + " \\* MERGEFORMAT ", "«DAY25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分年排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體前標" + " \\* MERGEFORMAT ", "«DAY50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分年排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體平均" + " \\* MERGEFORMAT ", "«DAYA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分年排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體後標" + " \\* MERGEFORMAT ", "«DAY50B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分年排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體底標" + " \\* MERGEFORMAT ", "«DAY25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別1排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名名次" + " \\* MERGEFORMAT ", "«D1TR " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別1排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名PR值" + " \\* MERGEFORMAT ", "«D1TPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別1排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名百分比" + " \\* MERGEFORMAT ", "«D1TP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別1排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體頂標" + " \\* MERGEFORMAT ", "«DA1T25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別1排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體前標" + " \\* MERGEFORMAT ", "«DA1T50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別1排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體平均" + " \\* MERGEFORMAT ", "«DA1TA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別1排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體後標" + " \\* MERGEFORMAT ", "«DA1T50B " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別1排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體底標" + " \\* MERGEFORMAT ", "«DA1T25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別2排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名名次" + " \\* MERGEFORMAT ", "«D2TR " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別2排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名PR值" + " \\* MERGEFORMAT ", "«D2TPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別2排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名百分比" + " \\* MERGEFORMAT ", "«D2TP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別2排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體頂標" + " \\* MERGEFORMAT ", "«DA2T25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別2排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體前標" + " \\* MERGEFORMAT ", "«DA2T50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別2排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體平均" + " \\* MERGEFORMAT ", "«DA2TA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別2排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體後標" + " \\* MERGEFORMAT ", "«DA2T50B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "加權總分類別2排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體底標" + " \\* MERGEFORMAT ", "«DA2T25B" + "»");
-                    builder.EndRow();
-
-                    if (!rt.Contains("參考"))
-                    {
-                        // "總分
-                        builder.InsertCell();
-                        builder.Write(rt + "總分");
-                        builder.InsertCell();
-                        builder.InsertField("MERGEFIELD " + rt + "總分" + " \\* MERGEFORMAT ", "«DA" + "»");
-                        builder.EndRow();
-                    }
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分班排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分班排名名次" + " \\* MERGEFORMAT ", "«DACR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分班排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分班排名PR值" + " \\* MERGEFORMAT ", "«DACPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分班排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分班排名百分比" + " \\* MERGEFORMAT ", "«DACP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分班排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體頂標" + " \\* MERGEFORMAT ", "«DAC25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分班排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體前標" + " \\* MERGEFORMAT ", "«DAC50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分班排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體平均" + " \\* MERGEFORMAT ", "«DACA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分班排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體後標" + " \\* MERGEFORMAT ", "«DAC50B " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分班排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體底標" + " \\* MERGEFORMAT ", "«DAC25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分年排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分年排名名次" + " \\* MERGEFORMAT ", "«DAYR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分年排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分年排名PR值" + " \\* MERGEFORMAT ", "«DAYPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分年排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分年排名百分比" + " \\* MERGEFORMAT ", "«DAYP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分年排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體頂標" + " \\* MERGEFORMAT ", "«DAY25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分年排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體前標" + " \\* MERGEFORMAT ", "«DAY50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分年排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體平均" + " \\* MERGEFORMAT ", "«DAYA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分年排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體後標" + " \\* MERGEFORMAT ", "«DAY50B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分年排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體底標" + " \\* MERGEFORMAT ", "«DAY25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別1排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名名次" + " \\* MERGEFORMAT ", "«D1TR " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別1排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名PR值" + " \\* MERGEFORMAT ", "«D1TPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別1排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名百分比" + " \\* MERGEFORMAT ", "«D1TP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別1排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體頂標" + " \\* MERGEFORMAT ", "«DA1T25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別1排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體前標" + " \\* MERGEFORMAT ", "«DA1T50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別1排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體平均" + " \\* MERGEFORMAT ", "«DA1TA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別1排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體後標" + " \\* MERGEFORMAT ", "«DA1T50B " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別1排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體底標" + " \\* MERGEFORMAT ", "«DA1T25B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別2排名名次");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名名次" + " \\* MERGEFORMAT ", "«D2TR " + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別2排名PR值");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名PR值" + " \\* MERGEFORMAT ", "«D2TPR" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別2排名百分比");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名百分比" + " \\* MERGEFORMAT ", "«D2TP" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別2排名母體頂標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體頂標" + " \\* MERGEFORMAT ", "«DA2T25T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別2排名母體前標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體前標" + " \\* MERGEFORMAT ", "«DA2T50T" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別2排名母體平均");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體平均" + " \\* MERGEFORMAT ", "«DA2TA" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別2排名母體後標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體後標" + " \\* MERGEFORMAT ", "«DA2T50B" + "»");
-                    builder.EndRow();
-
-                    builder.InsertCell();
-                    builder.Write(rt + "總分類別2排名母體底標");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體底標" + " \\* MERGEFORMAT ", "«DA2T25B" + "»");
-                    builder.EndRow();
+                    //    if (!rt.Contains("參考"))
+                    //    {
+                    //        builder.InsertCell();
+                    //        builder.Write(rt + "加權平均");
+                    //        builder.InsertCell();
+                    //        builder.InsertField("MERGEFIELD " + rt + "加權平均" + " \\* MERGEFORMAT ", "«DA" + "»");
+                    //        builder.EndRow();
+                    //    }
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均班排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名名次" + " \\* MERGEFORMAT ", "«DACR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均班排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名PR值" + " \\* MERGEFORMAT ", "«DACPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均班排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名百分比" + " \\* MERGEFORMAT ", "«DACP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均班排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體頂標" + " \\* MERGEFORMAT ", "«DAC25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均班排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體前標" + " \\* MERGEFORMAT ", "«DAC50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均班排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體平均" + " \\* MERGEFORMAT ", "«DACA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均班排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體後標" + " \\* MERGEFORMAT ", "«DAC50B " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均班排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體底標" + " \\* MERGEFORMAT ", "«DAC25B" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均班排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均班排名母體人數" + " \\* MERGEFORMAT ", "«DACMC" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均年排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名名次" + " \\* MERGEFORMAT ", "«DAYR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均年排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名PR值" + " \\* MERGEFORMAT ", "«DAYPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均年排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名百分比" + " \\* MERGEFORMAT ", "«DAYP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均年排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體頂標" + " \\* MERGEFORMAT ", "«DAY25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均年排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體前標" + " \\* MERGEFORMAT ", "«DAY50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均年排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體平均" + " \\* MERGEFORMAT ", "«DAYA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均年排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體後標" + " \\* MERGEFORMAT ", "«DAY50B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均年排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體底標" + " \\* MERGEFORMAT ", "«DAY25B" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均年排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均年排名母體人數" + " \\* MERGEFORMAT ", "«DAYMC" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別1排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名名次" + " \\* MERGEFORMAT ", "«D1TR " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別1排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名PR值" + " \\* MERGEFORMAT ", "«D1TPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別1排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名百分比" + " \\* MERGEFORMAT ", "«D1TP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別1排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體頂標" + " \\* MERGEFORMAT ", "«DA1T25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別1排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體前標" + " \\* MERGEFORMAT ", "«DA1T50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別1排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體平均" + " \\* MERGEFORMAT ", "«DA1TA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別1排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體後標" + " \\* MERGEFORMAT ", "«DA1T50B " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別1排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體底標" + " \\* MERGEFORMAT ", "«DA1T25B" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別1排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別1排名母體人數" + " \\* MERGEFORMAT ", "«DA1TMC" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別2排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名名次" + " \\* MERGEFORMAT ", "«D2TR " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別2排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名PR值" + " \\* MERGEFORMAT ", "«D2TPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別2排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名百分比" + " \\* MERGEFORMAT ", "«D2TP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別2排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體頂標" + " \\* MERGEFORMAT ", "«DA2T25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別2排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體前標" + " \\* MERGEFORMAT ", "«DA2T50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別2排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體平均" + " \\* MERGEFORMAT ", "«DA2TA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別2排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體後標" + " \\* MERGEFORMAT ", "«DA2T50B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別2排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體底標" + " \\* MERGEFORMAT ", "«DA2T25B" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權平均類別2排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權平均類別2排名母體人數" + " \\* MERGEFORMAT ", "«DA2T2MC" + "»");
+                    //    builder.EndRow();
+
+
+                    //    if (!rt.Contains("參考"))
+                    //    {
+
+                    //        // 平均 
+                    //        builder.InsertCell();
+                    //        builder.Write(rt + "平均");
+                    //        builder.InsertCell();
+                    //        builder.InsertField("MERGEFIELD " + rt + "平均" + " \\* MERGEFORMAT ", "«DA" + "»");
+                    //        builder.EndRow();
+                    //    }
+
+                    //    //因固定排名沒有計算領域總計成績(平均、總分、加權平均、加權總分) ====> 所以先拿掉
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均班排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均班排名名次" + " \\* MERGEFORMAT ", "«DACR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均班排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均班排名PR值" + " \\* MERGEFORMAT ", "«DACPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均班排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均班排名百分比" + " \\* MERGEFORMAT ", "«DACP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均班排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體頂標" + " \\* MERGEFORMAT ", "«DAC25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均班排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體前標" + " \\* MERGEFORMAT ", "«DAC50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均班排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體平均" + " \\* MERGEFORMAT ", "«DACA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均班排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體後標" + " \\* MERGEFORMAT ", "«DAC50B " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均班排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體底標" + " \\* MERGEFORMAT ", "«DAC25B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均班排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均班排名母體人數" + " \\* MERGEFORMAT ", "«DACMC" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均年排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均年排名名次" + " \\* MERGEFORMAT ", "«DAYR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均年排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均年排名PR值" + " \\* MERGEFORMAT ", "«DAYPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均年排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均年排名百分比" + " \\* MERGEFORMAT ", "«DAYP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均年排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體頂標" + " \\* MERGEFORMAT ", "«DAY25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均年排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體前標" + " \\* MERGEFORMAT ", "«DAY50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均年排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體平均" + " \\* MERGEFORMAT ", "«DAYA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均年排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體後標" + " \\* MERGEFORMAT ", "«DAY50B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均年排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體底標" + " \\* MERGEFORMAT ", "«DAY25B" + "»");
+                    //    builder.EndRow();
+
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均年排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均年排名母體人數" + " \\* MERGEFORMAT ", "«DAYMC" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別1排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名名次" + " \\* MERGEFORMAT ", "«D1TR " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別1排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名PR值" + " \\* MERGEFORMAT ", "«D1TPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別1排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名百分比" + " \\* MERGEFORMAT ", "«D1TP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別1排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體頂標" + " \\* MERGEFORMAT ", "«DA1T25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別1排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體前標" + " \\* MERGEFORMAT ", "«DA1T50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別1排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體平均" + " \\* MERGEFORMAT ", "«DA1TA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別1排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體後標" + " \\* MERGEFORMAT ", "«DA1T50B " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別1排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體底標" + " \\* MERGEFORMAT ", "«DA1T25B" + "»");
+                    //    builder.EndRow();
+
+
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別1排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別1排名母體人數" + " \\* MERGEFORMAT ", "«DA1TMC" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別2排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名名次" + " \\* MERGEFORMAT ", "«D2TR " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別2排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名PR值" + " \\* MERGEFORMAT ", "«D2TPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別2排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名百分比" + " \\* MERGEFORMAT ", "«D2TP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別2排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體頂標" + " \\* MERGEFORMAT ", "«DA2T25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別2排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體前標" + " \\* MERGEFORMAT ", "«DA2T50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別2排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體平均" + " \\* MERGEFORMAT ", "«DA2TA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別2排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體後標" + " \\* MERGEFORMAT ", "«DA2T50B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別2排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體底標" + " \\* MERGEFORMAT ", "«DA2T25B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "平均類別2排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "平均類別2排名母體人數" + " \\* MERGEFORMAT ", "«DA2TMC" + "»");
+                    //    builder.EndRow();
+
+                    //    if (!rt.Contains("參考"))
+                    //    {
+                    //        // 加權總分
+                    //        builder.InsertCell();
+                    //        builder.Write(rt + "加權總分");
+                    //        builder.InsertCell();
+                    //        builder.InsertField("MERGEFIELD " + rt + "加權總分" + " \\* MERGEFORMAT ", "«DA" + "»");
+                    //        builder.EndRow();
+                    //    }
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分班排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名名次" + " \\* MERGEFORMAT ", "«DACR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分班排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名PR值" + " \\* MERGEFORMAT ", "«DACPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分班排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名百分比" + " \\* MERGEFORMAT ", "«DACP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分班排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體頂標" + " \\* MERGEFORMAT ", "«DAC25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分班排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體前標" + " \\* MERGEFORMAT ", "«DAC50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分班排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體平均" + " \\* MERGEFORMAT ", "«DACA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分班排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體後標" + " \\* MERGEFORMAT ", "«DAC50B " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分班排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體底標" + " \\* MERGEFORMAT ", "«DAC25B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分班排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分班排名母體人數" + " \\* MERGEFORMAT ", "«DAC25B" + "»");
+                    //    builder.EndRow();
+
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分年排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名名次" + " \\* MERGEFORMAT ", "«DAYR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分年排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名PR值" + " \\* MERGEFORMAT ", "«DAYPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分年排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名百分比" + " \\* MERGEFORMAT ", "«DAYP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分年排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體頂標" + " \\* MERGEFORMAT ", "«DAY25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分年排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體前標" + " \\* MERGEFORMAT ", "«DAY50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分年排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體平均" + " \\* MERGEFORMAT ", "«DAYA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分年排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體後標" + " \\* MERGEFORMAT ", "«DAY50B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分年排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體底標" + " \\* MERGEFORMAT ", "«DAY25B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分年排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分年排名母體人數" + " \\* MERGEFORMAT ", "«DAYMC" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別1排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名名次" + " \\* MERGEFORMAT ", "«D1TR " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別1排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名PR值" + " \\* MERGEFORMAT ", "«D1TPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別1排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名百分比" + " \\* MERGEFORMAT ", "«D1TP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別1排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體頂標" + " \\* MERGEFORMAT ", "«DA1T25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別1排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體前標" + " \\* MERGEFORMAT ", "«DA1T50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別1排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體平均" + " \\* MERGEFORMAT ", "«DA1TA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別1排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體後標" + " \\* MERGEFORMAT ", "«DA1T50B " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別1排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體底標" + " \\* MERGEFORMAT ", "«DA1T25B" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別1排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別1排名母體人數" + " \\* MERGEFORMAT ", "«DA1TMC" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別2排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名名次" + " \\* MERGEFORMAT ", "«D2TR " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別2排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名PR值" + " \\* MERGEFORMAT ", "«D2TPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別2排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名百分比" + " \\* MERGEFORMAT ", "«D2TP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別2排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體頂標" + " \\* MERGEFORMAT ", "«DA2T25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別2排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體前標" + " \\* MERGEFORMAT ", "«DA2T50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別2排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體平均" + " \\* MERGEFORMAT ", "«DA2TA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別2排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體後標" + " \\* MERGEFORMAT ", "«DA2T50B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別2排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體底標" + " \\* MERGEFORMAT ", "«DA2T25B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "加權總分類別2排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "加權總分類別2排名母體人數" + " \\* MERGEFORMAT ", "«DA2TMC" + "»");
+                    //    builder.EndRow();
+
+
+                    //    if (!rt.Contains("參考"))
+                    //    {
+                    //        // "總分
+                    //        builder.InsertCell();
+                    //        builder.Write(rt + "總分");
+                    //        builder.InsertCell();
+                    //        builder.InsertField("MERGEFIELD " + rt + "總分" + " \\* MERGEFORMAT ", "«DA" + "»");
+                    //        builder.EndRow();
+                    //    }
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分班排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分班排名名次" + " \\* MERGEFORMAT ", "«DACR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分班排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分班排名PR值" + " \\* MERGEFORMAT ", "«DACPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分班排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分班排名百分比" + " \\* MERGEFORMAT ", "«DACP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分班排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體頂標" + " \\* MERGEFORMAT ", "«DAC25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分班排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體前標" + " \\* MERGEFORMAT ", "«DAC50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分班排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體平均" + " \\* MERGEFORMAT ", "«DACA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分班排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體後標" + " \\* MERGEFORMAT ", "«DAC50B " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分班排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體底標" + " \\* MERGEFORMAT ", "«DAC25B" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分班排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分班排名母體人數" + " \\* MERGEFORMAT ", "«DAC25B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分年排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分年排名名次" + " \\* MERGEFORMAT ", "«DAYR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分年排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分年排名PR值" + " \\* MERGEFORMAT ", "«DAYPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分年排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分年排名百分比" + " \\* MERGEFORMAT ", "«DAYP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分年排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體頂標" + " \\* MERGEFORMAT ", "«DAY25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分年排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體前標" + " \\* MERGEFORMAT ", "«DAY50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分年排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體平均" + " \\* MERGEFORMAT ", "«DAYA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分年排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體後標" + " \\* MERGEFORMAT ", "«DAY50B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分年排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體底標" + " \\* MERGEFORMAT ", "«DAY25B" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分年排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分年排名母體人數" + " \\* MERGEFORMAT ", "«DAYMC" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別1排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名名次" + " \\* MERGEFORMAT ", "«D1TR " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別1排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名PR值" + " \\* MERGEFORMAT ", "«D1TPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別1排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名百分比" + " \\* MERGEFORMAT ", "«D1TP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別1排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體頂標" + " \\* MERGEFORMAT ", "«DA1T25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別1排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體前標" + " \\* MERGEFORMAT ", "«DA1T50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別1排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體平均" + " \\* MERGEFORMAT ", "«DA1TA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別1排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體後標" + " \\* MERGEFORMAT ", "«DA1T50B " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別1排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體底標" + " \\* MERGEFORMAT ", "«DA1T25B" + "»");
+                    //    builder.EndRow();
+
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別1排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別1排名母體人數" + " \\* MERGEFORMAT ", "«DA1TMC" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別2排名名次");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名名次" + " \\* MERGEFORMAT ", "«D2TR " + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別2排名PR值");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名PR值" + " \\* MERGEFORMAT ", "«D2TPR" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別2排名百分比");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名百分比" + " \\* MERGEFORMAT ", "«D2TP" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別2排名母體頂標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體頂標" + " \\* MERGEFORMAT ", "«DA2T25T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別2排名母體前標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體前標" + " \\* MERGEFORMAT ", "«DA2T50T" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別2排名母體平均");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體平均" + " \\* MERGEFORMAT ", "«DA2TA" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別2排名母體後標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體後標" + " \\* MERGEFORMAT ", "«DA2T50B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別2排名母體底標");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體底標" + " \\* MERGEFORMAT ", "«DA2T25B" + "»");
+                    //    builder.EndRow();
+
+                    //    builder.InsertCell();
+                    //    builder.Write(rt + "總分類別2排名母體人數");
+                    //    builder.InsertCell();
+                    //    builder.InsertField("MERGEFIELD " + rt + "總分類別2排名母體人數" + " \\* MERGEFORMAT ", "«DA2TMC" + "»");
+                    //    builder.EndRow();
                 }
 
 
 
+                // todo  2020 將部分科目相關欄位改寫為 迴圈下去跑 Jean 
+                // 科目相關資訊
+                // * 科目
+                // 1.
+                // a. 加權平均 b.加權平均(不含彈性) c.加權總分 d .加權總分(不含彈性)
 
-
-
-
-
-
+                /*===========================以下為原本有的先保留==============================*/
 
                 builder.InsertCell();
-                builder.Write("科目定期評量加權平均");
+                builder.Write($"--------------------------------------------------------------");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目定期評量加權平均" + " \\* MERGEFORMAT ", "«SF" + "»");
+                builder.Write($"--------------------------------------------------------------");
                 builder.EndRow();
 
-                builder.InsertCell();
-                builder.Write("科目平時評量加權平均");
-                builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目平時評量加權平均" + " \\* MERGEFORMAT ", "«SA" + "»");
-                builder.EndRow();
 
-                builder.InsertCell();
-                builder.Write("科目總成績加權平均");
-                builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目總成績加權平均" + " \\* MERGEFORMAT ", "«ST" + "»");
-                builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("領域成績加權平均(不含彈性課程)");
@@ -1096,22 +1328,87 @@ namespace HsinChuExamScore_JH
                 builder.InsertField("MERGEFIELD 領域成績加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«DAN" + "»");
                 builder.EndRow();
 
+
                 builder.InsertCell();
-                builder.Write("科目定期評量加權平均(不含彈性課程)");
+                builder.Write("領域成績加權總分(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目定期評量加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«SFN" + "»");
+                builder.InsertField("MERGEFIELD 領域成績加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«DAN" + "»");
+                builder.EndRow();
+
+                /*=================================以上為原本有的先保留================================*/
+
+
+
+
+                /*===========================以上科目相關改為迴圈下去跑==================================*/
+
+
+                // 個總排列組合
+                // AM是算術平均的縮寫
+                string scoreTarget = "科目_S";
+                string[] ScoreCompositions = new string[] { "定期成績_F", "平時成績_A", "成績_T" };
+                string[] ScoreCaculateWays = new string[] { "平均_AMCF", "平均(不含彈性)_AMNF", "總分_ATCF", "總分(不含彈性)_STNF" };
+
+                string scoreTargetName = scoreTarget.Split('_')[0];
+                string scoreTargetAbbr = scoreTarget.Split('_')[1];
+
+                foreach (string scoreComposition in ScoreCompositions)
+                {
+                    string scoreCompositionName = scoreComposition.Split('_')[0];
+                    string scoreCompositionAbbr = scoreComposition.Split('_')[1];
+                    foreach (string scoreCaculateWay in ScoreCaculateWays)
+                    {
+                        string scoreCaculateWayName = scoreCaculateWay.Split('_')[0];
+                        string scoreCaculateWayAbbr = scoreCaculateWay.Split('_')[1];
+
+                        builder.InsertCell();
+                        // builder.Write("科目定期評量加權平均");
+                        builder.Write($"{scoreTargetName}{scoreCompositionName}{scoreCaculateWayName}");
+                        builder.InsertCell();
+                        // builder.InsertField("MERGEFIELD 科目定期評量加權平均" + " \\* MERGEFORMAT ", "«SF" + "»");
+                        builder.InsertField($"MERGEFIELD {scoreTargetName}{scoreCompositionName}{scoreCaculateWayName}" + " \\* MERGEFORMAT ", $"«{scoreTargetAbbr}{scoreCaculateWayAbbr}»");
+                        builder.EndRow();
+                    }
+                }
+
+
+
+
+                builder.InsertCell();
+                builder.Write("科目定期成績加權平均");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 科目定期成績加權平均" + " \\* MERGEFORMAT ", "«SF" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
-                builder.Write("科目平時評量加權平均(不含彈性課程)");
+                builder.Write("科目平時成績加權平均");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目平時評量加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«SAN" + "»");
+                builder.InsertField("MERGEFIELD 科目平時成績加權平均" + " \\* MERGEFORMAT ", "«SA" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
-                builder.Write("科目總成績加權平均(不含彈性課程)");
+                builder.Write("科目成績加權平均");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目總成績加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«STN" + "»");
+                builder.InsertField("MERGEFIELD 科目成績加權平均" + " \\* MERGEFORMAT ", "«ST" + "»");
+                builder.EndRow();
+
+
+                builder.InsertCell();
+                builder.Write("科目定期成績加權平均(不含彈性課程)");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 科目定期成績加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«SFN" + "»");
+                builder.EndRow();
+
+                builder.InsertCell();
+                builder.Write("科目平時成績加權平均(不含彈性課程)");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 科目平時成績加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«SAN" + "»");
+                builder.EndRow();
+
+                builder.InsertCell();
+                builder.Write("科目成績加權平均(不含彈性課程)");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 科目成績加權平均(不含彈性)" + " \\* MERGEFORMAT ", "«STN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
@@ -1121,46 +1418,45 @@ namespace HsinChuExamScore_JH
                 builder.EndRow();
 
                 builder.InsertCell();
-                builder.Write("科目定期評量加權總分");
+                builder.Write("科目定期成績加權總分");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目定期評量加權總分" + " \\* MERGEFORMAT ", "«SF" + "»");
+                builder.InsertField("MERGEFIELD 科目定期成績加權總分" + " \\* MERGEFORMAT ", "«SF" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
-                builder.Write("科目平時評量加權總分");
+                builder.Write("科目平時成績加權總分");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目平時評量加權總分" + " \\* MERGEFORMAT ", "«SA" + "»");
+                builder.InsertField("MERGEFIELD 科目平時成績加權總分" + " \\* MERGEFORMAT ", "«SA" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
-                builder.Write("科目總成績加權總分");
+                builder.Write("科目成績加權總分");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目總成績加權總分" + " \\* MERGEFORMAT ", "«ST" + "»");
+                builder.InsertField("MERGEFIELD 科目成績加權總分" + " \\* MERGEFORMAT ", "«ST" + "»");
+                builder.EndRow();
+
+
+                builder.InsertCell();
+                builder.Write("科目定期成績加權總分(不含彈性課程)");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 科目定期成績加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«SFN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
-                builder.Write("領域成績加權總分(不含彈性課程)");
+                builder.Write("科目平時成績加權總分(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 領域成績加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«DAN" + "»");
-                builder.EndRow();
-
-                builder.InsertCell();
-                builder.Write("科目定期評量加權總分(不含彈性課程)");
-                builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目定期評量加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«SFN" + "»");
-                builder.EndRow();
-
-                builder.InsertCell();
-                builder.Write("科目平時評量加權總分(不含彈性課程)");
-                builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目平時評量加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«SAN" + "»");
+                builder.InsertField("MERGEFIELD 科目平時成績加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«SAN" + "»");
                 builder.EndRow();
 
                 builder.InsertCell();
                 builder.Write("科目總成績加權總分(不含彈性課程)");
                 builder.InsertCell();
-                builder.InsertField("MERGEFIELD 科目總成績加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«STN" + "»");
+                builder.InsertField("MERGEFIELD 科目成績加權總分(不含彈性)" + " \\* MERGEFORMAT ", "«STN" + "»");
                 builder.EndRow();
+
+                /*===========================以上科目相關改為迴圈下去跑==============================*/
+
+
 
                 builder.InsertCell();
                 builder.Write("缺曠紀錄");
@@ -1496,6 +1792,8 @@ namespace HsinChuExamScore_JH
                 builder.InsertCell();
                 builder.Write("領域年排名母體底標");
                 builder.InsertCell();
+                builder.Write("領域年排名母體人數");
+                builder.InsertCell();
                 builder.Write("領域班排名母體頂標");
                 builder.InsertCell();
                 builder.Write("領域班排名母體前標");
@@ -1505,6 +1803,8 @@ namespace HsinChuExamScore_JH
                 builder.Write("領域班排名母體後標");
                 builder.InsertCell();
                 builder.Write("領域班排名母體底標");
+                builder.InsertCell();
+                builder.Write("領域班排名母體人數");
                 builder.EndRow();
 
                 foreach (string domainName in DomainNameList)
@@ -1526,6 +1826,9 @@ namespace HsinChuExamScore_JH
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DY50B" + "»");
                     mName1 = domainName + "_領域年排名母體底標";
                     builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DY50B" + "»");
+                    mName1 = domainName + "_領域年排名母體人數";
+                    builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DY25B" + "»");
                     mName1 = domainName + "_領域班排名母體頂標";
                     builder.InsertCell();
@@ -1542,6 +1845,9 @@ namespace HsinChuExamScore_JH
                     mName1 = domainName + "_領域班排名母體底標";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DC25B" + "»");
+                    mName1 = domainName + "_領域班排名母體人數";
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DC2MC" + "»");
                     builder.EndRow();
                 }
 
@@ -1567,6 +1873,8 @@ namespace HsinChuExamScore_JH
                 builder.InsertCell();
                 builder.Write("領域類別1排名母體底標");
                 builder.InsertCell();
+                builder.Write("領域類別1排名母體人數");
+                builder.InsertCell();
                 builder.Write("領域類別2排名母體頂標");
                 builder.InsertCell();
                 builder.Write("領域類別2排名母體前標");
@@ -1576,6 +1884,8 @@ namespace HsinChuExamScore_JH
                 builder.Write("領域類別2排名母體後標");
                 builder.InsertCell();
                 builder.Write("領域類別2排名母體底標");
+                builder.InsertCell();
+                builder.Write("領域類別2排名母體人數");
                 builder.EndRow();
 
                 foreach (string domainName in DomainNameList)
@@ -1598,6 +1908,9 @@ namespace HsinChuExamScore_JH
                     mName1 = domainName + "_領域類別1排名母體底標";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«D1T25B" + "»");
+                    mName1 = domainName + "_領域類別1排名母體人數";
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«D1TMC" + "»");
                     mName1 = domainName + "_領域類別2排名母體頂標";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«D2T25T" + "»");
@@ -1613,6 +1926,9 @@ namespace HsinChuExamScore_JH
                     mName1 = domainName + "_領域類別2排名母體底標";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«D2T25B" + "»");
+                    mName1 = domainName + "_領域類別2排名母體人數";
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«D2TMC" + "»");
                     builder.EndRow();
                 }
 
@@ -1799,6 +2115,9 @@ namespace HsinChuExamScore_JH
                 builder.InsertCell();
                 builder.Write("領域定期年排名母體底標");
                 builder.InsertCell();
+                builder.Write("領域定期年排名母體人數");
+                builder.InsertCell();
+
                 builder.Write("領域定期班排名母體頂標");
                 builder.InsertCell();
                 builder.Write("領域定期班排名母體前標");
@@ -1808,6 +2127,8 @@ namespace HsinChuExamScore_JH
                 builder.Write("領域定期班排名母體後標");
                 builder.InsertCell();
                 builder.Write("領域定期班排名母體底標");
+                builder.InsertCell();
+                builder.Write("領域定期班排名母體人數");
                 builder.EndRow();
 
                 foreach (string domainName in DomainNameList)
@@ -1830,6 +2151,9 @@ namespace HsinChuExamScore_JH
                     mName1 = domainName + "_領域定期年排名母體底標";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DY25B" + "»");
+                    mName1 = domainName + "_領域定期年排名母體人數";
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DY25B" + "»");
                     mName1 = domainName + "_領域定期班排名母體頂標";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DC25T" + "»");
@@ -1845,6 +2169,9 @@ namespace HsinChuExamScore_JH
                     mName1 = domainName + "_領域定期班排名母體底標";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DC25B" + "»");
+                    mName1 = domainName + "_領域定期班排名母體人數";
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«DC2MC" + "»");
                     builder.EndRow();
                 }
 
@@ -1870,6 +2197,8 @@ namespace HsinChuExamScore_JH
                 builder.InsertCell();
                 builder.Write("領域定期類別1排名母體底標");
                 builder.InsertCell();
+                builder.Write("領域定期類別1排名母體人數");
+                builder.InsertCell();
                 builder.Write("領域定期類別2排名母體頂標");
                 builder.InsertCell();
                 builder.Write("領域定期類別2排名母體前標");
@@ -1879,6 +2208,8 @@ namespace HsinChuExamScore_JH
                 builder.Write("領域定期類別2排名母體後標");
                 builder.InsertCell();
                 builder.Write("領域定期類別2排名母體底標");
+                builder.InsertCell();
+                builder.Write("領域定期類別2排名母體人數");
                 builder.EndRow();
 
                 foreach (string domainName in DomainNameList)
@@ -1901,6 +2232,9 @@ namespace HsinChuExamScore_JH
                     mName1 = domainName + "_領域定期類別1排名母體底標";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«D1T25B" + "»");
+                    mName1 = domainName + "_領域定期類別1排名母體人數";
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«D1TMC" + "»");
                     mName1 = domainName + "_領域定期類別2排名母體頂標";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«D2T25T" + "»");
@@ -1916,6 +2250,9 @@ namespace HsinChuExamScore_JH
                     mName1 = domainName + "_領域定期類別2排名母體底標";
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«D2T25B" + "»");
+                    mName1 = domainName + "_領域定期類別2排名母體人數";
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«D2TMC" + "»");
                     builder.EndRow();
                 }
 
@@ -2056,6 +2393,8 @@ namespace HsinChuExamScore_JH
                     builder.InsertCell();
                     builder.Write("科目年排名母體底標");
                     builder.InsertCell();
+                    builder.Write("科目年排名母體人數");
+                    builder.InsertCell();
                     builder.Write("科目班排名母體頂標");
                     builder.InsertCell();
                     builder.Write("科目班排名母體前標");
@@ -2065,6 +2404,8 @@ namespace HsinChuExamScore_JH
                     builder.Write("科目班排名母體後標");
                     builder.InsertCell();
                     builder.Write("科目班排名母體底標");
+                    builder.InsertCell();
+                    builder.Write("科目班排名母體人數");
                     builder.EndRow();
 
                     for (int sj = 1; sj <= 12; sj++)
@@ -2087,6 +2428,10 @@ namespace HsinChuExamScore_JH
                         mName1 = domainName + "_科目年排名母體底標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SY25B" + "»");
+                        mName1 = domainName + "_科目年排名母體人數" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SYMC" + "»");
+
                         mName1 = domainName + "_科目班排名母體頂標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SC25T" + "»");
@@ -2102,6 +2447,9 @@ namespace HsinChuExamScore_JH
                         mName1 = domainName + "_科目班排名母體底標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SC25B" + "»");
+                        mName1 = domainName + "_科目班排名母體人數" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SCMC" + "»");
                         builder.EndRow();
                     }
 
@@ -2131,6 +2479,8 @@ namespace HsinChuExamScore_JH
                     builder.InsertCell();
                     builder.Write("科目類別1排名母體底標");
                     builder.InsertCell();
+                    builder.Write("科目類別1排名母體母數");
+                    builder.InsertCell();
                     builder.Write("科目類別2排名母體頂標");
                     builder.InsertCell();
                     builder.Write("科目類別2排名母體前標");
@@ -2140,6 +2490,8 @@ namespace HsinChuExamScore_JH
                     builder.Write("科目類別2排名母體後標");
                     builder.InsertCell();
                     builder.Write("科目類別2排名母體底標");
+                    builder.InsertCell();
+                    builder.Write("科目類別2排名母體人數");
                     builder.EndRow();
 
                     for (int sj = 1; sj <= 12; sj++)
@@ -2162,6 +2514,9 @@ namespace HsinChuExamScore_JH
                         mName1 = domainName + "_科目類別1排名母體底標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S1T25B" + "»");
+                        mName1 = domainName + "_科目類別1排名母體人數" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S1T25B" + "»");
                         mName1 = domainName + "_科目類別2排名母體頂標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S2T25T" + "»");
@@ -2177,6 +2532,10 @@ namespace HsinChuExamScore_JH
                         mName1 = domainName + "_科目類別2排名母體底標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S2T25B" + "»");
+
+                        mName1 = domainName + "_科目類別2排名母體人數" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S2TMC" + "»");
 
                         builder.EndRow();
                     }
@@ -2318,6 +2677,8 @@ namespace HsinChuExamScore_JH
                     builder.InsertCell();
                     builder.Write("科目定期年排名母體底標");
                     builder.InsertCell();
+                    builder.Write("科目定期年排名母體人數");
+                    builder.InsertCell();
                     builder.Write("科目定期班排名母體頂標");
                     builder.InsertCell();
                     builder.Write("科目定期班排名母體前標");
@@ -2327,6 +2688,8 @@ namespace HsinChuExamScore_JH
                     builder.Write("科目定期班排名母體後標");
                     builder.InsertCell();
                     builder.Write("科目定期班排名母體底標");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體人數");
                     builder.EndRow();
 
                     for (int sj = 1; sj <= 12; sj++)
@@ -2349,6 +2712,11 @@ namespace HsinChuExamScore_JH
                         mName1 = domainName + "_科目定期年排名母體底標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SY25B" + "»");
+
+                        mName1 = domainName + "_科目定期年排名母體人數" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SYMC" + "»");
+
                         mName1 = domainName + "_科目定期班排名母體頂標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SC25T" + "»");
@@ -2364,6 +2732,9 @@ namespace HsinChuExamScore_JH
                         mName1 = domainName + "_科目定期班排名母體底標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SC25B" + "»");
+                        mName1 = domainName + "_科目定期班排名母體人數" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SCMC" + "»");
                         builder.EndRow();
                     }
 
@@ -2393,6 +2764,8 @@ namespace HsinChuExamScore_JH
                     builder.InsertCell();
                     builder.Write("科目定期類別1排名母體底標");
                     builder.InsertCell();
+                    builder.Write("科目定期類別1排名母體人數");
+                    builder.InsertCell();
                     builder.Write("科目定期類別2排名母體頂標");
                     builder.InsertCell();
                     builder.Write("科目定期類別2排名母體前標");
@@ -2402,6 +2775,8 @@ namespace HsinChuExamScore_JH
                     builder.Write("科目定期類別2排名母體後標");
                     builder.InsertCell();
                     builder.Write("科目定期類別2排名母體底標");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體人數");
                     builder.EndRow();
 
                     for (int sj = 1; sj <= 12; sj++)
@@ -2424,6 +2799,9 @@ namespace HsinChuExamScore_JH
                         mName1 = domainName + "_科目定期類別1排名母體底標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S1T25B" + "»");
+                        mName1 = domainName + "_科目定期類別1排名母體人數" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S1TMC" + "»");
                         mName1 = domainName + "_科目定期類別2排名母體頂標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S2T25T" + "»");
@@ -2439,6 +2817,9 @@ namespace HsinChuExamScore_JH
                         mName1 = domainName + "_科目定期類別2排名母體底標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S2T25B" + "»");
+                        mName1 = domainName + "_科目定期類別2排名母體人數" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S2TMC" + "»");
 
                         builder.EndRow();
                     }
@@ -2700,9 +3081,17 @@ namespace HsinChuExamScore_JH
                     builder.InsertCell();
                     builder.Write("科目年排名百分比");
                     builder.InsertCell();
-                    builder.Write("科目年排名母體平均");
+                    //builder.Write("科目年排名百分比");
+                    //builder.InsertCell();
+                    builder.Write("科目年排母體平均");
+                    builder.InsertCell();
+                    builder.Write("參考試別科目定期評量");
+                    builder.InsertCell();
+                    builder.Write("參考試別科目平時評量");
+                    builder.InsertCell();
+                    builder.Write("參考試別科目總成績");
                     builder.EndRow();
-
+                    // todo 新增參考識別功能變數
                     for (int sj = 1; sj <= 12; sj++)
                     {
                         string mName1 = "";
@@ -2720,6 +3109,8 @@ namespace HsinChuExamScore_JH
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SA" + "»");
                         mName1 = domainName + "_科目總成績" + sj;
+
+
 
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SC" + "»");
@@ -2760,6 +3151,16 @@ namespace HsinChuExamScore_JH
                         mName1 = domainName + "_科目年排名母體平均" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SYA" + "»");
+                        // Jean 新增參考識別
+                        mName1 = domainName + "_參考試別科目定期評量" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«RSF" + "»");
+                        mName1 = domainName + "_參考試別科目平時評量" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«RSA" + "»");
+                        mName1 = domainName + "_參考試別科目總成績" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«TSC" + "»");
                         builder.EndRow();
                     }
 
@@ -3295,22 +3696,81 @@ namespace HsinChuExamScore_JH
                     }
                 }
 
+                //組距 (程式用詞)^^^(顯示用詞)
+                string[] intervals = new string[] {  "R0_9^0-9",
+                                                    "R10_19^10-19",
+                                                    "R20_29^20-29",
+                                                    "R30_39^30-39",
+                                                    "R40_49^40-49",
+                                                    "R50_59^50-59",
+                                                    "R60_69^60-69",
+                                                    "R70_79^70-79",
+                                                    "R80_89^80-89",
+                                                    "R90_99^90-99",
+                                                     "R100_u^100以上"};
 
+
+                // 總計成績 平均/總分 
+                foreach (string rankType in _rankTypes) //"班排名", "年排名", "類別1排名", "類別2排名" 
+                {
+                    builder.Writeln("總計成績-科目定期 " + rankType + " 組距");
+                    builder.StartTable();
+                    builder.InsertCell();
+                    builder.Write("");
+                    builder.InsertCell();
+                    builder.Write("0-9");
+                    builder.InsertCell();
+                    builder.Write("10-19");
+                    builder.InsertCell();
+                    builder.Write("20-29");
+                    builder.InsertCell();
+                    builder.Write("30-39");
+                    builder.InsertCell();
+                    builder.Write("40-49");
+                    builder.InsertCell();
+                    builder.Write("50-59");
+                    builder.InsertCell();
+                    builder.Write("60-69");
+                    builder.InsertCell();
+                    builder.Write("70-79");
+                    builder.InsertCell();
+                    builder.Write("80-89");
+                    builder.InsertCell();
+                    builder.Write("90-99");
+                    builder.InsertCell();
+                    builder.Write("100以上");
+                    builder.EndRow();
+
+                    builder.InsertCell();
+                    builder.Write($"算術平均"); // 算數
+
+                    int num = 1;
+                    foreach (string interval in intervals)
+                    {
+                        string intervalPname = interval.Split('^')[0];
+                        string intervalUserName = interval.Split('^')[1];
+                        builder.InsertCell();
+                        builder.InsertField($"MERGEFIELD  科目{"定期成績"}{"平均"}{rankType}{intervalPname}   \\* MERGEFORMAT ", $"«R{intervalUserName}»");
+                        num++;
+
+                        // builder.InsenumrtField("MERGEFIELD " + rankType + dname + "領域_科目" + i + "F" + r + " \\* MERGEFORMAT ", "«R" + i + "»");
+                    }
+                    builder.EndRow();
+
+                    builder.EndTable();
+                    builder.Writeln();
+                }
                 builder.Writeln();
                 builder.Writeln();
 
                 #endregion
                 tempDoc.Save(path, SaveFormat.Doc);
 
-
-
                 //System.IO.FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
-
                 //stream.Write(Properties.Resources.新竹評量成績合併欄位總表, 0, Properties.Resources.新竹評量成績合併欄位總表.Length);
                 //stream.Flush();
                 //stream.Close();
                 System.Diagnostics.Process.Start(path);
-
 
             }
             catch

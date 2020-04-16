@@ -152,6 +152,63 @@ namespace HsinChuExamScore_JH
             return retVal;
         }
 
+        public static List<string> GetDominOrder()
+        {
+            List<string> result = new List<string>();
+            QueryHelper qh = new QueryHelper();
+            string sql =
+                @"
+SELECT
+unnest(xpath('/Configurations/Configuration/Domains/Domain/@Name', xmlparse(content replace(  replace(content,'&lt;', '<'),'&gt;', '>')))) as domain_name
+FROM 
+	list
+WHERE  name = 'JHEvaluation_Subject_Ordinal' 
+
+
+
+";
+            DataTable dt = qh.Select(sql);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                string domain = dr["domain_name"] + "";
+                result.Add(domain);
+            }
+            return result;
+        }
+        /// <summary>
+        /// 取得科目排序
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetSubjectOrder()
+        {
+            List<string> result = new List<string>();
+            QueryHelper qh = new QueryHelper();
+            string sql =
+                @"
+SELECT
+unnest(xpath('/Configurations/Configuration/Subjects/Subject/@Name', xmlparse(content replace(  replace(content,'&lt;', '<'),'&gt;', '>')))) as subject_name
+FROM 
+	list
+WHERE  name = 'JHEvaluation_Subject_Ordinal'
+
+";
+            DataTable dt = qh.Select(sql);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                string subject = dr["subject_name"] + "";
+                result.Add(subject);
+            }
+            return result;
+        }
+
+
+
+
+
+
+
         /// <summary>
         /// 透過 ClassID 取得學生為一般，依照年級、班級名稱、座號排序
         /// </summary>
@@ -211,6 +268,13 @@ namespace HsinChuExamScore_JH
             return retVal;
         }
 
+        /// <summary>
+        /// 取得修課記錄
+        /// </summary>
+        /// <param name="StudentIDList"></param>
+        /// <param name="CourseIDList"></param>
+        /// <param name="examID"></param>
+        /// <returns></returns>
         public static Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> GetStudentSCAttendCourse(List<string> StudentIDList, List<string> CourseIDList, string examID)
         {
             Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> retVal = new Dictionary<string, Dictionary<string, DAO.SubjectDomainName>>();
@@ -405,7 +469,7 @@ WHERE
 
                             // 和佳樺討論，五標 小數下第2位四捨五入
                             if (decimal.TryParse(dr["avg_top_25"].ToString(), out avg_top_25))
-                                rdf.avg_top_25 = Math.Round(avg_top_25, 2, MidpointRounding.AwayFromZero);
+                                rdf.avg_top_25 = Math.Round(avg_top_25, MidpointRounding.AwayFromZero);
                             if (decimal.TryParse(dr["avg_top_50"].ToString(), out avg_top_50))
                                 rdf.avg_top_50 = Math.Round(avg_top_50, MidpointRounding.AwayFromZero);
                             if (decimal.TryParse(dr["avg"].ToString(), out avg))
@@ -433,19 +497,30 @@ WHERE
         }
 
 
-        public static List<string> GetSCETakeIDsByExamID(List<string> IDList, string ExamID)
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="studentIDs">學生ID</param>
+         /// <param name="schoolYear">學年度</param>
+         /// <param name="semester">學期</param>
+         /// <param name="examIDs">試別</param>
+         /// <returns></returns>
+        public static List<string> GetSCETakeIDsByExamID(List<string> studentIDs, int schoolYear, int semester , params string[] examIDs)
         {
-            List<string> value = new List<string>();
+            List<string> result = new List<string>();
 
-            if (IDList.Count > 0 && ExamID != "")
+            if (studentIDs.Count > 0 && examIDs != null)
             {
                 string qry = @"
 SELECT
     sce_take.id
 FROM 
-    sc_attend INNER JOIN sce_take
+    sc_attend   
+    INNER JOIN sce_take
 ON sce_take.ref_sc_attend_id = sc_attend.id
-WHERE sc_attend.ref_student_id IN(" + string.Join(",", IDList.ToArray()) + @") AND sce_take.ref_exam_id =" + ExamID + @"";
+WHERE sc_attend.ref_student_id IN(" + string.Join(",", studentIDs.ToArray()) + @") AND sce_take.ref_exam_id IN (" + String.Join(",",examIDs) + 
+@") AND ref_course_id in ( SELECT  id FROM course  WHERE school_year =" + schoolYear + " AND semester =" + semester + " )";
+               
                 QueryHelper qh = new QueryHelper();
 
                 DataTable dt = qh.Select(qry);
@@ -453,12 +528,12 @@ WHERE sc_attend.ref_student_id IN(" + string.Join(",", IDList.ToArray()) + @") A
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
-                        value.Add(dr["id"].ToString());
+                        result.Add(dr["id"].ToString());
                     }
                 }
             }
 
-            return value;
+            return result;
         }
 
         /// <summary>
@@ -483,7 +558,7 @@ WHERE sc_attend.ref_student_id IN(" + string.Join(",", IDList.ToArray()) + @") A
                 {
                     userDefineInfo.Add(studentID, new Dictionary<string, string>());
                 }
-                if (!userDefineInfo[studentID].ContainsKey(fieldName)) 
+                if (!userDefineInfo[studentID].ContainsKey(fieldName))
                 {
                     userDefineInfo[studentID].Add(fieldName, value);
                 }

@@ -80,6 +80,7 @@ namespace HsinChuExamScore_JH
             _Keys = keys;
         }
 
+     
         #region IComparer<string> 成員
         /// <summary>
         /// 比較
