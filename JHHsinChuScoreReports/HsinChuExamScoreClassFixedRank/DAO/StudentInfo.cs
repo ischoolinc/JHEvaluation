@@ -16,7 +16,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         // 領域與科目
         public List<DomainInfo> DomainInfoList = new List<DomainInfo>();
 
-     
+
         /// <summary>
         /// 總分
         /// </summary>
@@ -57,7 +57,9 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         /// </summary>
         public decimal? AvgScoreAF { get; set; }
 
-        
+
+
+
 
         /// <summary>
         /// 平均班排名
@@ -149,6 +151,281 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         public int? YearSumRankAF { get; set; }
 
         /// <summary>
+        /// 平均類別1排名
+        /// </summary>
+        public int? ClassType1AvgRank { get; set; }
+
+        /// <summary>
+        /// 加權平均類別1排名
+        /// </summary>
+        /// 
+        public int? ClassType1AvgRankA { get; set; }
+
+
+        /// <summary>
+        /// 總分類別1排名
+        /// </summary>
+        public int? ClassType1SumRank { get; set; }
+
+        /// <summary>
+        /// 加權總分類別1排名
+        /// </summary>
+        /// 
+        public int? ClassType1SumRankA { get; set; }
+
+
+        /// <summary>
+        /// 平均類別1排名(定期)
+        /// </summary>
+        public int? ClassType1AvgRankF { get; set; }
+
+        /// <summary>
+        /// 加權平均類別1排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassType1AvgRankAF { get; set; }
+
+        /// <summary>
+        /// 總分類別1排名(定期)
+        /// </summary>
+        public int? ClassType1SumRankF { get; set; }
+
+        /// <summary>
+        /// 加權總分類別1排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassType1SumRankAF { get; set; }
+
+        /// <summary>
+        /// 平均類別2排名
+        /// </summary>
+        public int? ClassType2AvgRank { get; set; }
+
+        /// <summary>
+        /// 加權平均類別2排名
+        /// </summary>
+        /// 
+        public int? ClassType2AvgRankA { get; set; }
+
+
+        /// <summary>
+        /// 總分類別2排名
+        /// </summary>
+        public int? ClassType2SumRank { get; set; }
+
+        /// <summary>
+        /// 加權總分類別2排名
+        /// </summary>
+        /// 
+        public int? ClassType2SumRankA { get; set; }
+
+
+        /// <summary>
+        /// 平均類別2排名(定期)
+        /// </summary>
+        public int? ClassType2AvgRankF { get; set; }
+
+        /// <summary>
+        /// 加權平均類別2排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassType2AvgRankAF { get; set; }
+
+        /// <summary>
+        /// 總分類別2排名(定期)
+        /// </summary>
+        public int? ClassType2SumRankF { get; set; }
+
+        /// <summary>
+        /// 加權總分類別2排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassType2SumRankAF { get; set; }
+
+
+        /// <summary>
+        /// 平均班參考試別排名
+        /// </summary>
+        public int? ClassAvgRefRank { get; set; }
+
+        /// <summary>
+        /// 加權平均班參考試別排名
+        /// </summary>
+        /// 
+        public int? ClassAvgRefRankA { get; set; }
+
+        /// <summary>
+        /// 平均年參考試別排名
+        /// </summary>
+        public int? YearAvgRefRank { get; set; }
+
+        /// <summary>
+        /// 加權平均年參考試別排名
+        /// </summary>
+        /// 
+        public int? YearAvgRefRankA { get; set; }
+
+        /// <summary>
+        /// 總分班參考試別排名
+        /// </summary>
+        public int? ClassSumRefRank { get; set; }
+
+        /// <summary>
+        /// 加權總分班參考試別排名
+        /// </summary>
+        /// 
+        public int? ClassSumRefRankA { get; set; }
+
+        /// <summary>
+        /// 總分年參考試別排名
+        /// </summary>
+        public int? YearSumRefRank { get; set; }
+
+        /// <summary>
+        /// 加權總分年參考試別排名
+        /// </summary>
+        /// 
+        public int? YearSumRefRankA { get; set; }
+
+
+        /// <summary>
+        /// 平均班參考試別排名(定期)
+        /// </summary>
+        public int? ClassAvgRefRankF { get; set; }
+
+        /// <summary>
+        /// 加權平均班參考試別排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassAvgRefRankAF { get; set; }
+
+        /// <summary>
+        /// 平均年參考試別排名(定期)
+        /// </summary>
+        public int? YearAvgRefRankF { get; set; }
+
+        /// <summary>
+        /// 加權平均年參考試別排名(定期)
+        /// </summary>
+        /// 
+        public int? YearAvgRefRankAF { get; set; }
+
+        /// <summary>
+        /// 總分班參考試別排名(定期)
+        /// </summary>
+        public int? ClassSumRefRankF { get; set; }
+
+        /// <summary>
+        /// 加權總分班參考試別排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassSumRefRankAF { get; set; }
+
+        /// <summary>
+        /// 總分年參考試別排名(定期)
+        /// </summary>
+        public int? YearSumRefRankF { get; set; }
+
+        /// <summary>
+        /// 加權總分年參考試別排名(定期)
+        /// </summary>
+        /// 
+        public int? YearSumRefRankAF { get; set; }
+
+        /// <summary>
+        /// 平均類別1參考試別排名
+        /// </summary>
+        public int? ClassType1AvgRefRank { get; set; }
+
+        /// <summary>
+        /// 加權平均類別1參考試別排名
+        /// </summary>
+        /// 
+        public int? ClassType1AvgRefRankA { get; set; }
+
+
+        /// <summary>
+        /// 總分類別1參考試別排名
+        /// </summary>
+        public int? ClassType1SumRefRank { get; set; }
+
+        /// <summary>
+        /// 加權總分類別1參考試別排名
+        /// </summary>
+        /// 
+        public int? ClassType1SumRefRankA { get; set; }
+
+
+        /// <summary>
+        /// 平均類別1參考試別排名(定期)
+        /// </summary>
+        public int? ClassType1AvgRefRankF { get; set; }
+
+        /// <summary>
+        /// 加權平均類別1參考試別排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassType1AvgRefRankAF { get; set; }
+
+        /// <summary>
+        /// 總分類別1參考試別排名(定期)
+        /// </summary>
+        public int? ClassType1SumRefRankF { get; set; }
+
+        /// <summary>
+        /// 加權總分類別1參考試別排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassType1SumRefRankAF { get; set; }
+
+        /// <summary>
+        /// 平均類別2參考試別排名
+        /// </summary>
+        public int? ClassType2AvgRefRank { get; set; }
+
+        /// <summary>
+        /// 加權平均類別2參考試別排名
+        /// </summary>
+        /// 
+        public int? ClassType2AvgRefRankA { get; set; }
+
+
+        /// <summary>
+        /// 總分類別2參考試別排名
+        /// </summary>
+        public int? ClassType2SumRefRank { get; set; }
+
+        /// <summary>
+        /// 加權總分類別2參考試別排名
+        /// </summary>
+        /// 
+        public int? ClassType2SumRefRankA { get; set; }
+
+
+        /// <summary>
+        /// 平均類別2參考試別排名(定期)
+        /// </summary>
+        public int? ClassType2AvgRefRankF { get; set; }
+
+        /// <summary>
+        /// 加權平均類別2參考試別排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassType2AvgRefRankAF { get; set; }
+
+        /// <summary>
+        /// 總分類別2參考試別排名(定期)
+        /// </summary>
+        public int? ClassType2SumRefRankF { get; set; }
+
+        /// <summary>
+        /// 加權總分類別2參考試別排名(定期)
+        /// </summary>
+        /// 
+        public int? ClassType2SumRefRankAF { get; set; }
+
+
+        /// <summary>
         /// 計算成績
         /// </summary>
         public void CalScore()
@@ -206,7 +483,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
             // 只有科目來計算
             foreach (DomainInfo domain in DomainInfoList)
             {
-                foreach(SubjectInfo subj in domain.SubjectInfoList)
+                foreach (SubjectInfo subj in domain.SubjectInfoList)
                 {
                     if (Global.SelOnlySubjectList.Contains(subj.Name))
                     {

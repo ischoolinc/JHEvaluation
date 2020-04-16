@@ -57,6 +57,11 @@ namespace HsinChuExamScoreClassFixedRank
         private string PrintSubjectListString { get; set; }
         public List<string> PrintSubjectList { get; set; }
 
+        /// <summary>
+        /// 參考試別  
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string RefExamID { get; set; }
 
         /// <summary>
         /// 列印領域

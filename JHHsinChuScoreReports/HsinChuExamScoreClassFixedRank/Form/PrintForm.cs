@@ -51,6 +51,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
         string SelSemester = "";
         string SelExamID = "";
         string SelExamName = "";
+        string SelRefExamID = "";
+        string SelRefExamName = "";
         int parseNumber = 0;
         List<string> _StudentIDList = new List<string>();
 
@@ -208,6 +210,9 @@ namespace HsinChuExamScoreClassFixedRank.Form
             // 取得學生評量固定排名
             DataTable dtStudentExamRankMatrix = DataAccess.GetStudentExamRankMatrix(SelSchoolYear, SelSemester, SelExamID, _ClassIDList);
 
+            // 取得取得學生評量固定排名(參考試別)
+            DataTable dtStudentRefExamRankMatrix = DataAccess.GetStudentExamRankMatrix(SelSchoolYear, SelSemester, SelRefExamID, _ClassIDList);
+
             // 取得固定排名 班級、年級 五標與組距
             DataTable dtClassExamRankMatrix = DataAccess.GetClassExamRankMatrix(SelSchoolYear, SelSemester, SelExamID, _ClassIDList);
 
@@ -216,6 +221,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
             //dtStudentExamRankMatrix.WriteXml(Application.StartupPath + "\\tmp.xml");
 
             Dictionary<string, Dictionary<string, int>> StudentExamRankMatrixDict = new Dictionary<string, Dictionary<string, int>>();
+
+
             // 班級五標與組距
             Dictionary<string, Dictionary<string, DataRow>> ClassExamRankMatrixDict = new Dictionary<string, Dictionary<string, DataRow>>();
 
@@ -240,6 +247,32 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     }
                 }
             }
+
+
+            // 學生評量參考試別 Dict		
+            Dictionary<string, Dictionary<string, int>> StudentRefExamRankMatrixDict = new Dictionary<string, Dictionary<string, int>>();
+            // 建立排名索引
+            if (dtStudentRefExamRankMatrix != null && dtStudentRefExamRankMatrix.Rows.Count > 0)
+            {
+
+                foreach (DataRow dr in dtStudentRefExamRankMatrix.Rows)
+                {
+                    string student_id = dr["ref_student_id"].ToString();
+                    // 定期評量/總計成績 加權總分 班排名
+                    string type = dr["item_type"].ToString() + dr["item_name"].ToString() + dr["rank_type"].ToString();
+                    if (!StudentRefExamRankMatrixDict.ContainsKey(student_id))
+                        StudentRefExamRankMatrixDict.Add(student_id, new Dictionary<string, int>());
+
+                    if (!StudentRefExamRankMatrixDict[student_id].ContainsKey(type))
+                    {
+                        int rank = 0;
+                        int.TryParse(dr["rank"].ToString(), out rank);
+                        StudentRefExamRankMatrixDict[student_id].Add(type, rank);
+                    }
+                }
+            }
+
+
             // 建立索引
             if (dtClassExamRankMatrix != null && dtClassExamRankMatrix.Rows.Count > 0)
             {
@@ -265,6 +298,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                     if (StudentExamRankMatrixDict.ContainsKey(si.StudentID))
                     {
+
+                        #region 學生總計班排名
                         if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分班排名"))
                             si.ClassSumRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分班排名"];
 
@@ -276,18 +311,6 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                         if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均班排名"))
                             si.ClassAvgRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均班排名"];
-
-                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分年排名"))
-                            si.YearSumRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分年排名"];
-
-                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分年排名"))
-                            si.YearSumRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分年排名"];
-
-                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均年排名"))
-                            si.YearAvgRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均年排名"];
-
-                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均年排名"))
-                            si.YearAvgRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均年排名"];
 
                         if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分班排名"))
                             si.ClassSumRankAF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分班排名"];
@@ -301,6 +324,22 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均班排名"))
                             si.ClassAvgRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均班排名"];
 
+                        #endregion
+
+                        #region 學生總計年排名
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分年排名"))
+                            si.YearSumRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分年排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分年排名"))
+                            si.YearSumRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分年排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均年排名"))
+                            si.YearAvgRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均年排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均年排名"))
+                            si.YearAvgRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均年排名"];
+
+
                         if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分年排名"))
                             si.YearSumRankAF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分年排名"];
 
@@ -312,7 +351,177 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                         if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均年排名"))
                             si.YearAvgRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均年排名"];
+                        #endregion
+
+                        #region 學生總計類別1排名
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分類別1排名"))
+                            si.ClassType1SumRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分類別1排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分類別1排名"))
+                            si.ClassType1SumRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分類別1排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均類別1排名"))
+                            si.ClassType1AvgRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均類別1排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均類別1排名"))
+                            si.ClassType1AvgRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均類別1排名"];
+
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分類別1排名"))
+                            si.ClassType1SumRankAF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分類別1排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分類別1排名"))
+                            si.ClassType1SumRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績總分類別1排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均類別1排名"))
+                            si.ClassType1AvgRankAF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權平均類別1排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均類別1排名"))
+                            si.ClassType1AvgRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均類別1排名"];
+                        #endregion
+
+                        #region 學生總計類別2排名
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分類別2排名"))
+                            si.ClassType2SumRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分類別2排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分類別2排名"))
+                            si.ClassType2SumRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分類別2排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均類別2排名"))
+                            si.ClassType2AvgRankA = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均類別2排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均類別2排名"))
+                            si.ClassType2AvgRank = StudentExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均類別2排名"];
+
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分類別2排名"))
+                            si.ClassType2SumRankAF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分類別2排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分類別2排名"))
+                            si.ClassType2SumRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績總分類別2排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均類別2排名"))
+                            si.ClassType2AvgRankAF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權平均類別2排名"];
+
+                        if (StudentExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均類別2排名"))
+                            si.ClassType2AvgRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均類別2排名"];
+                        #endregion
+
+                        
                     }
+
+                    if (StudentRefExamRankMatrixDict.ContainsKey(si.StudentID))
+                    {
+                        #region 學生總計班排名 (參考試別)
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分班排名"))
+                            si.ClassSumRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分班排名"))
+                            si.ClassSumRefRank = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均班排名"))
+                            si.ClassAvgRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均班排名"))
+                            si.ClassAvgRefRank = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分班排名"))
+                            si.ClassSumRefRankAF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分班排名"))
+                            si.ClassSumRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績總分班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均班排名"))
+                            si.ClassAvgRefRankAF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權平均班排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均班排名"))
+                            si.ClassAvgRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均班排名"];
+
+                        #endregion
+
+                        #region 學生總計年排名(參考試別)
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分年排名"))
+                            si.YearSumRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分年排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分年排名"))
+                            si.YearSumRefRank = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分年排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均年排名"))
+                            si.YearAvgRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均年排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均年排名"))
+                            si.YearAvgRefRank = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均年排名"];
+
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分年排名"))
+                            si.YearSumRefRankAF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分年排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分年排名"))
+                            si.YearSumRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績總分年排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均年排名"))
+                            si.YearAvgRefRankAF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權平均年排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均年排名"))
+                            si.YearAvgRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均年排名"];
+                        #endregion
+
+                        #region 學生總計類別1排名 (參考試別)
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分類別1排名"))
+                            si.ClassType1SumRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分類別1排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分類別1排名"))
+                            si.ClassType1SumRefRank = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分類別1排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均類別1排名"))
+                            si.ClassType1AvgRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均類別1排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均類別1排名"))
+                            si.ClassType1AvgRefRank = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均類別1排名"];
+
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分類別1排名"))
+                            si.ClassType1SumRefRankAF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分類別1排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分類別1排名"))
+                            si.ClassType1SumRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績總分類別1排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均類別1排名"))
+                            si.ClassType1AvgRefRankAF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權平均類別1排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均類別1排名"))
+                            si.ClassType1AvgRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均類別1排名"];
+                        #endregion
+
+                        #region 學生總計類別2排名  (參考試別)
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權總分類別2排名"))
+                            si.ClassType2SumRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權總分類別2排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績總分類別2排名"))
+                            si.ClassType2SumRefRank = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績總分類別2排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績加權平均類別2排名"))
+                            si.ClassType2AvgRefRankA = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績加權平均類別2排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量/總計成績平均類別2排名"))
+                            si.ClassType2AvgRefRank = StudentRefExamRankMatrixDict[si.StudentID]["定期評量/總計成績平均類別2排名"];
+
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分類別2排名"))
+                            si.ClassType2SumRefRankAF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權總分類別2排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分類別2排名"))
+                            si.ClassType2SumRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績總分類別2排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均類別2排名"))
+                            si.ClassType2AvgRefRankAF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績加權平均類別2排名"];
+
+                        if (StudentRefExamRankMatrixDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均類別2排名"))
+                            si.ClassType2AvgRefRankF = StudentRefExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均類別2排名"];
+                        #endregion
+                    }
+
+
                 }
 
                 // 計算各項目及格人數
@@ -329,6 +538,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             dtTable.Columns.Add("學年度");
             dtTable.Columns.Add("學期");
             dtTable.Columns.Add("試別名稱");
+            dtTable.Columns.Add("參考試別");
             dtTable.Columns.Add("班級");
             dtTable.Columns.Add("班導師");
 
@@ -382,6 +592,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 dtTable.Columns.Add("加權總分_定期" + studCot);
                 dtTable.Columns.Add("平均_定期" + studCot);
                 dtTable.Columns.Add("加權平均_定期" + studCot);
+
                 dtTable.Columns.Add("總分班排名" + studCot);
                 dtTable.Columns.Add("加權總分班排名" + studCot);
                 dtTable.Columns.Add("平均班排名" + studCot);
@@ -400,6 +611,90 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 dtTable.Columns.Add("平均_定期年排名" + studCot);
                 dtTable.Columns.Add("加權平均_定期年排名" + studCot);
 
+                dtTable.Columns.Add("總分類別1排名" + studCot);
+                dtTable.Columns.Add("加權總分類別1排名" + studCot);
+                dtTable.Columns.Add("平均類別1排名" + studCot);
+                dtTable.Columns.Add("加權平均類別1排名" + studCot);
+                dtTable.Columns.Add("總分_定期類別1排名" + studCot);
+                dtTable.Columns.Add("加權總分_定期類別1排名" + studCot);
+                dtTable.Columns.Add("平均_定期類別1排名" + studCot);
+                dtTable.Columns.Add("加權平均_定期類別1排名" + studCot);
+
+                dtTable.Columns.Add("總分類別2排名" + studCot);
+                dtTable.Columns.Add("加權總分類別2排名" + studCot);
+                dtTable.Columns.Add("平均類別2排名" + studCot);
+                dtTable.Columns.Add("加權平均類別2排名" + studCot);
+                dtTable.Columns.Add("總分_定期類別2排名" + studCot);
+                dtTable.Columns.Add("加權總分_定期類別2排名" + studCot);
+                dtTable.Columns.Add("平均_定期類別2排名" + studCot);
+                dtTable.Columns.Add("加權平均_定期類別2排名" + studCot);
+
+                dtTable.Columns.Add("總分班排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權總分班排名_參考試別" + studCot);
+                dtTable.Columns.Add("平均班排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權平均班排名_參考試別" + studCot);
+                dtTable.Columns.Add("總分年排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權總分年排名_參考試別" + studCot);
+                dtTable.Columns.Add("平均年排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權平均年排名_參考試別" + studCot);
+                dtTable.Columns.Add("總分_定期班排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權總分_定期班排名_參考試別" + studCot);
+                dtTable.Columns.Add("平均_定期班排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權平均_定期班排名_參考試別" + studCot);
+                dtTable.Columns.Add("總分_定期年排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權總分_定期年排名_參考試別" + studCot);
+                dtTable.Columns.Add("平均_定期年排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權平均_定期年排名_參考試別" + studCot);
+                dtTable.Columns.Add("總分類別1排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權總分類別1排名_參考試別" + studCot);
+                dtTable.Columns.Add("平均類別1排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權平均類別1排名_參考試別" + studCot);
+                dtTable.Columns.Add("總分_定期類別1排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權總分_定期類別1排名_參考試別" + studCot);
+                dtTable.Columns.Add("平均_定期類別1排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權平均_定期類別1排名_參考試別" + studCot);
+                dtTable.Columns.Add("總分類別2排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權總分類別2排名_參考試別" + studCot);
+                dtTable.Columns.Add("平均類別2排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權平均類別2排名_參考試別" + studCot);
+                dtTable.Columns.Add("總分_定期類別2排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權總分_定期類別2排名_參考試別" + studCot);
+                dtTable.Columns.Add("平均_定期類別2排名_參考試別" + studCot);
+                dtTable.Columns.Add("加權平均_定期類別2排名_參考試別" + studCot);
+
+                dtTable.Columns.Add("總分班排名_進退步" + studCot);
+                dtTable.Columns.Add("加權總分班排名_進退步" + studCot);
+                dtTable.Columns.Add("平均班排名_進退步" + studCot);
+                dtTable.Columns.Add("加權平均班排名_進退步" + studCot);
+                dtTable.Columns.Add("總分年排名_進退步" + studCot);
+                dtTable.Columns.Add("加權總分年排名_進退步" + studCot);
+                dtTable.Columns.Add("平均年排名_進退步" + studCot);
+                dtTable.Columns.Add("加權平均年排名_進退步" + studCot);
+                dtTable.Columns.Add("總分_定期班排名_進退步" + studCot);
+                dtTable.Columns.Add("加權總分_定期班排名_進退步" + studCot);
+                dtTable.Columns.Add("平均_定期班排名_進退步" + studCot);
+                dtTable.Columns.Add("加權平均_定期班排名_進退步" + studCot);
+                dtTable.Columns.Add("總分_定期年排名_進退步" + studCot);
+                dtTable.Columns.Add("加權總分_定期年排名_進退步" + studCot);
+                dtTable.Columns.Add("平均_定期年排名_進退步" + studCot);
+                dtTable.Columns.Add("加權平均_定期年排名_進退步" + studCot);
+                dtTable.Columns.Add("總分類別1排名_進退步" + studCot);
+                dtTable.Columns.Add("加權總分類別1排名_進退步" + studCot);
+                dtTable.Columns.Add("平均類別1排名_進退步" + studCot);
+                dtTable.Columns.Add("加權平均類別1排名_進退步" + studCot);
+                dtTable.Columns.Add("總分_定期類別1排名_進退步" + studCot);
+                dtTable.Columns.Add("加權總分_定期類別1排名_進退步" + studCot);
+                dtTable.Columns.Add("平均_定期類別1排名_進退步" + studCot);
+                dtTable.Columns.Add("加權平均_定期類別1排名_進退步" + studCot);
+                dtTable.Columns.Add("總分類別2排名_進退步" + studCot);
+                dtTable.Columns.Add("加權總分類別2排名_進退步" + studCot);
+                dtTable.Columns.Add("平均類別2排名_進退步" + studCot);
+                dtTable.Columns.Add("加權平均類別2排名_進退步" + studCot);
+                dtTable.Columns.Add("總分_定期類別2排名_進退步" + studCot);
+                dtTable.Columns.Add("加權總分_定期類別2排名_進退步" + studCot);
+                dtTable.Columns.Add("平均_定期類別2排名_進退步" + studCot);
+                dtTable.Columns.Add("加權平均_定期類別2排名_進退步" + studCot);
+
 
                 foreach (string dName in Global.DomainNameList)
                 {
@@ -414,6 +709,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             dtTable.Columns.Add(dName + "領域_科目名稱" + studCot + "_" + i);
                             dtTable.Columns.Add(dName + "領域_科目成績" + studCot + "_" + i);
                             dtTable.Columns.Add(dName + "領域_科目_定期成績" + studCot + "_" + i);
+                            dtTable.Columns.Add(dName + "領域_科目_平時成績" + studCot + "_" + i);
                             dtTable.Columns.Add(dName + "領域_科目學分" + studCot + "_" + i);
 
                         }
@@ -426,6 +722,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     dtTable.Columns.Add("學生_科目名稱" + studCot + "_" + ss);
                     dtTable.Columns.Add("學生_科目成績" + studCot + "_" + ss);
                     dtTable.Columns.Add("學生_科目_定期成績" + studCot + "_" + ss);
+                    dtTable.Columns.Add("學生_科目_平時成績" + studCot + "_" + ss);
+
                     dtTable.Columns.Add("學生_科目學分" + studCot + "_" + ss);
 
                     dtTable.Columns.Add("學生_領域名稱" + studCot + "_" + ss);
@@ -600,7 +898,11 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 }
             }
 
-            SelDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+            List<string> ddList = DataAccess.GetDomainConfigSortName();
+
+            SelDomainNameList.Sort(new StringComparer(ddList.ToArray()));
+
+            //SelDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
 
             // 所選單一排序
             SelSubjectNameList.Sort(new StringComparer("國文"
@@ -640,6 +942,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 row["學年度"] = SelSchoolYear;
                 row["學期"] = SelSemester;
                 row["試別名稱"] = SelExamName;
+                row["參考試別"] = SelRefExamName;
                 row["班級"] = ci.ClassName;
 
                 if (ClassTeacherNameDict.ContainsKey(ci.ClassID))
@@ -687,9 +990,24 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 tmpDomainCreditDict.Clear();
                 tmpSubjectCreditDict.Clear();
 
+                // 自己班上有的科目名稱
+                List<string> hasSubjectNameList = new List<string>();
 
-                // 填入學生資料
-                int studCot = 1;
+                foreach (StudentInfo si in ci.Students)
+                {
+                    foreach (DomainInfo di in si.DomainInfoList)
+                    {
+                        foreach(SubjectInfo subj in di.SubjectInfoList)
+                        {
+                            if (!hasSubjectNameList.Contains(subj.Name))
+                                hasSubjectNameList.Add(subj.Name);
+                        }
+                    }
+                }
+
+
+                    // 填入學生資料
+                    int studCot = 1;
                 foreach (StudentInfo si in ci.Students)
                 {
                     row["姓名" + studCot] = si.Name;
@@ -718,6 +1036,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         row["加權平均_定期" + studCot] = Math.Round(si.AvgScoreAF.Value, parseNumber, MidpointRounding.AwayFromZero);
 
 
+                    #region 評量成績排名
                     if (si.ClassSumRank.HasValue)
                         row["總分班排名" + studCot] = si.ClassSumRank.Value;
 
@@ -766,6 +1085,254 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     if (si.YearAvgRankAF.HasValue)
                         row["加權平均_定期年排名" + studCot] = si.YearAvgRankAF.Value;
 
+
+                    if (si.ClassType1SumRank.HasValue)
+                        row["總分類別1排名" + studCot] = si.ClassType1SumRank.Value;
+
+                    if (si.ClassType1SumRankA.HasValue)
+                        row["加權總分類別1排名" + studCot] = si.ClassType1SumRankA.Value;
+
+                    if (si.ClassType1AvgRank.HasValue)
+                        row["平均類別1排名" + studCot] = si.ClassType1AvgRank.Value;
+
+                    if (si.ClassType1AvgRankA.HasValue)
+                        row["加權平均類別1排名" + studCot] = si.ClassType1AvgRankA.Value;
+
+                    if (si.ClassType1SumRankF.HasValue)
+                        row["總分_定期類別1排名" + studCot] = si.ClassType1SumRankF.Value;
+
+                    if (si.ClassType1SumRankAF.HasValue)
+                        row["加權總分_定期類別1排名" + studCot] = si.ClassType1SumRankAF.Value;
+
+                    if (si.ClassType1AvgRankF.HasValue)
+                        row["平均_定期類別1排名" + studCot] = si.ClassType1AvgRankF.Value;
+
+                    if (si.ClassType1AvgRankAF.HasValue)
+                        row["加權平均_定期類別1排名" + studCot] = si.ClassType1AvgRankAF.Value;
+
+                    if (si.ClassType2SumRank.HasValue)
+                        row["總分類別2排名" + studCot] = si.ClassType2SumRank.Value;
+
+                    if (si.ClassType2SumRankA.HasValue)
+                        row["加權總分類別2排名" + studCot] = si.ClassType2SumRankA.Value;
+
+                    if (si.ClassType2AvgRank.HasValue)
+                        row["平均類別2排名" + studCot] = si.ClassType2AvgRank.Value;
+
+                    if (si.ClassType2AvgRankA.HasValue)
+                        row["加權平均類別2排名" + studCot] = si.ClassType2AvgRankA.Value;
+
+                    if (si.ClassType2SumRankF.HasValue)
+                        row["總分_定期類別2排名" + studCot] = si.ClassType2SumRankF.Value;
+
+                    if (si.ClassType2SumRankAF.HasValue)
+                        row["加權總分_定期類別2排名" + studCot] = si.ClassType2SumRankAF.Value;
+
+                    if (si.ClassType2AvgRankF.HasValue)
+                        row["平均_定期類別2排名" + studCot] = si.ClassType2AvgRankF.Value;
+
+                    if (si.ClassType2AvgRankAF.HasValue)
+                        row["加權平均_定期類別2排名" + studCot] = si.ClassType2AvgRankAF.Value;
+                    #endregion
+
+                    #region 評量成績排名_參考試別
+                    if (si.ClassSumRefRank.HasValue)
+                        row["總分班排名_參考試別" + studCot] = si.ClassSumRefRank.Value;
+
+                    if (si.ClassSumRefRankA.HasValue)
+                        row["加權總分班排名_參考試別" + studCot] = si.ClassSumRefRankA.Value;
+
+                    if (si.ClassAvgRefRank.HasValue)
+                        row["平均班排名_參考試別" + studCot] = si.ClassAvgRefRank.Value;
+
+                    if (si.ClassAvgRefRankA.HasValue)
+                        row["加權平均班排名_參考試別" + studCot] = si.ClassAvgRefRankA.Value;
+
+                    if (si.YearSumRefRank.HasValue)
+                        row["總分年排名_參考試別" + studCot] = si.YearSumRefRank.Value;
+
+                    if (si.YearSumRefRankA.HasValue)
+                        row["加權總分年排名_參考試別" + studCot] = si.YearSumRefRankA.Value;
+
+                    if (si.YearAvgRefRank.HasValue)
+                        row["平均年排名_參考試別" + studCot] = si.YearAvgRefRank.Value;
+
+                    if (si.YearAvgRefRankA.HasValue)
+                        row["加權平均年排名_參考試別" + studCot] = si.YearAvgRefRankA.Value;
+
+                    if (si.ClassSumRefRankF.HasValue)
+                        row["總分_定期班排名_參考試別" + studCot] = si.ClassSumRefRankF.Value;
+
+                    if (si.ClassSumRefRankAF.HasValue)
+                        row["加權總分_定期班排名_參考試別" + studCot] = si.ClassSumRefRankAF.Value;
+
+                    if (si.ClassAvgRefRankF.HasValue)
+                        row["平均_定期班排名_參考試別" + studCot] = si.ClassAvgRefRankF.Value;
+
+                    if (si.ClassAvgRefRankAF.HasValue)
+                        row["加權平均_定期班排名_參考試別" + studCot] = si.ClassAvgRefRankAF.Value;
+
+                    if (si.YearSumRefRankF.HasValue)
+                        row["總分_定期年排名_參考試別" + studCot] = si.YearSumRefRankF.Value;
+
+                    if (si.YearSumRefRankAF.HasValue)
+                        row["加權總分_定期年排名_參考試別" + studCot] = si.YearSumRefRankAF.Value;
+
+                    if (si.YearAvgRefRankF.HasValue)
+                        row["平均_定期年排名_參考試別" + studCot] = si.YearAvgRefRankF.Value;
+
+                    if (si.YearAvgRefRankAF.HasValue)
+                        row["加權平均_定期年排名_參考試別" + studCot] = si.YearAvgRefRankAF.Value;
+
+
+                    if (si.ClassType1SumRefRank.HasValue)
+                        row["總分類別1排名_參考試別" + studCot] = si.ClassType1SumRefRank.Value;
+
+                    if (si.ClassType1SumRefRankA.HasValue)
+                        row["加權總分類別1排名_參考試別" + studCot] = si.ClassType1SumRefRankA.Value;
+
+                    if (si.ClassType1AvgRefRank.HasValue)
+                        row["平均類別1排名_參考試別" + studCot] = si.ClassType1AvgRefRank.Value;
+
+                    if (si.ClassType1AvgRefRankA.HasValue)
+                        row["加權平均類別1排名_參考試別" + studCot] = si.ClassType1AvgRefRankA.Value;
+
+                    if (si.ClassType1SumRefRankF.HasValue)
+                        row["總分_定期類別1排名_參考試別" + studCot] = si.ClassType1SumRefRankF.Value;
+
+                    if (si.ClassType1SumRefRankAF.HasValue)
+                        row["加權總分_定期類別1排名_參考試別" + studCot] = si.ClassType1SumRefRankAF.Value;
+
+                    if (si.ClassType1AvgRefRankF.HasValue)
+                        row["平均_定期類別1排名_參考試別" + studCot] = si.ClassType1AvgRefRankF.Value;
+
+                    if (si.ClassType1AvgRefRankAF.HasValue)
+                        row["加權平均_定期類別1排名_參考試別" + studCot] = si.ClassType1AvgRefRankAF.Value;
+
+                    if (si.ClassType2SumRefRank.HasValue)
+                        row["總分類別2排名_參考試別" + studCot] = si.ClassType2SumRefRank.Value;
+
+                    if (si.ClassType2SumRefRankA.HasValue)
+                        row["加權總分類別2排名_參考試別" + studCot] = si.ClassType2SumRefRankA.Value;
+
+                    if (si.ClassType2AvgRefRank.HasValue)
+                        row["平均類別2排名_參考試別" + studCot] = si.ClassType2AvgRefRank.Value;
+
+                    if (si.ClassType2AvgRefRankA.HasValue)
+                        row["加權平均類別2排名_參考試別" + studCot] = si.ClassType2AvgRefRankA.Value;
+
+                    if (si.ClassType2SumRefRankF.HasValue)
+                        row["總分_定期類別2排名_參考試別" + studCot] = si.ClassType2SumRefRankF.Value;
+
+                    if (si.ClassType2SumRefRankAF.HasValue)
+                        row["加權總分_定期類別2排名_參考試別" + studCot] = si.ClassType2SumRefRankAF.Value;
+
+                    if (si.ClassType2AvgRefRankF.HasValue)
+                        row["平均_定期類別2排名_參考試別" + studCot] = si.ClassType2AvgRefRankF.Value;
+
+                    if (si.ClassType2AvgRefRankAF.HasValue)
+                        row["加權平均_定期類別2排名_參考試別" + studCot] = si.ClassType2AvgRefRankAF.Value;
+                    #endregion
+
+                    #region 評量成績排名_進退步
+                    if (si.ClassSumRefRank.HasValue && si.ClassSumRank.HasValue)
+                        row["總分班排名_進退步" + studCot] = si.ClassSumRefRank.Value - si.ClassSumRank.Value;
+
+                    if (si.ClassSumRefRankA.HasValue && si.ClassSumRankA.HasValue)
+                        row["加權總分班排名_進退步" + studCot] = si.ClassSumRefRankA.Value - si.ClassSumRankA.Value;
+
+                    if (si.ClassAvgRefRank.HasValue && si.ClassAvgRank.HasValue)
+                        row["平均班排名_進退步" + studCot] = si.ClassAvgRefRank.Value - si.ClassAvgRank.Value;
+
+                    if (si.ClassAvgRefRankA.HasValue && si.ClassAvgRankA.HasValue)
+                        row["加權平均班排名_進退步" + studCot] = si.ClassAvgRefRankA.Value - si.ClassAvgRankA.Value;
+
+                    if (si.YearSumRefRank.HasValue && si.YearSumRank.HasValue)
+                        row["總分年排名_進退步" + studCot] = si.YearSumRefRank.Value - si.YearSumRank.Value;
+
+                    if (si.YearSumRefRankA.HasValue && si.YearSumRankA.HasValue)
+                        row["加權總分年排名_進退步" + studCot] = si.YearSumRefRankA.Value - si.YearSumRankA.Value;
+
+                    if (si.YearAvgRefRank.HasValue && si.YearAvgRank.HasValue)
+                        row["平均年排名_進退步" + studCot] = si.YearAvgRefRank.Value - si.YearAvgRank.Value;
+
+                    if (si.YearAvgRefRankA.HasValue && si.YearAvgRankA.HasValue)
+                        row["加權平均年排名_進退步" + studCot] = si.YearAvgRefRankA.Value - si.YearAvgRankA.Value;
+
+                    if (si.ClassSumRefRankF.HasValue && si.ClassSumRankF.HasValue)
+                        row["總分_定期班排名_進退步" + studCot] = si.ClassSumRefRankF.Value - si.ClassSumRankF.Value;
+
+                    if (si.ClassSumRefRankAF.HasValue && si.ClassSumRankAF.HasValue)
+                        row["加權總分_定期班排名_進退步" + studCot] = si.ClassSumRefRankAF.Value - si.ClassSumRankAF.Value;
+
+                    if (si.ClassAvgRefRankF.HasValue && si.ClassAvgRankF.HasValue)
+                        row["平均_定期班排名_進退步" + studCot] = si.ClassAvgRefRankF.Value - si.ClassAvgRankF.Value;
+
+                    if (si.ClassAvgRefRankAF.HasValue && si.ClassAvgRankAF.HasValue)
+                        row["加權平均_定期班排名_進退步" + studCot] = si.ClassAvgRefRankAF.Value - si.ClassAvgRankAF.Value;
+
+                    if (si.YearSumRefRankF.HasValue && si.YearSumRankF.HasValue)
+                        row["總分_定期年排名_進退步" + studCot] = si.YearSumRefRankF.Value - si.YearSumRankF.Value;
+
+                    if (si.YearSumRefRankAF.HasValue && si.YearSumRankAF.HasValue)
+                        row["加權總分_定期年排名_進退步" + studCot] = si.YearSumRefRankAF.Value - si.YearSumRankAF.Value;
+
+                    if (si.YearAvgRefRankF.HasValue && si.YearAvgRankF.HasValue)
+                        row["平均_定期年排名_進退步" + studCot] = si.YearAvgRefRankF.Value - si.YearAvgRankF.Value;
+
+                    if (si.YearAvgRefRankAF.HasValue && si.YearAvgRankAF.HasValue)
+                        row["加權平均_定期年排名_進退步" + studCot] = si.YearAvgRefRankAF.Value - si.YearAvgRankAF.Value;
+
+
+                    if (si.ClassType1SumRefRank.HasValue && si.ClassType1SumRank.HasValue)
+                        row["總分類別1排名_進退步" + studCot] = si.ClassType1SumRefRank.Value - si.ClassType1SumRank.Value;
+
+                    if (si.ClassType1SumRefRankA.HasValue && si.ClassType1SumRankA.HasValue)
+                        row["加權總分類別1排名_進退步" + studCot] = si.ClassType1SumRefRankA.Value - si.ClassType1SumRankA.Value;
+
+                    if (si.ClassType1AvgRefRank.HasValue && si.ClassType1AvgRank.HasValue)
+                        row["平均類別1排名_進退步" + studCot] = si.ClassType1AvgRefRank.Value - si.ClassType1AvgRank.Value;
+
+                    if (si.ClassType1AvgRefRankA.HasValue && si.ClassType1AvgRankA.HasValue)
+                        row["加權平均類別1排名_進退步" + studCot] = si.ClassType1AvgRefRankA.Value - si.ClassType1AvgRankA.Value;
+
+                    if (si.ClassType1SumRefRankF.HasValue && si.ClassType1SumRankF.HasValue)
+                        row["總分_定期類別1排名_進退步" + studCot] = si.ClassType1SumRefRankF.Value - si.ClassType1SumRankF.Value;
+
+                    if (si.ClassType1SumRefRankAF.HasValue && si.ClassType1SumRankAF.HasValue)
+                        row["加權總分_定期類別1排名_進退步" + studCot] = si.ClassType1SumRefRankAF.Value - si.ClassType1SumRankAF.Value;
+
+                    if (si.ClassType1AvgRefRankF.HasValue && si.ClassType1AvgRankF.HasValue)
+                        row["平均_定期類別1排名_進退步" + studCot] = si.ClassType1AvgRefRankF.Value - si.ClassType1AvgRankF.Value;
+
+                    if (si.ClassType1AvgRefRankAF.HasValue && si.ClassType1AvgRankAF.HasValue)
+                        row["加權平均_定期類別1排名_進退步" + studCot] = si.ClassType1AvgRefRankAF.Value - si.ClassType1AvgRankAF.Value;
+
+                    if (si.ClassType2SumRefRank.HasValue && si.ClassType2SumRank.HasValue)
+                        row["總分類別2排名_進退步" + studCot] = si.ClassType2SumRefRank.Value - si.ClassType2SumRank.Value;
+
+                    if (si.ClassType2SumRefRankA.HasValue && si.ClassType2SumRankA.HasValue)
+                        row["加權總分類別2排名_進退步" + studCot] = si.ClassType2SumRefRankA.Value - si.ClassType2SumRankA.Value;
+
+                    if (si.ClassType2AvgRefRank.HasValue && si.ClassType2AvgRank.HasValue)
+                        row["平均類別2排名_進退步" + studCot] = si.ClassType2AvgRefRank.Value - si.ClassType2AvgRank.Value;
+
+                    if (si.ClassType2AvgRefRankA.HasValue && si.ClassType2AvgRankA.HasValue)
+                        row["加權平均類別2排名_進退步" + studCot] = si.ClassType2AvgRefRankA.Value - si.ClassType2AvgRankA.Value;
+
+                    if (si.ClassType2SumRefRankF.HasValue && si.ClassType2SumRankF.HasValue)
+                        row["總分_定期類別2排名_進退步" + studCot] = si.ClassType2SumRefRankF.Value - si.ClassType2SumRankF.Value;
+
+                    if (si.ClassType2SumRefRankAF.HasValue && si.ClassType2SumRankAF.HasValue)
+                        row["加權總分_定期類別2排名_進退步" + studCot] = si.ClassType2SumRefRankAF.Value - si.ClassType2SumRankAF.Value;
+
+                    if (si.ClassType2AvgRefRankF.HasValue && si.ClassType2AvgRankF.HasValue)
+                        row["平均_定期類別2排名_進退步" + studCot] = si.ClassType2AvgRefRankF.Value - si.ClassType2AvgRankF.Value;
+
+                    if (si.ClassType2AvgRefRankAF.HasValue && si.ClassType2AvgRankAF.HasValue)
+                        row["加權平均_定期類別2排名_進退步" + studCot] = si.ClassType2AvgRefRankAF.Value - si.ClassType2AvgRankAF.Value;
+                    #endregion
+
                     tmpDomainInfoDict.Clear();
                     tmpSubjectInfoDict.Clear();
                     // 領域科目成績
@@ -811,55 +1378,70 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                             foreach (string ssName in SelDomainSubjectDict[di.Name])
                             {
-                                foreach (SubjectInfo subj in di.SubjectInfoList)
+                                // 班上學生有這再處理
+                                if (hasSubjectNameList.Contains(ssName))
                                 {
-                                    if (!tmpSubjectInfoDict.ContainsKey(subj.Name))
-                                        tmpSubjectInfoDict.Add(subj.Name, subj);
-
-                                    if (subj.Name == ssName)
+                                    foreach (SubjectInfo subj in di.SubjectInfoList)
                                     {
-                                        string s1Key = di.Name + "領域_科目名稱" + studCot + "_" + subjCot;
-                                        string s2Key = di.Name + "領域_科目成績" + studCot + "_" + subjCot;
-                                        string s2_1Key = di.Name + "領域_科目_定期成績" + studCot + "_" + subjCot;
-                                        string s3Key = di.Name + "領域_科目學分" + studCot + "_" + subjCot;
+                                        if (!tmpSubjectInfoDict.ContainsKey(subj.Name))
+                                            tmpSubjectInfoDict.Add(subj.Name, subj);
 
-                                        if (dtTable.Columns.Contains(s1Key))
+                                        if (subj.Name == ssName)
                                         {
-                                            row[s1Key] = subj.Name;
-                                        }
-
-                                        if (dtTable.Columns.Contains(s2Key))
-                                        {
-                                            if (dtTable.Columns.Contains(s2Key))
-                                                if (subj.Score.HasValue)
-                                                    row[s2Key] = subj.Score.Value;
-                                        }
+                                            string s1Key = di.Name + "領域_科目名稱" + studCot + "_" + subjCot;
+                                            string s2Key = di.Name + "領域_科目成績" + studCot + "_" + subjCot;
+                                            string s2_1Key = di.Name + "領域_科目_定期成績" + studCot + "_" + subjCot;
+                                            string s3Key = di.Name + "領域_科目學分" + studCot + "_" + subjCot;
+                                            string s4Key = di.Name + "領域_科目_平時成績" + studCot + "_" + subjCot;
 
 
-                                        if (dtTable.Columns.Contains(s2_1Key))
-                                        {
-                                            if (dtTable.Columns.Contains(s2_1Key))
-                                                if (subj.ScoreF.HasValue)
-                                                    row[s2_1Key] = subj.ScoreF.Value;
-                                        }
-
-                                        if (dtTable.Columns.Contains(s3Key))
-                                        {
-                                            if (subj.Credit.HasValue)
+                                            if (dtTable.Columns.Contains(s1Key))
                                             {
-                                                row[s3Key] = subj.Credit.Value;
-
-                                                if (!tmpSubjectCreditDict.ContainsKey(subj.Name))
-                                                    tmpSubjectCreditDict.Add(subj.Name, new List<decimal>());
-
-                                                if (!tmpSubjectCreditDict[subj.Name].Contains(subj.Credit.Value))
-                                                    tmpSubjectCreditDict[subj.Name].Add(subj.Credit.Value);
+                                                row[s1Key] = subj.Name;
                                             }
 
+                                            if (dtTable.Columns.Contains(s2Key))
+                                            {
+                                                if (dtTable.Columns.Contains(s2Key))
+                                                    if (subj.Score.HasValue)
+                                                        row[s2Key] = subj.Score.Value;
+                                            }
+
+                                            // 定期成績
+                                            if (dtTable.Columns.Contains(s2_1Key))
+                                            {
+                                                if (dtTable.Columns.Contains(s2_1Key))
+                                                    if (subj.ScoreF.HasValue)
+                                                        row[s2_1Key] = subj.ScoreF.Value;
+                                            }
+
+                                            if (dtTable.Columns.Contains(s3Key))
+                                            {
+                                                if (subj.Credit.HasValue)
+                                                {
+                                                    row[s3Key] = subj.Credit.Value;
+
+                                                    if (!tmpSubjectCreditDict.ContainsKey(subj.Name))
+                                                        tmpSubjectCreditDict.Add(subj.Name, new List<decimal>());
+
+                                                    if (!tmpSubjectCreditDict[subj.Name].Contains(subj.Credit.Value))
+                                                        tmpSubjectCreditDict[subj.Name].Add(subj.Credit.Value);
+                                                }
+
+                                            }
+
+                                            // 平時成績
+                                            if (dtTable.Columns.Contains(s4Key))
+                                            {
+                                                if (dtTable.Columns.Contains(s4Key))
+                                                    if (subj.ScoreA.HasValue)
+                                                        row[s4Key] = subj.ScoreA.Value;
+                                            }
                                         }
                                     }
-                                }
-                                subjCot++;
+                                    subjCot++;
+                                }                              
+                               
                             }
                         }
 
@@ -918,6 +1500,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             string sa2 = "學生_科目成績" + studCot + "_" + saCount;
                             string sa3 = "學生_科目_定期成績" + studCot + "_" + saCount;
                             string sa4 = "學生_科目學分" + studCot + "_" + saCount;
+                            string sa5 = "學生_科目_平時成績" + studCot + "_" + saCount;
 
                             if (dtTable.Columns.Contains(sa1))
                             {
@@ -942,6 +1525,13 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 {
                                     row[sa4] = sia.Credit.Value;
                                 }
+                            }
+
+                            if (dtTable.Columns.Contains(sa5))
+                            {
+                                // 平時成績
+                                if (sia.ScoreA.HasValue)
+                                    row[sa5] = Math.Round(sia.ScoreA.Value, parseNumber, MidpointRounding.AwayFromZero);
                             }
 
                         }
@@ -1529,8 +2119,14 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
 
             cboExam.Items.Clear();
+            cboRefExam.Items.Clear();
+            cboRefExam.Items.Add("");
             foreach (ExamRecord exName in _exams)
+            {
                 cboExam.Items.Add(exName.Name);
+                cboRefExam.Items.Add(exName.Name);
+            }
+
 
 
             if (_ConfigureList.Count > 0)
@@ -1551,11 +2147,17 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     break;
                 }
 
+            if (string.IsNullOrEmpty(_Configure.RefExamID))
+                _Configure.RefExamID = "";
+
             int idx = 0;
             foreach (ExamRecord exName in _exams)
             {
                 if (exName.ID == _Configure.ExamRecordID)
                     cboExam.SelectedIndex = idx;
+
+                if (exName.ID == _Configure.RefExamID)
+                    cboRefExam.SelectedIndex = idx;
 
                 idx++;
             }
@@ -1708,13 +2310,18 @@ namespace HsinChuExamScoreClassFixedRank.Form
             }
 
             _Configure.ParseNumber = parseNumber;
-
+            _Configure.RefExamID = "";
             foreach (ExamRecord exm in _exams)
             {
                 if (exm.Name == cboExam.Text)
                 {
                     _Configure.ExamRecord = exm;
-                    break;
+                }
+
+                // 儲存參考試別編號
+                if (exm.Name == cboRefExam.Text)
+                {
+                    _Configure.RefExamID = exm.ID;
                 }
             }
 
@@ -1810,7 +2417,21 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
         private void PrintForm_Load(object sender, EventArgs e)
         {
-            // 2019/10/22 與佳樺討論，學年度學期使用系統預設，先鎖定不讓使用者更動。
+            // 
+            //List<string> ddList = DataAccess.GetDomainConfigSortName();
+
+            int sy;
+            if (int.TryParse(K12.Data.School.DefaultSchoolYear, out sy))
+            {
+                for (int i = (sy - 2); i <= (sy + 3); i++)
+                {
+                    cboSchoolYear.Items.Add(i);
+                }
+            }
+
+            cboSemester.Items.Add("1");
+            cboSemester.Items.Add("2");
+
             cboSchoolYear.Text = K12.Data.School.DefaultSchoolYear;
             cboSemester.Text = K12.Data.School.DefaultSemester;
             for (int i = 0; i <= 3; i++)
@@ -2039,6 +2660,13 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     SelExamID = er.ID;
                     SelExamName = er.Name;
                 }
+
+                // 參考試別
+                if (er.Name == cboRefExam.Text)
+                {
+                    SelRefExamID = er.ID;
+                    SelRefExamName = er.Name;
+                }
             }
 
             SelSchoolYear = cboSchoolYear.Text;
@@ -2055,7 +2683,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             Global._SelExamID = SelExamID;
             Global._SelSchoolYear = SelSchoolYear;
             Global._SelSemester = SelSemester;
-
+            Global._SelRefExamID = SelRefExamID;
 
             SetDomainList();
 
@@ -2117,7 +2745,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 lvi.Checked = false;
             }
 
-            
+
             // 清空預設
             foreach (ListViewItem lvi in lvDomain.Items)
             {
@@ -2195,6 +2823,21 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                     }
 
+                    if (_Configure.RefExamID != "")
+                    {
+                        int idx = 1;
+                        foreach (ExamRecord rec in _exams)
+                        {
+                            if (rec.ID == _Configure.RefExamID)
+                            {
+                                cboRefExam.SelectedIndex = idx;
+                                break;
+                            }
+
+                            idx++;
+                        }
+                    }
+
                     Global.parseNumebr = parseNumber = _Configure.ParseNumber;
                     if (_Configure.PrintSubjectList == null)
                         _Configure.PrintSubjectList = new List<string>();
@@ -2229,6 +2872,18 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     cboSemester.SelectedIndex = -1;
                     cboExam.SelectedIndex = -1;
 
+                }
+            }
+        }
+
+        private void cboRefExam_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (ExamRecord er in _exams)
+            {
+                if (er.Name == cboRefExam.Text)
+                {
+                    SelRefExamID = er.ID;
+                    SelRefExamName = er.Name;
                 }
             }
         }

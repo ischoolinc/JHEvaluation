@@ -15,6 +15,7 @@ using Aspose.Words;
 using JHSchool.Evaluation.Calculation;
 using Aspose.Words.Reporting;
 using Aspose.Words.Tables;
+using KaoHsiungExamScore_JH.DAO;
 
 namespace KaoHsiungExamScore_JH
 {
@@ -229,7 +230,7 @@ namespace KaoHsiungExamScore_JH
             _UDTConfigList = DAO.UDTTransfer.GetDefaultConfigNameListByTableName(Global._UDTTableName);
 
             // 沒有設定檔，建立預設設定檔
-            if (_UDTConfigList.Count < 2) 
+            if (_UDTConfigList.Count < 2)
             {
                 bkw.ReportProgress(10);
                 foreach (string name in Global.DefaultConfigNameList())
@@ -400,7 +401,7 @@ namespace KaoHsiungExamScore_JH
                 if (name.Contains("科目名稱"))
                     _TemplateSubjectNameList.Add(name);
             }
-        
+
             // 校名
             string SchoolName = K12.Data.School.ChineseName;
             // 校長
@@ -608,20 +609,22 @@ namespace KaoHsiungExamScore_JH
                                 }
                             }
 
-                            DAO.ExamSubjectScore ess = studExamScoreDict[studID]._ExamSubjectScoreDict[SubjecName];
+                            if (studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(SubjecName))
+                            {
+                                DAO.ExamSubjectScore ess = studExamScoreDict[studID]._ExamSubjectScoreDict[SubjecName];
 
-                            // 努力程度                                     
-                            ess.Effort = rec.Effort;
-                            // 評量分數
-                            ess.Score = rec.Score;
+                                // 努力程度                                     
+                                ess.Effort = rec.Effort;
+                                // 評量分數
+                                ess.Score = rec.Score;
 
-                            // 文字描述
-                            ess.Text = rec.Text;
-                            ess.Credit = cr.Credit;
+                                // 文字描述
+                                ess.Text = rec.Text;
+                                ess.Credit = cr.Credit;
 
-                            if (ess.Score.HasValue)
-                                ess.Score = studentCalculator.ParseSubjectScore(ess.Score.Value);
-
+                                if (ess.Score.HasValue)
+                                    ess.Score = studentCalculator.ParseSubjectScore(ess.Score.Value);
+                            }
                         }
                     }
                 }
@@ -663,6 +666,55 @@ namespace KaoHsiungExamScore_JH
                     studExamScoreDict[studID].CalcSubjectToDomain();
                 }
             }
+
+            List<string> tmpDomainList = new List<string>();
+
+            List<string> tmpSubjectList = new List<string>();
+            // 成績排序
+            foreach (string studID in studExamScoreDict.Keys)
+            {
+                tmpDomainList.Clear();
+                tmpSubjectList.Clear();
+                Dictionary<string, DAO.ExamSubjectScore> tmpSubjectScore = new Dictionary<string, ExamSubjectScore>();
+                Dictionary<string, DAO.ExamDomainScore> tmpDomainScore = new Dictionary<string, ExamDomainScore>();
+
+                foreach (string dname in studExamScoreDict[studID]._ExamDomainScoreDict.Keys)
+                {
+                    tmpDomainList.Add(dname);
+                    tmpDomainScore.Add(dname, studExamScoreDict[studID]._ExamDomainScoreDict[dname]);
+                }
+
+                foreach (string sname in studExamScoreDict[studID]._ExamSubjectScoreDict.Keys)
+                {
+                    tmpSubjectList.Add(sname);
+                    tmpSubjectScore.Add(sname, studExamScoreDict[studID]._ExamSubjectScoreDict[sname]);
+                }
+
+                // 排序
+                tmpDomainList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動", ""));
+
+                tmpSubjectList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+
+
+
+
+                studExamScoreDict[studID]._ExamDomainScoreDict.Clear();
+                studExamScoreDict[studID]._ExamSubjectScoreDict.Clear();
+
+                foreach (string dname in tmpDomainList)
+                {
+                    if (tmpDomainScore.ContainsKey(dname))
+                        studExamScoreDict[studID]._ExamDomainScoreDict.Add(dname, tmpDomainScore[dname]);
+                }
+
+                foreach (string sname in tmpSubjectList)
+                {
+                    if (tmpSubjectScore.ContainsKey(sname))
+                        studExamScoreDict[studID]._ExamSubjectScoreDict.Add(sname, tmpSubjectScore[sname]);
+                }
+            }
+
+
 
             #region 領域成績區間處理
             // 處理領域成績區間
@@ -2322,6 +2374,7 @@ namespace KaoHsiungExamScore_JH
                     cell.CellFormat.LeftPadding = 0;
                     cell.CellFormat.RightPadding = 0;
                     double width = cell.CellFormat.Width;
+                    cell.CellFormat.VerticalAlignment = CellVerticalAlignment.Center;
                     int columnCount = colCount;
                     double miniUnitWitdh = width / (double)columnCount;
 
@@ -2330,7 +2383,8 @@ namespace KaoHsiungExamScore_JH
                     //(table.ParentNode.ParentNode as Row).RowFormat.LeftIndent = 0;
                     double p = _builder.RowFormat.LeftIndent;
                     _builder.RowFormat.HeightRule = HeightRule.Auto; // [ischoolkingdom] Vicky新增，個人評量成績單建議能增加可列印數量(高雄國中)，調整 缺曠紀錄表格外觀
-                    _builder.RowFormat.Height = 34.0;
+                  //  _builder.RowFormat.Height = 34.0;
+                    _builder.RowFormat.Alignment = RowAlignment.Center;
                     _builder.RowFormat.LeftIndent = 0;
 
                     // 缺曠名稱
@@ -2352,7 +2406,7 @@ namespace KaoHsiungExamScore_JH
                         if (dataDict.ContainsKey(name))
                             _builder.Write(dataDict[name].ToString());
                         else
-                            _builder.Write("");
+                            _builder.Write("0");
                     }
                     _builder.EndRow();
 

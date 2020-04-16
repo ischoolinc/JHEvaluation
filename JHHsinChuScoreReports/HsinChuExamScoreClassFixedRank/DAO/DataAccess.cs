@@ -6,6 +6,8 @@ using FISCA.Data;
 using System.Data;
 using Aspose.Words;
 using System.IO;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace HsinChuExamScoreClassFixedRank.DAO
 {
@@ -345,8 +347,16 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         public static DataTable GetStudentExamRankMatrix(string SchoolYear, string Semester, string ExamID, List<string> ClassIDList)
         {
             DataTable value = new DataTable();
-            QueryHelper qh = new QueryHelper();
-            string query = @"
+
+            if (string.IsNullOrEmpty(SchoolYear) || string.IsNullOrEmpty(Semester) || string.IsNullOrEmpty(ExamID) || ClassIDList == null)
+                return value;
+
+            if (ClassIDList.Count > 0)
+            {
+                try
+                {
+                    QueryHelper qh = new QueryHelper();
+                    string query = @"
 SELECT 
 	rank_matrix.id AS rank_matrix_id
 	, rank_matrix.school_year
@@ -386,15 +396,24 @@ WHERE
 	AND rank_matrix.item_type like '定期評量%'
 	AND rank_matrix.ref_exam_id = '" + ExamID + @"'
     AND class.id IN (" + string.Join(",", ClassIDList.ToArray()) + ") " +
-    "ORDER BY rank_matrix.id" +
-    ", rank_detail.rank	" +
-    ", class.grade_year" +
-    ", class.display_order" +
-    ", class.class_name" +
-    ", student.seat_no" +
-    ", student.id";
+            "ORDER BY rank_matrix.id" +
+            ", rank_detail.rank	" +
+            ", class.grade_year" +
+            ", class.display_order" +
+            ", class.class_name" +
+            ", student.seat_no" +
+            ", student.id";
 
-            value = qh.Select(query);
+                    value = qh.Select(query);
+
+                    //using (StreamWriter fi = new StreamWriter(Application.StartupPath + "\\sql1.sql", false))
+                    //    fi.WriteLine(query);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
 
             return value;
         }
@@ -458,9 +477,16 @@ WHERE
         public static DataTable GetClassExamRankMatrix(string SchoolYear, string Semester, string ExamID, List<string> ClassIDList)
         {
             DataTable value = new DataTable();
-            QueryHelper qh = new QueryHelper();
-            // 定期評量:item_type:領域成績、科目成績,rank_type:班排名,年排名
-            string query = @"
+            if (string.IsNullOrEmpty(SchoolYear) || string.IsNullOrEmpty(Semester) || string.IsNullOrEmpty(ExamID) || ClassIDList == null)
+                return value;
+
+            if (ClassIDList.Count > 0)
+            {
+                try
+                {
+                    QueryHelper qh = new QueryHelper();
+                    // 定期評量:item_type:領域成績、科目成績,全部排名都要
+                    string query = @"
 SELECT 
 	DISTINCT rank_matrix.id AS rank_matrix_id
 	, class.id AS class_id
@@ -499,14 +525,79 @@ FROM
 		ON class.id = student.ref_class_id
 WHERE
 	rank_matrix.is_alive = true AND rank_matrix.school_year = " + SchoolYear + @" 
-	AND rank_matrix.semester = " + Semester + @" AND rank_matrix.item_type IN('定期評量/領域成績','定期評量/科目成績','定期評量_定期/領域成績','定期評量_定期/科目成績')
-	AND rank_type IN('班排名','年排名') 
+	AND rank_matrix.semester = " + Semester + @" AND rank_matrix.item_type like '定期評量%' 
 	AND rank_matrix.ref_exam_id = " + ExamID + @" AND class.id IN(" + string.Join(",", ClassIDList.ToArray()) + ")";
 
-            value = qh.Select(query);
 
+                    //using (StreamWriter fi = new StreamWriter(Application.StartupPath + "\\sql1c.sql", false))
+                    //    fi.WriteLine(query);
+
+
+                    value = qh.Select(query);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
             return value;
         }
 
+
+
+        /// <summary>
+        /// 取得系統領域管理內設定領域
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetDomainConfigSortName()
+        {
+            List<string> value = new List<string>();
+            try
+            {
+                QueryHelper qh = new QueryHelper();
+
+                string qry = "select content from list where name = 'JHEvaluation_Subject_Ordinal'";
+                DataTable dt = qh.Select(qry);
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    try
+                    {
+                        XElement elmRoot = XElement.Parse(dt.Rows[0]["content"].ToString().Replace("&lt;", "<").Replace("&gt;", ">"));
+
+                        foreach (XElement elm in elmRoot.Elements("Configuration"))
+                        {
+                            string name = "";
+                            if (elm.Attribute("Name") != null)
+                            {
+                                name = elm.Attribute("Name").Value;
+                            }
+
+                            if (name == "DomainOrdinal")
+                            {
+                                foreach (XElement elmA1 in elm.Element("Domains").Elements("Domain"))
+                                {
+                                    if (elmA1.Attribute("Name") != null)
+                                    {
+                                        value.Add(elmA1.Attribute("Name").Value);
+                                    }
+
+                                }
+                            }
+                        }                
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return value;
+        }
     }
 }
