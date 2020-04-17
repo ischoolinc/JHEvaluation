@@ -466,7 +466,7 @@ namespace HsinChuExamScore_JH.DAO
         /// 評量科目平時評量加權平均
         /// </summary>
         /// <returns></returns>
-        public decimal? GetSubjectScoreAA(bool all , string isRefScore )
+        public decimal? GetSubjectScoreAA(bool all, string isRefScore)
         {
             decimal? score = null;
             decimal ss = 0;
@@ -509,7 +509,7 @@ namespace HsinChuExamScore_JH.DAO
         /// 評量科目總成績加權平均
         /// </summary>
         /// <returns></returns>
-        public decimal? GetSubjectScoreAT(bool all ,string isRefScore)
+        public decimal? GetSubjectScoreAT(bool all, string isRefScore)
         {
             decimal? score = null;
             decimal ss = 0;
@@ -559,61 +559,64 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetScoreArithmeticＭean(bool isContainFlex, EnumScoreType scoreType, EnumScoreComposition enumScoreComposition)
         {
             Dictionary<string, IScore> dicScoreInfo = new Dictionary<string, IScore>();
+            decimal? result = null;
+         
+                if (scoreType == EnumScoreType.領域)
+                {
+                    dicScoreInfo = _ExamDomainScoreDict;
+                }
+                else if (scoreType == EnumScoreType.科目)
+                {
+                    dicScoreInfo = _ExamSubjectScoreDict;
+                }
+                else if (scoreType == EnumScoreType.參考科目)
+                {
+
+                    dicScoreInfo = this._RefExamSubjectScoreDict;
+                }
+
+
+
+                decimal totalScore = 0;
+                decimal SubjCount = 0;
+
+                if (isContainFlex)
+                {
+                    foreach (IScore sc in dicScoreInfo.Values)
+                    {
+                        if (this.GetScore(sc, enumScoreComposition).HasValue && sc.Credit.HasValue)
+                        {
+                            totalScore += GetScore(sc, enumScoreComposition).Value;
+                            SubjCount++;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (IScore sc in dicScoreInfo.Values)
+                    {
+                        // 過濾彈性課程
+                        if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
+                            continue;
+
+                        if (this.GetScore(sc, enumScoreComposition).HasValue && sc.Credit.HasValue)
+                        {
+                            totalScore += this.GetScore(sc, enumScoreComposition).Value;
+                            SubjCount++;
+                        }
+                    }
+                }
+
+                if (SubjCount > 0)
+                    result = _Calculator.ParseSubjectScore(totalScore / SubjCount);
+
+          
 
             // 確認 是哪一種成績要計算 取用不同dictionary
-            if (scoreType == EnumScoreType.領域)
-            {
-                dicScoreInfo = _ExamDomainScoreDict;
-            }
-            else if (scoreType == EnumScoreType.科目)
-            {
-                dicScoreInfo = _ExamSubjectScoreDict;
-            }
-            else if(scoreType == EnumScoreType.參考科目) {
 
-                dicScoreInfo = this._RefExamSubjectScoreDict;
-            }
-
-
-            decimal? result = null;
-            decimal totalScore = 0;
-            decimal SubjCount = 0;
-
-
-            if (isContainFlex)
-            {
-                foreach (IScore sc in dicScoreInfo.Values)
-                {
-                    if (this.GetScore(sc, enumScoreComposition).HasValue && sc.Credit.HasValue)
-                    {
-                        totalScore += GetScore(sc, enumScoreComposition).Value;
-                        SubjCount++;
-                    }
-                }
-            }
-            else
-            {
-                foreach (IScore sc in dicScoreInfo.Values)
-                {
-                    // 過濾彈性課程
-                    if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
-                        continue;
-
-                    if (this.GetScore(sc, enumScoreComposition).HasValue && sc.Credit.HasValue)
-                    {
-                        totalScore += this.GetScore(sc, enumScoreComposition).Value;
-                        SubjCount++;
-                    }
-                }
-            }
-
-            if (SubjCount > 0)
-                result = _Calculator.ParseSubjectScore(totalScore / SubjCount);
-
+         
             return result;
         }
-
-
 
 
 
@@ -637,16 +640,17 @@ namespace HsinChuExamScore_JH.DAO
             else if (scoreType == EnumScoreType.科目)
             {
                 dicScoreInfo = _ExamSubjectScoreDict;
-            } else if (scoreType == EnumScoreType.參考科目)
+            }
+            else if (scoreType == EnumScoreType.參考科目)
             {
-                dicScoreInfo = _RefExamSubjectScoreDict;   
-            
+                dicScoreInfo = _RefExamSubjectScoreDict;
+
             }
 
 
             decimal? result = null;
 
-            decimal? totalScore=null;
+            decimal? totalScore = null;
             if (dicScoreInfo.Count > 0) //如果有成績紀錄(至少有一科)
             {
                 totalScore = 0;
@@ -801,7 +805,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainScore_S(bool all)
         {
             decimal? score = null;
-             decimal ss = 0;
+            decimal ss = 0;
             if (all)
             {
                 foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
@@ -880,7 +884,7 @@ namespace HsinChuExamScore_JH.DAO
         /// 評量科目定期評量加權總分
         /// </summary>
         /// <returns></returns>
-        public decimal? GetSubjectScoreSF(bool all ,string isRefScore)
+        public decimal? GetSubjectScoreSF(bool all, string isRefScore)
         {
             decimal? score = null;
             decimal ss = 0;
@@ -919,7 +923,7 @@ namespace HsinChuExamScore_JH.DAO
         /// 評量科目平時評量加權總分
         /// </summary>
         /// <returns></returns>
-        public decimal? GetSubjectScoreSA(bool all,string isRefScore)
+        public decimal? GetSubjectScoreSA(bool all, string isRefScore)
         {
             decimal? score = null;
             decimal ss = 0;
@@ -958,7 +962,7 @@ namespace HsinChuExamScore_JH.DAO
         /// 評量科目總成績加權總分
         /// </summary>
         /// <returns></returns>
-        public decimal? GetSubjectScoreST(bool all ,string isRefScore)
+        public decimal? GetSubjectScoreST(bool all, string isRefScore)
         {
             decimal? score = null;
             decimal ss = 0;
@@ -998,13 +1002,14 @@ namespace HsinChuExamScore_JH.DAO
         /// </summary>
         /// <param name="ifRefScore"></param>
         /// <returns></returns>
-        public Dictionary<string, IScore>  GetSubjScoreDictionary(string ifRefScore  ) 
+        public Dictionary<string, IScore> GetSubjScoreDictionary(string ifRefScore)
         {
             if (ifRefScore == "參考")
             {
                 return this._RefExamSubjectScoreDict;
             }
-            else {
+            else
+            {
 
                 return this._ExamSubjectScoreDict;
             }

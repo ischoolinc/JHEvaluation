@@ -1905,15 +1905,22 @@ namespace HsinChuExamScore_JH
                         {
                             if (scoreCaculateWay.Contains("平均"))
                             {
-                                if (studExamScoreDict[StudRec.ID].GetDomainScore_A(true).HasValue)
-                                    row[$"{_scoreTarget}{scoreComposition}{scoreCaculateWay}"] = studExamScoreDict[StudRec.ID].GetScoreArithmeticＭean( //
-                                                                                                                    Global.CheckIfContainFlex(scoreCaculateWay) // 確認是否包含彈性
+
+                              decimal? ScoreArithmeticＭean = studExamScoreDict[StudRec.ID].GetScoreArithmeticＭean( Global.CheckIfContainFlex(scoreCaculateWay) // 確認是否包含彈性
                                                                                                                     , enumScoreType
-                                                                                                                    , scoreComposition).Value;
+                                                                                                                    , scoreComposition);
+
+                                if (ScoreArithmeticＭean.HasValue)
+                                    row[$"{_scoreTarget}{scoreComposition}{scoreCaculateWay}"] = ScoreArithmeticＭean;
                             }
                             else if (scoreCaculateWay.Contains("總分"))
                             {
-                                if (studExamScoreDict[StudRec.ID].GetDomainScore_A(true).HasValue)
+
+                                decimal? tScoreArithmeticTotal = studExamScoreDict[StudRec.ID].GetScoreArithmeticTotal( // 取得算數平均
+                                                                                                                    Global.CheckIfContainFlex(scoreCaculateWay) // 確認是否包含彈性
+                                                                                                                    , enumScoreType
+                                                                                                                    , scoreComposition);
+                                if (tScoreArithmeticTotal.HasValue)
                                     row[$"{_scoreTarget}{scoreComposition}{scoreCaculateWay}"] = studExamScoreDict[StudRec.ID].GetScoreArithmeticTotal( // 取得算數平均
                                                                                                                     Global.CheckIfContainFlex(scoreCaculateWay) // 確認是否包含彈性
                                                                                                                     , enumScoreType
