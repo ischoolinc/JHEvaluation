@@ -407,7 +407,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             si.ClassType2AvgRankF = StudentExamRankMatrixDict[si.StudentID]["定期評量_定期/總計成績平均類別2排名"];
                         #endregion
 
-                        
+
                     }
 
                     if (StudentRefExamRankMatrixDict.ContainsKey(si.StudentID))
@@ -997,7 +997,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 {
                     foreach (DomainInfo di in si.DomainInfoList)
                     {
-                        foreach(SubjectInfo subj in di.SubjectInfoList)
+                        foreach (SubjectInfo subj in di.SubjectInfoList)
                         {
                             if (!hasSubjectNameList.Contains(subj.Name))
                                 hasSubjectNameList.Add(subj.Name);
@@ -1006,8 +1006,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 }
 
 
-                    // 填入學生資料
-                    int studCot = 1;
+                // 填入學生資料
+                int studCot = 1;
                 foreach (StudentInfo si in ci.Students)
                 {
                     row["姓名" + studCot] = si.Name;
@@ -1440,8 +1440,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                         }
                                     }
                                     subjCot++;
-                                }                              
-                               
+                                }
+
                             }
                         }
 
@@ -2469,6 +2469,29 @@ namespace HsinChuExamScoreClassFixedRank.Form
             }
         }
 
+        // 解析檔名
+        public string ParseFileName(string fileName)
+        {
+            string name = fileName;
+
+            if (fileName == null)
+                throw new ArgumentNullException();
+
+            if (name.Length == 0)
+                throw new ArgumentException();
+
+            if (name.Length > 245)
+                throw new PathTooLongException();
+
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(c, '_');
+            }
+
+            return name;
+        }
+
+
         private void lnkViewTemplate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // 當沒有設定檔
@@ -2476,7 +2499,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             lnkViewTemplate.Enabled = false;
             #region 儲存檔案
 
-            string reportName = "新竹評量成績單樣板(" + _Configure.Name + ")";
+            string reportName = ParseFileName("新竹評量成績單樣板(" + _Configure.Name + ")");
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
             if (!Directory.Exists(path))
