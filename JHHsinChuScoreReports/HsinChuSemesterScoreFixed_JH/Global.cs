@@ -182,7 +182,10 @@ namespace HsinChuSemesterScoreFixed_JH
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + key + "_Name" + " \\* MERGEFORMAT ", "«" + key + "名稱»");
                     builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + key + "_Description" + " \\* MERGEFORMAT ", "«" + key + "建議內容»");
+                    // 新竹版沒有
+                    if (key != "日常生活表現程度")
+                        builder.InsertField("MERGEFIELD " + key + "_Description" + " \\* MERGEFORMAT ", "«" + key + "建議內容»");
+
                     builder.EndRow();
 
                 }
