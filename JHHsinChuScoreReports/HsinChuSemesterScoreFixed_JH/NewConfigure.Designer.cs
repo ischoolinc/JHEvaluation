@@ -108,10 +108,10 @@
             this.checkBoxX1.CheckBoxStyle = DevComponents.DotNetBar.eCheckBoxStyle.RadioButton;
             this.checkBoxX1.Location = new System.Drawing.Point(13, 163);
             this.checkBoxX1.Name = "checkBoxX1";
-            this.checkBoxX1.Size = new System.Drawing.Size(147, 21);
+            this.checkBoxX1.Size = new System.Drawing.Size(121, 21);
             this.checkBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.checkBoxX1.TabIndex = 4;
-            this.checkBoxX1.Text = "使用新竹國中版樣板";
+            this.checkBoxX1.Text = "使用國中版樣板";
             this.checkBoxX1.CheckedChanged += new System.EventHandler(this.checkReady);
             // 
             // labelX3

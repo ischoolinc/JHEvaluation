@@ -15,6 +15,7 @@ using System.Xml;
 using System.Xml.Linq;
 using JHSchool.Behavior.BusinessLogic;
 using Campus.ePaperCloud;
+using JHScoreReportDAL;
 
 namespace HsinChuSemesterScoreFixed_JH
 {
@@ -31,6 +32,9 @@ namespace HsinChuSemesterScoreFixed_JH
         BackgroundWorker _bgWorkReport;
         DocumentBuilder _builder;
         BackgroundWorker _bgWorkerLoadData;
+
+        JHScoreReportDAL.Config confDomainSubject = new Config();
+
 
         List<StudentRecord> _Students = new List<StudentRecord>();
 
@@ -126,6 +130,11 @@ namespace HsinChuSemesterScoreFixed_JH
             try
             {
                 _bgWorkReport.ReportProgress(1);
+
+
+                // 取得科目領域名稱
+                confDomainSubject.GetConfigData();
+
                 dt.Clear();
                 _DLBehaviorConfigNameDict = GetDLBehaviorConfigNameDict();
                 List<string> plist = K12.Data.PeriodMapping.SelectAll().Select(x => x.Type).Distinct().ToList();
@@ -226,6 +235,7 @@ namespace HsinChuSemesterScoreFixed_JH
 
                 // 領域名稱
                 List<string> DomainNameList = new List<string>();
+                List<string> tempDomains = new List<string>();
 
                 foreach (JHSemesterScoreRecord SemsScore in SemesterScoreRecordList)
                 {
@@ -235,8 +245,18 @@ namespace HsinChuSemesterScoreFixed_JH
                             DomainNameList.Add(dn);
                     }
                 }
-                DomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
-                DomainNameList.Add("彈性課程");
+                //   DomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+
+
+                foreach (ConfigItem it in confDomainSubject.GetDomainItemList())
+                {
+                    tempDomains.Add(it.Name);
+                }
+
+                DomainNameList.Sort(new StringComparer(tempDomains.ToArray()));
+
+                if (!DomainNameList.Contains("彈性課程"))
+                    DomainNameList.Add("彈性課程");
 
                 _bgWorkReport.ReportProgress(20);
 
@@ -316,7 +336,7 @@ namespace HsinChuSemesterScoreFixed_JH
                             itemIndex++;
                             dt.Columns.Add(key + "_Item_Name" + itemIndex);
                             dt.Columns.Add(key + "_Item_Degree" + itemIndex);
-                            dt.Columns.Add(key + "_Item_Description" + itemIndex);
+                            dt.Columns.Add(key + "_Item_Index" + itemIndex);
                         }
                     }
                 }
@@ -452,6 +472,7 @@ namespace HsinChuSemesterScoreFixed_JH
                 }
 
 
+
                 List<string> classIDs = _Students.Select(x => x.RefClassID).Distinct().ToList();
                 //班級 catch
                 Dictionary<string, ClassRecord> classDic = new Dictionary<string, ClassRecord>();
@@ -488,6 +509,9 @@ namespace HsinChuSemesterScoreFixed_JH
                         }
                     }
                 }
+
+                // 服務學習,傳入學年度學期
+                Dictionary<string, decimal> ServiceLearningDict = Utility.GetServiceLearningDetailBySemester(_StudentIDList, _SelSchoolYear, _SelSemester);
 
 
                 // 取得學期成績排名、五標、分數區間
@@ -546,6 +570,10 @@ namespace HsinChuSemesterScoreFixed_JH
 
                     row["學校地址"] = schoolAddress;
                     row["學校電話"] = schoolTelephone;
+
+                    row["服務學習時數"] = "";
+                    if (ServiceLearningDict.ContainsKey(student.ID))
+                        row["服務學習時數"] = ServiceLearningDict[student.ID];
 
                     if (AddressRecord != null)
                     {
@@ -610,38 +638,25 @@ namespace HsinChuSemesterScoreFixed_JH
                         Dictionary<string, DomainScore> DomainScoreDict = new Dictionary<string, DomainScore>();
                         Dictionary<string, List<SubjectScore>> DomainSubjScoreDict = new Dictionary<string, List<SubjectScore>>();
 
+                        List<string> tempSubject = new List<string>();
+                        foreach (ConfigItem it in confDomainSubject.GetSubjectItemList())
+                            tempSubject.Add(it.Name);
 
 
                         #region 科目成績照領域排序
-                        var jsSubjects = new List<SubjectScore>(jsr.Subjects.Values);
-                        var domainList = new Dictionary<string, int>();
-                        int num = 100;
-                        foreach (string dn in DomainNameList)
-                        {
-                            domainList.Add(dn, num);
-                            num--;
-                        }
-
+                        List<SubjectScore> jsSubjects = new List<SubjectScore>(jsr.Subjects.Values);
                         jsSubjects.Sort(delegate (SubjectScore r1, SubjectScore r2)
                         {
-                            decimal rank1 = 0;
-                            decimal rank2 = 0;
-
-                            if (r1.Credit != null)
-                                rank1 += r1.Credit.Value;
-                            if (r2.Credit != null)
-                                rank2 += r2.Credit.Value;
-
-                            if (domainList.ContainsKey(r1.Domain))
-                                rank1 += domainList[r1.Domain];
-                            if (domainList.ContainsKey(r2.Domain))
-                                rank2 += domainList[r2.Domain];
-
-                            if (rank1 == rank2)
-                                return r2.Subject.CompareTo(r1.Subject);
-                            else
-                                return rank2.CompareTo(rank1);
+                            return StringComparer.Comparer(r1.Subject,r2.Subject,tempSubject.ToArray());
                         });
+
+                        //    StreamWriter swss = new StreamWriter(Application.StartupPath + "\\ss.txt");
+                        //foreach(SubjectScore ss in jsSubjects)
+                        //{
+                        //    swss.WriteLine(ss.Subject);
+                        //}
+                        //swss.Close();
+                
                         #endregion
 
 
@@ -682,8 +697,6 @@ namespace HsinChuSemesterScoreFixed_JH
 
 
                         #endregion
-
-
 
                         //科目成績
                         int count = 0;
@@ -1214,8 +1227,8 @@ namespace HsinChuSemesterScoreFixed_JH
                         {
                             index++;
                             row[name + "_Item_Name" + index] = itemName;
+                            row[name + "_Item_Index" + index] = item.GetAttribute("Index");
                             row[name + "_Item_Degree" + index] = item.GetAttribute("Degree");
-                            row[name + "_Item_Description" + index] = item.GetAttribute("Description");
                         }
                     }
                 }

@@ -253,9 +253,9 @@ namespace HsinChuSemesterScoreFixed_JH
             {
                 string sid = dr["student_id"].ToString();
                 if (!value.ContainsKey(sid))
-                    value.Add(sid,new Dictionary<string, Dictionary<string, string>>());
+                    value.Add(sid, new Dictionary<string, Dictionary<string, string>>());
 
-                string key = dr["item_type"].ToString() + "_" + dr["item_name"].ToString() + "_" + dr["rank_type"].ToString();       
+                string key = dr["item_type"].ToString() + "_" + dr["item_name"].ToString() + "_" + dr["rank_type"].ToString();
 
                 if (key == "學期/總計成績_課程學習總成績_類別1排名")
                 {
@@ -263,7 +263,7 @@ namespace HsinChuSemesterScoreFixed_JH
                     {
                         if (!StudentTag1Dict.ContainsKey(sid))
                             StudentTag1Dict.Add(sid, dr["rank_name"].ToString());
-                    }                    
+                    }
                 }
 
                 if (key == "學期/總計成績_課程學習總成績_類別2排名")
@@ -272,12 +272,12 @@ namespace HsinChuSemesterScoreFixed_JH
                     {
                         if (!StudentTag2Dict.ContainsKey(sid))
                             StudentTag2Dict.Add(sid, dr["rank_name"].ToString());
-                    }                       
+                    }
                 }
                 if (!value[sid].ContainsKey(key))
                     value[sid].Add(key, new Dictionary<string, string>());
 
-                foreach(string r2 in r2List)
+                foreach (string r2 in r2List)
                 {
                     string dValue = "";
                     if (dr[r2] != null)
@@ -307,6 +307,61 @@ namespace HsinChuSemesterScoreFixed_JH
 
             return value;
         }
+
+        /// <summary>
+        /// 透過學生編號、開始與結束日期，取得學習服務統計值
+        /// </summary>
+        /// <param name="StudentIDList"></param>
+        /// <param name="beginDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public static Dictionary<string, decimal> GetServiceLearningDetailByDate(List<string> StudentIDList, DateTime beginDate, DateTime endDate)
+        {
+            Dictionary<string, decimal> retVal = new Dictionary<string, decimal>();
+            if (StudentIDList.Count > 0)
+            {
+                QueryHelper qh = new QueryHelper();
+                string query = "select ref_student_id,occur_date,reason,hours from $k12.service.learning.record where ref_student_id in('" + string.Join("','", StudentIDList.ToArray()) + "') and occur_date >='" + beginDate.ToShortDateString() + "' and occur_date <='" + endDate.ToShortDateString() + "'order by ref_student_id,occur_date;";
+                DataTable dt = qh.Select(query);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    decimal hr;
+
+                    string sid = dr[0].ToString();
+                    if (!retVal.ContainsKey(sid))
+                        retVal.Add(sid, 0);
+
+                    if (decimal.TryParse(dr["hours"].ToString(), out hr))
+                        retVal[sid] += hr;
+                }
+            }
+            return retVal;
+        }
+
+        public static Dictionary<string, decimal> GetServiceLearningDetailBySemester(List<string> StudentIDList, int SchoolYear, int Semester)
+        {
+            Dictionary<string, decimal> retVal = new Dictionary<string, decimal>();
+            if (StudentIDList.Count > 0)
+            {
+                QueryHelper qh = new QueryHelper();
+                string query = "select ref_student_id,occur_date,reason,hours from $k12.service.learning.record where ref_student_id in('" + string.Join("','", StudentIDList.ToArray()) + "') and school_year = " + SchoolYear + " and semester=" + Semester + " order by ref_student_id,occur_date; ";
+                DataTable dt = qh.Select(query);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    decimal hr;
+
+                    string sid = dr[0].ToString();
+                    if (!retVal.ContainsKey(sid))
+                        retVal.Add(sid, 0);
+
+                    if (decimal.TryParse(dr["hours"].ToString(), out hr))
+                        retVal[sid] += hr;
+                }
+            }
+            return retVal;
+        }
+
+
 
     }
 }

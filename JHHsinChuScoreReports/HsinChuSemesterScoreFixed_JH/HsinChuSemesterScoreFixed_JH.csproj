@@ -95,6 +95,10 @@
       <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JHScoreReportDAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\JHScoreReportDAL.dll</HintPath>
+    </Reference>
     <Reference Include="K12.Data, Version=2.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\K12.Data.dll</HintPath>
@@ -174,6 +178,8 @@
     <Content Include="Library\JHSchool.Data.xml" />
     <Content Include="Library\JHSchool.Evaluation.dll" />
     <Content Include="Library\JHSchool.Evaluation.pdb" />
+    <Content Include="Library\JHScoreReportDAL.dll" />
+    <Content Include="Library\JHScoreReportDAL.pdb" />
     <Content Include="Library\K12.Data.dll" />
     <Content Include="Library\K12.Data.pdb" />
     <Content Include="Library\K12.Data.xml" />
@@ -181,7 +187,6 @@
     <Content Include="Library\K12.Presentation.pdb" />
     <Content Include="Library\K12.Presentation.xml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="CloneConfigure.resx">
       <DependentUpon>CloneConfigure.cs</DependentUpon>

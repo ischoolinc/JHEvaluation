@@ -206,9 +206,9 @@ namespace HsinChuSemesterScoreFixed_JH
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD " + "日常生活表現程度_Item_Name" + i + " \\* MERGEFORMAT ", "«項目" + i + "»");
                     builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + "日常生活表現程度_Item_Degree" + i + " \\* MERGEFORMAT ", "«指標" + i + "»");
+                    builder.InsertField("MERGEFIELD " + "日常生活表現程度_Item_Index" + i + " \\* MERGEFORMAT ", "«指標" + i + "»");
                     builder.InsertCell();
-                    builder.InsertField("MERGEFIELD " + "日常生活表現程度_Item_Description" + i + " \\* MERGEFORMAT ", "«表現" + i + "»");
+                    builder.InsertField("MERGEFIELD " + "日常生活表現程度_Item_Degree" + i + " \\* MERGEFORMAT ", "«表現" + i + "»");
                     builder.EndRow();
                 }
 
