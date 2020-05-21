@@ -4,6 +4,8 @@ using System.Text;
 using JHSchool.Data;
 using Aspose.Cells;
 using System.IO;
+using FISCA.Deployment;
+using FISCA;
 
 namespace JHEvaluation.ClassSemesterScoreReport
 {
@@ -35,32 +37,71 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
         private int _MaxClassStudCot = 0;
 
+        bool isFeedbackVisible = true;
+
+
         //public const int ScoreHeaderCount = 18;
 
         public Report()
         {
             Template = new Workbook();
             //Template.Open(new MemoryStream(Prc.班級學期成績單));
+
+            #region 判斷是否顯示 Feedback，因為高雄不需要
+            DeployParameters dparams = ModuleLoader.GetDeployParametsers(typeof(Program), "Mode=KaoHsiung");
+
+            if (dparams["Mode"].ToUpper() == "KaoHsiung".ToUpper())
+            {
+                isFeedbackVisible = false;
+            }
+            else
+            {
+                isFeedbackVisible = true;
+            }
+          
+            #endregion
         }
 
         private Stream GetTemplateStream()
         {
-
-            if (_MaxClassStudCot > 45)
+            if (isFeedbackVisible)
             {
-                if (Perference.PaperSize == "B4")
-                    return new MemoryStream(Prc.班級學期成績單B4_60);
+                // 有回條
+                if (_MaxClassStudCot > 45)
+                {
+                    if (Perference.PaperSize == "B4")
+                        return new MemoryStream(Prc.班級學期成績單B4_60);
+                    else
+                        return new MemoryStream(Prc.班級學期成績單60);
+                }
                 else
-                    return new MemoryStream(Prc.班級學期成績單60);
+                {
+                    if (Perference.PaperSize == "B4")
+                        return new MemoryStream(Prc.班級學期成績單B4);
+                    else
+                        return new MemoryStream(Prc.班級學期成績單);
+
+                }
             }
             else
             {
-                if (Perference.PaperSize == "B4")
-                    return new MemoryStream(Prc.班級學期成績單B4);
+                // 沒有回條
+                if (_MaxClassStudCot > 45)
+                {
+                    if (Perference.PaperSize == "B4")
+                        return new MemoryStream(Prc.班級學期成績單B4_60_kh);
+                    else
+                        return new MemoryStream(Prc.班級學期成績單60_kh);
+                }
                 else
-                    return new MemoryStream(Prc.班級學期成績單);
-            
-            }
+                {
+                    if (Perference.PaperSize == "B4")
+                        return new MemoryStream(Prc.班級學期成績單B4_kh);
+                    else
+                        return new MemoryStream(Prc.班級學期成績單_kh);
+
+                }
+            }          
         }
 
         public Workbook Output()
@@ -101,11 +142,17 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
             Range all = Template.Worksheets.GetRangeByName("All");
 
-            Range printDate = Template.Worksheets.GetRangeByName("PrintDate");
-            printDate[0, 0].PutValue(DateTime.Today.ToString("yyyy/MM/dd"));
+            Range printDate = null; 
 
             Range title = Template.Worksheets.GetRangeByName("Title");
-            Range feedback = Template.Worksheets.GetRangeByName("Feedback");
+            Range feedback = null;
+            if (isFeedbackVisible)
+            {
+                feedback = Template.Worksheets.GetRangeByName("Feedback");
+                printDate = Template.Worksheets.GetRangeByName("PrintDate");
+                printDate[0, 0].PutValue(DateTime.Today.ToString("yyyy/MM/dd"));
+            }
+          
             Range rowHeaders = Template.Worksheets.GetRangeByName("RowHeaders");
             Range columnHeaders = Template.Worksheets.GetRangeByName("ColumnHeaders");
             Range rankColumnHeader = Template.Worksheets.GetRangeByName("RankColumnHeader");
@@ -130,7 +177,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
                 //轉換成 ReportStudent。
                 List<ReportStudent> pageStudent = GetPreparedStudent(each.Students);
-                pageStudent.Sort(delegate(ReportStudent x, ReportStudent y)
+                pageStudent.Sort(delegate (ReportStudent x, ReportStudent y)
                 {//將學生按座號排序。
                     return x.OrderSeatNo.CompareTo(y.OrderSeatNo);
                 });
@@ -198,15 +245,15 @@ namespace JHEvaluation.ClassSemesterScoreReport
                         {
                             int headerIndex = headers[eachSubj, false].ColumnIndex;
 
-                            decimal ss=(decimal)scores[eachSubj];
+                            decimal ss = (decimal)scores[eachSubj];
                             decimal rss = scores.GetReExamScore(eachSubj);
 
                             OutputSheet.Cells[RowOffset, headerIndex].PutValue(ss);
 
                             if (Perference.UserSelScoreType == "原始補考擇優")
                                 if (rss >= ss)
-                                    OutputSheet.Cells[RowOffset, headerIndex].PutValue(Perference.ReScoreMark+ss);
-                            
+                                    OutputSheet.Cells[RowOffset, headerIndex].PutValue(Perference.ReScoreMark + ss);
+
 
                             // 科目平均與及格人數
                             if (!ClassSubjSumScoreDict.ContainsKey(eachSubj))
@@ -233,8 +280,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
                         if (scores.Contains(eachDomain) && headers.Contains(eachDomain, true))// scores.Weights[eachDomain]))
                         {
                             int headerIndex = headers[eachDomain, true].ColumnIndex;
-                            
-                            decimal dd =(decimal)scores[eachDomain];
+
+                            decimal dd = (decimal)scores[eachDomain];
                             decimal rdd = scores.GetReExamScore(eachDomain);
 
                             OutputSheet.Cells[RowOffset, headerIndex].PutValue(dd);
@@ -242,7 +289,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                             if (Perference.UserSelScoreType == "原始補考擇優")
                                 if (rdd >= dd)
                                     OutputSheet.Cells[RowOffset, headerIndex].PutValue(Perference.ReScoreMark + dd);
-                                                       
+
 
                             // 領域平均與及格人數
                             if (!ClassDomainSumScoreDict.ContainsKey(eachDomain))
@@ -296,9 +343,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
                         OutputSheet.Cells[RowOffset, rankColumnHeader.FirstColumn + 1].PutValue(eachStudent.Places.NS("年排名")[rm].Level);
 
                     RowOffset++;
-//                    if ((RowOffset - (rowHeaders.FirstRow + ClassOffset)) >= 45) break; //超過45個學生就不印了。
+                    //                    if ((RowOffset - (rowHeaders.FirstRow + ClassOffset)) >= 45) break; //超過45個學生就不印了。
                 }
-
 
                 #region 填入平均與人數
 
@@ -312,7 +358,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     }
                 }
                 // 科目平均
-                foreach(string key in ClassSubjSumScoreDict.Keys)
+                foreach (string key in ClassSubjSumScoreDict.Keys)
                 {
                     if (headers.Contains(key, false))
                     {
@@ -345,15 +391,15 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 int suDataOffset = (columnHeaders.FirstColumn + ScoreHeaderCount) - Perference.PrintItems.Count;
                 // 總分平均,人數
                 foreach (string eachSummary in Perference.PrintItems)
-                {                    
-                    
-                    if(ClassDomainSumScoreDict.ContainsKey(eachSummary))
+                {
+
+                    if (ClassDomainSumScoreDict.ContainsKey(eachSummary))
                     {
                         decimal dd = ClassDomainSumScoreDict[eachSummary] / ClassDomainPeopleDict[eachSummary];
                         OutputSheet.Cells[AvgRowOffset, suDataOffset].PutValue(dd);
                     }
-                    
-                    if(ClassDomainPassDict.ContainsKey(eachSummary))
+
+                    if (ClassDomainPassDict.ContainsKey(eachSummary))
                         OutputSheet.Cells[AvgRowOffset + 1, suDataOffset].PutValue(ClassDomainPassDict[eachSummary]);
                     suDataOffset++;
                 }
@@ -364,7 +410,13 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 //Ex. 新竹市立光華國民中學 97 學年度第 1 學期    101  第1次平時評量成績單
                 OutputSheet.Cells[title.FirstRow + ClassOffset, title.FirstColumn].PutValue(string.Format("{0} {1}學年度第{2}學期 {3} 班級學期成績單", SchoolName, SchoolYear, Semester, each.Name));
                 //Ex. 101 第1次平時評量回條 (家長意見欄)
-                OutputSheet.Cells[feedback.FirstRow + ClassOffset, feedback.FirstColumn].PutValue(string.Format("{0} 班級學期成績單回條  (家長意見欄)", each.Name));
+
+                // 因為高雄不需要所以加判斷
+                if (isFeedbackVisible)
+                {
+                    OutputSheet.Cells[feedback.FirstRow + ClassOffset, feedback.FirstColumn].PutValue(string.Format("{0} 班級學期成績單回條  (家長意見欄)", each.Name));
+                }              
+                
                 #endregion
 
                 ClassOffset += RowNumber;

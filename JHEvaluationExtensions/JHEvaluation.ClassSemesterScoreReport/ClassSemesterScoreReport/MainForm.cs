@@ -76,6 +76,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+
             cbxScoreType.Items.Add("原始成績");
             cbxScoreType.Items.Add("原始補考擇優");
             cbxScoreType.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -134,7 +135,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
             lvSubject.FillItems(Subjects, "科目");
 
             // 回填使用者勾選
-            foreach(ListViewItem lvi in lvSubject.Items)
+            foreach (ListViewItem lvi in lvSubject.Items)
                 if (_tmpUserSelSubjectList.Contains(lvi.Text))
                     lvi.Checked = true;
 
@@ -150,11 +151,11 @@ namespace JHEvaluation.ClassSemesterScoreReport
             //2.寫入成績資料到 ReportStudent 上。
 
 
-            
+
             int schoolYear = Semester.SelectedSchoolYear;
             int semester = Semester.SelectedSemester;
             FunctionSpliter<string, JHSemesterScoreRecord> selectData = new FunctionSpliter<string, JHSemesterScoreRecord>(1000, 5);
-            selectData.Function = delegate(List<string> ps)
+            selectData.Function = delegate (List<string> ps)
             {
                 return JHSemesterScore.SelectBySchoolYearAndSemester(ps, schoolYear, semester);
             };
@@ -185,8 +186,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 {
                     // 初始執
                     decimal ss = -1;
-                    
-                    if(Perference.UserSelScoreType =="原始成績")
+
+                    if (Perference.UserSelScoreType == "原始成績")
                     {
                         if (each.ScoreOrigin.HasValue)
                             ss = each.ScoreOrigin.Value;
@@ -199,7 +200,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                             ss = each.Score.Value;
                     }
 
-//                    if (!each.Score.HasValue) continue; //沒有分數不處理。
+                    //                    if (!each.Score.HasValue) continue; //沒有分數不處理。
 
                     if (ss == -1)
                         continue;
@@ -209,19 +210,19 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     if (!student.Scores[Utilities.SubjectToken].Contains(each.Subject))
                     {
                         student.Scores[Utilities.SubjectToken].Add(each.Subject, ss, each.Credit.Value);
-                       
+
                         if (Perference.UserSelScoreType == "原始補考擇優" && each.ScoreMakeup.HasValue)
-                        {   
+                        {
                             student.Scores[Utilities.DomainToken].AddReExam(each.Subject, each.ScoreMakeup.Value);
-                        }                                        
-                    }  
+                        }
+                    }
                 }
 
                 //領域成績。
                 foreach (DomainScore each in eachScore.Domains.Values)
                 {
                     decimal dd = -1;
-                    if(Perference.UserSelScoreType == "原始成績")
+                    if (Perference.UserSelScoreType == "原始成績")
                     {
                         if (each.ScoreOrigin.HasValue)
                             dd = each.ScoreOrigin.Value;
@@ -305,7 +306,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
         private void btnPrint_Click(object sender, EventArgs e)
         {
 
-            MsgBox.Show( "請注意: 本成績單包含所有學生學期成績及排名，僅供校內教師參考使用，請勿公佈或發放與學生。","注意",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MsgBox.Show("請注意: 本成績單包含所有學生學期成績及排名，僅供校內教師參考使用，請勿公佈或發放與學生。", "注意", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             List<string> selectedSubjects = lvSubject.GetSelectedItems();
             List<string> selectedDomains = lvDomain.GetSelectedItems();
@@ -335,7 +336,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
             #endregion
 
-           
+
 
 
             #region 計算各類成績。
@@ -383,11 +384,11 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
             Utilities.DisableControls(this);
             BackgroundWorker OutputWork = new BackgroundWorker();
-            OutputWork.DoWork += delegate(object sender1, DoWorkEventArgs e1)
+            OutputWork.DoWork += delegate (object sender1, DoWorkEventArgs e1)
             {
                 e1.Result = report.Output();
             };
-            OutputWork.RunWorkerCompleted += delegate(object sender1, RunWorkerCompletedEventArgs e1)
+            OutputWork.RunWorkerCompleted += delegate (object sender1, RunWorkerCompletedEventArgs e1)
             {
                 if (e1.Error != null)
                     MsgBox.Show(e1.Error.Message);
@@ -427,13 +428,13 @@ namespace JHEvaluation.ClassSemesterScoreReport
             _tmpUserSelSubjectList.Clear();
 
             // 記錄讀取前
-            foreach(ListViewItem lvi in lvSubject.Items)
+            foreach (ListViewItem lvi in lvSubject.Items)
             {
                 if (lvi.Checked)
                     _tmpUserSelSubjectList.Add(lvi.Text);
             }
 
-            foreach(ListViewItem lvi in lvDomain.Items)
+            foreach (ListViewItem lvi in lvDomain.Items)
             {
                 if (lvi.Checked)
                     _tmpUserSelDomainList.Add(lvi.Text);

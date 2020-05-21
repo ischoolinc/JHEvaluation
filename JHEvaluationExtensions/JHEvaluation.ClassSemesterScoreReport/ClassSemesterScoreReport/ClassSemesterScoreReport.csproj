@@ -191,8 +191,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Prc\班級學期成績單60.xls" />
+    <None Include="Prc\班級學期成績單60_kh.xls" />
     <None Include="Prc\班級學期成績單B4.xls" />
     <None Include="Prc\班級學期成績單B4_60.xls" />
+    <None Include="Prc\班級學期成績單B4_60_kh.xls" />
+    <None Include="Prc\班級學期成績單B4_kh.xls" />
+    <None Include="Prc\班級學期成績單_kh.xls" />
     <None Include="Resources\loading.gif" />
   </ItemGroup>
   <ItemGroup>
