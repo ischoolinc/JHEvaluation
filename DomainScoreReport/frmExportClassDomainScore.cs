@@ -12,6 +12,9 @@ using K12.Data;
 using K12.Data.Configuration;
 using Aspose.Words;
 using Aspose.Words.Reporting;
+using JHSchool.Data;
+using JHSchool.Evaluation.Calculation;
+using System.Linq;
 
 namespace DomainScoreReport
 {
@@ -28,8 +31,10 @@ namespace DomainScoreReport
         private Dictionary<string, StudentRec> dicStuRecByID = new Dictionary<string, StudentRec>();
         private Dictionary<string, List<string>> dicDomainNameByClassID = new Dictionary<string, List<string>>();
         private BackgroundWorker bgWorker = new BackgroundWorker();
+        Dictionary<string, ScoreCalculator> calcCache = new Dictionary<string, ScoreCalculator>();
+        Dictionary<string, string> calcIDCache = new Dictionary<string, string>();
 
-        public frmExportClassDomainScore(List<string>listIDs)
+        public frmExportClassDomainScore(List<string> listIDs)
         {
             InitializeComponent();
             InitializeBackgroundWorker();
@@ -46,18 +51,7 @@ namespace DomainScoreReport
 
         private void frmExportClassDomainScore_Load(object sender, EventArgs e)
         {
-            // init schoolYear semester
-            int schoolYear = int.Parse(School.DefaultSchoolYear);
-            int semester = int.Parse(School.DefaultSemester);
 
-            cbxSchoolYear.Items.Add(schoolYear - 1);
-            cbxSchoolYear.Items.Add(schoolYear);
-            cbxSchoolYear.Items.Add(schoolYear + 1);
-            cbxSchoolYear.SelectedIndex = 1;
-
-            cbxSemester.Items.Add(1);
-            cbxSemester.Items.Add(2);
-            cbxSemester.SelectedIndex = semester - 1;
 
             // 讀取樣板
             Stream stream = new MemoryStream(Properties.Resources.ClassDomainScore_template);
@@ -80,11 +74,11 @@ namespace DomainScoreReport
 
         private void btnExport_Click(object sender, EventArgs e)
         {
+            btnExport.Enabled = false;
             if (!bgWorker.IsBusy)
             {
                 ParameterRec data = new ParameterRec();
-                data.SchoolYear = cbxSchoolYear.SelectedItem.ToString();
-                data.Semester = cbxSemester.SelectedItem.ToString();
+
                 data.ClassIDs = string.Join(",", listClassID);
 
                 bgWorker.RunWorkerAsync(data);
@@ -94,7 +88,7 @@ namespace DomainScoreReport
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             ParameterRec data = (ParameterRec)e.Argument;
-            
+
             Document doc = new Document();
             doc.RemoveAllChildren();
             int progress = 0;
@@ -108,7 +102,11 @@ namespace DomainScoreReport
             DataTable table = FillMergeFiledData(data);
             bgWorker.ReportProgress(progress += 10);
 
-            int p = 70 / table.Rows.Count;
+            int p = 0;
+            if (table.Rows.Count > 0)
+            {
+                p = 70 / table.Rows.Count;
+            }
             foreach (DataRow row in table.Rows)
             {
                 Document eachDoc = new Document();
@@ -138,6 +136,7 @@ namespace DomainScoreReport
 
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            btnExport.Enabled = true;
             string path = (string)e.Result;
 
             MotherForm.SetStatusBarMessage("班級成績預警通知單 產生完成");
@@ -156,55 +155,284 @@ namespace DomainScoreReport
 
         private DataTable GetClassStudentDomainScore(ParameterRec data)
         {
-            string sql = string.Format(@"
-WITH data_row AS (
-    SELECT
-        {0}::INT AS school_year
-        , {1}::INT AS semester
-), target_student AS(
-	SELECT
-		*
-	FROM
-		student
-	WHERE
-		ref_class_id IN ({2})
-        AND status IN(1, 2)
-)
-SELECT
-    student.id
-    , student.name
-    , student.seat_no
-    , class.id AS class_id
-    , class.class_name
-	, sems_subj_score_ext.semester
-	, sems_subj_score_ext.school_year
-	, array_to_string(xpath('/Domain/@原始成績', subj_score_ele), '')::text AS 原始成績
-	, array_to_string(xpath('/Domain/@成績', subj_score_ele), '')::text AS 成績
-	, array_to_string(xpath('/Domain/@領域', subj_score_ele), '')::text AS 領域
-    , array_to_string(xpath('/Domain/@權數', subj_score_ele), '')::text AS 權數
-FROM (
-		SELECT 
-			sems_subj_score.*
-			, unnest(xpath('/root/Domains/Domain', xmlparse(content '<root>' || score_info || '</root>'))) as subj_score_ele
-		FROM 
-			sems_subj_score 
-			INNER JOIN target_student
-				ON target_student.id = sems_subj_score.ref_student_id 
-	) as sems_subj_score_ext
-    LEFT OUTER JOIN student
-        ON student.id = sems_subj_score_ext.ref_student_id
-    LEFT OUTER JOIN class
-        ON class.id = student.ref_class_id
-    INNER JOIN data_row
-    	ON data_row.school_year = sems_subj_score_ext.school_year
-    	AND data_row.semester = sems_subj_score_ext.semester
-ORDER BY
-	sems_subj_score_ext.grade_year 
-    , class.display_order
-    , student.seat_no
-                ", data.SchoolYear, data.Semester, data.ClassIDs);
+            //            string sql = string.Format(@"
+            //WITH data_row AS (
+            //    SELECT
+            //        {0}::INT AS school_year
+            //        , {1}::INT AS semester
+            //), target_student AS(
+            //	SELECT
+            //		*
+            //	FROM
+            //		student
+            //	WHERE
+            //		ref_class_id IN ({2})
+            //        AND status IN(1, 2)
+            //)
+            //SELECT
+            //    student.id
+            //    , student.name
+            //    , student.seat_no
+            //    , class.id AS class_id
+            //    , class.class_name
+            //	, sems_subj_score_ext.semester
+            //	, sems_subj_score_ext.school_year
+            //	, array_to_string(xpath('/Domain/@原始成績', subj_score_ele), '')::text AS 原始成績
+            //	, array_to_string(xpath('/Domain/@成績', subj_score_ele), '')::text AS 成績
+            //	, array_to_string(xpath('/Domain/@領域', subj_score_ele), '')::text AS 領域
+            //    , array_to_string(xpath('/Domain/@權數', subj_score_ele), '')::text AS 權數
+            //FROM (
+            //		SELECT 
+            //			sems_subj_score.*
+            //			, unnest(xpath('/root/Domains/Domain', xmlparse(content '<root>' || score_info || '</root>'))) as subj_score_ele
+            //		FROM 
+            //			sems_subj_score 
+            //			INNER JOIN target_student
+            //				ON target_student.id = sems_subj_score.ref_student_id 
+            //	) as sems_subj_score_ext
+            //    LEFT OUTER JOIN student
+            //        ON student.id = sems_subj_score_ext.ref_student_id
+            //    LEFT OUTER JOIN class
+            //        ON class.id = student.ref_class_id
+            //    INNER JOIN data_row
+            //    	ON data_row.school_year = sems_subj_score_ext.school_year
+            //    	AND data_row.semester = sems_subj_score_ext.semester
+            //ORDER BY
+            //	sems_subj_score_ext.grade_year 
+            //    , class.display_order
+            //    , student.seat_no
+            //                ", data.SchoolYear, data.Semester, data.ClassIDs);
 
-            return qh.Select(sql);
+            //return qh.Select(sql);
+
+            // 取得班級學生含研修
+            QueryHelper qh1 = new QueryHelper();
+            string qry = @"SELECT student.id,student.name,student.seat_no,class.id AS class_id,class.class_name FROM student INNER JOIN class on student.ref_class_id = class.id WHERE student.status IN(1,2) AND class.id IN(" + data.ClassIDs + @") ORDER BY class.grade_year,class.display_order,class.class_name,student.seat_no";
+
+            DataTable dtStudent = qh1.Select(qry);
+
+            List<string> StudentIDList = new List<string>();
+
+            foreach (DataRow dr in dtStudent.Rows)
+            {
+                StudentIDList.Add(dr["id"].ToString());
+            }
+
+            // 取得學生學期成績，即時計算使用
+            List<JHSemesterScoreRecord> StudentSemesterScoreList = JHSemesterScore.SelectByStudentIDs(StudentIDList);
+
+            // 建立成績資料索引
+            Dictionary<string, List<JHSemesterScoreRecord>> StudentSemesterScoreDict = new Dictionary<string, List<JHSemesterScoreRecord>>();
+
+            foreach (JHSemesterScoreRecord rec in StudentSemesterScoreList)
+            {
+                if (!StudentSemesterScoreDict.ContainsKey(rec.RefStudentID))
+                    StudentSemesterScoreDict.Add(rec.RefStudentID, new List<JHSemesterScoreRecord>());
+
+                StudentSemesterScoreDict[rec.RefStudentID].Add(rec);
+            }
+
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("id");
+            dt.Columns.Add("name");
+            dt.Columns.Add("seat_no");
+            dt.Columns.Add("class_id");
+            dt.Columns.Add("class_name");
+            dt.Columns.Add("semester");
+            dt.Columns.Add("school_year");
+            dt.Columns.Add("原始成績");
+            dt.Columns.Add("成績");
+            dt.Columns.Add("領域");
+            dt.Columns.Add("權數");
+
+            // 各領域學期成績
+            Dictionary<string, List<decimal>> domainnScoreDict = new Dictionary<string, List<decimal>>();
+            // 各領域學期成績原始
+            Dictionary<string, List<decimal>> domainnScoreOrignDict = new Dictionary<string, List<decimal>>();
+
+            // 各領域成績(算術平均)
+            Dictionary<string, decimal> domainnScoreAvgDict = new Dictionary<string, decimal>();
+            // 各領域成績(算術平均)(原始)
+            Dictionary<string, decimal> domainnScoreAvgOrignDict = new Dictionary<string, decimal>();
+
+            // 各領域學分
+            Dictionary<string, List<decimal>> domainCreditDict = new Dictionary<string, List<decimal>>();
+
+            // 各領域學分平均
+            Dictionary<string, decimal> domainAvgCreditDict = new Dictionary<string, decimal>();
+
+            #region 取得學生成績計算規則
+            ScoreCalculator defaultScoreCalculator = new ScoreCalculator(null);
+
+            //key: ScoreCalcRuleID
+            calcCache.Clear();
+
+            //key: StudentID, val: ScoreCalcRuleID
+            calcIDCache.Clear();
+
+            List<string> scoreCalcRuleIDList = new List<string>();
+
+            List<StudentRecord> StudentRecList = K12.Data.Student.SelectByIDs(StudentIDList);
+            foreach (StudentRecord student in StudentRecList)
+            {
+                //calcCache.Add(student.ID, new ScoreCalculator(student.ScoreCalcRule));
+                string calcID = string.Empty;
+                if (!string.IsNullOrEmpty(student.OverrideScoreCalcRuleID))
+                    calcID = student.OverrideScoreCalcRuleID;
+                else if (student.Class != null && !string.IsNullOrEmpty(student.Class.RefScoreCalcRuleID))
+                    calcID = student.Class.RefScoreCalcRuleID;
+
+                if (!string.IsNullOrEmpty(calcID))
+                    calcIDCache.Add(student.ID, calcID);
+            }
+            foreach (JHScoreCalcRuleRecord record in JHScoreCalcRule.SelectByIDs(calcIDCache.Values))
+            {
+                if (!calcCache.ContainsKey(record.ID))
+                    calcCache.Add(record.ID, new ScoreCalculator(record));
+            }
+
+
+            #endregion
+
+            // 開始填資料
+            foreach (DataRow dr in dtStudent.Rows)
+            {
+                string sid = dr["id"].ToString();
+
+                //DataRow newRow = dt.NewRow();             
+                //newRow["id"] = sid;
+                //newRow["name"] = dr["name"].ToString();
+                //newRow["seat_no"] = dr["seat_no"].ToString();
+                //newRow["class_id"] = dr["class_id"].ToString();
+                //newRow["class_name"] = dr["class_name"].ToString();
+                //newRow["semester"] = "";
+                //newRow["school_year"] = "";
+
+                //newRow["原始成績"] = "0";
+                //newRow["成績"] = "0";
+                //newRow["領域"] = "0";
+                //newRow["權數"] = "0";
+
+                // 即時計算領域成績
+                if (StudentSemesterScoreDict.ContainsKey(sid))
+                {
+
+                    // 成績計算規則
+                    ScoreCalculator studentCalculator = defaultScoreCalculator;
+                    if (calcIDCache.ContainsKey(sid) && calcCache.ContainsKey(calcIDCache[sid]))
+                        studentCalculator = calcCache[calcIDCache[sid]];
+
+                    domainnScoreDict.Clear();
+                    domainnScoreOrignDict.Clear();
+                    domainnScoreAvgDict.Clear();
+                    domainnScoreAvgOrignDict.Clear();
+                    domainCreditDict.Clear();
+
+                    // 整理各學期領域成績
+                    foreach (JHSemesterScoreRecord rec in StudentSemesterScoreDict[sid])
+                    {
+                        // 讀取成績
+                        foreach (string dName in rec.Domains.Keys)
+                        {
+                            // 加入領域成績
+                            if (rec.Domains[dName].Score.HasValue)
+                            {
+                                if (!domainnScoreDict.ContainsKey(dName))
+                                {
+                                    domainnScoreDict.Add(dName, new List<decimal>());
+                                }
+                                domainnScoreDict[dName].Add(rec.Domains[dName].Score.Value);
+
+                            }
+
+                            // 加入領域原始
+                            if (rec.Domains[dName].ScoreMakeup.HasValue)
+                            {
+                                if (!domainnScoreOrignDict.ContainsKey(dName))
+                                {
+                                    domainnScoreOrignDict.Add(dName, new List<decimal>());
+                                }
+                                domainnScoreOrignDict[dName].Add(rec.Domains[dName].ScoreMakeup.Value);
+
+                            }
+
+                            // 加入權數
+                            if (rec.Domains[dName].Credit.HasValue)
+                            {
+                                if (!domainCreditDict.ContainsKey(dName))
+                                    domainCreditDict.Add(dName, new List<decimal>());
+
+                                domainCreditDict[dName].Add(rec.Domains[dName].Credit.Value);
+                            }
+                        }
+                    }
+
+                    // 計算成績
+                    foreach (string dName in domainnScoreDict.Keys)
+                    {
+                        // 使用畢業成績計算規則四捨五入方式，即時計算平均
+                        decimal avgScore = studentCalculator.ParseGraduateScore(domainnScoreDict[dName].Average());
+                        if (!domainnScoreAvgDict.ContainsKey(dName))
+                            domainnScoreAvgDict.Add(dName, avgScore);
+                    }
+
+                    foreach (string dName in domainnScoreOrignDict.Keys)
+                    {
+                        // 使用畢業成績計算規則四捨五入方式，即時計算平均(原始)
+                        decimal avgScore = studentCalculator.ParseGraduateScore(domainnScoreOrignDict[dName].Average());
+                        if (!domainnScoreAvgOrignDict.ContainsKey(dName))
+                            domainnScoreAvgOrignDict.Add(dName, avgScore);
+                    }
+
+                    // 處理學分
+
+                    foreach (string dName in domainCreditDict.Keys)
+                    {
+                        // 使用畢業成績計算規則四捨五入方式，即時計算平均(原始)
+                        decimal avgScore = studentCalculator.ParseGraduateScore(domainCreditDict[dName].Average());
+                        if (!domainAvgCreditDict.ContainsKey(dName))
+                            domainAvgCreditDict.Add(dName, avgScore);
+                    }
+
+                    foreach (string domainName in domainnScoreAvgDict.Keys)
+                    {
+                        // 填資料
+                        DataRow newRow = dt.NewRow();
+                        newRow["id"] = sid;
+                        newRow["name"] = dr["name"].ToString();
+                        newRow["seat_no"] = dr["seat_no"].ToString();
+                        newRow["class_id"] = dr["class_id"].ToString();
+                        newRow["class_name"] = dr["class_name"].ToString();
+                        newRow["semester"] = "";
+                        newRow["school_year"] = "";
+
+                        newRow["原始成績"] = "";
+                        if (domainnScoreAvgOrignDict.ContainsKey(domainName))
+                        {
+                            newRow["原始成績"] = domainnScoreAvgOrignDict[domainName];
+                        }
+
+                        newRow["成績"] = domainnScoreAvgDict[domainName];
+                        newRow["領域"] = domainName;
+                        newRow["權數"] = "";
+                        if (domainAvgCreditDict.ContainsKey(domainName))
+                        {
+                            newRow["權數"] = domainAvgCreditDict[domainName];
+                        }
+
+                        dt.Rows.Add(newRow);
+                    }
+
+
+                }
+
+            }
+
+            return dt;
+
+
+
         }
 
         private void ParseData(DataTable dt)
@@ -336,20 +564,18 @@ ORDER BY
         private DataTable FillMergeFiledData(ParameterRec data)
         {
             DataTable dt = CreateMergeFiledTable();
-            
+
             foreach (string classID in dicClassNameByID.Keys)
             {
                 DataRow row = dt.NewRow();
 
                 row["school_name"] = School.ChineseName;
-                row["school_year"] = data.SchoolYear;
-                row["semester"] = data.Semester;
                 row["class_name"] = dicClassNameByID[classID];
 
                 // 班級領域清單
                 List<string> listDomain = dicDomainNameByClassID[classID];
                 // 根據領域對照表做排序
-                listDomain.Sort(delegate(string a, string b)
+                listDomain.Sort(delegate (string a, string b)
                 {
                     int aIndex = listDomainName.FindIndex(domain => domain == a);
                     int bIndex = listDomainName.FindIndex(domain => domain == b);
@@ -383,7 +609,7 @@ ORDER BY
                         d++;
                     }
                 }
-                
+
                 // 學生
                 Dictionary<string, Dictionary<string, ScoreRec>> dicStuDomainScore = dicClassStuDomainScore[classID];
                 int s = 1;
@@ -396,8 +622,8 @@ ORDER BY
                     int d = 1;
                     int sc = 0;
                     int passCount = 0;
-                    float totalPower = 0;
-                    float totalScore = 0;
+                    decimal totalPower = 0;
+                    decimal totalScore = 0;
                     // 領域成績
                     foreach (string domain in listDomain)
                     {
@@ -408,8 +634,13 @@ ORDER BY
                             string power = dicStuDomainScore[stuID][domain].Power;
                             row[$"stu_{s}_domain_{d}"] = score == originScore ? score : $"*{score}";
 
-                            totalScore += FloatParser(score) * FloatParser(power);
-                            totalPower += FloatParser(power);
+
+                            //totalScore += FloatParser(score) * FloatParser(power);
+                            //totalPower += FloatParser(power);
+
+                            // 最後平均使用算術平均不使用加權平均
+                            totalScore += FloatParser(score);
+                            totalPower += 1;
 
                             if (FloatParser(score) >= 60)
                             {
@@ -424,8 +655,15 @@ ORDER BY
                         // 沒有權重就不幫你算
                         if (totalPower > 0)
                         {
+
+                            // 成績計算規則
+                            ScoreCalculator defaultScoreCalculator = new ScoreCalculator(null);
+                            ScoreCalculator studentCalculator = defaultScoreCalculator;
+                            if (calcIDCache.ContainsKey(stuID) && calcCache.ContainsKey(calcIDCache[stuID]))
+                                studentCalculator = calcCache[calcIDCache[stuID]];
+
                             // 平均成績
-                            row[$"stu_{s}_avg_score"] = Math.Round(totalScore / totalPower, 2);
+                            row[$"stu_{s}_avg_score"] = studentCalculator.ParseGraduateScore(totalScore / totalPower);   // Math.Round(totalScore / totalPower, 2);
                         }
                         // 領域及格數
                         row[$"stu_{s}_pass_count"] = passCount;
@@ -439,9 +677,9 @@ ORDER BY
             return dt;
         }
 
-        private float FloatParser(string data)
+        private decimal FloatParser(string data)
         {
-            return float.Parse(data == "" ? "0" : data);
+            return decimal.Parse(data == "" ? "0" : data);
         }
 
         private void btnLeave_Click(object sender, EventArgs e)
@@ -457,8 +695,8 @@ ORDER BY
 
         private class ParameterRec
         {
-            public string SchoolYear;
-            public string Semester;
+            //public string SchoolYear;
+            //public string Semester;
             public string ClassIDs;
         }
 

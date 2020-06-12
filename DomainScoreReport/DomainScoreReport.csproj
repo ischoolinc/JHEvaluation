@@ -66,8 +66,16 @@
     <Content Include="library\FISCA.pdb" />
     <Content Include="library\FISCA.Permission.dll" />
     <Content Include="library\FISCA.Permission.xml" />
+    <Content Include="library\FISCA.Presentation.dll" />
+    <Content Include="library\FISCA.Presentation.pdb" />
     <Content Include="library\FISCA.xml" />
+    <Content Include="library\JHSchool.Data.dll" />
+    <Content Include="library\JHSchool.Data.pdb" />
+    <Content Include="library\JHSchool.Data.xml" />
+    <Content Include="library\JHSchool.Evaluation.dll" />
+    <Content Include="library\JHSchool.Evaluation.pdb" />
     <Content Include="library\K12.Data.dll" />
+    <Content Include="library\K12.Data.pdb" />
     <Content Include="library\K12.Data.xml" />
     <Content Include="library\K12.Presentation.dll" />
     <Content Include="library\K12.Presentation.xml" />
@@ -88,7 +96,9 @@
       <HintPath>library\Campus.Report.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04" />
+    <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="FISCA, Version=2.1.1.22, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>library\FISCA.dll</HintPath>
@@ -106,6 +116,16 @@
     </Reference>
     <Reference Include="FISCA.Presentation">
       <HintPath>Z:\Github_ischool\JHEvaluation\JHSchool.Evaluation\library\FISCA.Presentation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JHSchool.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\JHSchool.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JHSchool.Evaluation, Version=1.0.3.55, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>library\JHSchool.Evaluation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="K12.Data, Version=2.0.0.5, Culture=neutral, processorArchitecture=MSIL">
