@@ -26,7 +26,7 @@ namespace KaoHsingReExamScoreReport.Forms
         public ReDomainForTeacherForm(List<string> ClassIDList)
         {
             InitializeComponent();
-            
+
             listClassID = ClassIDList;
         }
 
@@ -89,7 +89,8 @@ namespace KaoHsingReExamScoreReport.Forms
                 List<string> listDomain = dicDomainByClassID[classID];
 
                 // 資料排序
-                listDomain.Sort(delegate (string a, string b) {
+                listDomain.Sort(delegate (string a, string b)
+                {
                     int aIndex = listDomainFromConfig.FindIndex(name => name == a);
                     int bIndex = listDomainFromConfig.FindIndex(name => name == b);
 
@@ -104,10 +105,127 @@ namespace KaoHsingReExamScoreReport.Forms
                 });
             }
             _bgWorker.ReportProgress(60);
-            
+
             Workbook wb = new Workbook();
             int sheetIndex = 0;
-            
+
+            // 總表功能          
+            Worksheet wst = wb.Worksheets[0];
+            wst.Name = "總表";
+            wst.Copy(wbTemplate.Worksheets["總表樣板"]);
+
+            // 需要補考
+            List<string> domainNameList = new List<string>();
+            Dictionary<string, int> domainIdxDict = new Dictionary<string, int>();
+
+            int colIdx = 4;
+
+            foreach (string classID in listClassID)
+            {
+                if (dicDomainByClassID.ContainsKey(classID))
+                {
+                    foreach (string dName in dicDomainByClassID[classID])
+                    {
+                        if (!domainNameList.Contains(dName))
+                            domainNameList.Add(dName);
+                    }
+                }
+            }
+
+
+            // 填入欄位
+            foreach (string dName in domainNameList)
+            {
+                wst.Cells[0, colIdx].PutValue(dName);
+                domainIdxDict.Add(dName + "補考", colIdx);
+                colIdx++;
+            }
+            foreach (string dName in domainNameList)
+            {
+                wst.Cells[0, colIdx].PutValue(dName);
+                domainIdxDict.Add(dName + "成績", colIdx);
+                colIdx++;
+            }
+
+            int rowIdx = 1;
+            // 產生資料至總表
+            foreach (string classID in listClassID)
+            {
+                List<string> listDomain = new List<string>();
+                if (dicDomainByClassID.ContainsKey(classID))
+                {
+                    listDomain = dicDomainByClassID[classID];
+                    if (dicStuRecByClassID.ContainsKey(classID))
+                    {
+                        foreach (string stuID in dicStuRecByClassID[classID].Keys)
+                        {
+                            StudentRec stuRec = dicStuRecByClassID[classID][stuID];
+
+                            bool checkReExam = false;
+                            // 檢查是否需要補考
+                            foreach (string domain in listDomain)
+                            {
+                                if (stuRec.dicScoreRecByDomain.ContainsKey(domain))
+                                {
+                                    if (stuRec.dicScoreRecByDomain[domain].isPass == false)
+                                    {
+                                        checkReExam = true;
+                                    }
+                                }
+                            }
+
+                            // 需要補考才產生在總表
+                            if (checkReExam)
+                            {
+                                wst.Cells[rowIdx, 0].PutValue(stuRec.GradeYear);
+                                wst.Cells[rowIdx, 1].PutValue(stuRec.ClassName);
+                                wst.Cells[rowIdx, 2].PutValue(stuRec.SeatNo);
+                                wst.Cells[rowIdx, 3].PutValue(stuRec.StudentName);
+
+                                foreach (string domain in listDomain)
+                                {
+                                    if (stuRec.dicScoreRecByDomain.ContainsKey(domain))
+                                    {
+                                        if (stuRec.dicScoreRecByDomain[domain].isPass)
+                                        {
+                                            //
+                                        }
+                                        else
+                                        {
+                                            if (domainIdxDict.ContainsKey(domain + "補考"))
+                                            {
+                                                wst.Cells[rowIdx, domainIdxDict[domain + "補考"]].PutValue("補考");
+                                            }
+
+                                        }
+
+                                        if (domainIdxDict.ContainsKey(domain + "成績"))
+                                        {
+                                            decimal score;
+
+                                            if (decimal.TryParse(stuRec.dicScoreRecByDomain[domain].OriginScore, out score))
+                                            {
+                                                wst.Cells[rowIdx, domainIdxDict[domain + "成績"]].PutValue(score);
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                                rowIdx++;
+                            }
+
+
+                        }
+                    }
+                }
+            }
+            wst.AutoFitColumns();
+
+
+            sheetIndex = 1;
+
+            // 各班分列
             foreach (string classID in listClassID)
             {
                 string className = K12.Data.Class.SelectByID(classID).Name;
@@ -124,8 +242,8 @@ namespace KaoHsingReExamScoreReport.Forms
                 }
                 Worksheet ws = wb.Worksheets[sheetIndex++];
                 ws.Name = className;
-                ws.Copy(wbTemplate.Worksheets[0]);
-                Range colRange = wbTemplate.Worksheets[0].Cells.CreateRange(2, 2, 1, 1);
+                ws.Copy(wbTemplate.Worksheets["班級樣板"]);
+                Range colRange = wbTemplate.Worksheets["班級樣板"].Cells.CreateRange(2, 2, 1, 1);
 
                 int rowIndex = 0;
                 int colIndex = 0;
@@ -190,7 +308,7 @@ namespace KaoHsingReExamScoreReport.Forms
                     ws.Cells.Merge(2, 0, 1, 3);
                 }
             }
-            
+
             e.Result = wb;
         }
 
@@ -209,7 +327,7 @@ namespace KaoHsingReExamScoreReport.Forms
             {
                 Utility.CompletedXls("領域補考名單-給導師", wb);
             }
-                
+
             FISCA.Presentation.MotherForm.SetStatusBarMessage("領域補考名單產生完成.");
         }
 
@@ -303,7 +421,7 @@ ORDER BY
 
                     dicStuRecByID[stuID].dicScoreRecByDomain.Add(domain, scoreRec);
                 }
-                
+
             }
         }
 
@@ -398,5 +516,5 @@ ORDER BY
             public bool isPass;
         }
     }
-    
+
 }
