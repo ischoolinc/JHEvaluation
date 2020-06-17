@@ -117,7 +117,7 @@ namespace KaoHsingReExamScoreReport.Forms
             // 需要補考
             List<string> domainNameList = new List<string>();
             Dictionary<string, int> domainIdxDict = new Dictionary<string, int>();
-
+            List<string> tmpNameList = new List<string>();
             int colIdx = 4;
 
             foreach (string classID in listClassID)
@@ -126,10 +126,20 @@ namespace KaoHsingReExamScoreReport.Forms
                 {
                     foreach (string dName in dicDomainByClassID[classID])
                     {
-                        if (!domainNameList.Contains(dName))
-                            domainNameList.Add(dName);
+                        if (!tmpNameList.Contains(dName))
+                            tmpNameList.Add(dName);
                     }
                 }
+            }
+
+            if (tmpNameList.Contains("語文"))
+                domainNameList.Add("語文");
+
+            //  依對照表順序
+            foreach (string name in listDomainFromConfig)
+            {
+                if (tmpNameList.Contains(name))
+                    domainNameList.Add(name);
             }
 
 
