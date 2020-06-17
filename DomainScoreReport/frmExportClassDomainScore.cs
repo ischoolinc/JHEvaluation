@@ -34,6 +34,13 @@ namespace DomainScoreReport
         Dictionary<string, ScoreCalculator> calcCache = new Dictionary<string, ScoreCalculator>();
         Dictionary<string, string> calcIDCache = new Dictionary<string, string>();
 
+
+        // 各學期領域總分
+        Dictionary<string, Dictionary<string, decimal>> StudentSemsDomainScoreSumDict = new Dictionary<string, Dictionary<string, decimal>>();
+
+        // 各學期學分加總
+        Dictionary<string, Dictionary<string, decimal>> StudentSemsCreditSumDict = new Dictionary<string, Dictionary<string, decimal>>();
+
         public frmExportClassDomainScore(List<string> listIDs)
         {
             InitializeComponent();
@@ -248,6 +255,9 @@ namespace DomainScoreReport
 
             // 各領域學期成績
             Dictionary<string, List<decimal>> domainnScoreDict = new Dictionary<string, List<decimal>>();
+
+
+
             // 各領域學期成績原始
             Dictionary<string, List<decimal>> domainnScoreOrignDict = new Dictionary<string, List<decimal>>();
 
@@ -295,6 +305,10 @@ namespace DomainScoreReport
 
             #endregion
 
+            // 計算畢業成績使用
+            StudentSemsDomainScoreSumDict.Clear();
+            StudentSemsCreditSumDict.Clear();
+
             // 開始填資料
             foreach (DataRow dr in dtStudent.Rows)
             {
@@ -324,14 +338,29 @@ namespace DomainScoreReport
                         studentCalculator = calcCache[calcIDCache[sid]];
 
                     domainnScoreDict.Clear();
+
                     domainnScoreOrignDict.Clear();
                     domainnScoreAvgDict.Clear();
                     domainnScoreAvgOrignDict.Clear();
                     domainCreditDict.Clear();
 
+                    if (!StudentSemsDomainScoreSumDict.ContainsKey(sid))
+                        StudentSemsDomainScoreSumDict.Add(sid, new Dictionary<string, decimal>());
+
+                    if (!StudentSemsCreditSumDict.ContainsKey(sid))
+                        StudentSemsCreditSumDict.Add(sid, new Dictionary<string, decimal>());
+
                     // 整理各學期領域成績
                     foreach (JHSemesterScoreRecord rec in StudentSemesterScoreDict[sid])
                     {
+                        string key = rec.SchoolYear + "_" + rec.Semester;
+
+                        if (!StudentSemsDomainScoreSumDict[sid].ContainsKey(key))
+                            StudentSemsDomainScoreSumDict[sid].Add(key, 0);
+
+                        if (!StudentSemsCreditSumDict[sid].ContainsKey(key))
+                            StudentSemsCreditSumDict[sid].Add(key, 0);
+
                         // 讀取成績
                         foreach (string dName in rec.Domains.Keys)
                         {
@@ -344,6 +373,10 @@ namespace DomainScoreReport
                                 }
                                 domainnScoreDict[dName].Add(rec.Domains[dName].Score.Value);
 
+                                if (rec.Domains[dName].Credit.HasValue)
+                                {
+                                    StudentSemsDomainScoreSumDict[sid][key] += (rec.Domains[dName].Score.Value * rec.Domains[dName].Credit.Value);
+                                }
                             }
 
                             // 加入領域原始
@@ -364,6 +397,8 @@ namespace DomainScoreReport
                                     domainCreditDict.Add(dName, new List<decimal>());
 
                                 domainCreditDict[dName].Add(rec.Domains[dName].Credit.Value);
+
+                                StudentSemsCreditSumDict[sid][key] += rec.Domains[dName].Credit.Value;
                             }
                         }
                     }
@@ -613,6 +648,7 @@ namespace DomainScoreReport
                 // 學生
                 Dictionary<string, Dictionary<string, ScoreRec>> dicStuDomainScore = dicClassStuDomainScore[classID];
                 int s = 1;
+
                 foreach (string stuID in dicStuDomainScore.Keys)
                 {
                     StudentRec stuRec = dicStuRecByID[stuID];
@@ -629,10 +665,11 @@ namespace DomainScoreReport
                     {
                         if (dicStuDomainScore[stuID].ContainsKey(domain))
                         {
+
                             string score = dicStuDomainScore[stuID][domain].Score;
                             string originScore = dicStuDomainScore[stuID][domain].OriginScore;
                             string power = dicStuDomainScore[stuID][domain].Power;
-                            row[$"stu_{s}_domain_{d}"] = score == originScore ? score : $"*{score}";
+                            row[$"stu_{s}_domain_{d}"] = score == originScore ? score : $"{score}";
 
 
                             //totalScore += FloatParser(score) * FloatParser(power);
@@ -650,6 +687,10 @@ namespace DomainScoreReport
                         }
                         d++;
                     }
+
+
+
+
                     if (sc > 0)
                     {
                         // 沒有權重就不幫你算
@@ -662,8 +703,30 @@ namespace DomainScoreReport
                             if (calcIDCache.ContainsKey(stuID) && calcCache.ContainsKey(calcIDCache[stuID]))
                                 studentCalculator = calcCache[calcIDCache[stuID]];
 
-                            // 平均成績
-                            row[$"stu_{s}_avg_score"] = studentCalculator.ParseGraduateScore(totalScore / totalPower);   // Math.Round(totalScore / totalPower, 2);
+                            //// 平均成績
+                            //row[$"stu_{s}_avg_score"] = studentCalculator.ParseGraduateScore(totalScore / totalPower);   // Math.Round(totalScore / totalPower, 2);
+                            List<decimal> scoreList = new List<decimal>();
+                            if (StudentSemsDomainScoreSumDict.ContainsKey(stuID) && StudentSemsCreditSumDict.ContainsKey(stuID))
+                            {                               
+                                foreach(string sms in StudentSemsDomainScoreSumDict[stuID].Keys)
+                                {
+                                    // 各學期做加權平均
+                                    if (StudentSemsCreditSumDict[stuID].ContainsKey(sms))
+                                    {
+                                        decimal ss = StudentSemsDomainScoreSumDict[stuID][sms];
+                                        decimal cc = StudentSemsCreditSumDict[stuID][sms];
+                                        if (cc > 0)
+                                        {
+                                            scoreList.Add(ss / cc);
+                                        }
+
+                                    }
+                                }
+                            }
+
+                            // 最後再做算術平均在四捨五入
+                            row[$"stu_{s}_avg_score"] = studentCalculator.ParseGraduateScore(scoreList.Average());   // Math.Round(totalScore / totalPower, 2);
+
                         }
                         // 領域及格數
                         row[$"stu_{s}_pass_count"] = passCount;
@@ -714,6 +777,8 @@ namespace DomainScoreReport
             /// 權數 
             /// </summary>
             public string Power;
+
+
         }
     }
 }

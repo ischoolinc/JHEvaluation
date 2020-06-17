@@ -30,6 +30,7 @@
         {
             this.btnExport = new DevComponents.DotNetBar.ButtonX();
             this.btnLeave = new DevComponents.DotNetBar.ButtonX();
+            this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.SuspendLayout();
             // 
             // btnExport
@@ -37,7 +38,7 @@
             this.btnExport.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnExport.BackColor = System.Drawing.Color.Transparent;
             this.btnExport.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExport.Location = new System.Drawing.Point(38, 23);
+            this.btnExport.Location = new System.Drawing.Point(38, 68);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(75, 23);
             this.btnExport.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -50,7 +51,7 @@
             this.btnLeave.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnLeave.BackColor = System.Drawing.Color.Transparent;
             this.btnLeave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnLeave.Location = new System.Drawing.Point(135, 23);
+            this.btnLeave.Location = new System.Drawing.Point(135, 68);
             this.btnLeave.Name = "btnLeave";
             this.btnLeave.Size = new System.Drawing.Size(75, 23);
             this.btnLeave.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -58,18 +59,33 @@
             this.btnLeave.Text = "取消";
             this.btnLeave.Click += new System.EventHandler(this.btnLeave_Click);
             // 
+            // labelX1
+            // 
+            this.labelX1.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX1.Location = new System.Drawing.Point(38, 25);
+            this.labelX1.Name = "labelX1";
+            this.labelX1.Size = new System.Drawing.Size(188, 23);
+            this.labelX1.TabIndex = 4;
+            this.labelX1.Text = "本功能為多學期合計之成績。";
+            // 
             // frmExportClassDomainScore
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(247, 62);
+            this.ClientSize = new System.Drawing.Size(238, 107);
+            this.Controls.Add(this.labelX1);
             this.Controls.Add(this.btnLeave);
             this.Controls.Add(this.btnExport);
             this.DoubleBuffered = true;
             this.MaximumSize = new System.Drawing.Size(380, 180);
             this.Name = "frmExportClassDomainScore";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "班級成績預警通知單";
+            this.Text = "班級多學期成績預警通知單";
             this.Load += new System.EventHandler(this.frmExportClassDomainScore_Load);
             this.ResumeLayout(false);
 
@@ -78,5 +94,6 @@
         #endregion
         private DevComponents.DotNetBar.ButtonX btnExport;
         private DevComponents.DotNetBar.ButtonX btnLeave;
+        private DevComponents.DotNetBar.LabelX labelX1;
     }
 }
