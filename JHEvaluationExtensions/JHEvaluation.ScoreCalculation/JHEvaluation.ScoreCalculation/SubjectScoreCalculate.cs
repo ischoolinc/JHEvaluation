@@ -10,6 +10,7 @@ using FISCA.Presentation;
 using JHSchool.Data;
 using FISCA.LogAgent;
 using JHEvaluation.ScoreCalculation.ScoreStruct;
+using FISCA.Data;
 
 namespace JHEvaluation.ScoreCalculation
 {
@@ -115,7 +116,28 @@ namespace JHEvaluation.ScoreCalculation
             #region 檢查科目重複問題
 
             Feedback("檢查學生修課內容", 0);
-            List<JHSCAttendRecord> scAttendList = JHSCAttend.SelectByStudentIDs(StudentIDs);
+            //  List<JHSCAttendRecord> scAttendList = JHSCAttend.SelectByStudentIDs(StudentIDs); // 資料量過大會爆
+
+            List<JHSCAttendRecord> scAttendList = new List<JHSCAttendRecord>();
+
+            string qry = "SELECT " +
+                 "sc_attend.id" +
+                 " FROM" +
+                 " sc_attend" +
+                 " INNER JOIN" +
+                 " course" +
+                 " ON sc_attend.ref_course_id = course.id" +
+                 " WHERE sc_attend.ref_student_id IN(" + string.Join(",", StudentIDs) + ") AND course.school_year = " + SchoolYear + " AND course.semester = " + Semester;
+
+            QueryHelper qh1 = new QueryHelper();
+            DataTable dt = qh1.Select(qry);
+            List<string> scIDList = new List<string>();
+            foreach(DataRow dr in dt.Rows)
+            {
+                scIDList.Add(dr["id"] + "");
+            }
+
+            scAttendList = JHSCAttend.SelectByIDs(scIDList);
 
             Dictionary<string, List<JHSCAttendRecord>> scAttendCheck = new Dictionary<string, List<JHSchool.Data.JHSCAttendRecord>>();
             // 穎驊重做，檢查重覆修習科目
