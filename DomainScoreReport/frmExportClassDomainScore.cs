@@ -717,7 +717,8 @@ namespace DomainScoreReport
                                         decimal cc = StudentSemsCreditSumDict[stuID][sms];
                                         if (cc > 0)
                                         {
-                                            scoreList.Add(ss / cc);
+                                            // 使用領域計算規則進位
+                                            scoreList.Add(studentCalculator.ParseDomainScore(ss / cc));
                                         }
 
                                     }
