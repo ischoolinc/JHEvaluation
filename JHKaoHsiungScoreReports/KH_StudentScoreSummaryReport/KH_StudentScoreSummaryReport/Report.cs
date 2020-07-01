@@ -268,6 +268,8 @@ namespace KH_StudentScoreSummaryReport
                         ddName.Add("藝術與人文");
                         ddName.Add("健康與體育");
                         ddName.Add("綜合活動");
+                        ddName.Add("藝術");
+                        ddName.Add("科技");
                         //準備領域資料。
                         foreach (string strDomain in semsscore.Domain)
                         {
