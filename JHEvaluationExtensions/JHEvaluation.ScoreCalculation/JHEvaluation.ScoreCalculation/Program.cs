@@ -187,6 +187,9 @@ namespace JHEvaluation.ScoreCalculation
                 Mode = ModuleMode.KaoHsiung; //高雄。
             else
                 Mode = ModuleMode.HsinChu;  //新竹。
+
+            // debug
+        //   Mode = ModuleMode.KaoHsiung;
         }
 
         //private static void TestMode(DeployParameters dparams)

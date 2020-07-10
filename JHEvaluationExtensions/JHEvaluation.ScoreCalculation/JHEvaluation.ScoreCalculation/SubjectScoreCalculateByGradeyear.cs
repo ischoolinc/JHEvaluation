@@ -23,7 +23,7 @@ namespace JHEvaluation.ScoreCalculation
 
         public SubjectScoreCalculateByGradeyear()
         {
-            InitializeComponent();
+            InitializeComponent();       
         }
 
         private void SubjectScoreCalculate_Load(object sender, EventArgs e)
@@ -127,25 +127,26 @@ namespace JHEvaluation.ScoreCalculation
 
             List<JHSCAttendRecord> scAttendList = new List<JHSCAttendRecord>();
 
-            string qry = "SELECT " +
-                "sc_attend.id" +
-                " FROM" +
-                " sc_attend" +
-                " INNER JOIN" +
-                " course" +
-                " ON sc_attend.ref_course_id = course.id" +
-                " WHERE sc_attend.ref_student_id IN(" + string.Join(",", StudentIDs) + ") AND course.school_year = " + SchoolYear + " AND course.semester = " + Semester;
+            //string qry = "SELECT " +
+            //    "sc_attend.id" +
+            //    " FROM" +
+            //    " sc_attend" +
+            //    " INNER JOIN" +
+            //    " course" +
+            //    " ON sc_attend.ref_course_id = course.id" +
+            //    " WHERE sc_attend.ref_student_id IN(" + string.Join(",", StudentIDs) + ") AND course.school_year = " + SchoolYear + " AND course.semester = " + Semester;
 
-            QueryHelper qh1 = new QueryHelper();
-            DataTable dt = qh1.Select(qry);
-            List<string> scIDList = new List<string>();
-            foreach (DataRow dr in dt.Rows)
-            {
-                scIDList.Add(dr["id"] + "");
-            }
+            //QueryHelper qh1 = new QueryHelper();
+            //DataTable dt = qh1.Select(qry);
+            //List<string> scIDList = new List<string>();
+            //foreach (DataRow dr in dt.Rows)
+            //{
+            //    scIDList.Add(dr["id"] + "");
+            //}
 
-            scAttendList = JHSCAttend.SelectByIDs(scIDList);
+            //scAttendList = JHSCAttend.SelectByIDs(scIDList);
 
+            scAttendList = Util.GetSCAttendRecordListBySchoolYearSemsStudentIDs(SchoolYear, Semester, StudentIDs);
 
 
 

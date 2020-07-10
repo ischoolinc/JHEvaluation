@@ -305,7 +305,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         //填入dscore.Value
                         if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
                             dscore.BetterScoreSelection(setting.DomainScoreLimit);
-                    }                                      
+                    }
                     #endregion
                     #region 高雄專用語文領域成績結算
                     //高雄市特有領域成績
@@ -319,11 +319,32 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         decimal period = 0;
 
                         bool hasMakeupScore = false;
-                        foreach (var subDomain in new string[] { "國語文", "英語" })
+                        // 計算國語文、英語 舊寫法
+                        //foreach (var subDomain in new string[] { "國語文", "英語" })
+                        //{
+                        //    if (dscores.Contains(subDomain))
+                        //    {
+                        //        var subScore = dscores[subDomain];
+                        //        total += subScore.Value.Value * subScore.Weight.Value;
+                        //        totalOrigin += subScore.ScoreOrigin.Value * subScore.Weight.Value;
+                        //        totalEffort += subScore.Effort.Value * subScore.Weight.Value;
+                        //        weight += subScore.Weight.HasValue ? subScore.Weight.Value : 0;
+                        //        period += subScore.Period.HasValue ? subScore.Period.Value : 0;
+
+                        //        if (subScore.ScoreMakeup.HasValue)
+                        //            hasMakeupScore = true;
+                        //    }
+                        //}
+
+
+
+                        // CT 2020/7/6 計算語文成績由國語文、英語來，是由科目不是領域
+                        foreach(string key in jscores)
                         {
-                            if (dscores.Contains(subDomain))
+                            if (jscores[key].Domain == "國語文" || jscores[key].Domain == "英語")
                             {
-                                var subScore = dscores[subDomain];
+
+                                var subScore = jscores[key];
                                 total += subScore.Value.Value * subScore.Weight.Value;
                                 totalOrigin += subScore.ScoreOrigin.Value * subScore.Weight.Value;
                                 totalEffort += subScore.Effort.Value * subScore.Weight.Value;
@@ -334,6 +355,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                     hasMakeupScore = true;
                             }
                         }
+                     
+
                         if (weight > 0)
                         {
                             decimal weightValueAvg = rule.ParseDomainScore(total / weight);
@@ -386,6 +409,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     dscore.BetterScoreSelection(setting.DomainScoreLimit);
                 }
 
+                // 載入108課綱比對使用
+                Util.LoadDomainMap108();
 
                 //計算課程學習成績。
                 ScoreResult result = CalcDomainWeightAvgScore(dscores, new UniqueSet<string>());
@@ -494,24 +519,54 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
             decimal TotalScore = 0, TotalScoreOrigin = 0, TotalWeight = 0;
             foreach (string strDomain in dscores)
             {
-                // 高雄語文只顯示不計算
+                // 調整讀取白名單領域名稱才計算
+                //// 高雄語文只顯示不計算
+                //if (Program.Mode == ModuleMode.KaoHsiung)
+                //    if (strDomain == "語文")
+                //        continue;
+
+                //     if (excludeItem.Contains(strDomain.Trim())) continue;
+
                 if (Program.Mode == ModuleMode.KaoHsiung)
-                    if (strDomain == "語文")
+                    if (strDomain == "國語文" || strDomain == "英語")
                         continue;
 
-                if (excludeItem.Contains(strDomain.Trim())) continue;
+                if (excludeItem.Count == 0)
+                {                
 
-                SemesterDomainScore dscore = dscores[strDomain];
-                if (dscore.Value.HasValue && dscore.Weight.HasValue) //dscore.Value 是原來的結構。
+                    //計算課程所有
+                    SemesterDomainScore dscore = dscores[strDomain];
+                    if (dscore.Value.HasValue && dscore.Weight.HasValue) //dscore.Value 是原來的結構。
+                    {
+                        TotalScore += (dscore.Value.Value * dscore.Weight.Value); //擇優成績。
+
+                        if (dscore.ScoreOrigin.HasValue)
+                            TotalScoreOrigin += (dscore.ScoreOrigin.Value * dscore.Weight.Value); //原始成績。
+                        else
+                            TotalScoreOrigin += (dscore.Value.Value * dscore.Weight.Value); //將擇優當成原始。
+
+                        TotalWeight += dscore.Weight.Value; //比重不會因為哪種成績而不同。
+                    }
+                }
+                else
                 {
-                    TotalScore += (dscore.Value.Value * dscore.Weight.Value); //擇優成績。
+                    // 計算學習領域
+                    // 要符合108課綱白名單資料
+                    if (Util.DomainMap108List.Contains(strDomain))
+                    {
+                        SemesterDomainScore dscore = dscores[strDomain];
+                        if (dscore.Value.HasValue && dscore.Weight.HasValue) //dscore.Value 是原來的結構。
+                        {
+                            TotalScore += (dscore.Value.Value * dscore.Weight.Value); //擇優成績。
 
-                    if (dscore.ScoreOrigin.HasValue)
-                        TotalScoreOrigin += (dscore.ScoreOrigin.Value * dscore.Weight.Value); //原始成績。
-                    else
-                        TotalScoreOrigin += (dscore.Value.Value * dscore.Weight.Value); //將擇優當成原始。
+                            if (dscore.ScoreOrigin.HasValue)
+                                TotalScoreOrigin += (dscore.ScoreOrigin.Value * dscore.Weight.Value); //原始成績。
+                            else
+                                TotalScoreOrigin += (dscore.Value.Value * dscore.Weight.Value); //將擇優當成原始。
 
-                    TotalWeight += dscore.Weight.Value; //比重不會因為哪種成績而不同。
+                            TotalWeight += dscore.Weight.Value; //比重不會因為哪種成績而不同。
+                        }
+                    }
                 }
             }
 

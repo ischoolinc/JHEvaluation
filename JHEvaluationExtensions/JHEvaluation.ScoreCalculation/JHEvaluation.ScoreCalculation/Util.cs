@@ -8,6 +8,9 @@ using FISCA.Presentation.Controls;
 using DevComponents.Editors;
 using Aspose.Cells;
 using System.Windows.Forms;
+using FISCA.Data;
+using System.Data;
+
 
 namespace JHEvaluation.ScoreCalculation
 {
@@ -119,7 +122,7 @@ namespace JHEvaluation.ScoreCalculation
             List<string> list = new List<string>(new string[] { "國語文", "語文", "國文", "英文", "英語", "語文", "數學", "歷史", "公民", "地理", "社會", "藝術與人文", "理化", "生物", "自然與生活科技", "健康與體育", "綜合活動" });
 
             List<string> orderName = new List<string>(names);
-            orderName.Sort(delegate(string x, string y)
+            orderName.Sort(delegate (string x, string y)
             {
                 int ix = list.IndexOf(x);
                 int iy = list.IndexOf(y);
@@ -240,21 +243,77 @@ namespace JHEvaluation.ScoreCalculation
 
             foreach (System.Data.DataRow dr in dt1.Rows)
             {
-                string id=dr["id"].ToString();
+                string id = dr["id"].ToString();
                 decimal sp = 50;
                 if (decimal.TryParse(dr["ScorePercentage"].ToString(), out sp))
-                { 
+                {
                     returnData.Add(id, sp);
                 }
                 else
-                    returnData.Add(id, 50);                
+                    returnData.Add(id, 50);
             }
-            return returnData;   
+            return returnData;
         }
 
         /// <summary>
         /// 評量比例設定
         /// </summary>
         public static Dictionary<string, decimal> ScorePercentageHSDict = new Dictionary<string, decimal>();
+
+        /// <summary>
+        /// 載入 108 課綱領域對照
+        /// </summary>
+        public static void LoadDomainMap108()
+        {
+            DomainMap108List.Clear();
+            DomainMap108List = new List<string>(new string[] { "語文", "數學", "自然科學", "科技", "社會", "藝術", "健康與體育", "綜合活動", "藝術與人文", "自然與生活科技" });
+
+         
+        }
+
+        /// <summary>
+        ///  108 課綱領域對照
+        /// </summary>
+        public static List<string> DomainMap108List = new List<string>();
+
+
+        /// <summary>
+        /// 使用SQL傳入學年度、學期、學生系統編號，取得學生修課紀錄，目的在處理 K12 無法透過這條件，需要SelectAll學生修課造成記憶體不足。
+        /// </summary>
+        /// <param name="SchoolYear"></param>
+        /// <param name="Semester"></param>
+        /// <param name="StudentIDs"></param>
+        /// <returns></returns>
+        public static List<JHSCAttendRecord> GetSCAttendRecordListBySchoolYearSemsStudentIDs(int SchoolYear,int Semester,List<string> StudentIDs)
+        {
+            List<JHSCAttendRecord> value = new List<JHSCAttendRecord>();
+
+            string qry = "SELECT " +
+            "sc_attend.id" +
+            " FROM" +
+            " sc_attend" +
+            " INNER JOIN" +
+            " course" +
+            " ON sc_attend.ref_course_id = course.id" +
+            " WHERE sc_attend.ref_student_id IN(" + string.Join(",", StudentIDs.ToArray()) + ") AND course.school_year = " + SchoolYear + " AND course.semester = " + Semester;
+
+            QueryHelper qh1 = new QueryHelper();
+            DataTable dt = qh1.Select(qry);
+            List<string> scIDList = new List<string>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                scIDList.Add(dr["id"] + "");
+            }
+            
+            value = JHSCAttend.SelectByIDs(scIDList);
+
+            // 節省記憶體
+            dt = null;
+            GC.Collect();
+
+            return value;
+        }
+
+
     }
 }

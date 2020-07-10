@@ -122,68 +122,77 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
             List<string> studKeys = Students.Values.ToKeys();
             Dictionary<string, JHSCAttendRecord> currentAttends = new Dictionary<string, JHSCAttendRecord>();
 
-            //分批取得資料。
-            FunctionSpliter<string, JHSCAttendRecord> spliter = new FunctionSpliter<string, JHSCAttendRecord>(300, Util.MaxThread);
-            spliter.Function = delegate(List<string> studKeysPart)
+            // CT 2020/7/6 因 Select All 效能問題，將它改寫
+            ////分批取得資料。
+            //FunctionSpliter<string, JHSCAttendRecord> spliter = new FunctionSpliter<string, JHSCAttendRecord>(300, Util.MaxThread);
+            //spliter.Function = delegate(List<string> studKeysPart)
+            //{
+            //    return JHSCAttend.SelectByStudentIDs(studKeysPart);
+            //};
+            //spliter.ProgressChange = delegate(int progress)
+            //{
+            //    Reporter.Feedback("讀取修課資料...", Util.CalculatePercentage(studKeys.Count, progress));
+            //};
+            //List<JHSCAttendRecord> allAttends = spliter.Execute(studKeys);
+
+            ////用於檢查重覆修習科目。
+            ////Dictionary<string, Dictionary<string, string>> duplicate = new Dictionary<string, Dictionary<string, string>>();
+
+
+
+            ////過濾修課記錄的學年度、學期，只要本學期的成績。
+            //foreach (JHSCAttendRecord each in allAttends)
+            //{
+            //    if (!Courses.ContainsKey(each.RefCourseID)) continue;
+            //    JHCourseRecord course = Courses[each.RefCourseID];
+
+            //    if (!course.SchoolYear.HasValue) continue;
+            //    if (!course.Semester.HasValue) continue;
+
+            //    if (course.SchoolYear.Value != SchoolYear) continue;
+            //    if (course.Semester.Value != Semester) continue;
+
+            //    currentAttends.Add(each.ID, each);         
+
+
+            //    //// 2016/5/25 穎驊新增 ，只有在該科目需要列入計算才更進一步加到currentAttends，如此一來可以濾掉科目名稱為空的社團課(不列入計算的課)
+            //    //if (each.Course.CalculationFlag == "1")
+            //    //{
+
+            //    //    #region 檢查重覆修習科目。
+            //    //    if (!duplicate.ContainsKey(each.RefStudentID))
+            //    //        duplicate.Add(each.RefStudentID, new Dictionary<string, string>());
+
+            //    //    if (duplicate[each.RefStudentID].ContainsKey(course.Subject.Trim()))
+            //    //    {
+            //    //        if (!Students.ContainsKey(each.RefStudentID)) continue;
+            //    //        StudentScore student = Students[each.RefStudentID];
+
+
+            //    //        //  2016/5/25 穎驊新增，針對如果同一學生同一學期有修習同一門科目名稱的課，會跳出視窗提醒。
+            //    //        MessageBox.Show(string.Format("學生「{0}」在「{1}」學年「{2}」學期，重覆修習科目「{3}」，將使學期科目成績計算遺漏誤植，請確認並修正該科目。", student.Name, course.SchoolYear, course.Semester, course.Subject));
+
+            //    //        break;
+
+            //    //        //throw new ArgumentException(string.Format("學生「{0}」重覆修習科目「{1}」。", student.Name, course.Subject));
+            //    //        //continue; //先略過不管。
+            //    //    }
+            //    //    duplicate[each.RefStudentID].Add(course.Subject.Trim(), null);
+            //    //    #endregion;
+
+
+            //    //    currentAttends.Add(each.ID, each);
+
+            //    //}
+
+            //}
+
+            List<JHSCAttendRecord> currentAttendsList = Util.GetSCAttendRecordListBySchoolYearSemsStudentIDs(SchoolYear, Semester, studKeys);
+
+            foreach(JHSCAttendRecord rec in currentAttendsList)
             {
-                return JHSCAttend.SelectByStudentIDs(studKeysPart);
-            };
-            spliter.ProgressChange = delegate(int progress)
-            {
-                Reporter.Feedback("讀取修課資料...", Util.CalculatePercentage(studKeys.Count, progress));
-            };
-            List<JHSCAttendRecord> allAttends = spliter.Execute(studKeys);
-
-            //用於檢查重覆修習科目。
-            //Dictionary<string, Dictionary<string, string>> duplicate = new Dictionary<string, Dictionary<string, string>>();
-
-           
-
-            //過濾修課記錄的學年度、學期，只要本學期的成績。
-            foreach (JHSCAttendRecord each in allAttends)
-            {
-                if (!Courses.ContainsKey(each.RefCourseID)) continue;
-                JHCourseRecord course = Courses[each.RefCourseID];
-
-                if (!course.SchoolYear.HasValue) continue;
-                if (!course.Semester.HasValue) continue;
-
-                if (course.SchoolYear.Value != SchoolYear) continue;
-                if (course.Semester.Value != Semester) continue;
-
-                currentAttends.Add(each.ID, each);         
-
-                
-                //// 2016/5/25 穎驊新增 ，只有在該科目需要列入計算才更進一步加到currentAttends，如此一來可以濾掉科目名稱為空的社團課(不列入計算的課)
-                //if (each.Course.CalculationFlag == "1")
-                //{
-
-                //    #region 檢查重覆修習科目。
-                //    if (!duplicate.ContainsKey(each.RefStudentID))
-                //        duplicate.Add(each.RefStudentID, new Dictionary<string, string>());
-
-                //    if (duplicate[each.RefStudentID].ContainsKey(course.Subject.Trim()))
-                //    {
-                //        if (!Students.ContainsKey(each.RefStudentID)) continue;
-                //        StudentScore student = Students[each.RefStudentID];
-
-
-                //        //  2016/5/25 穎驊新增，針對如果同一學生同一學期有修習同一門科目名稱的課，會跳出視窗提醒。
-                //        MessageBox.Show(string.Format("學生「{0}」在「{1}」學年「{2}」學期，重覆修習科目「{3}」，將使學期科目成績計算遺漏誤植，請確認並修正該科目。", student.Name, course.SchoolYear, course.Semester, course.Subject));
-                    
-                //        break;
-
-                //        //throw new ArgumentException(string.Format("學生「{0}」重覆修習科目「{1}」。", student.Name, course.Subject));
-                //        //continue; //先略過不管。
-                //    }
-                //    duplicate[each.RefStudentID].Add(course.Subject.Trim(), null);
-                //    #endregion;
-
-
-                //    currentAttends.Add(each.ID, each);
-
-                //}
-          
+                if (!currentAttends.ContainsKey(rec.ID))
+                    currentAttends.Add(rec.ID, rec);
             }
 
             return currentAttends;

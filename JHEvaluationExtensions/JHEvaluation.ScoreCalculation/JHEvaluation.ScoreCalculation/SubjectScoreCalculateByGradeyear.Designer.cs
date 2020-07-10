@@ -43,6 +43,11 @@
             // labelX3
             // 
             this.labelX3.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX3.ForeColor = System.Drawing.SystemColors.ControlText;
             this.labelX3.Location = new System.Drawing.Point(178, 21);
             this.labelX3.Name = "labelX3";
@@ -53,6 +58,11 @@
             // labelX2
             // 
             this.labelX2.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.labelX2.Location = new System.Drawing.Point(21, 21);
             this.labelX2.Name = "labelX2";
@@ -76,6 +86,11 @@
             // labelX1
             // 
             this.labelX1.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.labelX1.Location = new System.Drawing.Point(21, 59);
             this.labelX1.Name = "labelX1";
@@ -90,6 +105,7 @@
             // 
             // 
             this.intSchoolYear.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.intSchoolYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.intSchoolYear.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
             this.intSchoolYear.Location = new System.Drawing.Point(74, 20);
             this.intSchoolYear.Name = "intSchoolYear";
@@ -104,6 +120,7 @@
             // 
             // 
             this.intSemester.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.intSemester.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.intSemester.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
             this.intSemester.Location = new System.Drawing.Point(218, 20);
             this.intSemester.Name = "intSemester";
@@ -118,6 +135,7 @@
             // 
             // 
             this.intGradeyear.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.intGradeyear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.intGradeyear.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
             this.intGradeyear.Location = new System.Drawing.Point(74, 57);
             this.intGradeyear.Name = "intGradeyear";
@@ -137,6 +155,7 @@
             this.Controls.Add(this.labelX1);
             this.Controls.Add(this.labelX2);
             this.Controls.Add(this.btnCalc);
+            this.DoubleBuffered = true;
             this.Name = "SubjectScoreCalculateByGradeyear";
             this.Text = "批次學期科目成績計算";
             this.Load += new System.EventHandler(this.SubjectScoreCalculate_Load);
