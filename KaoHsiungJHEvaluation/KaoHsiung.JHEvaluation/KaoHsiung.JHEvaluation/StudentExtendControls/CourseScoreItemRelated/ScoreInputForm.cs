@@ -31,7 +31,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
 
             lblCourseName.Text = course.Name;
             lblStudent.Text = student.Name + " " + student.StudentNumber;
-
+            lblWaringMsg.Visible = false;
             _course = course;
             _student = student;
 
@@ -58,7 +58,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
             }
 
             // 排序需要再改寫
-            aeList.Sort(delegate(KH.JHAEIncludeRecord x, KH.JHAEIncludeRecord y)
+            aeList.Sort(delegate (KH.JHAEIncludeRecord x, KH.JHAEIncludeRecord y)
             {
                 int ix = examIDs.IndexOf(x.RefExamID);
                 int iy = examIDs.IndexOf(y.RefExamID);
@@ -104,12 +104,13 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
                     JHExamRecord exam = JHExam.SelectByID(sce.RefExamID);
                     row.CreateCells(dgv, (exam != null) ? exam.Name : "無此評量(" + sce.RefExamID + ")", sce.Score.HasValue ? "" + sce.Score.Value : "", sce.Effort.HasValue ? "" + sce.Effort.Value : "", sce.Text);
                     row.Tag = sce;
-                    row.Cells[chExamName.Index].Tag = (exam!=null)? exam.ID:"";
+                    row.Cells[chExamName.Index].Tag = (exam != null) ? exam.ID : "";
                     dgv.Rows.Add(row);
                     DisableCell(row, chExamName);
                     DisableCell(row, chScore);
                     DisableCell(row, chEffort);
                     DisableCell(row, chText);
+                    lblWaringMsg.Visible = true;
                 }
             }
 
@@ -130,7 +131,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
 
             foreach (DataGridViewRow dgv1 in dgv.Rows)
                 foreach (DataGridViewCell cell in dgv1.Cells)
-                {                    
+                {
                     cell.ErrorText = "";
 
                     if (cell.OwningColumn == chScore)
@@ -158,7 +159,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
                             if (!int.TryParse("" + cell.Value, out i))
                                 cell.ErrorText = "努力程度必須為整數";
                         }
-                    }                
+                    }
                 }
 
             _listener.Reset();
@@ -193,13 +194,13 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
             {
                 prlp.ClearCache();
 
-                string sy = "", ss = "",key="";
+                string sy = "", ss = "", key = "";
                 if (_course.SchoolYear.HasValue)
                     sy = _course.SchoolYear.Value.ToString();
                 if (_course.Semester.HasValue)
                     ss = _course.Semester.Value.ToString();
 
-                key = sy +"學年度第"+ ss +"學期"+ "學號:"+_student.StudentNumber +" 姓名:"+_student.Name+" "+_course.Name;
+                key = sy + "學年度第" + ss + "學期" + "學號:" + _student.StudentNumber + " 姓名:" + _student.Name + " " + _course.Name;
 
 
                 foreach (DataGridViewRow dgvr in dgv.Rows)
@@ -223,12 +224,12 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
                     if (dgvr.Cells[chText.Index].Value != null)
                         strText = dgvr.Cells[chText.Index].Value.ToString();
 
-                    prlp.SetBeforeSaveText(key + strExamName+"分數評量",strScore);
+                    prlp.SetBeforeSaveText(key + strExamName + "分數評量", strScore);
                     prlp.SetBeforeSaveText(key + strExamName + "努力程度", strEffort);
                     prlp.SetBeforeSaveText(key + strExamName + "文字描述", strText);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 FISCA.Presentation.Controls.MsgBox.Show("Log發生錯誤.");
             }
@@ -239,24 +240,24 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
         {
             try
             {
-                string sy = "", ss = "",key="";
+                string sy = "", ss = "", key = "";
                 if (_course.SchoolYear.HasValue)
                     sy = _course.SchoolYear.Value.ToString();
                 if (_course.Semester.HasValue)
                     ss = _course.Semester.Value.ToString();
 
                 key = sy + "學年度第" + ss + "學期" + "學號:" + _student.StudentNumber + " 姓名:" + _student.Name + " " + _course.Name;
-                                
+
                 foreach (DataGridViewRow dgvr in dgv.Rows)
                 {
                     if (dgvr.IsNewRow)
                         continue;
-                    
+
                     string strExamName = "", strScore = "", strEffort = "", strText = "";
 
                     if (dgvr.Cells[chExamName.Index].Value == null)
                         continue;
-                        strExamName = dgvr.Cells[chExamName.Index].Value.ToString();
+                    strExamName = dgvr.Cells[chExamName.Index].Value.ToString();
 
                     if (dgvr.Cells[chScore.Index].Value != null)
                         strScore = dgvr.Cells[chScore.Index].Value.ToString();
@@ -269,14 +270,14 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
 
                     prlp.SetAfterSaveText(key + strExamName + "分數評量", strScore);
                     prlp.SetAfterSaveText(key + strExamName + "努力程度", strEffort);
-                    prlp.SetAfterSaveText(key + strExamName + "文字描述", strText);                    
+                    prlp.SetAfterSaveText(key + strExamName + "文字描述", strText);
                 }
             }
             catch (Exception ex)
             {
                 FISCA.Presentation.Controls.MsgBox.Show("Log發生錯誤.");
             }
-        
+
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -328,25 +329,25 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
                     else if ("" + row.Tag == "平時評量")
                     {
                         #region 平時評量
-                        if ("" + row.Cells[chScore.Index].Value != "" + _scattend.OrdinarilyScore )
+                        if ("" + row.Cells[chScore.Index].Value != "" + _scattend.OrdinarilyScore)
                         {
                             scattendNeedSave = true;
                             decimal d;
                             if (decimal.TryParse("" + row.Cells[chScore.Index].Value, out d))
                                 _scattend.OrdinarilyScore = d;
                             else
-                                _scattend.OrdinarilyScore  = null;
+                                _scattend.OrdinarilyScore = null;
                         }
                         if ("" + row.Cells[chEffort.Index].Value != "" + _scattend.OrdinarilyEffort)
                         {
                             scattendNeedSave = true;
                             int i;
                             if (int.TryParse("" + row.Cells[chEffort.Index].Value, out i))
-                                _scattend.OrdinarilyEffort  = i;
+                                _scattend.OrdinarilyEffort = i;
                             else
                                 _scattend.OrdinarilyEffort = null;
                         }
-                        
+
                         #endregion
 
                     }
@@ -418,7 +419,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.CourseScoreItemControls
                 prlp.SetActionBy("學生", "評量成績輸入");
                 prlp.SetAction("評量成績輸入");
                 prlp.SetDescTitle("");
-                prlp.SaveLog("", "", "Student",_student.ID);
+                prlp.SaveLog("", "", "Student", _student.ID);
                 SetLoadDataToLog();
 
 
