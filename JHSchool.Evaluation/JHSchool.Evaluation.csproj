@@ -269,6 +269,7 @@
     <Compile Include="ErrorViewer.designer.cs">
       <DependentUpon>ErrorViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Global.cs" />
     <Compile Include="Legacy\SwapAttendStudents.cs">
       <SubType>Form</SubType>
     </Compile>

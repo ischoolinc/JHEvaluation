@@ -40,6 +40,8 @@
             this.chGroup = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chEnglishName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chLearningDomain = new DevComponents.DotNetBar.Controls.DataGridViewCheckBoxXColumn();
+            this.chGraduation = new DevComponents.DotNetBar.Controls.DataGridViewCheckBoxXColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,16 +50,18 @@
             this.dgv.AllowUserToAddRows = false;
             this.dgv.AllowUserToDeleteRows = false;
             this.dgv.AllowUserToResizeRows = false;
-            this.dgv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv.BackgroundColor = System.Drawing.Color.White;
             this.dgv.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.chGroup,
             this.chName,
-            this.chEnglishName});
+            this.chEnglishName,
+            this.chLearningDomain,
+            this.chGraduation});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -70,7 +74,7 @@
             this.dgv.Location = new System.Drawing.Point(6, 7);
             this.dgv.Name = "dgv";
             this.dgv.RowHeadersWidth = 25;
-            this.dgv.Size = new System.Drawing.Size(484, 368);
+            this.dgv.Size = new System.Drawing.Size(566, 368);
             this.dgv.TabIndex = 0;
             this.dgv.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
             // 
@@ -80,7 +84,7 @@
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.BackColor = System.Drawing.Color.Transparent;
             this.btnOK.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnOK.Location = new System.Drawing.Point(333, 381);
+            this.btnOK.Location = new System.Drawing.Point(415, 381);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 25);
             this.btnOK.TabIndex = 1;
@@ -93,7 +97,7 @@
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
             this.btnClose.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnClose.Location = new System.Drawing.Point(415, 381);
+            this.btnClose.Location = new System.Drawing.Point(497, 381);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 25);
             this.btnClose.TabIndex = 1;
@@ -168,19 +172,41 @@
             this.chEnglishName.HeaderText = "領域英文名稱";
             this.chEnglishName.Name = "chEnglishName";
             // 
+            // chLearningDomain
+            // 
+            this.chLearningDomain.Checked = true;
+            this.chLearningDomain.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+            this.chLearningDomain.CheckValue = "N";
+            this.chLearningDomain.Enabled = false;
+            this.chLearningDomain.HeaderText = "計算學習領域";
+            this.chLearningDomain.Name = "chLearningDomain";
+            this.chLearningDomain.ReadOnly = true;
+            // 
+            // chGraduation
+            // 
+            this.chGraduation.Checked = true;
+            this.chGraduation.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+            this.chGraduation.CheckValue = "N";
+            this.chGraduation.Enabled = false;
+            this.chGraduation.HeaderText = "畢業判斷";
+            this.chGraduation.Name = "chGraduation";
+            this.chGraduation.ReadOnly = true;
+            // 
             // DomainListTable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(497, 412);
+            this.ClientSize = new System.Drawing.Size(579, 412);
             this.Controls.Add(this.btnImport);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.dgv);
+            this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(505, 450);
             this.Name = "DomainListTable";
             this.Text = "領域清單";
+            this.Load += new System.EventHandler(this.DomainListTable_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
             this.ResumeLayout(false);
 
@@ -199,5 +225,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn chGroup;
         private System.Windows.Forms.DataGridViewTextBoxColumn chName;
         private System.Windows.Forms.DataGridViewTextBoxColumn chEnglishName;
+        private DevComponents.DotNetBar.Controls.DataGridViewCheckBoxXColumn chLearningDomain;
+        private DevComponents.DotNetBar.Controls.DataGridViewCheckBoxXColumn chGraduation;
     }
 }

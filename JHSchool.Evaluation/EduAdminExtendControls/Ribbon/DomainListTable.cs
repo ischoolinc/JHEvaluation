@@ -21,6 +21,10 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
         public DomainListTable()
         {
             InitializeComponent();
+
+            // 取得108課綱領域白名單對照
+            Global.LoadDomainMap108();
+
             LoadDomain();
         }
 
@@ -49,7 +53,20 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
                     }
 
                     DataGridViewRow row = new DataGridViewRow();
-                    row.CreateCells(dgv, group, name, englishName);
+
+                    bool chkC = false;
+                    bool chkG = false;
+
+                    // 判斷領域是白名單內 check true
+                    if (Global.DomainMap108List.Contains(name))
+                    {
+                        chkC = true;
+                        chkG = true;
+                    }
+
+
+                    row.CreateCells(dgv, group, name, englishName, chkC, chkG);
+
                     dgv.Rows.Add(row);
                 }
             }
@@ -57,13 +74,13 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             if (!containsIEPDomin)
             {
                 DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(dgv, "", "特殊需求", "");
+                row.CreateCells(dgv, "", "特殊需求", "", false, false);
                 dgv.Rows.Add(row);
             }
             if (!containsTechnologydomin)
             {
                 DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(dgv, "", "科技", "");
+                row.CreateCells(dgv, "", "科技", "", false, false);
                 dgv.Rows.Add(row);
             }
 
@@ -162,6 +179,11 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
         {
             ImportExport.Import(dgv, new List<string>() { "群組", "領域名稱", "領域英文名稱" });
             ValidDomain();
+        }
+
+        private void DomainListTable_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
