@@ -339,15 +339,27 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
 
                         // CT 2020/7/6 計算語文成績由國語文、英語來，是由科目不是領域
-                        foreach(string key in jscores)
+                        foreach (string key in jscores)
                         {
                             if (jscores[key].Domain == "國語文" || jscores[key].Domain == "英語")
                             {
 
                                 var subScore = jscores[key];
-                                total += subScore.Value.Value * subScore.Weight.Value;
-                                totalOrigin += subScore.ScoreOrigin.Value * subScore.Weight.Value;
-                                totalEffort += subScore.Effort.Value * subScore.Weight.Value;
+
+                                if (subScore.Weight.HasValue)
+                                {
+                                    if (subScore.Value.HasValue)
+                                        total += subScore.Value.Value * subScore.Weight.Value;
+
+                                    if (subScore.ScoreOrigin.HasValue)
+                                        totalOrigin += subScore.ScoreOrigin.Value * subScore.Weight.Value;
+
+                                    if (subScore.Effort.HasValue)
+                                        totalEffort += subScore.Effort.Value * subScore.Weight.Value;
+                                }
+
+
+
                                 weight += subScore.Weight.HasValue ? subScore.Weight.Value : 0;
                                 period += subScore.Period.HasValue ? subScore.Period.Value : 0;
 
@@ -355,7 +367,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                     hasMakeupScore = true;
                             }
                         }
-                     
+
 
                         if (weight > 0)
                         {
@@ -532,7 +544,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         continue;
 
                 if (excludeItem.Count == 0)
-                {                
+                {
 
                     //計算課程所有
                     SemesterDomainScore dscore = dscores[strDomain];
