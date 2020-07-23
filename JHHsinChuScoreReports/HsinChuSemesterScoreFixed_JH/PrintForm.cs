@@ -534,6 +534,19 @@ namespace HsinChuSemesterScoreFixed_JH
                 }
 
 
+                List<string> tempSubject = new List<string>();
+                foreach (ConfigItem it in confDomainSubject.GetSubjectItemList())
+                    tempSubject.Add(it.Name);
+
+                // 依領域與科目排列
+                List<string> sortKey = new List<string>();
+                foreach (string dName in DomainNameList)
+                {
+                    foreach (string sName in tempSubject)
+                    {
+                        sortKey.Add(dName + "_" + sName);
+                    }
+                }
 
                 //基本資料
                 foreach (StudentRecord student in _Students)
@@ -638,16 +651,31 @@ namespace HsinChuSemesterScoreFixed_JH
                         Dictionary<string, DomainScore> DomainScoreDict = new Dictionary<string, DomainScore>();
                         Dictionary<string, List<SubjectScore>> DomainSubjScoreDict = new Dictionary<string, List<SubjectScore>>();
 
-                        List<string> tempSubject = new List<string>();
-                        foreach (ConfigItem it in confDomainSubject.GetSubjectItemList())
-                            tempSubject.Add(it.Name);
+
+
+                        // 
 
 
                         #region 科目成績照領域排序
                         List<SubjectScore> jsSubjects = new List<SubjectScore>(jsr.Subjects.Values);
+
+                        // return StringComparer.Comparer(r1.Subject, r2.Subject, tempSubject.ToArray());
+
+                        // 依領域科目排序
                         jsSubjects.Sort(delegate (SubjectScore r1, SubjectScore r2)
                         {
-                            return StringComparer.Comparer(r1.Subject,r2.Subject,tempSubject.ToArray());
+                            string d1 = r1.Domain;
+                            string d2 = r2.Domain;
+                            if (string.IsNullOrWhiteSpace(d1))
+                                d1 = "彈性課程";
+
+                            if (string.IsNullOrWhiteSpace(d2))
+                                d2 = "彈性課程";
+
+                            string k1 = d1 + "_" + r1.Subject;
+                            string k2 = d2 + "_" + r2.Subject;
+
+                            return StringComparer.Comparer(k1, k2, sortKey.ToArray());
                         });
 
                         //    StreamWriter swss = new StreamWriter(Application.StartupPath + "\\ss.txt");
@@ -656,7 +684,7 @@ namespace HsinChuSemesterScoreFixed_JH
                         //    swss.WriteLine(ss.Subject);
                         //}
                         //swss.Close();
-                
+
                         #endregion
 
 
