@@ -1117,9 +1117,6 @@ namespace HsinChu.StudentRecordReportVer2
                 int schoolyear_grade1 = 0;
                 int schoolyear_grade2 = 0;
                 int schoolyear_grade3 = 0;
-                int schoolyear_grade4 = 0;
-                int schoolyear_grade5 = 0;
-                int schoolyear_grade6 = 0;
 
                 DataRow row = table.NewRow();
 
