@@ -320,9 +320,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("學年度1");
             table.Columns.Add("學年度2");
             table.Columns.Add("學年度3");
-            table.Columns.Add("學年度4");
-            table.Columns.Add("學年度5");
-            table.Columns.Add("學年度6");
             #endregion
 
             #region 家長資料
@@ -360,30 +357,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("班級6");
             table.Columns.Add("座號6");
             table.Columns.Add("班導師6");
-
-            table.Columns.Add("班級7");
-            table.Columns.Add("座號7");
-            table.Columns.Add("班導師7");
-
-            table.Columns.Add("班級8");
-            table.Columns.Add("座號8");
-            table.Columns.Add("班導師8");
-
-            table.Columns.Add("班級9");
-            table.Columns.Add("座號9");
-            table.Columns.Add("班導師9");
-
-            table.Columns.Add("班級10");
-            table.Columns.Add("座號10");
-            table.Columns.Add("班導師10");
-
-            table.Columns.Add("班級11");
-            table.Columns.Add("座號11");
-            table.Columns.Add("班導師11");
-
-            table.Columns.Add("班級12");
-            table.Columns.Add("座號12");
-            table.Columns.Add("班導師12");
             #endregion
 
             #region 異動紀錄
@@ -448,12 +421,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("應出席日數_4");
             table.Columns.Add("應出席日數_5");
             table.Columns.Add("應出席日數_6");
-            table.Columns.Add("應出席日數_7");
-            table.Columns.Add("應出席日數_8");
-            table.Columns.Add("應出席日數_9");
-            table.Columns.Add("應出席日數_10");
-            table.Columns.Add("應出席日數_11");
-            table.Columns.Add("應出席日數_12");
 
 
             table.Columns.Add("事假日數_1");
@@ -462,12 +429,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("事假日數_4");
             table.Columns.Add("事假日數_5");
             table.Columns.Add("事假日數_6");
-            table.Columns.Add("事假日數_7");
-            table.Columns.Add("事假日數_8");
-            table.Columns.Add("事假日數_9");
-            table.Columns.Add("事假日數_10");
-            table.Columns.Add("事假日數_11");
-            table.Columns.Add("事假日數_12");
 
 
             table.Columns.Add("病假日數_1");
@@ -476,12 +437,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("病假日數_4");
             table.Columns.Add("病假日數_5");
             table.Columns.Add("病假日數_6");
-            table.Columns.Add("病假日數_7");
-            table.Columns.Add("病假日數_8");
-            table.Columns.Add("病假日數_9");
-            table.Columns.Add("病假日數_10");
-            table.Columns.Add("病假日數_11");
-            table.Columns.Add("病假日數_12");
 
             table.Columns.Add("公假日數_1");
             table.Columns.Add("公假日數_2");
@@ -489,12 +444,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("公假日數_4");
             table.Columns.Add("公假日數_5");
             table.Columns.Add("公假日數_6");
-            table.Columns.Add("公假日數_7");
-            table.Columns.Add("公假日數_8");
-            table.Columns.Add("公假日數_9");
-            table.Columns.Add("公假日數_10");
-            table.Columns.Add("公假日數_11");
-            table.Columns.Add("公假日數_12");
 
             table.Columns.Add("喪假日數_1");
             table.Columns.Add("喪假日數_2");
@@ -502,12 +451,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("喪假日數_4");
             table.Columns.Add("喪假日數_5");
             table.Columns.Add("喪假日數_6");
-            table.Columns.Add("喪假日數_7");
-            table.Columns.Add("喪假日數_8");
-            table.Columns.Add("喪假日數_9");
-            table.Columns.Add("喪假日數_10");
-            table.Columns.Add("喪假日數_11");
-            table.Columns.Add("喪假日數_12");
 
             table.Columns.Add("曠課日數_1");
             table.Columns.Add("曠課日數_2");
@@ -515,12 +458,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("曠課日數_4");
             table.Columns.Add("曠課日數_5");
             table.Columns.Add("曠課日數_6");
-            table.Columns.Add("曠課日數_7");
-            table.Columns.Add("曠課日數_8");
-            table.Columns.Add("曠課日數_9");
-            table.Columns.Add("曠課日數_10");
-            table.Columns.Add("曠課日數_11");
-            table.Columns.Add("曠課日數_12");
 
             table.Columns.Add("缺席總日數_1");
             table.Columns.Add("缺席總日數_2");
@@ -528,12 +465,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("缺席總日數_4");
             table.Columns.Add("缺席總日數_5");
             table.Columns.Add("缺席總日數_6");
-            table.Columns.Add("缺席總日數_7");
-            table.Columns.Add("缺席總日數_8");
-            table.Columns.Add("缺席總日數_9");
-            table.Columns.Add("缺席總日數_10");
-            table.Columns.Add("缺席總日數_11");
-            table.Columns.Add("缺席總日數_12");
             #endregion
 
             #region 領域成績
@@ -544,12 +475,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_語文_成績_4");
             table.Columns.Add("領域_語文_成績_5");
             table.Columns.Add("領域_語文_成績_6");
-            table.Columns.Add("領域_語文_成績_7");
-            table.Columns.Add("領域_語文_成績_8");
-            table.Columns.Add("領域_語文_成績_9");
-            table.Columns.Add("領域_語文_成績_10");
-            table.Columns.Add("領域_語文_成績_11");
-            table.Columns.Add("領域_語文_成績_12");
 
 
             table.Columns.Add("領域_語文_等第_1");
@@ -558,12 +483,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_語文_等第_4");
             table.Columns.Add("領域_語文_等第_5");
             table.Columns.Add("領域_語文_等第_6");
-            table.Columns.Add("領域_語文_等第_7");
-            table.Columns.Add("領域_語文_等第_8");
-            table.Columns.Add("領域_語文_等第_9");
-            table.Columns.Add("領域_語文_等第_10");
-            table.Columns.Add("領域_語文_等第_11");
-            table.Columns.Add("領域_語文_等第_12");
 
 
             table.Columns.Add("領域_數學_成績_1");
@@ -572,12 +491,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_數學_成績_4");
             table.Columns.Add("領域_數學_成績_5");
             table.Columns.Add("領域_數學_成績_6");
-            table.Columns.Add("領域_數學_成績_7");
-            table.Columns.Add("領域_數學_成績_8");
-            table.Columns.Add("領域_數學_成績_9");
-            table.Columns.Add("領域_數學_成績_10");
-            table.Columns.Add("領域_數學_成績_11");
-            table.Columns.Add("領域_數學_成績_12");
 
 
             table.Columns.Add("領域_數學_等第_1");
@@ -586,12 +499,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_數學_等第_4");
             table.Columns.Add("領域_數學_等第_5");
             table.Columns.Add("領域_數學_等第_6");
-            table.Columns.Add("領域_數學_等第_7");
-            table.Columns.Add("領域_數學_等第_8");
-            table.Columns.Add("領域_數學_等第_9");
-            table.Columns.Add("領域_數學_等第_10");
-            table.Columns.Add("領域_數學_等第_11");
-            table.Columns.Add("領域_數學_等第_12");
 
 
             table.Columns.Add("領域_生活課程_成績_1");
@@ -600,12 +507,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_生活課程_成績_4");
             table.Columns.Add("領域_生活課程_成績_5");
             table.Columns.Add("領域_生活課程_成績_6");
-            table.Columns.Add("領域_生活課程_成績_7");
-            table.Columns.Add("領域_生活課程_成績_8");
-            table.Columns.Add("領域_生活課程_成績_9");
-            table.Columns.Add("領域_生活課程_成績_10");
-            table.Columns.Add("領域_生活課程_成績_11");
-            table.Columns.Add("領域_生活課程_成績_12");
 
 
             table.Columns.Add("領域_生活課程_等第_1");
@@ -614,12 +515,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_生活課程_等第_4");
             table.Columns.Add("領域_生活課程_等第_5");
             table.Columns.Add("領域_生活課程_等第_6");
-            table.Columns.Add("領域_生活課程_等第_7");
-            table.Columns.Add("領域_生活課程_等第_8");
-            table.Columns.Add("領域_生活課程_等第_9");
-            table.Columns.Add("領域_生活課程_等第_10");
-            table.Columns.Add("領域_生活課程_等第_11");
-            table.Columns.Add("領域_生活課程_等第_12");
 
 
             table.Columns.Add("領域_自然科學_成績_1");
@@ -628,12 +523,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_自然科學_成績_4");
             table.Columns.Add("領域_自然科學_成績_5");
             table.Columns.Add("領域_自然科學_成績_6");
-            table.Columns.Add("領域_自然科學_成績_7");
-            table.Columns.Add("領域_自然科學_成績_8");
-            table.Columns.Add("領域_自然科學_成績_9");
-            table.Columns.Add("領域_自然科學_成績_10");
-            table.Columns.Add("領域_自然科學_成績_11");
-            table.Columns.Add("領域_自然科學_成績_12");
 
 
             table.Columns.Add("領域_自然科學_等第_1");
@@ -642,12 +531,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_自然科學_等第_4");
             table.Columns.Add("領域_自然科學_等第_5");
             table.Columns.Add("領域_自然科學_等第_6");
-            table.Columns.Add("領域_自然科學_等第_7");
-            table.Columns.Add("領域_自然科學_等第_8");
-            table.Columns.Add("領域_自然科學_等第_9");
-            table.Columns.Add("領域_自然科學_等第_10");
-            table.Columns.Add("領域_自然科學_等第_11");
-            table.Columns.Add("領域_自然科學_等第_12");
 
 
             table.Columns.Add("領域_科技_成績_1");
@@ -656,12 +539,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_科技_成績_4");
             table.Columns.Add("領域_科技_成績_5");
             table.Columns.Add("領域_科技_成績_6");
-            table.Columns.Add("領域_科技_成績_7");
-            table.Columns.Add("領域_科技_成績_8");
-            table.Columns.Add("領域_科技_成績_9");
-            table.Columns.Add("領域_科技_成績_10");
-            table.Columns.Add("領域_科技_成績_11");
-            table.Columns.Add("領域_科技_成績_12");
 
 
             table.Columns.Add("領域_科技_等第_1");
@@ -670,12 +547,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_科技_等第_4");
             table.Columns.Add("領域_科技_等第_5");
             table.Columns.Add("領域_科技_等第_6");
-            table.Columns.Add("領域_科技_等第_7");
-            table.Columns.Add("領域_科技_等第_8");
-            table.Columns.Add("領域_科技_等第_9");
-            table.Columns.Add("領域_科技_等第_10");
-            table.Columns.Add("領域_科技_等第_11");
-            table.Columns.Add("領域_科技_等第_12");
 
 
             table.Columns.Add("領域_藝術_成績_1");
@@ -684,12 +555,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_藝術_成績_4");
             table.Columns.Add("領域_藝術_成績_5");
             table.Columns.Add("領域_藝術_成績_6");
-            table.Columns.Add("領域_藝術_成績_7");
-            table.Columns.Add("領域_藝術_成績_8");
-            table.Columns.Add("領域_藝術_成績_9");
-            table.Columns.Add("領域_藝術_成績_10");
-            table.Columns.Add("領域_藝術_成績_11");
-            table.Columns.Add("領域_藝術_成績_12");
 
 
             table.Columns.Add("領域_藝術_等第_1");
@@ -698,12 +563,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_藝術_等第_4");
             table.Columns.Add("領域_藝術_等第_5");
             table.Columns.Add("領域_藝術_等第_6");
-            table.Columns.Add("領域_藝術_等第_7");
-            table.Columns.Add("領域_藝術_等第_8");
-            table.Columns.Add("領域_藝術_等第_9");
-            table.Columns.Add("領域_藝術_等第_10");
-            table.Columns.Add("領域_藝術_等第_11");
-            table.Columns.Add("領域_藝術_等第_12");
 
 
             table.Columns.Add("領域_自然與生活科技_成績_1");
@@ -712,12 +571,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_自然與生活科技_成績_4");
             table.Columns.Add("領域_自然與生活科技_成績_5");
             table.Columns.Add("領域_自然與生活科技_成績_6");
-            table.Columns.Add("領域_自然與生活科技_成績_7");
-            table.Columns.Add("領域_自然與生活科技_成績_8");
-            table.Columns.Add("領域_自然與生活科技_成績_9");
-            table.Columns.Add("領域_自然與生活科技_成績_10");
-            table.Columns.Add("領域_自然與生活科技_成績_11");
-            table.Columns.Add("領域_自然與生活科技_成績_12");
 
 
             table.Columns.Add("領域_自然與生活科技_等第_1");
@@ -726,12 +579,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_自然與生活科技_等第_4");
             table.Columns.Add("領域_自然與生活科技_等第_5");
             table.Columns.Add("領域_自然與生活科技_等第_6");
-            table.Columns.Add("領域_自然與生活科技_等第_7");
-            table.Columns.Add("領域_自然與生活科技_等第_8");
-            table.Columns.Add("領域_自然與生活科技_等第_9");
-            table.Columns.Add("領域_自然與生活科技_等第_10");
-            table.Columns.Add("領域_自然與生活科技_等第_11");
-            table.Columns.Add("領域_自然與生活科技_等第_12");
 
 
             table.Columns.Add("領域_藝術與人文_成績_1");
@@ -740,12 +587,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_藝術與人文_成績_4");
             table.Columns.Add("領域_藝術與人文_成績_5");
             table.Columns.Add("領域_藝術與人文_成績_6");
-            table.Columns.Add("領域_藝術與人文_成績_7");
-            table.Columns.Add("領域_藝術與人文_成績_8");
-            table.Columns.Add("領域_藝術與人文_成績_9");
-            table.Columns.Add("領域_藝術與人文_成績_10");
-            table.Columns.Add("領域_藝術與人文_成績_11");
-            table.Columns.Add("領域_藝術與人文_成績_12");
 
 
             table.Columns.Add("領域_藝術與人文_等第_1");
@@ -754,12 +595,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_藝術與人文_等第_4");
             table.Columns.Add("領域_藝術與人文_等第_5");
             table.Columns.Add("領域_藝術與人文_等第_6");
-            table.Columns.Add("領域_藝術與人文_等第_7");
-            table.Columns.Add("領域_藝術與人文_等第_8");
-            table.Columns.Add("領域_藝術與人文_等第_9");
-            table.Columns.Add("領域_藝術與人文_等第_10");
-            table.Columns.Add("領域_藝術與人文_等第_11");
-            table.Columns.Add("領域_藝術與人文_等第_12");
 
 
 
@@ -769,12 +604,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_社會_成績_4");
             table.Columns.Add("領域_社會_成績_5");
             table.Columns.Add("領域_社會_成績_6");
-            table.Columns.Add("領域_社會_成績_7");
-            table.Columns.Add("領域_社會_成績_8");
-            table.Columns.Add("領域_社會_成績_9");
-            table.Columns.Add("領域_社會_成績_10");
-            table.Columns.Add("領域_社會_成績_11");
-            table.Columns.Add("領域_社會_成績_12");
 
 
             table.Columns.Add("領域_社會_等第_1");
@@ -783,12 +612,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_社會_等第_4");
             table.Columns.Add("領域_社會_等第_5");
             table.Columns.Add("領域_社會_等第_6");
-            table.Columns.Add("領域_社會_等第_7");
-            table.Columns.Add("領域_社會_等第_8");
-            table.Columns.Add("領域_社會_等第_9");
-            table.Columns.Add("領域_社會_等第_10");
-            table.Columns.Add("領域_社會_等第_11");
-            table.Columns.Add("領域_社會_等第_12");
 
 
             table.Columns.Add("領域_健康與體育_成績_1");
@@ -797,12 +620,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_健康與體育_成績_4");
             table.Columns.Add("領域_健康與體育_成績_5");
             table.Columns.Add("領域_健康與體育_成績_6");
-            table.Columns.Add("領域_健康與體育_成績_7");
-            table.Columns.Add("領域_健康與體育_成績_8");
-            table.Columns.Add("領域_健康與體育_成績_9");
-            table.Columns.Add("領域_健康與體育_成績_10");
-            table.Columns.Add("領域_健康與體育_成績_11");
-            table.Columns.Add("領域_健康與體育_成績_12");
 
 
             table.Columns.Add("領域_健康與體育_等第_1");
@@ -811,12 +628,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_健康與體育_等第_4");
             table.Columns.Add("領域_健康與體育_等第_5");
             table.Columns.Add("領域_健康與體育_等第_6");
-            table.Columns.Add("領域_健康與體育_等第_7");
-            table.Columns.Add("領域_健康與體育_等第_8");
-            table.Columns.Add("領域_健康與體育_等第_9");
-            table.Columns.Add("領域_健康與體育_等第_10");
-            table.Columns.Add("領域_健康與體育_等第_11");
-            table.Columns.Add("領域_健康與體育_等第_12");
 
 
             table.Columns.Add("領域_綜合活動_成績_1");
@@ -825,12 +636,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_綜合活動_成績_4");
             table.Columns.Add("領域_綜合活動_成績_5");
             table.Columns.Add("領域_綜合活動_成績_6");
-            table.Columns.Add("領域_綜合活動_成績_7");
-            table.Columns.Add("領域_綜合活動_成績_8");
-            table.Columns.Add("領域_綜合活動_成績_9");
-            table.Columns.Add("領域_綜合活動_成績_10");
-            table.Columns.Add("領域_綜合活動_成績_11");
-            table.Columns.Add("領域_綜合活動_成績_12");
 
 
             table.Columns.Add("領域_綜合活動_等第_1");
@@ -839,12 +644,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_綜合活動_等第_4");
             table.Columns.Add("領域_綜合活動_等第_5");
             table.Columns.Add("領域_綜合活動_等第_6");
-            table.Columns.Add("領域_綜合活動_等第_7");
-            table.Columns.Add("領域_綜合活動_等第_8");
-            table.Columns.Add("領域_綜合活動_等第_9");
-            table.Columns.Add("領域_綜合活動_等第_10");
-            table.Columns.Add("領域_綜合活動_等第_11");
-            table.Columns.Add("領域_綜合活動_等第_12");
 
             table.Columns.Add("領域_彈性課程_成績_1");
             table.Columns.Add("領域_彈性課程_成績_2");
@@ -852,12 +651,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_彈性課程_成績_4");
             table.Columns.Add("領域_彈性課程_成績_5");
             table.Columns.Add("領域_彈性課程_成績_6");
-            table.Columns.Add("領域_彈性課程_成績_7");
-            table.Columns.Add("領域_彈性課程_成績_8");
-            table.Columns.Add("領域_彈性課程_成績_9");
-            table.Columns.Add("領域_彈性課程_成績_10");
-            table.Columns.Add("領域_彈性課程_成績_11");
-            table.Columns.Add("領域_彈性課程_成績_12");
 
 
             table.Columns.Add("領域_彈性課程_等第_1");
@@ -866,12 +659,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_彈性課程_等第_4");
             table.Columns.Add("領域_彈性課程_等第_5");
             table.Columns.Add("領域_彈性課程_等第_6");
-            table.Columns.Add("領域_彈性課程_等第_7");
-            table.Columns.Add("領域_彈性課程_等第_8");
-            table.Columns.Add("領域_彈性課程_等第_9");
-            table.Columns.Add("領域_彈性課程_等第_10");
-            table.Columns.Add("領域_彈性課程_等第_11");
-            table.Columns.Add("領域_彈性課程_等第_12");
 
 
             table.Columns.Add("領域_學習領域總成績_成績_1");
@@ -880,12 +667,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_學習領域總成績_成績_4");
             table.Columns.Add("領域_學習領域總成績_成績_5");
             table.Columns.Add("領域_學習領域總成績_成績_6");
-            table.Columns.Add("領域_學習領域總成績_成績_7");
-            table.Columns.Add("領域_學習領域總成績_成績_8");
-            table.Columns.Add("領域_學習領域總成績_成績_9");
-            table.Columns.Add("領域_學習領域總成績_成績_10");
-            table.Columns.Add("領域_學習領域總成績_成績_11");
-            table.Columns.Add("領域_學習領域總成績_成績_12");
 
 
             table.Columns.Add("領域_學習領域總成績_等第_1");
@@ -894,12 +675,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_學習領域總成績_等第_4");
             table.Columns.Add("領域_學習領域總成績_等第_5");
             table.Columns.Add("領域_學習領域總成績_等第_6");
-            table.Columns.Add("領域_學習領域總成績_等第_7");
-            table.Columns.Add("領域_學習領域總成績_等第_8");
-            table.Columns.Add("領域_學習領域總成績_等第_9");
-            table.Columns.Add("領域_學習領域總成績_等第_10");
-            table.Columns.Add("領域_學習領域總成績_等第_11");
-            table.Columns.Add("領域_學習領域總成績_等第_12");
 
             table.Columns.Add("領域_課程學習成績_成績_1");
             table.Columns.Add("領域_課程學習成績_成績_2");
@@ -907,12 +682,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_課程學習成績_成績_4");
             table.Columns.Add("領域_課程學習成績_成績_5");
             table.Columns.Add("領域_課程學習成績_成績_6");
-            table.Columns.Add("領域_課程學習成績_成績_7");
-            table.Columns.Add("領域_課程學習成績_成績_8");
-            table.Columns.Add("領域_課程學習成績_成績_9");
-            table.Columns.Add("領域_課程學習成績_成績_10");
-            table.Columns.Add("領域_課程學習成績_成績_11");
-            table.Columns.Add("領域_課程學習成績_成績_12");
 
 
             table.Columns.Add("領域_課程學習成績_等第_1");
@@ -921,12 +690,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("領域_課程學習成績_等第_4");
             table.Columns.Add("領域_課程學習成績_等第_5");
             table.Columns.Add("領域_課程學習成績_等第_6");
-            table.Columns.Add("領域_課程學習成績_等第_7");
-            table.Columns.Add("領域_課程學習成績_等第_8");
-            table.Columns.Add("領域_課程學習成績_等第_9");
-            table.Columns.Add("領域_課程學習成績_等第_10");
-            table.Columns.Add("領域_課程學習成績_等第_11");
-            table.Columns.Add("領域_課程學習成績_等第_12");
             #endregion
 
             #region 科目成績
@@ -1026,14 +789,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("日常生活表現及具體建議_4");
             table.Columns.Add("日常生活表現及具體建議_5");
             table.Columns.Add("日常生活表現及具體建議_6");
-            table.Columns.Add("日常生活表現及具體建議_7");
-            table.Columns.Add("日常生活表現及具體建議_8");
-            table.Columns.Add("日常生活表現及具體建議_9");
-            table.Columns.Add("日常生活表現及具體建議_10");
-            table.Columns.Add("日常生活表現及具體建議_11");
-            table.Columns.Add("日常生活表現及具體建議_12");
-
-
             #endregion
 
             #region 校內外特殊表現
@@ -1044,14 +799,6 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("校內外特殊表現_4");
             table.Columns.Add("校內外特殊表現_5");
             table.Columns.Add("校內外特殊表現_6");
-            table.Columns.Add("校內外特殊表現_7");
-            table.Columns.Add("校內外特殊表現_8");
-            table.Columns.Add("校內外特殊表現_9");
-            table.Columns.Add("校內外特殊表現_10");
-            table.Columns.Add("校內外特殊表現_11");
-            table.Columns.Add("校內外特殊表現_12");
-
-
             #endregion 
             #endregion
 
@@ -1306,7 +1053,7 @@ namespace HsinChu.StudentRecordReportVer2
                 // 建立缺曠 對照字典
                 foreach (string ab in absenceType_list)
                 {
-                    for (int i = 1; i <= 12; i++)
+                    for (int i = 1; i <= 6; i++)
                     {
                         arStatistic_dict.Add(ab + "日數_" + i, 0);
                     }
@@ -1315,7 +1062,7 @@ namespace HsinChu.StudentRecordReportVer2
                 // 建立領域成績 對照字典
                 foreach (string dst in domainScoreType_list)
                 {
-                    for (int i = 1; i <= 12; i++)
+                    for (int i = 1; i <= 6; i++)
                     {
                         domainScore_dict.Add(dst + i, null);
                     }
@@ -1324,7 +1071,7 @@ namespace HsinChu.StudentRecordReportVer2
                 // 建立領域等第 對照字典
                 foreach (string dlt in domainLevelType_list)
                 {
-                    for (int i = 1; i <= 12; i++)
+                    for (int i = 1; i <= 6; i++)
                     {
                         domainLevel_dict.Add(dlt + i, null);
                     }
@@ -1333,7 +1080,7 @@ namespace HsinChu.StudentRecordReportVer2
                 // 建立科目成績 對照字典
                 foreach (string sst in subjectScoreType_list)
                 {
-                    for (int i = 1; i <= 12; i++)
+                    for (int i = 1; i <= 6; i++)
                     {
                         subjectScore_dict.Add(sst + i, null);
 
@@ -1348,7 +1095,7 @@ namespace HsinChu.StudentRecordReportVer2
                 // 建立科目等第 對照字典
                 foreach (string slt in subjectLevelType_list)
                 {
-                    for (int i = 1; i <= 12; i++)
+                    for (int i = 1; i <= 6; i++)
                     {
                         subjectLevel_dict.Add(slt + i, null);
 
@@ -1360,7 +1107,7 @@ namespace HsinChu.StudentRecordReportVer2
                 }
 
                 // 建立文字評量 對照字典
-                for (int i = 1; i <= 12; i++)
+                for (int i = 1; i <= 6; i++)
                 {
                     textScore_dict.Add("日常生活表現及具體建議_" + i, null);
                     textScore_dict.Add("校內外特殊表現_" + i, null);
@@ -1500,73 +1247,6 @@ namespace HsinChu.StudentRecordReportVer2
                                 row["班導師6"] = item.Teacher;
                             }
                         }
-                        if (item.GradeYear == 4)
-                        {
-                            row["學年度4"] = item.SchoolYear;
-
-                            //為學生的年級與學年配對
-                            schoolyear_grade4 = item.SchoolYear;
-
-                            if (item.Semester == 1)
-                            {
-                                row["應出席日數_7"] = item.SchoolDayCount;
-                                row["班級7"] = item.ClassName;
-                                row["座號7"] = item.SeatNo;
-                                row["班導師7"] = item.Teacher;
-                            }
-                            else
-                            {
-                                row["應出席日數_8"] = item.SchoolDayCount;
-                                row["班級8"] = item.ClassName;
-                                row["座號8"] = item.SeatNo;
-                                row["班導師8"] = item.Teacher;
-
-                            }
-                        }
-                        if (item.GradeYear == 5)
-                        {
-                            row["學年度5"] = item.SchoolYear;
-
-                            //為學生的年級與學年配對
-                            schoolyear_grade5 = item.SchoolYear;
-
-                            if (item.Semester == 1)
-                            {
-                                row["應出席日數_9"] = item.SchoolDayCount;
-                                row["班級9"] = item.ClassName;
-                                row["座號9"] = item.SeatNo;
-                                row["班導師9"] = item.Teacher;
-                            }
-                            else
-                            {
-                                row["應出席日數_10"] = item.SchoolDayCount;
-                                row["班級10"] = item.ClassName;
-                                row["座號10"] = item.SeatNo;
-                                row["班導師10"] = item.Teacher;
-                            }
-                        }
-                        if (item.GradeYear == 6)
-                        {
-                            row["學年度6"] = item.SchoolYear;
-
-                            //為學生的年級與學年配對
-                            schoolyear_grade6 = item.SchoolYear;
-
-                            if (item.Semester == 1)
-                            {
-                                row["應出席日數_11"] = item.SchoolDayCount;
-                                row["班級11"] = item.ClassName;
-                                row["座號11"] = item.SeatNo;
-                                row["班導師11"] = item.Teacher;
-                            }
-                            else
-                            {
-                                row["應出席日數_12"] = item.SchoolDayCount;
-                                row["班級12"] = item.ClassName;
-                                row["座號12"] = item.SeatNo;
-                                row["班導師12"] = item.Teacher;
-                            }
-                        }
                     }
                 }
 
@@ -1576,14 +1256,11 @@ namespace HsinChu.StudentRecordReportVer2
                 schoolyear_grade_dict.Add(1, schoolyear_grade1);
                 schoolyear_grade_dict.Add(2, schoolyear_grade2);
                 schoolyear_grade_dict.Add(3, schoolyear_grade3);
-                schoolyear_grade_dict.Add(4, schoolyear_grade4);
-                schoolyear_grade_dict.Add(5, schoolyear_grade5);
-                schoolyear_grade_dict.Add(6, schoolyear_grade6);
 
                 //出缺勤
                 if (_AttendanceRecordDic.ContainsKey(stuID))
                 {
-                    for (int grade = 1; grade <= 6; grade++)
+                    for (int grade = 1; grade <= 3; grade++)
                     {
                         foreach (var ar in _AttendanceRecordDic[stuID])
                         {
@@ -1670,7 +1347,7 @@ namespace HsinChu.StudentRecordReportVer2
                     // 任一領域的科目數量是否超過
                     bool isExceed = false;
 
-                    for (int grade = 1; grade <= 6; grade++)
+                    for (int grade = 1; grade <= 3; grade++)
                     {
                         foreach (JHSemesterScoreRecord semesterScoreRecord in _SemesterScoreRecordDic[stuID])
                         {
@@ -1724,7 +1401,7 @@ namespace HsinChu.StudentRecordReportVer2
                     // 彈性課程記數
                     int AlternativeCourse = 0;
 
-                    for (int grade = 1; grade <= 6; grade++)
+                    for (int grade = 1; grade <= 3; grade++)
                     {
                         foreach (JHSemesterScoreRecord semesterScoreRecord in _SemesterScoreRecordDic[stuID])
                         {
@@ -1762,7 +1439,7 @@ namespace HsinChu.StudentRecordReportVer2
 
                 if (_SemesterScoreRecordDic.ContainsKey(stuID))
                 {
-                    for (int grade = 1; grade <= 6; grade++)
+                    for (int grade = 1; grade <= 3; grade++)
                     {
                         foreach (JHSemesterScoreRecord semesterScoreRecord in _SemesterScoreRecordDic[stuID])
                         {
@@ -2119,7 +1796,7 @@ namespace HsinChu.StudentRecordReportVer2
                 // 日常生活表現、校內外特殊表現
                 if (_MoralScoreRecordDic.ContainsKey(stuID))
                 {
-                    for (int grade = 1; grade <= 6; grade++)
+                    for (int grade = 1; grade <= 3; grade++)
                     {
                         foreach (var msr in _MoralScoreRecordDic[stuID])
                         {
