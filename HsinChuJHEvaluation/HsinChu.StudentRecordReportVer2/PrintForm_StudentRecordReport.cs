@@ -159,7 +159,7 @@ namespace HsinChu.StudentRecordReportVer2
             List<K12.Data.GradScoreRecord> graduateScoreRecordList = K12.Data.GradScore.SelectByIDs<K12.Data.GradScoreRecord>(_StudentIDs);
 
             //異動
-            List<K12.Data.UpdateRecordRecord> updateRecordRecordList = K12.Data.UpdateRecord.SelectByIDs(_StudentIDs);
+            List<K12.Data.UpdateRecordRecord> updateRecordRecordList = K12.Data.UpdateRecord.SelectByStudentIDs(_StudentIDs);
 
             //日常生活表現、校內外特殊表現
             List<K12.Data.MoralScoreRecord> moralScoreRecordList = K12.Data.MoralScore.SelectByStudentIDs(_StudentIDs);
@@ -313,6 +313,7 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("戶籍電話");
             table.Columns.Add("聯絡地址");
             table.Columns.Add("聯絡電話");
+            table.Columns.Add("學校名稱");
             #endregion
 
             #region 學年度
@@ -1143,6 +1144,7 @@ namespace HsinChu.StudentRecordReportVer2
                     row["入學年月"] = "";
                     row["學生身分證字號"] = _StudentRecordDic[stuID].IDNumber;
                     row["學號"] = _StudentRecordDic[stuID].StudentNumber;
+                    row["學校名稱"] = K12.Data.School.ChineseName;
 
                     _PrintStudents.Add(_StudentRecordDic[stuID]);
                 }
@@ -1672,8 +1674,8 @@ namespace HsinChu.StudentRecordReportVer2
                     row["畢業總成績_等第"] = ScoreToLevel(_GraduateScoreRecordDic[stuID].LearnDomainScore);
 
                     // 60 分 就可以 准予畢業
-                    row["准予畢業"] = _GraduateScoreRecordDic[stuID].LearnDomainScore > 60 ? "■" : "□";
-                    row["發給修業證書"] = _GraduateScoreRecordDic[stuID].LearnDomainScore > 60 ? "□" : "■";
+                    row["准予畢業"] = _GraduateScoreRecordDic[stuID].LearnDomainScore >= 60 ? "■" : "□";
+                    row["發給修業證書"] = _GraduateScoreRecordDic[stuID].LearnDomainScore >= 60 ? "□" : "■";
                 }
 
                 // 異動資料
@@ -1695,7 +1697,7 @@ namespace HsinChu.StudentRecordReportVer2
                             row["入學年月"] = enterday.ToString("yyyy/MM");
 
                             row["異動紀錄" + updateRecordCount + "_日期"] = urr.UpdateDate;
-                            row["異動紀錄" + updateRecordCount + "_校名"] = ""; // 2019/03/15 怡芬說 新生異動 校名 空白
+                            row["異動紀錄" + updateRecordCount + "_校名"] = "" + urr.Attributes["GraduateSchool"];
                             row["異動紀錄" + updateRecordCount + "_類別"] = "新生";
                             row["異動紀錄" + updateRecordCount + "_核准日期"] = urr.ADDate;
                             row["異動紀錄" + updateRecordCount + "_核准文號"] = urr.ADNumber;
