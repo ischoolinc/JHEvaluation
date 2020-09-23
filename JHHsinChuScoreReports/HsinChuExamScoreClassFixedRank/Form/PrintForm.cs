@@ -49,6 +49,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
         BackgroundWorker bgWorkerReport;
         string SelSchoolYear = "";
         string SelSemester = "";
+        string RefSelSchoolYear = "";
+        string RefSelSemester = "";
         string SelExamID = "";
         string SelExamName = "";
         string SelRefExamID = "";
@@ -211,7 +213,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             DataTable dtStudentExamRankMatrix = DataAccess.GetStudentExamRankMatrix(SelSchoolYear, SelSemester, SelExamID, _ClassIDList);
 
             // 取得取得學生評量固定排名(參考試別)
-            DataTable dtStudentRefExamRankMatrix = DataAccess.GetStudentExamRankMatrix(SelSchoolYear, SelSemester, SelRefExamID, _ClassIDList);
+            DataTable dtStudentRefExamRankMatrix = DataAccess.GetStudentExamRankMatrix(RefSelSchoolYear, RefSelSemester, SelRefExamID, _ClassIDList);
 
             // 取得固定排名 班級、年級 五標與組距
             DataTable dtClassExamRankMatrix = DataAccess.GetClassExamRankMatrix(SelSchoolYear, SelSemester, SelExamID, _ClassIDList);
@@ -2300,6 +2302,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
             if (_Configure == null) return;
             _Configure.SchoolYear = cboSchoolYear.Text;
             _Configure.Semester = cboSemester.Text;
+            _Configure.RefSchoolYear = cboRefSchoolYear.Text;
+            _Configure.RefSemester = cboRefSemester.Text;
             _Configure.SelSetConfigName = cboConfigure.Text;
 
             // 四捨五入進位
@@ -2426,14 +2430,18 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 for (int i = (sy - 2); i <= (sy + 3); i++)
                 {
                     cboSchoolYear.Items.Add(i);
+                    cboRefSchoolYear.Items.Add(i);
                 }
             }
 
             cboSemester.Items.Add("1");
             cboSemester.Items.Add("2");
-
+            cboRefSemester.Items.Add("1");
+            cboRefSemester.Items.Add("2");
             cboSchoolYear.Text = K12.Data.School.DefaultSchoolYear;
             cboSemester.Text = K12.Data.School.DefaultSemester;
+            cboRefSchoolYear.Text = K12.Data.School.DefaultSchoolYear;
+            cboRefSemester.Text = K12.Data.School.DefaultSemester;
             for (int i = 0; i <= 3; i++)
                 cboParseNumber.Items.Add(i);
 
@@ -2694,6 +2702,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
             SelSchoolYear = cboSchoolYear.Text;
             SelSemester = cboSemester.Text;
+            RefSelSchoolYear = cboRefSchoolYear.Text;
+            RefSelSemester = cboRefSemester.Text;
 
             // 四捨五入進位
             if (!int.TryParse(cboParseNumber.Text, out parseNumber))
@@ -2830,6 +2840,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         cboSchoolYear.Items.Add(_Configure.SchoolYear);
                     cboSchoolYear.Text = _Configure.SchoolYear;
                     cboSemester.Text = _Configure.Semester;
+                    cboRefSchoolYear.Text = _Configure.RefSchoolYear;
+                    cboRefSemester.Text = _Configure.RefSemester;
                     cboExam.Text = "";
                     if (_Configure.ExamRecord != null)
                     {
@@ -2910,5 +2922,6 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 }
             }
         }
+
     }
 }

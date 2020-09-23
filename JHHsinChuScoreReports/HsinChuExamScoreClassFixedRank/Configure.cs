@@ -32,6 +32,17 @@ namespace HsinChuExamScoreClassFixedRank
         public string Semester { get; set; }
 
         /// <summary>
+        /// 參考學年度
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string RefSchoolYear { get; set; }
+        /// <summary>
+        /// 參考學期
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string RefSemester { get; set; }
+
+        /// <summary>
         /// 列印樣板
         /// </summary>
         [FISCA.UDT.Field]

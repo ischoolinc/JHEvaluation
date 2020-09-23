@@ -53,6 +53,9 @@
             this.cboParseNumber = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.cboRefExam = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX6 = new DevComponents.DotNetBar.LabelX();
+            this.labelX7 = new DevComponents.DotNetBar.LabelX();
+            this.cboRefSchoolYear = new DevComponents.DotNetBar.Controls.ComboBoxEx();
+            this.cboRefSemester = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.groupPanel1.SuspendLayout();
             this.groupPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -199,7 +202,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkViewMapColumns.AutoSize = true;
             this.lnkViewMapColumns.BackColor = System.Drawing.Color.Transparent;
-            this.lnkViewMapColumns.Location = new System.Drawing.Point(200, 428);
+            this.lnkViewMapColumns.Location = new System.Drawing.Point(195, 463);
             this.lnkViewMapColumns.Name = "lnkViewMapColumns";
             this.lnkViewMapColumns.Size = new System.Drawing.Size(112, 17);
             this.lnkViewMapColumns.TabIndex = 9;
@@ -213,7 +216,7 @@
             this.btnSaveConfig.BackColor = System.Drawing.Color.Transparent;
             this.btnSaveConfig.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
             this.btnSaveConfig.Enabled = false;
-            this.btnSaveConfig.Location = new System.Drawing.Point(334, 425);
+            this.btnSaveConfig.Location = new System.Drawing.Point(329, 460);
             this.btnSaveConfig.Name = "btnSaveConfig";
             this.btnSaveConfig.Size = new System.Drawing.Size(75, 23);
             this.btnSaveConfig.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -228,7 +231,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkViewTemplate.AutoSize = true;
             this.lnkViewTemplate.BackColor = System.Drawing.Color.Transparent;
-            this.lnkViewTemplate.Location = new System.Drawing.Point(21, 428);
+            this.lnkViewTemplate.Location = new System.Drawing.Point(16, 463);
             this.lnkViewTemplate.Name = "lnkViewTemplate";
             this.lnkViewTemplate.Size = new System.Drawing.Size(86, 17);
             this.lnkViewTemplate.TabIndex = 7;
@@ -242,7 +245,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkChangeTemplate.AutoSize = true;
             this.lnkChangeTemplate.BackColor = System.Drawing.Color.Transparent;
-            this.lnkChangeTemplate.Location = new System.Drawing.Point(110, 428);
+            this.lnkChangeTemplate.Location = new System.Drawing.Point(105, 463);
             this.lnkChangeTemplate.Name = "lnkChangeTemplate";
             this.lnkChangeTemplate.Size = new System.Drawing.Size(86, 17);
             this.lnkChangeTemplate.TabIndex = 8;
@@ -257,7 +260,7 @@
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
             this.btnPrint.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnPrint.Enabled = false;
-            this.btnPrint.Location = new System.Drawing.Point(419, 425);
+            this.btnPrint.Location = new System.Drawing.Point(414, 460);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(67, 23);
             this.btnPrint.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -271,7 +274,7 @@
             this.btnCancel.BackColor = System.Drawing.Color.Transparent;
             this.btnCancel.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(492, 425);
+            this.btnCancel.Location = new System.Drawing.Point(487, 460);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(67, 23);
             this.btnCancel.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -285,7 +288,7 @@
             this.groupPanel1.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.groupPanel1.Controls.Add(this.lvSubject);
-            this.groupPanel1.Location = new System.Drawing.Point(24, 145);
+            this.groupPanel1.Location = new System.Drawing.Point(19, 180);
             this.groupPanel1.Name = "groupPanel1";
             this.groupPanel1.Size = new System.Drawing.Size(265, 256);
             // 
@@ -329,6 +332,7 @@
             this.lvSubject.Border.Class = "ListViewBorder";
             this.lvSubject.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSubject.CheckBoxes = true;
+            this.lvSubject.HideSelection = false;
             this.lvSubject.Location = new System.Drawing.Point(3, 7);
             this.lvSubject.Name = "lvSubject";
             this.lvSubject.Size = new System.Drawing.Size(253, 216);
@@ -342,7 +346,7 @@
             this.groupPanel2.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel2.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.groupPanel2.Controls.Add(this.lvDomain);
-            this.groupPanel2.Location = new System.Drawing.Point(305, 145);
+            this.groupPanel2.Location = new System.Drawing.Point(300, 180);
             this.groupPanel2.Name = "groupPanel2";
             this.groupPanel2.Size = new System.Drawing.Size(265, 256);
             // 
@@ -386,6 +390,7 @@
             this.lvDomain.Border.Class = "ListViewBorder";
             this.lvDomain.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvDomain.CheckBoxes = true;
+            this.lvDomain.HideSelection = false;
             this.lvDomain.Location = new System.Drawing.Point(3, 6);
             this.lvDomain.Name = "lvDomain";
             this.lvDomain.Size = new System.Drawing.Size(253, 216);
@@ -443,7 +448,7 @@
             this.cboRefExam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRefExam.FormattingEnabled = true;
             this.cboRefExam.ItemHeight = 19;
-            this.cboRefExam.Location = new System.Drawing.Point(375, 103);
+            this.cboRefExam.Location = new System.Drawing.Point(375, 137);
             this.cboRefExam.Name = "cboRefExam";
             this.cboRefExam.Size = new System.Drawing.Size(189, 25);
             this.cboRefExam.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -459,17 +464,61 @@
             // 
             this.labelX6.BackgroundStyle.Class = "";
             this.labelX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX6.Location = new System.Drawing.Point(311, 105);
+            this.labelX6.Location = new System.Drawing.Point(311, 139);
             this.labelX6.Name = "labelX6";
             this.labelX6.Size = new System.Drawing.Size(60, 21);
             this.labelX6.TabIndex = 45;
             this.labelX6.Text = "參考試別";
             // 
+            // labelX7
+            // 
+            this.labelX7.AutoSize = true;
+            this.labelX7.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX7.BackgroundStyle.Class = "";
+            this.labelX7.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX7.Location = new System.Drawing.Point(311, 104);
+            this.labelX7.Name = "labelX7";
+            this.labelX7.Size = new System.Drawing.Size(87, 21);
+            this.labelX7.TabIndex = 46;
+            this.labelX7.Text = "參考學年學期";
+            // 
+            // cboRefSchoolYear
+            // 
+            this.cboRefSchoolYear.DisplayMember = "Text";
+            this.cboRefSchoolYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboRefSchoolYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboRefSchoolYear.FormattingEnabled = true;
+            this.cboRefSchoolYear.ItemHeight = 19;
+            this.cboRefSchoolYear.Location = new System.Drawing.Point(404, 103);
+            this.cboRefSchoolYear.Name = "cboRefSchoolYear";
+            this.cboRefSchoolYear.Size = new System.Drawing.Size(83, 25);
+            this.cboRefSchoolYear.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cboRefSchoolYear.TabIndex = 47;
+            // 
+            // cboRefSemester
+            // 
+            this.cboRefSemester.DisplayMember = "Text";
+            this.cboRefSemester.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboRefSemester.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboRefSemester.FormattingEnabled = true;
+            this.cboRefSemester.ItemHeight = 19;
+            this.cboRefSemester.Location = new System.Drawing.Point(494, 103);
+            this.cboRefSemester.Name = "cboRefSemester";
+            this.cboRefSemester.Size = new System.Drawing.Size(71, 25);
+            this.cboRefSemester.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cboRefSemester.TabIndex = 48;
+            // 
             // PrintForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(593, 465);
+            this.ClientSize = new System.Drawing.Size(593, 523);
+            this.Controls.Add(this.cboRefSemester);
+            this.Controls.Add(this.cboRefSchoolYear);
+            this.Controls.Add(this.labelX7);
             this.Controls.Add(this.cboRefExam);
             this.Controls.Add(this.labelX6);
             this.Controls.Add(this.cboParseNumber);
@@ -531,5 +580,8 @@
         private DevComponents.DotNetBar.Controls.ComboBoxEx cboParseNumber;
         private DevComponents.DotNetBar.Controls.ComboBoxEx cboRefExam;
         private DevComponents.DotNetBar.LabelX labelX6;
+        private DevComponents.DotNetBar.LabelX labelX7;
+        private DevComponents.DotNetBar.Controls.ComboBoxEx cboRefSchoolYear;
+        private DevComponents.DotNetBar.Controls.ComboBoxEx cboRefSemester;
     }
 }
