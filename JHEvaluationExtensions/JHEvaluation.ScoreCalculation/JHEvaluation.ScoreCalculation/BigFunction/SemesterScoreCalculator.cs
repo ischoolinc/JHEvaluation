@@ -254,7 +254,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             domainText[strDomain] += GetDomainSubjectText(strSubj, objSubj.Text);
 
                             //領域補考成績總和 ，算法為 先用各科目的"成績" 加權計算 ， 之後會再判斷， 此成績總和 是否含有"補考成績" 是否為"補考成績總和"
-                            domainMakeUpScoreTotal[strDomain] += objSubj.Value.Value * objSubj.Weight.Value;
+                           
+                            if (objSubj.ScoreMakeup.HasValue && objSubj.Weight.HasValue)
+                                 domainMakeUpScoreTotal[strDomain] += objSubj.ScoreMakeup.Value * objSubj.Weight.Value;
                         }
                     }
                     #endregion
@@ -313,6 +315,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     {
                         decimal total = 0;
                         decimal totalOrigin = 0;
+                        decimal totalScoreMakeup = 0;
                         decimal totalEffort = 0;
 
                         decimal weight = 0;
@@ -353,18 +356,17 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                                     if (subScore.ScoreOrigin.HasValue)
                                         totalOrigin += subScore.ScoreOrigin.Value * subScore.Weight.Value;
+                                    
+                                    if (subScore.ScoreMakeup.HasValue)
+                                        totalScoreMakeup += subScore.ScoreMakeup.Value * subScore.Weight.Value;
 
                                     if (subScore.Effort.HasValue)
                                         totalEffort += subScore.Effort.Value * subScore.Weight.Value;
                                 }
-
-
-
+                                
                                 weight += subScore.Weight.HasValue ? subScore.Weight.Value : 0;
                                 period += subScore.Period.HasValue ? subScore.Period.Value : 0;
-
-                                if (subScore.ScoreMakeup.HasValue)
-                                    hasMakeupScore = true;
+                                                    
                             }
                         }
 
@@ -373,6 +375,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         {
                             decimal weightValueAvg = rule.ParseDomainScore(total / weight);
                             decimal weightOriginAvg = rule.ParseDomainScore(totalOrigin / weight);
+                            decimal weightScoreMakeup = rule.ParseDomainScore(totalScoreMakeup / weight);
+
                             int effortAvg = Convert.ToInt32(decimal.Round(totalEffort / weight, 0, MidpointRounding.AwayFromZero));
 
                             var strDomain = "語文";
@@ -392,7 +396,12 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             dscore.Period = period;
                             dscore.Text = "";
                             dscore.Effort = effortAvg;
-                            dscore.ScoreMakeup = hasMakeupScore ? weightValueAvg : dscore.ScoreMakeup;//補考成績若無更新則保留原值
+
+                            dscore.ScoreMakeup = weightScoreMakeup;
+                            //// 這段不需，邏輯有問題
+                            //dscore.ScoreMakeup = hasMakeupScore ? weightValueAvg : dscore.ScoreMakeup;//補考成績若無更新則保留原值
+
+
                             //填入dscore.Value
                             if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
                                 dscore.BetterScoreSelection(setting.DomainScoreLimit);
