@@ -30,12 +30,27 @@ namespace HsinChuExamScore_JH
          [FISCA.UDT.Field]
          public string Semester { get; set; }
 
+        /// <summary>
+        /// 參考學年度
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string RefSchoolYear { get; set; }
+        /// <summary>
+        /// 參考學期
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string RefSemester { get; set; }
 
+        /// <summary>
+        /// 成績顯示位數
+        /// </summary>
+        [FISCA.UDT.Field]
+        public int ParseNumber { get; set; }
 
-         /// <summary>
-         /// 列印樣板
-         /// </summary>
-         [FISCA.UDT.Field]
+        /// <summary>
+        /// 列印樣板
+        /// </summary>
+        [FISCA.UDT.Field]
          private string TemplateStream { get; set; }
          public Aspose.Words.Document Template { get; set; }
 
@@ -51,10 +66,17 @@ namespace HsinChuExamScore_JH
          private string ExamRecordID { get; set; }
          public K12.Data.ExamRecord ExamRecord { get; set; }
 
-         /// <summary>
-         /// 列印科別
-         /// </summary>
-         [FISCA.UDT.Field]
+        /// <summary>
+        /// 參考列印試別
+        /// </summary>
+        [FISCA.UDT.Field]
+        private string RefExamRecordID { get; set; }
+        public K12.Data.ExamRecord RefExamRecord { get; set; }
+
+        /// <summary>
+        /// 列印科別
+        /// </summary>
+        [FISCA.UDT.Field]
          private string PrintSubjectListString { get; set; }
          public List<string> PrintSubjectList { get;  set; }
 
@@ -103,8 +125,9 @@ namespace HsinChuExamScore_JH
          public void Encode()
          {
              this.ExamRecordID = (this.ExamRecord == null ? "" : this.ExamRecord.ID);
-             // 科目
-             this.PrintSubjectListString = "";
+            this.RefExamRecordID = (this.RefExamRecord == null ? "" : this.RefExamRecord.ID);
+            // 科目
+            this.PrintSubjectListString = "";
              if (this.PrintSubjectList == null)
                  this.PrintSubjectList = new List<string>();
 
@@ -133,8 +156,9 @@ namespace HsinChuExamScore_JH
          public void Decode()
          {
              this.ExamRecord = K12.Data.Exam.SelectByID(this.ExamRecordID);
-             // 科目
-             this.PrintSubjectList = new List<string>(this.PrintSubjectListString.Split(new string[] { "^^^" }, StringSplitOptions.RemoveEmptyEntries));
+            this.RefExamRecord = K12.Data.Exam.SelectByID(this.RefExamRecordID);
+            // 科目
+            this.PrintSubjectList = new List<string>(this.PrintSubjectListString.Split(new string[] { "^^^" }, StringSplitOptions.RemoveEmptyEntries));
 
              // 缺曠選項
              this.PrintAttendanceList = new List<string>(this.PrintAttendanceListString.Split(new string[] { "^^^" }, StringSplitOptions.RemoveEmptyEntries));

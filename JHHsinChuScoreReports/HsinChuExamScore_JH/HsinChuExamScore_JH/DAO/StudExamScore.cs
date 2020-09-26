@@ -973,7 +973,7 @@ namespace HsinChuExamScore_JH.DAO
                 {
                     if (sc.ScoreT.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreT.Value * sc.Credit.Value;
+                        ss += _Calculator.ParseSubjectScore(sc.ScoreT.Value * sc.Credit.Value);
                     }
                 }
             }
@@ -987,7 +987,7 @@ namespace HsinChuExamScore_JH.DAO
 
                     if (sc.ScoreT.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreT.Value * sc.Credit.Value;
+                        ss += _Calculator.ParseSubjectScore(sc.ScoreT.Value * sc.Credit.Value);
                     }
                 }
             }

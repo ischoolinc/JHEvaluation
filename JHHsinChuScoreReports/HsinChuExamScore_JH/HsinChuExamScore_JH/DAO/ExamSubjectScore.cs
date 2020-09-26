@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JHSchool.Evaluation.Calculation;
 
 namespace HsinChuExamScore_JH.DAO
 {
@@ -64,8 +65,7 @@ namespace HsinChuExamScore_JH.DAO
         /// <summary>
         /// 定期評量 百分比
         /// </summary>
-        public decimal? FixScorePercentage { get; set; } 
-
+        public decimal? FixScorePercentage { get; set; }
 
         /// <summary>
         /// 計算總成績(國中的評量成績=定期評量&平時評量)

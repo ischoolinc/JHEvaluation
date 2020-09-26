@@ -34,9 +34,15 @@ namespace HsinChuExamScore_JH
         public static List<string> _SelStudentIDList = new List<string>();
         // public static List<string> UserDefineFields = new List<string>();
         /// <summary>
-        /// 設定檔預設名稱
+        /// 設定檔預設名稱 
         /// </summary>
         /// <returns></returns>
+
+        /// <summary>
+        /// 進位四捨五入位數
+        /// </summary>
+        public static int parseNumebr = 2;
+
         public static List<string> DefaultConfigNameList()
         {
             List<string> retVal = new List<string>();
