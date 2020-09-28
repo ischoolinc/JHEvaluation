@@ -254,9 +254,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             domainText[strDomain] += GetDomainSubjectText(strSubj, objSubj.Text);
 
                             //領域補考成績總和 ，算法為 先用各科目的"成績" 加權計算 ， 之後會再判斷， 此成績總和 是否含有"補考成績" 是否為"補考成績總和"
-                           
+
                             if (objSubj.ScoreMakeup.HasValue && objSubj.Weight.HasValue)
-                                 domainMakeUpScoreTotal[strDomain] += objSubj.ScoreMakeup.Value * objSubj.Weight.Value;
+                                domainMakeUpScoreTotal[strDomain] += objSubj.ScoreMakeup.Value * objSubj.Weight.Value;
                         }
                     }
                     #endregion
@@ -316,6 +316,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         decimal total = 0;
                         decimal totalOrigin = 0;
                         decimal totalScoreMakeup = 0;
+                        decimal totalScoreMakeupCredit = 0;
                         decimal totalEffort = 0;
 
                         decimal weight = 0;
@@ -341,43 +342,72 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
 
 
-                        // CT 2020/7/6 計算語文成績由國語文、英語來，是由科目不是領域
+                        // 2020/9/25，宏安與高雄王主任確認語文領域成績處理方式：
+                        // 語文領域是由科目成績來，科目有(國語文與英語)補考成績，由這2個加權平均，如果只有補考其中一科目，補考成績由該科目補考成績與另一科原始成績做加權平均算出語文領域補考成績。只要有語文領域成績是有科目領域國語文與英語加權平均計算過來的結果。
+
+                        decimal? langScore = null, chiScore = null, engScore = null, chiScoreOrigin = null, engScoreOrigin = null, chiMakeupScore = null, engMakeupScore = null;
+
+
                         foreach (string key in jscores)
                         {
                             if (jscores[key].Domain == "國語文" || jscores[key].Domain == "英語")
                             {
-
                                 var subScore = jscores[key];
 
                                 if (subScore.Weight.HasValue)
                                 {
-                                    if (subScore.Value.HasValue)
-                                        total += subScore.Value.Value * subScore.Weight.Value;
+                                    if (subScore.Domain == "國語文")
+                                    {
+                                        if (subScore.Value.HasValue)
+                                            chiScore = subScore.Value.Value * subScore.Weight.Value;
 
-                                    if (subScore.ScoreOrigin.HasValue)
-                                        totalOrigin += subScore.ScoreOrigin.Value * subScore.Weight.Value;
-                                    
-                                    if (subScore.ScoreMakeup.HasValue)
-                                        totalScoreMakeup += subScore.ScoreMakeup.Value * subScore.Weight.Value;
+                                        if (subScore.ScoreOrigin.HasValue)
+                                            chiScoreOrigin = subScore.ScoreOrigin.Value * subScore.Weight.Value;
+
+                                        if (subScore.ScoreMakeup.HasValue)
+                                            chiMakeupScore = subScore.ScoreMakeup.Value * subScore.Weight.Value;
+                                    }
+
+                                    if (subScore.Domain == "英語")
+                                    {
+                                        if (subScore.Value.HasValue)
+                                            engScore = subScore.Value.Value * subScore.Weight.Value;
+
+
+                                        if (subScore.ScoreOrigin.HasValue)
+                                            engScoreOrigin = subScore.ScoreOrigin.Value * subScore.Weight.Value;
+
+                                        if (subScore.ScoreMakeup.HasValue)
+                                            engMakeupScore = subScore.ScoreMakeup.Value * subScore.Weight.Value;
+                                    }
 
                                     if (subScore.Effort.HasValue)
                                         totalEffort += subScore.Effort.Value * subScore.Weight.Value;
                                 }
-                                
+
                                 weight += subScore.Weight.HasValue ? subScore.Weight.Value : 0;
                                 period += subScore.Period.HasValue ? subScore.Period.Value : 0;
-                                                    
+
                             }
                         }
-
 
                         if (weight > 0)
                         {
                             decimal weightValueAvg = rule.ParseDomainScore(total / weight);
-                            decimal weightOriginAvg = rule.ParseDomainScore(totalOrigin / weight);
-                            decimal weightScoreMakeup = rule.ParseDomainScore(totalScoreMakeup / weight);
+                            //     decimal weightOriginAvg = rule.ParseDomainScore(totalOrigin / weight);
+
+                            // 領域成績國語文英語擇優
+                            if (chiScore.HasValue && engScore.HasValue)
+                                langScore = rule.ParseDomainScore((chiScore.Value + engScore.Value) / weight);
+
+
+                            decimal? weightScoreMakeup = null;
+                            if (totalScoreMakeupCredit > 0)
+                                weightScoreMakeup = rule.ParseDomainScore(totalScoreMakeup / totalScoreMakeupCredit);
 
                             int effortAvg = Convert.ToInt32(decimal.Round(totalEffort / weight, 0, MidpointRounding.AwayFromZero));
+
+
 
                             var strDomain = "語文";
                             //將成績更新回學生。
@@ -391,21 +421,94 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             }
 
                             //先將算好的成績帶入領域成績,後面的擇優判斷才不會有問題
-                            dscore.ScoreOrigin = weightOriginAvg;
+                            if (chiScoreOrigin.HasValue && engScoreOrigin.HasValue)
+                            {
+                                dscore.ScoreOrigin = rule.ParseDomainScore((chiScoreOrigin.Value + engScoreOrigin.Value) / weight);
+                            }
+
                             dscore.Weight = weight;
                             dscore.Period = period;
                             dscore.Text = "";
                             dscore.Effort = effortAvg;
 
-                            dscore.ScoreMakeup = weightScoreMakeup;
-                            //// 這段不需，邏輯有問題
-                            //dscore.ScoreMakeup = hasMakeupScore ? weightValueAvg : dscore.ScoreMakeup;//補考成績若無更新則保留原值
+                            // 補考成績
+                            if (chiMakeupScore.HasValue && engMakeupScore.HasValue)
+                            {
+                                // 都補考
+                                dscore.ScoreMakeup = rule.ParseDomainScore((chiMakeupScore.Value + engMakeupScore.Value) / weight);
+
+                            }
+                            else if (chiMakeupScore.HasValue && (engMakeupScore.HasValue == false))
+                            {
+                                // 只有補國語文
+                                if (engScoreOrigin.HasValue)
+                                {
+                                    // 補考與原始加權平均
+                                    dscore.ScoreMakeup = rule.ParseDomainScore((chiMakeupScore.Value + engScoreOrigin.Value) / weight);
+                                }
+                            }
+                            else if (chiMakeupScore.HasValue == false && engMakeupScore.HasValue)
+                            {
+                                if (chiScoreOrigin.HasValue)
+                                {
+                                    // 補考與原始加權平均
+                                    dscore.ScoreMakeup = rule.ParseDomainScore((engMakeupScore.Value + chiScoreOrigin.Value) / weight);
+                                }
+                            }
+                            else
+                            {
+                                // dscore.ScoreMakeup = null;
+
+                            }
 
 
-                            //填入dscore.Value
-                            if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
-                                dscore.BetterScoreSelection(setting.DomainScoreLimit);
+                            //if (weightScoreMakeup.HasValue)
+                            //    dscore.ScoreMakeup = weightScoreMakeup.Value;
+
+                            // 語文成績
+                            if (chiMakeupScore.HasValue == false && engMakeupScore.HasValue == false)
+                            {
+                                //// 語文領域補考直接輸入補考
+                                if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
+                                    dscore.BetterScoreSelection(setting.DomainScoreLimit);
+                            }
+                            else
+                            {
+                                // 當有輸入補考，又有勾選不能超過 60 分
+                                if (setting.DomainScoreLimit)
+                                {
+                                    dscore.Value = langScore.Value;
+                                }
+                                else
+                                {
+                                    dscore.Value = langScore.Value;
+                                    // 分數取最高
+                                    if (dscore.ScoreOrigin.HasValue)
+                                    {
+                                        if (dscore.ScoreOrigin.Value > langScore.Value)
+                                            dscore.Value = dscore.ScoreOrigin.Value;
+                                    }
+
+                                    if (dscore.ScoreMakeup.HasValue)
+                                    {
+                                        if (dscore.ScoreMakeup.Value > langScore.Value)
+                                        {
+                                            dscore.Value = dscore.ScoreMakeup.Value;
+                                        }
+                                    }
+                                }
+
+
+                            }
+
+
+
+                            ////填入dscore.Value
+                            //if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
+                            //    dscore.BetterScoreSelection(setting.DomainScoreLimit);
                         }
+
+
                     }
                     #endregion
                     //清除不應該存在領域成績
@@ -425,8 +528,14 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 // 將所有的領域成績一併擇優計算，以防止有些僅有領域成績，但是卻沒有科目成績的領域，其補考成績被漏算的問題
                 foreach (var domain in dscores.ToArray())
                 {
+
+
                     SemesterDomainScore dscore = dscores[domain];
                     //擇優
+
+                    if (Program.Mode == ModuleMode.KaoHsiung && domain == "語文")
+                        continue;
+
                     dscore.BetterScoreSelection(setting.DomainScoreLimit);
                 }
 
