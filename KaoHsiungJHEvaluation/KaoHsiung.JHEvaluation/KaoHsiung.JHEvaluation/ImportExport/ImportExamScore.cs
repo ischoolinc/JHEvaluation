@@ -14,14 +14,14 @@ namespace KaoHsiung.JHEvaluation.ImportExport
     class ImportExamScore : SmartSchool.API.PlugIn.Import.Importer
     {
         // 努力程度對照表
-        private Dictionary <decimal,int> _EffortDict;
+        private Dictionary<decimal, int> _EffortDict;
         private List<decimal> _ScoreList;
 
         public ImportExamScore()
         {
             this.Image = null;
             this.Text = "匯入評量成績";
-            _EffortDict =new Dictionary<decimal,int>();
+            _EffortDict = new Dictionary<decimal, int>();
             _ScoreList = new List<decimal>();
         }
 
@@ -41,7 +41,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
             Dictionary<string, List<JHSCETakeRecord>> existSces = new Dictionary<string, List<JHSchool.Data.JHSCETakeRecord>>();
             //所有試別
             Dictionary<string, JHExamRecord> exams = new Dictionary<string, JHSchool.Data.JHExamRecord>();
-            
+
             // 取得努力程度對照
             K12.Data.Configuration.ConfigData cd = K12.Data.School.Configuration["努力程度對照表"];
             if (!string.IsNullOrEmpty(cd["xml"]))
@@ -61,7 +61,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
 
                 _ScoreList.AddRange(_EffortDict.Keys);
                 _ScoreList.Reverse();
-                
+
             }
 
 
@@ -70,7 +70,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
             wizard.ImportableFields.AddRange("學年度", "學期", "課程名稱", "評量名稱", "分數評量", "努力程度");
             wizard.RequiredFields.AddRange("學年度", "學期", "課程名稱", "評量名稱");
 
-            wizard.ValidateStart += delegate(object sender, SmartSchool.API.PlugIn.Import.ValidateStartEventArgs e)
+            wizard.ValidateStart += delegate (object sender, SmartSchool.API.PlugIn.Import.ValidateStartEventArgs e)
             {
                 #region 取得學生資訊
                 foreach (JHStudentRecord stu in JHStudent.SelectByIDs(e.List))
@@ -84,7 +84,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                 MultiThreadWorker<string> loader1 = new MultiThreadWorker<string>();
                 loader1.MaxThreads = 3;
                 loader1.PackageSize = 250;
-                loader1.PackageWorker += delegate(object sender1, PackageWorkEventArgs<string> e1)
+                loader1.PackageWorker += delegate (object sender1, PackageWorkEventArgs<string> e1)
                 {
                     foreach (JHSCAttendRecord record in JHSCAttend.SelectByStudentIDAndCourseID(e1.List, new string[] { }))
                     {
@@ -103,7 +103,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                 MultiThreadWorker<string> loader2 = new MultiThreadWorker<string>();
                 loader2.MaxThreads = 3;
                 loader2.PackageSize = 250;
-                loader2.PackageWorker += delegate(object sender2, PackageWorkEventArgs<string> e2)
+                loader2.PackageWorker += delegate (object sender2, PackageWorkEventArgs<string> e2)
                 {
                     foreach (JHCourseRecord record in JHCourse.SelectByIDs(new List<string>(e2.List)))
                     {
@@ -128,7 +128,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                 MultiThreadWorker<string> loader3 = new MultiThreadWorker<string>();
                 loader3.MaxThreads = 3;
                 loader3.PackageSize = 250;
-                loader3.PackageWorker += delegate(object sender3, PackageWorkEventArgs<string> e3)
+                loader3.PackageWorker += delegate (object sender3, PackageWorkEventArgs<string> e3)
                 {
                     foreach (JHSCETakeRecord sce in JHSCETake.SelectByStudentIDs(e3.List))
                     {
@@ -158,10 +158,10 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                 #endregion
             };
 
-            wizard.ValidateRow += delegate(object sender, SmartSchool.API.PlugIn.Import.ValidateRowEventArgs e)
+            wizard.ValidateRow += delegate (object sender, SmartSchool.API.PlugIn.Import.ValidateRowEventArgs e)
             {
-                int i;
-                decimal d;
+                int i = -1;
+                decimal d = -1;
 
                 #region 檢查學生是否存在
                 JHStudentRecord student = null;
@@ -220,6 +220,19 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 inputFormatPass &= false;
                                 e.ErrorFields.Add(field, "必須填入空白或整數");
                             }
+                            else
+                            {
+                                // 2020/10/15 加入檢查，當分數與努力轉換後努力程度不同，需要顯示警告
+                                if (value != "")
+                                {
+                                    int x = ConvertEffort(d);
+                                    if (x != i)
+                                    {
+                                        e.WarningFields.Add(field, "努力程度與使用分數轉換後不一致");
+                                    }
+                                }
+
+                            }
                             break;
 
                             // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
@@ -274,9 +287,9 @@ namespace KaoHsiung.JHEvaluation.ImportExport
 
                             // 當有學年度學期課程名稱相同
                             if (courses[record.RefCourseID].Name == courseName && courses[record.RefCourseID].SchoolYear.HasValue && courses[record.RefCourseID].Semester.HasValue)
-                            { 
-                                if((courses[record.RefCourseID].SchoolYear.Value.ToString().Trim() == sy.Trim()) && courses[record.RefCourseID].Semester.Value.ToString().Trim() == se.Trim())
-                                    HasRec=true ;
+                            {
+                                if ((courses[record.RefCourseID].SchoolYear.Value.ToString().Trim() == sy.Trim()) && courses[record.RefCourseID].Semester.Value.ToString().Trim() == se.Trim())
+                                    HasRec = true;
                             }
                             if (HasRec && courses.ContainsKey(record.RefCourseID))
                                 attendCourse = courses[record.RefCourseID];
@@ -335,7 +348,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                 #endregion
             };
 
-            wizard.ImportPackage += delegate(object sender, SmartSchool.API.PlugIn.Import.ImportPackageEventArgs e)
+            wizard.ImportPackage += delegate (object sender, SmartSchool.API.PlugIn.Import.ImportPackageEventArgs e)
             {
                 Dictionary<string, List<RowData>> id_Rows = new Dictionary<string, List<RowData>>();
 
@@ -351,6 +364,10 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                 List<KH.JHSCETakeRecord> insertList = new List<KH.JHSCETakeRecord>();
                 List<KH.JHSCETakeRecord> updateList = new List<KH.JHSCETakeRecord>();
 
+
+                // 檢查是否有努力程度欄位
+                bool isHasEffortField = false;
+
                 //交叉比對各學生資料
                 #region 交叉比對各學生資料
                 foreach (string id in id_Rows.Keys)
@@ -364,22 +381,31 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                         string SchoolYear = data["學年度"];
                         string Semester = data["學期"];
 
+                        if (isHasEffortField == false)
+                        {
+                            if (data.ContainsKey("努力程度"))
+                            {
+                                // 有努力程度這欄位
+                                isHasEffortField = true;
+                            }
+                        }
+
                         // 2016/7/26，穎驊新增bool值避免 在有"平時評量"的評量名稱Row 進入算評量成績的判斷式
                         bool isOrdinarilyScore = false;
 
                         if (!scattends.ContainsKey(id)) continue;
-                        
+
                         foreach (JHSCAttendRecord record in scattends[id])
                         {
                             if (!courses.ContainsKey(record.RefCourseID)) continue;
                             JHCourseRecord course = courses[record.RefCourseID];
                             //if (course.Name != courseName) continue;
 
-                            string sy="",ss="";
-                            if(course.SchoolYear.HasValue )
-                                sy=course.SchoolYear.Value.ToString ();
-                            if(course.Semester.HasValue )
-                                ss=course.Semester.Value.ToString ();
+                            string sy = "", ss = "";
+                            if (course.SchoolYear.HasValue)
+                                sy = course.SchoolYear.Value.ToString();
+                            if (course.Semester.HasValue)
+                                ss = course.Semester.Value.ToString();
 
                             if (SchoolYear != sy || Semester != ss || course.Name != courseName)
                                 continue;
@@ -398,56 +424,90 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 //而 JHSCAttendRecord record內意外發現剛好有 平時評量OrdinarilyScore的欄位
                                 //因此只要指定欄位為新的Excel 內的值，最後 使用JHSCAttend.Update(record) 更新即可
 
-                                if (data["評量名稱"] == "平時評量")
+                                if (data.ContainsKey("評量名稱"))
                                 {
-                                    if (data["分數評量"] != null && data["分數評量"] != "")
+                                    if (data["評量名稱"] == "平時評量")
                                     {
-                                        decimal d;
-
-                                        // 使用TryParse 的轉換，是因為可能會有Row 的分數評量欄位是空的(EX: 社團成績) ，直接Parse會爆
-                                        if (decimal.TryParse(data["分數評量"], out d))
-                                        record.OrdinarilyScore = d;
-                                    }
-
-
-                                    if (data["努力程度"] != null)
-                                    {
-                                        int i;
-                                        if (int.TryParse(data["努力程度"], out i))
-                                        record.OrdinarilyEffort = i;
-                                    }
-
-                                    // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
-                                    //if (data["文字描述"] != null)
-                                    //{
-                                    //    record.Text = data["文字描述"].ToString();
-                                    //}
-                                    JHSCAttend.Update(record);
-
-                                    isOrdinarilyScore = true;
-
-                                    currentSCE = null;
-                                }
-
-                                else
-                                {
-                                    if (existSces.ContainsKey(record.ID))
-                                    {
-                                        foreach (KH.JHSCETakeRecord sce in existSces[record.ID].AsKHJHSCETakeRecords())
+                                        if (data.ContainsKey("分數評量"))
                                         {
-                                            if (!exams.ContainsKey(sce.RefExamID)) continue;
+                                            if (data["分數評量"] != null && data["分數評量"] != "")
+                                            {
+                                                decimal d;
 
-                                            if (exams[sce.RefExamID].Name == examName)
-                                                currentSCE = sce;
+                                                // 使用TryParse 的轉換，是因為可能會有Row 的分數評量欄位是空的(EX: 社團成績) ，直接Parse會爆
+                                                if (decimal.TryParse(data["分數評量"], out d))
+                                                    record.OrdinarilyScore = d;
+                                            }
+
+                                            // 當分數評量是空白
+                                            if (data["分數評量"] != null && data["分數評量"].Trim() == "")
+                                            {
+                                                record.OrdinarilyScore = null;
+                                            }
+
+                                        }
+
+                                        if (data.ContainsKey("努力程度"))
+                                        {
+                                            if (data["努力程度"] != null && data["努力程度"] != "")
+                                            {
+                                                int i;
+                                                if (int.TryParse(data["努力程度"], out i))
+                                                    record.OrdinarilyEffort = i;
+                                            }
+
+                                            if (data["努力程度"] != null && data["努力程度"].Trim() == "")
+                                            {
+                                                record.OrdinarilyEffort = null;
+                                            }
+                                        }
+
+                                        // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
+                                        //if (data["文字描述"] != null)
+                                        //{
+                                        //    record.Text = data["文字描述"].ToString();
+                                        //}
+
+                                        // 2020/10/15 宏安與小組會議討論，當沒有努力程度欄位，會使用成績轉換努力程度
+                                        if (isHasEffortField == false)
+                                        {
+                                            if (record.OrdinarilyScore.HasValue)
+                                            {
+                                                record.OrdinarilyEffort = ConvertEffort(record.OrdinarilyScore.Value);
+                                            }else
+                                            {
+                                                record.OrdinarilyEffort = null;
+                                            }
+                                        }
+
+
+                                        JHSCAttend.Update(record);
+
+                                        isOrdinarilyScore = true;
+
+                                        currentSCE = null;
+                                    }
+
+                                    else
+                                    {
+                                        if (existSces.ContainsKey(record.ID))
+                                        {
+                                            foreach (KH.JHSCETakeRecord sce in existSces[record.ID].AsKHJHSCETakeRecords())
+                                            {
+                                                if (!exams.ContainsKey(sce.RefExamID)) continue;
+
+                                                if (exams[sce.RefExamID].Name == examName)
+                                                    currentSCE = sce;
+                                            }
                                         }
                                     }
                                 }
                             }
 
                             // 2016/7/26，穎驊新增bool值避免 在有"平時評量"的評量名稱Row 進入算評量成績的判斷式
-                            if (currentSCE != null && isOrdinarilyScore==false)
+                            if (currentSCE != null && isOrdinarilyScore == false)
                             {
-                                bool changed = false;
+                                //bool changed = false;
 
                                 #region 填入資料
                                 foreach (string field in e.ImportFields)
@@ -463,7 +523,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                                     currentSCE.Score = d;
                                                 else
                                                     currentSCE.Score = null;
-                                                changed = true;
+                                                //   changed = true;
                                             }
                                             break;
                                         case "努力程度":
@@ -474,7 +534,7 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                                     currentSCE.Effort = i;
                                                 else
                                                     currentSCE.Effort = null;
-                                                changed = true;
+                                                //  changed = true;
                                             }
                                             break;
                                             // 2018.09.05 [ischoolKingdom] Vicky依據 [02-01][03] 匯入評量成績 項目，移除文字描述。
@@ -489,8 +549,8 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                                 }
                                 #endregion
 
-                                if (changed)
-                                    updateList.Add(currentSCE);
+                                //    if (changed)
+                                updateList.Add(currentSCE);
                             }
 
                             // 2016/7/26，穎驊新增bool值避免 在有"平時評量"的評量名稱Row 進入算評量成績的判斷式
@@ -559,22 +619,39 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                 try
                 {
                     // 解析並填入轉換空白的努力程度
-
+                    // 2020/10/15 透過宏安討論，當沒有努力程度欄位才會使用成績轉換，如果有努力程度欄位不會使用成績轉換。
                     foreach (KH.JHSCETakeRecord rec in updateList)
                     {
-                        // 當努力程度沒有值卻有成績。
-                        if ((rec.Effort.HasValue == false) && rec.Score.HasValue)
+
+                        //// 當努力程度沒有值卻有成績。
+                        //if ((rec.Effort.HasValue == false) && rec.Score.HasValue)
+                        //{
+                        //    rec.Effort = ConvertEffort(rec.Score.Value);
+                        //}
+
+                        if (isHasEffortField == false)
                         {
-                            rec.Effort = ConvertEffort(rec.Score.Value);
+                            if (rec.Score.HasValue)
+                                rec.Effort = ConvertEffort(rec.Score.Value);
+                            else
+                                rec.Effort = null;
                         }
                     }
 
                     foreach (KH.JHSCETakeRecord rec in insertList)
                     {
-                        // 當努力程度沒有值卻有成績。
-                        if ((rec.Effort.HasValue == false) && rec.Score.HasValue)
+                        //// 當努力程度沒有值卻有成績。
+                        //if ((rec.Effort.HasValue == false) && rec.Score.HasValue)
+                        //{
+                        //    rec.Effort = ConvertEffort(rec.Score.Value);
+                        //}
+
+                        if (isHasEffortField == false)
                         {
-                            rec.Effort = ConvertEffort(rec.Score.Value);
+                            if (rec.Score.HasValue)
+                                rec.Effort = ConvertEffort(rec.Score.Value);
+                            else
+                                rec.Effort = null;
                         }
                     }
 
@@ -673,10 +750,10 @@ namespace KaoHsiung.JHEvaluation.ImportExport
             {
                 if (score >= s)
                 {
-                    if(_EffortDict.ContainsKey(s))
+                    if (_EffortDict.ContainsKey(s))
                         retVal = _EffortDict[s];
-                                       
-                }            
+
+                }
             }
             return retVal;
         }
