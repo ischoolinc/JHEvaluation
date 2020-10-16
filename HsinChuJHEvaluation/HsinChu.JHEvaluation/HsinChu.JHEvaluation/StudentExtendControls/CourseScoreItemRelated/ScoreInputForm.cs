@@ -453,5 +453,12 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItemRelated
             //    }
             //}
         }
+
+        private void ScoreInputForm_Load(object sender, EventArgs e)
+        {
+            List<string> cols = new List<string>() { "定期分數", "平時分數" };
+            Campus.Windows.DataGridViewImeDecorator dec = new Campus.Windows.DataGridViewImeDecorator(this.dgv, cols);
+
+        }
     }
 }

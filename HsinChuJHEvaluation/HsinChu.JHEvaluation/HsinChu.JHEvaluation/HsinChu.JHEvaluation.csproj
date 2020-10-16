@@ -67,6 +67,10 @@
       <HintPath>Library\Campus.Configuration.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Campus.Windows, Version=1.0.4.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Campus.Windows.dll</HintPath>
+    </Reference>
     <Reference Include="DevComponents.DotNetBar2, Version=7.9.0.3, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\DevComponents.DotNetBar2.dll</HintPath>
@@ -115,7 +119,6 @@
     <Reference Include="HsinChu.JHEvaluation.Data, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\HsinChu.JHEvaluation.Data.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -329,6 +332,9 @@
     <Content Include="Library\Aspose.Cells.xml" />
     <Content Include="Library\Campus.Configuration.dll" />
     <Content Include="Library\Campus.Configuration.pdb" />
+    <Content Include="Library\Campus.Windows.dll" />
+    <Content Include="Library\Campus.Windows.pdb" />
+    <Content Include="Library\Campus.Windows.xml" />
     <Content Include="Library\DevComponents.DotNetBar2.dll" />
     <Content Include="Library\DevComponents.DotNetBar2.xml" />
     <Content Include="Library\FISCA.Authentication.dll" />
@@ -353,6 +359,7 @@
     <Content Include="Library\Framework.pdb" />
     <Content Include="Library\HsinChu.JHEvaluation.Data.dll" />
     <Content Include="Library\HsinChu.JHEvaluation.Data.pdb" />
+    <Content Include="Library\HsinChu.JHEvaluation.Data.xml" />
     <Content Include="Library\JHSchool.Affair.dll" />
     <Content Include="Library\JHSchool.Affair.pdb" />
     <Content Include="Library\JHSchool.Data.dll" />

@@ -31,6 +31,10 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lblCourseName = new DevComponents.DotNetBar.LabelX();
             this.dgv = new DevComponents.DotNetBar.Controls.DataGridViewX();
+            this.chExamName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chAssignmentScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnSave = new DevComponents.DotNetBar.ButtonX();
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
             this.lblNotSave = new DevComponents.DotNetBar.LabelX();
@@ -39,16 +43,17 @@
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblStudent = new DevComponents.DotNetBar.LabelX();
-            this.chExamName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chAssignmentScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
             // lblCourseName
             // 
             this.lblCourseName.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblCourseName.BackgroundStyle.Class = "";
+            this.lblCourseName.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblCourseName.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblCourseName.Location = new System.Drawing.Point(6, 5);
             this.lblCourseName.Name = "lblCourseName";
@@ -70,7 +75,7 @@
             this.chText});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9.75F);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
@@ -84,6 +89,31 @@
             this.dgv.Size = new System.Drawing.Size(560, 200);
             this.dgv.TabIndex = 1;
             this.dgv.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
+            // 
+            // chExamName
+            // 
+            this.chExamName.HeaderText = "評量名稱";
+            this.chExamName.Name = "chExamName";
+            this.chExamName.ReadOnly = true;
+            this.chExamName.Width = 170;
+            // 
+            // chScore
+            // 
+            this.chScore.HeaderText = "定期分數";
+            this.chScore.Name = "chScore";
+            this.chScore.Width = 83;
+            // 
+            // chAssignmentScore
+            // 
+            this.chAssignmentScore.HeaderText = "平時分數";
+            this.chAssignmentScore.Name = "chAssignmentScore";
+            this.chAssignmentScore.Width = 83;
+            // 
+            // chText
+            // 
+            this.chText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.chText.HeaderText = "文字描述";
+            this.chText.Name = "chText";
             // 
             // btnSave
             // 
@@ -112,6 +142,11 @@
             // lblNotSave
             // 
             this.lblNotSave.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblNotSave.BackgroundStyle.Class = "";
+            this.lblNotSave.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblNotSave.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblNotSave.ForeColor = System.Drawing.Color.Red;
             this.lblNotSave.Location = new System.Drawing.Point(328, 252);
@@ -150,6 +185,11 @@
             // lblStudent
             // 
             this.lblStudent.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.lblStudent.BackgroundStyle.Class = "";
+            this.lblStudent.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblStudent.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblStudent.Location = new System.Drawing.Point(328, 5);
             this.lblStudent.Name = "lblStudent";
@@ -157,34 +197,9 @@
             this.lblStudent.TabIndex = 0;
             this.lblStudent.TextAlignment = System.Drawing.StringAlignment.Far;
             // 
-            // chExamName
-            // 
-            this.chExamName.HeaderText = "評量名稱";
-            this.chExamName.Name = "chExamName";
-            this.chExamName.ReadOnly = true;
-            this.chExamName.Width = 170;
-            // 
-            // chScore
-            // 
-            this.chScore.HeaderText = "定期分數";
-            this.chScore.Name = "chScore";
-            this.chScore.Width = 83;
-            // 
-            // chAssignmentScore
-            // 
-            this.chAssignmentScore.HeaderText = "平時分數";
-            this.chAssignmentScore.Name = "chAssignmentScore";
-            this.chAssignmentScore.Width = 83;
-            // 
-            // chText
-            // 
-            this.chText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.chText.HeaderText = "文字描述";
-            this.chText.Name = "chText";
-            // 
             // ScoreInputForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(572, 281);
             this.Controls.Add(this.lblNotSave);
@@ -193,8 +208,10 @@
             this.Controls.Add(this.dgv);
             this.Controls.Add(this.lblStudent);
             this.Controls.Add(this.lblCourseName);
+            this.DoubleBuffered = true;
             this.Name = "ScoreInputForm";
             this.Text = "評量成績";
+            this.Load += new System.EventHandler(this.ScoreInputForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
             this.ResumeLayout(false);
 
