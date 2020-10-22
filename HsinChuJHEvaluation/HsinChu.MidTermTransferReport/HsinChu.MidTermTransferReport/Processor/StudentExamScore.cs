@@ -10,6 +10,7 @@ using JHSchool.Evaluation.Calculation;
 using FISCA.Data;
 using System.Xml;
 
+
 namespace HsinChu.MidTermTransferReport.Processor
 {
     internal class StudentExamScore
@@ -18,7 +19,7 @@ namespace HsinChu.MidTermTransferReport.Processor
         private Font _font;
         private Config _config;
         private Dictionary<string, JHCourseRecord> _courseDict;
-
+        private Report _report;
         private Dictionary<string, int> _columnMapping;
 
         private DomainManager _manager;
@@ -195,19 +196,55 @@ namespace HsinChu.MidTermTransferReport.Processor
             SubjectRow subjectRow = row.Subjects[course.Subject];
             subjectRow.SetPeriodCredit(course.Period, course.Credit);
             subjectRow.AddScore(sce.RefExamID, sce.Score, sce.AssignmentScore);
-
-
-            K12.Data.AssessmentSetupRecord assessmentSetupRecord = course.AssessmentSetup;
-            XmlElement extension = assessmentSetupRecord.Extension;
-            int examPercentage = 0;
-            if (!string.IsNullOrEmpty(extension["ScorePercentage"].InnerText))
+                //Report._NoneExamT
+         if(course.AssessmentSetup == null)
             {
-                examPercentage = Convert.ToInt32(extension["ScorePercentage"].InnerText.Trim(' ', '\n'));
+                Report._NoneExamT = true;
             }
-            int assignmentPercentage = 100 - examPercentage;
+            K12.Data.AssessmentSetupRecord assessmentSetupRecord = course.AssessmentSetup;
 
-            subjectRow.examPercentage = examPercentage;
-            subjectRow.assignmentPercentage = assignmentPercentage;
+                
+            XmlElement extension = assessmentSetupRecord.Extension;
+
+            
+                int examPercentage = 0;
+                if (!string.IsNullOrEmpty(extension["ScorePercentage"].InnerText))
+                {
+                    examPercentage = Convert.ToInt32(extension["ScorePercentage"].InnerText.Trim(' ', '\n'));
+                }
+                int assignmentPercentage = 100 - examPercentage;
+
+                subjectRow.examPercentage = examPercentage;
+                subjectRow.assignmentPercentage = assignmentPercentage;
+            
+
+            //try
+            //{
+            //    K12.Data.AssessmentSetupRecord assessmentSetupRecord = course.AssessmentSetup;
+
+            //    XmlElement extension = assessmentSetupRecord.Extension;
+            //    int examPercentage = 0;
+            //    if (!string.IsNullOrEmpty(extension["ScorePercentage"].InnerText))
+            //    {
+            //        examPercentage = Convert.ToInt32(extension["ScorePercentage"].InnerText.Trim(' ', '\n'));
+            //    }
+            //    int assignmentPercentage = 100 - examPercentage;
+
+            //    subjectRow.examPercentage = examPercentage;
+            //    subjectRow.assignmentPercentage = assignmentPercentage;
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    if (course.AssessmentSetup == null)
+            //    {
+            //        MsgBox.Show ( _courseDict[sce.RefCourseID].Name + "未設定評分樣板");
+            //    } else
+            //    {
+            //        MsgBox.Show(ex.Message);
+            //    }
+            //}
+
             //if (_config.DomainSubjectSetup == DomainSubjectSetup.Subject)
             //    subjectRow.Display = true;
         }

@@ -149,9 +149,12 @@ namespace KaoHsiung.MidTermTransferReport.Processor
                         string effortText = string.Empty;
                         if (data.Effort.HasValue) effortText = _effortMapper.GetTextByInt(data.Effort.Value);
 
-                        temp = WordHelper.GetMoveRightCell(subjectCell, _columnMapping[examID] - 1);
-                        WordHelper.Write(temp, _font, (data.Score.HasValue ? "" + _calculator.ParseSubjectScore(data.Score.Value) : ""));
-                        WordHelper.Write(temp.NextSibling as Cell, _font, effortText);
+                        if(_columnMapping.ContainsKey(examID)) {
+                            temp = WordHelper.GetMoveRightCell(subjectCell, _columnMapping[examID] - 1);
+                            WordHelper.Write(temp, _font, (data.Score.HasValue ? "" + _calculator.ParseSubjectScore(data.Score.Value) : ""));
+                            WordHelper.Write(temp.NextSibling as Cell, _font, effortText);
+                        }
+                        
                     }
 
                     if (_AttendDict.ContainsKey(subjectName))
