@@ -29,6 +29,9 @@ namespace HsinChu.MidTermTransferReport
         public string _SchoolYear = "";
         public string _Semester = "";
 
+        static public Boolean _NoneExamT = false;
+        static public string _SubName = "";
+
         private Config _config;
 //        private string ReportName { get { return _config.ReportName; } }
         private List<JHStudentRecord> Students { get { return _config.Students; } }
@@ -59,6 +62,17 @@ namespace HsinChu.MidTermTransferReport
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+                if (_NoneExamT)
+                {
+                    MsgBox.Show("課程未設定評分樣板，請重新檢查相關設置。");
+
+                    _NoneExamT = false;
+                    MotherForm.SetStatusBarMessage(Global.ReportName + "產生失敗");
+                    return;
+                }
+
+
+
             if (e.Error != null)
             {
                 MsgBox.Show("產生報表時發生錯誤。" + e.Error.Message);
@@ -635,11 +649,19 @@ namespace HsinChu.MidTermTransferReport
                 if (calcIDCache.ContainsKey(student.ID) && calcCache.ContainsKey(calcIDCache[student.ID]))
                     studentCalculator = calcCache[calcIDCache[student.ID]];
 
+                try { 
                 StudentExamScore examScore = new StudentExamScore(builder, _config, courseCache);
-                if (scCache.ContainsKey(student.ID)) examScore.SetSubjects(scCache[student.ID]);
-                examScore.SetColumnMap(columnMapping);
-                examScore.SetCalculator(studentCalculator);
-                examScore.SetData(sceScoreList);
+                    if (scCache.ContainsKey(student.ID)) examScore.SetSubjects(scCache[student.ID]);
+                    examScore.SetColumnMap(columnMapping);
+                    examScore.SetCalculator(studentCalculator);
+                    examScore.SetData(sceScoreList);
+                } catch(Exception erro)
+                {
+                    e.Cancel = true;
+
+
+                }
+
                 #endregion
 
                 #region 缺曠獎懲
