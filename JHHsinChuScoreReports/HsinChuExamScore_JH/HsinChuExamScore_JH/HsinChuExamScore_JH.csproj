@@ -43,11 +43,6 @@
       <HintPath>Library\Aspose.Words_201402.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Campus.ePaperCloud, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Campus.ePaperCloud.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\DevComponents.DotNetBar2.dll</HintPath>
@@ -172,8 +167,6 @@
   <ItemGroup>
     <Content Include="Library\Aspose.Words_201402.dll" />
     <Content Include="Library\Aspose.Words_201402.xml" />
-    <Content Include="Library\Campus.ePaperCloud.dll" />
-    <Content Include="Library\Campus.ePaperCloud.pdb" />
     <Content Include="Library\DevComponents.DotNetBar2.dll" />
     <Content Include="Library\FISCA.Data.dll" />
     <Content Include="Library\FISCA.dll" />
@@ -220,6 +213,12 @@
     <None Include="Template\新竹_評量成績合併欄位總表.doc" />
     <None Include="Template\新竹_領域成績單.doc" />
     <None Include="Template\新竹評量成績單樣板%28固定排名_科目+領域%29.doc1.doc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Campus\Campus.ePaperCloud\Campus.ePaperCloud\Campus.ePaperCloud.csproj">
+      <Project>{1acb96b7-415f-4fac-bceb-92b326a3bcc3}</Project>
+      <Name>Campus.ePaperCloud</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

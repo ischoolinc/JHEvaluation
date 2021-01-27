@@ -362,11 +362,22 @@ namespace HsinChuExamScore_JH
         {
             try
             {
+                //object[] objArray = (object[])e.Result;
+                //MemoryStream memoryStream = (MemoryStream)objArray[0];
+                //string reportNameW = "" + _SelSchoolYear + "學年度第" + _SelSemester + "學期" + _SelExamName + "" + objArray[1];
+                //ePaperCloud ePaperCloud = new ePaperCloud();
+                //ePaperCloud.upload_ePaper(_SelSchoolYear, _SelSemester, reportNameW, "", memoryStream, ePaperCloud.ViewerType.Student, ePaperCloud.FormatType.Docx);
+
+                //object[] objArray = (object[])e.Result;
                 object[] objArray = (object[])e.Result;
-                MemoryStream memoryStream = (MemoryStream)objArray[0];
+                Document doc  = (Document)objArray[0];
+
                 string reportNameW = "" + _SelSchoolYear + "學年度第" + _SelSemester + "學期" + _SelExamName + "" + objArray[1];
                 ePaperCloud ePaperCloud = new ePaperCloud();
-                ePaperCloud.upload_ePaper(_SelSchoolYear, _SelSemester, reportNameW, "", memoryStream, ePaperCloud.ViewerType.Student, ePaperCloud.FormatType.Docx);
+                ePaperCloud.upload_ePaper_doc(_SelSchoolYear, _SelSemester, reportNameW, "", doc, ePaperCloud.ViewerType.Student, ePaperCloud.FormatType.Docx);
+
+                //      doc.Save(Application.StartupPath + "\\test.docx", SaveFormat.Docx);
+
 
                 btnSaveConfig.Enabled = true;
                 btnPrint.Enabled = true;
@@ -1201,13 +1212,13 @@ namespace HsinChuExamScore_JH
                 dt.TableName = StudRec.ID;
 
                 //// debug write text file
-                using (StreamWriter sw = new StreamWriter(Application.StartupPath + "\\debug_TestSc.txt", false))
-                {
-                    foreach (DataColumn dc in dt.Columns)
-                    {
-                        sw.WriteLine(dc.Caption);
-                    }
-                }
+                //using (StreamWriter sw = new StreamWriter(Application.StartupPath + "\\debug_TestSc.txt", false))
+                //{
+                //    foreach (DataColumn dc in dt.Columns)
+                //    {
+                //        sw.WriteLine(dc.Caption);
+                //    }
+                //}
 
 
                 // 填入對照資料
@@ -1415,17 +1426,20 @@ namespace HsinChuExamScore_JH
                                         row[key] = null;
                                         break;
                                     }
-                                    else if (examSubjScore.ScoreF.HasValue)
+                                    else if (examSubjScore.RefScoreF.HasValue)
                                     {
-                                        if(examSubjScore.RefScoreF != null)
-                                        {
-                                            row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
-                                        }
-                                        else
-                                        {
+                                        row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
+
+
+                                        //if (examSubjScore.RefScoreF != null)
+                                        //{
+                                        //    row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
+                                        //}
+                                        //else
+                                        //{
                                             //row[key] = examSubjScore.RefScoreF;
-                                            row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
-                                        }
+                                          //  row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
+                                        //}
                                     }
                                         
                                     break;
@@ -1438,15 +1452,17 @@ namespace HsinChuExamScore_JH
                                     }
                                     if (examSubjScore.RefScoreA.HasValue)
                                     {
-                                        if (examSubjScore.RefScoreF != null)
-                                        {
-                                            row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
-                                        }
-                                        else
-                                        {
+                                        row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
+                                        
+                                        //if (examSubjScore.RefScoreA != null)
+                                        //{
+                                        //    row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
+                                        //}
+                                        //else
+                                        //{
                                             //row[key] = examSubjScore.RefScoreA;
-                                            row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
-                                        }
+                                           // row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
+                                        //}
                                     }
    
                                     break;
@@ -1458,14 +1474,16 @@ namespace HsinChuExamScore_JH
                                     }
                                     if (examSubjScore.RefScoreT.HasValue)
                                     {
-                                        if (examSubjScore.RefScoreF != null)
-                                        {
-                                            row[key] = doParseTransfer(examSubjScore.RefScoreT.Value);
-                                        }
-                                        else
-                                        {
-                                            row[key] = doParseTransfer(examSubjScore.RefScoreT.Value);
-                                        }
+                                        row[key] = doParseTransfer(examSubjScore.RefScoreT.Value);
+
+                                        //if (examSubjScore.RefScoreT != null)
+                                        //{
+                                        //    row[key] = doParseTransfer(examSubjScore.RefScoreT.Value);
+                                        //}
+                                        //else
+                                        //{
+                                           // row[key] = doParseTransfer(examSubjScore.RefScoreT.Value);
+                                        //}
                                     }
                                     break;
                             }
@@ -2292,9 +2310,13 @@ namespace HsinChuExamScore_JH
             try
             {
                 //2019/4/19 俊緯更新 完成[190417-01][03] 電子報表及推播功能，聽恩正建議將Save功能移到Complete執行
-                MemoryStream memoryStream = new MemoryStream();
-                doc.Save(memoryStream, SaveFormat.Docx);
-                e.Result = new object[] { memoryStream, reportNameW };
+                //MemoryStream memoryStream = new MemoryStream();
+                //doc.Save(memoryStream, SaveFormat.Docx);
+                //e.Result = new object[] { memoryStream, reportNameW };
+                docList = null;
+                GC.Collect();
+
+                e.Result = new object[] { doc, reportNameW };
 
             }
             catch (Exception exow)
@@ -2302,7 +2324,7 @@ namespace HsinChuExamScore_JH
                 throw exow;
             }
             doc = null;
-            docList.Clear();
+        
 
             GC.Collect();
             #endregion

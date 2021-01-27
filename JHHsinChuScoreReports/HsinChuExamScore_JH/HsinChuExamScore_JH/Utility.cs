@@ -413,9 +413,9 @@ SELECT
     ,rank_detail.percentile
 FROM 
 	rank_matrix
-	LEFT OUTER JOIN rank_detail
+	INNER JOIN rank_detail
 		ON rank_detail.ref_matrix_id = rank_matrix.id
-	LEFT OUTER JOIN student
+	INNER JOIN student
 		ON student.id = rank_detail.ref_student_id
 	LEFT OUTER JOIN class
 		ON class.id = student.ref_class_id
