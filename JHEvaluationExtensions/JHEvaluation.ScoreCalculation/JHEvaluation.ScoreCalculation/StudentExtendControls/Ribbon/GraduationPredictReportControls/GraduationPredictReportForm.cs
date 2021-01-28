@@ -969,7 +969,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                     System.Windows.Forms.CheckBox cb = each as System.Windows.Forms.CheckBox;
                     if (cb.Text.Contains("領域"))
                     {
-                        cb.Checked = checkBox1.Checked;
+                        //cb.Checked = checkBox1.Checked;
                     }
                 }
             }
@@ -984,7 +984,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                     System.Windows.Forms.CheckBox cb = each as System.Windows.Forms.CheckBox;
                     if (cb.Text.Contains("各學期"))
                     {
-                        cb.Checked = checkBox2.Checked;
+                        //cb.Checked = checkBox2.Checked;
                     }
                 }
             }
@@ -999,7 +999,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                     System.Windows.Forms.CheckBox cb = each as System.Windows.Forms.CheckBox;
                     if (cb.Text.Contains("第六學期"))
                     {
-                        cb.Checked = checkBox3.Checked;
+                        //cb.Checked = checkBox3.Checked;
                     }
                 }
             }
@@ -1056,12 +1056,12 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         /// </summary>
         private bool IsShowSemesterDomainSheet()
         {
-            // 假如有勾選"各學期領域成績均符合規範。"
-            if (chCondition1.Checked && (!string.IsNullOrEmpty("" + chCondition1.Tag)))
-                return true;
-            // 假如有勾選"第六學期各領域成績符合規範。"
-            if (chCondition2.Checked && (!string.IsNullOrEmpty("" + chCondition2.Tag)))
-                return true;
+            //// 假如有勾選"各學期領域成績均符合規範。"
+            //if (chCondition1.Checked && (!string.IsNullOrEmpty("" + chCondition1.Tag)))
+            //    return true;
+            //// 假如有勾選"第六學期各領域成績符合規範。"
+            //if (chCondition2.Checked && (!string.IsNullOrEmpty("" + chCondition2.Tag)))
+            //    return true;
 
             // 只要"日常生活表現"其中一項有勾選就顯示
             foreach (Control ctrl in gpDaily.Controls)

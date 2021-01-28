@@ -180,6 +180,7 @@ namespace JHEvaluation.ScoreCalculation
         {
             DeployParameters dparams = ModuleLoader.GetDeployParametsers(typeof(Program), "Mode=KaoHsiung");
 
+            // debug
             //Mode = ModuleMode.KaoHsiung;
             //return;
 

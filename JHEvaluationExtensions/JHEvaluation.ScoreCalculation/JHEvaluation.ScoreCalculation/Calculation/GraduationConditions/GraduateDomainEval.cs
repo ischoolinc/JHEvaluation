@@ -108,6 +108,9 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
 
             #endregion
 
+            // 取得108課綱認定領域
+            JHEvaluation.ScoreCalculation.Util.LoadDomainMap108();
+
             foreach (StudentRecord each in list)
             {
                 List<ResultDetail> resultList = new List<ResultDetail>();
@@ -151,50 +154,68 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                         //跑一遍領域成績
                         foreach (K12.Data.DomainScore domain in record.Domains.Values)
                         {
+                            // 不符合108課綱白名單先剔除
+                            if (!JHEvaluation.ScoreCalculation.Util.DomainMap108List.Contains(domain.Domain))
+                                continue;
 
-                            if (domain.Domain == "語文") 
+                            if (domain.SchoolYear <108)
                             {
-                                hasLanguageDomain = true;
+                                // 108學年度前有修科技不會被判斷
+                                if (domain.Domain == "科技")
+                                    continue;
+
+                                if (domain.Domain == "自然科學")
+                                    domain.Domain = "自然與生活科技";
+
+                                if (domain.Domain == "藝術")
+                                    domain.Domain = "藝術與人文";
                             }
 
-                            //這三種挑出來處理
-                            if (domain.Domain == "國語文" || domain.Domain == "英語")
-                            {
-                                if (domain.Score.HasValue && domain.Credit.HasValue)
-                                {
-                                    sum += domain.Score.Value * domain.Credit.Value;
-                                    credit += domain.Credit.Value;
+                            // 經過討論高雄國語文與英語不要特別處理，應該回歸各學期有語文領域
+                            //if (domain.Domain == "語文") 
+                            //{
+                            //    hasLanguageDomain = true;
+                            //}
 
-                                    //處理高雄語文顯示
-                                    //  加權總分
-                                    if (!TempData.tmpStudDomainScoreDict.ContainsKey(record.RefStudentID))
-                                        TempData.tmpStudDomainScoreDict.Add(record.RefStudentID, new Dictionary<string, decimal>());
+                            ////這三種挑出來處理
+                            //if (domain.Domain == "國語文" || domain.Domain == "英語")
+                            //{
+                            //    if (domain.Score.HasValue && domain.Credit.HasValue)
+                            //    {
+                            //        sum += domain.Score.Value * domain.Credit.Value;
+                            //        credit += domain.Credit.Value;
 
-                                    if (!TempData.tmpStudDomainCreditDict.ContainsKey(record.RefStudentID))
-                                        TempData.tmpStudDomainCreditDict.Add(record.RefStudentID, new Dictionary<string, decimal>());
+                            //        //處理高雄語文顯示
+                            //        //  加權總分
+                            //        if (!TempData.tmpStudDomainScoreDict.ContainsKey(record.RefStudentID))
+                            //            TempData.tmpStudDomainScoreDict.Add(record.RefStudentID, new Dictionary<string, decimal>());
 
-                                    if (!TempData.tmpStudDomainScoreDict[record.RefStudentID].ContainsKey(domain.Domain))
-                                        TempData.tmpStudDomainScoreDict[record.RefStudentID].Add(domain.Domain, 0);
+                            //        if (!TempData.tmpStudDomainCreditDict.ContainsKey(record.RefStudentID))
+                            //            TempData.tmpStudDomainCreditDict.Add(record.RefStudentID, new Dictionary<string, decimal>());
 
-                                    // 學分數
-                                    if (!TempData.tmpStudDomainCreditDict[record.RefStudentID].ContainsKey(domain.Domain))
-                                        TempData.tmpStudDomainCreditDict[record.RefStudentID].Add(domain.Domain, 0);
+                            //        if (!TempData.tmpStudDomainScoreDict[record.RefStudentID].ContainsKey(domain.Domain))
+                            //            TempData.tmpStudDomainScoreDict[record.RefStudentID].Add(domain.Domain, 0);
 
-                                    TempData.tmpStudDomainScoreDict[record.RefStudentID][domain.Domain] += (domain.Score.Value * domain.Credit.Value);
-                                    TempData.tmpStudDomainCreditDict[record.RefStudentID][domain.Domain] += domain.Credit.Value;
-                                }
-                            }
-                            else
-                                domainScoreList.Add(domain);
+                            //        // 學分數
+                            //        if (!TempData.tmpStudDomainCreditDict[record.RefStudentID].ContainsKey(domain.Domain))
+                            //            TempData.tmpStudDomainCreditDict[record.RefStudentID].Add(domain.Domain, 0);
+
+                            //        TempData.tmpStudDomainScoreDict[record.RefStudentID][domain.Domain] += (domain.Score.Value * domain.Credit.Value);
+                            //        TempData.tmpStudDomainCreditDict[record.RefStudentID][domain.Domain] += domain.Credit.Value;
+                            //    }
+                            //}
+                            //else
+                            //    domainScoreList.Add(domain);
+                            domainScoreList.Add(domain);
                         }
 
-                        if (!hasLanguageDomain&&credit > 0)
-                        {
-                            語文.Score = Math.Round(sum / credit, 2, MidpointRounding.AwayFromZero);
-                            語文.Credit = credit;
+                        //if (!hasLanguageDomain&&credit > 0)
+                        //{
+                        //    語文.Score = Math.Round(sum / credit, 2, MidpointRounding.AwayFromZero);
+                        //    語文.Credit = credit;
 
-                            domainScoreList.Add(語文);
-                        }
+                        //    domainScoreList.Add(語文);
+                        //}
 
                         //會被加入就代表承認了
                         GradeScoreList.Add(domainScoreList);
