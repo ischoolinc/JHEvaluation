@@ -103,7 +103,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                 #region 儲存檔案
 
-                string reportName = "" + SelSchoolYear + "學年度第" + SelSemester + "學期" + SelExamName + "新竹班級評量成績單";
+                string reportName = "" + SelSchoolYear + "學年度第" + SelSemester + "學期" + SelExamName + "班級評量成績單(固定排名)";
 
                 string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
                 if (!Directory.Exists(path))
@@ -167,9 +167,9 @@ namespace HsinChuExamScoreClassFixedRank.Form
         private void BgWorkerReport_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             if (e.ProgressPercentage == 100)
-                FISCA.Presentation.MotherForm.SetStatusBarMessage("班級評量成績完成");
+                FISCA.Presentation.MotherForm.SetStatusBarMessage("班級評量成績單產生完成");
             else
-                FISCA.Presentation.MotherForm.SetStatusBarMessage("班級評量成績產生中...", e.ProgressPercentage);
+                FISCA.Presentation.MotherForm.SetStatusBarMessage("班級評量成績單產生中...", e.ProgressPercentage);
         }
 
         private void BgWorkerReport_DoWork(object sender, DoWorkEventArgs e)
@@ -905,34 +905,41 @@ namespace HsinChuExamScoreClassFixedRank.Form
             SelDomainNameList.Sort(new StringComparer(ddList.ToArray()));
 
             //SelDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+            
+            //科目排序
+            SelSubjectNameList.Sort(new StringComparer(Utility.GetSubjectOrder().ToArray()));
 
             // 所選單一排序
-            SelSubjectNameList.Sort(new StringComparer("國文"
-                                , "英文"
-                                , "數學"
-                                , "理化"
-                                , "生物"
-                                , "社會"
-                                , "物理"
-                                , "化學"
-                                , "歷史"
-                                , "地理"
-                                , "公民"));
+            //SelSubjectNameList.Sort(new StringComparer("國文"
+            //                    , "英文"
+            //                    , "數學"
+            //                    , "理化"
+            //                    , "生物"
+            //                    , "社會"
+            //                    , "物理"
+            //                    , "化學"
+            //                    , "歷史"
+            //                    , "地理"
+            //                    , "公民"));
 
 
+            //foreach (string dName in SelDomainSubjectDict.Keys)
+            //{
+            //    SelDomainSubjectDict[dName].Sort(new StringComparer("國文"
+            //                    , "英文"
+            //                    , "數學"
+            //                    , "理化"
+            //                    , "生物"
+            //                    , "社會"
+            //                    , "物理"
+            //                    , "化學"
+            //                    , "歷史"
+            //                    , "地理"
+            //                    , "公民"));
+            //}
             foreach (string dName in SelDomainSubjectDict.Keys)
             {
-                SelDomainSubjectDict[dName].Sort(new StringComparer("國文"
-                                , "英文"
-                                , "數學"
-                                , "理化"
-                                , "生物"
-                                , "社會"
-                                , "物理"
-                                , "化學"
-                                , "歷史"
-                                , "地理"
-                                , "公民"));
+                SelDomainSubjectDict[dName].Sort(new StringComparer(Utility.GetSubjectOrder().ToArray()));
             }
 
 
@@ -2507,7 +2514,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             lnkViewTemplate.Enabled = false;
             #region 儲存檔案
 
-            string reportName = ParseFileName("新竹評量成績單樣板(" + _Configure.Name + ")");
+            string reportName = ParseFileName("評量成績單樣板(" + _Configure.Name + ")");
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
             if (!Directory.Exists(path))

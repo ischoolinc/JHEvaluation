@@ -133,7 +133,7 @@ namespace HsinChuExamScoreClassFixedRank
 
         public static void ExportMappingFieldWord()
         {
-            string inputReportName = "新竹班級評量成績單合併欄位總表";
+            string inputReportName = "班級評量成績單合併欄位總表";
             string reportName = inputReportName;
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
@@ -163,7 +163,7 @@ namespace HsinChuExamScoreClassFixedRank
                 // 讀取總表檔案並動態加入合併欄位
 
                 DocumentBuilder builder = new DocumentBuilder(tempDoc);
-                builder.Write("=== 新竹評量成績單合併欄位總表 ===");
+                builder.Write("=== 評量成績單合併欄位總表 ===");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
