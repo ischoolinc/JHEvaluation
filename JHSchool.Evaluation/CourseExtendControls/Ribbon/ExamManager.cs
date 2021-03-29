@@ -20,6 +20,8 @@ namespace JHSchool.Evaluation.CourseExtendControls.Ribbon
         public ExamManager()
         {
             InitializeComponent();
+            List<int> cols = new List<int>() { 1 };
+            Campus.Windows.DataGridViewImeDecorator dec = new Campus.Windows.DataGridViewImeDecorator(this.dataGridView, cols);
 
             try
             {

@@ -16,6 +16,8 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
         public EffortDegreeTable()
         {
             InitializeComponent();
+            List<int> cols = new List<int>() { 2 };
+            Campus.Windows.DataGridViewImeDecorator dec = new Campus.Windows.DataGridViewImeDecorator(this.dgv, cols);
         }
 
         private void EffortDegreeTable_Load(object sender, EventArgs e)

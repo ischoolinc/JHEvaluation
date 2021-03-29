@@ -17,6 +17,9 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
         public ScoreMappingTable()
         {
             InitializeComponent();
+            List<int> cols = new List<int>() { 1, 2 };
+            Campus.Windows.DataGridViewImeDecorator dec = new Campus.Windows.DataGridViewImeDecorator(this.dgv, cols);
+
         }
 
         private void ScoreMappingTable_Load(object sender, EventArgs e)
