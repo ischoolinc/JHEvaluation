@@ -66,10 +66,10 @@
             this.cboConfigure.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboConfigure.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboConfigure.FormattingEnabled = true;
-            this.cboConfigure.ItemHeight = 19;
+            this.cboConfigure.ItemHeight = 23;
             this.cboConfigure.Location = new System.Drawing.Point(111, 21);
             this.cboConfigure.Name = "cboConfigure";
-            this.cboConfigure.Size = new System.Drawing.Size(273, 25);
+            this.cboConfigure.Size = new System.Drawing.Size(273, 29);
             this.cboConfigure.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboConfigure.TabIndex = 0;
             this.cboConfigure.SelectedIndexChanged += new System.EventHandler(this.cboConfigure_SelectedIndexChanged);
@@ -80,7 +80,7 @@
             this.lnkDelConfig.BackColor = System.Drawing.Color.Transparent;
             this.lnkDelConfig.Location = new System.Drawing.Point(481, 29);
             this.lnkDelConfig.Name = "lnkDelConfig";
-            this.lnkDelConfig.Size = new System.Drawing.Size(73, 17);
+            this.lnkDelConfig.Size = new System.Drawing.Size(95, 22);
             this.lnkDelConfig.TabIndex = 2;
             this.lnkDelConfig.TabStop = true;
             this.lnkDelConfig.Text = "刪除設定檔";
@@ -92,7 +92,7 @@
             this.lnkCopyConfig.BackColor = System.Drawing.Color.Transparent;
             this.lnkCopyConfig.Location = new System.Drawing.Point(402, 29);
             this.lnkCopyConfig.Name = "lnkCopyConfig";
-            this.lnkCopyConfig.Size = new System.Drawing.Size(73, 17);
+            this.lnkCopyConfig.Size = new System.Drawing.Size(95, 22);
             this.lnkCopyConfig.TabIndex = 1;
             this.lnkCopyConfig.TabStop = true;
             this.lnkCopyConfig.Text = "複製設定檔";
@@ -109,7 +109,7 @@
             this.labelX11.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX11.Location = new System.Drawing.Point(20, 23);
             this.labelX11.Name = "labelX11";
-            this.labelX11.Size = new System.Drawing.Size(87, 21);
+            this.labelX11.Size = new System.Drawing.Size(108, 26);
             this.labelX11.TabIndex = 13;
             this.labelX11.Text = "樣板設定檔：";
             // 
@@ -119,10 +119,10 @@
             this.cboExam.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboExam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboExam.FormattingEnabled = true;
-            this.cboExam.ItemHeight = 19;
+            this.cboExam.ItemHeight = 23;
             this.cboExam.Location = new System.Drawing.Point(375, 67);
             this.cboExam.Name = "cboExam";
-            this.cboExam.Size = new System.Drawing.Size(189, 25);
+            this.cboExam.Size = new System.Drawing.Size(189, 29);
             this.cboExam.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboExam.TabIndex = 3;
             this.cboExam.SelectedIndexChanged += new System.EventHandler(this.cboExam_SelectedIndexChanged);
@@ -132,10 +132,10 @@
             this.cboSemester.DisplayMember = "Text";
             this.cboSemester.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboSemester.FormattingEnabled = true;
-            this.cboSemester.ItemHeight = 19;
+            this.cboSemester.ItemHeight = 23;
             this.cboSemester.Location = new System.Drawing.Point(179, 67);
             this.cboSemester.Name = "cboSemester";
-            this.cboSemester.Size = new System.Drawing.Size(48, 25);
+            this.cboSemester.Size = new System.Drawing.Size(48, 29);
             this.cboSemester.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboSemester.TabIndex = 2;
             // 
@@ -144,10 +144,10 @@
             this.cboSchoolYear.DisplayMember = "Text";
             this.cboSchoolYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboSchoolYear.FormattingEnabled = true;
-            this.cboSchoolYear.ItemHeight = 19;
+            this.cboSchoolYear.ItemHeight = 23;
             this.cboSchoolYear.Location = new System.Drawing.Point(71, 67);
             this.cboSchoolYear.Name = "cboSchoolYear";
-            this.cboSchoolYear.Size = new System.Drawing.Size(62, 25);
+            this.cboSchoolYear.Size = new System.Drawing.Size(62, 29);
             this.cboSchoolYear.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboSchoolYear.TabIndex = 1;
             // 
@@ -162,7 +162,7 @@
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX3.Location = new System.Drawing.Point(311, 69);
             this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(60, 21);
+            this.labelX3.Size = new System.Drawing.Size(75, 26);
             this.labelX3.TabIndex = 32;
             this.labelX3.Text = "試別名稱";
             // 
@@ -177,7 +177,7 @@
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX2.Location = new System.Drawing.Point(139, 69);
             this.labelX2.Name = "labelX2";
-            this.labelX2.Size = new System.Drawing.Size(34, 21);
+            this.labelX2.Size = new System.Drawing.Size(41, 26);
             this.labelX2.TabIndex = 29;
             this.labelX2.Text = "學期";
             // 
@@ -192,7 +192,7 @@
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.Location = new System.Drawing.Point(20, 69);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(47, 21);
+            this.labelX1.Size = new System.Drawing.Size(58, 26);
             this.labelX1.TabIndex = 31;
             this.labelX1.Text = "學年度";
             // 
@@ -204,7 +204,7 @@
             this.lnkViewMapColumns.BackColor = System.Drawing.Color.Transparent;
             this.lnkViewMapColumns.Location = new System.Drawing.Point(195, 463);
             this.lnkViewMapColumns.Name = "lnkViewMapColumns";
-            this.lnkViewMapColumns.Size = new System.Drawing.Size(112, 17);
+            this.lnkViewMapColumns.Size = new System.Drawing.Size(146, 22);
             this.lnkViewMapColumns.TabIndex = 9;
             this.lnkViewMapColumns.TabStop = true;
             this.lnkViewMapColumns.Text = "檢視合併欄位總表";
@@ -233,7 +233,7 @@
             this.lnkViewTemplate.BackColor = System.Drawing.Color.Transparent;
             this.lnkViewTemplate.Location = new System.Drawing.Point(16, 463);
             this.lnkViewTemplate.Name = "lnkViewTemplate";
-            this.lnkViewTemplate.Size = new System.Drawing.Size(86, 17);
+            this.lnkViewTemplate.Size = new System.Drawing.Size(112, 22);
             this.lnkViewTemplate.TabIndex = 7;
             this.lnkViewTemplate.TabStop = true;
             this.lnkViewTemplate.Text = "檢視套印樣板";
@@ -247,7 +247,7 @@
             this.lnkChangeTemplate.BackColor = System.Drawing.Color.Transparent;
             this.lnkChangeTemplate.Location = new System.Drawing.Point(105, 463);
             this.lnkChangeTemplate.Name = "lnkChangeTemplate";
-            this.lnkChangeTemplate.Size = new System.Drawing.Size(86, 17);
+            this.lnkChangeTemplate.Size = new System.Drawing.Size(112, 22);
             this.lnkChangeTemplate.TabIndex = 8;
             this.lnkChangeTemplate.TabStop = true;
             this.lnkChangeTemplate.Text = "變更套印樣板";
@@ -409,7 +409,7 @@
             this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX4.Location = new System.Drawing.Point(20, 105);
             this.labelX4.Name = "labelX4";
-            this.labelX4.Size = new System.Drawing.Size(127, 21);
+            this.labelX4.Size = new System.Drawing.Size(159, 26);
             this.labelX4.TabIndex = 42;
             this.labelX4.Text = "平均計算至小數點後";
             // 
@@ -424,7 +424,7 @@
             this.labelX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX5.Location = new System.Drawing.Point(204, 105);
             this.labelX5.Name = "labelX5";
-            this.labelX5.Size = new System.Drawing.Size(74, 21);
+            this.labelX5.Size = new System.Drawing.Size(92, 26);
             this.labelX5.TabIndex = 43;
             this.labelX5.Text = "位四捨五入";
             // 
@@ -433,10 +433,10 @@
             this.cboParseNumber.DisplayMember = "Text";
             this.cboParseNumber.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboParseNumber.FormattingEnabled = true;
-            this.cboParseNumber.ItemHeight = 19;
+            this.cboParseNumber.ItemHeight = 23;
             this.cboParseNumber.Location = new System.Drawing.Point(148, 103);
             this.cboParseNumber.Name = "cboParseNumber";
-            this.cboParseNumber.Size = new System.Drawing.Size(40, 25);
+            this.cboParseNumber.Size = new System.Drawing.Size(40, 29);
             this.cboParseNumber.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboParseNumber.TabIndex = 5;
             this.cboParseNumber.Text = "2";
@@ -447,10 +447,10 @@
             this.cboRefExam.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboRefExam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRefExam.FormattingEnabled = true;
-            this.cboRefExam.ItemHeight = 19;
+            this.cboRefExam.ItemHeight = 23;
             this.cboRefExam.Location = new System.Drawing.Point(375, 137);
             this.cboRefExam.Name = "cboRefExam";
-            this.cboRefExam.Size = new System.Drawing.Size(189, 25);
+            this.cboRefExam.Size = new System.Drawing.Size(189, 29);
             this.cboRefExam.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboRefExam.TabIndex = 4;
             this.cboRefExam.SelectedIndexChanged += new System.EventHandler(this.cboRefExam_SelectedIndexChanged);
@@ -466,7 +466,7 @@
             this.labelX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX6.Location = new System.Drawing.Point(311, 139);
             this.labelX6.Name = "labelX6";
-            this.labelX6.Size = new System.Drawing.Size(60, 21);
+            this.labelX6.Size = new System.Drawing.Size(75, 26);
             this.labelX6.TabIndex = 45;
             this.labelX6.Text = "參考試別";
             // 
@@ -481,7 +481,7 @@
             this.labelX7.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX7.Location = new System.Drawing.Point(311, 104);
             this.labelX7.Name = "labelX7";
-            this.labelX7.Size = new System.Drawing.Size(87, 21);
+            this.labelX7.Size = new System.Drawing.Size(108, 26);
             this.labelX7.TabIndex = 46;
             this.labelX7.Text = "參考學年學期";
             // 
@@ -491,10 +491,10 @@
             this.cboRefSchoolYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboRefSchoolYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRefSchoolYear.FormattingEnabled = true;
-            this.cboRefSchoolYear.ItemHeight = 19;
+            this.cboRefSchoolYear.ItemHeight = 23;
             this.cboRefSchoolYear.Location = new System.Drawing.Point(404, 103);
             this.cboRefSchoolYear.Name = "cboRefSchoolYear";
-            this.cboRefSchoolYear.Size = new System.Drawing.Size(83, 25);
+            this.cboRefSchoolYear.Size = new System.Drawing.Size(83, 29);
             this.cboRefSchoolYear.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboRefSchoolYear.TabIndex = 47;
             // 
@@ -504,16 +504,16 @@
             this.cboRefSemester.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboRefSemester.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRefSemester.FormattingEnabled = true;
-            this.cboRefSemester.ItemHeight = 19;
+            this.cboRefSemester.ItemHeight = 23;
             this.cboRefSemester.Location = new System.Drawing.Point(494, 103);
             this.cboRefSemester.Name = "cboRefSemester";
-            this.cboRefSemester.Size = new System.Drawing.Size(71, 25);
+            this.cboRefSemester.Size = new System.Drawing.Size(71, 29);
             this.cboRefSemester.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboRefSemester.TabIndex = 48;
             // 
             // PrintForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(593, 523);
             this.Controls.Add(this.cboRefSemester);
@@ -544,7 +544,7 @@
             this.Controls.Add(this.labelX11);
             this.DoubleBuffered = true;
             this.Name = "PrintForm";
-            this.Text = "班級評量成績通知單";
+            this.Text = "班級評量成績通知單(固定排名)";
             this.Load += new System.EventHandler(this.PrintForm_Load);
             this.groupPanel1.ResumeLayout(false);
             this.groupPanel2.ResumeLayout(false);

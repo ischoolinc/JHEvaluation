@@ -91,8 +91,10 @@ namespace JHSchool.Evaluation.CourseExtendControls
             {
                 if (record.CalculationFlag == "1")
                     rdoCalcTrue.Checked = true;
-                else if (record.CalculationFlag == "2")
-                    rdoCalcFalse.Checked = true;
+                //else if (record.CalculationFlag == "2")
+                else if (record.CalculationFlag == "2"|| record.CalculationFlag == "")
+
+                            rdoCalcFalse.Checked = true;
             }
             JHAssessmentSetupRecord ass = JHAssessmentSetup.SelectByID(record.RefAssessmentSetupID);
 

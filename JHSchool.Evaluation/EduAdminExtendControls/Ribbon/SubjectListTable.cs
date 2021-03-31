@@ -23,6 +23,9 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
             InitializeComponent();
 
             LoadSubject();
+
+            List<int> cols = new List<int>() { 1 };
+            Campus.Windows.DataGridViewImeDecorator dec = new Campus.Windows.DataGridViewImeDecorator(this.dgv, cols);
         }
 
         private void LoadSubject()

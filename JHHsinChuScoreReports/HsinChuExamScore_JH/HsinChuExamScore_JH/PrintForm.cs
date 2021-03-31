@@ -115,7 +115,7 @@ namespace HsinChuExamScore_JH
         /// <summary>
         /// 裝有那些自訂欄位
         /// </summary>
-        private List<string> _UserDefineFields; 
+        private List<string> _UserDefineFields;
         private Dictionary<string, List<string>> _StudTagDict = new Dictionary<string, List<string>>();
 
         // 紀錄樣板設定
@@ -152,7 +152,7 @@ namespace HsinChuExamScore_JH
         void bkw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             EnbSelect();
-            
+
             _DefalutSchoolYear = K12.Data.School.DefaultSchoolYear;
             _DefaultSemester = K12.Data.School.DefaultSemester;
 
@@ -169,6 +169,7 @@ namespace HsinChuExamScore_JH
 
             if (int.TryParse(_DefalutSchoolYear, out i))
             {
+                cboRefSchoolYear.Items.Add("");
                 for (int j = 5; j > 0; j--)
                 {
                     cboSchoolYear.Items.Add("" + (i - j));
@@ -185,11 +186,12 @@ namespace HsinChuExamScore_JH
 
             cboSemester.Items.Add("1");
             cboSemester.Items.Add("2");
+            cboRefSemester.Items.Add("");
             cboRefSemester.Items.Add("1");
             cboRefSemester.Items.Add("2");
             cboExam.Items.Clear();
             cboRefExam.Items.Clear();
-
+            cboRefExam.Items.Add("");
             foreach (ExamRecord exName in _exams)
             {
                 cboExam.Items.Add(exName.Name);
@@ -291,8 +293,10 @@ namespace HsinChuExamScore_JH
                     cn.Name = name;
                     cn.SchoolYear = K12.Data.School.DefaultSchoolYear;
                     cn.Semester = K12.Data.School.DefaultSemester;
-                    cn.RefSchoolYear = K12.Data.School.DefaultSchoolYear;
-                    cn.RefSemester = K12.Data.School.DefaultSemester;
+                    //cn.RefSchoolYear = K12.Data.School.DefaultSchoolYear;
+                    //cn.RefSemester = K12.Data.School.DefaultSemester;
+                    cn.RefSchoolYear = "";
+                    cn.RefSemester = "";
                     DAO.UDT_ScoreConfig conf = new DAO.UDT_ScoreConfig();
                     conf.Name = name;
                     conf.UDTTableName = Global._UDTTableName;
@@ -370,7 +374,7 @@ namespace HsinChuExamScore_JH
 
                 //object[] objArray = (object[])e.Result;
                 object[] objArray = (object[])e.Result;
-                Document doc  = (Document)objArray[0];
+                Document doc = (Document)objArray[0];
 
                 string reportNameW = "" + _SelSchoolYear + "學年度第" + _SelSemester + "學期" + _SelExamName + "" + objArray[1];
                 ePaperCloud ePaperCloud = new ePaperCloud();
@@ -598,13 +602,13 @@ namespace HsinChuExamScore_JH
                                     examSubjectScore = (ExamSubjectScore)studExamScoreDict[studID]._ExamSubjectScoreDict[SubjecName];
                                 }
 
-                                    examSubjectScore.DomainName = cr.Domain;
-                                    examSubjectScore.SubjectName = SubjecName;
+                                examSubjectScore.DomainName = cr.Domain;
+                                examSubjectScore.SubjectName = SubjecName;
 
-                                    if (rec.RefExamID == this._SelExamID) //如果是本次選擇類別
-                                    {
-                                        examSubjectScore.ScoreA = rec.AssignmentScore;
-                                        examSubjectScore.ScoreF = rec.Score;
+                                if (rec.RefExamID == this._SelExamID) //如果是本次選擇類別
+                                {
+                                    examSubjectScore.ScoreA = rec.AssignmentScore;
+                                    examSubjectScore.ScoreF = rec.Score;
                                     if (examSubjectScore.ScoreT.HasValue)
                                         examSubjectScore.ScoreT = studentCalculator.ParseSubjectScore(examSubjectScore.ScoreT.Value);
 
@@ -612,49 +616,49 @@ namespace HsinChuExamScore_JH
                                     examSubjectScore.Credit = cr.Credit;
 
                                 }
-                                    else if (rec.RefExamID == this._SelRefExamID) //處理參考試別
-                                    {
-                                        examSubjectScore.RefScoreA = rec.AssignmentScore;
-                                        examSubjectScore.RefScoreF = rec.Score;
-                                    }
+                                else if (rec.RefExamID == this._SelRefExamID) //處理參考試別
+                                {
+                                    examSubjectScore.RefScoreA = rec.AssignmentScore;
+                                    examSubjectScore.RefScoreF = rec.Score;
+                                }
 
-                                    if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
-                                    {
-                                        // 取得定期，評量由100-定期
-                                        // decimal f = ScorePercentageHSDict[cr.RefAssessmentSetupID] * 0.01M;
-                                        // 計算所有成績
-                                        examSubjectScore.GetTotalScore(this.HasReferenceExam, ScorePercentageHSDict[cr.RefAssessmentSetupID]);
-                                        //decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID]) * 0.01M;
-                                    }
-                                    else
-                                    {
-                                        examSubjectScore.GetTotalScore(this.HasReferenceExam, 0.5M);
-                                    }
+                                if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
+                                {
+                                    // 取得定期，評量由100-定期
+                                    // decimal f = ScorePercentageHSDict[cr.RefAssessmentSetupID] * 0.01M;
+                                    // 計算所有成績
+                                    examSubjectScore.GetTotalScore(this.HasReferenceExam, ScorePercentageHSDict[cr.RefAssessmentSetupID]);
+                                    //decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID]) * 0.01M;
+                                }
+                                else
+                                {
+                                    examSubjectScore.GetTotalScore(this.HasReferenceExam, 0.5M);
+                                }
 
-                                    //examSubjectScore.ScoreT = examSubjectScore.ScoreA.Value * a + examSubjectScore.ScoreF.Value * f;
-                                    //}
-                                    //else
-                                    //    examSubjectScore.ScoreT = examSubjectScore.ScoreA.Value * 0.5M + examSubjectScore.ScoreF.Value * 0.5M; // 沒有設定預設50,50
+                                //examSubjectScore.ScoreT = examSubjectScore.ScoreA.Value * a + examSubjectScore.ScoreF.Value * f;
+                                //}
+                                //else
+                                //    examSubjectScore.ScoreT = examSubjectScore.ScoreA.Value * 0.5M + examSubjectScore.ScoreF.Value * 0.5M; // 沒有設定預設50,50
 
-                                    // 原本
-                                    //ess.ScoreT = (ess.ScoreA.Value + ess.ScoreF.Value) / 2;
+                                // 原本
+                                //ess.ScoreT = (ess.ScoreA.Value + ess.ScoreF.Value) / 2;
 
-                                    //if (examSubjectScore.ScoreA.HasValue && examSubjectScore.ScoreF.HasValue == false)
-                                    //    examSubjectScore.ScoreT = examSubjectScore.ScoreA.Value;
+                                //if (examSubjectScore.ScoreA.HasValue && examSubjectScore.ScoreF.HasValue == false)
+                                //    examSubjectScore.ScoreT = examSubjectScore.ScoreA.Value;
 
-                                    //if (examSubjectScore.ScoreA.HasValue == false && examSubjectScore.ScoreF.HasValue)
-                                    //    examSubjectScore.ScoreT = examSubjectScore.ScoreF.Value;
+                                //if (examSubjectScore.ScoreA.HasValue == false && examSubjectScore.ScoreF.HasValue)
+                                //    examSubjectScore.ScoreT = examSubjectScore.ScoreF.Value;
 
-                                    // 依照成績計算規則科目方式處理進位，只有總成績。
-                                    // 平時
-                                    //if(ess.ScoreA.HasValue)
-                                    //    ess.ScoreA = studentCalculator.ParseSubjectScore(ess.ScoreA.Value);
+                                // 依照成績計算規則科目方式處理進位，只有總成績。
+                                // 平時
+                                //if(ess.ScoreA.HasValue)
+                                //    ess.ScoreA = studentCalculator.ParseSubjectScore(ess.ScoreA.Value);
 
-                                    // 定期
-                                    //if (ess.ScoreF.HasValue)
-                                    //    ess.ScoreF = studentCalculator.ParseSubjectScore(ess.ScoreF.Value);
+                                // 定期
+                                //if (ess.ScoreF.HasValue)
+                                //    ess.ScoreF = studentCalculator.ParseSubjectScore(ess.ScoreF.Value);
 
-                                    // 進位 
+                                // 進位 
                             }
                         }
                     }
@@ -1030,18 +1034,18 @@ namespace HsinChuExamScore_JH
                 //dt.Columns.Add("科目成績總分");
                 dt.Columns.Add("領域成績加權總分(不含彈性)");
                 dt.Columns.Add("科目定期成績加權總分(不含彈性)");
-                dt.Columns.Add("科目平時成績加權總分(不含彈性)"); 
-               // dt.Columns.Add("科目總成績加權總分(不含彈性)"); 
+                dt.Columns.Add("科目平時成績加權總分(不含彈性)");
+                // dt.Columns.Add("科目總成績加權總分(不含彈性)"); 
 
                 dt.Columns.Add("科目平時評量總分(不含彈性)");
-                dt.Columns.Add("科目成績加權總分(不含彈性)"); 
-               // dt.Columns.Add("科目成績總分(不含彈性)"); 
+                dt.Columns.Add("科目成績加權總分(不含彈性)");
+                // dt.Columns.Add("科目成績總分(不含彈性)"); 
                 dt.Columns.Add("領域成績總分");
                 dt.Columns.Add("領域定期成績總分");
                 dt.Columns.Add("領域成績平均");
                 dt.Columns.Add("領域定期成績平均");
 
-               
+
 
                 #region 在dt加上科目相關header
 
@@ -1068,7 +1072,7 @@ namespace HsinChuExamScore_JH
                         foreach (string itemType in itemTypesMapping.Keys)
                         {
 
-                          
+
 
                         }
                     }
@@ -1421,7 +1425,7 @@ namespace HsinChuExamScore_JH
                                     break;
 
                                 case "參考試別科目定期評量":
-                                    if(cboSchoolYear.Text != cboRefSchoolYear.Text || cboSemester.Text != cboRefSemester.Text)
+                                    if (cboSchoolYear.Text != cboRefSchoolYear.Text || cboSemester.Text != cboRefSemester.Text)
                                     {
                                         row[key] = null;
                                         break;
@@ -1437,11 +1441,11 @@ namespace HsinChuExamScore_JH
                                         //}
                                         //else
                                         //{
-                                            //row[key] = examSubjScore.RefScoreF;
-                                          //  row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
+                                        //row[key] = examSubjScore.RefScoreF;
+                                        //  row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
                                         //}
                                     }
-                                        
+
                                     break;
 
                                 case "參考試別科目平時評量":
@@ -1453,18 +1457,18 @@ namespace HsinChuExamScore_JH
                                     if (examSubjScore.RefScoreA.HasValue)
                                     {
                                         row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
-                                        
+
                                         //if (examSubjScore.RefScoreA != null)
                                         //{
                                         //    row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
                                         //}
                                         //else
                                         //{
-                                            //row[key] = examSubjScore.RefScoreA;
-                                           // row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
+                                        //row[key] = examSubjScore.RefScoreA;
+                                        // row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
                                         //}
                                     }
-   
+
                                     break;
                                 case "參考試別科目總成績":
                                     if (cboSchoolYear.Text != cboRefSchoolYear.Text || cboSemester.Text != cboRefSemester.Text)
@@ -1482,7 +1486,7 @@ namespace HsinChuExamScore_JH
                                         //}
                                         //else
                                         //{
-                                           // row[key] = doParseTransfer(examSubjScore.RefScoreT.Value);
+                                        // row[key] = doParseTransfer(examSubjScore.RefScoreT.Value);
                                         //}
                                     }
                                     break;
@@ -1738,7 +1742,7 @@ namespace HsinChuExamScore_JH
                         {
                             row[key] = doParseTransfer(eds.ScoreT.Value);
                             row[key + "等第"] = _ScoreMappingConfig.ParseScoreName(eds.ScoreT.Value);
-     
+
                         }
 
 
@@ -1963,12 +1967,12 @@ namespace HsinChuExamScore_JH
                             if (scoreCaculateWay.Contains("平均"))
                             {
 
-                              decimal? ScoreArithmeticＭean = studExamScoreDict[StudRec.ID].GetScoreArithmeticＭean( Global.CheckIfContainFlex(scoreCaculateWay) // 確認是否包含彈性
-                                                                                                                    , enumScoreType
-                                                                                                                    , scoreComposition);
+                                decimal? ScoreArithmeticＭean = studExamScoreDict[StudRec.ID].GetScoreArithmeticＭean(Global.CheckIfContainFlex(scoreCaculateWay) // 確認是否包含彈性
+                                                                                                                      , enumScoreType
+                                                                                                                      , scoreComposition);
 
                                 if (ScoreArithmeticＭean.HasValue)
-                                    row[$"{_scoreTarget}{scoreComposition}{scoreCaculateWay}"] =  ScoreArithmeticＭean;
+                                    row[$"{_scoreTarget}{scoreComposition}{scoreCaculateWay}"] = ScoreArithmeticＭean;
                             }
                             else if (scoreCaculateWay.Contains("總分"))
                             {
@@ -2263,12 +2267,12 @@ namespace HsinChuExamScore_JH
                 //{
                 //    if (doc1.MailMerge.GetFieldNames().Contains(cols.ColumnName)) 
                 //    {
-                    
+
                 //    }
                 //} 
-               
+
                 doc1.MailMerge.RemoveEmptyParagraphs = true;
-               doc1.MailMerge.DeleteFields();
+                doc1.MailMerge.DeleteFields();
                 docList.Add(doc1);
 
             }
@@ -2287,7 +2291,7 @@ namespace HsinChuExamScore_JH
             foreach (Document doc1 in docList)
                 doc.Sections.Add(doc.ImportNode(doc1.Sections[0], true));
 
-            string reportNameW = "新竹評量成績單";
+            string reportNameW = "國中評量成績單";
             pathW = Path.Combine(System.Windows.Forms.Application.StartupPath + "\\Reports", "");
             if (!Directory.Exists(pathW))
                 Directory.CreateDirectory(pathW);
@@ -2324,7 +2328,7 @@ namespace HsinChuExamScore_JH
                 throw exow;
             }
             doc = null;
-        
+
 
             GC.Collect();
             #endregion
@@ -2671,7 +2675,7 @@ namespace HsinChuExamScore_JH
                     //break;
                 }
             }
- 
+
             // 科目
             foreach (ListViewItem item in lvSubject.Items)
             {
@@ -2719,7 +2723,7 @@ namespace HsinChuExamScore_JH
                         _Configure.PrintSubjectList.Remove(item.Text);
                 }
             }
-    
+
             // 儲存開始與結束日期
             _Configure.BeginDate = dtBegin.Value.ToShortDateString();
             _Configure.EndDate = dtEnd.Value.ToShortDateString();
@@ -2760,20 +2764,23 @@ namespace HsinChuExamScore_JH
                 DAO.UDTTransfer.InsertConfigData(iList);
             }
             #endregion
-            if(btnPrintClick == false)
+            if (btnPrintClick == false)
             {
                 MessageBox.Show("已完成樣板儲存", "儲存樣板", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                if(cboSchoolYear.Text != cboRefSchoolYear.Text || cboSemester.Text != cboRefSemester.Text)
+                if (cboRefSchoolYear.Text != "" && cboRefSemester.Text != "" && cboRefExam.Text != "" )
                 {
-                    MessageBox.Show("跨學年度學期之參考試別只會呈排名資料，不會呈現評量成績。", "列印提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (cboSchoolYear.Text != cboRefSchoolYear.Text || cboSemester.Text != cboRefSemester.Text)
+                    {
+                        MessageBox.Show("跨學年度學期之參考試別只會呈排名資料，不會呈現評量成績。", "列印提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        btnPrintClick = false;
+                    }
                     btnPrintClick = false;
                 }
-                    btnPrintClick = false;
             }
-            
+
 
             EnbSelect();
         }
@@ -2815,8 +2822,10 @@ namespace HsinChuExamScore_JH
                     _Configure.SubjectLimit = dialog.SubjectLimit;
                     _Configure.SchoolYear = _DefalutSchoolYear;
                     _Configure.Semester = _DefaultSemester;
-                    _Configure.RefSchoolYear = _DefalutSchoolYear;
-                    _Configure.RefSemester = _DefaultSemester;
+                    //_Configure.RefSchoolYear = _DefalutSchoolYear;
+                    //_Configure.RefSemester = _DefaultSemester;
+                    _Configure.RefSchoolYear = "";
+                    _Configure.RefSemester = "";
                     if (_Configure.PrintAttendanceList == null)
                         _Configure.PrintAttendanceList = new List<string>();
                     if (_Configure.PrintSubjectList == null)
@@ -2896,7 +2905,7 @@ namespace HsinChuExamScore_JH
                         {
                             cboRefExam.SelectedIndex = 0;
                         }
-                            int idx = 0;
+                        int idx = 0;
                         foreach (string sitm in cboRefExam.Items)
                         {
                             if (sitm == _Configure.RefExamRecord.Name)
@@ -2981,7 +2990,7 @@ namespace HsinChuExamScore_JH
             lnkViewTemplate.Enabled = false;
             #region 儲存檔案
 
-            string reportName = "新竹評量成績單樣板(" + _Configure.Name + ").doc";
+            string reportName = "國中評量成績單樣板(" + _Configure.Name + ").doc";
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
             if (!Directory.Exists(path))

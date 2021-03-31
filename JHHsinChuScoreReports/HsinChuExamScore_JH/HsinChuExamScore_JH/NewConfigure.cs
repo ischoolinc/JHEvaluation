@@ -113,7 +113,7 @@ namespace HsinChuExamScore_JH
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             #region 儲存檔案
-            string inputReportName = "新竹_評量成績通知單樣板.doc";
+            string inputReportName = "國中_評量成績通知單樣板.doc";
             string reportName = inputReportName;
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
