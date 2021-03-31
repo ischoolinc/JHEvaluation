@@ -261,25 +261,34 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             {
                                 if (objSubj.ScoreMakeup.HasValue && objSubj.Weight.HasValue)
                                 {
-
-                                    // 有補考需要與原始比較擇優
-                                    if (objSubj.ScoreOrigin.HasValue)
+                                    if (Program.Mode == ModuleMode.KaoHsiung)
                                     {
-                                        if (objSubj.ScoreMakeup.Value > objSubj.ScoreOrigin.Value)
-                                        {
-                                            domainMakeUpScoreTotal[strDomain] += objSubj.ScoreMakeup.Value * objSubj.Weight.Value;
-                                        }
-                                        else
-                                        {
-                                            // 原始
-                                            domainMakeUpScoreTotal[strDomain] += objSubj.ScoreOrigin.Value * objSubj.Weight.Value;
-                                        }
+                                        // 補考不擇優
+                                        domainMakeUpScoreTotal[strDomain] += objSubj.ScoreMakeup.Value * objSubj.Weight.Value;
                                     }
                                     else
                                     {
-                                        // 沒有原始使用補考
-                                        domainMakeUpScoreTotal[strDomain] += objSubj.ScoreMakeup.Value * objSubj.Weight.Value;
+                                        // 公版
+                                        // 有補考需要與原始比較擇優
+                                        if (objSubj.ScoreOrigin.HasValue)
+                                        {
+                                            if (objSubj.ScoreMakeup.Value > objSubj.ScoreOrigin.Value)
+                                            {
+                                                domainMakeUpScoreTotal[strDomain] += objSubj.ScoreMakeup.Value * objSubj.Weight.Value;
+                                            }
+                                            else
+                                            {
+                                                // 原始
+                                                domainMakeUpScoreTotal[strDomain] += objSubj.ScoreOrigin.Value * objSubj.Weight.Value;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // 沒有原始使用補考
+                                            domainMakeUpScoreTotal[strDomain] += objSubj.ScoreMakeup.Value * objSubj.Weight.Value;
+                                        }
                                     }
+
                                 }
                                 else
                                 {
@@ -431,7 +440,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                                             chiScore += subScore.Value.Value * subScore.Weight.Value;
                                         }
-                                            
+
 
                                         if (subScore.ScoreOrigin.HasValue)
                                         {
@@ -440,7 +449,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                                             chiScoreOrigin += subScore.ScoreOrigin.Value * subScore.Weight.Value;
                                         }
-                                         
+
 
                                         // 有補考，有補考值使用補考，沒有使用原始
                                         if (chiHasMakupCount > 0)
@@ -472,7 +481,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                                             engScore = +subScore.Value.Value * subScore.Weight.Value;
                                         }
-                                          
+
 
 
                                         if (subScore.ScoreOrigin.HasValue)
@@ -482,7 +491,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                                             engScoreOrigin += subScore.ScoreOrigin.Value * subScore.Weight.Value;
                                         }
-                                          
+
 
                                         // 有補考，有補考值使用補考，沒有使用原始
                                         if (engHasMakupCount > 0)
@@ -569,7 +578,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 dscore.ScoreMakeup = rule.ParseDomainScore((chiMakeupScore.Value + engMakeupScore.Value) / weight);
 
                                 // 不會有補考
-                                if (dscore.ScoreMakeup.Value == 0 && chiMakeupScore.Value == 0 && engMakeupScore.Value ==0)
+                                if (dscore.ScoreMakeup.Value == 0 && chiMakeupScore.Value == 0 && engMakeupScore.Value == 0)
                                 {
                                     dscore.ScoreMakeup = null;
                                 }
@@ -614,28 +623,65 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 // 當有輸入補考，又有勾選不能超過 60 分
                                 if (setting.DomainScoreLimit)
                                 {
-                                    dscore.Value = langScore.Value;
+                                    // 2021/3/10 修改，當語文計算出來有超過60分有勾最高60分
+                                    // 計算出來語文
+                                    if (langScore.HasValue)
+                                    {
+                                        if (langScore.Value > 60)
+                                            langScore = 60;
+                                    }                                   
+
                                 }
+
+                                // 先放入原始成績
+                                if (dscore.ScoreOrigin.HasValue)
+                                    dscore.Value = dscore.ScoreOrigin.Value;
                                 else
                                 {
-                                    dscore.Value = langScore.Value;
-                                    // 分數取最高
-                                    if (dscore.ScoreOrigin.HasValue)
+                                    dscore.Value = 0;
+                                }
+                                // 分數取最高
+                                if (dscore.ScoreOrigin.HasValue)
+                                {
+                                    if (dscore.ScoreOrigin.Value > dscore.Value)
+                                        dscore.Value = dscore.ScoreOrigin.Value;
+                                }
+
+                                // 補考
+                                if (dscore.ScoreMakeup.HasValue)
+                                {
+                                    decimal SCMScore =dscore.ScoreMakeup.Value;
+
+                                    // 當有勾補考不能超過60分
+                                    if (setting.DomainScoreLimit)
                                     {
-                                        if (dscore.ScoreOrigin.Value > langScore.Value)
-                                            dscore.Value = dscore.ScoreOrigin.Value;
+                                        if (SCMScore > 60)
+                                            SCMScore = 60;
                                     }
 
-                                    if (dscore.ScoreMakeup.HasValue)
+                                    if (SCMScore > dscore.Value)
                                     {
-                                        if (dscore.ScoreMakeup.Value > langScore.Value)
-                                        {
-                                            dscore.Value = dscore.ScoreMakeup.Value;
-                                        }
+                                        dscore.Value = SCMScore;
                                     }
                                 }
 
+                                // 處理從科目算來語文領域
+                                if (langScore.HasValue)
+                                {
+                                    decimal LCMScore = langScore.Value;
 
+                                    // 當有勾補考不能超過60分
+                                    if (setting.DomainScoreLimit)
+                                    {
+                                        if (LCMScore > 60)
+                                            LCMScore = 60;
+                                    }
+
+                                    if (LCMScore > dscore.Value)
+                                    {
+                                        dscore.Value = LCMScore;
+                                    }
+                                }
                             }
 
 
