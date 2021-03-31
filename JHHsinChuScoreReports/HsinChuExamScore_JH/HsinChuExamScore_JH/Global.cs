@@ -171,7 +171,7 @@ namespace HsinChuExamScore_JH
         public static void ExportMappingFieldWord()
         {
             #region 儲存檔案
-            string inputReportName = "新竹評量成績單合併欄位總表";
+            string inputReportName = "國中評量成績單合併欄位總表";
             string reportName = inputReportName;
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
@@ -207,7 +207,7 @@ namespace HsinChuExamScore_JH
                 ScoreComposition.Add("參考科目定期成績");
 
                 DocumentBuilder builder = new DocumentBuilder(tempDoc);
-                builder.Write("=== 新竹評量成績單合併欄位總表 ===");
+                builder.Write("=== 國中評量成績單合併欄位總表 ===");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 

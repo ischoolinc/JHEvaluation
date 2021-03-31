@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cboConfigure = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.lnkDelConfig = new System.Windows.Forms.LinkLabel();
             this.lnkCopyConfig = new System.Windows.Forms.LinkLabel();
@@ -91,10 +91,10 @@
             this.cboConfigure.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboConfigure.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboConfigure.FormattingEnabled = true;
-            this.cboConfigure.ItemHeight = 19;
+            this.cboConfigure.ItemHeight = 23;
             this.cboConfigure.Location = new System.Drawing.Point(106, 11);
             this.cboConfigure.Name = "cboConfigure";
-            this.cboConfigure.Size = new System.Drawing.Size(273, 25);
+            this.cboConfigure.Size = new System.Drawing.Size(273, 29);
             this.cboConfigure.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboConfigure.TabIndex = 0;
             this.cboConfigure.SelectedIndexChanged += new System.EventHandler(this.cboConfigure_SelectedIndexChanged);
@@ -105,7 +105,7 @@
             this.lnkDelConfig.BackColor = System.Drawing.Color.Transparent;
             this.lnkDelConfig.Location = new System.Drawing.Point(476, 19);
             this.lnkDelConfig.Name = "lnkDelConfig";
-            this.lnkDelConfig.Size = new System.Drawing.Size(73, 17);
+            this.lnkDelConfig.Size = new System.Drawing.Size(95, 22);
             this.lnkDelConfig.TabIndex = 8;
             this.lnkDelConfig.TabStop = true;
             this.lnkDelConfig.Text = "刪除設定檔";
@@ -117,7 +117,7 @@
             this.lnkCopyConfig.BackColor = System.Drawing.Color.Transparent;
             this.lnkCopyConfig.Location = new System.Drawing.Point(397, 19);
             this.lnkCopyConfig.Name = "lnkCopyConfig";
-            this.lnkCopyConfig.Size = new System.Drawing.Size(73, 17);
+            this.lnkCopyConfig.Size = new System.Drawing.Size(95, 22);
             this.lnkCopyConfig.TabIndex = 7;
             this.lnkCopyConfig.TabStop = true;
             this.lnkCopyConfig.Text = "複製設定檔";
@@ -134,7 +134,7 @@
             this.labelX11.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX11.Location = new System.Drawing.Point(15, 13);
             this.labelX11.Name = "labelX11";
-            this.labelX11.Size = new System.Drawing.Size(87, 21);
+            this.labelX11.Size = new System.Drawing.Size(108, 26);
             this.labelX11.TabIndex = 9;
             this.labelX11.Text = "樣板設定檔：";
             // 
@@ -182,10 +182,10 @@
             this.tabControlPanel1.Controls.Add(this.labelX2);
             this.tabControlPanel1.Controls.Add(this.labelX1);
             this.tabControlPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlPanel1.Location = new System.Drawing.Point(0, 28);
+            this.tabControlPanel1.Location = new System.Drawing.Point(0, 33);
             this.tabControlPanel1.Name = "tabControlPanel1";
             this.tabControlPanel1.Padding = new System.Windows.Forms.Padding(1);
-            this.tabControlPanel1.Size = new System.Drawing.Size(534, 292);
+            this.tabControlPanel1.Size = new System.Drawing.Size(534, 287);
             this.tabControlPanel1.Style.BackColor1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(253)))), ((int)(((byte)(254)))));
             this.tabControlPanel1.Style.BackColor2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(157)))), ((int)(((byte)(188)))), ((int)(((byte)(227)))));
             this.tabControlPanel1.Style.Border = DevComponents.DotNetBar.eBorderType.SingleLine;
@@ -221,14 +221,14 @@
             // 
             this.cboParseNumber.DisplayMember = "Text";
             this.cboParseNumber.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboParseNumber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboParseNumber.FormattingEnabled = true;
-            this.cboParseNumber.ItemHeight = 19;
+            this.cboParseNumber.ItemHeight = 23;
             this.cboParseNumber.Location = new System.Drawing.Point(151, 116);
             this.cboParseNumber.Name = "cboParseNumber";
-            this.cboParseNumber.Size = new System.Drawing.Size(40, 25);
+            this.cboParseNumber.Size = new System.Drawing.Size(40, 29);
             this.cboParseNumber.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboParseNumber.TabIndex = 44;
-            this.cboParseNumber.Text = "2";
             // 
             // labelX10
             // 
@@ -241,7 +241,7 @@
             this.labelX10.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX10.Location = new System.Drawing.Point(197, 118);
             this.labelX10.Name = "labelX10";
-            this.labelX10.Size = new System.Drawing.Size(136, 21);
+            this.labelX10.Size = new System.Drawing.Size(169, 26);
             this.labelX10.TabIndex = 46;
             this.labelX10.Text = "位四捨五入(平均除外)";
             // 
@@ -256,7 +256,7 @@
             this.labelX15.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX15.Location = new System.Drawing.Point(25, 118);
             this.labelX15.Name = "labelX15";
-            this.labelX15.Size = new System.Drawing.Size(127, 21);
+            this.labelX15.Size = new System.Drawing.Size(159, 26);
             this.labelX15.TabIndex = 45;
             this.labelX15.Text = "成績顯示至小數點後";
             // 
@@ -265,11 +265,12 @@
             this.cboRefSemester.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cboRefSemester.DisplayMember = "Text";
             this.cboRefSemester.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboRefSemester.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRefSemester.FormattingEnabled = true;
-            this.cboRefSemester.ItemHeight = 19;
-            this.cboRefSemester.Location = new System.Drawing.Point(463, 85);
+            this.cboRefSemester.ItemHeight = 23;
+            this.cboRefSemester.Location = new System.Drawing.Point(463, 80);
             this.cboRefSemester.Name = "cboRefSemester";
-            this.cboRefSemester.Size = new System.Drawing.Size(48, 25);
+            this.cboRefSemester.Size = new System.Drawing.Size(48, 29);
             this.cboRefSemester.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboRefSemester.TabIndex = 39;
             // 
@@ -283,9 +284,9 @@
             // 
             this.labelX9.BackgroundStyle.Class = "";
             this.labelX9.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX9.Location = new System.Drawing.Point(405, 88);
+            this.labelX9.Location = new System.Drawing.Point(405, 83);
             this.labelX9.Name = "labelX9";
-            this.labelX9.Size = new System.Drawing.Size(60, 21);
+            this.labelX9.Size = new System.Drawing.Size(75, 26);
             this.labelX9.TabIndex = 38;
             this.labelX9.Text = "參考學期";
             // 
@@ -294,11 +295,12 @@
             this.cboRefSchoolYear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cboRefSchoolYear.DisplayMember = "Text";
             this.cboRefSchoolYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboRefSchoolYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRefSchoolYear.FormattingEnabled = true;
-            this.cboRefSchoolYear.ItemHeight = 19;
-            this.cboRefSchoolYear.Location = new System.Drawing.Point(326, 85);
+            this.cboRefSchoolYear.ItemHeight = 23;
+            this.cboRefSchoolYear.Location = new System.Drawing.Point(326, 80);
             this.cboRefSchoolYear.Name = "cboRefSchoolYear";
-            this.cboRefSchoolYear.Size = new System.Drawing.Size(73, 25);
+            this.cboRefSchoolYear.Size = new System.Drawing.Size(73, 29);
             this.cboRefSchoolYear.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboRefSchoolYear.TabIndex = 37;
             // 
@@ -312,9 +314,9 @@
             // 
             this.labelX6.BackgroundStyle.Class = "";
             this.labelX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX6.Location = new System.Drawing.Point(264, 89);
+            this.labelX6.Location = new System.Drawing.Point(264, 84);
             this.labelX6.Name = "labelX6";
-            this.labelX6.Size = new System.Drawing.Size(60, 21);
+            this.labelX6.Size = new System.Drawing.Size(75, 26);
             this.labelX6.TabIndex = 36;
             this.labelX6.Text = "參考學年";
             // 
@@ -323,11 +325,12 @@
             this.cboRefExam.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cboRefExam.DisplayMember = "Text";
             this.cboRefExam.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboRefExam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRefExam.FormattingEnabled = true;
-            this.cboRefExam.ItemHeight = 19;
-            this.cboRefExam.Location = new System.Drawing.Point(355, 53);
+            this.cboRefExam.ItemHeight = 23;
+            this.cboRefExam.Location = new System.Drawing.Point(355, 48);
             this.cboRefExam.Name = "cboRefExam";
-            this.cboRefExam.Size = new System.Drawing.Size(156, 25);
+            this.cboRefExam.Size = new System.Drawing.Size(156, 29);
             this.cboRefExam.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboRefExam.TabIndex = 34;
             this.cboRefExam.SelectedIndexChanged += new System.EventHandler(this.cboRefExam_SelectedIndexChanged);
@@ -342,9 +345,9 @@
             // 
             this.labelX8.BackgroundStyle.Class = "";
             this.labelX8.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX8.Location = new System.Drawing.Point(291, 55);
+            this.labelX8.Location = new System.Drawing.Point(291, 50);
             this.labelX8.Name = "labelX8";
-            this.labelX8.Size = new System.Drawing.Size(60, 21);
+            this.labelX8.Size = new System.Drawing.Size(75, 26);
             this.labelX8.TabIndex = 35;
             this.labelX8.Text = "參考試別";
             // 
@@ -359,7 +362,7 @@
             this.dtScoreEdit.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
             this.dtScoreEdit.ButtonDropDown.Visible = true;
             this.dtScoreEdit.IsPopupCalendarOpen = false;
-            this.dtScoreEdit.Location = new System.Drawing.Point(357, 15);
+            this.dtScoreEdit.Location = new System.Drawing.Point(357, 10);
             // 
             // 
             // 
@@ -404,7 +407,7 @@
             this.dtScoreEdit.MonthCalendar.TodayButtonVisible = true;
             this.dtScoreEdit.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
             this.dtScoreEdit.Name = "dtScoreEdit";
-            this.dtScoreEdit.Size = new System.Drawing.Size(154, 25);
+            this.dtScoreEdit.Size = new System.Drawing.Size(154, 29);
             this.dtScoreEdit.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.dtScoreEdit.TabIndex = 33;
             // 
@@ -418,9 +421,9 @@
             // 
             this.labelX7.BackgroundStyle.Class = "";
             this.labelX7.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX7.Location = new System.Drawing.Point(264, 17);
+            this.labelX7.Location = new System.Drawing.Point(264, 12);
             this.labelX7.Name = "labelX7";
-            this.labelX7.Size = new System.Drawing.Size(87, 21);
+            this.labelX7.Size = new System.Drawing.Size(108, 26);
             this.labelX7.TabIndex = 32;
             this.labelX7.Text = "成績校正日期";
             // 
@@ -434,9 +437,9 @@
             // 
             this.chkSubjSelAll.BackgroundStyle.Class = "";
             this.chkSubjSelAll.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.chkSubjSelAll.Location = new System.Drawing.Point(89, 89);
+            this.chkSubjSelAll.Location = new System.Drawing.Point(89, 84);
             this.chkSubjSelAll.Name = "chkSubjSelAll";
-            this.chkSubjSelAll.Size = new System.Drawing.Size(54, 21);
+            this.chkSubjSelAll.Size = new System.Drawing.Size(61, 26);
             this.chkSubjSelAll.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkSubjSelAll.TabIndex = 30;
             this.chkSubjSelAll.Text = "全選";
@@ -452,7 +455,7 @@
             this.circularProgress1.BackgroundStyle.Class = "";
             this.circularProgress1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.circularProgress1.FocusCuesEnabled = false;
-            this.circularProgress1.Location = new System.Drawing.Point(255, 188);
+            this.circularProgress1.Location = new System.Drawing.Point(255, 183);
             this.circularProgress1.Name = "circularProgress1";
             this.circularProgress1.ProgressBarType = DevComponents.DotNetBar.eCircularProgressType.Dot;
             this.circularProgress1.ProgressColor = System.Drawing.Color.LimeGreen;
@@ -466,11 +469,12 @@
             this.cboExam.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cboExam.DisplayMember = "Text";
             this.cboExam.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboExam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboExam.FormattingEnabled = true;
-            this.cboExam.ItemHeight = 19;
-            this.cboExam.Location = new System.Drawing.Point(89, 55);
+            this.cboExam.ItemHeight = 23;
+            this.cboExam.Location = new System.Drawing.Point(89, 50);
             this.cboExam.Name = "cboExam";
-            this.cboExam.Size = new System.Drawing.Size(156, 25);
+            this.cboExam.Size = new System.Drawing.Size(156, 29);
             this.cboExam.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboExam.TabIndex = 2;
             this.cboExam.SelectedIndexChanged += new System.EventHandler(this.cboExam_SelectedIndexChanged);
@@ -480,11 +484,12 @@
             this.cboSemester.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cboSemester.DisplayMember = "Text";
             this.cboSemester.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboSemester.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboSemester.FormattingEnabled = true;
-            this.cboSemester.ItemHeight = 19;
-            this.cboSemester.Location = new System.Drawing.Point(197, 15);
+            this.cboSemester.ItemHeight = 23;
+            this.cboSemester.Location = new System.Drawing.Point(197, 10);
             this.cboSemester.Name = "cboSemester";
-            this.cboSemester.Size = new System.Drawing.Size(48, 25);
+            this.cboSemester.Size = new System.Drawing.Size(48, 29);
             this.cboSemester.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboSemester.TabIndex = 27;
             this.cboSemester.SelectedIndexChanged += new System.EventHandler(this.cboSemester_SelectedIndexChanged);
@@ -494,11 +499,12 @@
             this.cboSchoolYear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cboSchoolYear.DisplayMember = "Text";
             this.cboSchoolYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboSchoolYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboSchoolYear.FormattingEnabled = true;
-            this.cboSchoolYear.ItemHeight = 19;
-            this.cboSchoolYear.Location = new System.Drawing.Point(89, 15);
+            this.cboSchoolYear.ItemHeight = 23;
+            this.cboSchoolYear.Location = new System.Drawing.Point(89, 10);
             this.cboSchoolYear.Name = "cboSchoolYear";
-            this.cboSchoolYear.Size = new System.Drawing.Size(62, 25);
+            this.cboSchoolYear.Size = new System.Drawing.Size(62, 29);
             this.cboSchoolYear.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboSchoolYear.TabIndex = 0;
             this.cboSchoolYear.SelectedIndexChanged += new System.EventHandler(this.cboSchoolYear_SelectedIndexChanged);
@@ -513,9 +519,9 @@
             // 
             this.labelX4.BackgroundStyle.Class = "";
             this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX4.Location = new System.Drawing.Point(25, 89);
+            this.labelX4.Location = new System.Drawing.Point(25, 84);
             this.labelX4.Name = "labelX4";
-            this.labelX4.Size = new System.Drawing.Size(60, 21);
+            this.labelX4.Size = new System.Drawing.Size(75, 26);
             this.labelX4.TabIndex = 25;
             this.labelX4.Text = "列印科目";
             // 
@@ -529,7 +535,7 @@
             this.lvSubject.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSubject.CheckBoxes = true;
             this.lvSubject.HideSelection = false;
-            this.lvSubject.Location = new System.Drawing.Point(22, 150);
+            this.lvSubject.Location = new System.Drawing.Point(22, 145);
             this.lvSubject.Name = "lvSubject";
             this.lvSubject.Size = new System.Drawing.Size(490, 124);
             this.lvSubject.TabIndex = 4;
@@ -546,9 +552,9 @@
             // 
             this.labelX3.BackgroundStyle.Class = "";
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX3.Location = new System.Drawing.Point(25, 57);
+            this.labelX3.Location = new System.Drawing.Point(25, 52);
             this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(60, 21);
+            this.labelX3.Size = new System.Drawing.Size(75, 26);
             this.labelX3.TabIndex = 23;
             this.labelX3.Text = "試別名稱";
             // 
@@ -562,9 +568,9 @@
             // 
             this.labelX2.BackgroundStyle.Class = "";
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(157, 17);
+            this.labelX2.Location = new System.Drawing.Point(157, 12);
             this.labelX2.Name = "labelX2";
-            this.labelX2.Size = new System.Drawing.Size(34, 21);
+            this.labelX2.Size = new System.Drawing.Size(41, 26);
             this.labelX2.TabIndex = 1;
             this.labelX2.Text = "學期";
             // 
@@ -578,9 +584,9 @@
             // 
             this.labelX1.BackgroundStyle.Class = "";
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(38, 17);
+            this.labelX1.Location = new System.Drawing.Point(38, 12);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(47, 21);
+            this.labelX1.Size = new System.Drawing.Size(58, 26);
             this.labelX1.TabIndex = 5;
             this.labelX1.Text = "學年度";
             // 
@@ -603,10 +609,10 @@
             this.tabControlPanel2.Controls.Add(this.labelX13);
             this.tabControlPanel2.Controls.Add(this.labelX12);
             this.tabControlPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlPanel2.Location = new System.Drawing.Point(0, 28);
+            this.tabControlPanel2.Location = new System.Drawing.Point(0, 33);
             this.tabControlPanel2.Name = "tabControlPanel2";
             this.tabControlPanel2.Padding = new System.Windows.Forms.Padding(1);
-            this.tabControlPanel2.Size = new System.Drawing.Size(534, 292);
+            this.tabControlPanel2.Size = new System.Drawing.Size(534, 287);
             this.tabControlPanel2.Style.BackColor1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(253)))), ((int)(((byte)(254)))));
             this.tabControlPanel2.Style.BackColor2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(157)))), ((int)(((byte)(188)))), ((int)(((byte)(227)))));
             this.tabControlPanel2.Style.Border = DevComponents.DotNetBar.eBorderType.SingleLine;
@@ -628,7 +634,7 @@
             this.chkAttendSelAll.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.chkAttendSelAll.Location = new System.Drawing.Point(168, 73);
             this.chkAttendSelAll.Name = "chkAttendSelAll";
-            this.chkAttendSelAll.Size = new System.Drawing.Size(54, 21);
+            this.chkAttendSelAll.Size = new System.Drawing.Size(61, 26);
             this.chkAttendSelAll.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkAttendSelAll.TabIndex = 31;
             this.chkAttendSelAll.Text = "全選";
@@ -644,9 +650,9 @@
             // 
             this.labelX5.BackgroundStyle.Class = "";
             this.labelX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX5.Location = new System.Drawing.Point(19, 86);
+            this.labelX5.Location = new System.Drawing.Point(19, 83);
             this.labelX5.Name = "labelX5";
-            this.labelX5.Size = new System.Drawing.Size(154, 21);
+            this.labelX5.Size = new System.Drawing.Size(192, 26);
             this.labelX5.TabIndex = 25;
             this.labelX5.Text = "請選擇您要列印的假別：";
             // 
@@ -660,21 +666,22 @@
             this.dgAttendanceData.BackgroundColor = System.Drawing.Color.White;
             this.dgAttendanceData.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgAttendanceData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgAttendanceData.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgAttendanceData.DefaultCellStyle = dataGridViewCellStyle1;
             this.dgAttendanceData.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
             this.dgAttendanceData.Location = new System.Drawing.Point(19, 99);
             this.dgAttendanceData.MultiSelect = false;
             this.dgAttendanceData.Name = "dgAttendanceData";
             this.dgAttendanceData.RowHeadersVisible = false;
+            this.dgAttendanceData.RowHeadersWidth = 51;
             this.dgAttendanceData.RowTemplate.Height = 24;
-            this.dgAttendanceData.Size = new System.Drawing.Size(501, 175);
+            this.dgAttendanceData.Size = new System.Drawing.Size(501, 170);
             this.dgAttendanceData.TabIndex = 2;
             // 
             // dtEnd
@@ -734,7 +741,7 @@
             this.dtEnd.MonthCalendar.TodayButtonVisible = true;
             this.dtEnd.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
             this.dtEnd.Name = "dtEnd";
-            this.dtEnd.Size = new System.Drawing.Size(143, 25);
+            this.dtEnd.Size = new System.Drawing.Size(143, 29);
             this.dtEnd.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.dtEnd.TabIndex = 1;
             // 
@@ -797,7 +804,7 @@
             this.dtBegin.MonthCalendar.TodayButtonVisible = true;
             this.dtBegin.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
             this.dtBegin.Name = "dtBegin";
-            this.dtBegin.Size = new System.Drawing.Size(143, 25);
+            this.dtBegin.Size = new System.Drawing.Size(143, 29);
             this.dtBegin.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.dtBegin.TabIndex = 0;
             // 
@@ -811,9 +818,9 @@
             // 
             this.labelX14.BackgroundStyle.Class = "";
             this.labelX14.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX14.Location = new System.Drawing.Point(257, 53);
+            this.labelX14.Location = new System.Drawing.Point(257, 50);
             this.labelX14.Name = "labelX14";
-            this.labelX14.Size = new System.Drawing.Size(34, 21);
+            this.labelX14.Size = new System.Drawing.Size(41, 26);
             this.labelX14.TabIndex = 21;
             this.labelX14.Text = "結束";
             // 
@@ -827,9 +834,9 @@
             // 
             this.labelX13.BackgroundStyle.Class = "";
             this.labelX13.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX13.Location = new System.Drawing.Point(38, 53);
+            this.labelX13.Location = new System.Drawing.Point(38, 50);
             this.labelX13.Name = "labelX13";
-            this.labelX13.Size = new System.Drawing.Size(34, 21);
+            this.labelX13.Size = new System.Drawing.Size(41, 26);
             this.labelX13.TabIndex = 20;
             this.labelX13.Text = "開始";
             // 
@@ -843,9 +850,9 @@
             // 
             this.labelX12.BackgroundStyle.Class = "";
             this.labelX12.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX12.Location = new System.Drawing.Point(19, 21);
+            this.labelX12.Location = new System.Drawing.Point(19, 18);
             this.labelX12.Name = "labelX12";
-            this.labelX12.Size = new System.Drawing.Size(350, 21);
+            this.labelX12.Size = new System.Drawing.Size(437, 26);
             this.labelX12.TabIndex = 19;
             this.labelX12.Text = "請選擇日期區間：(依區間統計缺曠、獎懲、服務學習時數)";
             // 
@@ -877,7 +884,6 @@
             this.btnPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPrint.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnPrint.Enabled = false;
             this.btnPrint.Location = new System.Drawing.Point(410, 379);
             this.btnPrint.Name = "btnPrint";
@@ -908,7 +914,7 @@
             this.lnkViewMapColumns.BackColor = System.Drawing.Color.Transparent;
             this.lnkViewMapColumns.Location = new System.Drawing.Point(191, 382);
             this.lnkViewMapColumns.Name = "lnkViewMapColumns";
-            this.lnkViewMapColumns.Size = new System.Drawing.Size(112, 17);
+            this.lnkViewMapColumns.Size = new System.Drawing.Size(146, 22);
             this.lnkViewMapColumns.TabIndex = 3;
             this.lnkViewMapColumns.TabStop = true;
             this.lnkViewMapColumns.Text = "檢視合併欄位總表";
@@ -921,7 +927,7 @@
             this.lnkViewTemplate.BackColor = System.Drawing.Color.Transparent;
             this.lnkViewTemplate.Location = new System.Drawing.Point(12, 382);
             this.lnkViewTemplate.Name = "lnkViewTemplate";
-            this.lnkViewTemplate.Size = new System.Drawing.Size(86, 17);
+            this.lnkViewTemplate.Size = new System.Drawing.Size(112, 22);
             this.lnkViewTemplate.TabIndex = 1;
             this.lnkViewTemplate.TabStop = true;
             this.lnkViewTemplate.Text = "檢視套印樣板";
@@ -934,7 +940,7 @@
             this.lnkChangeTemplate.BackColor = System.Drawing.Color.Transparent;
             this.lnkChangeTemplate.Location = new System.Drawing.Point(101, 382);
             this.lnkChangeTemplate.Name = "lnkChangeTemplate";
-            this.lnkChangeTemplate.Size = new System.Drawing.Size(86, 17);
+            this.lnkChangeTemplate.Size = new System.Drawing.Size(112, 22);
             this.lnkChangeTemplate.TabIndex = 2;
             this.lnkChangeTemplate.TabStop = true;
             this.lnkChangeTemplate.Text = "變更套印樣板";
@@ -942,7 +948,7 @@
             // 
             // PrintForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(564, 414);
             this.Controls.Add(this.lnkViewMapColumns);
@@ -958,7 +964,7 @@
             this.Controls.Add(this.labelX11);
             this.DoubleBuffered = true;
             this.Name = "PrintForm";
-            this.Text = "評量成績通知單";
+            this.Text = "評量成績通知單(固定排名)";
             this.Load += new System.EventHandler(this.PrintForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tabControl1)).EndInit();
             this.tabControl1.ResumeLayout(false);
