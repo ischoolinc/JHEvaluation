@@ -384,7 +384,7 @@ namespace HsinChuSemesterClassFixedRank
                         dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_成績");
 
 
-                        for (int si = 1; si <= 12; si++)
+                        for (int si = 1; si <= 25; si++)
                         {
                             dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_名稱");
                             dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_學分");
@@ -400,7 +400,7 @@ namespace HsinChuSemesterClassFixedRank
                                 dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_" + rk + "_" + r2);
                                 dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_" + rk + "_" + r2);
 
-                                for (int si = 1; si <= 12; si++)
+                                for (int si = 1; si <= 25; si++)
                                 {
                                     dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域_科目" + si + "_" + rk + "_" + r2);
                                     dtTable.Columns.Add("學生" + studIdx + "_" + dName + "領域(原始)_科目" + si + "_" + rk + "_" + r2);
@@ -437,7 +437,7 @@ namespace HsinChuSemesterClassFixedRank
                     }
 
                     // 科目1,2 合併欄位
-                    for (int sIdx = 1; sIdx <= 30; sIdx++)
+                    for (int sIdx = 1; sIdx <= 60; sIdx++)
                     {
                         // 學生1_科目1_成績
                         dtTable.Columns.Add("學生" + studIdx + "_科目" + sIdx + "_名稱");
@@ -504,7 +504,7 @@ namespace HsinChuSemesterClassFixedRank
                 }
 
                 // 科目1,2 合併欄位
-                for (int sIdx = 1; sIdx <= 30; sIdx++)
+                for (int sIdx = 1; sIdx <= 60; sIdx++)
                 {
                     // 班級1_科目1_成績
                     dtTable.Columns.Add("班級_科目" + sIdx + "_名稱");
@@ -542,7 +542,7 @@ namespace HsinChuSemesterClassFixedRank
                     }
 
 
-                    for (int si = 1; si <= 12; si++)
+                    for (int si = 1; si <= 25; si++)
                     {
                         dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_名稱");
                         dtTable.Columns.Add("班級_" + dName + "領域_科目" + si + "_學分");
@@ -1851,6 +1851,28 @@ namespace HsinChuSemesterClassFixedRank
             SaveConfig();
         }
 
+        // 解析檔名
+        public string ParseFileName(string fileName)
+        {
+            string name = fileName;
+
+            if (fileName == null)
+                throw new ArgumentNullException();
+
+            if (name.Length == 0)
+                throw new ArgumentException();
+
+            if (name.Length > 245)
+                throw new PathTooLongException();
+
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(c, '_');
+            }
+
+            return name;
+        }
+
         private void lnkViewTemplate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // 當沒有設定檔
@@ -1858,7 +1880,7 @@ namespace HsinChuSemesterClassFixedRank
             lnkViewTemplate.Enabled = false;
             #region 儲存檔案
 
-            string reportName = "新竹學期成績單樣板(" + _Configure.Name + ")";
+            string reportName = ParseFileName("新竹學期成績單樣板(" + _Configure.Name + ")");
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
             if (!Directory.Exists(path))
