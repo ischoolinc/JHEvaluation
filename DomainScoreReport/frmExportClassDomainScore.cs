@@ -548,7 +548,7 @@ namespace DomainScoreReport
             col.ColumnName = "class_name";
             table.Columns.Add(col);
 
-            for (int i = 1; i <= 40; i++)
+            for (int i = 1; i <= 50; i++)    ///cyn 2021/4/27 由40改到50
             {
                 // 座號
                 col = new DataColumn();
