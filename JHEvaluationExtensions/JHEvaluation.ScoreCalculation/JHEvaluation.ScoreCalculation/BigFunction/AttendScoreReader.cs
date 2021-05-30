@@ -66,31 +66,58 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                 string subjName = Course.Subject.Trim();
 
+                // 如果科目名稱空白就不處理，因為無法計算到科目成績
+                if (string.IsNullOrWhiteSpace(subjName))
+                    continue;
+
                 //傳入學年度,判斷103以前的學年度5:5而以後6:4比例計算
                 if (!Student.AttendScore.Contains(subjName))
                     Student.AttendScore.Add(subjName, new AttendScore(Attend, Course.Credit, Course.Period, toSems, Course.Domain, Course.SchoolYear));
             }
 
-            foreach (JHSCETakeRecord take in SCETakes)
+            try
             {
-                if (!Attends.ContainsKey(take.RefSCAttendID)) continue;
-                JHSCAttendRecord Attend = Attends[take.RefSCAttendID];
+                foreach (JHSCETakeRecord take in SCETakes)
+                {
+                    if (!Attends.ContainsKey(take.RefSCAttendID)) continue;
+                    JHSCAttendRecord Attend = Attends[take.RefSCAttendID];
 
-                if (!Students.ContainsKey(Attend.RefStudentID)) continue;
-                StudentScore Student = Students[Attend.RefStudentID];
+                    if (!Students.ContainsKey(Attend.RefStudentID)) continue;
+                    StudentScore Student = Students[Attend.RefStudentID];
 
-                if (!Courses.ContainsKey(Attend.RefCourseID)) continue;
-                JHCourseRecord Course = Courses[Attend.RefCourseID];
+                    if (!Courses.ContainsKey(Attend.RefCourseID)) continue;
+                    JHCourseRecord Course = Courses[Attend.RefCourseID];
 
-                if (!AEIncludes.ContainsKey(Course.RefAssessmentSetupID)) continue;
-                Dictionary<string, AEIncludeData> Include = AEIncludes[Course.RefAssessmentSetupID];
+                    if (!AEIncludes.ContainsKey(Course.RefAssessmentSetupID)) continue;
+                    Dictionary<string, AEIncludeData> Include = AEIncludes[Course.RefAssessmentSetupID];
 
-                //沒有該次考試就不處理。
-                if (!Include.ContainsKey(take.RefExamID)) continue;
+                    //沒有該次考試就不處理。
+                    if (!Include.ContainsKey(take.RefExamID)) continue;
 
-                string subjName = Course.Subject.Trim();
-                Student.AttendScore[subjName].Subscores.Add(take.RefExamID, new TakeScore(take, Include[take.RefExamID]));
+                    string subjName = Course.Subject.Trim();
+
+                    // 如果科目名稱空白就不處理，因為無法計算到科目成績
+                    if (string.IsNullOrWhiteSpace(subjName))
+                        continue;
+
+                    try
+                    {
+                        Student.AttendScore[subjName].Subscores.Add(take.RefExamID, new TakeScore(take, Include[take.RefExamID]));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Write(ex.Message);
+                    }
+
+                }
+
             }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
+
+
 
             Reporter.Feedback("時間：" + (Environment.TickCount - t1), 0);
         }
@@ -104,11 +131,11 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                 attendids.Add(each.ID);
 
             FunctionSpliter<string, JHSCETakeRecord> selectData = new FunctionSpliter<string, JHSCETakeRecord>(300 * 10, Util.MaxThread);
-            selectData.Function = delegate(List<string> attendIdsPart)
+            selectData.Function = delegate (List<string> attendIdsPart)
             {
                 return JHSCETake.Select(new string[] { }, new string[] { }, new string[] { }, new string[] { }, attendIdsPart);
             };
-            selectData.ProgressChange = delegate(int progress)
+            selectData.ProgressChange = delegate (int progress)
             {
                 Reporter.Feedback("讀取評量成績資料...", Util.CalculatePercentage(attendids.Count, progress));
             };
@@ -189,7 +216,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
             List<JHSCAttendRecord> currentAttendsList = Util.GetSCAttendRecordListBySchoolYearSemsStudentIDs(SchoolYear, Semester, studKeys);
 
-            foreach(JHSCAttendRecord rec in currentAttendsList)
+            foreach (JHSCAttendRecord rec in currentAttendsList)
             {
                 if (!currentAttends.ContainsKey(rec.ID))
                     currentAttends.Add(rec.ID, rec);

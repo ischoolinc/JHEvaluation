@@ -89,25 +89,77 @@ namespace JHEvaluation.ScoreCalculation
 
             // 計算彈性課程成績
 
-            foreach (KeyValuePair<string,List<K12.Data.SubjectScore>> data in StudSubjScore)
+            Dictionary<string, decimal> sumScoreDict = new Dictionary<string, decimal>();
+            Dictionary<string, decimal> sumCreditDict = new Dictionary<string, decimal>();
+            List<decimal> GradeScoreList = new List<decimal>();
+            foreach (KeyValuePair<string, List<K12.Data.SubjectScore>> data in StudSubjScore)
             {
-                decimal sum=0, Credit=0;
+                sumScoreDict.Clear();
+                sumCreditDict.Clear();
+                GradeScoreList.Clear();
+
+                // 計算出各學期彈性課程加權平均
                 foreach (K12.Data.SubjectScore ss in data.Value)
                 {
-                    if (ss.Credit.HasValue)
-                        Credit += ss.Credit.Value;
-                    if (ss.Score.HasValue)
-                        sum += ss.Score.Value;                
+                    if (ss.Credit.HasValue && ss.Score.HasValue)
+                    {
+                        string key = ss.SchoolYear + "_" + ss.Semester;
+
+                        // 初始化
+                        if (!sumScoreDict.ContainsKey(key))
+                            sumScoreDict.Add(key, 0);
+
+                        if (!sumCreditDict.ContainsKey(key))
+                            sumCreditDict.Add(key, 0);
+
+                        decimal score = ss.Score.Value * ss.Credit.Value;
+                        sumScoreDict[key] += score;
+                        sumCreditDict[key] += ss.Credit.Value;
+                    }
                 }
+
+                // 計算畢業成績
+                foreach(string key in sumScoreDict.Keys)
+                {
+                    if(sumCreditDict.ContainsKey(key))
+                    {
+                        GradeScoreList.Add(sumScoreDict[key] / sumCreditDict[key]);
+                    }
+                }
+
                 if (!StudDomainNullScore.ContainsKey(data.Key))
                 {
-                    if (Credit > 0)
+                    if (GradeScoreList.Count > 0)
                     {
-                        decimal score = sum / Credit;
+                        decimal score = GradeScoreList.Average();
                         StudDomainNullScore.Add(data.Key, score);
                     }
                 }
             }
+
+
+            // 舊寫法有問題
+            //foreach (KeyValuePair<string,List<K12.Data.SubjectScore>> data in StudSubjScore)
+            //{
+            //    decimal sum=0, Credit=0;
+
+
+            //    foreach (K12.Data.SubjectScore ss in data.Value)
+            //    {
+            //        if (ss.Credit.HasValue)
+            //            Credit += ss.Credit.Value;
+            //        if (ss.Score.HasValue)
+            //            sum += ss.Score.Value;                
+            //    }
+            //    if (!StudDomainNullScore.ContainsKey(data.Key))
+            //    {
+            //        if (Credit > 0)
+            //        {
+            //            decimal score = sum / Credit;
+            //            StudDomainNullScore.Add(data.Key, score);
+            //        }
+            //    }
+            //}
 
             foreach (StudentScore ss in Students)
             { 

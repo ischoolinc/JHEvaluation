@@ -181,7 +181,7 @@ namespace JHEvaluation.ScoreCalculation
             DeployParameters dparams = ModuleLoader.GetDeployParametsers(typeof(Program), "Mode=KaoHsiung");
 
             //debug
-            //Mode = ModuleMode.KaoHsiung;
+            //Mode = ModuleMode.HsinChu;
             //return;
 
             if (dparams["Mode"].ToUpper() == "KaoHsiung".ToUpper())
