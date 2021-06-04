@@ -33,6 +33,10 @@ namespace KaoHsiung.JHEvaluation.EduAdminExtendControls.Ribbon
             InitializeComponent();
             HideNavigationBar();
 
+            List<string> cols = new List<string>() { "比重", "開始時間", "結束時間" };
+            Campus.Windows.DataGridViewImeDecorator dec = new Campus.Windows.DataGridViewImeDecorator(this.dataview, cols);
+
+
             JHAssessmentSetup.AfterDelete += new EventHandler<K12.Data.DataChangedEventArgs>(JHAssessmentSetup_AfterChanged);
             JHAssessmentSetup.AfterInsert += new EventHandler<K12.Data.DataChangedEventArgs>(JHAssessmentSetup_AfterChanged);
             JHAssessmentSetup.AfterUpdate += new EventHandler<K12.Data.DataChangedEventArgs>(JHAssessmentSetup_AfterChanged);
@@ -49,6 +53,9 @@ namespace KaoHsiung.JHEvaluation.EduAdminExtendControls.Ribbon
             Listener.Add(new TextBoxSource(txtTStartTime));
             Listener.Add(new TextBoxSource(txtTEndTime));
             Listener.Reset();
+
+
+
         }
 
         private void Listener_StatusChanged(object sender, ChangeEventArgs e)
@@ -404,11 +411,15 @@ namespace KaoHsiung.JHEvaluation.EduAdminExtendControls.Ribbon
                     cell.ErrorText = string.Empty;
                 else
                 {
-                    DateTime? dt = DateTimeHelper.ParseGregorian(validValue, PaddingMethod.First);
-                    if (!dt.HasValue)
-                        cell.ErrorText = "您必須要輸入合法的日期格式。";
-                    else
-                        cell.ErrorText = string.Empty;
+                    DateTime dateTime;
+                    if (DateTime.TryParse(validValue, out dateTime))
+                    {
+                        DateTime? dt = DateTimeHelper.ParseGregorian(validValue, PaddingMethod.First);
+                        if (!dt.HasValue)
+                            cell.ErrorText = "您必須要輸入合法的日期格式。";
+                        else
+                            cell.ErrorText = string.Empty;
+                    }
                 }
             }
         }
@@ -428,9 +439,12 @@ namespace KaoHsiung.JHEvaluation.EduAdminExtendControls.Ribbon
                     if ((cell.Value + string.Empty) != string.Empty)
                     {
                         PaddingMethod method = (columnName == "StartTime" ? PaddingMethod.First : PaddingMethod.Last);
-
-                        DateTime? dt = DateTimeHelper.ParseGregorian(cell.Value + string.Empty, method);
-                        cell.Value = dt.Value.ToString(Consts.TimeFormat);
+                        DateTime dateTime;
+                        if (DateTime.TryParse(cell.Value.ToString(), out dateTime))
+                        {
+                            DateTime? dt = DateTimeHelper.ParseGregorian(cell.Value + string.Empty, method);
+                            cell.Value = dt.Value.ToString(Consts.TimeFormat);
+                        }
                     }
                 }
             }
@@ -561,6 +575,27 @@ namespace KaoHsiung.JHEvaluation.EduAdminExtendControls.Ribbon
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (CurrentItem == null) return;
+
+            //Cyn 檢查dataview有無錯誤資料
+            foreach (DataGridViewRow dr in dataview.Rows)
+            {
+                if (dr.ErrorText != "")
+                {
+                    FISCA.Presentation.Controls.MsgBox.Show("資料有誤，請修改。");
+                    return;
+                }
+
+                foreach (DataGridViewCell cell in dr.Cells)
+                {
+                    if (cell.ErrorText != "")
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show("資料有誤，請修改。");
+                        return;
+                    }
+                }
+            }
+
+
 
             dataview.EndEdit();
 
@@ -759,6 +794,30 @@ namespace KaoHsiung.JHEvaluation.EduAdminExtendControls.Ribbon
         private void dataview_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             ValidateGrid();
+            ValidateCellData(e.ColumnIndex, e.RowIndex, dataview.Rows[e.RowIndex].Cells[e.ColumnIndex].Value + "");
+        }
+
+
+        private void ValidateCellData(int ColumnIndex, int RowIndex, string value)
+        {
+            if (ColumnIndex == StartTime.Index || ColumnIndex == EndTime.Index) //Cyn 驗證開始時間
+            {
+                DataGridViewCell cell = dataview.Rows[RowIndex].Cells[ColumnIndex];
+                cell.ErrorText = "";
+
+                if (!string.IsNullOrEmpty(value))
+                {
+                    DateTime dt;
+                    if (DateTime.TryParse(value, out dt))
+                    {
+                        cell.Value = dt.ToString(Consts.TimeFormat);
+                    }
+                    else
+                    {
+                        cell.ErrorText = "時間格式錯誤。";
+                    }
+                }
+            }
         }
     }
 }
