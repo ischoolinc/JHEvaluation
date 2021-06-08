@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.listView = new DevComponents.DotNetBar.Controls.ListViewEx();
-            this.chSchoolYear = new System.Windows.Forms.ColumnHeader();
-            this.chSemester = new System.Windows.Forms.ColumnHeader();
+            this.chSchoolYear = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chSemester = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnAdd = new DevComponents.DotNetBar.ButtonX();
             this.btnNornal = new DevComponents.DotNetBar.ButtonItem();
             this.btnModify = new DevComponents.DotNetBar.ButtonX();
@@ -46,10 +46,12 @@
             // 
             // 
             this.listView.Border.Class = "ListViewBorder";
+            this.listView.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chSchoolYear,
             this.chSemester});
             this.listView.FullRowSelect = true;
+            this.listView.HideSelection = false;
             this.listView.Location = new System.Drawing.Point(13, 8);
             this.listView.MultiSelect = false;
             this.listView.Name = "listView";

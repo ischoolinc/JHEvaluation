@@ -117,16 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="textBoxX1.Text" xml:space="preserve">
-    <value>每個領域都含有下列三個成績：
-原始成績：由科目成績直接計算。
-補考成績：從系統外部匯入或是直接輸入。
-成績：大部份報表會輸出的會是此成績，是上列成績的擇優，如果選到補考成績，上限會是60分。
+  <data name="labelX4.Text" xml:space="preserve">
+    <value>&lt;p&gt;&lt;b&gt;學期科目成績：&lt;/b&gt;
+&lt;br&gt;原始成績：由課程總成績而來，可從學生資料項目「修課及評量成績」查看。&lt;/br&gt;
+&lt;br&gt;補考成績：從系統匯入或是直接輸入。&lt;/br&gt;
+&lt;br&gt;成績：若原始成績未達60分，「成績」為原始成績及補考成績的擇優，上限為60分，若原始成績達60分，「成績」即原始成績。&lt;/br&gt;&lt;/p&gt;
 
-學習領域成績(七大學習領域)、課程學習成績(含彈性課程)：
-使用領域成績中的「成績」欄位計算而來。
+&lt;p&gt;&lt;b&gt;學期領域成績：&lt;/b&gt;
+&lt;br&gt;原始成績：由科目成績加權平均計算。&lt;/br&gt;
+&lt;br&gt;補考成績：從系統匯入、直接輸入或是從科目補考成績計算而來，若該領域部分科目沒有補考成績，則取原始成績加權平均計算。&lt;/br&gt;
+&lt;br&gt;成績：大部份報表會輸出的會是此成績，是上列成績的擇優，如果勾選「補考科目該領域不得超過60分」，上限會是60分。&lt;/br&gt;&lt;/p&gt;
 
-原始學習領域成績(七大學習領域)、原始課程學習成績(含彈性課程)：
-使用領域成績的「原始成績」欄位計算而來。</value>
+&lt;p&gt;&lt;b&gt;學習領域成績(八大學習領域)、課程學習成績(含彈性課程)：&lt;/b&gt;&lt;br&gt;使用領域成績中的「成績」欄位計算而來。&lt;/br&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;原始學習領域成績(八大學習領域)、原始課程學習成績(含彈性課程)：&lt;/b&gt;&lt;br&gt;使用領域成績的「原始成績」欄位計算而來。&lt;/br&gt;&lt;/p&gt;</value>
   </data>
 </root>

@@ -17,7 +17,7 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
     {
         //可編輯狀態
         bool _Editable = true;
-
+        
         /// <summary>
         /// 學生所有學期成績記錄
         /// </summary>
@@ -70,7 +70,7 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
 
             btnPreSubjScore.Enabled = false;
             btnPreCalcScore.Enabled = false;
-
+           
             //如果是新竹市，將努力程度藏起來
             if (Global.Params["Mode"] == "HsinChu")
             {
@@ -120,6 +120,7 @@ namespace JHEvaluation.SemesterScoreContentItem.Forms
             cboSchoolYear.Text = "" + record.SchoolYear;
             cboSemester.Text = "" + record.Semester;
             cboSchoolYear.Enabled = cboSemester.Enabled = false;
+            dgvSubject.Columns["chsScore"].ReadOnly = true;
 
             FillScore(record);
         }
