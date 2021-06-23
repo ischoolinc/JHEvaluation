@@ -11,6 +11,8 @@ using HsinChu.ClassExamScoreAvgComparison.Model;
 using HsinChu.JHEvaluation.Data;
 using JHSchool.Evaluation.Ranking;
 using K12.Data;
+using FISCA.Data;
+using HsinChu.ClassExamScoreAvgComparison.DAL;
 
 namespace HsinChu.ClassExamScoreAvgComparison
 {
@@ -22,6 +24,7 @@ namespace HsinChu.ClassExamScoreAvgComparison
         private BackgroundWorker _worker;
         private List<JHExamRecord> _exams;
         //private Dictionary<string, List<string>> _ecMapping;
+        List<string> subjectNameList = DALTransfer.GetSubjectList();
         private List<string> _courseList;
 
         private Dictionary<string, JHCourseRecord> _courseDict;
@@ -36,6 +39,7 @@ namespace HsinChu.ClassExamScoreAvgComparison
 
         public MainForm()
         {
+            //GetSubjectList();
             InitializeComponent();
             InitializeSemester();
             this.Text = Global.ReportName;
@@ -480,7 +484,7 @@ namespace HsinChu.ClassExamScoreAvgComparison
                 lvSubject.Items.Add(item);
             }
             List<ListViewItem> itemList2 = new List<ListViewItem>(domainItems.Values);
-            itemList2.Sort(ItemSort);
+            itemList2.Sort(ItemSortDomain);
             foreach (ListViewItem item in itemList2)
                 lvDomain.Items.Add(item);
             lvSubject.ResumeLayout();
@@ -498,22 +502,50 @@ namespace HsinChu.ClassExamScoreAvgComparison
 
             //}
         }
-
+        /// <summary>
+        /// 依照科目資料管理排序
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private int ItemSort(ListViewItem x, ListViewItem y)
         {
-            return JHSchool.Evaluation.Subject.CompareSubjectOrdinal(x.Text, y.Text);
-            //List<string> list = new List<string>(new string[] { "國語文", "國文", "英文", "英語", "語文", "數學", "歷史", "公民", "地理", "社會", "藝術與人文", "理化", "生物", "自然與生活科技", "健康與體育", "綜合活動" });
-            //int ix = list.IndexOf(x.Text);
-            //int iy = list.IndexOf(y.Text);
+            //return JHSchool.Evaluation.Subject.CompareSubjectOrdinal(x.Text, y.Text);
+            //List<string> list = new List<string>(new string[] { "國語文", "國文", "英語文", "英文", "英語", "語文", "數學", "歷史", "公民", "地理", "社會", "藝術與人文", "理化", "生物", "自然與生活科技", "健康與體育", "綜合活動" });
+            int ix = subjectNameList.IndexOf(x.Text);
+            int iy = subjectNameList.IndexOf(y.Text);
 
-            //if (ix >= 0 && iy >= 0)
-            //    return ix.CompareTo(iy);
-            //else if (ix >= 0)
-            //    return -1;
-            //else if (iy >= 0)
-            //    return 1;
-            //else
-            //    return x.Text.CompareTo(y.Text);
+            if (ix >= 0 && iy >= 0)
+                return ix.CompareTo(iy);
+            else if (ix >= 0)
+                return -1;
+            else if (iy >= 0)
+                return 1;
+            else
+                return x.Text.CompareTo(y.Text);
         }
+        /// <summary>
+        /// 領域排序
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private int ItemSortDomain(ListViewItem x, ListViewItem y)
+        {
+            //return JHSchool.Evaluation.Subject.CompareSubjectOrdinal(x.Text, y.Text);
+            List<string> list = new List<string>(new string[] { "國語文", "英語文",  "語文", "數學",  "社會", "自然科學", "自然與生活科技", "藝術", "藝術與人文", "健康與體育", "綜合活動", "科技" });
+            int ix = list.IndexOf(x.Text);
+            int iy = list.IndexOf(y.Text);
+
+            if (ix >= 0 && iy >= 0)
+                return ix.CompareTo(iy);
+            else if (ix >= 0)
+                return -1;
+            else if (iy >= 0)
+                return 1;
+            else
+                return x.Text.CompareTo(y.Text);
+        }
+
     }
 }

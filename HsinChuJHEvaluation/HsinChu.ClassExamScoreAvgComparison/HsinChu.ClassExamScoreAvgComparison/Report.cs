@@ -12,6 +12,8 @@ using HsinChu.ClassExamScoreAvgComparison.Model;
 using FISCA.Presentation.Controls;
 using FISCA.Presentation;
 using System.Windows.Forms;
+using FISCA.Data;
+using System.Data;
 
 namespace HsinChu.ClassExamScoreAvgComparison
 {
@@ -33,6 +35,11 @@ namespace HsinChu.ClassExamScoreAvgComparison
         private string SchoolName;
         private string Semester;
 
+        //科目資料管理
+        List<string> subjectNameList = new List<string>();
+
+
+
         //public Report(List<ClassExamScoreData> data, Dictionary<string, JHCourseRecord> courseDict, JHExamRecord exam, List<ComputeMethod> methods)
         //{
         public Report(List<ClassExamScoreData> data, Dictionary<string, JHCourseRecord> courseDict, JHExamRecord exam, List<string> domains)
@@ -45,10 +52,11 @@ namespace HsinChu.ClassExamScoreAvgComparison
             //_methods = methods;
 
             InitializeWorker();
-
+            //GetSubjectList();
             SchoolName = School.ChineseName;
             // Semester = string.Format("{0}學年度 第{1}學期", School.DefaultSchoolYear, School.DefaultSemester);
             Semester = string.Format("{0}學年度 第{1}學期", Global.UserSelectSchoolYear, Global.UserSelectSemester);
+
         }
 
         /// <summary>
@@ -140,7 +148,7 @@ namespace HsinChu.ClassExamScoreAvgComparison
             int rowIndex = 0;
             Workbook template = new Workbook();
 
-            if (_data.Count > 30 || _UserSelectCount>14)
+            if (_data.Count > 30 || _UserSelectCount > 14)
             {
                 book.Open(new MemoryStream(Resource1.班級評量成績平均比較表60));
                 ws = book.Worksheets[0];
@@ -452,12 +460,68 @@ namespace HsinChu.ClassExamScoreAvgComparison
             if (p.StartsWith("領域")) return true;
             else return false;
         }
+       
+        /// <summary>
+        /// 取得科目資料管理
+        /// </summary>
+        /// <returns></returns>
+        private List<string> GetSubjectList()
+        {
+
+            QueryHelper queryHelper = new QueryHelper();
+            DataTable dataTable;
+            try
+            {
+                dataTable = queryHelper.Select(@"WITH    subject_mapping AS 
+(
+SELECT
+    unnest(xpath('//Subjects/Subject/@Name',  xmlparse(content replace(replace(content ,'&lt;','<'),'&gt;','>'))))::text AS subject_name
+FROM  
+    list 
+WHERE name  ='JHEvaluation_Subject_Ordinal'
+)SELECT
+		replace (subject_name ,'&amp;amp;','&') AS subject_name
+	FROM  subject_mapping");
+            }
+            catch
+            {
+                throw new Exception("查詢科目對照失敗！");
+            }
+
+            //List<string> subjectNameList=new List<string>();
+
+            foreach (DataRow dtRow in dataTable.Rows)
+            {
+
+                subjectNameList.Add("領域語文");
+                subjectNameList.Add("領域數學");
+                subjectNameList.Add("領域社會");
+                subjectNameList.Add("領域自然科學");
+                subjectNameList.Add("領域自然與生活科技");
+                subjectNameList.Add("領域藝術");
+                subjectNameList.Add("領域藝術與人文");
+                subjectNameList.Add("領域健康與體育");
+                subjectNameList.Add("領域綜合活動");
+                subjectNameList.Add("領域科技");
+                subjectNameList.Add("領域特殊需求");
+                subjectNameList.Add(dtRow["subject_name"].ToString());
+            }
+            return subjectNameList;
+        }
 
         private int Sort(string x, string y)
         {
-            List<string> list = new List<string>(new string[] { "國語文", "國文", "英文", "英語", "領域語文", "數學", "領域數學", "歷史", "公民", "地理", "領域社會", "領域藝術與人文", "理化", "生物", "領域自然與生活科技", "領域健康與體育", "領域綜合活動" });
+
+            List<string> list = new List<string>(new string[] { "國語文", "國文", "英語文", "英文", "英語", "領域語文", "數學", "領域數學", "歷史", "公民", "地理", "領域社會","理化", "生物", "地球科學", "領域自然與生活科技", "領域自然科學", "音樂", "視覺藝術", "表演藝術", "領域藝術與人文", "領域藝術", "健康教育", "體育", "領域健康與體育", "家政", "童軍", "輔導", "領域綜合活動", "資訊科技", "生活科技", "領域科技" });
+
             int ix = list.IndexOf(x);
             int iy = list.IndexOf(y);
+
+
+            //科目資料管理排序
+            //int ix = subjectNameList.IndexOf(x);
+            //int iy = subjectNameList.IndexOf(y);
+
 
             if (ix >= 0 && iy >= 0)
                 return ix.CompareTo(iy);
