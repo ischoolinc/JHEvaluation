@@ -53,8 +53,17 @@ namespace JHEvaluation.Rating
         {
             get
             {
+                //if (Classes.ContainsKey(RefClassID))
+                //    return Classes[RefClassID].DisplayOrder.PadLeft(3, 'Z') + Classes[RefClassID].Name;
+                //else
+                //    return string.Empty;
                 if (Classes.ContainsKey(RefClassID))
-                    return Classes[RefClassID].DisplayOrder.PadLeft(3, 'Z') + Classes[RefClassID].Name;
+                {
+                    if (Classes[RefClassID].DisplayOrder == null || Classes[RefClassID].DisplayOrder =="")
+                        return Classes[RefClassID].DisplayOrder.PadLeft(3, 'Z') + Classes[RefClassID].Name;
+                    else
+                        return Classes[RefClassID].DisplayOrder.PadLeft(3, '0') + Classes[RefClassID].Name;
+                }
                 else
                     return string.Empty;
             }
