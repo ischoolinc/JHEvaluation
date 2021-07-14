@@ -842,9 +842,9 @@ namespace HsinChu.StudentRecordReportVer2
             domainLevelType_list.Add("領域_語文_等第_");
             domainLevelType_list.Add("領域_數學_等第_");
             domainLevelType_list.Add("領域_生活課程_等第_");
-            domainScoreType_list.Add("領域_自然科學_等第_");
-            domainScoreType_list.Add("領域_科技_等第_");
-            domainScoreType_list.Add("領域_藝術_等第_");
+            domainLevelType_list.Add("領域_自然科學_等第_");
+            domainLevelType_list.Add("領域_科技_等第_");
+            domainLevelType_list.Add("領域_藝術_等第_");
             domainLevelType_list.Add("領域_自然與生活科技_等第_");
             domainLevelType_list.Add("領域_藝術與人文_等第_");
             domainLevelType_list.Add("領域_社會_等第_");
@@ -1180,7 +1180,7 @@ namespace HsinChu.StudentRecordReportVer2
                 {
                     foreach (var item in _SemesterHistoryRecordDic[stuID].SemesterHistoryItems)
                     {
-                        if (item.GradeYear == 1)
+                        if (item.GradeYear == 1|| item.GradeYear==7)
                         {
                             row["學年度1"] = item.SchoolYear;
 
@@ -1202,7 +1202,7 @@ namespace HsinChu.StudentRecordReportVer2
                                 row["班導師2"] = item.Teacher;
                             }
                         }
-                        if (item.GradeYear == 2)
+                        if (item.GradeYear == 2|| item.GradeYear == 8)
                         {
                             row["學年度2"] = item.SchoolYear;
 
@@ -1224,7 +1224,7 @@ namespace HsinChu.StudentRecordReportVer2
                                 row["班導師4"] = item.Teacher;
                             }
                         }
-                        if (item.GradeYear == 3)
+                        if (item.GradeYear == 3|| item.GradeYear == 9)
                         {
                             row["學年度3"] = item.SchoolYear;
 
