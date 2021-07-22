@@ -61,6 +61,8 @@ namespace JHSchool.Evaluation.CourseExtendControls
             this.cboMultiTeacher = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX14 = new DevComponents.DotNetBar.LabelX();
             this.cboDomain = new DevComponents.DotNetBar.Controls.ComboBoxEx();
+            this.labelX3 = new DevComponents.DotNetBar.LabelX();
+            this.txtCourseNumber = new DevComponents.DotNetBar.Controls.TextBoxX();
             ((System.ComponentModel.ISupportInitialize)(this.picWaiting)).BeginInit();
             this.SuspendLayout();
             // 
@@ -324,10 +326,40 @@ namespace JHSchool.Evaluation.CourseExtendControls
             this.cboDomain.TextChanged += new System.EventHandler(this.cboDomain_TextChanged);
             this.cboDomain.Validating += new System.ComponentModel.CancelEventHandler(this.ComboBoxItem_Validating);
             // 
+            // labelX3
+            // 
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX3.Location = new System.Drawing.Point(36, 140);
+            this.labelX3.Name = "labelX3";
+            this.labelX3.Size = new System.Drawing.Size(70, 23);
+            this.labelX3.TabIndex = 27;
+            this.labelX3.Text = "課程編號";
+            this.labelX3.TextAlignment = System.Drawing.StringAlignment.Far;
+            // 
+            // txtCourseNumber
+            // 
+            // 
+            // 
+            // 
+            this.txtCourseNumber.Border.Class = "TextBoxBorder";
+            this.txtCourseNumber.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtCourseNumber.Location = new System.Drawing.Point(113, 139);
+            this.txtCourseNumber.MaxLength = 50;
+            this.txtCourseNumber.Name = "txtCourseNumber";
+            this.txtCourseNumber.Size = new System.Drawing.Size(151, 25);
+            this.txtCourseNumber.TabIndex = 28;
+            this.txtCourseNumber.TextChanged += new System.EventHandler(this.txtCourseNumber_TextChanged);
+            // 
             // BasicInfoItem
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.labelX3);
+            this.Controls.Add(this.txtCourseNumber);
             this.Controls.Add(this.cboDomain);
             this.Controls.Add(this.btnTeachers);
             this.Controls.Add(this.cboClass);
@@ -347,7 +379,7 @@ namespace JHSchool.Evaluation.CourseExtendControls
             this.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(550, 0);
             this.Name = "BasicInfoItem";
-            this.Size = new System.Drawing.Size(550, 155);
+            this.Size = new System.Drawing.Size(550, 175);
             this.Load += new System.EventHandler(this.BasicInfoItem_Load);
             this.DoubleClick += new System.EventHandler(this.BasicInfo_DoubleClick);
             this.Controls.SetChildIndex(this.txtPeriodCredit, 0);
@@ -367,6 +399,8 @@ namespace JHSchool.Evaluation.CourseExtendControls
             this.Controls.SetChildIndex(this.btnTeachers, 0);
             this.Controls.SetChildIndex(this.picWaiting, 0);
             this.Controls.SetChildIndex(this.cboDomain, 0);
+            this.Controls.SetChildIndex(this.txtCourseNumber, 0);
+            this.Controls.SetChildIndex(this.labelX3, 0);
             ((System.ComponentModel.ISupportInitialize)(this.picWaiting)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -398,6 +432,7 @@ namespace JHSchool.Evaluation.CourseExtendControls
         private DevComponents.DotNetBar.Controls.ComboBoxEx cboMultiTeacher;
         private DevComponents.DotNetBar.LabelX labelX14;
         private DevComponents.DotNetBar.Controls.ComboBoxEx cboDomain;
-
+        private DevComponents.DotNetBar.LabelX labelX3;
+        protected DevComponents.DotNetBar.Controls.TextBoxX txtCourseNumber;
     }
 }

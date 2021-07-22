@@ -270,7 +270,7 @@ namespace JHSchool.Evaluation.CourseExtendControls
                 txtCourseName.Text = content.GetText("Course/CourseName");
                 txtSubject.Text = content.GetText("Course/Subject");
                 //cboSubjectLevel.Text = content.GetText("Course/SubjectLevel");
-
+                txtCourseNumber.Text = content.GetText("Course/CourseNumber");
                 #region 處理節次...權數。
                 string period = content.GetText("Course/Period");
                 string credit = content.GetText("Course/Credit");
@@ -340,6 +340,7 @@ namespace JHSchool.Evaluation.CourseExtendControls
                 //WatchValue("ScoreType", cboEntry.Text);
                 //WatchValue("RequiredBy", cboRequiredBy.Text);
                 //WatchValue("Required", cboRequired.Text);
+                WatchValue("CourseNumber", txtCourseNumber.Text);
 
                 _initialing = false;
 
@@ -354,7 +355,7 @@ namespace JHSchool.Evaluation.CourseExtendControls
                 _oldLogDataDict.Add("節權數", txtPeriodCredit.Text);
                 _oldLogDataDict.Add("學期", cboSemester.Text);
                 _oldLogDataDict.Add("領域", cboDomain.Text);
-                
+                _oldLogDataDict.Add("班級編號", txtCourseNumber.Text);
                 if (_multi_teacher.Teacher1Button.Teacher == null)
                     _oldLogDataDict.Add("教師一", "");
                 else
@@ -502,6 +503,7 @@ namespace JHSchool.Evaluation.CourseExtendControls
                 _newLogDataDict.Add("節權數", txtPeriodCredit.Text);
                 _newLogDataDict.Add("學期", cboSemester.Text);
                 _newLogDataDict.Add("領域", cboDomain.Text);
+                _newLogDataDict.Add("班級編號", txtCourseNumber.Text);
                 if (_multi_teacher.Teacher1Button.Teacher == null)
                     _newLogDataDict.Add("教師一", "");
                 else
@@ -558,6 +560,11 @@ namespace JHSchool.Evaluation.CourseExtendControls
                     _update_required = true;
                 }
 
+                if (items.ContainsKey("CourseNumber"))
+                {
+                    req.AddElement("Course/Field", "CourseNumber", txtCourseNumber.Text);
+                    _update_required = true;
+                }
                 //if (items.ContainsKey("SubjectLevel"))
                 //{
                 //    req.AddElement("Course/Field", "SubjectLevel", cboSubjectLevel.Text);
@@ -711,6 +718,12 @@ namespace JHSchool.Evaluation.CourseExtendControls
                 CheckCourseName();
                 OnValueChanged("CourseName", txtCourseName.Text);
             }
+        }
+
+        private void txtCourseNumber_TextChanged(object sender, EventArgs e)
+        {
+            if (!_initialing)
+                OnValueChanged("CourseNumber", txtCourseNumber.Text);
         }
 
         private void CheckCourseName()
@@ -1316,6 +1329,7 @@ namespace JHSchool.Evaluation.CourseExtendControls
         {
             InitializeDomainList();
         }
+
 
     }
 
