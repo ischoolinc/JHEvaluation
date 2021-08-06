@@ -108,6 +108,22 @@ namespace JHEvaluation.ClassSemesterScoreReport
             return items;
         }
 
+        public static List<string> GetSelectedItemsM(this ListViewEx listView)
+        {
+            List<string> items = new List<string>();
+            foreach (ListViewItem each in listView.Items)
+            {
+                if (each.Checked)
+                {
+                    if (each.Tag.ToString() != "彈性課程" && each.Tag.ToString() != "")
+                    {
+                        items.Add(each.Text);
+                    }
+                }
+            }
+            return items;
+        }
+
         public static Dictionary<string, ReportStudent> ToDictionary(this IEnumerable<ReportStudent> students)
         {
             Dictionary<string, ReportStudent> dicstuds = new Dictionary<string, ReportStudent>();
@@ -163,6 +179,34 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 item.Group = group;
                 item.Text = each;
                 listView.Items.Add(item);
+            }
+            listView.ResumeLayout();
+            listView.Refresh();
+        }
+
+        public static void FillSubjectItems(this ListViewEx listView, IEnumerable<string> items, string groupName, Dictionary<string, string> domaims)
+        {
+            listView.Groups.Clear();
+            listView.Items.Clear();
+
+            ListViewGroup group = new ListViewGroup(groupName);
+            listView.Groups.Add(group);
+            listView.SuspendLayout();
+
+            foreach (KeyValuePair<string, string> kvp in domaims)
+            {
+                foreach (string each in items)
+                {
+                    ListViewItem item = new ListViewItem();
+                    item.Group = group;
+                    item.Text = each;
+                    if (item.Text == kvp.Key)
+                    {
+
+                        item.Tag = kvp.Value;
+                        listView.Items.Add(item);
+                    }
+                }
             }
             listView.ResumeLayout();
             listView.Refresh();

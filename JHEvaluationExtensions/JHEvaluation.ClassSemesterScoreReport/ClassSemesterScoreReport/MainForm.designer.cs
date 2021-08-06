@@ -61,6 +61,7 @@
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.labelX4 = new DevComponents.DotNetBar.LabelX();
             this.txtReMark = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.checkBoxX1 = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.gpSubject.SuspendLayout();
             this.plSubject.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LoadingSubject)).BeginInit();
@@ -149,6 +150,7 @@
             this.lvSubject.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
             listViewGroup1,
             listViewGroup2});
+            this.lvSubject.HideSelection = false;
             listViewItem1.Group = listViewGroup1;
             listViewItem1.StateImageIndex = 0;
             listViewItem2.Group = listViewGroup2;
@@ -349,6 +351,7 @@
             this.lvDomain.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
             listViewGroup3,
             listViewGroup4});
+            this.lvDomain.HideSelection = false;
             listViewItem6.Group = listViewGroup3;
             listViewItem6.StateImageIndex = 0;
             listViewItem7.Group = listViewGroup4;
@@ -430,10 +433,27 @@
             this.txtReMark.Size = new System.Drawing.Size(67, 25);
             this.txtReMark.TabIndex = 16;
             // 
+            // checkBoxX1
+            // 
+            this.checkBoxX1.AutoSize = true;
+            this.checkBoxX1.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.checkBoxX1.BackgroundStyle.Class = "";
+            this.checkBoxX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkBoxX1.Location = new System.Drawing.Point(147, 345);
+            this.checkBoxX1.Name = "checkBoxX1";
+            this.checkBoxX1.Size = new System.Drawing.Size(147, 21);
+            this.checkBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkBoxX1.TabIndex = 17;
+            this.checkBoxX1.Text = "彈性領域不列入計算";
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(456, 372);
+            this.Controls.Add(this.checkBoxX1);
             this.Controls.Add(this.txtReMark);
             this.Controls.Add(this.labelX4);
             this.Controls.Add(this.cbxScoreType);
@@ -485,7 +505,7 @@
         private DevComponents.DotNetBar.LabelX labelX1;
         private DevComponents.DotNetBar.LabelX labelX4;
         private DevComponents.DotNetBar.Controls.TextBoxX txtReMark;
-
+        private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxX1;
     }
 }
 

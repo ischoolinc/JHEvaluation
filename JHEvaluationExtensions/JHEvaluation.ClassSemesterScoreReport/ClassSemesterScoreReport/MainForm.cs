@@ -132,8 +132,9 @@ namespace JHEvaluation.ClassSemesterScoreReport
             }
 
             lvDomain.FillItems(Utilities.DomainNames, "領域");
-            lvSubject.FillItems(Subjects, "科目");
-
+            //lvSubject.FillItems(Subjects, "科目");
+            lvSubject.FillSubjectItems(Subjects, "科目", SubjectDomainMap);
+            
             // 回填使用者勾選
             foreach (ListViewItem lvi in lvSubject.Items)
                 if (_tmpUserSelSubjectList.Contains(lvi.Text))
@@ -205,7 +206,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     if (ss == -1)
                         continue;
 
-                    if (!each.Credit.HasValue || each.Credit.Value <= 0) continue;  //沒有節數不處理。
+                    if (!each.Credit.HasValue || each.Credit.Value < 0) continue;  //沒有節數不處理。 //2021-07 要求權重0也要印出
 
                     if (!student.Scores[Utilities.SubjectToken].Contains(each.Subject))
                     {
@@ -238,7 +239,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                     if (dd == -1)
                         continue;
 
-                    if (!each.Credit.HasValue || each.Credit.Value <= 0) continue;
+                    if (!each.Credit.HasValue || each.Credit.Value < 0) continue; //2021-07 要求權重0也要印出
 
                     if (!student.Scores[Utilities.DomainToken].Contains(each.Domain))
                     {
@@ -309,6 +310,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
             MsgBox.Show("請注意: 本成績單包含所有學生學期成績及排名，僅供校內教師參考使用，請勿公佈或發放與學生。", "注意", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             List<string> selectedSubjects = lvSubject.GetSelectedItems();
+            List<string> selectedSubjectsM = lvSubject.GetSelectedItemsM();
             List<string> selectedDomains = lvDomain.GetSelectedItems();
 
             #region 檢查選擇的科目、領域是否合理。
@@ -343,6 +345,11 @@ namespace JHEvaluation.ClassSemesterScoreReport
             ScoreCalculatorP calculator = new ScoreCalculatorP(2, Utilities.SummaryToken);
             calculator.Subjects = selectedSubjects;
             calculator.Domains = selectedDomains;
+
+            if (checkBoxX1.Checked)
+            {
+                calculator.Subjects = selectedSubjectsM;  //20210721 要求彈性課程領域不列入計算
+            }
 
             foreach (ReportStudent each in AllStudents)
                 calculator.CalculateScore(each);
