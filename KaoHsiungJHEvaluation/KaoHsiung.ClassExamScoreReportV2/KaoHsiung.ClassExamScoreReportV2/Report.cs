@@ -164,6 +164,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
                     OutputSheet.Cells[RowOffset, ColumnOffset].PutValue(eachHeacher.Name);
                     OutputSheet.Cells[RowOffset + 1, ColumnOffset].PutValue(eachHeacher.GetDisplayCredit());
+
                     eachHeacher.ColumnIndex = ColumnOffset;
                     ColumnOffset++;
                 }

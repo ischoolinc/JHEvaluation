@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Group1", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Group2", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Group1", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Group2", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("Group1", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Group2", System.Windows.Forms.HorizontalAlignment.Left);
             this.gpSubject = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.plSubject = new System.Windows.Forms.Panel();
             this.LoadingSubject = new System.Windows.Forms.PictureBox();
@@ -49,6 +49,7 @@
             this.labelX6 = new DevComponents.DotNetBar.LabelX();
             this.labelX8 = new DevComponents.DotNetBar.LabelX();
             this.cbExam = new DevComponents.DotNetBar.Controls.ComboBoxEx();
+            this.checkBoxX1 = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.gpSubject.SuspendLayout();
             this.plSubject.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LoadingSubject)).BeginInit();
@@ -130,13 +131,14 @@
             this.lvSubject.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSubject.CheckBoxes = true;
             this.lvSubject.Dock = System.Windows.Forms.DockStyle.Fill;
-            listViewGroup1.Header = "Group1";
-            listViewGroup1.Name = "listViewGroup1";
-            listViewGroup2.Header = "Group2";
-            listViewGroup2.Name = "listViewGroup2";
+            listViewGroup3.Header = "Group1";
+            listViewGroup3.Name = "listViewGroup1";
+            listViewGroup4.Header = "Group2";
+            listViewGroup4.Name = "listViewGroup2";
             this.lvSubject.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2});
+            listViewGroup3,
+            listViewGroup4});
+            this.lvSubject.HideSelection = false;
             this.lvSubject.Location = new System.Drawing.Point(3, 3);
             this.lvSubject.Name = "lvSubject";
             this.lvSubject.Size = new System.Drawing.Size(254, 219);
@@ -257,13 +259,14 @@
             this.lvDomain.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvDomain.CheckBoxes = true;
             this.lvDomain.Dock = System.Windows.Forms.DockStyle.Fill;
-            listViewGroup3.Header = "Group1";
-            listViewGroup3.Name = "listViewGroup1";
-            listViewGroup4.Header = "Group2";
-            listViewGroup4.Name = "listViewGroup2";
+            listViewGroup5.Header = "Group1";
+            listViewGroup5.Name = "listViewGroup1";
+            listViewGroup6.Header = "Group2";
+            listViewGroup6.Name = "listViewGroup2";
             this.lvDomain.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup3,
-            listViewGroup4});
+            listViewGroup5,
+            listViewGroup6});
+            this.lvDomain.HideSelection = false;
             this.lvDomain.Location = new System.Drawing.Point(3, 3);
             this.lvDomain.Name = "lvDomain";
             this.lvDomain.Size = new System.Drawing.Size(148, 219);
@@ -354,10 +357,26 @@
             this.cbExam.TabIndex = 5;
             this.cbExam.Tag = "StatusVarying";
             // 
+            // checkBoxX1
+            // 
+            this.checkBoxX1.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.checkBoxX1.BackgroundStyle.Class = "";
+            this.checkBoxX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkBoxX1.Location = new System.Drawing.Point(147, 335);
+            this.checkBoxX1.Name = "checkBoxX1";
+            this.checkBoxX1.Size = new System.Drawing.Size(146, 23);
+            this.checkBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkBoxX1.TabIndex = 12;
+            this.checkBoxX1.Text = "彈性領域不列入計算";
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(456, 367);
+            this.Controls.Add(this.checkBoxX1);
             this.Controls.Add(this.cboSchoolYear);
             this.Controls.Add(this.labelX5);
             this.Controls.Add(this.cboSemester);
@@ -407,6 +426,6 @@
         private DevComponents.DotNetBar.LabelX labelX8;
 
         private DevComponents.DotNetBar.Controls.ComboBoxEx cbExam;
-
+        private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxX1;
     }
 }

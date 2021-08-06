@@ -31,7 +31,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
                 ctlExam.ValueMember = "ID";
 
                 List<JHExamRecord> exams = JHExam.SelectAll();
-                exams.Sort(delegate(JHExamRecord x, JHExamRecord y)
+                exams.Sort(delegate (JHExamRecord x, JHExamRecord y)
                 {
                     int xx = x.DisplayOrder.HasValue ? x.DisplayOrder.Value : int.MinValue;
                     int yy = y.DisplayOrder.HasValue ? y.DisplayOrder.Value : int.MinValue;
@@ -108,6 +108,22 @@ namespace KaoHsiung.ClassExamScoreReportV2
             return items;
         }
 
+        public static List<string> GetSelectedItemsM(this ListViewEx listView)
+        {
+            List<string> items = new List<string>();
+            foreach (ListViewItem each in listView.Items)
+            {
+                if (each.Checked)
+                {
+                    if (each.Tag.ToString() != "彈性課程")
+                    {
+                        items.Add(each.Text);
+                    }
+                }
+            }
+            return items;
+        }
+
         public static Dictionary<string, ReportStudent> ToDictionary(this IEnumerable<ReportStudent> students)
         {
             Dictionary<string, ReportStudent> dicstuds = new Dictionary<string, ReportStudent>();
@@ -116,7 +132,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
             return dicstuds;
         }
 
-        public static List<ReportStudent> ToReportStudent(this IEnumerable<JHStudentRecord> srcStudents,List<string> notInStudIDList)
+        public static List<ReportStudent> ToReportStudent(this IEnumerable<JHStudentRecord> srcStudents, List<string> notInStudIDList)
         {
             List<ReportStudent> students = new List<ReportStudent>();
             foreach (JHStudentRecord each in srcStudents)
@@ -169,9 +185,38 @@ namespace KaoHsiung.ClassExamScoreReportV2
             listView.Refresh();
         }
 
+        public static void FillSubjectItems(this ListViewEx listView, IEnumerable<string> items, string groupName, Dictionary<string, string> domaims)
+        {
+            listView.Groups.Clear();
+            listView.Items.Clear();
+
+            ListViewGroup group = new ListViewGroup(groupName);
+            listView.Groups.Add(group);
+            listView.SuspendLayout();
+
+            foreach (KeyValuePair<string, string> kvp in domaims)
+            {
+                foreach (string each in items)
+                {
+                    ListViewItem item = new ListViewItem();
+                    item.Group = group;
+                    item.Text = each;
+                    if (item.Text == kvp.Key)
+                    {
+
+                        item.Tag = kvp.Value;
+                        listView.Items.Add(item);
+                    }
+                }
+            }
+
+            listView.ResumeLayout();
+            listView.Refresh();
+        }
+
         public static List<RatingScope<ReportStudent>> SortName(this List<RatingScope<ReportStudent>> scopes)
         {
-            scopes.Sort(new Comparison<RatingScope<ReportStudent>>(delegate(RatingScope<ReportStudent> x, RatingScope<ReportStudent> y)
+            scopes.Sort(new Comparison<RatingScope<ReportStudent>>(delegate (RatingScope<ReportStudent> x, RatingScope<ReportStudent> y)
             {
                 return x.Name.CompareTo(y.Name);
             }));
@@ -242,7 +287,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
                 //domains.Add("綜合活動");
                 //domains.Add("學習領域");
                 //domains.Add("課程學習");
-                
+
                 domains.Sort(Subject.CompareDomainOrdinal);
 
                 return domains;

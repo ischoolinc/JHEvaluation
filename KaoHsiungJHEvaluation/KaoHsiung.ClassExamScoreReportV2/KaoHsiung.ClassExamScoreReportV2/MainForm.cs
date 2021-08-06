@@ -172,7 +172,9 @@ namespace KaoHsiung.ClassExamScoreReportV2
             }
 
             lvDomain.FillItems(Utilities.DomainNames, "領域");
-            lvSubject.FillItems(Subjects, "科目");
+            //lvSubject.FillItems(Subjects, "科目");
+            lvSubject.FillSubjectItems(Subjects, "科目", SubjectDomainMap);   //2021-07 增加「彈性課程不列入計算」功能
+            
         }
 
         private void MasterWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -291,6 +293,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
         private void btnPrint_Click(object sender, EventArgs e)
         {
             List<string> selectedSubjects = lvSubject.GetSelectedItems();
+            List<string> selectedSubjectsM = lvSubject.GetSelectedItemsM();  //20210721 要求彈性課程領域不列入計算
             List<string> selectedDomains = lvDomain.GetSelectedItems();
 
             #region 檢查選擇的科目、領域是否合理。
@@ -298,7 +301,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
             int ScoreHeaderCount = (Perference.PaperSize == "B4") ? 32 : 18;
             if ((selectedSubjects.Count + selectedDomains.Count + Perference.PrintItems.Count) > ScoreHeaderCount)
             {
-                MsgBox.Show("選擇的成績項目超過，無法列印報表。");
+                MsgBox.Show("選擇的成績項目與列印項目超過樣板可提供數量，無法列印報表。");
                 return;
             }
             #endregion
@@ -314,7 +317,12 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
             #region 計算各類成績。
             ScoreCalculator calculator = new ScoreCalculator(2, Utilities.SummaryToken);
+
             calculator.Subjects = selectedSubjects;
+            if (checkBoxX1.Checked)
+            {
+                calculator.Subjects = selectedSubjectsM;  //20210721 要求彈性課程領域不列入計算
+            }
             calculator.Domains = selectedDomains;
 
             foreach (ReportStudent each in AllStudents)
