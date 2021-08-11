@@ -140,10 +140,18 @@ namespace JHEvaluation.StudentScoreSummaryReport
             PrintStudents.ReadUpdateRecordDate(this);
             PrintStudents.ReadGraduatePhoto(this); //讀取照片。
 
-            if(Preference.SpiltPDF)
-                e.Result = new ReportEnglish(PrintStudents, Preference).PrintDict(PrintScore);
-            else
-                e.Result = new ReportEnglish(PrintStudents, Preference).Print(PrintScore);
+            try
+            {
+                if (Preference.SpiltPDF)
+                    e.Result = new ReportEnglish(PrintStudents, Preference).PrintDict(PrintScore);
+                else
+                    e.Result = new ReportEnglish(PrintStudents, Preference).Print(PrintScore);
+            }
+            catch(Exception ex)
+            {
+                MsgBox.Show(ex.Message);
+            }
+
 
             Feedback("列印完成", -1);        
         }
@@ -151,53 +159,60 @@ namespace JHEvaluation.StudentScoreSummaryReport
         private void MasterWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Util.EnableControls(this);
-
-            if(Preference.SpiltPDF)
+            try
             {
-                Dictionary<string,Document> dataDict =e.Result as Dictionary<string,Document>;
-
-                FolderBrowserDialog fbd = new FolderBrowserDialog();
-                fbd.Description = "請選擇儲存資料夾";
-                fbd.ShowNewFolderButton = true;
-
-                if (fbd.ShowDialog() == DialogResult.Cancel) return;
-                if(Preference.ConvertToPDF)
+                if (Preference.SpiltPDF)
                 {
-                    MotherForm.SetStatusBarMessage("轉換成 PDF 格式中...");
-                    foreach (string each in dataDict.Keys)
+                    Dictionary<string, Document> dataDict = e.Result as Dictionary<string, Document>;
+
+                    FolderBrowserDialog fbd = new FolderBrowserDialog();
+                    fbd.Description = "請選擇儲存資料夾";
+                    fbd.ShowNewFolderButton = true;
+
+                    if (fbd.ShowDialog() == DialogResult.Cancel) return;
+                    if (Preference.ConvertToPDF)
                     {
+                        MotherForm.SetStatusBarMessage("轉換成 PDF 格式中...");
+                        foreach (string each in dataDict.Keys)
+                        {
 
-                        #region 處理產生 PDF
+                            #region 處理產生 PDF
 
-                        string fPath = fbd.SelectedPath + "\\" + each + ".pdf";
+                            string fPath = fbd.SelectedPath + "\\" + each + ".pdf";
 
-                        dataDict[each].Save(fPath, Aspose.Words.SaveFormat.Pdf);
+                            dataDict[each].Save(fPath, Aspose.Words.SaveFormat.Pdf);
 
-                        #endregion
+                            #endregion
+                        }
                     }
+                    else
+                    {
+                        MotherForm.SetStatusBarMessage("儲存中...");
+                        foreach (string each in dataDict.Keys)
+                        {
+                            #region 處理產生 Doc
+
+                            string fPath = fbd.SelectedPath + "\\" + each + ".doc";
+                            dataDict[each].Save(fPath, Aspose.Words.SaveFormat.Doc);
+                            #endregion
+                        }
+
+                    }
+
+                    MotherForm.SetStatusBarMessage("產生完成");
+                    System.Diagnostics.Process.Start(fbd.SelectedPath);
                 }
                 else
                 {
-                    MotherForm.SetStatusBarMessage("儲存中...");
-                    foreach (string each in dataDict.Keys)
-                    {
-                        #region 處理產生 Doc
-
-                        string fPath = fbd.SelectedPath + "\\" + each + ".doc";
-                        dataDict[each].Save(fPath, Aspose.Words.SaveFormat.Doc);
-                        #endregion
-                    }
-
+                    Document doc = e.Result as Document;
+                    Util.Save(doc, "學生在校成績證明書_英文", Preference.ConvertToPDF);
                 }
-
-                MotherForm.SetStatusBarMessage("產生完成");
-                System.Diagnostics.Process.Start(fbd.SelectedPath);
             }
-            else
+            catch(Exception ex)
             {
-                Document doc = e.Result as Document;
-                Util.Save(doc, "學生在校成績證明書_英文", Preference.ConvertToPDF);
+                MsgBox.Show(ex.Message);
             }
+
         }
 
         private void btnExit_Click(object sender, EventArgs e)
