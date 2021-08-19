@@ -77,23 +77,34 @@ namespace DomainScoreReport
                     // 資料整理
                     ParseData();
                     worker.ReportProgress(progress += 30);
-
-                    DataTable dt = FillMergeFiledData();
-                    int n = 70 / dt.Rows.Count;
-
-                    foreach (DataRow row in dt.Rows)
+                    try
                     {
-                        Document eachDoc = new Document();
-                        eachDoc.Sections.Clear();
-                        eachDoc.Sections.Add(eachDoc.ImportNode(docTemplat.FirstSection, true));
-                        eachDoc.MailMerge.CleanupOptions = MailMergeCleanupOptions.RemoveEmptyParagraphs;
-                        eachDoc.MailMerge.Execute(row);
 
-                        doc.Sections.Add(doc.ImportNode(eachDoc.Sections[0], true));
-                        worker.ReportProgress(progress += n);
+                        DataTable dt = FillMergeFiledData();
+                        int n = 70 / dt.Rows.Count;
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            Document eachDoc = new Document();
+                            eachDoc.Sections.Clear();
+                            eachDoc.Sections.Add(eachDoc.ImportNode(docTemplat.FirstSection, true));
+                            eachDoc.MailMerge.CleanupOptions = MailMergeCleanupOptions.RemoveEmptyParagraphs;
+                            eachDoc.MailMerge.Execute(row);
+
+                            doc.Sections.Add(doc.ImportNode(eachDoc.Sections[0], true));
+                            worker.ReportProgress(progress += n);
+                        }
+
+                        e.Result = doc;
+
                     }
-
-                    e.Result = doc;
+                    catch (Exception ex)
+                    {
+                        if (ex.Message.Contains("domain' 不屬於資料表"))
+                            MsgBox.Show("資料中有不合規定的領域名稱，無法產生成績預警通知單。","錯誤",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                        else
+                            MsgBox.Show("成績資料有誤，無法產生成績預警通知單。", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
@@ -137,7 +148,7 @@ namespace DomainScoreReport
             }
             else
             {
-                MotherForm.SetStatusBarMessage("沒有成績資料，無法產生成績預警通知單。");
+                MotherForm.SetStatusBarMessage("成績資料有誤，無法產生成績預警通知單。");
             }
         }
 
@@ -315,7 +326,7 @@ ORDER BY
                 // 領域及格數
                 int passCount = 0;
                 // 領域加權平均清單
-                List<double> listDomainAvgScore = new List<double>();
+                List<decimal> listDomainAvgScore = new List<decimal>();
                 // 領域
                 int d = 1;
                 foreach (string domain in dicStudentByID[id].listDomainFromStu)
@@ -359,16 +370,16 @@ ORDER BY
                     // 領域平均
                     if (listScore.Count > 0)
                     {
-                        float totalScore = 0;
+                        decimal totalScore = 0;
                         int domainScoreCount = 0;
                         foreach (ScoreRec sr in listScore)
                         {
-                            totalScore += FloatParser(sr.Score);
+                            totalScore += DecimalParser(sr.Score);
                             domainScoreCount++;
                         }
                         if (totalScore != 0)
                         {
-                            double avgScore = Math.Round(totalScore / domainScoreCount, 2);
+                            decimal avgScore = Math.Round(totalScore / domainScoreCount, 2, MidpointRounding.AwayFromZero);
                             row[$"{d}_domain_avg"] = avgScore;
                             listDomainAvgScore.Add(avgScore);
 
@@ -386,7 +397,7 @@ ORDER BY
 
                 // 學期各領域平均
                 // 個學期領域平均的算術平均
-                double allTotalScore = 0;
+                decimal allTotalScore = 0;
                 int scoreCount = 0;
                 int sIndex = 1;
                 foreach (string key in dicStudentByID[id].dicSchoolYear.Keys)
@@ -413,17 +424,17 @@ ORDER BY
 
                     if (listScore.Count > 0)
                     {
-                        float totalScore = 0;
-                        float totalPower = 0;
+                        decimal totalScore = 0;
+                        decimal totalPower = 0;
                         foreach (ScoreRec sr in listScore)
                         {
-                            totalScore += FloatParser(sr.Score) * FloatParser(sr.Power);
-                            totalPower += FloatParser(sr.Power);
+                            totalScore += DecimalParser(sr.Score) * DecimalParser(sr.Power);
+                            totalPower += DecimalParser(sr.Power);
                         }
                         // 沒有權重就不幫你算
                         if (totalPower != 0)
                         {
-                            double score = Math.Round(totalScore / totalPower, 2);
+                            decimal score = Math.Round(totalScore / totalPower, 2, MidpointRounding.AwayFromZero);
                             row[$"{sIndex}_all_domain_avg"] = score;
                             allTotalScore += score;
                             scoreCount++;
@@ -440,7 +451,7 @@ ORDER BY
                     //{
                     //    totalScore += score;
                     //}
-                    double avgScore = Math.Round(allTotalScore / scoreCount, 2);
+                    decimal avgScore = Math.Round(allTotalScore / scoreCount, 2, MidpointRounding.AwayFromZero);
 
                     row["all_domain_avg"] = avgScore;
                 }
@@ -546,7 +557,12 @@ ORDER BY
             return table;
         }
 
-        private float FloatParser(string data)
+        private decimal DecimalParser(string data)
+        {
+            return decimal.Parse(data == "" ? "0" : data);
+        }
+
+        private float FloatParser2(string data)
         {
             return float.Parse(data == "" ? "0" : data);
         }
