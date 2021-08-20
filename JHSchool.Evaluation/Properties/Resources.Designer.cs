@@ -119,12 +119,12 @@ namespace JHSchool.Evaluation.Properties {
         ///	&lt;Domain Type=&quot;General&quot;&gt;健康與體育&lt;/Domain&gt;
         ///	&lt;Domain Type=&quot;General&quot;&gt;藝術與人文&lt;/Domain&gt;
         ///	&lt;Domain Type=&quot;General&quot;&gt;綜合活動&lt;/Domain&gt;
+        ///  &lt;Domain Type=&quot;General&quot;&gt;特殊需求&lt;/Domain&gt;
+        ///  &lt;Domain Type=&quot;General&quot;&gt;科技&lt;/Domain&gt;
         ///	&lt;!-- &lt;Domain Type=&quot;Special&quot;&gt;實用語文&lt;/Domain&gt;
         ///	&lt;Domain Type=&quot;Special&quot;&gt;實用數學&lt;/Domain&gt;
         ///	&lt;Domain Type=&quot;Special&quot;&gt;社會適應&lt;/Domain&gt;
-        ///	&lt;Domain Type=&quot;Special&quot;&gt;生活教育&lt;/Domain&gt;
-        ///	&lt;Domain Type=&quot;Special&quot;&gt;休閒教育&lt;/Domain&gt;
-        ///	&lt;Domain Type=&quot;Special&quot;&gt;職業 [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
+        ///	&lt;Domain Type=&quot;Special&quot;&gt;生活 [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
         /// </summary>
         internal static string DefaultDomainList {
             get {

@@ -50,6 +50,14 @@ namespace JHSchool.Evaluation
             AssessmentSetup.Instance.SetupPresentation();
             #endregion
 
+
+            // 當授課教師變更
+            FISCA.InteractionService.SubscribeEvent("JH_CourseTeacherChange", (sender, args) =>
+            {
+                TCInstruct.Instance.SyncAllBackground();
+            });
+
+
             #region ContentItem 資料項目
             //學期成績
             //Student.Instance.AddDetailBulider(new DetailBulider<SemesterScoreItem>());
