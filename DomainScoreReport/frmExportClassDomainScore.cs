@@ -478,7 +478,8 @@ namespace DomainScoreReport
                 string studentID = "" + row["id"];
                 string domain = "" + row["領域"];
 
-                if (domain != "")
+                //if (domain != "")
+                if (listDomainName.Contains(domain) && domain!="特殊需求")  //如果領域存在領域資料管理，且不是特殊需求才列印，沒有則忽略-Cynthia 2021.08
                 {
                     // 成績資料
                     if (!dicClassStuDomainScore.ContainsKey(classID))
@@ -676,10 +677,10 @@ namespace DomainScoreReport
                             //totalPower += FloatParser(power);
 
                             // 最後平均使用算術平均不使用加權平均
-                            totalScore += FloatParser(score);
+                            totalScore += DecimalParser(score);
                             totalPower += 1;
 
-                            if (FloatParser(score) >= 60)
+                            if (DecimalParser(score) >= 60)
                             {
                                 passCount++;
                             }
@@ -741,7 +742,7 @@ namespace DomainScoreReport
             return dt;
         }
 
-        private decimal FloatParser(string data)
+        private decimal DecimalParser(string data)
         {
             return decimal.Parse(data == "" ? "0" : data);
         }

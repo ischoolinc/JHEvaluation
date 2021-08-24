@@ -100,10 +100,7 @@ namespace DomainScoreReport
                     }
                     catch (Exception ex)
                     {
-                        if (ex.Message.Contains("domain' 不屬於資料表"))
-                            MsgBox.Show("資料中有不合規定的領域名稱，無法產生成績預警通知單。","錯誤",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                        else
-                            MsgBox.Show("成績資料有誤，無法產生成績預警通知單。", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MsgBox.Show("無法列印："+ex.Message, "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
@@ -220,7 +217,7 @@ ORDER BY
             }
             catch (Exception error)
             {
-                MsgBox.Show("成績單列印失敗:" + error.Message);
+                MsgBox.Show("成績單列印失敗：" + error.Message);
                 return false;
             }
         }
@@ -255,7 +252,8 @@ ORDER BY
                     string ssKey = schoolYear + semester;
 
                     // 沒有領域就忽略
-                    if (domain != "")
+                    //if (domain != "")
+                    if (listDomainName.Contains(domain) && domain != "特殊需求")  //如果領域存在領域資料管理，且不是特殊需求才列印，沒有則忽略-Cynthia 2021.08
                     {
                         // 成績
                         if (!stuRec.dicScoreByDomainBySchoolYear.ContainsKey(ssKey))

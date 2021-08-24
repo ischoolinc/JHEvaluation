@@ -61,17 +61,19 @@
             // 
             // labelX1
             // 
+            this.labelX1.AutoSize = true;
             this.labelX1.BackColor = System.Drawing.Color.Transparent;
             // 
             // 
             // 
             this.labelX1.BackgroundStyle.Class = "";
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(38, 25);
+            this.labelX1.Location = new System.Drawing.Point(29, 12);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(188, 23);
+            this.labelX1.Size = new System.Drawing.Size(181, 39);
             this.labelX1.TabIndex = 4;
-            this.labelX1.Text = "本功能為多學期合計之成績。";
+            this.labelX1.Text = "本功能為多學期合計之成績。\r\n只印出八大領域。";
+            this.labelX1.TextAlignment = System.Drawing.StringAlignment.Center;
             // 
             // frmExportClassDomainScore
             // 
@@ -83,11 +85,13 @@
             this.Controls.Add(this.btnExport);
             this.DoubleBuffered = true;
             this.MaximumSize = new System.Drawing.Size(380, 180);
+            this.MinimumSize = new System.Drawing.Size(254, 146);
             this.Name = "frmExportClassDomainScore";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "班級多學期成績預警通知單";
             this.Load += new System.EventHandler(this.frmExportClassDomainScore_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
