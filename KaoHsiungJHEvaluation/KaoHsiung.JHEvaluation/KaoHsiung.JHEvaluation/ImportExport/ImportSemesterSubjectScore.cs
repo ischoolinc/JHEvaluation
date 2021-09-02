@@ -764,8 +764,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                     {
                         if (!newRecord.Subjects.ContainsKey(subject))
                             newRecord.Subjects.Add(subject, record.Subjects[subject]);
-                        if (newRecord.Subjects[subject].Text.Contains("\b"))
-                            newRecord.Subjects[subject].Text = newRecord.Subjects[subject].Text.Replace("\b", "");
+                        if (newRecord.Subjects[subject].Text != null)
+                        {
+                            if (newRecord.Subjects[subject].Text.Contains("\b"))
+                                newRecord.Subjects[subject].Text = newRecord.Subjects[subject].Text.Replace("\b", "");
+                        }
                     }
                 }
 
@@ -784,8 +787,11 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                     {
                         if (!newRecord.Subjects.ContainsKey(subject))
                             newRecord.Subjects.Add(subject, record.Subjects[subject]);
-                        if (newRecord.Subjects[subject].Text.Contains("\b"))
-                            newRecord.Subjects[subject].Text = newRecord.Subjects[subject].Text.Replace("\b", "");
+                        if (newRecord.Subjects[subject].Text != null)
+                        {
+                            if (newRecord.Subjects[subject].Text.Contains("\b"))
+                                newRecord.Subjects[subject].Text = newRecord.Subjects[subject].Text.Replace("\b", "");
+                        }
                     }
                 }
 
