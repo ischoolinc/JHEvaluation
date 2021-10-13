@@ -260,5 +260,11 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
 
             return list;
         }
+        private void linkLabel1_LinkClicked(object sender, EventArgs e)
+        {
+            MsgBox.Show("勾選「列入學期成績」：該課程會結算到學期成績，且會呈現在成績單上。\r\n" +
+                "不勾選「列入學期成績」：該課程不會結算到學期成績，也不會呈現在成績單上。\r\n" +
+                "若已開課，可於「課程」頁籤中修改。", "說明", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

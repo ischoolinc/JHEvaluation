@@ -49,10 +49,14 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnAdd = new DevComponents.DotNetBar.ButtonX();
             this.btnDelete = new DevComponents.DotNetBar.ButtonX();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+
             this.expandableSplitter1 = new DevComponents.DotNetBar.ExpandableSplitter();
             ((System.ComponentModel.ISupportInitialize)(this.tabControl1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabControlPanel1.SuspendLayout();
+            this.tabControlPanel1.Controls.Add(this.linkLabel1);
+
             this.tabControlPanel2.SuspendLayout();
             this.panelEx1.SuspendLayout();
             this.itemPanel1.SuspendLayout();
@@ -107,7 +111,8 @@
             this.lblSaveWarning.BackColor = System.Drawing.Color.Transparent;
             this.lblSaveWarning.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblSaveWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblSaveWarning.Location = new System.Drawing.Point(470, 4);
+            this.lblSaveWarning.Location = new System.Drawing.Point(470, 4); 
+            //this.lblSaveWarning.Location = new System.Drawing.Point(409, 4);
             this.lblSaveWarning.Name = "lblSaveWarning";
             this.lblSaveWarning.Size = new System.Drawing.Size(69, 24);
             this.lblSaveWarning.TabIndex = 3;
@@ -361,6 +366,20 @@
             this.expandableSplitter1.TabIndex = 3;
             this.expandableSplitter1.TabStop = false;
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(479, 8);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(60, 17);
+            this.linkLabel1.TabIndex = 4;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "列入說明";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.linkLabel1.BackColor = System.Drawing.Color.Transparent;
+            this.linkLabel1.Visible = false;     // 2021-7 未決議說明內容，先隱藏 cyn
+            this.linkLabel1.Enabled = false;  // 2021-7 未決議說明內容，先隱藏 cyn
+            // 
             // ProgramPlanManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
@@ -408,6 +427,7 @@
         private DevComponents.DotNetBar.ButtonX btnSave;
         private DevComponents.DotNetBar.LabelX lblSaveWarning;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.LinkLabel linkLabel1;
 
     }
 }
