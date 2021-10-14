@@ -187,5 +187,35 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 }
             }
         }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.FileName = "畢業預警範本二";
+            saveDialog.Filter = "Word (*.doc)|*.doc";
+            if (saveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    Aspose.Words.Document doc = new Aspose.Words.Document(new MemoryStream(JHEvaluation.ScoreCalculation.Properties.Resources.畢業預警報表範本二));
+                    doc.Save(saveDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MsgBox.Show("儲存失敗", ex.Message);
+                    return;
+                }
+
+                try
+                {
+                    System.Diagnostics.Process.Start(saveDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MsgBox.Show("開啟失敗", ex.Message);
+                    return;
+                }
+            }
+        }
     }
 }

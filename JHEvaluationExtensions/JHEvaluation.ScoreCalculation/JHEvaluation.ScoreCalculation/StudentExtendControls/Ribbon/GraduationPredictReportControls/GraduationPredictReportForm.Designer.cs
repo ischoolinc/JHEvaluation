@@ -102,7 +102,7 @@
             this.chConditionGr1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
             this.chConditionGr1.Location = new System.Drawing.Point(17, 15);
             this.chConditionGr1.Name = "chConditionGr1";
-            this.chConditionGr1.Size = new System.Drawing.Size(235, 21);
+            this.chConditionGr1.Size = new System.Drawing.Size(304, 26);
             this.chConditionGr1.TabIndex = 3;
             this.chConditionGr1.Tag = "GraduateDomain";
             this.chConditionGr1.Text = "學習領域畢業總平均成績符合規範。";
@@ -164,7 +164,7 @@
             this.checkBox4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
             this.checkBox4.Location = new System.Drawing.Point(17, 17);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(105, 21);
+            this.checkBox4.Size = new System.Drawing.Size(134, 26);
             this.checkBox4.TabIndex = 20;
             this.checkBox4.Text = "勾選以下條件";
             this.checkBox4.UseVisualStyleBackColor = true;
@@ -178,7 +178,7 @@
             this.chCondition4c.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
             this.chCondition4c.Location = new System.Drawing.Point(17, 46);
             this.chCondition4c.Name = "chCondition4c";
-            this.chCondition4c.Size = new System.Drawing.Size(261, 21);
+            this.chCondition4c.Size = new System.Drawing.Size(338, 26);
             this.chCondition4c.TabIndex = 17;
             this.chCondition4c.Tag = "AbsenceAmountAllFraction";
             this.chCondition4c.Text = "所有學期缺課節數超過總節數指定比例。";
@@ -192,7 +192,7 @@
             this.chCondition5c.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
             this.chCondition5c.Location = new System.Drawing.Point(17, 73);
             this.chCondition5c.Name = "chCondition5c";
-            this.chCondition5c.Size = new System.Drawing.Size(196, 21);
+            this.chCondition5c.Size = new System.Drawing.Size(253, 26);
             this.chCondition5c.TabIndex = 18;
             this.chCondition5c.Tag = "DemeritAmountAll";
             this.chCondition5c.Text = "所有學期懲戒次數合計超次。";
@@ -260,7 +260,7 @@
             this.ExportDoctSetup.BackColor = System.Drawing.Color.Transparent;
             this.ExportDoctSetup.Location = new System.Drawing.Point(113, 325);
             this.ExportDoctSetup.Name = "ExportDoctSetup";
-            this.ExportDoctSetup.Size = new System.Drawing.Size(99, 17);
+            this.ExportDoctSetup.Size = new System.Drawing.Size(129, 22);
             this.ExportDoctSetup.TabIndex = 14;
             this.ExportDoctSetup.TabStop = true;
             this.ExportDoctSetup.Text = "樣板與列印設定";
@@ -273,7 +273,7 @@
             this.checkExportDoc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(66)))), ((int)(((byte)(133)))));
             this.checkExportDoc.Location = new System.Drawing.Point(15, 324);
             this.checkExportDoc.Name = "checkExportDoc";
-            this.checkExportDoc.Size = new System.Drawing.Size(92, 21);
+            this.checkExportDoc.Size = new System.Drawing.Size(117, 26);
             this.checkExportDoc.TabIndex = 16;
             this.checkExportDoc.Text = "產生通知單";
             this.checkExportDoc.UseVisualStyleBackColor = false;
@@ -292,7 +292,7 @@
             this.iptSchoolYear.MinValue = 1;
             this.iptSchoolYear.Name = "iptSchoolYear";
             this.iptSchoolYear.ShowUpDown = true;
-            this.iptSchoolYear.Size = new System.Drawing.Size(80, 25);
+            this.iptSchoolYear.Size = new System.Drawing.Size(80, 29);
             this.iptSchoolYear.TabIndex = 17;
             this.iptSchoolYear.Value = 1;
             // 
@@ -310,13 +310,13 @@
             this.iptSemester.MinValue = 1;
             this.iptSemester.Name = "iptSemester";
             this.iptSemester.ShowUpDown = true;
-            this.iptSemester.Size = new System.Drawing.Size(80, 25);
+            this.iptSemester.Size = new System.Drawing.Size(80, 29);
             this.iptSemester.TabIndex = 18;
             this.iptSemester.Value = 1;
             // 
             // GraduationPredictReportForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(398, 354);
             this.Controls.Add(this.iptSemester);

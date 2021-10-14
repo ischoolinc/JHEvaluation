@@ -43,6 +43,7 @@
             this.btnSave = new DevComponents.DotNetBar.ButtonX();
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
             this.chkExportStuentList = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.gp1.SuspendLayout();
             this.gp2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtDocDate)).BeginInit();
@@ -50,16 +51,19 @@
             // 
             // gp1
             // 
+            this.gp1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gp1.BackColor = System.Drawing.Color.Transparent;
             this.gp1.CanvasColor = System.Drawing.SystemColors.Control;
             this.gp1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.gp1.Controls.Add(this.linkLabel1);
             this.gp1.Controls.Add(this.lnkView);
             this.gp1.Controls.Add(this.lnkRemove);
             this.gp1.Controls.Add(this.lnkUpload);
             this.gp1.Controls.Add(this.lnkDefault);
             this.gp1.Location = new System.Drawing.Point(12, 12);
             this.gp1.Name = "gp1";
-            this.gp1.Size = new System.Drawing.Size(370, 70);
+            this.gp1.Size = new System.Drawing.Size(313, 109);
             // 
             // 
             // 
@@ -96,9 +100,9 @@
             // lnkView
             // 
             this.lnkView.AutoSize = true;
-            this.lnkView.Location = new System.Drawing.Point(262, 15);
+            this.lnkView.Location = new System.Drawing.Point(182, 49);
             this.lnkView.Name = "lnkView";
-            this.lnkView.Size = new System.Drawing.Size(86, 17);
+            this.lnkView.Size = new System.Drawing.Size(112, 22);
             this.lnkView.TabIndex = 3;
             this.lnkView.TabStop = true;
             this.lnkView.Text = "合併欄位總表";
@@ -107,9 +111,9 @@
             // lnkRemove
             // 
             this.lnkRemove.AutoSize = true;
-            this.lnkRemove.Location = new System.Drawing.Point(170, 15);
+            this.lnkRemove.Location = new System.Drawing.Point(182, 15);
             this.lnkRemove.Name = "lnkRemove";
-            this.lnkRemove.Size = new System.Drawing.Size(86, 17);
+            this.lnkRemove.Size = new System.Drawing.Size(112, 22);
             this.lnkRemove.TabIndex = 2;
             this.lnkRemove.TabStop = true;
             this.lnkRemove.Text = "移除自訂範本";
@@ -118,9 +122,9 @@
             // lnkUpload
             // 
             this.lnkUpload.AutoSize = true;
-            this.lnkUpload.Location = new System.Drawing.Point(104, 15);
+            this.lnkUpload.Location = new System.Drawing.Point(110, 15);
             this.lnkUpload.Name = "lnkUpload";
-            this.lnkUpload.Size = new System.Drawing.Size(60, 17);
+            this.lnkUpload.Size = new System.Drawing.Size(78, 22);
             this.lnkUpload.TabIndex = 1;
             this.lnkUpload.TabStop = true;
             this.lnkUpload.Text = "上傳範本";
@@ -131,7 +135,7 @@
             this.lnkDefault.AutoSize = true;
             this.lnkDefault.Location = new System.Drawing.Point(12, 15);
             this.lnkDefault.Name = "lnkDefault";
-            this.lnkDefault.Size = new System.Drawing.Size(86, 17);
+            this.lnkDefault.Size = new System.Drawing.Size(112, 22);
             this.lnkDefault.TabIndex = 0;
             this.lnkDefault.TabStop = true;
             this.lnkDefault.Text = "檢視目前範本";
@@ -139,6 +143,8 @@
             // 
             // gp2
             // 
+            this.gp2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gp2.BackColor = System.Drawing.Color.Transparent;
             this.gp2.CanvasColor = System.Drawing.SystemColors.Control;
             this.gp2.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
@@ -148,9 +154,9 @@
             this.gp2.Controls.Add(this.labelX2);
             this.gp2.Controls.Add(this.cboAddresseeAddress);
             this.gp2.Controls.Add(this.labelX1);
-            this.gp2.Location = new System.Drawing.Point(12, 97);
+            this.gp2.Location = new System.Drawing.Point(12, 130);
             this.gp2.Name = "gp2";
-            this.gp2.Size = new System.Drawing.Size(370, 149);
+            this.gp2.Size = new System.Drawing.Size(313, 149);
             // 
             // 
             // 
@@ -239,7 +245,7 @@
             this.dtDocDate.MonthCalendar.TodayButtonVisible = true;
             this.dtDocDate.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
             this.dtDocDate.Name = "dtDocDate";
-            this.dtDocDate.Size = new System.Drawing.Size(112, 25);
+            this.dtDocDate.Size = new System.Drawing.Size(121, 29);
             this.dtDocDate.TabIndex = 5;
             // 
             // labelX3
@@ -260,11 +266,12 @@
             // 
             this.cboAddresseeName.DisplayMember = "Text";
             this.cboAddresseeName.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboAddresseeName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboAddresseeName.FormattingEnabled = true;
-            this.cboAddresseeName.ItemHeight = 19;
+            this.cboAddresseeName.ItemHeight = 23;
             this.cboAddresseeName.Location = new System.Drawing.Point(100, 50);
             this.cboAddresseeName.Name = "cboAddresseeName";
-            this.cboAddresseeName.Size = new System.Drawing.Size(113, 25);
+            this.cboAddresseeName.Size = new System.Drawing.Size(122, 29);
             this.cboAddresseeName.TabIndex = 3;
             // 
             // labelX2
@@ -285,11 +292,12 @@
             // 
             this.cboAddresseeAddress.DisplayMember = "Text";
             this.cboAddresseeAddress.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboAddresseeAddress.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboAddresseeAddress.FormattingEnabled = true;
-            this.cboAddresseeAddress.ItemHeight = 19;
+            this.cboAddresseeAddress.ItemHeight = 23;
             this.cboAddresseeAddress.Location = new System.Drawing.Point(100, 14);
             this.cboAddresseeAddress.Name = "cboAddresseeAddress";
-            this.cboAddresseeAddress.Size = new System.Drawing.Size(113, 25);
+            this.cboAddresseeAddress.Size = new System.Drawing.Size(122, 29);
             this.cboAddresseeAddress.TabIndex = 1;
             // 
             // labelX1
@@ -309,9 +317,10 @@
             // btnSave
             // 
             this.btnSave.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.BackColor = System.Drawing.Color.Transparent;
             this.btnSave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSave.Location = new System.Drawing.Point(242, 258);
+            this.btnSave.Location = new System.Drawing.Point(185, 291);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(67, 23);
             this.btnSave.TabIndex = 2;
@@ -321,9 +330,10 @@
             // btnExit
             // 
             this.btnExit.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(315, 258);
+            this.btnExit.Location = new System.Drawing.Point(258, 291);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(67, 23);
             this.btnExit.TabIndex = 3;
@@ -332,6 +342,7 @@
             // 
             // chkExportStuentList
             // 
+            this.chkExportStuentList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkExportStuentList.AutoSize = true;
             this.chkExportStuentList.BackColor = System.Drawing.Color.Transparent;
             // 
@@ -339,18 +350,29 @@
             // 
             this.chkExportStuentList.BackgroundStyle.Class = "";
             this.chkExportStuentList.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.chkExportStuentList.Location = new System.Drawing.Point(12, 260);
+            this.chkExportStuentList.Location = new System.Drawing.Point(12, 293);
             this.chkExportStuentList.Name = "chkExportStuentList";
-            this.chkExportStuentList.Size = new System.Drawing.Size(147, 21);
+            this.chkExportStuentList.Size = new System.Drawing.Size(178, 26);
             this.chkExportStuentList.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.chkExportStuentList.TabIndex = 4;
             this.chkExportStuentList.Text = "另存學生清單(Excel)";
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(12, 49);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(112, 22);
+            this.linkLabel1.TabIndex = 4;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "下載其他範本";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // PrintConfigForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(398, 290);
+            this.ClientSize = new System.Drawing.Size(341, 323);
             this.Controls.Add(this.chkExportStuentList);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnSave);
@@ -386,5 +408,6 @@
         private DevComponents.DotNetBar.ButtonX btnExit;
         private DevComponents.DotNetBar.Controls.CheckBoxX chkExportStuentList;
         private System.Windows.Forms.LinkLabel lnkView;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }

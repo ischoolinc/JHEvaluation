@@ -139,4 +139,7 @@
   <data name="未達畢業標準通知單樣板" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\未達畢業標準通知單樣板.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="畢業預警報表範本二" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\畢業預警報表範本二.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

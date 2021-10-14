@@ -93,6 +93,7 @@
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\DevComponents.DotNetBar2.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FISCA, Version=2.5.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -506,9 +507,6 @@
       <DependentUpon>GraduationInspectWizard.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\GraduationPredictReportForm.resx">
-      <DependentUpon>GraduationPredictReportForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\PrintConfigForm.resx">
       <DependentUpon>PrintConfigForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -556,6 +554,7 @@
     <None Include="Resources\功能變數.doc" />
     <None Include="Resources\未達畢業標準通知單樣板.doc" />
     <None Include="Resources\未達畢業標準學生名冊template.xls" />
+    <None Include="Resources\畢業預警報表範本二.doc" />
     <None Include="StudentExtendControls\Ribbon\Resources\未達畢業標準學生名冊template.xls" />
     <None Include="StudentExtendControls\Ribbon\Resources\未達畢業標準通知單樣板.doc" />
   </ItemGroup>
