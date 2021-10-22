@@ -108,6 +108,11 @@ namespace KaoHsiung.ClassExamScoreReportV2
             return items;
         }
 
+        /// <summary>
+        /// 取得不包含彈性課程的科目
+        /// </summary>
+        /// <param name="listView"></param>
+        /// <returns></returns>
         public static List<string> GetSelectedItemsM(this ListViewEx listView)
         {
             List<string> items = new List<string>();
@@ -115,7 +120,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
             {
                 if (each.Checked)
                 {
-                    if (each.Tag.ToString() != "彈性課程")
+                    if (each.Tag.ToString() != "彈性課程" && each.Tag.ToString() != "")
                     {
                         items.Add(each.Text);
                     }

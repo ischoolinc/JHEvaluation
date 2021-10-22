@@ -292,8 +292,8 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-            List<string> selectedSubjects = lvSubject.GetSelectedItems();
-            List<string> selectedSubjectsM = lvSubject.GetSelectedItemsM();  //20210721 要求彈性課程領域不列入計算
+            List<string> selectedSubjects = lvSubject.GetSelectedItems();  //取得勾選的科目
+            List<string> selectedSubjectsM = lvSubject.GetSelectedItemsM();  //20210721 要求彈性課程領域不列入計算，取得勾選的科目中，不包含彈性課程領域的科目
             List<string> selectedDomains = lvDomain.GetSelectedItems();
 
             #region 檢查選擇的科目、領域是否合理。
