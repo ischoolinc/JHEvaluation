@@ -232,7 +232,14 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
 
         internal static void Import(DataGridView dgv, List<string> fields)
         {
-            Import(dgv, fields, new Dictionary<string, IColumnValidator>());
+            try
+            {
+                Import(dgv, fields, new Dictionary<string, IColumnValidator>());
+            }
+            catch (Exception ex)
+            {
+                MsgBox.Show("匯入失敗：" + ex.Message);
+            }
         }
 
         internal static void Import(DataGridView dgv, List<string> fields, Dictionary<string, IColumnValidator> validators)

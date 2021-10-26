@@ -47,6 +47,8 @@ namespace JHSchool.Evaluation.CourseExtendControls.Ribbon
                 cre.SchoolYear = SchoolYear;
                 cre.Semester = Semester;
                 cre.Name = txtName.Text;
+                //2021-10-25 Cynthia 預設不列入學期成績  https://3.basecamp.com/4399967/buckets/15765350/todos/3312348115
+                cre.CalculationFlag = "2";   
                 cre.Save();
                 Course.Instance.SyncDataBackground(cre.ID);
                 if (chkInputData.Checked == true)
