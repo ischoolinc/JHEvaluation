@@ -67,7 +67,9 @@ namespace KH_StudentScoreSummaryReport
             Students = students;
             Students.Sort(delegate(ReportStudent x, ReportStudent y)
             {
-                return x.OrderString.CompareTo(y.OrderString);
+                //return x.OrderString.CompareTo(y.OrderString);
+                return x.PrintOrder.CompareTo(y.PrintOrder);
+                
             });
             List<string> studenIDList = new List<string>();
             foreach (ReportStudent stud in students)

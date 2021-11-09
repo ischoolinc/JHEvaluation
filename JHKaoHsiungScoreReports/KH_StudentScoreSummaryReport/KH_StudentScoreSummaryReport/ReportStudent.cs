@@ -26,7 +26,18 @@ namespace KH_StudentScoreSummaryReport
             IDNumber = student.IDNumber;
             StudentID = student.ID;
         }
-
+        public string PrintOrder
+        {
+            //2021-11-08 因原本JHEvaluation.ScoreCalculation的OrderString寫法有問題，故改用下列方式設定列印順序
+            //年級//班級display/班級名稱//座號
+            get
+            {
+                if (Class.DisplayOrder == null || Class.DisplayOrder == "")
+                    return GradeYear.ToString().PadLeft(3, '0') + Class.DisplayOrder.PadLeft(3, 'Z') + ClassName + SeatNo.PadLeft(3, '0');
+                else
+                    return GradeYear.ToString().PadLeft(3, '0') + Class.DisplayOrder.PadLeft(3, '0') + ClassName + SeatNo.PadLeft(3, '0');
+            }
+        }
         public string Gender { get; private set; }
 
         public string Birthday { get; private set; }
@@ -175,7 +186,7 @@ namespace KH_StudentScoreSummaryReport
             List<string> keys = students.ToSC().ToKeys();
 
             Campus.FunctionSpliter<string, JHUpdateRecordRecord> selectData = new Campus.FunctionSpliter<string, JHUpdateRecordRecord>(500, 5);
-            selectData.Function = delegate(List<string> ps)
+            selectData.Function = delegate (List<string> ps)
             {
                 return JHUpdateRecord.SelectByStudentIDs(ps);
             };
@@ -195,7 +206,7 @@ namespace KH_StudentScoreSummaryReport
 
             foreach (KeyValuePair<string, List<JHUpdateRecordRecord>> each in dicupdaterecords)
             {
-                each.Value.Sort(delegate(JHUpdateRecordRecord x, JHUpdateRecordRecord y)
+                each.Value.Sort(delegate (JHUpdateRecordRecord x, JHUpdateRecordRecord y)
                 {
                     DateTime xx, yy;
 
@@ -252,7 +263,7 @@ namespace KH_StudentScoreSummaryReport
             List<string> keys = students.ToSC().ToKeys();
 
             Campus.FunctionSpliter<string, PhotoRecord> selectData = new Campus.FunctionSpliter<string, PhotoRecord>(300, 5);
-            selectData.Function = delegate(List<string> ps)
+            selectData.Function = delegate (List<string> ps)
             {
                 List<PhotoRecord> photos = new List<PhotoRecord>();
                 foreach (KeyValuePair<string, string> each in Photo.SelectGraduatePhoto(ps))
