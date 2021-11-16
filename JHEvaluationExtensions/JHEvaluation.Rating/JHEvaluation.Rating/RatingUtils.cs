@@ -113,6 +113,16 @@ namespace JHEvaluation.Rating
             string xx = x.GradeYear.PadLeft(3, '0') + ":" + x.ClassOrderString + ":" + x.SeatNo.PadLeft(3, '0');
             string yy = y.GradeYear.PadLeft(3, '0') + ":" + y.ClassOrderString + ":" + y.SeatNo.PadLeft(3, '0');
             return xx.CompareTo(yy);
+
+            //if (x.ClassOrderString != "")
+            //    string xx = x.GradeYear.PadLeft(3, '0') + ":" + x.ClassOrderString + ":" + x.SeatNo.PadLeft(3, '0');
+            //else
+            //    string xx = x.GradeYear.PadLeft(3, 'Z') + ":" + x.ClassOrderString + ":" + x.SeatNo.PadLeft(3, '0');
+            //if (y.ClassOrderString != "")
+            //    string yy = y.GradeYear.PadLeft(3, '0') + ":" + y.ClassOrderString + ":" + y.SeatNo.PadLeft(3, '0');
+            //else
+            //    string yy = y.GradeYear.PadLeft(3, 'Z') + ":" + y.ClassOrderString + ":" + y.SeatNo.PadLeft(3, '0');
+            //return xx.CompareTo(yy);
         }
 
         public static List<RatingStudent> ToRatingStudent(IEnumerable<string> studentIDs)

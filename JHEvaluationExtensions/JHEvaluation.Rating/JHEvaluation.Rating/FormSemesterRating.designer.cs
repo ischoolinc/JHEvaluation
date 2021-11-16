@@ -81,6 +81,8 @@
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
+            this.checkBoxAllSubject = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.checkBoxAllDomanin = new DevComponents.DotNetBar.Controls.CheckBoxX();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupPanel1.SuspendLayout();
@@ -637,7 +639,7 @@
             // lblSelectedCount
             // 
             this.lblSelectedCount.BackColor = System.Drawing.Color.Transparent;
-            this.lblSelectedCount.Location = new System.Drawing.Point(120, 481);
+            this.lblSelectedCount.Location = new System.Drawing.Point(301, 481);
             this.lblSelectedCount.Name = "lblSelectedCount";
             this.lblSelectedCount.Size = new System.Drawing.Size(211, 21);
             this.lblSelectedCount.TabIndex = 4;
@@ -677,11 +679,47 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.ForeColor = System.Drawing.Color.Blue;
-            this.label1.Location = new System.Drawing.Point(8, 483);
+            this.label1.Location = new System.Drawing.Point(189, 483);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(126, 17);
             this.label1.TabIndex = 6;
             this.label1.Text = "※ 藍色字體為領域。";
+            // 
+            // checkBoxAllSubject
+            // 
+            this.checkBoxAllSubject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxAllSubject.AutoSize = true;
+            this.checkBoxAllSubject.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.checkBoxAllSubject.BackgroundStyle.Class = "";
+            this.checkBoxAllSubject.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkBoxAllSubject.Location = new System.Drawing.Point(87, 481);
+            this.checkBoxAllSubject.Name = "checkBoxAllSubject";
+            this.checkBoxAllSubject.Size = new System.Drawing.Size(80, 21);
+            this.checkBoxAllSubject.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkBoxAllSubject.TabIndex = 9;
+            this.checkBoxAllSubject.Text = "全選科目";
+            this.checkBoxAllSubject.CheckedChanged += new System.EventHandler(this.checkBoxAllSubject_CheckedChanged);
+            // 
+            // checkBoxAllDomanin
+            // 
+            this.checkBoxAllDomanin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxAllDomanin.AutoSize = true;
+            this.checkBoxAllDomanin.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.checkBoxAllDomanin.BackgroundStyle.Class = "";
+            this.checkBoxAllDomanin.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkBoxAllDomanin.Location = new System.Drawing.Point(7, 481);
+            this.checkBoxAllDomanin.Name = "checkBoxAllDomanin";
+            this.checkBoxAllDomanin.Size = new System.Drawing.Size(80, 21);
+            this.checkBoxAllDomanin.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkBoxAllDomanin.TabIndex = 8;
+            this.checkBoxAllDomanin.Text = "全選領域";
+            this.checkBoxAllDomanin.CheckedChanged += new System.EventHandler(this.checkBoxAllDomanin_CheckedChanged);
             // 
             // FormSemesterRating
             // 
@@ -689,6 +727,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(687, 509);
+            this.Controls.Add(this.checkBoxAllSubject);
+            this.Controls.Add(this.checkBoxAllDomanin);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblSelectedCount);
             this.Controls.Add(this.groupPanel1);
@@ -696,6 +736,7 @@
             this.Controls.Add(this.btnRank);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dgv);
+            this.DoubleBuffered = true;
             this.Name = "FormSemesterRating";
             this.Tag = "StatusVarying";
             this.Text = "學期成績排名";
@@ -765,5 +806,7 @@
         private DevComponents.DotNetBar.Controls.TextBoxX txtLastPercentage;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RadioButton rbLastPercentage;
+        private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxAllSubject;
+        private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxAllDomanin;
     }
 }

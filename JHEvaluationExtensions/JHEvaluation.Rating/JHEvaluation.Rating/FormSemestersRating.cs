@@ -468,5 +468,41 @@ namespace JHEvaluation.Rating
             rbLastPercentage.Checked = true;
             ValidateLastPercentageText();
         }
+
+        private void checkBoxAllSubject_CheckedChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < dgv.Rows.Count; i++)
+            {
+                if (checkBoxAllSubject.Checked == true)
+                {
+                    if (dgv.Rows[i].Cells[chScoreItem.Index].Style.ForeColor != Color.Blue) //科目
+                        dgv.Rows[i].Cells[0].Value = true;
+                }
+                else
+                {
+                    if (dgv.Rows[i].Cells[chScoreItem.Index].Style.ForeColor != Color.Blue) //科目
+                        dgv.Rows[i].Cells[0].Value = false;
+                }
+
+            }
+        }
+
+        private void checkBoxAllDomanin_CheckedChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < dgv.Rows.Count; i++)
+            {
+                if (checkBoxAllDomanin.Checked == true)
+                {
+                    if (dgv.Rows[i].Cells[chScoreItem.Index].Style.ForeColor == Color.Blue) //領域
+                        dgv.Rows[i].Cells[0].Value = true;
+                }
+                else
+                {
+                    if (dgv.Rows[i].Cells[chScoreItem.Index].Style.ForeColor == Color.Blue) //領域
+                        dgv.Rows[i].Cells[0].Value = false;
+                }
+
+            }
+        }
     }
 }
