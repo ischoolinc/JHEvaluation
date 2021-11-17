@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgv = new DevComponents.DotNetBar.Controls.DataGridViewX();
             this.chCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.chScoreItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -70,6 +70,8 @@
             this.lblSelectedCount = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.label1 = new System.Windows.Forms.Label();
+            this.checkBoxAllSubject = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.checkBoxAllDomanin = new DevComponents.DotNetBar.Controls.CheckBoxX();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.groupPanel1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -83,30 +85,31 @@
             this.dgv.AllowUserToResizeRows = false;
             this.dgv.BackgroundColor = System.Drawing.Color.White;
             this.dgv.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.chCheck,
             this.chScoreItem});
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv.DefaultCellStyle = dataGridViewCellStyle15;
             this.dgv.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
             this.dgv.Location = new System.Drawing.Point(7, 12);
             this.dgv.Name = "dgv";
             this.dgv.RowHeadersVisible = false;
+            this.dgv.RowHeadersWidth = 51;
             this.dgv.RowTemplate.Height = 24;
             this.dgv.Size = new System.Drawing.Size(323, 304);
             this.dgv.TabIndex = 0;
@@ -115,15 +118,17 @@
             // chCheck
             // 
             this.chCheck.HeaderText = "";
+            this.chCheck.MinimumWidth = 6;
             this.chCheck.Name = "chCheck";
             this.chCheck.Width = 30;
             // 
             // chScoreItem
             // 
             this.chScoreItem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.chScoreItem.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.chScoreItem.DefaultCellStyle = dataGridViewCellStyle14;
             this.chScoreItem.HeaderText = "名稱";
+            this.chScoreItem.MinimumWidth = 6;
             this.chScoreItem.Name = "chScoreItem";
             this.chScoreItem.ReadOnly = true;
             // 
@@ -211,7 +216,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(317, 286);
+            this.panel3.Size = new System.Drawing.Size(317, 281);
             this.panel3.TabIndex = 0;
             // 
             // chk3Down
@@ -219,7 +224,7 @@
             this.chk3Down.AutoSize = true;
             this.chk3Down.Location = new System.Drawing.Point(126, 55);
             this.chk3Down.Name = "chk3Down";
-            this.chk3Down.Size = new System.Drawing.Size(53, 21);
+            this.chk3Down.Size = new System.Drawing.Size(66, 26);
             this.chk3Down.TabIndex = 21;
             this.chk3Down.Text = "三下";
             this.chk3Down.UseVisualStyleBackColor = true;
@@ -229,7 +234,7 @@
             this.chk3Up.AutoSize = true;
             this.chk3Up.Location = new System.Drawing.Point(126, 22);
             this.chk3Up.Name = "chk3Up";
-            this.chk3Up.Size = new System.Drawing.Size(53, 21);
+            this.chk3Up.Size = new System.Drawing.Size(66, 26);
             this.chk3Up.TabIndex = 20;
             this.chk3Up.Text = "三上";
             this.chk3Up.UseVisualStyleBackColor = true;
@@ -239,7 +244,7 @@
             this.chk2Down.AutoSize = true;
             this.chk2Down.Location = new System.Drawing.Point(71, 55);
             this.chk2Down.Name = "chk2Down";
-            this.chk2Down.Size = new System.Drawing.Size(53, 21);
+            this.chk2Down.Size = new System.Drawing.Size(66, 26);
             this.chk2Down.TabIndex = 16;
             this.chk2Down.Text = "二下";
             this.chk2Down.UseVisualStyleBackColor = true;
@@ -249,7 +254,7 @@
             this.chk2Up.AutoSize = true;
             this.chk2Up.Location = new System.Drawing.Point(71, 22);
             this.chk2Up.Name = "chk2Up";
-            this.chk2Up.Size = new System.Drawing.Size(53, 21);
+            this.chk2Up.Size = new System.Drawing.Size(66, 26);
             this.chk2Up.TabIndex = 19;
             this.chk2Up.Text = "二上";
             this.chk2Up.UseVisualStyleBackColor = true;
@@ -259,7 +264,7 @@
             this.chk1Down.AutoSize = true;
             this.chk1Down.Location = new System.Drawing.Point(16, 55);
             this.chk1Down.Name = "chk1Down";
-            this.chk1Down.Size = new System.Drawing.Size(53, 21);
+            this.chk1Down.Size = new System.Drawing.Size(66, 26);
             this.chk1Down.TabIndex = 18;
             this.chk1Down.Text = "一下";
             this.chk1Down.UseVisualStyleBackColor = true;
@@ -269,7 +274,7 @@
             this.chk1Up.AutoSize = true;
             this.chk1Up.Location = new System.Drawing.Point(16, 22);
             this.chk1Up.Name = "chk1Up";
-            this.chk1Up.Size = new System.Drawing.Size(53, 21);
+            this.chk1Up.Size = new System.Drawing.Size(66, 26);
             this.chk1Up.TabIndex = 17;
             this.chk1Up.Text = "一上";
             this.chk1Up.UseVisualStyleBackColor = true;
@@ -312,7 +317,7 @@
             this.txtLastPercentage.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtLastPercentage.Location = new System.Drawing.Point(135, 101);
             this.txtLastPercentage.Name = "txtLastPercentage";
-            this.txtLastPercentage.Size = new System.Drawing.Size(45, 25);
+            this.txtLastPercentage.Size = new System.Drawing.Size(45, 35);
             this.txtLastPercentage.TabIndex = 12;
             this.txtLastPercentage.TextChanged += new System.EventHandler(this.txtLastPercentage_TextChanged);
             // 
@@ -321,7 +326,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(181, 105);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(47, 17);
+            this.label3.Size = new System.Drawing.Size(61, 22);
             this.label3.TabIndex = 11;
             this.label3.Text = "的學生";
             // 
@@ -330,7 +335,7 @@
             this.rbLastPercentage.AutoSize = true;
             this.rbLastPercentage.Location = new System.Drawing.Point(19, 103);
             this.rbLastPercentage.Name = "rbLastPercentage";
-            this.rbLastPercentage.Size = new System.Drawing.Size(117, 21);
+            this.rbLastPercentage.Size = new System.Drawing.Size(150, 26);
             this.rbLastPercentage.TabIndex = 10;
             this.rbLastPercentage.Text = "名次於後百分之";
             this.rbLastPercentage.UseVisualStyleBackColor = true;
@@ -344,7 +349,7 @@
             this.txtLastRank.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtLastRank.Location = new System.Drawing.Point(187, 39);
             this.txtLastRank.Name = "txtLastRank";
-            this.txtLastRank.Size = new System.Drawing.Size(45, 25);
+            this.txtLastRank.Size = new System.Drawing.Size(45, 35);
             this.txtLastRank.TabIndex = 9;
             this.txtLastRank.TextChanged += new System.EventHandler(this.txtLastRank_TextChanged);
             // 
@@ -353,7 +358,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(236, 43);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(21, 17);
+            this.label2.Size = new System.Drawing.Size(27, 22);
             this.label2.TabIndex = 8;
             this.label2.Text = "名";
             // 
@@ -362,7 +367,7 @@
             this.rbLastRank.AutoSize = true;
             this.rbLastRank.Location = new System.Drawing.Point(147, 41);
             this.rbLastRank.Name = "rbLastRank";
-            this.rbLastRank.Size = new System.Drawing.Size(39, 21);
+            this.rbLastRank.Size = new System.Drawing.Size(48, 26);
             this.rbLastRank.TabIndex = 7;
             this.rbLastRank.Text = "後";
             this.rbLastRank.UseVisualStyleBackColor = true;
@@ -376,7 +381,7 @@
             this.txtPercentage.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtPercentage.Location = new System.Drawing.Point(135, 70);
             this.txtPercentage.Name = "txtPercentage";
-            this.txtPercentage.Size = new System.Drawing.Size(45, 25);
+            this.txtPercentage.Size = new System.Drawing.Size(45, 35);
             this.txtPercentage.TabIndex = 6;
             this.txtPercentage.TextChanged += new System.EventHandler(this.txtPercentage_TextChanged);
             // 
@@ -385,7 +390,7 @@
             this.lblPercentage.AutoSize = true;
             this.lblPercentage.Location = new System.Drawing.Point(181, 74);
             this.lblPercentage.Name = "lblPercentage";
-            this.lblPercentage.Size = new System.Drawing.Size(47, 17);
+            this.lblPercentage.Size = new System.Drawing.Size(61, 22);
             this.lblPercentage.TabIndex = 5;
             this.lblPercentage.Text = "的學生";
             // 
@@ -394,7 +399,7 @@
             this.rbPercentage.AutoSize = true;
             this.rbPercentage.Location = new System.Drawing.Point(19, 72);
             this.rbPercentage.Name = "rbPercentage";
-            this.rbPercentage.Size = new System.Drawing.Size(117, 21);
+            this.rbPercentage.Size = new System.Drawing.Size(150, 26);
             this.rbPercentage.TabIndex = 4;
             this.rbPercentage.Text = "名次於前百分之";
             this.rbPercentage.UseVisualStyleBackColor = true;
@@ -408,7 +413,7 @@
             this.txtTopRank.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtTopRank.Location = new System.Drawing.Point(59, 39);
             this.txtTopRank.Name = "txtTopRank";
-            this.txtTopRank.Size = new System.Drawing.Size(45, 25);
+            this.txtTopRank.Size = new System.Drawing.Size(45, 35);
             this.txtTopRank.TabIndex = 3;
             this.txtTopRank.TextChanged += new System.EventHandler(this.txtTopRank_TextChanged);
             // 
@@ -417,7 +422,7 @@
             this.lblTopRank.AutoSize = true;
             this.lblTopRank.Location = new System.Drawing.Point(108, 43);
             this.lblTopRank.Name = "lblTopRank";
-            this.lblTopRank.Size = new System.Drawing.Size(21, 17);
+            this.lblTopRank.Size = new System.Drawing.Size(27, 22);
             this.lblTopRank.TabIndex = 2;
             this.lblTopRank.Text = "名";
             // 
@@ -426,7 +431,7 @@
             this.rbTopRank.AutoSize = true;
             this.rbTopRank.Location = new System.Drawing.Point(19, 41);
             this.rbTopRank.Name = "rbTopRank";
-            this.rbTopRank.Size = new System.Drawing.Size(39, 21);
+            this.rbTopRank.Size = new System.Drawing.Size(48, 26);
             this.rbTopRank.TabIndex = 1;
             this.rbTopRank.Text = "前";
             this.rbTopRank.UseVisualStyleBackColor = true;
@@ -437,7 +442,7 @@
             this.rbAllRank.Checked = true;
             this.rbAllRank.Location = new System.Drawing.Point(19, 13);
             this.rbAllRank.Name = "rbAllRank";
-            this.rbAllRank.Size = new System.Drawing.Size(78, 21);
+            this.rbAllRank.Size = new System.Drawing.Size(99, 26);
             this.rbAllRank.TabIndex = 1;
             this.rbAllRank.TabStop = true;
             this.rbAllRank.Text = "所有名次";
@@ -448,7 +453,7 @@
             this.rbGradeYear.AutoSize = true;
             this.rbGradeYear.Location = new System.Drawing.Point(101, 105);
             this.rbGradeYear.Name = "rbGradeYear";
-            this.rbGradeYear.Size = new System.Drawing.Size(78, 21);
+            this.rbGradeYear.Size = new System.Drawing.Size(99, 26);
             this.rbGradeYear.TabIndex = 12;
             this.rbGradeYear.Text = "年級排名";
             this.rbGradeYear.UseVisualStyleBackColor = true;
@@ -459,7 +464,7 @@
             this.rbClass.Checked = true;
             this.rbClass.Location = new System.Drawing.Point(14, 105);
             this.rbClass.Name = "rbClass";
-            this.rbClass.Size = new System.Drawing.Size(78, 21);
+            this.rbClass.Size = new System.Drawing.Size(99, 26);
             this.rbClass.TabIndex = 13;
             this.rbClass.TabStop = true;
             this.rbClass.Text = "班級排名";
@@ -468,27 +473,30 @@
             // dataGridViewTextBoxColumn1
             // 
             this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle16;
             this.dataGridViewTextBoxColumn1.HeaderText = "領域";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 6;
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
             // 
             // dataGridViewTextBoxColumn2
             // 
             this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle17;
             this.dataGridViewTextBoxColumn2.HeaderText = "權數";
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 6;
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
             // 
             // dataGridViewTextBoxColumn3
             // 
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle18;
             this.dataGridViewTextBoxColumn3.HeaderText = "修習人數";
+            this.dataGridViewTextBoxColumn3.MinimumWidth = 6;
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             this.dataGridViewTextBoxColumn3.ReadOnly = true;
             this.dataGridViewTextBoxColumn3.Width = 75;
@@ -497,7 +505,7 @@
             // 
             this.lblSelectedCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSelectedCount.BackColor = System.Drawing.Color.Transparent;
-            this.lblSelectedCount.Location = new System.Drawing.Point(115, 331);
+            this.lblSelectedCount.Location = new System.Drawing.Point(283, 331);
             this.lblSelectedCount.Name = "lblSelectedCount";
             this.lblSelectedCount.Size = new System.Drawing.Size(211, 21);
             this.lblSelectedCount.TabIndex = 4;
@@ -509,11 +517,47 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.ForeColor = System.Drawing.Color.Blue;
-            this.label1.Location = new System.Drawing.Point(4, 331);
+            this.label1.Location = new System.Drawing.Point(172, 331);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 17);
+            this.label1.Size = new System.Drawing.Size(164, 22);
             this.label1.TabIndex = 7;
             this.label1.Text = "※ 藍色字體為領域。";
+            // 
+            // checkBoxAllSubject
+            // 
+            this.checkBoxAllSubject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxAllSubject.AutoSize = true;
+            this.checkBoxAllSubject.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.checkBoxAllSubject.BackgroundStyle.Class = "";
+            this.checkBoxAllSubject.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkBoxAllSubject.Location = new System.Drawing.Point(89, 331);
+            this.checkBoxAllSubject.Name = "checkBoxAllSubject";
+            this.checkBoxAllSubject.Size = new System.Drawing.Size(95, 26);
+            this.checkBoxAllSubject.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkBoxAllSubject.TabIndex = 11;
+            this.checkBoxAllSubject.Text = "全選科目";
+            this.checkBoxAllSubject.CheckedChanged += new System.EventHandler(this.checkBoxAllSubject_CheckedChanged);
+            // 
+            // checkBoxAllDomanin
+            // 
+            this.checkBoxAllDomanin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxAllDomanin.AutoSize = true;
+            this.checkBoxAllDomanin.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.checkBoxAllDomanin.BackgroundStyle.Class = "";
+            this.checkBoxAllDomanin.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkBoxAllDomanin.Location = new System.Drawing.Point(9, 331);
+            this.checkBoxAllDomanin.Name = "checkBoxAllDomanin";
+            this.checkBoxAllDomanin.Size = new System.Drawing.Size(95, 26);
+            this.checkBoxAllDomanin.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkBoxAllDomanin.TabIndex = 10;
+            this.checkBoxAllDomanin.Text = "全選領域";
+            this.checkBoxAllDomanin.CheckedChanged += new System.EventHandler(this.checkBoxAllDomanin_CheckedChanged);
             // 
             // FormSemestersRating
             // 
@@ -521,12 +565,15 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(665, 366);
+            this.Controls.Add(this.checkBoxAllSubject);
+            this.Controls.Add(this.checkBoxAllDomanin);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblSelectedCount);
             this.Controls.Add(this.groupPanel1);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnRank);
             this.Controls.Add(this.dgv);
+            this.DoubleBuffered = true;
             this.Name = "FormSemestersRating";
             this.Tag = "StatusVarying";
             this.Text = "學期成績排名(多學期)";
@@ -579,5 +626,7 @@
         private DevComponents.DotNetBar.Controls.TextBoxX txtLastPercentage;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RadioButton rbLastPercentage;
+        private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxAllSubject;
+        private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxAllDomanin;
     }
 }
