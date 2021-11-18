@@ -51,7 +51,7 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison
             foreach (string str in _ClassEntityDic.Keys)
                 _ClassNameList.Add(str);
 
-            _ClassNameList.Sort();
+            //_ClassNameList.Sort();
 
             _SchoolName = SchoolName;
             _SchoolYear = SchoolYear;

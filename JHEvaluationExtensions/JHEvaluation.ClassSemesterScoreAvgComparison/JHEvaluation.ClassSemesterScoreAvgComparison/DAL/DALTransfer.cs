@@ -25,7 +25,9 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison.DAL
             List<JHClassRecord> ClassRecList = JHClass.SelectByIDs(ClassIDList);
             List<string> StudentIDList = new List<string>();
             foreach (JHClassRecord ClassRec in ClassRecList)
+            {
                 foreach (JHStudentRecord studRec in ClassRec.Students)
+                {
                     if (studRec.Status == K12.Data.StudentRecord.StudentStatus.一般 && !notRankStudentIDList.Contains(studRec.ID))//剔除不排名學生
                     {
                         StudentIDList.Add(studRec.ID);
@@ -35,9 +37,12 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison.DAL
                         else
                             _ClassStudCount.Add(studRec.Class.ID, 1);
                     }
+                }
+            }
 
             // 取得多筆學生學年度學期成績
-            _SemesterScoreRecordList = JHSemesterScore.SelectBySchoolYearAndSemester(StudentIDList, SchoolYear, Semester);            
+            _SemesterScoreRecordList = JHSemesterScore.SelectBySchoolYearAndSemester(StudentIDList, SchoolYear, Semester);
+            _SemesterScoreRecordList.Sort(new Comparison<JHSemesterScoreRecord>(StudentReocrdSorter));
         }
 
 
@@ -61,7 +66,7 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison.DAL
 
 
                 // 取得學生班名
-                if(SemsRec.Student.Class !=null )
+                if(SemsRec.Student.Class !=null)
                     ClassName =SemsRec.Student.Class.Name;
 
                 // 如果沒有班級名稱跳過
@@ -159,5 +164,23 @@ namespace JHEvaluation.ClassSemesterScoreAvgComparison.DAL
             return DomainNameList;        
         }
 
+        public static int StudentReocrdSorter(JHSchool.Data.JHSemesterScoreRecord x, JHSchool.Data.JHSemesterScoreRecord y)
+        {
+            ////年級//班級排列序號//班級名稱
+            string xx = "";
+            string yy = "";
+
+            if (x.Student.Class.DisplayOrder == "" || x.Student.Class.DisplayOrder == null)
+                xx = x.Student.Class.GradeYear.ToString().PadLeft(3, '0') + ":" + x.Student.Class.DisplayOrder.PadLeft(3, 'Z') + ":" + x.Student.Class.Name;
+            else
+                xx = x.Student.Class.GradeYear.ToString().PadLeft(3, '0') + ":" + x.Student.Class.DisplayOrder.PadLeft(3, '0') + ":" + x.Student.Class.Name;
+
+            if (y.Student.Class.DisplayOrder == "" || y.Student.Class.DisplayOrder == null)
+                yy = y.Student.Class.GradeYear.ToString().PadLeft(3, '0') + ":" + y.Student.Class.DisplayOrder.PadLeft(3, 'Z') + ":" + y.Student.Class.Name;
+            else
+                yy = y.Student.Class.GradeYear.ToString().PadLeft(3, '0') + ":" + y.Student.Class.DisplayOrder.PadLeft(3, '0') + ":" + y.Student.Class.Name;
+
+            return xx.CompareTo(yy);
+        }
     }
 }

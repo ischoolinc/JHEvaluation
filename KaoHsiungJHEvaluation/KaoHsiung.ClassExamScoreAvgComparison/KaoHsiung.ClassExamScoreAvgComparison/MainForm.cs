@@ -75,7 +75,7 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
             cbxNotRankTag.Items.Add("");
             foreach (string item in StudTagItemList)
             {
-                cbxNotRankTag.Items.Add(item);            
+                cbxNotRankTag.Items.Add(item);
             }
 
             cbxNotRankTag.Text = config.NotRankTag;
@@ -85,7 +85,7 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
 
 
             _worker = new BackgroundWorker();
-            _worker.DoWork += delegate(object sender, DoWorkEventArgs e)
+            _worker.DoWork += delegate (object sender, DoWorkEventArgs e)
             {
                 JHExamRecord exam = e.Argument as JHExamRecord;
 
@@ -108,8 +108,8 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
 
                 // 排序
                 if (_classes.Count > 1)
-                    _classes = DAL.DALTransfer.ClassRecordSortByDisplayOrder(_classes);
-
+                    //_classes = DAL.DALTransfer.ClassRecordSortByDisplayOrder(_classes);
+                    _classes.Sort(new Comparison<JHClassRecord>(DAL.DALTransfer.ClassReocrdSorter2021));
                 // TODO: 這邊要排序
                 //List<K12.Data.ClassRecord> c = new List<K12.Data.ClassRecord>(_classes);
                 //c.Sort();
@@ -349,7 +349,7 @@ namespace KaoHsiung.ClassExamScoreAvgComparison
 
             config.NotRankTag = cbxNotRankTag.Text;
 
-            config.Save(); 
+            config.Save();
 
             #endregion
 

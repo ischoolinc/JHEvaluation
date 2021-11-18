@@ -51,5 +51,27 @@ namespace KaoHsiung.ClassExamScoreAvgComparison.DAL
             return x.Name.CompareTo(y.Name);        
         }
 
+        public static int ClassReocrdSorter2021(JHSchool.Data.JHClassRecord x, JHSchool.Data.JHClassRecord y)
+        {
+            //年級//班級排列序號//班級名稱
+            string xx = "";
+            string yy="";
+
+            if (x.DisplayOrder == "" || x.DisplayOrder == null)
+                xx = x.GradeYear.ToString().PadLeft(3, '0') + ":" + x.DisplayOrder.PadLeft(3, 'Z') + ":" + x.Name;
+            else
+                xx = x.GradeYear.ToString().PadLeft(3, '0') + ":" + x.DisplayOrder.PadLeft(3, '0') +":"+ x.Name;
+
+            if (y.DisplayOrder == "" || y.DisplayOrder == null)
+                yy = y.GradeYear.ToString().PadLeft(3, '0') + ":" + y.DisplayOrder.PadLeft(3, 'Z') + ":" + y.Name;
+            else
+                yy = y.GradeYear.ToString().PadLeft(3, '0') + ":" + y.DisplayOrder.PadLeft(3, '0') + ":" + y.Name;
+
+
+
+            return xx.CompareTo(yy);
+        }
+
+
     }
 }
