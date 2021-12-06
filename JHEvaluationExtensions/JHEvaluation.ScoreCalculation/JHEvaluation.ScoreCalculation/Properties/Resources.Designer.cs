@@ -103,6 +103,16 @@ namespace JHEvaluation.ScoreCalculation.Properties {
         /// <summary>
         ///   查詢類型 System.Byte[] 的當地語系化資源。
         /// </summary>
+        internal static byte[] Template2021 {
+            get {
+                object obj = ResourceManager.GetObject("Template2021", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
         internal static byte[] 功能變數 {
             get {
                 object obj = ResourceManager.GetObject("功能變數", resourceCulture);

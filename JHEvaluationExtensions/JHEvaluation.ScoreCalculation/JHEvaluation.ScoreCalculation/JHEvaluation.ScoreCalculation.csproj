@@ -551,6 +551,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\calc_save_64.png" />
+    <None Include="Resources\Template2021.doc" />
     <None Include="Resources\功能變數.doc" />
     <None Include="Resources\未達畢業標準通知單樣板.doc" />
     <None Include="Resources\未達畢業標準學生名冊template.xls" />

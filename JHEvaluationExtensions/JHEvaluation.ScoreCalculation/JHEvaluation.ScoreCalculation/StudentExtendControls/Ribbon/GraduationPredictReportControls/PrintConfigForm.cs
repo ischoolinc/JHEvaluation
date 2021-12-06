@@ -55,7 +55,8 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         {
             if (Config.Template == null)
             {
-                ReportTemplate template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準通知單樣板, TemplateType.Word);
+                ReportTemplate template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.Template2021, TemplateType.Word);
+                //ReportTemplate template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準通知單樣板, TemplateType.Word);
                 Config.Template = template;            
             }        
         }
