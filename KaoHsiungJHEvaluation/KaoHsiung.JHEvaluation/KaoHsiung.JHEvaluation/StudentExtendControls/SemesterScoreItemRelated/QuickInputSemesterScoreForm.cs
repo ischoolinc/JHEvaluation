@@ -94,7 +94,8 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 txtPC5, txtScore5, txtEffort5, txtText5,
                 txtPC6, txtScore6, txtEffort6, txtText6,
                 txtPC7, txtScore7, txtEffort7, txtText7,
-                txtPC8, txtScore8, txtEffort8, txtText8                
+                txtPC8, txtScore8, txtEffort8, txtText8,
+                txtPC10, txtScore10, txtEffort10, txtText10
                 );
             _manager.AddEffortTextBoxMapping(txtScore9, txtEffort9);
             _manager.AddEffortTextBoxMapping(txtScore1, txtEffort1);
@@ -104,7 +105,8 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             _manager.AddEffortTextBoxMapping(txtScore5, txtEffort5);
             _manager.AddEffortTextBoxMapping(txtScore6, txtEffort6);
             _manager.AddEffortTextBoxMapping(txtScore7, txtEffort7);
-            _manager.AddEffortTextBoxMapping(txtScore8, txtEffort8);            
+            _manager.AddEffortTextBoxMapping(txtScore8, txtEffort8);
+            _manager.AddEffortTextBoxMapping(txtScore10, txtEffort10);
         }
 
         private void InitializeComboBoxes()
@@ -195,10 +197,13 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 txtPC2.Text = pcs.ContainsKey("英語") ? pcs["英語"].ToString() : "";
                 txtPC3.Text = pcs.ContainsKey("數學") ? pcs["數學"].ToString() : "";
                 txtPC4.Text = pcs.ContainsKey("社會") ? pcs["社會"].ToString() : "";
-                txtPC5.Text = pcs.ContainsKey("藝術與人文") ? pcs["藝術與人文"].ToString() : "";
-                txtPC6.Text = pcs.ContainsKey("自然與生活科技") ? pcs["自然與生活科技"].ToString() : "";
+                //txtPC5.Text = pcs.ContainsKey("藝術與人文") ? pcs["藝術與人文"].ToString() : "";
+                //txtPC6.Text = pcs.ContainsKey("自然與生活科技") ? pcs["自然與生活科技"].ToString() : "";
+                txtPC5.Text = pcs.ContainsKey("藝術") ? pcs["藝術"].ToString() : "";
+                txtPC6.Text = pcs.ContainsKey("自然科學") ? pcs["自然科學"].ToString() : "";
                 txtPC7.Text = pcs.ContainsKey("健康與體育") ? pcs["健康與體育"].ToString() : "";
                 txtPC8.Text = pcs.ContainsKey("綜合活動") ? pcs["綜合活動"].ToString() : "";
+                txtPC10.Text = pcs.ContainsKey("科技") ? pcs["科技"].ToString() : "";
 
                 // 2019/1/10 穎驊修正  佳樺反映 快速登錄沒有 自動帶出 語文領域節數/權數
                 // 討論過後， 確認 語文領域的權數 為 國語文、 英文 加總
@@ -315,16 +320,22 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                     newRecord.Domains.Add("數學", GetDomainScore("數學", txtPC3, txtScore3, txtScore3, txtEffort3, txtText3));
                 if (CheckDomainValid(txtPC4, txtScore4, txtScore4, txtEffort4))
                     newRecord.Domains.Add("社會", GetDomainScore("社會", txtPC4, txtScore4, txtScore4, txtEffort4, txtText4));
+                //if (CheckDomainValid(txtPC5, txtScore5, txtScore5, txtEffort5))
+                //    newRecord.Domains.Add("藝術與人文", GetDomainScore("藝術與人文", txtPC5, txtScore5, txtScore5, txtEffort5, txtText5));
+                //if (CheckDomainValid(txtPC6, txtScore6, txtScore6, txtEffort6))
+                //    newRecord.Domains.Add("自然與生活科技", GetDomainScore("自然與生活科技", txtPC6, txtScore6, txtScore6, txtEffort6, txtText6));
                 if (CheckDomainValid(txtPC5, txtScore5, txtScore5, txtEffort5))
-                    newRecord.Domains.Add("藝術與人文", GetDomainScore("藝術與人文", txtPC5, txtScore5, txtScore5, txtEffort5, txtText5));
+                    newRecord.Domains.Add("藝術", GetDomainScore("藝術", txtPC5, txtScore5, txtScore5, txtEffort5, txtText5));
                 if (CheckDomainValid(txtPC6, txtScore6, txtScore6, txtEffort6))
-                    newRecord.Domains.Add("自然與生活科技", GetDomainScore("自然與生活科技", txtPC6, txtScore6, txtScore6, txtEffort6, txtText6));
+                    newRecord.Domains.Add("自然科學", GetDomainScore("自然科學", txtPC6, txtScore6, txtScore6, txtEffort6, txtText6));
                 if (CheckDomainValid(txtPC7, txtScore7, txtScore7, txtEffort7))
                     newRecord.Domains.Add("健康與體育", GetDomainScore("健康與體育", txtPC7, txtScore7, txtScore7, txtEffort7, txtText7));
                 if (CheckDomainValid(txtPC8, txtScore8, txtScore8, txtEffort8))
                     newRecord.Domains.Add("綜合活動", GetDomainScore("綜合活動", txtPC8, txtScore8, txtScore8, txtEffort8, txtText8));
                 if (CheckDomainValid(txtPC9, txtScore9, txtScore9, txtEffort9))
                     newRecord.Domains.Add("語文", GetDomainScore("語文", txtPC9, txtScore9, txtScore9, txtEffort9, txtText9));
+                if (CheckDomainValid(txtPC10, txtScore10, txtScore10, txtEffort10))
+                    newRecord.Domains.Add("科技", GetDomainScore("科技", txtPC10, txtScore10, txtScore10, txtEffort10, txtText10));
 
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
@@ -499,7 +510,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             EvalDomainScore(ref pc, ref total, txtScore6, txtPC6);
             EvalDomainScore(ref pc, ref total, txtScore7, txtPC7);
             EvalDomainScore(ref pc, ref total, txtScore8, txtPC8);
-
+            EvalDomainScore(ref pc, ref total, txtScore10, txtPC10);
             if (pc.Credit > 0)
             {
                 txtLearnDomain.Text = "" + _calculator.ParseLearnDomainScore(total / pc.Credit);
@@ -668,6 +679,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             textBoxList.Add(txtPC7);
             textBoxList.Add(txtPC8);
             textBoxList.Add(txtPC9);
+            textBoxList.Add(txtPC10);
 
             // 這方法很蠢， 但目前暫時也沒更好的寫法           
             #region 配對分數的權重 關係 有分數資料 才要驗
@@ -750,7 +762,16 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             else
             {
                 txtPC9.Tag = "";
-            } 
+            }
+
+            if (txtScore10.Text != "")
+            {
+                txtPC10.Tag = "hasValue";
+            }
+            else
+            {
+                txtPC10.Tag = "";
+            }
             #endregion
 
             foreach (TextBox tb in textBoxList)

@@ -39,12 +39,6 @@
             this.btnClose = new DevComponents.DotNetBar.ButtonX();
             this.errorProvider = new Framework.EnhancedErrorProvider();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtPC4 = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.txtEffort4 = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.txtText4 = new DevComponents.DotNetBar.Controls.TextBoxX();
@@ -111,6 +105,17 @@
             this.txtPC9 = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.txtText9 = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.panelEx1 = new DevComponents.DotNetBar.PanelEx();
+            this.txtText10 = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.txtPC10 = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.txtEffort10 = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.labelX19 = new DevComponents.DotNetBar.LabelX();
+            this.txtScore10 = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -137,10 +142,10 @@
             this.cboSchoolYear.DisplayMember = "Text";
             this.cboSchoolYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboSchoolYear.FormattingEnabled = true;
-            this.cboSchoolYear.ItemHeight = 19;
+            this.cboSchoolYear.ItemHeight = 23;
             this.cboSchoolYear.Location = new System.Drawing.Point(64, 5);
             this.cboSchoolYear.Name = "cboSchoolYear";
-            this.cboSchoolYear.Size = new System.Drawing.Size(60, 25);
+            this.cboSchoolYear.Size = new System.Drawing.Size(60, 29);
             this.cboSchoolYear.TabIndex = 1;
             this.cboSchoolYear.TextChanged += new System.EventHandler(this.SchoolYearAndSemester_TextChanged);
             this.cboSchoolYear.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cboSchoolYear_KeyUp);
@@ -164,10 +169,10 @@
             this.cboSemester.DisplayMember = "Text";
             this.cboSemester.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboSemester.FormattingEnabled = true;
-            this.cboSemester.ItemHeight = 19;
+            this.cboSemester.ItemHeight = 23;
             this.cboSemester.Location = new System.Drawing.Point(186, 5);
             this.cboSemester.Name = "cboSemester";
-            this.cboSemester.Size = new System.Drawing.Size(45, 25);
+            this.cboSemester.Size = new System.Drawing.Size(45, 29);
             this.cboSemester.TabIndex = 3;
             this.cboSemester.TextChanged += new System.EventHandler(this.SchoolYearAndSemester_TextChanged);
             this.cboSemester.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cboSemester_KeyUp);
@@ -178,7 +183,7 @@
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.BackColor = System.Drawing.Color.Transparent;
             this.btnSave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSave.Location = new System.Drawing.Point(439, 600);
+            this.btnSave.Location = new System.Drawing.Point(439, 636);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 5;
@@ -191,7 +196,7 @@
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
             this.btnClose.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnClose.Location = new System.Drawing.Point(521, 600);
+            this.btnClose.Location = new System.Drawing.Point(521, 636);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 6;
@@ -203,41 +208,6 @@
             this.errorProvider.BlinkRate = 0;
             this.errorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
             this.errorProvider.ContainerControl = this;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "領域";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "科目";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.Width = 90;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "節數/權數";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.Width = 65;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.HeaderText = "成績";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.Width = 60;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            this.dataGridViewTextBoxColumn5.HeaderText = "努力程度";
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            this.dataGridViewTextBoxColumn5.Width = 60;
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn6.HeaderText = "文字描述";
-            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
             // 
             // txtPC4
             // 
@@ -251,7 +221,7 @@
             this.txtPC4.Location = new System.Drawing.Point(140, 165);
             this.txtPC4.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC4.Name = "txtPC4";
-            this.txtPC4.Size = new System.Drawing.Size(68, 25);
+            this.txtPC4.Size = new System.Drawing.Size(68, 35);
             this.txtPC4.TabIndex = 22;
             this.txtPC4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPC4.TextChanged += new System.EventHandler(this.pcTextBox_TextChanged);
@@ -269,7 +239,7 @@
             this.txtEffort4.Location = new System.Drawing.Point(289, 165);
             this.txtEffort4.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort4.Name = "txtEffort4";
-            this.txtEffort4.Size = new System.Drawing.Size(35, 25);
+            this.txtEffort4.Size = new System.Drawing.Size(35, 35);
             this.txtEffort4.TabIndex = 25;
             this.txtEffort4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtEffort4.TextChanged += new System.EventHandler(this.effortTextBox_TextChanged);
@@ -286,7 +256,7 @@
             this.txtText4.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtText4.Location = new System.Drawing.Point(330, 165);
             this.txtText4.Name = "txtText4";
-            this.txtText4.Size = new System.Drawing.Size(250, 25);
+            this.txtText4.Size = new System.Drawing.Size(250, 35);
             this.txtText4.TabIndex = 26;
             this.txtText4.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
             // 
@@ -300,7 +270,7 @@
             this.txtScore4.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore4.Location = new System.Drawing.Point(220, 165);
             this.txtScore4.Name = "txtScore4";
-            this.txtScore4.Size = new System.Drawing.Size(63, 25);
+            this.txtScore4.Size = new System.Drawing.Size(63, 35);
             this.txtScore4.TabIndex = 23;
             this.txtScore4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtScore4.TextChanged += new System.EventHandler(this.scoreTextBox_TextChanged);
@@ -316,7 +286,7 @@
             this.txtScore5.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore5.Location = new System.Drawing.Point(220, 194);
             this.txtScore5.Name = "txtScore5";
-            this.txtScore5.Size = new System.Drawing.Size(63, 25);
+            this.txtScore5.Size = new System.Drawing.Size(63, 35);
             this.txtScore5.TabIndex = 29;
             this.txtScore5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtScore5.TextChanged += new System.EventHandler(this.scoreTextBox_TextChanged);
@@ -333,7 +303,7 @@
             this.txtText3.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtText3.Location = new System.Drawing.Point(330, 136);
             this.txtText3.Name = "txtText3";
-            this.txtText3.Size = new System.Drawing.Size(250, 25);
+            this.txtText3.Size = new System.Drawing.Size(250, 35);
             this.txtText3.TabIndex = 20;
             this.txtText3.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
             // 
@@ -349,7 +319,7 @@
             this.txtEffort5.Location = new System.Drawing.Point(289, 194);
             this.txtEffort5.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort5.Name = "txtEffort5";
-            this.txtEffort5.Size = new System.Drawing.Size(35, 25);
+            this.txtEffort5.Size = new System.Drawing.Size(35, 35);
             this.txtEffort5.TabIndex = 31;
             this.txtEffort5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtEffort5.TextChanged += new System.EventHandler(this.effortTextBox_TextChanged);
@@ -366,7 +336,7 @@
             this.txtText1.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtText1.Location = new System.Drawing.Point(330, 79);
             this.txtText1.Name = "txtText1";
-            this.txtText1.Size = new System.Drawing.Size(250, 25);
+            this.txtText1.Size = new System.Drawing.Size(250, 35);
             this.txtText1.TabIndex = 8;
             this.txtText1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
             // 
@@ -382,7 +352,7 @@
             this.txtPC3.Location = new System.Drawing.Point(140, 136);
             this.txtPC3.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC3.Name = "txtPC3";
-            this.txtPC3.Size = new System.Drawing.Size(68, 25);
+            this.txtPC3.Size = new System.Drawing.Size(68, 35);
             this.txtPC3.TabIndex = 16;
             this.txtPC3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPC3.TextChanged += new System.EventHandler(this.pcTextBox_TextChanged);
@@ -399,7 +369,7 @@
             this.txtText2.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtText2.Location = new System.Drawing.Point(330, 108);
             this.txtText2.Name = "txtText2";
-            this.txtText2.Size = new System.Drawing.Size(250, 25);
+            this.txtText2.Size = new System.Drawing.Size(250, 35);
             this.txtText2.TabIndex = 14;
             this.txtText2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
             // 
@@ -415,7 +385,7 @@
             this.txtPC5.Location = new System.Drawing.Point(140, 194);
             this.txtPC5.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC5.Name = "txtPC5";
-            this.txtPC5.Size = new System.Drawing.Size(68, 25);
+            this.txtPC5.Size = new System.Drawing.Size(68, 35);
             this.txtPC5.TabIndex = 28;
             this.txtPC5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPC5.TextChanged += new System.EventHandler(this.pcTextBox_TextChanged);
@@ -433,7 +403,7 @@
             this.txtPC1.Location = new System.Drawing.Point(140, 79);
             this.txtPC1.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC1.Name = "txtPC1";
-            this.txtPC1.Size = new System.Drawing.Size(68, 25);
+            this.txtPC1.Size = new System.Drawing.Size(68, 35);
             this.txtPC1.TabIndex = 4;
             this.txtPC1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPC1.TextChanged += new System.EventHandler(this.pcTextBox_TextChanged);
@@ -451,7 +421,7 @@
             this.txtEffort3.Location = new System.Drawing.Point(289, 136);
             this.txtEffort3.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort3.Name = "txtEffort3";
-            this.txtEffort3.Size = new System.Drawing.Size(35, 25);
+            this.txtEffort3.Size = new System.Drawing.Size(35, 35);
             this.txtEffort3.TabIndex = 19;
             this.txtEffort3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtEffort3.TextChanged += new System.EventHandler(this.effortTextBox_TextChanged);
@@ -469,7 +439,7 @@
             this.txtPC2.Location = new System.Drawing.Point(140, 108);
             this.txtPC2.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC2.Name = "txtPC2";
-            this.txtPC2.Size = new System.Drawing.Size(68, 25);
+            this.txtPC2.Size = new System.Drawing.Size(68, 35);
             this.txtPC2.TabIndex = 10;
             this.txtPC2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPC2.TextChanged += new System.EventHandler(this.pcTextBox_TextChanged);
@@ -486,7 +456,7 @@
             this.txtText5.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtText5.Location = new System.Drawing.Point(330, 194);
             this.txtText5.Name = "txtText5";
-            this.txtText5.Size = new System.Drawing.Size(249, 25);
+            this.txtText5.Size = new System.Drawing.Size(249, 35);
             this.txtText5.TabIndex = 32;
             this.txtText5.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
             // 
@@ -502,7 +472,7 @@
             this.txtEffort1.Location = new System.Drawing.Point(289, 79);
             this.txtEffort1.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort1.Name = "txtEffort1";
-            this.txtEffort1.Size = new System.Drawing.Size(35, 25);
+            this.txtEffort1.Size = new System.Drawing.Size(35, 35);
             this.txtEffort1.TabIndex = 7;
             this.txtEffort1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtEffort1.TextChanged += new System.EventHandler(this.effortTextBox_TextChanged);
@@ -518,7 +488,7 @@
             this.txtScore3.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore3.Location = new System.Drawing.Point(220, 136);
             this.txtScore3.Name = "txtScore3";
-            this.txtScore3.Size = new System.Drawing.Size(63, 25);
+            this.txtScore3.Size = new System.Drawing.Size(63, 35);
             this.txtScore3.TabIndex = 17;
             this.txtScore3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtScore3.TextChanged += new System.EventHandler(this.scoreTextBox_TextChanged);
@@ -536,7 +506,7 @@
             this.txtEffort2.Location = new System.Drawing.Point(289, 108);
             this.txtEffort2.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort2.Name = "txtEffort2";
-            this.txtEffort2.Size = new System.Drawing.Size(35, 25);
+            this.txtEffort2.Size = new System.Drawing.Size(35, 35);
             this.txtEffort2.TabIndex = 13;
             this.txtEffort2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtEffort2.TextChanged += new System.EventHandler(this.effortTextBox_TextChanged);
@@ -552,7 +522,7 @@
             this.txtScore6.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore6.Location = new System.Drawing.Point(220, 223);
             this.txtScore6.Name = "txtScore6";
-            this.txtScore6.Size = new System.Drawing.Size(63, 25);
+            this.txtScore6.Size = new System.Drawing.Size(63, 35);
             this.txtScore6.TabIndex = 35;
             this.txtScore6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtScore6.TextChanged += new System.EventHandler(this.scoreTextBox_TextChanged);
@@ -568,7 +538,7 @@
             this.txtScore1.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore1.Location = new System.Drawing.Point(220, 79);
             this.txtScore1.Name = "txtScore1";
-            this.txtScore1.Size = new System.Drawing.Size(63, 25);
+            this.txtScore1.Size = new System.Drawing.Size(63, 35);
             this.txtScore1.TabIndex = 5;
             this.txtScore1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtScore1.TextChanged += new System.EventHandler(this.scoreTextBox_TextChanged);
@@ -586,7 +556,7 @@
             this.txtEffort6.Location = new System.Drawing.Point(289, 223);
             this.txtEffort6.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort6.Name = "txtEffort6";
-            this.txtEffort6.Size = new System.Drawing.Size(35, 25);
+            this.txtEffort6.Size = new System.Drawing.Size(35, 35);
             this.txtEffort6.TabIndex = 37;
             this.txtEffort6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtEffort6.TextChanged += new System.EventHandler(this.effortTextBox_TextChanged);
@@ -602,7 +572,7 @@
             this.txtScore2.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore2.Location = new System.Drawing.Point(220, 108);
             this.txtScore2.Name = "txtScore2";
-            this.txtScore2.Size = new System.Drawing.Size(63, 25);
+            this.txtScore2.Size = new System.Drawing.Size(63, 35);
             this.txtScore2.TabIndex = 11;
             this.txtScore2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtScore2.TextChanged += new System.EventHandler(this.scoreTextBox_TextChanged);
@@ -620,7 +590,7 @@
             this.txtPC6.Location = new System.Drawing.Point(140, 223);
             this.txtPC6.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC6.Name = "txtPC6";
-            this.txtPC6.Size = new System.Drawing.Size(68, 25);
+            this.txtPC6.Size = new System.Drawing.Size(68, 35);
             this.txtPC6.TabIndex = 34;
             this.txtPC6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPC6.TextChanged += new System.EventHandler(this.pcTextBox_TextChanged);
@@ -637,7 +607,7 @@
             this.txtText6.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtText6.Location = new System.Drawing.Point(330, 223);
             this.txtText6.Name = "txtText6";
-            this.txtText6.Size = new System.Drawing.Size(250, 25);
+            this.txtText6.Size = new System.Drawing.Size(250, 35);
             this.txtText6.TabIndex = 38;
             this.txtText6.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
             // 
@@ -651,7 +621,7 @@
             this.txtScore7.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore7.Location = new System.Drawing.Point(220, 252);
             this.txtScore7.Name = "txtScore7";
-            this.txtScore7.Size = new System.Drawing.Size(63, 25);
+            this.txtScore7.Size = new System.Drawing.Size(63, 35);
             this.txtScore7.TabIndex = 41;
             this.txtScore7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtScore7.TextChanged += new System.EventHandler(this.scoreTextBox_TextChanged);
@@ -669,7 +639,7 @@
             this.txtEffort7.Location = new System.Drawing.Point(289, 252);
             this.txtEffort7.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort7.Name = "txtEffort7";
-            this.txtEffort7.Size = new System.Drawing.Size(35, 25);
+            this.txtEffort7.Size = new System.Drawing.Size(35, 35);
             this.txtEffort7.TabIndex = 43;
             this.txtEffort7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtEffort7.TextChanged += new System.EventHandler(this.effortTextBox_TextChanged);
@@ -687,7 +657,7 @@
             this.txtPC7.Location = new System.Drawing.Point(140, 252);
             this.txtPC7.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC7.Name = "txtPC7";
-            this.txtPC7.Size = new System.Drawing.Size(68, 25);
+            this.txtPC7.Size = new System.Drawing.Size(68, 35);
             this.txtPC7.TabIndex = 40;
             this.txtPC7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPC7.TextChanged += new System.EventHandler(this.pcTextBox_TextChanged);
@@ -704,7 +674,7 @@
             this.txtText7.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtText7.Location = new System.Drawing.Point(330, 252);
             this.txtText7.Name = "txtText7";
-            this.txtText7.Size = new System.Drawing.Size(250, 25);
+            this.txtText7.Size = new System.Drawing.Size(250, 35);
             this.txtText7.TabIndex = 44;
             this.txtText7.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
             // 
@@ -718,7 +688,7 @@
             this.txtScore8.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore8.Location = new System.Drawing.Point(220, 281);
             this.txtScore8.Name = "txtScore8";
-            this.txtScore8.Size = new System.Drawing.Size(63, 25);
+            this.txtScore8.Size = new System.Drawing.Size(63, 35);
             this.txtScore8.TabIndex = 47;
             this.txtScore8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtScore8.TextChanged += new System.EventHandler(this.scoreTextBox_TextChanged);
@@ -754,7 +724,7 @@
             this.txtEffort8.Location = new System.Drawing.Point(289, 281);
             this.txtEffort8.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort8.Name = "txtEffort8";
-            this.txtEffort8.Size = new System.Drawing.Size(35, 25);
+            this.txtEffort8.Size = new System.Drawing.Size(35, 35);
             this.txtEffort8.TabIndex = 49;
             this.txtEffort8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtEffort8.TextChanged += new System.EventHandler(this.effortTextBox_TextChanged);
@@ -787,10 +757,10 @@
             // 
             this.txtElastic.Border.Class = "TextBoxBorder";
             this.txtElastic.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtElastic.Location = new System.Drawing.Point(147, 528);
+            this.txtElastic.Location = new System.Drawing.Point(147, 564);
             this.txtElastic.Margin = new System.Windows.Forms.Padding(0);
             this.txtElastic.Name = "txtElastic";
-            this.txtElastic.Size = new System.Drawing.Size(70, 25);
+            this.txtElastic.Size = new System.Drawing.Size(70, 35);
             this.txtElastic.TabIndex = 45;
             this.txtElastic.TextChanged += new System.EventHandler(this.textBoxX33_TextChanged);
             // 
@@ -809,7 +779,7 @@
             this.labelX11.Name = "labelX11";
             this.labelX11.Size = new System.Drawing.Size(126, 25);
             this.labelX11.TabIndex = 33;
-            this.labelX11.Text = "自然與生活科技";
+            this.labelX11.Text = "自然科學";
             this.labelX11.TextAlignment = System.Drawing.StringAlignment.Center;
             // 
             // txtPC8
@@ -824,7 +794,7 @@
             this.txtPC8.Location = new System.Drawing.Point(140, 281);
             this.txtPC8.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC8.Name = "txtPC8";
-            this.txtPC8.Size = new System.Drawing.Size(68, 25);
+            this.txtPC8.Size = new System.Drawing.Size(68, 35);
             this.txtPC8.TabIndex = 46;
             this.txtPC8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPC8.TextChanged += new System.EventHandler(this.pcTextBox_TextChanged);
@@ -845,7 +815,7 @@
             this.labelX10.Name = "labelX10";
             this.labelX10.Size = new System.Drawing.Size(126, 25);
             this.labelX10.TabIndex = 27;
-            this.labelX10.Text = "藝術與人文";
+            this.labelX10.Text = "藝術";
             this.labelX10.TextAlignment = System.Drawing.StringAlignment.Center;
             // 
             // txtLearnDomain
@@ -857,10 +827,10 @@
             // 
             this.txtLearnDomain.Border.Class = "TextBoxBorder";
             this.txtLearnDomain.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtLearnDomain.Location = new System.Drawing.Point(329, 528);
+            this.txtLearnDomain.Location = new System.Drawing.Point(329, 564);
             this.txtLearnDomain.Margin = new System.Windows.Forms.Padding(0);
             this.txtLearnDomain.Name = "txtLearnDomain";
-            this.txtLearnDomain.Size = new System.Drawing.Size(70, 25);
+            this.txtLearnDomain.Size = new System.Drawing.Size(70, 35);
             this.txtLearnDomain.TabIndex = 47;
             this.txtLearnDomain.TextChanged += new System.EventHandler(this.textBoxX33_TextChanged);
             // 
@@ -893,7 +863,7 @@
             this.txtText8.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtText8.Location = new System.Drawing.Point(330, 281);
             this.txtText8.Name = "txtText8";
-            this.txtText8.Size = new System.Drawing.Size(250, 25);
+            this.txtText8.Size = new System.Drawing.Size(250, 35);
             this.txtText8.TabIndex = 50;
             this.txtText8.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
             // 
@@ -960,10 +930,10 @@
             // 
             this.txtCourseLearn.Border.Class = "TextBoxBorder";
             this.txtCourseLearn.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtCourseLearn.Location = new System.Drawing.Point(512, 528);
+            this.txtCourseLearn.Location = new System.Drawing.Point(512, 564);
             this.txtCourseLearn.Margin = new System.Windows.Forms.Padding(0);
             this.txtCourseLearn.Name = "txtCourseLearn";
-            this.txtCourseLearn.Size = new System.Drawing.Size(70, 25);
+            this.txtCourseLearn.Size = new System.Drawing.Size(70, 35);
             this.txtCourseLearn.TabIndex = 49;
             this.txtCourseLearn.TextChanged += new System.EventHandler(this.textBoxX33_TextChanged);
             // 
@@ -976,9 +946,9 @@
             this.groupPanel1.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.groupPanel1.Controls.Add(this.panel1);
-            this.groupPanel1.Location = new System.Drawing.Point(7, 324);
+            this.groupPanel1.Location = new System.Drawing.Point(7, 348);
             this.groupPanel1.Name = "groupPanel1";
-            this.groupPanel1.Size = new System.Drawing.Size(575, 199);
+            this.groupPanel1.Size = new System.Drawing.Size(575, 211);
             // 
             // 
             // 
@@ -1018,7 +988,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(2);
-            this.panel1.Size = new System.Drawing.Size(569, 172);
+            this.panel1.Size = new System.Drawing.Size(569, 179);
             this.panel1.TabIndex = 0;
             // 
             // dgv
@@ -1046,8 +1016,9 @@
             this.dgv.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.dgv.Location = new System.Drawing.Point(2, 2);
             this.dgv.Name = "dgv";
+            this.dgv.RowHeadersWidth = 51;
             this.dgv.RowTemplate.Height = 24;
-            this.dgv.Size = new System.Drawing.Size(565, 168);
+            this.dgv.Size = new System.Drawing.Size(565, 175);
             this.dgv.TabIndex = 0;
             this.dgv.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
             this.dgv.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_RowsAdded);
@@ -1056,29 +1027,35 @@
             // 
             this.chsDomain.HeaderText = "領域";
             this.chsDomain.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("chsDomain.Items")));
+            this.chsDomain.MinimumWidth = 6;
             this.chsDomain.Name = "chsDomain";
+            this.chsDomain.Width = 125;
             // 
             // chsSubject
             // 
             this.chsSubject.HeaderText = "科目";
+            this.chsSubject.MinimumWidth = 6;
             this.chsSubject.Name = "chsSubject";
             this.chsSubject.Width = 90;
             // 
             // chsPeriodCredit
             // 
             this.chsPeriodCredit.HeaderText = "節數/權數";
+            this.chsPeriodCredit.MinimumWidth = 6;
             this.chsPeriodCredit.Name = "chsPeriodCredit";
             this.chsPeriodCredit.Width = 65;
             // 
             // chsScore
             // 
             this.chsScore.HeaderText = "成績";
+            this.chsScore.MinimumWidth = 6;
             this.chsScore.Name = "chsScore";
             this.chsScore.Width = 60;
             // 
             // chsEffort
             // 
             this.chsEffort.HeaderText = "努力程度";
+            this.chsEffort.MinimumWidth = 6;
             this.chsEffort.Name = "chsEffort";
             this.chsEffort.Width = 60;
             // 
@@ -1086,6 +1063,7 @@
             // 
             this.chsText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.chsText.HeaderText = "文字描述";
+            this.chsText.MinimumWidth = 6;
             this.chsText.Name = "chsText";
             // 
             // labelX15
@@ -1097,7 +1075,7 @@
             // 
             this.labelX15.BackgroundStyle.Class = "";
             this.labelX15.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX15.Location = new System.Drawing.Point(84, 529);
+            this.labelX15.Location = new System.Drawing.Point(84, 565);
             this.labelX15.Name = "labelX15";
             this.labelX15.Size = new System.Drawing.Size(58, 23);
             this.labelX15.TabIndex = 44;
@@ -1132,7 +1110,7 @@
             // 
             this.labelX16.BackgroundStyle.Class = "";
             this.labelX16.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX16.Location = new System.Drawing.Point(240, 529);
+            this.labelX16.Location = new System.Drawing.Point(240, 565);
             this.labelX16.Name = "labelX16";
             this.labelX16.Size = new System.Drawing.Size(85, 23);
             this.labelX16.TabIndex = 46;
@@ -1165,7 +1143,7 @@
             // 
             this.labelX17.BackgroundStyle.Class = "";
             this.labelX17.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX17.Location = new System.Drawing.Point(422, 529);
+            this.labelX17.Location = new System.Drawing.Point(422, 565);
             this.labelX17.Name = "labelX17";
             this.labelX17.Size = new System.Drawing.Size(85, 23);
             this.labelX17.TabIndex = 48;
@@ -1235,7 +1213,7 @@
             this.txtScore9.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtScore9.Location = new System.Drawing.Point(220, 50);
             this.txtScore9.Name = "txtScore9";
-            this.txtScore9.Size = new System.Drawing.Size(63, 25);
+            this.txtScore9.Size = new System.Drawing.Size(63, 35);
             this.txtScore9.TabIndex = 53;
             this.txtScore9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtScore9.TextChanged += new System.EventHandler(this.scoreTextBox_TextChanged);
@@ -1271,7 +1249,7 @@
             this.txtEffort9.Location = new System.Drawing.Point(289, 50);
             this.txtEffort9.Margin = new System.Windows.Forms.Padding(0);
             this.txtEffort9.Name = "txtEffort9";
-            this.txtEffort9.Size = new System.Drawing.Size(35, 25);
+            this.txtEffort9.Size = new System.Drawing.Size(35, 35);
             this.txtEffort9.TabIndex = 55;
             this.txtEffort9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtEffort9.TextChanged += new System.EventHandler(this.effortTextBox_TextChanged);
@@ -1289,7 +1267,7 @@
             this.txtPC9.Location = new System.Drawing.Point(140, 50);
             this.txtPC9.Margin = new System.Windows.Forms.Padding(0);
             this.txtPC9.Name = "txtPC9";
-            this.txtPC9.Size = new System.Drawing.Size(68, 25);
+            this.txtPC9.Size = new System.Drawing.Size(68, 35);
             this.txtPC9.TabIndex = 52;
             this.txtPC9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtPC9.TextChanged += new System.EventHandler(this.pcTextBox_TextChanged);
@@ -1306,7 +1284,7 @@
             this.txtText9.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtText9.Location = new System.Drawing.Point(330, 50);
             this.txtText9.Name = "txtText9";
-            this.txtText9.Size = new System.Drawing.Size(250, 25);
+            this.txtText9.Size = new System.Drawing.Size(250, 35);
             this.txtText9.TabIndex = 56;
             this.txtText9.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
             // 
@@ -1317,6 +1295,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelEx1.CanvasColor = System.Drawing.SystemColors.Control;
             this.panelEx1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.panelEx1.Controls.Add(this.txtText10);
+            this.panelEx1.Controls.Add(this.txtPC10);
+            this.panelEx1.Controls.Add(this.txtEffort10);
+            this.panelEx1.Controls.Add(this.labelX19);
+            this.panelEx1.Controls.Add(this.txtScore10);
             this.panelEx1.Controls.Add(this.txtText9);
             this.panelEx1.Controls.Add(this.txtPC9);
             this.panelEx1.Controls.Add(this.txtEffort9);
@@ -1378,7 +1361,7 @@
             this.panelEx1.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.panelEx1.Location = new System.Drawing.Point(7, 35);
             this.panelEx1.Name = "panelEx1";
-            this.panelEx1.Size = new System.Drawing.Size(589, 559);
+            this.panelEx1.Size = new System.Drawing.Size(589, 595);
             this.panelEx1.Style.Alignment = System.Drawing.StringAlignment.Center;
             this.panelEx1.Style.BackColor1.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
             this.panelEx1.Style.BackColor2.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
@@ -1390,11 +1373,138 @@
             this.panelEx1.Style.GradientAngle = 90;
             this.panelEx1.TabIndex = 4;
             // 
+            // txtText10
+            // 
+            this.txtText10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            // 
+            // 
+            // 
+            this.txtText10.Border.Class = "TextBoxBorder";
+            this.txtText10.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtText10.Location = new System.Drawing.Point(330, 310);
+            this.txtText10.Name = "txtText10";
+            this.txtText10.Size = new System.Drawing.Size(250, 35);
+            this.txtText10.TabIndex = 61;
+            this.txtText10.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
+            // 
+            // txtPC10
+            // 
+            this.txtPC10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            // 
+            // 
+            // 
+            this.txtPC10.Border.Class = "TextBoxBorder";
+            this.txtPC10.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtPC10.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.txtPC10.Location = new System.Drawing.Point(140, 310);
+            this.txtPC10.Margin = new System.Windows.Forms.Padding(0);
+            this.txtPC10.Name = "txtPC10";
+            this.txtPC10.Size = new System.Drawing.Size(68, 35);
+            this.txtPC10.TabIndex = 58;
+            this.txtPC10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtPC10.TextChanged += new System.EventHandler(this.pcTextBox_TextChanged);
+            this.txtPC10.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
+            // 
+            // txtEffort10
+            // 
+            this.txtEffort10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            // 
+            // 
+            // 
+            this.txtEffort10.Border.Class = "TextBoxBorder";
+            this.txtEffort10.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEffort10.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.txtEffort10.Location = new System.Drawing.Point(289, 310);
+            this.txtEffort10.Margin = new System.Windows.Forms.Padding(0);
+            this.txtEffort10.Name = "txtEffort10";
+            this.txtEffort10.Size = new System.Drawing.Size(35, 35);
+            this.txtEffort10.TabIndex = 60;
+            this.txtEffort10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtEffort10.TextChanged += new System.EventHandler(this.effortTextBox_TextChanged);
+            this.txtEffort10.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
+            // 
+            // labelX19
+            // 
+            this.labelX19.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX19.BackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
+            this.labelX19.BackgroundStyle.BackColorGradientAngle = 90;
+            this.labelX19.BackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.labelX19.BackgroundStyle.Class = "";
+            this.labelX19.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX19.Location = new System.Drawing.Point(8, 310);
+            this.labelX19.Name = "labelX19";
+            this.labelX19.Size = new System.Drawing.Size(126, 25);
+            this.labelX19.TabIndex = 57;
+            this.labelX19.Text = "科技";
+            this.labelX19.TextAlignment = System.Drawing.StringAlignment.Center;
+            // 
+            // txtScore10
+            // 
+            // 
+            // 
+            // 
+            this.txtScore10.Border.Class = "TextBoxBorder";
+            this.txtScore10.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtScore10.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.txtScore10.Location = new System.Drawing.Point(220, 310);
+            this.txtScore10.Name = "txtScore10";
+            this.txtScore10.Size = new System.Drawing.Size(63, 35);
+            this.txtScore10.TabIndex = 59;
+            this.txtScore10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtScore10.TextChanged += new System.EventHandler(this.scoreTextBox_TextChanged);
+            this.txtScore10.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyUp);
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "領域";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 125;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "科目";
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.Width = 90;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "節數/權數";
+            this.dataGridViewTextBoxColumn3.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.Width = 65;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.HeaderText = "成績";
+            this.dataGridViewTextBoxColumn4.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.Width = 60;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.HeaderText = "努力程度";
+            this.dataGridViewTextBoxColumn5.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.Width = 60;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn6.HeaderText = "文字描述";
+            this.dataGridViewTextBoxColumn6.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            // 
             // QuickInputSemesterScoreForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(610, 626);
+            this.ClientSize = new System.Drawing.Size(610, 662);
             this.Controls.Add(this.panelEx1);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnSave);
@@ -1496,5 +1606,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn chsScore;
         private System.Windows.Forms.DataGridViewTextBoxColumn chsEffort;
         private System.Windows.Forms.DataGridViewTextBoxColumn chsText;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtText10;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtPC10;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtEffort10;
+        private DevComponents.DotNetBar.LabelX labelX19;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtScore10;
     }
 }
