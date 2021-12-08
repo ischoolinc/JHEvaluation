@@ -91,7 +91,8 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 textBoxPC4, textBoxScore4, textBoxText4,
                 textBoxPC5, textBoxScore5, textBoxText5,
                 textBoxPC6, textBoxScore6, textBoxText6,
-                textBoxPC7, textBoxScore7, textBoxText7
+                textBoxPC7, textBoxScore7, textBoxText7,
+                textBoxPC8, textBoxScore8, textBoxText8
                 );
             _manager.AddEffortTextBoxMapping(textBoxScore1, textBoxEffort1); // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，將語文領域的子領域兩個項目欄位拿掉，僅保留輸入語文領域成績的單一功能。
             _manager.AddEffortTextBoxMapping(textBoxScore2, textBoxEffort2);
@@ -100,6 +101,7 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             _manager.AddEffortTextBoxMapping(textBoxScore5, textBoxEffort5);
             _manager.AddEffortTextBoxMapping(textBoxScore6, textBoxEffort6);
             _manager.AddEffortTextBoxMapping(textBoxScore7, textBoxEffort7);
+            _manager.AddEffortTextBoxMapping(textBoxScore8, textBoxEffort8);
         }
 
         private void InitializeComboBoxes()
@@ -191,10 +193,13 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 textBoxPC1.Text = pcs.ContainsKey("語文") ? pcs["語文"].ToString() : ""; // 2018.09.22 [ischoolKingdom] Vicky依據 [J成績][HC][03] 快速新增學期成績修正，將語文領域的子領域兩個項目欄位拿掉，僅保留輸入語文領域成績的單一功能。
                 textBoxPC2.Text = pcs.ContainsKey("數學") ? pcs["數學"].ToString() : "";
                 textBoxPC3.Text = pcs.ContainsKey("社會") ? pcs["社會"].ToString() : "";
-                textBoxPC4.Text = pcs.ContainsKey("藝術與人文") ? pcs["藝術與人文"].ToString() : "";
-                textBoxPC5.Text = pcs.ContainsKey("自然與生活科技") ? pcs["自然與生活科技"].ToString() : "";
+                //textBoxPC4.Text = pcs.ContainsKey("藝術與人文") ? pcs["藝術與人文"].ToString() : "";
+                //textBoxPC5.Text = pcs.ContainsKey("自然與生活科技") ? pcs["自然與生活科技"].ToString() : "";
+                textBoxPC4.Text = pcs.ContainsKey("藝術") ? pcs["藝術"].ToString() : "";
+                textBoxPC5.Text = pcs.ContainsKey("自然科學") ? pcs["自然科學"].ToString() : "";
                 textBoxPC6.Text = pcs.ContainsKey("健康與體育") ? pcs["健康與體育"].ToString() : "";
                 textBoxPC7.Text = pcs.ContainsKey("綜合活動") ? pcs["綜合活動"].ToString() : "";
+                textBoxPC8.Text = pcs.ContainsKey("科技") ? pcs["科技"].ToString() : "";
             }
             #endregion
         }
@@ -274,15 +279,20 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                     newRecord.Domains.Add("數學", GetDomainScore("數學", textBoxPC2, textBoxScore2, textBoxEffort2, textBoxText2));
                 if (CheckDomainValid(textBoxPC3, textBoxScore3, textBoxEffort3))
                     newRecord.Domains.Add("社會", GetDomainScore("社會", textBoxPC3, textBoxScore3, textBoxEffort3, textBoxText3));
+                //if (CheckDomainValid(textBoxPC4, textBoxScore4, textBoxEffort4))
+                //    newRecord.Domains.Add("藝術與人文", GetDomainScore("藝術與人文", textBoxPC4, textBoxScore4, textBoxEffort4, textBoxText4));
+                //if (CheckDomainValid(textBoxPC5, textBoxScore5, textBoxEffort5))
+                //    newRecord.Domains.Add("自然與生活科技", GetDomainScore("自然與生活科技", textBoxPC5, textBoxScore5, textBoxEffort5, textBoxText5));
                 if (CheckDomainValid(textBoxPC4, textBoxScore4, textBoxEffort4))
-                    newRecord.Domains.Add("藝術與人文", GetDomainScore("藝術與人文", textBoxPC4, textBoxScore4, textBoxEffort4, textBoxText4));
+                    newRecord.Domains.Add("藝術", GetDomainScore("藝術", textBoxPC4, textBoxScore4, textBoxEffort4, textBoxText4));
                 if (CheckDomainValid(textBoxPC5, textBoxScore5, textBoxEffort5))
-                    newRecord.Domains.Add("自然與生活科技", GetDomainScore("自然與生活科技", textBoxPC5, textBoxScore5, textBoxEffort5, textBoxText5));
+                    newRecord.Domains.Add("自然科學", GetDomainScore("自然科學", textBoxPC5, textBoxScore5, textBoxEffort5, textBoxText5));
                 if (CheckDomainValid(textBoxPC6, textBoxScore6, textBoxEffort6))
                     newRecord.Domains.Add("健康與體育", GetDomainScore("健康與體育", textBoxPC6, textBoxScore6, textBoxEffort6, textBoxText6));
                 if (CheckDomainValid(textBoxPC7, textBoxScore7, textBoxEffort7))
                     newRecord.Domains.Add("綜合活動", GetDomainScore("綜合活動", textBoxPC7, textBoxScore7, textBoxEffort7, textBoxText7));
-
+                if (CheckDomainValid(textBoxPC8, textBoxScore8, textBoxEffort8))
+                    newRecord.Domains.Add("科技", GetDomainScore("科技", textBoxPC8, textBoxScore8, textBoxEffort8, textBoxText8));
 
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
@@ -370,7 +380,7 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             foreach (DataGridViewRow row in dgv.Rows)
             {
                 if (row.IsNewRow) continue;
-                if ("" + row.Cells[chsDomain.Index].Value == "彈性課程")
+                if ("" + row.Cells[chsDomain.Index].Value == "彈性課程"|| "" + row.Cells[chsDomain.Index].Value == "")
                 {
                     count++;
                     temp.Parse("" + row.Cells[chsPeriodCredit.Index].Value);
@@ -451,6 +461,7 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             EvalDomainScore(ref pc, ref total, textBoxScore5, textBoxPC5);
             EvalDomainScore(ref pc, ref total, textBoxScore6, textBoxPC6);
             EvalDomainScore(ref pc, ref total, textBoxScore7, textBoxPC7);
+            EvalDomainScore(ref pc, ref total, textBoxScore8, textBoxPC8);
 
             if (pc.Credit > 0)
             {
@@ -738,11 +749,14 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             {
                 foreach (DataGridViewColumn col in cols)
                 {
-                    DataGridViewCell cell = row.Cells[col.Index];
-                    if (string.IsNullOrEmpty("" + cell.Value))
-                        cell.ErrorText = "不可為空白";
-                    else
-                        cell.ErrorText = "";
+                    if (col.HeaderText != "領域")
+                    {
+                        DataGridViewCell cell = row.Cells[col.Index];
+                        if (string.IsNullOrEmpty("" + cell.Value))
+                            cell.ErrorText = "不可為空白";
+                        else
+                            cell.ErrorText = "";
+                    }
                 }
             }
 
@@ -828,10 +842,10 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             }
             #endregion
 
-            if (!HasDataGridViewError())
-            {
+            //if (!HasDataGridViewError())
+            //{
                 CalculateCourseLearnScore();
-            }
+            //}
         }
 
         private void CalculateCourseLearnScore()
@@ -839,16 +853,19 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             PeriodCredit pc = new PeriodCredit();
             //int pc = 0;
             decimal total = 0;
-
+            decimal trydecimal;
             foreach (DataGridViewRow row in dgv.Rows)
             {
-                if ("" + row.Cells[chsDomain.Index].Value == "彈性課程")
+                if ("" + row.Cells[chsDomain.Index].Value == "彈性課程" || "" + row.Cells[chsDomain.Index].Value == "")
                 {
-                    PeriodCredit temp = new PeriodCredit();
-                    temp.Parse("" + row.Cells[chsPeriodCredit.Index].Value);
-                    pc.Credit += temp.Credit;
-                    pc.Period += temp.Period;
-                    total += temp.Credit * decimal.Parse("" + row.Cells[chsScore.Index].Value);
+                    if (decimal.TryParse("" + row.Cells[chsPeriodCredit.Index].Value, out trydecimal) && decimal.TryParse("" + row.Cells[chsScore.Index].Value, out trydecimal))
+                    {
+                        PeriodCredit temp = new PeriodCredit();
+                        temp.Parse("" + row.Cells[chsPeriodCredit.Index].Value);
+                        pc.Credit += temp.Credit;
+                        pc.Period += temp.Period;
+                        total += temp.Credit * decimal.Parse("" + row.Cells[chsScore.Index].Value);
+                    }
                 }
             }
 
@@ -950,7 +967,7 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                     return _controls[index - 3];
                 else
                     return _controls[0];
-           
+
             return null;
         }
 
