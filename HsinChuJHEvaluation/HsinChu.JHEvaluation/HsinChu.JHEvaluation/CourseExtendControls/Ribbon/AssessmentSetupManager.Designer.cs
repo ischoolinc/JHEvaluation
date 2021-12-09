@@ -31,19 +31,10 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AssessmentSetupManager));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataview = new DevComponents.DotNetBar.Controls.DataGridViewX();
-            this.ExamID = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Weight = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UseScore = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.UseAssignmentScore = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.UseText = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.OpenTeacherAccess = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.EndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.InputRequired = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.expandableSplitter1 = new DevComponents.DotNetBar.ExpandableSplitter();
             this.buttonItem3 = new DevComponents.DotNetBar.ButtonItem();
             this.buttonItem2 = new DevComponents.DotNetBar.ButtonItem();
@@ -67,6 +58,15 @@
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExamID = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Weight = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UseScore = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.UseAssignmentScore = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.UseText = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.OpenTeacherAccess = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.InputRequired = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataview)).BeginInit();
             this.ipList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loading)).BeginInit();
@@ -127,90 +127,6 @@
             this.dataview.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataview_RowsAdded);
             this.dataview.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataview_RowsRemoved);
             this.dataview.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataview_RowValidating);
-            // 
-            // ExamID
-            // 
-            this.ExamID.DataPropertyName = "ExamID";
-            this.ExamID.DisplayStyleForCurrentCellOnly = true;
-            this.ExamID.HeaderText = "評量名稱";
-            this.ExamID.Name = "ExamID";
-            this.ExamID.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ExamID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // Weight
-            // 
-            this.Weight.DataPropertyName = "Weight";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Weight.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Weight.HeaderText = "比重";
-            this.Weight.Name = "Weight";
-            this.Weight.Width = 50;
-            // 
-            // UseScore
-            // 
-            this.UseScore.DataPropertyName = "UseScore";
-            this.UseScore.FalseValue = "否";
-            this.UseScore.HeaderText = "定期分數";
-            this.UseScore.Name = "UseScore";
-            this.UseScore.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.UseScore.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.UseScore.TrueValue = "是";
-            this.UseScore.Width = 75;
-            // 
-            // UseAssignmentScore
-            // 
-            this.UseAssignmentScore.HeaderText = "平時分數";
-            this.UseAssignmentScore.Name = "UseAssignmentScore";
-            this.UseAssignmentScore.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.UseAssignmentScore.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.UseAssignmentScore.Width = 75;
-            // 
-            // UseText
-            // 
-            this.UseText.DataPropertyName = "UseText";
-            this.UseText.FalseValue = "否";
-            this.UseText.HeaderText = "文字描述";
-            this.UseText.Name = "UseText";
-            this.UseText.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.UseText.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.UseText.TrueValue = "是";
-            this.UseText.Width = 75;
-            // 
-            // OpenTeacherAccess
-            // 
-            this.OpenTeacherAccess.DataPropertyName = "OpenTeacherAccess";
-            this.OpenTeacherAccess.FalseValue = "否";
-            this.OpenTeacherAccess.HeaderText = "開放繳交";
-            this.OpenTeacherAccess.Name = "OpenTeacherAccess";
-            this.OpenTeacherAccess.TrueValue = "是";
-            this.OpenTeacherAccess.Visible = false;
-            this.OpenTeacherAccess.Width = 75;
-            // 
-            // StartTime
-            // 
-            this.StartTime.DataPropertyName = "StartTime";
-            this.StartTime.HeaderText = "開始時間";
-            this.StartTime.Name = "StartTime";
-            this.StartTime.Width = 90;
-            // 
-            // EndTime
-            // 
-            this.EndTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.EndTime.DataPropertyName = "EndTime";
-            this.EndTime.HeaderText = "結束時間";
-            this.EndTime.Name = "EndTime";
-            // 
-            // InputRequired
-            // 
-            this.InputRequired.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.InputRequired.DataPropertyName = "InputRequired";
-            this.InputRequired.FalseValue = "是";
-            this.InputRequired.HeaderText = "不強制繳交成績";
-            this.InputRequired.Name = "InputRequired";
-            this.InputRequired.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.InputRequired.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.InputRequired.TrueValue = "否";
-            this.InputRequired.Visible = false;
             // 
             // expandableSplitter1
             // 
@@ -295,7 +211,7 @@
             this.ipList.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F";
             this.ipList.Location = new System.Drawing.Point(0, 0);
             this.ipList.Name = "ipList";
-            this.ipList.Size = new System.Drawing.Size(154, 322);
+            this.ipList.Size = new System.Drawing.Size(154, 325);
             this.ipList.TabIndex = 0;
             this.ipList.Text = "itemPanel1";
             // 
@@ -368,7 +284,7 @@
             this.lblpt02.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lblpt02.Location = new System.Drawing.Point(339, 9);
             this.lblpt02.Name = "lblpt02";
-            this.lblpt02.Size = new System.Drawing.Size(46, 26);
+            this.lblpt02.Size = new System.Drawing.Size(37, 21);
             this.lblpt02.TabIndex = 11;
             this.lblpt02.Text = "50 %";
             this.lblpt02.TextAlignment = System.Drawing.StringAlignment.Far;
@@ -383,7 +299,7 @@
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX2.Location = new System.Drawing.Point(244, 9);
             this.labelX2.Name = "labelX2";
-            this.labelX2.Size = new System.Drawing.Size(23, 26);
+            this.labelX2.Size = new System.Drawing.Size(19, 21);
             this.labelX2.TabIndex = 9;
             this.labelX2.Text = "%";
             this.labelX2.TextAlignment = System.Drawing.StringAlignment.Center;
@@ -402,7 +318,7 @@
             this.ipt01.MinValue = 0;
             this.ipt01.Name = "ipt01";
             this.ipt01.ShowUpDown = true;
-            this.ipt01.Size = new System.Drawing.Size(60, 29);
+            this.ipt01.Size = new System.Drawing.Size(60, 25);
             this.ipt01.TabIndex = 7;
             this.ipt01.Value = 50;
             this.ipt01.ValueChanged += new System.EventHandler(this.ipt01_ValueChanged);
@@ -417,7 +333,7 @@
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.Location = new System.Drawing.Point(278, 9);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(75, 26);
+            this.labelX1.Size = new System.Drawing.Size(60, 21);
             this.labelX1.TabIndex = 6;
             this.labelX1.Text = "平時比例";
             // 
@@ -431,7 +347,7 @@
             this.lbl1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lbl1.Location = new System.Drawing.Point(118, 9);
             this.lbl1.Name = "lbl1";
-            this.lbl1.Size = new System.Drawing.Size(75, 26);
+            this.lbl1.Size = new System.Drawing.Size(60, 21);
             this.lbl1.TabIndex = 5;
             this.lbl1.Text = "定期比例";
             // 
@@ -481,7 +397,7 @@
             this.navigationPanePanel1.Location = new System.Drawing.Point(1, 25);
             this.navigationPanePanel1.Name = "navigationPanePanel1";
             this.navigationPanePanel1.ParentItem = this.buttonItem4;
-            this.navigationPanePanel1.Size = new System.Drawing.Size(154, 353);
+            this.navigationPanePanel1.Size = new System.Drawing.Size(154, 356);
             this.navigationPanePanel1.Style.Alignment = System.Drawing.StringAlignment.Center;
             this.navigationPanePanel1.Style.BackColor1.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
             this.navigationPanePanel1.Style.BackColor2.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
@@ -499,7 +415,7 @@
             this.panel2.Controls.Add(this.btnAddNew);
             this.panel2.Controls.Add(this.btnDelete);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 322);
+            this.panel2.Location = new System.Drawing.Point(0, 325);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(154, 31);
             this.panel2.TabIndex = 14;
@@ -516,7 +432,6 @@
             this.buttonItem4});
             this.npLeft.Location = new System.Drawing.Point(0, 0);
             this.npLeft.Name = "npLeft";
-            this.npLeft.NavigationBarHeight = 35;
             this.npLeft.Padding = new System.Windows.Forms.Padding(1);
             this.npLeft.Size = new System.Drawing.Size(156, 414);
             this.npLeft.Style = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
@@ -563,6 +478,96 @@
             this.dataGridViewTextBoxColumn3.DataPropertyName = "EndTime";
             this.dataGridViewTextBoxColumn3.HeaderText = "結束時間";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            // 
+            // ExamID
+            // 
+            this.ExamID.DataPropertyName = "ExamID";
+            this.ExamID.DisplayStyleForCurrentCellOnly = true;
+            this.ExamID.HeaderText = "評量名稱";
+            this.ExamID.Name = "ExamID";
+            this.ExamID.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ExamID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Weight
+            // 
+            this.Weight.DataPropertyName = "Weight";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Weight.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Weight.HeaderText = "比重";
+            this.Weight.Name = "Weight";
+            this.Weight.Width = 50;
+            // 
+            // UseScore
+            // 
+            this.UseScore.DataPropertyName = "UseScore";
+            this.UseScore.FalseValue = "false";
+            this.UseScore.HeaderText = "定期分數";
+            this.UseScore.IndeterminateValue = "false";
+            this.UseScore.Name = "UseScore";
+            this.UseScore.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.UseScore.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.UseScore.TrueValue = "true";
+            this.UseScore.Width = 75;
+            // 
+            // UseAssignmentScore
+            // 
+            this.UseAssignmentScore.DataPropertyName = "UseAssignmentScore";
+            this.UseAssignmentScore.FalseValue = "false";
+            this.UseAssignmentScore.HeaderText = "平時分數";
+            this.UseAssignmentScore.IndeterminateValue = "false";
+            this.UseAssignmentScore.Name = "UseAssignmentScore";
+            this.UseAssignmentScore.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.UseAssignmentScore.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.UseAssignmentScore.TrueValue = "true";
+            this.UseAssignmentScore.Width = 75;
+            // 
+            // UseText
+            // 
+            this.UseText.DataPropertyName = "UseText";
+            this.UseText.FalseValue = "false";
+            this.UseText.HeaderText = "文字描述";
+            this.UseText.IndeterminateValue = "false";
+            this.UseText.Name = "UseText";
+            this.UseText.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.UseText.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.UseText.TrueValue = "true";
+            this.UseText.Width = 75;
+            // 
+            // OpenTeacherAccess
+            // 
+            this.OpenTeacherAccess.DataPropertyName = "OpenTeacherAccess";
+            this.OpenTeacherAccess.FalseValue = "否";
+            this.OpenTeacherAccess.HeaderText = "開放繳交";
+            this.OpenTeacherAccess.Name = "OpenTeacherAccess";
+            this.OpenTeacherAccess.TrueValue = "是";
+            this.OpenTeacherAccess.Visible = false;
+            this.OpenTeacherAccess.Width = 75;
+            // 
+            // StartTime
+            // 
+            this.StartTime.DataPropertyName = "StartTime";
+            this.StartTime.HeaderText = "開始時間";
+            this.StartTime.Name = "StartTime";
+            this.StartTime.Width = 90;
+            // 
+            // EndTime
+            // 
+            this.EndTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.EndTime.DataPropertyName = "EndTime";
+            this.EndTime.HeaderText = "結束時間";
+            this.EndTime.Name = "EndTime";
+            // 
+            // InputRequired
+            // 
+            this.InputRequired.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.InputRequired.DataPropertyName = "InputRequired";
+            this.InputRequired.FalseValue = "是";
+            this.InputRequired.HeaderText = "不強制繳交成績";
+            this.InputRequired.Name = "InputRequired";
+            this.InputRequired.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.InputRequired.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.InputRequired.TrueValue = "否";
+            this.InputRequired.Visible = false;
             // 
             // AssessmentSetupManager
             // 
@@ -613,6 +618,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private DevComponents.DotNetBar.LabelX lblIsDirty;
+        private DevComponents.Editors.IntegerInput ipt01;
+        private DevComponents.DotNetBar.LabelX labelX1;
+        private DevComponents.DotNetBar.LabelX lbl1;
+        private DevComponents.DotNetBar.LabelX labelX2;
+        private DevComponents.DotNetBar.LabelX lblpt02;
         private System.Windows.Forms.DataGridViewComboBoxColumn ExamID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Weight;
         private System.Windows.Forms.DataGridViewCheckBoxColumn UseScore;
@@ -622,11 +632,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn StartTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn EndTime;
         private System.Windows.Forms.DataGridViewCheckBoxColumn InputRequired;
-        private DevComponents.Editors.IntegerInput ipt01;
-        private DevComponents.DotNetBar.LabelX labelX1;
-        private DevComponents.DotNetBar.LabelX lbl1;
-        private DevComponents.DotNetBar.LabelX labelX2;
-        private DevComponents.DotNetBar.LabelX lblpt02;
-
     }
 }

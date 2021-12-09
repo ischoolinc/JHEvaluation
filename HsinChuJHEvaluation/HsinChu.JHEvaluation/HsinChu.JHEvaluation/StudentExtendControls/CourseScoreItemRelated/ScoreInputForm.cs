@@ -9,6 +9,7 @@ using Framework;
 using JHSchool.Data;
 using HsinChu.JHEvaluation.Data;
 using System.Linq;
+using System.Xml;
 
 namespace HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItemRelated
 {
@@ -34,6 +35,55 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItemRelated
             List<JHSCAttendRecord> scattendList = JHSCAttend.SelectByStudentIDAndCourseID(new string[] { student.ID }, new string[] { course.ID });
             if (scattendList.Count > 0)
                 _scattend = scattendList[0];
+
+
+            #region 取得評量成績缺考暨免試設定
+
+            PluginMain.ScoreTextMap.Clear();
+            PluginMain.ScoreValueMap.Clear();
+            Framework.ConfigData cd = JHSchool.School.Configuration["評量成績缺考暨免試設定"];
+            if (!string.IsNullOrEmpty(cd["評量成績缺考暨免試設定"]))
+            {
+                XmlElement element = Framework.XmlHelper.LoadXml(cd["評量成績缺考暨免試設定"]);
+
+                foreach (XmlElement each in element.SelectNodes("Setting"))
+                {
+                    var UseText = each.SelectSingleNode("UseText").InnerText;
+                    var AllowCalculation = bool.Parse(each.SelectSingleNode("AllowCalculation").InnerText);
+                    decimal Score;
+                    decimal.TryParse(each.SelectSingleNode("Score").InnerText, out Score);
+                    var Active = bool.Parse(each.SelectSingleNode("Active").InnerText);
+                    var UseValue = decimal.Parse(each.SelectSingleNode("UseValue").InnerText);
+
+                    if (Active)
+                    {
+                        if (!PluginMain.ScoreTextMap.ContainsKey(UseText))
+                        {
+                            PluginMain.ScoreTextMap.Add(UseText, new ScoreMap
+                            {
+                                UseText = UseText,
+                                AllowCalculation = AllowCalculation,
+                                Score = Score,
+                                Active = Active,
+                                UseValue = UseValue,
+                            });
+                        }
+                        if (!PluginMain.ScoreValueMap.ContainsKey(UseValue))
+                        {
+                            PluginMain.ScoreValueMap.Add(UseValue, new ScoreMap
+                            {
+                                UseText = UseText,
+                                AllowCalculation = AllowCalculation,
+                                Score = Score,
+                                Active = Active,
+                                UseValue = UseValue,
+                            });
+                        }
+                    }
+                }
+            }
+
+            #endregion
 
             #region 取得評量成績
             _listener.SuspendListen();
@@ -103,8 +153,37 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItemRelated
                 if (rows.ContainsKey(sce.RefExamID))
                 {
                     DataGridViewRow row = rows[sce.RefExamID];
-                    row.Cells[chScore.Index].Value = sce.Score.HasValue ? "" + sce.Score.Value : "";
-                    row.Cells[chAssignmentScore.Index].Value = sce.AssignmentScore.HasValue ? "" + sce.AssignmentScore.Value : "";
+
+                    if (sce.Score.HasValue)
+                    {
+                        if (PluginMain.ScoreValueMap.ContainsKey(decimal.Parse(sce.Score.Value + "")))
+                        {
+                            row.Cells[chScore.Index].Value = PluginMain.ScoreValueMap[decimal.Parse(sce.Score.Value + "")].UseText;
+                        }
+                        else
+                        {
+                            row.Cells[chScore.Index].Value = sce.Score.Value;
+                        }
+                    }
+                    else
+                    {
+                        row.Cells[chScore.Index].Value = "";
+                    }
+                    if (sce.AssignmentScore.HasValue)
+                    {
+                        if (PluginMain.ScoreValueMap.ContainsKey(decimal.Parse(sce.AssignmentScore.Value + "")))
+                        {
+                            row.Cells[chAssignmentScore.Index].Value = PluginMain.ScoreValueMap[decimal.Parse(sce.AssignmentScore.Value + "")].UseText;
+                        }
+                        else
+                        {
+                            row.Cells[chAssignmentScore.Index].Value = sce.AssignmentScore.Value;
+                        }
+                    }
+                    else
+                    {
+                        row.Cells[chAssignmentScore.Index].Value = "";
+                    }
                     row.Cells[chText.Index].Value = sce.Text;
                     row.Tag = sce;
                 }
@@ -146,7 +225,17 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItemRelated
                         {
                             decimal d;
                             if (!decimal.TryParse("" + cell.Value, out d))
-                                cell.ErrorText = "分數必須為數字";
+                            {
+                                if (PluginMain.ScoreTextMap.Keys.Count > 0)
+                                {
+                                    if (!PluginMain.ScoreTextMap.ContainsKey("" + cell.Value))
+                                        cell.ErrorText = "分數必須為數字或「" + string.Join("、", PluginMain.ScoreTextMap.Keys) + "」";
+                                }
+                                else
+                                {
+                                    cell.ErrorText = "分數必須為數字";
+                                }
+                            }
                             else
                             {
                                 if (d < 60)
@@ -328,12 +417,32 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItemRelated
                         HC.JHSCETakeRecord sce = row.Tag as HC.JHSCETakeRecord;
 
                         if (!string.IsNullOrEmpty("" + row.Cells[chScore.Index].Value))
-                            sce.Score = decimal.Parse("" + row.Cells[chScore.Index].Value);
+                        {
+                            decimal d;
+                            if (!decimal.TryParse("" + row.Cells[chScore.Index].Value, out d))
+                            {
+                                sce.Score = PluginMain.ScoreTextMap["" + row.Cells[chScore.Index].Value].UseValue;
+                            }
+                            else
+                            {
+                                sce.Score = d;
+                            }
+                        }
                         else
                             sce.Score = null;
 
                         if (!string.IsNullOrEmpty("" + row.Cells[chAssignmentScore.Index].Value))
-                            sce.AssignmentScore = decimal.Parse("" + row.Cells[chAssignmentScore.Index].Value);
+                        {
+                            decimal d;
+                            if (!decimal.TryParse("" + row.Cells[chAssignmentScore.Index].Value, out d))
+                            {
+                                sce.AssignmentScore = PluginMain.ScoreTextMap["" + row.Cells[chAssignmentScore.Index].Value].UseValue;
+                            }
+                            else
+                            {
+                                sce.AssignmentScore = d;
+                            }
+                        }
                         else
                             sce.AssignmentScore = null;
 
@@ -363,13 +472,34 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItemRelated
                             sce.RefExamID = "" + row.Cells[chExamName.Index].Tag;
                             sce.RefSCAttendID = _scattend != null ? _scattend.ID : "";
                             sce.RefStudentID = _student.ID;
+
                             if (!string.IsNullOrEmpty("" + row.Cells[chScore.Index].Value))
-                                sce.Score = decimal.Parse("" + row.Cells[chScore.Index].Value);
+                            {
+                                decimal d;
+                                if (!decimal.TryParse("" + row.Cells[chScore.Index].Value, out d))
+                                {
+                                    sce.Score = PluginMain.ScoreTextMap["" + row.Cells[chScore.Index].Value].UseValue;
+                                }
+                                else
+                                {
+                                    sce.Score = d;
+                                }
+                            }
                             else
                                 sce.Score = null;
 
                             if (!string.IsNullOrEmpty("" + row.Cells[chAssignmentScore.Index].Value))
-                                sce.AssignmentScore = decimal.Parse("" + row.Cells[chAssignmentScore.Index].Value);
+                            {
+                                decimal d;
+                                if (!decimal.TryParse("" + row.Cells[chAssignmentScore.Index].Value, out d))
+                                {
+                                    sce.AssignmentScore = PluginMain.ScoreTextMap["" + row.Cells[chAssignmentScore.Index].Value].UseValue;
+                                }
+                                else
+                                {
+                                    sce.AssignmentScore = d;
+                                }
+                            }
                             else
                                 sce.AssignmentScore = null;
 
@@ -433,7 +563,17 @@ namespace HsinChu.JHEvaluation.StudentExtendControls.CourseScoreItemRelated
                 {
                     decimal d;
                     if (!decimal.TryParse("" + cell.Value, out d))
-                        cell.ErrorText = "分數必須為數字";
+                    {
+                        if (PluginMain.ScoreTextMap.Keys.Count>0)
+                        {
+                            if (!PluginMain.ScoreTextMap.ContainsKey("" + cell.Value))
+                                cell.ErrorText = "分數必須為數字或「" + string.Join("、", PluginMain.ScoreTextMap.Keys) + "」";
+                        } 
+                        else
+                        {
+                            cell.ErrorText = "分數必須為數字";
+                        }
+                    }
                     else
                     {
                         if (d < 60)

@@ -7,11 +7,14 @@ using System.Threading;
 using Framework;
 using JHSchool.Data;
 using HsinChu.JHEvaluation.Data;
+using System.Xml;
 
 namespace HsinChu.JHEvaluation.ImportExport
 {
+
     class ImportExamScore : SmartSchool.API.PlugIn.Import.Importer
     {
+
         public ImportExamScore()
         {
             this.Image = null;
@@ -34,6 +37,10 @@ namespace HsinChu.JHEvaluation.ImportExport
             Dictionary<string, List<HC.JHSCETakeRecord>> existSces = new Dictionary<string, List<HC.JHSCETakeRecord>>();
             //所有試別
             Dictionary<string, JHExamRecord> exams = new Dictionary<string, JHSchool.Data.JHExamRecord>();
+            //評量成績缺考暨免試設定
+
+            PluginMain.ScoreTextMap.Clear();
+            PluginMain.ScoreValueMap.Clear();
 
             wizard.PackageLimit = 3000;
             wizard.ImportableFields.AddRange("學年度", "學期", "課程名稱", "評量名稱", "定期分數", "平時分數", "文字描述");
@@ -125,6 +132,52 @@ namespace HsinChu.JHEvaluation.ImportExport
                         exams.Add(exam.ID, exam);
                 }
                 #endregion
+
+                #region 取得評量成績缺考暨免試設定
+                Framework.ConfigData cd = JHSchool.School.Configuration["評量成績缺考暨免試設定"];
+                if (!string.IsNullOrEmpty(cd["評量成績缺考暨免試設定"]))
+                {
+                    XmlElement element = Framework.XmlHelper.LoadXml(cd["評量成績缺考暨免試設定"]);
+
+                    foreach (XmlElement each in element.SelectNodes("Setting"))
+                    {
+                        var UseText = each.SelectSingleNode("UseText").InnerText;
+                        var AllowCalculation = bool.Parse(each.SelectSingleNode("AllowCalculation").InnerText);
+                        decimal Score;
+                        decimal.TryParse(each.SelectSingleNode("Score").InnerText, out Score);
+                        var Active = bool.Parse(each.SelectSingleNode("Active").InnerText);
+                        var UseValue = decimal.Parse(each.SelectSingleNode("UseValue").InnerText);
+
+                        if (Active)
+                        {
+                            if (!PluginMain.ScoreTextMap.ContainsKey(UseText))
+                            {
+                                PluginMain.ScoreTextMap.Add(UseText, new ScoreMap
+                                {
+                                    UseText = UseText,
+                                    AllowCalculation = AllowCalculation,
+                                    Score = Score,
+                                    Active = Active,
+                                    UseValue = UseValue,
+                                });
+                            }
+                            if (!PluginMain.ScoreValueMap.ContainsKey(UseValue))
+                            {
+                                PluginMain.ScoreValueMap.Add(UseValue, new ScoreMap
+                                {
+                                    UseText = UseText,
+                                    AllowCalculation = AllowCalculation,
+                                    Score = Score,
+                                    Active = Active,
+                                    UseValue = UseValue,
+                                });
+                            }
+                        }
+                    }
+                }
+
+                #endregion
+
             };
 
             wizard.ValidateRow += delegate(object sender, SmartSchool.API.PlugIn.Import.ValidateRowEventArgs e)
@@ -180,8 +233,19 @@ namespace HsinChu.JHEvaluation.ImportExport
                         case "平時分數":
                             if (value != "" && !decimal.TryParse(value, out d))
                             {
-                                inputFormatPass &= false;
-                                e.ErrorFields.Add(field, "必須填入空白或數值");
+                                if (PluginMain.ScoreTextMap.Keys.Count>0)
+                                {
+                                    if (!PluginMain.ScoreTextMap.ContainsKey(value))
+                                    {
+                                        inputFormatPass &= false;
+                                        e.ErrorFields.Add(field, "僅允許空白、數值或「" + string.Join("、", PluginMain.ScoreTextMap.Keys) + "」");
+                                    }
+                                }
+                                else
+                                {
+                                    inputFormatPass &= false;
+                                    e.ErrorFields.Add(field, "僅允許空白或數值");
+                                }
                             }
                             break;
                         //case "努力程度":
@@ -384,9 +448,20 @@ namespace HsinChu.JHEvaluation.ImportExport
                                             {
                                                 decimal d;
                                                 if (decimal.TryParse(value, out d))
+                                                {
                                                     currentSCE.Score = d;
+                                                }
                                                 else
-                                                    currentSCE.Score = null;
+                                                {
+                                                    if (PluginMain.ScoreTextMap.ContainsKey(value))
+                                                    {
+                                                        currentSCE.Score = PluginMain.ScoreTextMap[value].UseValue;
+                                                    }
+                                                    else
+                                                    {
+                                                        currentSCE.Score = null;
+                                                    }
+                                                }
                                                 changed = true;
                                             }
                                             break;
@@ -395,9 +470,20 @@ namespace HsinChu.JHEvaluation.ImportExport
                                             {
                                                 decimal d;
                                                 if (decimal.TryParse(value, out d))
+                                                {
                                                     currentSCE.AssignmentScore = d;
+                                                }
                                                 else
-                                                    currentSCE.AssignmentScore = null;
+                                                {
+                                                    if (PluginMain.ScoreTextMap.ContainsKey(value))
+                                                    {
+                                                        currentSCE.AssignmentScore = PluginMain.ScoreTextMap[value].UseValue;
+                                                    }
+                                                    else
+                                                    {
+                                                        currentSCE.AssignmentScore = null;
+                                                    }
+                                                }
                                                 changed = true;
                                             }
                                             break;
@@ -450,9 +536,20 @@ namespace HsinChu.JHEvaluation.ImportExport
                                             {
                                                 decimal d;
                                                 if (decimal.TryParse(value, out d))
+                                                {
                                                     newSCE.Score = d;
+                                                }
                                                 else
-                                                    newSCE.Score = null;
+                                                {
+                                                    if (PluginMain.ScoreTextMap.ContainsKey(value))
+                                                    {
+                                                        newSCE.Score = PluginMain.ScoreTextMap[value].UseValue;
+                                                    }
+                                                    else
+                                                    {
+                                                        newSCE.Score = null;
+                                                    }
+                                                }
                                             }
                                             else
                                                 newSCE.Score = null;
@@ -462,9 +559,20 @@ namespace HsinChu.JHEvaluation.ImportExport
                                             {
                                                 decimal d;
                                                 if (decimal.TryParse(value, out d))
+                                                {
                                                     newSCE.AssignmentScore = d;
+                                                }
                                                 else
-                                                    newSCE.AssignmentScore = null;
+                                                {
+                                                    if (PluginMain.ScoreTextMap.ContainsKey(value))
+                                                    {
+                                                        newSCE.AssignmentScore = PluginMain.ScoreTextMap[value].UseValue;
+                                                    }
+                                                    else
+                                                    {
+                                                        newSCE.AssignmentScore = null;
+                                                    }
+                                                }
                                             }
                                             else
                                                 newSCE.AssignmentScore = null;

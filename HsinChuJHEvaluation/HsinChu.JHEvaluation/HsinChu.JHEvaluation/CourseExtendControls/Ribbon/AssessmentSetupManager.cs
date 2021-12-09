@@ -101,6 +101,52 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
         {
             LoadAssessmentSetups();
             SelectAssessmentSetup(null);//不選擇任何 Tempalte
+
+
+            dataview.DataError += new DataGridViewDataErrorEventHandler(dataview_DataError);
+            dataview.CurrentCellDirtyStateChanged += new EventHandler(dataview_CurrentCellDirtyStateChanged);
+            dataview.CellEnter += new DataGridViewCellEventHandler(dataview_CellEnter);
+            dataview.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(dataview_ColumnHeaderMouseClick);
+            dataview.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(dataview_RowHeaderMouseClick);
+            dataview.MouseClick += new System.Windows.Forms.MouseEventHandler(dataview_MouseClick);
+        }
+
+        private void dataview_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            dataview.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+
+        private void dataview_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataview.SelectedCells.Count == 1)
+            {
+                dataview.BeginEdit(true);
+                //if (dataview.CurrentCell != null && dataview.CurrentCell.GetType().ToString() == "System.Windows.Forms.DataGridViewComboBoxCell")
+                    //(dataview.EditingControl as ComboBox).DroppedDown = true;  //自動拉下清單
+            }
+        }
+
+        private void dataview_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            dataview.CurrentCell = null;
+            dataview.Rows[e.RowIndex].Selected = true;
+        }
+
+        private void dataview_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            dataview.CurrentCell = null;
+        }
+
+        private void dataview_MouseClick(object sender, MouseEventArgs e)
+        {
+            DataGridView dgv = (DataGridView)sender;
+            DataGridView.HitTestInfo hit = dgv.HitTest(e.X, e.Y);
+
+            if (hit.Type == DataGridViewHitTestType.TopLeftHeader)
+            {
+                dataview.CurrentCell = null;
+                //dgvScoreConfig.SelectAll();
+            }
         }
 
         /// <summary>
@@ -550,6 +596,9 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
             if (startTime.ErrorText != string.Empty || endTime.ErrorText != string.Empty)
                 return;
 
+            row.ErrorText = string.Empty; 
+            row.Cells["ExamID"].ErrorText = string.Empty;
+
             if (startTime.Value != null && endTime.Value != null)
             {
                 DateTime? objStart = DateTimeHelper.ParseGregorian(startTime.Value + string.Empty, PaddingMethod.First);
@@ -557,15 +606,11 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
 
                 if ((objStart.HasValue && objEnd.HasValue) && objStart.Value > objEnd.Value)
                     row.ErrorText = "「開始時間」必須在「結束時間」之前。";
-                else
-                    row.ErrorText = string.Empty;
             }
 
             string exam = row.Cells["ExamID"].Value + string.Empty;
             if (exam == string.Empty)
                 row.Cells["ExamID"].ErrorText = "必須選擇一個評量。";
-            else
-                row.Cells["ExamID"].ErrorText = string.Empty;
         }
 
         private void dataview_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
@@ -659,7 +704,6 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
         private void ValidateGrid()
         {
             List<string> examDuplicate = new List<string>();
-            float weight = 0;
             foreach (DataGridViewRow each in dataview.Rows)
             {
                 if (each.IsNewRow) continue;
@@ -676,10 +720,30 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     }
                 }
 
-                string weightValue = each.Cells["Weight"].Value + string.Empty;
-                bool weightNoError = each.Cells["Weight"].ErrorText == string.Empty;
-                if (weightValue != string.Empty && weightNoError)
-                    weight += float.Parse(weightValue);
+                each.Cells["Weight"].ErrorText = string.Empty;
+                each.Cells["UseScore"].ErrorText = string.Empty;
+                each.Cells["UseAssignmentScore"].ErrorText = string.Empty;
+                each.Cells["UseText"].ErrorText = string.Empty;
+
+                try
+                {
+                    if (!bool.Parse(each.Cells["UseScore"].Value + "") && !bool.Parse(each.Cells["UseAssignmentScore"].Value + "") && !bool.Parse(each.Cells["UseText"].Value + ""))
+                    {
+                        each.Cells["UseScore"].ErrorText = "「定期分數」、「平時分數」、「文字描述」至少需勾選一項。";
+                        each.Cells["UseAssignmentScore"].ErrorText = "「定期分數」、「平時分數」、「文字描述」至少需勾選一項。";
+                        each.Cells["UseText"].ErrorText = "「定期分數」、「平時分數」、「文字描述」至少需勾選一項。";
+                    }
+                    if (!bool.Parse(each.Cells["UseScore"].Value + "") && !bool.Parse(each.Cells["UseAssignmentScore"].Value + ""))
+                    {
+                        decimal weight = 0;
+                        decimal.TryParse(each.Cells["Weight"].Value + "", out weight);
+                        if (weight != 0)
+                        {
+                            each.Cells["Weight"].ErrorText = "「定期分數」、「平時分數」皆未勾選時，比重必須為 0。";
+                        }
+                    }
+                }
+                catch (Exception ex) {; }
             }
 
             //string errorMsg = "評量比重加總必須等於 100。";

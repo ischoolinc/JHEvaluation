@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FISCA.Permission;
 using FISCA.Presentation;
 
 namespace HsinChu.JHEvaluation
@@ -28,6 +29,18 @@ namespace HsinChu.JHEvaluation
             {
                 new HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon.CourseScoreStatusForm().ShowDialog();
             };
+            #endregion
+
+            #region 教務作業/基本設定/設定/評量成績缺考/免試
+            var Permission = RoleAclSource.Instance["教務作業"]["功能按鈕"];
+            Permission.Add(new RibbonFeature("EduAdmin_Button_ScoreMap", "設定評量成績缺考/免試"));
+            RibbonBarButton rbItem2 = JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["基本設定"]["設定"];
+            rbItem2["評量成績缺考/免試"].Enable = UserAcl.Current["EduAdmin_Button_ScoreMap"].Executable;
+            rbItem2["評量成績缺考/免試"].Click += delegate
+            {
+                new ConfigControls.Ribbon.ScoreValueManager().ShowDialog();
+            };
+
             #endregion
 
             #endregion

@@ -88,6 +88,55 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
             _studentRowDict = new Dictionary<string, DataGridViewRow>();
             _dirtyCellList = new List<DataGridViewCell>();
 
+            #region 取得評量成績缺考暨免試設定
+
+            PluginMain.ScoreTextMap.Clear();
+            PluginMain.ScoreValueMap.Clear();
+
+            Framework.ConfigData cd = JHSchool.School.Configuration["評量成績缺考暨免試設定"];
+            if (!string.IsNullOrEmpty(cd["評量成績缺考暨免試設定"]))
+            {
+                XmlElement element = Framework.XmlHelper.LoadXml(cd["評量成績缺考暨免試設定"]);
+
+                foreach (XmlElement each in element.SelectNodes("Setting"))
+                {          
+                    var UseText = each.SelectSingleNode("UseText").InnerText;
+                    var AllowCalculation = bool.Parse(each.SelectSingleNode("AllowCalculation").InnerText);
+                    decimal Score;
+                    decimal.TryParse(each.SelectSingleNode("Score").InnerText, out Score);
+                    var Active = bool.Parse(each.SelectSingleNode("Active").InnerText);
+                    var UseValue = decimal.Parse(each.SelectSingleNode("UseValue").InnerText);
+
+                    if (Active)
+                    {
+                        if (!PluginMain.ScoreTextMap.ContainsKey(UseText))
+                        {
+                            PluginMain.ScoreTextMap.Add(UseText, new ScoreMap
+                            {
+                                UseText = UseText,
+                                AllowCalculation = AllowCalculation,
+                                Score = Score,
+                                Active = Active,
+                                UseValue = UseValue,
+                            });
+                        }
+                        if (!PluginMain.ScoreValueMap.ContainsKey(UseValue))
+                        {
+                            PluginMain.ScoreValueMap.Add(UseValue, new ScoreMap
+                            {
+                                UseText = UseText,
+                                AllowCalculation = AllowCalculation,
+                                Score = Score,
+                                Active = Active,
+                                UseValue = UseValue,
+                            });
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
             #region 取得修課學生
 
             //_scAttendRecordList = _course.GetAttends();
@@ -132,7 +181,17 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                         {
                             decimal d;
                             if (!decimal.TryParse("" + cell.Value, out d))
-                                cell.ErrorText = "分數必須為數字";
+                            {
+                                if (PluginMain.ScoreTextMap.Keys.Count > 0)
+                                {
+                                    if (!PluginMain.ScoreTextMap.ContainsKey("" + cell.Value))
+                                        cell.ErrorText = "分數必須為數字或「" + string.Join("、", PluginMain.ScoreTextMap.Keys) + "」";
+                                }
+                                else
+                                {
+                                    cell.ErrorText = "分數必須為數字";
+                                }
+                            }
                             else
                             {
                                 if (d < 60)
@@ -422,11 +481,26 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                 {
                     DataGridViewRow row = _studentRowDict[record.RefStudentID];
                     row.Cells[chInputScore.Index].Value = record.Score;
-                    row.Cells[chInputAssignmentScore.Index].Value = record.AssignmentScore;
-                    row.Cells[chInputText.Index].Value = record.Text;
-
                     row.Cells[chInputScore.Index].Tag = record.Score;
+                    if (record.Score.HasValue && record.Score.Value<0)
+                    {
+                        if (PluginMain.ScoreValueMap.ContainsKey(record.Score.Value))
+                        {
+                            row.Cells[chInputScore.Index].Value = PluginMain.ScoreValueMap[record.Score.Value].UseText;
+                            row.Cells[chInputScore.Index].Tag = PluginMain.ScoreValueMap[record.Score.Value].UseText;
+                        }
+                    }
+                    row.Cells[chInputAssignmentScore.Index].Value = record.AssignmentScore;
                     row.Cells[chInputAssignmentScore.Index].Tag = record.AssignmentScore;
+                    if (record.AssignmentScore.HasValue && record.AssignmentScore.Value < 0)
+                    {
+                        if (PluginMain.ScoreValueMap.ContainsKey(record.AssignmentScore.Value))
+                        {
+                            row.Cells[chInputAssignmentScore.Index].Value = PluginMain.ScoreValueMap[record.AssignmentScore.Value].UseText;
+                            row.Cells[chInputAssignmentScore.Index].Tag = PluginMain.ScoreValueMap[record.AssignmentScore.Value].UseText;
+                        }
+                    }
+                    row.Cells[chInputText.Index].Value = record.Text;
                     row.Cells[chInputText.Index].Tag = record.Text;
 
                     if (record.Score < 60) row.Cells[chInputScore.Index].Style.ForeColor = Color.Red;
@@ -505,10 +579,10 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     foreach (HsinChu.JHEvaluation.Data.HC.JHSCETakeRecord sc in lists.DeleteList)
                     {
                         if (sc.AssignmentScore.HasValue)
-                            if (sc.AssignmentScore < 0 || sc.AssignmentScore > 100)
+                            if ((sc.AssignmentScore < 0 && !PluginMain.ScoreValueMap.ContainsKey(sc.AssignmentScore.Value)) || sc.AssignmentScore > 100)
                                 checkLoadSave = true;
                         if (sc.Score.HasValue)
-                            if (sc.Score < 0 || sc.Score > 100)
+                            if ((sc.Score < 0 && !PluginMain.ScoreValueMap.ContainsKey(sc.Score.Value)) || sc.Score > 100)
                                 checkLoadSave = true;
 
                     }
@@ -517,10 +591,10 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     foreach (HsinChu.JHEvaluation.Data.HC.JHSCETakeRecord sc in lists.InsertList)
                     {
                         if (sc.AssignmentScore.HasValue)
-                            if (sc.AssignmentScore < 0 || sc.AssignmentScore > 100)
+                            if ((sc.AssignmentScore < 0 && !PluginMain.ScoreValueMap.ContainsKey(sc.AssignmentScore.Value)) || sc.AssignmentScore > 100)
                                 checkLoadSave = true;
                         if (sc.Score.HasValue)
-                            if (sc.Score < 0 || sc.Score > 100)
+                            if ((sc.Score < 0 && !PluginMain.ScoreValueMap.ContainsKey(sc.Score.Value)) || sc.Score > 100)
                                 checkLoadSave = true;
 
                     }
@@ -529,11 +603,10 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     foreach (HsinChu.JHEvaluation.Data.HC.JHSCETakeRecord sc in lists.UpdateList)
                     {
                         if (sc.AssignmentScore.HasValue)
-                            if (sc.AssignmentScore < 0 || sc.AssignmentScore > 100)
+                            if ((sc.AssignmentScore < 0 && !PluginMain.ScoreValueMap.ContainsKey(sc.AssignmentScore.Value)) || sc.AssignmentScore > 100)
                                 checkLoadSave = true;
-
                         if (sc.Score.HasValue)
-                            if (sc.Score < 0 || sc.Score > 100)
+                            if ((sc.Score < 0 && !PluginMain.ScoreValueMap.ContainsKey(sc.Score.Value)) || sc.Score > 100)
                                 checkLoadSave = true;
                     }
 
@@ -544,7 +617,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     if (csf.DialogResult == DialogResult.Cancel)
                         return;
                 }
-
+                
                 if (lists.InsertList.Count > 0)
                     JHSchool.Data.JHSCETake.Insert(lists.InsertList.AsJHSCETakeRecords());
                 if (lists.UpdateList.Count > 0)
@@ -708,7 +781,11 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
 
                     if (chInputScore.Visible == true)
                     {
-                        string value = "" + row.Cells[chInputScore.Index].Value;
+                        string value = ("" + row.Cells[chInputScore.Index].Value).Trim();
+                        if (PluginMain.ScoreTextMap.ContainsKey(value))
+                        {
+                            value = PluginMain.ScoreTextMap[value].UseValue.ToString();
+                        }
                         is_remove &= string.IsNullOrEmpty(value);
                         if (!string.IsNullOrEmpty(value))
                             record.Score = decimal.Parse(value);
@@ -718,7 +795,11 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     }
                     if (chInputAssignmentScore.Visible == true)
                     {
-                        string value = "" + row.Cells[chInputAssignmentScore.Index].Value;
+                        string value = ("" + row.Cells[chInputAssignmentScore.Index].Value).Trim();
+                        if (PluginMain.ScoreTextMap.ContainsKey(value))
+                        {
+                            value = PluginMain.ScoreTextMap[value].UseValue.ToString();
+                        }
                         is_remove &= string.IsNullOrEmpty(value);
                         if (!string.IsNullOrEmpty(value))
                             record.AssignmentScore = decimal.Parse(value);
@@ -758,7 +839,11 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
 
                     if (chInputScore.Visible == true)
                     {
-                        string value = "" + row.Cells[chInputScore.Index].Value;
+                        string value = ("" + row.Cells[chInputScore.Index].Value).Trim();
+                        if (PluginMain.ScoreTextMap.ContainsKey(value))
+                        {
+                            value = PluginMain.ScoreTextMap[value].UseValue.ToString();
+                        }
                         if (!string.IsNullOrEmpty(value))
                         {
                             record.Score = decimal.Parse(value);
@@ -767,7 +852,11 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     }
                     if (chInputAssignmentScore.Visible == true)
                     {
-                        string value = "" + row.Cells[chInputAssignmentScore.Index].Value;
+                        string value = ("" + row.Cells[chInputAssignmentScore.Index].Value).Trim();
+                        if (PluginMain.ScoreTextMap.ContainsKey(value))
+                        {
+                            value = PluginMain.ScoreTextMap[value].UseValue.ToString();
+                        }
                         if (!string.IsNullOrEmpty(value))
                         {
                             record.AssignmentScore = decimal.Parse(value);
@@ -849,7 +938,17 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                 {
                     decimal d;
                     if (!decimal.TryParse("" + cell.Value, out d))
-                        cell.ErrorText = "分數必須是數字";
+                    {
+                        if (PluginMain.ScoreTextMap.Keys.Count > 0)
+                        {
+                            if (!PluginMain.ScoreTextMap.ContainsKey("" + cell.Value))
+                                cell.ErrorText = "分數必須為數字或「" + string.Join("、", PluginMain.ScoreTextMap.Keys) + "」";
+                        }
+                        else
+                        {
+                            cell.ErrorText = "分數必須為數字";
+                        }
+                    }
                     else
                     {
                         cell.ErrorText = "";
