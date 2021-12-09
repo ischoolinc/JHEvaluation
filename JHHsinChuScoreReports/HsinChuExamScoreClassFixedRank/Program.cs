@@ -13,6 +13,9 @@ namespace HsinChuExamScoreClassFixedRank
     public class Program
     {
 
+        public static Dictionary<string, DAO.ScoreMap> ScoreTextMap = new Dictionary<string, DAO.ScoreMap>();
+        public static Dictionary<decimal, DAO.ScoreMap> ScoreValueMap = new Dictionary<decimal, DAO.ScoreMap>();
+
         [FISCA.MainMethod]
         public static void Main()
         {

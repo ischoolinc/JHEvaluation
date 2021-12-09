@@ -25,6 +25,10 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         public decimal? ScoreA { get; set; }
         // 平時比例
         public decimal ScoreAP { get; set; }
+        //  使用定期評量
+        public bool UseScore { get; set; }
+        //  使用平時評量
+        public bool UseAssignmentScore { get; set; }
 
         /// <summary>
         ///  計算科目評量總成績
@@ -32,19 +36,47 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         public void CalcScore()
         {
             // 定期與評量都有
-            if (ScoreA.HasValue && ScoreF.HasValue)
+            //if (ScoreA.HasValue && ScoreF.HasValue)
+            //{
+            //    Score = ScoreA.Value * ScoreAP + ScoreF.Value * ScoreFP;
+            //}
+            //else if (ScoreA.HasValue && ScoreF.HasValue == false)
+            //{
+            //    // 只有平時
+            //    Score = ScoreA.Value;
+            //}
+            //else if (ScoreA.HasValue == false && ScoreF.HasValue)
+            //{
+            //    // 只有定期
+            //    Score = ScoreF.Value;
+            //}
+            if (ScoreFP > 0 && ScoreF.HasValue)
             {
-                Score = ScoreA.Value * ScoreAP + ScoreF.Value * ScoreFP;
+                if (Program.ScoreValueMap.ContainsKey(ScoreF.Value))
+                {
+                    if (Program.ScoreValueMap[ScoreF.Value].AllowCalculation)
+                    {
+                        Score = (Score==null?0:Score) + Program.ScoreValueMap[ScoreF.Value].Score.Value * ScoreFP;
+                    }
+                }
+                else
+                {
+                    Score = (Score == null ? 0 : Score) + ScoreF.Value * ScoreFP;
+                }
             }
-            else if (ScoreA.HasValue && ScoreF.HasValue == false)
+            if (ScoreAP > 0 && ScoreA.HasValue)
             {
-                // 只有評量
-                Score = ScoreA.Value;
-            }
-            else if (ScoreA.HasValue == false && ScoreF.HasValue)
-            {
-                // 只有定期
-                Score = ScoreF.Value;
+                if (Program.ScoreValueMap.ContainsKey(ScoreA.Value))
+                {
+                    if (Program.ScoreValueMap[ScoreA.Value].AllowCalculation)
+                    {
+                        Score = (Score == null ? 0 : Score) + Program.ScoreValueMap[ScoreA.Value].Score.Value * ScoreAP;
+                    }
+                }
+                else
+                {
+                    Score = (Score == null ? 0 : Score) + ScoreA.Value * ScoreAP;
+                }
             }
         }
     }

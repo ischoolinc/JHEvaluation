@@ -22,19 +22,31 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         public void CalScore()
         {
             // 使用加權平均計算
-            decimal sumScore = 0,sumCredit = 0,sumScoreF = 0,sumCreditF = 0;
-            foreach(SubjectInfo si in SubjectInfoList)
+            decimal? sumScore=null, sumScoreF=null;
+            decimal sumCredit = 0, sumCreditF = 0;
+            foreach (SubjectInfo si in SubjectInfoList)
             {
                 if (si.Score.HasValue && si.Credit.HasValue)
                 {
-                    sumScore += si.Score.Value * si.Credit.Value;
+                    sumScore = (sumScore==null?0: sumScore) + si.Score.Value * si.Credit.Value;
                     sumCredit += si.Credit.Value;
                 }
 
                 if (si.ScoreF.HasValue && si.Credit.HasValue)
                 {
-                    sumScoreF += si.ScoreF.Value * si.Credit.Value;
-                    sumCreditF += si.Credit.Value;
+                    if (Program.ScoreValueMap.ContainsKey(si.ScoreF.Value))
+                    {
+                        if (Program.ScoreValueMap[si.ScoreF.Value].AllowCalculation)
+                        {                            
+                            sumScoreF =(sumScoreF==null?0:sumScoreF) + Program.ScoreValueMap[si.ScoreF.Value].Score.Value * si.Credit.Value;
+                            sumCreditF += si.Credit.Value;
+                        }
+                    }
+                    else
+                    {
+                        sumScoreF = (sumScoreF == null ? 0 : sumScoreF) + si.ScoreF.Value * si.Credit.Value;
+                        sumCreditF += si.Credit.Value;
+                    }
                 }
             }
 
@@ -44,13 +56,19 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                 Credit = null;
             }else
             {
-                Score = sumScore / sumCredit;
-                Credit = sumCredit;
+                if (sumScore != null)
+                {
+                    Score = sumScore / sumCredit;
+                    Credit = sumCredit;
+                }
             }
 
             if (sumCreditF > 0)
             {
-                ScoreF = sumScoreF / sumCreditF;
+                if (sumScoreF != null)
+                {
+                    ScoreF = sumScoreF / sumCreditF;
+                }
             }
         }
     }

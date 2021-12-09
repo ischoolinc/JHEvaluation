@@ -17,6 +17,7 @@ using Aspose.Words.Reporting;
 using Aspose.Words.Tables;
 using FISCA.Data;
 using HsinChuExamScoreClassFixedRank.DAO;
+using System.Xml;
 
 namespace HsinChuExamScoreClassFixedRank.Form
 {
@@ -1365,7 +1366,16 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             {
                                 // 定期
                                 if (di.ScoreF.HasValue)
-                                    row[d1_1] = Math.Round(di.ScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
+                                {
+                                    if (Program.ScoreValueMap.ContainsKey(di.ScoreF.Value))
+                                    {
+                                        row[d1_1] = Program.ScoreValueMap[di.ScoreF.Value].UseText;
+                                    } 
+                                    else
+                                    {
+                                        row[d1_1] = Math.Round(di.ScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
+                                    }
+                                }                                    
                             }
 
                             string d2 = di.Name + "領域學分" + studCot;
@@ -1421,7 +1431,17 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                             {
                                                 if (dtTable.Columns.Contains(s2_1Key))
                                                     if (subj.ScoreF.HasValue)
-                                                        row[s2_1Key] = subj.ScoreF.Value;
+                                                    {
+                                                        if (Program.ScoreValueMap.ContainsKey(subj.ScoreF.Value))
+                                                        {
+                                                            row[s2_1Key] = Program.ScoreValueMap[subj.ScoreF.Value].UseText;
+                                                        }
+                                                        else
+                                                        {
+                                                            row[s2_1Key] = subj.ScoreF.Value;
+                                                        }
+                                                    }
+                                                        
                                             }
 
                                             if (dtTable.Columns.Contains(s3Key))
@@ -1444,7 +1464,16 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                             {
                                                 if (dtTable.Columns.Contains(s4Key))
                                                     if (subj.ScoreA.HasValue)
-                                                        row[s4Key] = subj.ScoreA.Value;
+                                                    {
+                                                        if (Program.ScoreValueMap.ContainsKey(subj.ScoreA.Value))
+                                                        {
+                                                            row[s4Key] = Program.ScoreValueMap[subj.ScoreA.Value].UseText;
+                                                        }
+                                                        else
+                                                        {
+                                                            row[s4Key] = subj.ScoreA.Value;
+                                                        }
+                                                    }
                                             }
                                         }
                                     }
@@ -1482,7 +1511,16 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             {
                                 // 定期
                                 if (di.ScoreF.HasValue)
-                                    row[da3] = Math.Round(di.ScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
+                                {
+                                    if (Program.ScoreValueMap.ContainsKey(di.ScoreF.Value))
+                                    {
+                                        row[da3] = Program.ScoreValueMap[di.ScoreF.Value].UseText; 
+                                    }
+                                    else
+                                    {
+                                        row[da3] = Math.Round(di.ScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
+                                    }
+                                }                                    
                             }
 
                             if (dtTable.Columns.Contains(da4))
@@ -1525,7 +1563,16 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             {
                                 // 定期
                                 if (sia.ScoreF.HasValue)
-                                    row[sa3] = Math.Round(sia.ScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
+                                {
+                                    if (Program.ScoreValueMap.ContainsKey(sia.ScoreF.Value))
+                                    {
+                                        row[sa3] = Program.ScoreValueMap[sia.ScoreF.Value].UseText;
+                                    }
+                                    else
+                                    {
+                                        row[sa3] = Math.Round(sia.ScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
+                                    }
+                                }
                             }
 
                             if (dtTable.Columns.Contains(sa4))
@@ -1540,7 +1587,16 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             {
                                 // 平時成績
                                 if (sia.ScoreA.HasValue)
-                                    row[sa5] = Math.Round(sia.ScoreA.Value, parseNumber, MidpointRounding.AwayFromZero);
+                                {
+                                    if (Program.ScoreValueMap.ContainsKey(sia.ScoreA.Value))
+                                    {
+                                        row[sa5] = Program.ScoreValueMap[sia.ScoreA.Value].UseText;
+                                    }
+                                    else
+                                    {
+                                        row[sa5] = Math.Round(sia.ScoreA.Value, parseNumber, MidpointRounding.AwayFromZero);
+                                    }
+                                }
                             }
 
                         }
@@ -2428,6 +2484,52 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
         private void PrintForm_Load(object sender, EventArgs e)
         {
+            Program.ScoreTextMap.Clear();
+            Program.ScoreValueMap.Clear();
+            #region 取得評量成績缺考暨免試設定
+            Framework.ConfigData cd = JHSchool.School.Configuration["評量成績缺考暨免試設定"];
+            if (!string.IsNullOrEmpty(cd["評量成績缺考暨免試設定"]))
+            {
+                XmlElement element = Framework.XmlHelper.LoadXml(cd["評量成績缺考暨免試設定"]);
+
+                foreach (XmlElement each in element.SelectNodes("Setting"))
+                {
+                    var UseText = each.SelectSingleNode("UseText").InnerText;
+                    var AllowCalculation = bool.Parse(each.SelectSingleNode("AllowCalculation").InnerText);
+                    decimal Score;
+                    decimal.TryParse(each.SelectSingleNode("Score").InnerText, out Score);
+                    var Active = bool.Parse(each.SelectSingleNode("Active").InnerText);
+                    var UseValue = decimal.Parse(each.SelectSingleNode("UseValue").InnerText);
+
+                    if (Active)
+                    {
+                        if (!Program.ScoreTextMap.ContainsKey(UseText))
+                        {
+                            Program.ScoreTextMap.Add(UseText, new DAO.ScoreMap
+                            {
+                                UseText = UseText,  //「缺」或「免」
+                                AllowCalculation = AllowCalculation,  //是否計算成績
+                                Score = Score,  //計算成績時，應以多少分來計算
+                                Active = Active, //此設定是否啟用
+                                UseValue = UseValue, //代表「缺」或「免」的負數
+                            });
+                        }
+                        if (!Program.ScoreValueMap.ContainsKey(UseValue))
+                        {
+                            Program.ScoreValueMap.Add(UseValue, new DAO.ScoreMap
+                            {
+                                UseText = UseText,
+                                AllowCalculation = AllowCalculation,
+                                Score = Score,
+                                Active = Active,
+                                UseValue = UseValue,
+                            });
+                        }
+                    }
+                }
+            }
+
+            #endregion
             // 
             //List<string> ddList = DataAccess.GetDomainConfigSortName();
 

@@ -193,6 +193,8 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                     ",course.credit" +
                     ",sce_take.ref_exam_id AS exam_id" +
                     ",course.ref_exam_template_id AS template_id" +
+                    ",array_to_string(xpath('/Extension/UseScore/text()', xmlparse(content te_include.extension)), '') AS use_score" + 
+                    ",array_to_string(xpath('/Extension/UseAssignmentScore/text()', xmlparse(content te_include.extension)), '') AS use_assignment_score" +
                     ",array_to_string(xpath('/Extension/AssignmentScore/text()',xmlparse(content sce_take.extension)),'') AS assignment_score" +
                     ",array_to_string(xpath('/Extension/Score/text()',xmlparse(content sce_take.extension)),'') AS f_score" +
                     " FROM sc_attend INNER JOIN course" +
@@ -233,27 +235,27 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                         di.SubjectInfoList = new List<SubjectInfo>();
                         tmpDomainDict[student_id].Add(dName, di);
                     }
-
-                    // 定期比例預設
-                    decimal sfp = 50 * 0.01M, sfa = 50 * 0.01M;
-
-
-                    string template_id = "";
-
-                    if (dr["template_id"] != null && dr["template_id"].ToString() != "")
-                        template_id = dr["template_id"].ToString();
-
-                    // 處理評量比例
-                    if (ScorePercentageHS.ContainsKey(template_id))
-                    {
-                        sfp = ScorePercentageHS[template_id] * 0.01M;
-                        sfa = (100 - ScorePercentageHS[template_id]) * 0.01M;
-                    }
-
                     // 科目成績
                     SubjectInfo si = new SubjectInfo();
                     si.Name = SubjectName;//dr["subject"].ToString();
                     si.DomainName = dName;
+
+                    if ((dr["use_score"] + "") == "是")
+                    {
+                        si.UseScore = true;
+                    }
+                    else
+                    {
+                        si.UseScore = false;
+                    }
+                    if ((dr["use_assignment_score"] + "") == "是")
+                    {
+                        si.UseAssignmentScore = true;
+                    }
+                    else
+                    {
+                        si.UseAssignmentScore = false;
+                    }
 
                     if (dr["credit"] != null)
                     {
@@ -267,10 +269,6 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                     }
                     else
                         si.Credit = null;
-
-
-                    si.ScoreAP = sfa;
-                    si.ScoreFP = sfp;
 
                     if (dr["assignment_score"] != null && dr["assignment_score"].ToString() != "")
                     {
@@ -299,6 +297,54 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                     {
                         si.ScoreF = null;
                     }
+
+                    // 定期比例預設，sfp：定期，sfa：平時
+                    decimal sfp = 50 * 0.01M, sfa = 50 * 0.01M;
+                    string template_id = "";
+
+                    if (dr["template_id"] != null && dr["template_id"].ToString() != "")
+                        template_id = dr["template_id"].ToString();
+
+                    // 處理評量比例
+                    if (ScorePercentageHS.ContainsKey(template_id))
+                    {
+                        sfp = ScorePercentageHS[template_id] * 0.01M;
+                        sfa = (100 - ScorePercentageHS[template_id]) * 0.01M;
+                    }
+                    if (si.UseScore && !si.UseAssignmentScore)
+                    {
+                        sfp = 1;
+                        sfa = 0;
+                    }
+                    if (!si.UseScore && si.UseAssignmentScore)
+                    {
+                        sfp = 0;
+                        sfa = 1;
+                    }
+                    if (!si.UseScore && !si.UseAssignmentScore)
+                    {
+                        sfp = 0;
+                        sfa = 0;
+                    }
+                    if (si.ScoreF.HasValue && Program.ScoreValueMap.ContainsKey(si.ScoreF.Value))
+                    {
+                        if (!Program.ScoreValueMap[si.ScoreF.Value].AllowCalculation)
+                        {
+                            sfp = 0;
+                            sfa = 1;
+                        }
+                    }
+                    if (si.ScoreA.HasValue && Program.ScoreValueMap.ContainsKey(si.ScoreA.Value))
+                    {
+                        if (!Program.ScoreValueMap[si.ScoreA.Value].AllowCalculation)
+                        {
+                            sfp = 1;
+                            sfa = 0;
+                        }
+                    }
+
+                    si.ScoreAP = sfa;
+                    si.ScoreFP = sfp;
 
                     // 計算科目評量總成績
                     si.CalcScore();

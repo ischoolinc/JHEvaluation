@@ -431,7 +431,7 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         public void CalScore()
         {
             // 初始
-            SumScore = SumScoreA = AvgScore = AvgScoreA = SumScoreF = SumScoreAF = AvgScoreF = AvgScoreAF = 0;
+            //SumScore = SumScoreA = AvgScore = AvgScoreA = SumScoreF = SumScoreAF = AvgScoreF = AvgScoreAF = 0;
 
             decimal cot = 0, credit = 0, cotF = 0, creditF = 0;
 
@@ -462,8 +462,8 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                     // 總成績
                     if (domain.Score.HasValue && domain.Credit.HasValue)
                     {
-                        SumScore += domain.Score.Value;
-                        SumScoreA += domain.Score.Value * domain.Credit.Value;
+                        SumScore = (SumScore.HasValue?SumScore.Value:0) + domain.Score.Value;
+                        SumScoreA = (SumScoreA.HasValue ? SumScoreA.Value : 0) + domain.Score.Value * domain.Credit.Value;
 
                         cot += 1;
                         credit += domain.Credit.Value;
@@ -472,8 +472,8 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                     // 定期
                     if (domain.ScoreF.HasValue && domain.Credit.HasValue)
                     {
-                        SumScoreF += domain.ScoreF.Value;
-                        SumScoreAF += domain.ScoreF.Value * domain.Credit.Value;
+                        SumScoreF = (SumScoreF.HasValue ? SumScoreF.Value : 0) + domain.ScoreF.Value;
+                        SumScoreAF = (SumScoreAF.HasValue ? SumScoreAF.Value : 0) + domain.ScoreF.Value * domain.Credit.Value;
                         cotF += 1;
                         creditF += domain.Credit.Value;
                     }
@@ -490,8 +490,8 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                         // 總成績
                         if (subj.Score.HasValue && subj.Credit.HasValue)
                         {
-                            SumScore += subj.Score.Value;
-                            SumScoreA += subj.Score.Value * subj.Credit.Value;
+                            SumScore = (SumScore.HasValue ? SumScore.Value : 0) + subj.Score.Value;
+                            SumScoreA = (SumScoreA.HasValue ? SumScoreA.Value : 0) + subj.Score.Value * subj.Credit.Value;
 
                             cot += 1;
                             credit += subj.Credit.Value;
@@ -500,27 +500,42 @@ namespace HsinChuExamScoreClassFixedRank.DAO
                         // 定期
                         if (subj.ScoreF.HasValue && subj.Credit.HasValue)
                         {
-                            SumScoreF += subj.ScoreF.Value;
-                            SumScoreAF += subj.ScoreF.Value * subj.Credit.Value;
+                            if (Program.ScoreValueMap.ContainsKey(subj.ScoreF.Value))
+                            {
+                                if (Program.ScoreValueMap[subj.ScoreF.Value].AllowCalculation)
+                                {
 
-                            cotF += 1;
-                            creditF += subj.Credit.Value;
+                                    SumScoreF = (SumScoreF.HasValue ? SumScoreF.Value : 0) + Program.ScoreValueMap[subj.ScoreF.Value].Score.Value;
+                                    SumScoreAF = (SumScoreAF.HasValue ? SumScoreAF.Value : 0) + Program.ScoreValueMap[subj.ScoreF.Value].Score.Value * subj.Credit.Value;
+
+                                    cotF += 1;
+                                    creditF += subj.Credit.Value;
+                                }
+                            } 
+                            else
+                            {
+                                SumScoreF = (SumScoreF.HasValue ? SumScoreF.Value : 0) + subj.ScoreF.Value;
+                                SumScoreAF = (SumScoreAF.HasValue ? SumScoreAF.Value : 0) + subj.ScoreF.Value * subj.Credit.Value;
+
+                                cotF += 1;
+                                creditF += subj.Credit.Value;
+                            }
                         }
                     }
                 }
             }
 
-            if (cot > 0)
-                AvgScore = SumScore / cot;
+            if (cot > 0 && SumScore.HasValue)
+                AvgScore = SumScore.Value / cot;
 
-            if (credit > 0)
-                AvgScoreA = SumScoreA / credit;
+            if (credit > 0 && SumScoreA.HasValue)
+                AvgScoreA = SumScoreA.Value / credit;
 
-            if (cotF > 0)
-                AvgScoreF = SumScoreF / cotF;
+            if (cotF > 0 && SumScoreF.HasValue)
+                AvgScoreF = SumScoreF.Value / cotF;
 
-            if (creditF > 0)
-                AvgScoreAF = SumScoreAF / creditF;
+            if (creditF > 0 && SumScoreAF.HasValue)
+                AvgScoreAF = SumScoreAF.Value / creditF;
         }
     }
 }
