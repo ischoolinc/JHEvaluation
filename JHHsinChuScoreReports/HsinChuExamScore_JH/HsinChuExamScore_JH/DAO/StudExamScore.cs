@@ -66,12 +66,14 @@ namespace HsinChuExamScore_JH.DAO
             Dictionary<string, List<decimal>> scDict = new Dictionary<string, List<decimal>>();
 
             List<string> DomainNameList = new List<string>();
-            string ss = "_加權", sc = "_學分", sa = "_平時加權", sf = "_定期加權", scs = "_學分值";
+            string ss = "_加權", sc = "_學分", sc_f = "_定期學分", sc_a = "_平時學分", sa = "_平時加權", sf = "_定期加權", scs = "_學分值";
 
             foreach (ExamSubjectScore ess in this.GetSubjScoreDictionary(ifRefScore).Values)
             {
                 string keys = ess.DomainName + ss;
                 string keyc = ess.DomainName + sc;
+                string keyc_f = ess.DomainName + sc_f;
+                string keyc_a = ess.DomainName + sc_a;
                 string keya = ess.DomainName + sa;
                 string keyf = ess.DomainName + sf;
                 string keycs = ess.DomainName + scs;
@@ -81,6 +83,8 @@ namespace HsinChuExamScore_JH.DAO
 
                 if (!scDict.ContainsKey(keys)) scDict.Add(keys, new List<decimal>());
                 if (!scDict.ContainsKey(keyc)) scDict.Add(keyc, new List<decimal>());
+                if (!scDict.ContainsKey(keyc_f)) scDict.Add(keyc_f, new List<decimal>());
+                if (!scDict.ContainsKey(keyc_a)) scDict.Add(keyc_a, new List<decimal>());
                 if (!scDict.ContainsKey(keya)) scDict.Add(keya, new List<decimal>());
                 if (!scDict.ContainsKey(keyf)) scDict.Add(keyf, new List<decimal>());
                 if (!scDict.ContainsKey(keycs)) scDict.Add(keycs, new List<decimal>());
@@ -91,12 +95,38 @@ namespace HsinChuExamScore_JH.DAO
 
                 // 定期加權平均
                 if (ess.ScoreF.HasValue && ess.Credit.HasValue)
-                    scDict[keyf].Add(_Calculator.ParseSubjectScore(ess.ScoreF.Value * ess.Credit.Value)); // 抓成績計算規則
-
+                {
+                    if (Program.ScoreValueMap.ContainsKey(ess.ScoreF.Value))
+                    {
+                        if (Program.ScoreValueMap[ess.ScoreF.Value].AllowCalculation)
+                        {
+                            scDict[keyf].Add(_Calculator.ParseSubjectScore(Program.ScoreValueMap[ess.ScoreF.Value].Score.Value * ess.Credit.Value)); // 抓成績計算規則
+                            scDict[keyc_f].Add(ess.Credit.Value);
+                        }
+                    } 
+                    else
+                    {
+                        scDict[keyf].Add(_Calculator.ParseSubjectScore(ess.ScoreF.Value * ess.Credit.Value)); // 抓成績計算規則
+                        scDict[keyc_f].Add(ess.Credit.Value);
+                    }
+                }
                 // 平時加權平均
                 if (ess.ScoreA.HasValue && ess.Credit.HasValue)
-                    scDict[keya].Add(_Calculator.ParseSubjectScore(ess.ScoreA.Value * ess.Credit.Value));
-
+                {
+                    if (Program.ScoreValueMap.ContainsKey(ess.ScoreA.Value))
+                    {
+                        if (Program.ScoreValueMap[ess.ScoreA.Value].AllowCalculation)
+                        {
+                            scDict[keya].Add(_Calculator.ParseSubjectScore(Program.ScoreValueMap[ess.ScoreA.Value].Score.Value * ess.Credit.Value)); // 抓成績計算規則
+                            scDict[keyc_a].Add(ess.Credit.Value);
+                        }
+                    }
+                    else
+                    {
+                        scDict[keya].Add(_Calculator.ParseSubjectScore(ess.ScoreA.Value * ess.Credit.Value)); // 抓成績計算規則
+                        scDict[keyc_a].Add(ess.Credit.Value);
+                    }
+                }
 
                 // 學分
                 if (ess.Credit.HasValue)
@@ -119,7 +149,15 @@ namespace HsinChuExamScore_JH.DAO
                     eds.DomainName = name;
 
                 string keyc = name + sc;
+                string keyc_f = name + sc_f;
+                string keyc_a = name + sc_a;
                 string keycs = name + scs;
+                // 定期學分加總
+                if (scDict.ContainsKey(keyc_f))
+                    eds.CreditF = scDict[keyc_f].Sum();
+                // 平時學分加總
+                if (scDict.ContainsKey(keyc_a))
+                    eds.CreditA = scDict[keyc_a].Sum();
                 // 學分加總
                 if (scDict.ContainsKey(keyc))
                     eds.Credit = scDict[keyc].Sum();
@@ -138,16 +176,16 @@ namespace HsinChuExamScore_JH.DAO
                             eds.ScoreT = _Calculator.ParseDomainScore(scDict[keyss].Sum() / eds.Credit1.Value);
 
                 // 領域定期成績加權平均
-                if (eds.Credit1.HasValue)
-                    if (eds.Credit1.Value > 0)
+                if (eds.CreditF.HasValue)
+                    if (eds.CreditF.Value > 0)
                         if (scDict.ContainsKey(keysf))
-                            eds.ScoreF = _Calculator.ParseDomainScore(scDict[keysf].Sum() / eds.Credit1.Value);
+                            eds.ScoreF = _Calculator.ParseDomainScore(scDict[keysf].Sum() / eds.CreditF.Value);
 
                 // 領域平時成績加權平均
-                if (eds.Credit1.HasValue)
-                    if (eds.Credit1.Value > 0)
+                if (eds.CreditA.HasValue)
+                    if (eds.CreditA.Value > 0)
                         if (scDict.ContainsKey(keysa))
-                            eds.ScoreA = _Calculator.ParseDomainScore(scDict[keysa].Sum() / eds.Credit1.Value);
+                            eds.ScoreA = _Calculator.ParseDomainScore(scDict[keysa].Sum() / eds.CreditA.Value);
 
                 _ExamDomainScoreDict.Add(name, eds);
             }
@@ -161,7 +199,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainWAvgScoreA(bool all)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             decimal cc = 0;
             if (all)
             {
@@ -170,7 +208,7 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreT.HasValue && sc.Credit1.HasValue)
                     {
-                        ss += sc.ScoreT.Value * sc.Credit1.Value;
+                        ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreT.Value * sc.Credit1.Value;
                         cc += sc.Credit1.Value;
                     }
                 }
@@ -186,14 +224,14 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreT.HasValue && sc.Credit1.HasValue)
                     {
-                        ss += sc.ScoreT.Value * sc.Credit1.Value;
+                        ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreT.Value * sc.Credit1.Value;
                         cc += sc.Credit1.Value;
                     }
                 }
             }
 
             if (cc > 0)
-                score = _Calculator.ParseDomainScore(ss / cc);
+                score = _Calculator.ParseDomainScore((ss.HasValue ? ss.Value : 0) / cc);
 
             return score;
         }
@@ -207,17 +245,28 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainWAvgScoreF(bool all)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             decimal cc = 0;
             if (all)
             {
                 foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
                 {
                     // 使用有成績計算加權
-                    if (sc.ScoreF.HasValue && sc.Credit1.HasValue)
+                    if (sc.ScoreF.HasValue && sc.CreditF.HasValue)
                     {
-                        ss += sc.ScoreF.Value * sc.Credit1.Value;
-                        cc += sc.Credit1.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value * sc.CreditF.Value;
+                                cc++;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value * sc.CreditF.Value;
+                            cc += sc.CreditF.Value;
+                        }
                     }
                 }
             }
@@ -230,16 +279,27 @@ namespace HsinChuExamScore_JH.DAO
                         continue;
 
                     // 使用有成績計算加權
-                    if (sc.ScoreF.HasValue && sc.Credit1.HasValue)
+                    if (sc.ScoreF.HasValue && sc.CreditF.HasValue)
                     {
-                        ss += sc.ScoreF.Value * sc.Credit1.Value;
-                        cc += sc.Credit1.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value * sc.CreditF.Value;
+                                cc++;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value * sc.CreditF.Value;
+                            cc += sc.CreditF.Value;
+                        }
                     }
                 }
             }
 
             if (cc > 0)
-                score = _Calculator.ParseDomainScore(ss / cc);
+                score = _Calculator.ParseDomainScore((ss.HasValue ? ss.Value : 0) / cc);
 
             return score;
         }
@@ -253,16 +313,28 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainArithmeticMeanScoreA(bool all)
         {
             decimal? arithmeticMeanScoreA = null;
-            decimal totalScore = 0;
+            decimal? totalScore=null;
             decimal subjCount = 0;
             if (all)
             {
                 foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
                 {
-                    if (sc.ScoreA.HasValue && sc.Credit1.HasValue)
+
+                    if (sc.ScoreA.HasValue && sc.CreditA.HasValue)
                     {
-                        totalScore += sc.ScoreA.Value;
-                        subjCount++;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreA.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreA.Value].AllowCalculation)
+                            {
+                                totalScore = (totalScore.HasValue ? totalScore.Value : 0) + Program.ScoreValueMap[sc.ScoreA.Value].Score.Value * sc.CreditA.Value;
+                                subjCount++;
+                            }
+                        }
+                        else
+                        {
+                            totalScore = (totalScore.HasValue ? totalScore.Value : 0) + sc.ScoreA.Value * sc.CreditA.Value;
+                            subjCount++;
+                        }
                     }
                 }
             }
@@ -274,16 +346,27 @@ namespace HsinChuExamScore_JH.DAO
                     if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
                         continue;
                     // 使用有成績計算加權
-                    if (sc.ScoreA.HasValue && sc.Credit1.HasValue)
+                    if (sc.ScoreA.HasValue && sc.CreditA.HasValue)
                     {
-                        totalScore += sc.ScoreA.Value;
-                        subjCount++;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreA.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreA.Value].AllowCalculation)
+                            {
+                                totalScore = (totalScore.HasValue ? totalScore.Value : 0) + Program.ScoreValueMap[sc.ScoreA.Value].Score.Value * sc.CreditA.Value;
+                                subjCount++;
+                            }
+                        }
+                        else
+                        {
+                            totalScore = (totalScore.HasValue ? totalScore.Value : 0) + sc.ScoreA.Value * sc.CreditA.Value;
+                            subjCount++;
+                        }
                     }
                 }
             }
 
             if (subjCount > 0)
-                arithmeticMeanScoreA = _Calculator.ParseDomainScore(totalScore / subjCount);
+                arithmeticMeanScoreA = _Calculator.ParseDomainScore((totalScore.HasValue ? totalScore.Value : 0) / subjCount);
 
             return arithmeticMeanScoreA;
         }
@@ -293,16 +376,27 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainArithmeticMeanScoreF(bool all)
         {
             decimal? arithmeticMeanScoreF = null;
-            decimal totalScore = 0;
+            decimal? totalScore = null;
             decimal subjCount = 0;
             if (all)
             {
                 foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
                 {
-                    if (sc.ScoreF.HasValue && sc.Credit1.HasValue)
+                    if (sc.ScoreF.HasValue && sc.CreditF.HasValue)
                     {
-                        totalScore += sc.ScoreF.Value;
-                        subjCount++;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                totalScore = (totalScore.HasValue ? totalScore.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value * sc.CreditF.Value;
+                                subjCount++;
+                            }
+                        }
+                        else
+                        {
+                            totalScore = (totalScore.HasValue ? totalScore.Value : 0) + sc.ScoreF.Value * sc.CreditF.Value;
+                            subjCount++;
+                        }
                     }
                 }
             }
@@ -314,16 +408,27 @@ namespace HsinChuExamScore_JH.DAO
                     if (string.IsNullOrEmpty(sc.DomainName) || sc.DomainName == "彈性課程")
                         continue;
                     // 使用有成績計算加權
-                    if (sc.ScoreF.HasValue && sc.Credit1.HasValue)
+                    if (sc.ScoreF.HasValue && sc.CreditF.HasValue)
                     {
-                        totalScore += sc.ScoreF.Value;
-                        subjCount++;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                totalScore = (totalScore.HasValue ? totalScore.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value * sc.CreditF.Value;
+                                subjCount++;
+                            }
+                        }
+                        else
+                        {
+                            totalScore = (totalScore.HasValue ? totalScore.Value : 0) + sc.ScoreF.Value * sc.CreditF.Value;
+                            subjCount++;
+                        }
                     }
                 }
             }
 
             if (subjCount > 0)
-                arithmeticMeanScoreF = _Calculator.ParseDomainScore(totalScore / subjCount);
+                arithmeticMeanScoreF = _Calculator.ParseDomainScore((totalScore.HasValue ? totalScore.Value : 0) / subjCount);
 
             return arithmeticMeanScoreF;
         }
@@ -336,7 +441,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainScore_A(bool all)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             decimal cc = 0;
             if (all)
             {
@@ -345,7 +450,7 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreT.HasValue)
                     {
-                        ss += sc.ScoreT.Value;
+                        ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreT.Value;
                         cc += 1;
                     }
                 }
@@ -361,14 +466,14 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreT.HasValue)
                     {
-                        ss += sc.ScoreT.Value;
+                        ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreT.Value;
                         cc += 1;
                     }
                 }
             }
 
             if (cc > 0)
-                score = _Calculator.ParseDomainScore(ss / cc);
+                score = _Calculator.ParseDomainScore((ss.HasValue ? ss.Value : 0) / cc);
 
             return score;
         }
@@ -380,7 +485,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainScore_F(bool all)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             decimal cc = 0;
             if (all)
             {
@@ -389,8 +494,19 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreF.HasValue)
                     {
-                        ss += sc.ScoreF.Value;
-                        cc += 1;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value;
+                                cc += 1;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value;
+                            cc += 1;
+                        }
                     }
                 }
             }
@@ -405,14 +521,25 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreF.HasValue)
                     {
-                        ss += sc.ScoreF.Value;
-                        cc += 1;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value;
+                                cc += 1;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value;
+                            cc += 1;
+                        }
                     }
                 }
             }
 
             if (cc > 0)
-                score = _Calculator.ParseDomainScore(ss / cc);
+                score = _Calculator.ParseDomainScore((ss.HasValue ? ss.Value : 0) / cc);
 
             return score;
         }
@@ -426,7 +553,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetSubjectScoreAF(bool all, string isRefScore)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             decimal cc = 0;
 
             if (all)
@@ -435,8 +562,19 @@ namespace HsinChuExamScore_JH.DAO
                 {
                     if (sc.ScoreF.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreF.Value * sc.Credit.Value;
-                        cc += sc.Credit.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value * sc.Credit.Value;
+                                cc += sc.Credit.Value;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value * sc.Credit.Value;
+                            cc += sc.Credit.Value;
+                        }
                     }
                 }
             }
@@ -450,14 +588,25 @@ namespace HsinChuExamScore_JH.DAO
 
                     if (sc.ScoreF.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreF.Value * sc.Credit.Value;
-                        cc += sc.Credit.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value * sc.Credit.Value;
+                                cc += sc.Credit.Value;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value * sc.Credit.Value;
+                            cc += sc.Credit.Value;
+                        }
                     }
                 }
             }
 
             if (cc > 0)
-                score = _Calculator.ParseSubjectScore(ss / cc);
+                score = _Calculator.ParseSubjectScore((ss.HasValue ? ss.Value : 0) / cc);
 
             return score;
         }
@@ -469,7 +618,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetSubjectScoreAA(bool all, string isRefScore)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             decimal cc = 0;
 
             if (all)
@@ -478,8 +627,19 @@ namespace HsinChuExamScore_JH.DAO
                 {
                     if (sc.ScoreA.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreA.Value * sc.Credit.Value;
-                        cc += sc.Credit.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreA.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreA.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreA.Value].Score.Value * sc.Credit.Value;
+                                cc += sc.Credit.Value;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreA.Value * sc.Credit.Value;
+                            cc += sc.Credit.Value;
+                        }
                     }
                 }
             }
@@ -493,14 +653,25 @@ namespace HsinChuExamScore_JH.DAO
 
                     if (sc.ScoreA.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreA.Value * sc.Credit.Value;
-                        cc += sc.Credit.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreA.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreA.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreA.Value].Score.Value * sc.Credit.Value;
+                                cc += sc.Credit.Value;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreA.Value * sc.Credit.Value;
+                            cc += sc.Credit.Value;
+                        }
                     }
                 }
             }
 
             if (cc > 0)
-                score = _Calculator.ParseSubjectScore(ss / cc);
+                score = _Calculator.ParseSubjectScore((ss.HasValue ? ss.Value : 0) / cc);
 
             return score;
         }
@@ -512,7 +683,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetSubjectScoreAT(bool all, string isRefScore)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             decimal cc = 0;
 
             if (all)
@@ -521,7 +692,7 @@ namespace HsinChuExamScore_JH.DAO
                 {
                     if (sc.ScoreT.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreT.Value * sc.Credit.Value;
+                        ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreT.Value * sc.Credit.Value;
                         cc += sc.Credit.Value;
                     }
                 }
@@ -536,14 +707,14 @@ namespace HsinChuExamScore_JH.DAO
 
                     if (sc.ScoreT.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreT.Value * sc.Credit.Value;
+                        ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreT.Value * sc.Credit.Value;
                         cc += sc.Credit.Value;
                     }
                 }
             }
 
             if (cc > 0)
-                score = _Calculator.ParseSubjectScore(ss / cc);
+                score = _Calculator.ParseSubjectScore((ss.HasValue ? ss.Value : 0) / cc);
 
             return score;
         }
@@ -575,9 +746,7 @@ namespace HsinChuExamScore_JH.DAO
                     dicScoreInfo = this._RefExamSubjectScoreDict;
                 }
 
-
-
-                decimal totalScore = 0;
+                decimal? totalScore = null;
                 decimal SubjCount = 0;
 
                 if (isContainFlex)
@@ -586,7 +755,7 @@ namespace HsinChuExamScore_JH.DAO
                     {
                         if (this.GetScore(sc, enumScoreComposition).HasValue && sc.Credit.HasValue)
                         {
-                            totalScore += GetScore(sc, enumScoreComposition).Value;
+                            totalScore = (totalScore.HasValue ? totalScore.Value : 0) + GetScore(sc, enumScoreComposition).Value;
                             SubjCount++;
                         }
                     }
@@ -601,14 +770,14 @@ namespace HsinChuExamScore_JH.DAO
 
                         if (this.GetScore(sc, enumScoreComposition).HasValue && sc.Credit.HasValue)
                         {
-                            totalScore += this.GetScore(sc, enumScoreComposition).Value;
+                        totalScore = (totalScore.HasValue ? totalScore.Value : 0) + this.GetScore(sc, enumScoreComposition).Value;
                             SubjCount++;
                         }
                     }
                 }
 
                 if (SubjCount > 0)
-                    result = _Calculator.ParseSubjectScore(totalScore / SubjCount);
+                    result = _Calculator.ParseSubjectScore((totalScore.HasValue ? totalScore.Value : 0) / SubjCount);
 
           
 
@@ -651,10 +820,10 @@ namespace HsinChuExamScore_JH.DAO
             decimal? result = null;
 
             decimal? totalScore = null;
-            if (dicScoreInfo.Count > 0) //如果有成績紀錄(至少有一科)
-            {
-                totalScore = 0;
-            }
+            //if (dicScoreInfo.Count > 0) //如果有成績紀錄(至少有一科)
+            //{
+            //    totalScore = 0;
+            //}
 
             if (isContainFlex)
             {
@@ -662,7 +831,7 @@ namespace HsinChuExamScore_JH.DAO
                 {
                     if (this.GetScore(sc, enumScoreComposition).HasValue && sc.Credit.HasValue)
                     {
-                        totalScore += GetScore(sc, enumScoreComposition).Value;
+                        totalScore = (totalScore.HasValue ? totalScore.Value : 0) + GetScore(sc, enumScoreComposition).Value;
                     }
                 }
             }
@@ -676,7 +845,7 @@ namespace HsinChuExamScore_JH.DAO
 
                     if (this.GetScore(sc, enumScoreComposition).HasValue && sc.Credit.HasValue)
                     {
-                        totalScore += this.GetScore(sc, enumScoreComposition).Value;
+                        totalScore = (totalScore.HasValue ? totalScore.Value : 0) + this.GetScore(sc, enumScoreComposition).Value;
 
                     }
                 }
@@ -700,14 +869,26 @@ namespace HsinChuExamScore_JH.DAO
         {
             if (EnumScoreComposition == EnumScoreComposition.成績)
             {
+                if (socreInfo.ScoreT.HasValue && Program.ScoreValueMap.ContainsKey(socreInfo.ScoreT.Value))
+                {
+                    return Program.ScoreValueMap[socreInfo.ScoreT.Value].Score;
+                }
                 return socreInfo.ScoreT;
             }
             else if (EnumScoreComposition == EnumScoreComposition.定期成績)
             {
+                if (socreInfo.ScoreF.HasValue && Program.ScoreValueMap.ContainsKey(socreInfo.ScoreF.Value))
+                {
+                    return Program.ScoreValueMap[socreInfo.ScoreF.Value].Score;
+                }
                 return socreInfo.ScoreF;
             }
             else if (EnumScoreComposition == EnumScoreComposition.平時成績)  // 因目前沒有平時成績排名需求 應該用不到
             {
+                if (socreInfo.ScoreA.HasValue && Program.ScoreValueMap.ContainsKey(socreInfo.ScoreA.Value))
+                {
+                    return Program.ScoreValueMap[socreInfo.ScoreA.Value].Score;
+                }
                 return socreInfo.ScoreA;
             }
             else
@@ -724,7 +905,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainScoreS(bool all)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             if (all)
             {
                 foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
@@ -732,7 +913,7 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreT.HasValue && sc.Credit1.HasValue)
                     {
-                        ss += sc.ScoreT.Value * sc.Credit1.Value;
+                        ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreT.Value * sc.Credit1.Value;
                     }
                 }
             }
@@ -747,7 +928,7 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreT.HasValue && sc.Credit1.HasValue)
                     {
-                        ss += sc.ScoreT.Value * sc.Credit1.Value;
+                        ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreT.Value * sc.Credit1.Value;
                     }
                 }
             }
@@ -764,15 +945,23 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainScoreSF(bool all)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             if (all)
             {
                 foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
                 {
                     // 使用有成績計算加權
-                    if (sc.ScoreF.HasValue && sc.Credit1.HasValue)
+                    if (sc.ScoreF.HasValue && sc.CreditF.HasValue)
                     {
-                        ss += sc.ScoreF.Value * sc.Credit1.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value * sc.CreditF.Value;
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value * sc.CreditF.Value;
+                        }
                     }
                 }
             }
@@ -785,9 +974,17 @@ namespace HsinChuExamScore_JH.DAO
                         continue;
 
                     // 使用有成績計算加權
-                    if (sc.ScoreF.HasValue && sc.Credit1.HasValue)
+                    if (sc.ScoreF.HasValue && sc.CreditF.HasValue)
                     {
-                        ss += sc.ScoreF.Value * sc.Credit1.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value * sc.CreditF.Value;
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value * sc.CreditF.Value;
+                        }
                     }
                 }
             }
@@ -805,7 +1002,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainScore_S(bool all)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             if (all)
             {
                 foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
@@ -813,7 +1010,7 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreT.HasValue)
                     {
-                        ss += sc.ScoreT.Value;
+                        ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreT.Value;
                     }
                 }
             }
@@ -828,7 +1025,7 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreT.HasValue)
                     {
-                        ss += sc.ScoreT.Value;
+                        ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreT.Value;
                     }
                 }
             }
@@ -845,7 +1042,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetDomainScore_SF(bool all)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
             if (all)
             {
                 foreach (ExamDomainScore sc in _ExamDomainScoreDict.Values)
@@ -853,7 +1050,17 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreF.HasValue)
                     {
-                        ss += sc.ScoreF.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value;
+                        }
                     }
                 }
             }
@@ -868,7 +1075,17 @@ namespace HsinChuExamScore_JH.DAO
                     // 使用有成績計算加權
                     if (sc.ScoreF.HasValue)
                     {
-                        ss += sc.ScoreF.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value;
+                        }
                     }
                 }
             }
@@ -887,7 +1104,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetSubjectScoreSF(bool all, string isRefScore)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
 
             if (all)
             {
@@ -895,7 +1112,17 @@ namespace HsinChuExamScore_JH.DAO
                 {
                     if (sc.ScoreF.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreF.Value * sc.Credit.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value * sc.Credit.Value;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value * sc.Credit.Value;
+                        }
                     }
                 }
             }
@@ -909,7 +1136,17 @@ namespace HsinChuExamScore_JH.DAO
 
                     if (sc.ScoreF.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreF.Value * sc.Credit.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreF.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreF.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreF.Value].Score.Value * sc.Credit.Value;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreF.Value * sc.Credit.Value;
+                        }
                     }
                 }
             }
@@ -926,7 +1163,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetSubjectScoreSA(bool all, string isRefScore)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
 
             if (all)
             {
@@ -934,7 +1171,17 @@ namespace HsinChuExamScore_JH.DAO
                 {
                     if (sc.ScoreA.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreA.Value * sc.Credit.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreA.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreA.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreA.Value].Score.Value * sc.Credit.Value;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreA.Value * sc.Credit.Value;
+                        }
                     }
                 }
             }
@@ -948,7 +1195,17 @@ namespace HsinChuExamScore_JH.DAO
 
                     if (sc.ScoreA.HasValue && sc.Credit.HasValue)
                     {
-                        ss += sc.ScoreA.Value * sc.Credit.Value;
+                        if (Program.ScoreValueMap.ContainsKey(sc.ScoreA.Value))
+                        {
+                            if (Program.ScoreValueMap[sc.ScoreA.Value].AllowCalculation)
+                            {
+                                ss = (ss.HasValue ? ss.Value : 0) + Program.ScoreValueMap[sc.ScoreA.Value].Score.Value * sc.Credit.Value;
+                            }
+                        }
+                        else
+                        {
+                            ss = (ss.HasValue ? ss.Value : 0) + sc.ScoreA.Value * sc.Credit.Value;
+                        }
                     }
                 }
             }
@@ -965,7 +1222,7 @@ namespace HsinChuExamScore_JH.DAO
         public decimal? GetSubjectScoreST(bool all, string isRefScore)
         {
             decimal? score = null;
-            decimal ss = 0;
+            decimal? ss = null;
 
             if (all)
             {
@@ -973,7 +1230,7 @@ namespace HsinChuExamScore_JH.DAO
                 {
                     if (sc.ScoreT.HasValue && sc.Credit.HasValue)
                     {
-                        ss += _Calculator.ParseSubjectScore(sc.ScoreT.Value * sc.Credit.Value);
+                        ss = (ss.HasValue ? ss.Value : 0) + _Calculator.ParseSubjectScore(sc.ScoreT.Value * sc.Credit.Value);
                     }
                 }
             }
@@ -987,7 +1244,7 @@ namespace HsinChuExamScore_JH.DAO
 
                     if (sc.ScoreT.HasValue && sc.Credit.HasValue)
                     {
-                        ss += _Calculator.ParseSubjectScore(sc.ScoreT.Value * sc.Credit.Value);
+                        ss = (ss.HasValue ? ss.Value : 0) + _Calculator.ParseSubjectScore(sc.ScoreT.Value * sc.Credit.Value);
                     }
                 }
             }

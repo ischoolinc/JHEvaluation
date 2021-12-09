@@ -29,7 +29,7 @@ namespace HsinChuExamScore_JH
                 string query = "select ref_student_id,occur_date,reason,hours from $k12.service.learning.record where ref_student_id in('" + string.Join("','", StudentIDList.ToArray()) + "') and occur_date >='" + beginDate.ToShortDateString() + "' and occur_date <='" + endDate.ToShortDateString() + "'order by ref_student_id,occur_date;";
                 DataTable dt = qh.Select(query);
                 foreach (DataRow dr in dt.Rows)
-                {
+                {  
                     decimal hr;
 
                     string sid = dr[0].ToString();
@@ -545,7 +545,7 @@ WHERE sc_attend.ref_student_id IN(" + string.Join(",", studentIDs.ToArray()) + @
         {
             Dictionary<string, Dictionary<string, string>> userDefineInfo = new Dictionary<string, Dictionary<string, string>>();
             QueryHelper qh = new QueryHelper();
-            string sql = $"SELECT *FROM $stud.userdefinedata WHERE refid IN ('{String.Join("','", studentIDs)}')";
+            string sql = $"SELECT * FROM $stud.userdefinedata WHERE refid IN ('{String.Join("','", studentIDs)}')";
             DataTable dt = qh.Select(sql);
 
             foreach (DataRow dr in dt.Rows)

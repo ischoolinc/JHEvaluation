@@ -16,6 +16,16 @@ namespace HsinChuExamScore_JH.DAO
         public string DomainName { get; set; }
 
         /// <summary>
+        /// 定期評量學分加總
+        /// </summary>
+        public decimal? CreditF { get; set; }
+
+        /// <summary>
+        /// 平時評量學分加總
+        /// </summary>
+        public decimal? CreditA { get; set; }
+
+        /// <summary>
         /// 領域學分
         /// </summary>
         public decimal? Credit { get; set; }

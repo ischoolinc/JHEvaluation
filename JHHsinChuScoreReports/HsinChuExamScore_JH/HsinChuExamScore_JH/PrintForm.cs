@@ -18,6 +18,7 @@ using Aspose.Words.Tables;
 using FISCA.Data;
 using Campus.ePaperCloud;
 using HsinChuExamScore_JH.DAO;
+using System.Xml;
 
 namespace HsinChuExamScore_JH
 {
@@ -560,10 +561,62 @@ namespace HsinChuExamScore_JH
             //  Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> StudCourseDict = Utility.GetStudentSCAttendCourse(_StudentIDList, CourseDict.Keys.ToList(), _SelRefExamID);
             // 取得評量設定比例
             Dictionary<string, decimal> ScorePercentageHSDict = Utility.GetScorePercentageHS();
+            //  評量樣版設定
+            List<JHAEIncludeRecord> lstIncludes = JHAEInclude.SelectAll();
+
+            Program.ScoreTextMap.Clear();
+            Program.ScoreValueMap.Clear();
+            #region 取得評量成績缺考暨免試設定
+            Framework.ConfigData cd = JHSchool.School.Configuration["評量成績缺考暨免試設定"];
+            if (!string.IsNullOrEmpty(cd["評量成績缺考暨免試設定"]))
+            {
+                XmlElement element = Framework.XmlHelper.LoadXml(cd["評量成績缺考暨免試設定"]);
+
+                foreach (XmlElement each in element.SelectNodes("Setting"))
+                {
+                    var UseText = each.SelectSingleNode("UseText").InnerText;
+                    var AllowCalculation = bool.Parse(each.SelectSingleNode("AllowCalculation").InnerText);
+                    decimal Score;
+                    decimal? NullableScore=null;
+                    bool result = decimal.TryParse(each.SelectSingleNode("Score").InnerText, out Score);
+                    if (result)
+                    {
+                        NullableScore = Score;
+                    }
+                    var Active = bool.Parse(each.SelectSingleNode("Active").InnerText);
+                    var UseValue = decimal.Parse(each.SelectSingleNode("UseValue").InnerText);
+
+                    if (Active)
+                    {
+                        if (!Program.ScoreTextMap.ContainsKey(UseText))
+                        {
+                            Program.ScoreTextMap.Add(UseText, new ScoreMap
+                            {
+                                UseText = UseText,  //「缺」或「免」
+                                AllowCalculation = AllowCalculation,  //是否計算成績
+                                Score = NullableScore,  //計算成績時，應以多少分來計算
+                                Active = Active, //此設定是否啟用
+                                UseValue = UseValue, //代表「缺」或「免」的負數
+                            });
+                        }
+                        if (!Program.ScoreValueMap.ContainsKey(UseValue))
+                        {
+                            Program.ScoreValueMap.Add(UseValue, new ScoreMap
+                            {
+                                UseText = UseText,
+                                AllowCalculation = AllowCalculation,
+                                Score = NullableScore,
+                                Active = Active,
+                                UseValue = UseValue,
+                            });
+                        }
+                    }
+                }
+            }
+
+            #endregion
 
             _bgWorkReport.ReportProgress(30);
-
-
 
             // 處理評量成績科目
             Dictionary<string, DAO.StudExamScore> studExamScoreDict = new Dictionary<string, DAO.StudExamScore>();
@@ -584,7 +637,7 @@ namespace HsinChuExamScore_JH
                     {
                         if ((rec.RefExamID == _SelExamID || rec.RefExamID == _SelRefExamID) && CourseDict.ContainsKey(rec.RefCourseID))
                         {
-                            JHCourseRecord cr = CourseDict[rec.RefCourseID];
+                            JHCourseRecord cr = CourseDict[rec.RefCourseID];                       
 
                             string SubjecName = cr.Subject;
 
@@ -605,6 +658,7 @@ namespace HsinChuExamScore_JH
                                 examSubjectScore.DomainName = cr.Domain;
                                 examSubjectScore.SubjectName = SubjecName;
 
+                                JHAEIncludeRecord IRecord = lstIncludes.Find(x => (x.RefAssessmentSetupID == cr.RefAssessmentSetupID && x.RefExamID == rec.RefExamID));
                                 if (rec.RefExamID == this._SelExamID) //如果是本次選擇類別
                                 {
                                     examSubjectScore.ScoreA = rec.AssignmentScore;
@@ -615,25 +669,28 @@ namespace HsinChuExamScore_JH
                                     examSubjectScore.Text = rec.Text;
                                     examSubjectScore.Credit = cr.Credit;
 
+                                    examSubjectScore.GetTotalScore(this.HasReferenceExam, IRecord, ScorePercentageHSDict);
+
                                 }
                                 else if (rec.RefExamID == this._SelRefExamID) //處理參考試別
                                 {
                                     examSubjectScore.RefScoreA = rec.AssignmentScore;
                                     examSubjectScore.RefScoreF = rec.Score;
-                                }
 
-                                if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
-                                {
-                                    // 取得定期，評量由100-定期
-                                    // decimal f = ScorePercentageHSDict[cr.RefAssessmentSetupID] * 0.01M;
-                                    // 計算所有成績
-                                    examSubjectScore.GetTotalScore(this.HasReferenceExam, ScorePercentageHSDict[cr.RefAssessmentSetupID]);
-                                    //decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID]) * 0.01M;
+                                    examSubjectScore.GetRefTotalScore(this.HasReferenceExam, IRecord, ScorePercentageHSDict);
                                 }
-                                else
-                                {
-                                    examSubjectScore.GetTotalScore(this.HasReferenceExam, 0.5M);
-                                }
+                                //if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
+                                //{
+                                //    // 取得定期，評量由100-定期
+                                //    // decimal f = ScorePercentageHSDict[cr.RefAssessmentSetupID] * 0.01M;
+                                //    // 計算所有成績
+                                //    examSubjectScore.GetTotalScore(this.HasReferenceExam, ScorePercentageHSDict[cr.RefAssessmentSetupID]);
+                                //    //decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID]) * 0.01M;
+                                //}
+                                //else
+                                //{
+                                //    examSubjectScore.GetTotalScore(this.HasReferenceExam, 0.5M);
+                                //}
 
                                 //examSubjectScore.ScoreT = examSubjectScore.ScoreA.Value * a + examSubjectScore.ScoreF.Value * f;
                                 //}
@@ -1398,19 +1455,69 @@ namespace HsinChuExamScore_JH
                                     break;
                                 case "科目定期評量":
                                     if (examSubjScore.ScoreF.HasValue)
-                                        row[key] = doParseTransfer(examSubjScore.ScoreF.Value);
+                                    {
+                                        if (Program.ScoreValueMap.ContainsKey(examSubjScore.ScoreF.Value))
+                                        {
+                                            row[key] = Program.ScoreValueMap[examSubjScore.ScoreF.Value].UseText;
+                                        }
+                                        else
+                                        {
+                                            row[key] = doParseTransfer(examSubjScore.ScoreF.Value);
+                                        }
+                                    }
                                     break;
                                 case "科目定期評量等第":
                                     if (examSubjScore.ScoreF.HasValue)
-                                        row[key] = _ScoreMappingConfig.ParseScoreName(examSubjScore.ScoreF.Value);
+                                    {
+                                        if (Program.ScoreValueMap.ContainsKey(examSubjScore.ScoreF.Value))
+                                        {
+                                            if (Program.ScoreValueMap[examSubjScore.ScoreF.Value].AllowCalculation)
+                                            {
+                                                row[key] = _ScoreMappingConfig.ParseScoreName(Program.ScoreValueMap[examSubjScore.ScoreF.Value].Score.Value);
+                                            }
+                                            else
+                                            {
+                                                row[key] = "";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            row[key] = _ScoreMappingConfig.ParseScoreName(examSubjScore.ScoreF.Value);
+                                        }
+                                    }
                                     break;
                                 case "科目平時評量":
                                     if (examSubjScore.ScoreA.HasValue)
-                                        row[key] = doParseTransfer(examSubjScore.ScoreA.Value);
+                                    {
+                                        if (Program.ScoreValueMap.ContainsKey(examSubjScore.ScoreA.Value))
+                                        {
+                                            row[key] = Program.ScoreValueMap[examSubjScore.ScoreA.Value].UseText;
+                                        }
+                                        else
+                                        {
+                                            row[key] = doParseTransfer(examSubjScore.ScoreA.Value);
+                                        }
+                                    }
                                     break;
                                 case "科目平時評量等第":
                                     if (examSubjScore.ScoreA.HasValue)
-                                        row[key] = _ScoreMappingConfig.ParseScoreName(examSubjScore.ScoreA.Value);
+                                    {
+                                        if (Program.ScoreValueMap.ContainsKey(examSubjScore.ScoreA.Value))
+                                        {
+                                            if (Program.ScoreValueMap[examSubjScore.ScoreA.Value].AllowCalculation)
+                                            {
+                                                row[key] = _ScoreMappingConfig.ParseScoreName(Program.ScoreValueMap[examSubjScore.ScoreA.Value].Score.Value);
+                                            }
+                                            else
+                                            {
+                                                row[key] = "";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            row[key] = _ScoreMappingConfig.ParseScoreName(examSubjScore.ScoreA.Value);
+                                        }
+                                    }
                                     break;
                                 case "科目總成績":
                                     if (examSubjScore.ScoreT.HasValue)
@@ -1431,19 +1538,15 @@ namespace HsinChuExamScore_JH
                                         break;
                                     }
                                     else if (examSubjScore.RefScoreF.HasValue)
-                                    {
-                                        row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
-
-
-                                        //if (examSubjScore.RefScoreF != null)
-                                        //{
-                                        //    row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
-                                        //}
-                                        //else
-                                        //{
-                                        //row[key] = examSubjScore.RefScoreF;
-                                        //  row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
-                                        //}
+                                    {                                        
+                                        if (Program.ScoreValueMap.ContainsKey(examSubjScore.RefScoreF.Value))
+                                        {
+                                            row[key] = Program.ScoreValueMap[examSubjScore.RefScoreF.Value].UseText;
+                                        }
+                                        else
+                                        {
+                                            row[key] = doParseTransfer(examSubjScore.RefScoreF.Value);
+                                        }
                                     }
 
                                     break;
@@ -1456,17 +1559,14 @@ namespace HsinChuExamScore_JH
                                     }
                                     if (examSubjScore.RefScoreA.HasValue)
                                     {
-                                        row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
-
-                                        //if (examSubjScore.RefScoreA != null)
-                                        //{
-                                        //    row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
-                                        //}
-                                        //else
-                                        //{
-                                        //row[key] = examSubjScore.RefScoreA;
-                                        // row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
-                                        //}
+                                        if (Program.ScoreValueMap.ContainsKey(examSubjScore.RefScoreA.Value))
+                                        {
+                                            row[key] = Program.ScoreValueMap[examSubjScore.RefScoreA.Value].UseText;
+                                        }
+                                        else
+                                        {
+                                            row[key] = doParseTransfer(examSubjScore.RefScoreA.Value);
+                                        }
                                     }
 
                                     break;
