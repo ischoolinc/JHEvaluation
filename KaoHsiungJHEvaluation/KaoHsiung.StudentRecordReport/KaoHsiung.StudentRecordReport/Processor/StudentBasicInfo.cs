@@ -107,7 +107,16 @@ namespace KaoHsiung.StudentRecordReport.Processor
                     number2 = leave.DiplomaNumber;
             }
 
+            #region 學生照片，若沒有畢業照，則印出入學照
             string base64 = K12.Data.Photo.SelectGraduatePhoto(student.ID);
+            string freshmanPhoto = K12.Data.Photo.SelectFreshmanPhoto(student.ID);
+
+            if (string.IsNullOrEmpty(base64))
+                base64 = freshmanPhoto;
+
+            #endregion
+
+
 
             _data["姓名"] = student.Name;
             _data["性別"] = student.Gender;
