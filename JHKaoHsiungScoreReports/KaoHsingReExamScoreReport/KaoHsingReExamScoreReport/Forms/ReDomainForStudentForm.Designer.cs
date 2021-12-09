@@ -53,7 +53,7 @@
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.Location = new System.Drawing.Point(25, 25);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(47, 21);
+            this.labelX1.Size = new System.Drawing.Size(58, 26);
             this.labelX1.TabIndex = 0;
             this.labelX1.Text = "學年度";
             // 
@@ -68,7 +68,7 @@
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX2.Location = new System.Drawing.Point(170, 25);
             this.labelX2.Name = "labelX2";
-            this.labelX2.Size = new System.Drawing.Size(34, 21);
+            this.labelX2.Size = new System.Drawing.Size(41, 26);
             this.labelX2.TabIndex = 1;
             this.labelX2.Text = "學期";
             // 
@@ -86,7 +86,7 @@
             this.iptSchoolYear.MinValue = 1;
             this.iptSchoolYear.Name = "iptSchoolYear";
             this.iptSchoolYear.ShowUpDown = true;
-            this.iptSchoolYear.Size = new System.Drawing.Size(80, 25);
+            this.iptSchoolYear.Size = new System.Drawing.Size(80, 29);
             this.iptSchoolYear.TabIndex = 2;
             this.iptSchoolYear.Value = 1;
             // 
@@ -104,14 +104,13 @@
             this.iptSemester.MinValue = 1;
             this.iptSemester.Name = "iptSemester";
             this.iptSemester.ShowUpDown = true;
-            this.iptSemester.Size = new System.Drawing.Size(62, 25);
+            this.iptSemester.Size = new System.Drawing.Size(62, 29);
             this.iptSemester.TabIndex = 3;
             this.iptSemester.Value = 1;
             // 
             // btnPrint
             // 
             this.btnPrint.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnPrint.AutoSize = true;
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
             this.btnPrint.Location = new System.Drawing.Point(129, 112);
@@ -125,7 +124,6 @@
             // btnExit
             // 
             this.btnExit.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnExit.AutoSize = true;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
             this.btnExit.Location = new System.Drawing.Point(210, 112);
@@ -142,7 +140,7 @@
             this.lnkDownload.BackColor = System.Drawing.Color.Transparent;
             this.lnkDownload.Location = new System.Drawing.Point(25, 80);
             this.lnkDownload.Name = "lnkDownload";
-            this.lnkDownload.Size = new System.Drawing.Size(60, 17);
+            this.lnkDownload.Size = new System.Drawing.Size(78, 22);
             this.lnkDownload.TabIndex = 6;
             this.lnkDownload.TabStop = true;
             this.lnkDownload.Text = "下載範本";
@@ -154,7 +152,7 @@
             this.lnkUpload.BackColor = System.Drawing.Color.Transparent;
             this.lnkUpload.Location = new System.Drawing.Point(92, 80);
             this.lnkUpload.Name = "lnkUpload";
-            this.lnkUpload.Size = new System.Drawing.Size(60, 17);
+            this.lnkUpload.Size = new System.Drawing.Size(78, 22);
             this.lnkUpload.TabIndex = 7;
             this.lnkUpload.TabStop = true;
             this.lnkUpload.Text = "上傳範本";
@@ -166,7 +164,7 @@
             this.lnkMField.BackColor = System.Drawing.Color.Transparent;
             this.lnkMField.Location = new System.Drawing.Point(170, 80);
             this.lnkMField.Name = "lnkMField";
-            this.lnkMField.Size = new System.Drawing.Size(86, 17);
+            this.lnkMField.Size = new System.Drawing.Size(112, 22);
             this.lnkMField.TabIndex = 8;
             this.lnkMField.TabStop = true;
             this.lnkMField.Text = "合併欄位總表";
@@ -178,7 +176,7 @@
             this.lnDownDefalut.BackColor = System.Drawing.Color.Transparent;
             this.lnDownDefalut.Location = new System.Drawing.Point(25, 116);
             this.lnDownDefalut.Name = "lnDownDefalut";
-            this.lnDownDefalut.Size = new System.Drawing.Size(86, 17);
+            this.lnDownDefalut.Size = new System.Drawing.Size(112, 22);
             this.lnDownDefalut.TabIndex = 9;
             this.lnDownDefalut.TabStop = true;
             this.lnDownDefalut.Text = "下載預設範本";
@@ -186,7 +184,7 @@
             // 
             // ReDomainForStudentForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(311, 153);
             this.Controls.Add(this.lnDownDefalut);

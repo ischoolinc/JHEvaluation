@@ -127,8 +127,8 @@ namespace KaoHsingReExamScoreReport.Forms
                 _Configure.Encode();
                 _Configure.Save();
             }
-                
-                DocTemp = _Configure.Template.Clone();
+
+            DocTemp = _Configure.Template.Clone();
 
             List<string> ColumnList = new List<string>();
             ColumnList.Add("學年度");
@@ -155,10 +155,10 @@ namespace KaoHsingReExamScoreReport.Forms
             for (int i = 1; i <= 10; i++)
             {
                 ColumnList.Add("領域名稱" + i);
-                ColumnList.Add("原始成績" + i);                
+                ColumnList.Add("原始成績" + i);
             }
 
-            
+
             List<Document> docList = new List<Document>();
             DataTable dt = new DataTable();
 
@@ -187,27 +187,37 @@ namespace KaoHsingReExamScoreReport.Forms
                 row["補考數"] = ReDomainCount;
 
                 int rDomCOunt = 1;
-                if(sd.StudSemesterScoreRecord !=null)
-                foreach (K12.Data.DomainScore ds in sd.StudSemesterScoreRecord.Domains.Values)
-                {
-                    if (ds.Score.HasValue)
+
+
+                if (sd.StudSemesterScoreRecord != null)
+                    foreach (K12.Data.DomainScore ds in sd.StudSemesterScoreRecord.Domains.Values)
                     {
-                        if (ds.Domain != "國語文" && ds.Domain != "英語") // 2017/1/9 穎驊 註解， 高雄不再分別使用 國語文 、英語 領域，而是兩領域合一算一"語文"領域成績 來看有沒有及格。 
+                        if (ds.Score.HasValue)
                         {
-                        if (ds.Score.Value < _passScore)
-                        {
-                            row["領域名稱" + rDomCOunt] = ds.Domain;
-                            row["原始成績" + rDomCOunt] = "";
+                            //if (ds.Domain != "國語文" && ds.Domain != "英語") // 2017/1/9 穎驊 註解， 高雄不再分別使用 國語文 、英語 領域，而是兩領域合一算一"語文"領域成績 來看有沒有及格。 
+                            {
+                                if (ds.Score.Value < _passScore)
+                                {
+                                    //2021/12/7 Cynthia 高雄小組要求，學生需要明確知道語文領域不及格是因為國語文還是英語，但語文領域及格則不管國語文或英語文是否及格都不需要印出，註解2017/1/9 穎驊程式碼
+                                    //https://3.basecamp.com/4399967/buckets/15852426/todos/4422425947
+                                    if (sd.DomainScorePassDict.ContainsKey(ds.Domain))
+                                    {
+                                        if (sd.DomainScorePassDict[ds.Domain]== false)
+                                        {
+                                            row["領域名稱" + rDomCOunt] = ds.Domain;
+                                            row["原始成績" + rDomCOunt] = "";
 
-                            if (ds.ScoreOrigin.HasValue)
-                                row["原始成績" + rDomCOunt] = ds.ScoreOrigin.Value;
+                                            if (ds.ScoreOrigin.HasValue)
+                                                row["原始成績" + rDomCOunt] = ds.ScoreOrigin.Value;
 
-                            rDomCOunt++;
-                        }                                                
+                                            rDomCOunt++;
+                                        }
+                                    }
+                                }
+                            }
+
                         }
-                        
                     }
-                }
 
                 if (ParentRecordDict.ContainsKey(sd.StudentID))
                 {
@@ -238,29 +248,29 @@ namespace KaoHsingReExamScoreReport.Forms
                 }
 
                 // 需要補考再出現
-                if(ReDomainCount>0)
+                if (ReDomainCount > 0)
                     dt.Rows.Add(row);
             }
-                //#region debug
-                //dt.TableName = "debug";
-                //dt.WriteXml(Application.StartupPath+"\\dttable.xml");
-                //StreamWriter sw = new StreamWriter(Application.StartupPath + "\\tempField.txt", false);
-                //foreach (string str in DocTemp.MailMerge.GetFieldNames())
-                //    sw.WriteLine(str);
-                //sw.Flush();
-                //sw.Close();
+            //#region debug
+            //dt.TableName = "debug";
+            //dt.WriteXml(Application.StartupPath+"\\dttable.xml");
+            //StreamWriter sw = new StreamWriter(Application.StartupPath + "\\tempField.txt", false);
+            //foreach (string str in DocTemp.MailMerge.GetFieldNames())
+            //    sw.WriteLine(str);
+            //sw.Flush();
+            //sw.Close();
 
-                //#endregion
+            //#endregion
 
 
-                if (DocTemp != null)
-                {
-                    // 處理固定欄位對應
-                    DocTemp.MailMerge.Execute(dt);
-                    DocTemp.MailMerge.RemoveEmptyParagraphs = true;
-                    DocTemp.MailMerge.DeleteFields();                    
-                }
-            
+            if (DocTemp != null)
+            {
+                // 處理固定欄位對應
+                DocTemp.MailMerge.Execute(dt);
+                DocTemp.MailMerge.RemoveEmptyParagraphs = true;
+                DocTemp.MailMerge.DeleteFields();
+            }
+
             _bgWorker.ReportProgress(90);
             e.Result = DocTemp;
         }
@@ -325,8 +335,8 @@ namespace KaoHsingReExamScoreReport.Forms
                 // 檢查目前範本是否 Null，當Null使用預設
                 if (_Configure.Template == null)
                     _Configure.Template = new Document(new MemoryStream(Properties.Resources.領域補考通知單範本));
-                
-                _Configure.Template.Save(path, Aspose.Words.SaveFormat.Doc);                
+
+                _Configure.Template.Save(path, Aspose.Words.SaveFormat.Doc);
                 System.Diagnostics.Process.Start(path);
             }
             catch
@@ -389,7 +399,7 @@ namespace KaoHsingReExamScoreReport.Forms
                         }
                         else
                             MsgBox.Show("上傳範本內沒有合併欄位無法上傳.");
-                    
+
                     }
 
                 }

@@ -24,7 +24,7 @@ namespace KaoHsingReExamScoreReport
         /// <param name="Semester"></param>
         /// <param name="passScore"></param>
         /// <returns></returns>
-        public static List<StudentData> CalcStudDomainScorePass(List<StudentData> studDataList, int SchoolYear, int Semester,decimal passScore)
+        public static List<StudentData> CalcStudDomainScorePass(List<StudentData> studDataList, int SchoolYear, int Semester, decimal passScore)
         {
             // 取得學期成績
             Dictionary<string, JHSemesterScoreRecord> studSemsScoreDict = new Dictionary<string, JHSemesterScoreRecord>();
@@ -44,7 +44,7 @@ namespace KaoHsingReExamScoreReport
                 {
                     sd.StudSemesterScoreRecord = studSemsScoreDict[sd.StudentID];
                     foreach (DomainScore ds in studSemsScoreDict[sd.StudentID].Domains.Values)
-                    {                     
+                    {
                         if (!sd.DomainScorePassDict.ContainsKey(ds.Domain))
                         {
                             sd.DomainScorePassDict.Add(ds.Domain, false);
@@ -52,10 +52,27 @@ namespace KaoHsingReExamScoreReport
                         }
 
                         if (ds.Score.HasValue)
-                        {                            
+                        {
                             sd.DomainScoreDict[ds.Domain] = ds.Score.Value;
-                            if (ds.Score.Value >= passScore) {
+                            if (ds.Score.Value >= passScore)
+                            {
                                 sd.DomainScorePassDict[ds.Domain] = true;
+                            }
+                            ///Cynthia 2021/12/8 新增需求: 若語文及格，則不單獨呈現國語文/英語
+                            ///https://3.basecamp.com/4399967/buckets/15852426/todos/4422425947#__recording_4426175131
+                            if (sd.DomainScorePassDict.ContainsKey("語文"))
+                            {
+                                if (sd.DomainScorePassDict["語文"] == true)  //如果語文及格
+                                {
+                                    if (sd.DomainScorePassDict.ContainsKey("國語文"))
+                                    {
+                                        sd.DomainScorePassDict["國語文"] = true;  //國語文也當成及格，就不會被印出來
+                                    }
+                                    if (sd.DomainScorePassDict.ContainsKey("英語"))
+                                    {
+                                        sd.DomainScorePassDict["英語"] = true; //英語也當成及格，就不會被印出來
+                                    }
+                                }
                             }
                         }
                     }
@@ -131,7 +148,7 @@ namespace KaoHsingReExamScoreReport
             List<string> retVal = new List<string>();
             retVal.Add("語文");
             retVal.Add("國語文");
-            retVal.Add("英語");            
+            retVal.Add("英語");
             retVal.Add("數學");
             retVal.Add("社會");
             retVal.Add("自然與生活科技");
