@@ -83,6 +83,21 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
             //if (newScore >= oldScore)
             //    Value = newScore;
 
+            //decimal? betterScore = null;
+
+            //if (ScoreOrigin.HasValue && ScoreMakeup.HasValue)
+            //{
+            //    betterScore = SubjectScore.GetBetterScore(ScoreOrigin, ScoreMakeup);
+            //}
+            //if (ScoreOrigin.HasValue && !ScoreMakeup.HasValue)
+            //{
+            //    betterScore = ScoreOrigin.Value;
+            //}
+            //if (!ScoreOrigin.HasValue && ScoreMakeup.HasValue)
+            //{
+            //    betterScore = ScoreMakeup.Value;
+            //}
+
             Value = betterScore;
         }
 

@@ -136,8 +136,8 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
             else if (Program.Mode == ModuleMode.HsinChu)
             {
                 // 預設取得比例
-                decimal scoreWeight = 50, assignmentWeight = 50;
-                decimal totalWeight = 0, totalScore = 0;
+                decimal scoreWeight = 0, assignmentWeight = 0, totalWeight = 0;
+                decimal? totalScore = null;
 
                 // 使用系統內預設比例
                 if (Util.ScorePercentageHSDict.ContainsKey(aedata.RefAssessmentSetupID))
@@ -145,18 +145,81 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
                     scoreWeight = Util.ScorePercentageHSDict[aedata.RefAssessmentSetupID];
                     assignmentWeight = 100 - scoreWeight;
                 }
-
-                if (aedata.UseScore && scedata.Score.HasValue)
+                if (aedata.UseScore && !aedata.UseAssignmentScore)
                 {
-                    totalScore += scedata.Score.Value * scoreWeight;
-                    totalWeight += scoreWeight;
+                    scoreWeight = 100;
+                    assignmentWeight = 0;
+                }
+                if (!aedata.UseScore && aedata.UseAssignmentScore)
+                {
+                    scoreWeight = 0;
+                    assignmentWeight = 100;
+                }
+                if (!aedata.UseScore && !aedata.UseAssignmentScore)
+                {
+                    scoreWeight = 0;
+                    assignmentWeight = 0;
+                }
+                if (scedata.Score.HasValue && Program.ScoreValueMap.ContainsKey(scedata.Score.Value))
+                {
+                    if (!Program.ScoreValueMap[scedata.Score.Value].AllowCalculation)
+                    {
+                        scoreWeight = 0;
+                        assignmentWeight = 100;
+                    }
+                }
+                if (scedata.AssignmentScore.HasValue && Program.ScoreValueMap.ContainsKey(scedata.AssignmentScore.Value))
+                {
+                    if (!Program.ScoreValueMap[scedata.AssignmentScore.Value].AllowCalculation)
+                    {
+                        scoreWeight = 100;
+                        assignmentWeight = 0;
+                    }
+                }
+                if (scoreWeight>0 && scedata.Score.HasValue)
+                {
+                    if (Program.ScoreValueMap.ContainsKey(scedata.Score.Value))
+                    {
+                        if (Program.ScoreValueMap[scedata.Score.Value].AllowCalculation)
+                        {
+                            totalScore = (totalScore == null ? 0 : totalScore) + Program.ScoreValueMap[scedata.Score.Value].Score.Value * scoreWeight;
+                            totalWeight += scoreWeight;
+                        }
+                    }
+                    else
+                    {
+                        totalScore = (totalScore == null ? 0 : totalScore) + scedata.Score.Value * scoreWeight;
+                        totalWeight += scoreWeight;
+                    }
+                }
+                if (assignmentWeight > 0 && scedata.AssignmentScore.HasValue)
+                {
+                    if (Program.ScoreValueMap.ContainsKey(scedata.AssignmentScore.Value))
+                    {
+                        if (Program.ScoreValueMap[scedata.AssignmentScore.Value].AllowCalculation)
+                        {
+                            totalScore = (totalScore == null ? 0 : totalScore) + Program.ScoreValueMap[scedata.AssignmentScore.Value].Score.Value * assignmentWeight;
+                            totalWeight += assignmentWeight;
+                        }
+                    }
+                    else
+                    {
+                        totalScore = (totalScore == null ? 0 : totalScore) + scedata.AssignmentScore.Value * assignmentWeight;
+                        totalWeight += assignmentWeight;
+                    }
                 }
 
-                if (aedata.UseAssignmentScore && scedata.AssignmentScore.HasValue)
-                {
-                    totalScore += scedata.AssignmentScore.Value * assignmentWeight;
-                    totalWeight += assignmentWeight;
-                }
+                //if (aedata.UseScore && scedata.Score.HasValue)
+                //{
+                //    totalScore += scedata.Score.Value * scoreWeight;
+                //    totalWeight += scoreWeight;
+                //}
+
+                //if (aedata.UseAssignmentScore && scedata.AssignmentScore.HasValue)
+                //{
+                //    totalScore += scedata.AssignmentScore.Value * assignmentWeight;
+                //    totalWeight += assignmentWeight;
+                //}
 
                 if (totalWeight != 0)
                     Value = totalScore / totalWeight;

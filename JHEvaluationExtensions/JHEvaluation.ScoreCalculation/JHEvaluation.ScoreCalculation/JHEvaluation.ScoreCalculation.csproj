@@ -336,6 +336,7 @@
     <Compile Include="ScoreStruct\ScoreCollections.cs" />
     <Compile Include="ScoreStruct\GraduateScore.cs" />
     <Compile Include="ScoreStruct\IScore.cs" />
+    <Compile Include="ScoreStruct\ScoreMap.cs" />
     <Compile Include="ScoreStruct\SemesterScore.cs" />
     <Compile Include="ScoreStruct\SemesterScoreCollection.cs" />
     <Compile Include="ScoreStruct\SemesterSubjectScore.cs" />
@@ -506,6 +507,9 @@
     <EmbeddedResource Include="StudentExtendControls\Ribbon\GraduationInspectWizard.resx">
       <DependentUpon>GraduationInspectWizard.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\GraduationPredictReportForm.resx">
+      <DependentUpon>GraduationPredictReportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StudentExtendControls\Ribbon\GraduationPredictReportControls\PrintConfigForm.resx">
       <DependentUpon>PrintConfigForm.cs</DependentUpon>

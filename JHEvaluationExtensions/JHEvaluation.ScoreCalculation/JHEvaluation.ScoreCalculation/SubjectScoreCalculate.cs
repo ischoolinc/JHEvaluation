@@ -11,6 +11,7 @@ using JHSchool.Data;
 using FISCA.LogAgent;
 using JHEvaluation.ScoreCalculation.ScoreStruct;
 using FISCA.Data;
+using System.Xml;
 
 namespace JHEvaluation.ScoreCalculation
 {
@@ -40,6 +41,51 @@ namespace JHEvaluation.ScoreCalculation
 
         private void SubjectScoreCalculate_Load(object sender, EventArgs e)
         {
+            Program.ScoreTextMap.Clear();
+            Program.ScoreValueMap.Clear();
+            #region 取得評量成績缺考暨免試設定
+            Framework.ConfigData cd = JHSchool.School.Configuration["評量成績缺考暨免試設定"];
+            if (!string.IsNullOrEmpty(cd["評量成績缺考暨免試設定"]))
+            {
+                XmlElement element = Framework.XmlHelper.LoadXml(cd["評量成績缺考暨免試設定"]);
+
+                foreach (XmlElement each in element.SelectNodes("Setting"))
+                {
+                    var UseText = each.SelectSingleNode("UseText").InnerText;
+                    var AllowCalculation = bool.Parse(each.SelectSingleNode("AllowCalculation").InnerText);
+                    decimal Score;
+                    decimal.TryParse(each.SelectSingleNode("Score").InnerText, out Score);
+                    var Active = bool.Parse(each.SelectSingleNode("Active").InnerText);
+                    var UseValue = decimal.Parse(each.SelectSingleNode("UseValue").InnerText);
+
+                    if (Active)
+                    {
+                        if (!Program.ScoreTextMap.ContainsKey(UseText))
+                        {
+                            Program.ScoreTextMap.Add(UseText, new ScoreStruct.ScoreMap
+                            {
+                                UseText = UseText,  //「缺」或「免」
+                                AllowCalculation = AllowCalculation,  //是否計算成績
+                                Score = Score,  //計算成績時，應以多少分來計算
+                                Active = Active, //此設定是否啟用
+                                UseValue = UseValue, //代表「缺」或「免」的負數
+                            });
+                        }
+                        if (!Program.ScoreValueMap.ContainsKey(UseValue))
+                        {
+                            Program.ScoreValueMap.Add(UseValue, new ScoreStruct.ScoreMap
+                            {
+                                UseText = UseText,
+                                AllowCalculation = AllowCalculation,
+                                Score = Score,
+                                Active = Active,
+                                UseValue = UseValue,
+                            });
+                        }
+                    }
+                }
+            }
+            #endregion
             Util.SetSemesterDefaultItems(intSchoolYear, intSemester);
             StudentScore.SetClassMapping();
         }

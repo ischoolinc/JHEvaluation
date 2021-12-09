@@ -26,6 +26,9 @@ namespace JHEvaluation.ScoreCalculation
         private const string GradFilteStudentCode = "JHSchool.Student.Ribbon0058"; //學生畢業資格審查。
         private const string GradFilteAdminCode = "JHSchool.EduAdmin.Ribbon0046"; //教務畢業資格審查。
 
+        public static Dictionary<string, ScoreStruct.ScoreMap> ScoreTextMap = new Dictionary<string, ScoreStruct.ScoreMap>();
+        public static Dictionary<decimal, ScoreStruct.ScoreMap> ScoreValueMap = new Dictionary<decimal, ScoreStruct.ScoreMap>();
+
         [MainMethod()]
         public static void Main()
         {
@@ -178,7 +181,7 @@ namespace JHEvaluation.ScoreCalculation
 
         private static void DeployModeSetup()
         {
-            DeployParameters dparams = ModuleLoader.GetDeployParametsers(typeof(Program), "Mode=KaoHsiung");
+            DeployParameters dparams = ModuleLoader.GetDeployParametsers(typeof(Program), "Mode=HsinChu");
 
             //debug
             //Mode = ModuleMode.HsinChu;
