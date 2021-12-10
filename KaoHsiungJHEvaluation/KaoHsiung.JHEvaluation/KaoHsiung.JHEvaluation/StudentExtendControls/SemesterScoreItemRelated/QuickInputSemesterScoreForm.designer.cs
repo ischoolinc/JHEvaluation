@@ -779,7 +779,7 @@
             this.labelX11.Name = "labelX11";
             this.labelX11.Size = new System.Drawing.Size(126, 25);
             this.labelX11.TabIndex = 33;
-            this.labelX11.Text = "自然科學";
+            this.labelX11.Text = "藝術";
             this.labelX11.TextAlignment = System.Drawing.StringAlignment.Center;
             // 
             // txtPC8
@@ -815,7 +815,7 @@
             this.labelX10.Name = "labelX10";
             this.labelX10.Size = new System.Drawing.Size(126, 25);
             this.labelX10.TabIndex = 27;
-            this.labelX10.Text = "藝術";
+            this.labelX10.Text = "自然科學";
             this.labelX10.TextAlignment = System.Drawing.StringAlignment.Center;
             // 
             // txtLearnDomain

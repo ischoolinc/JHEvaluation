@@ -199,8 +199,8 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 txtPC4.Text = pcs.ContainsKey("社會") ? pcs["社會"].ToString() : "";
                 //txtPC5.Text = pcs.ContainsKey("藝術與人文") ? pcs["藝術與人文"].ToString() : "";
                 //txtPC6.Text = pcs.ContainsKey("自然與生活科技") ? pcs["自然與生活科技"].ToString() : "";
-                txtPC5.Text = pcs.ContainsKey("藝術") ? pcs["藝術"].ToString() : "";
-                txtPC6.Text = pcs.ContainsKey("自然科學") ? pcs["自然科學"].ToString() : "";
+                txtPC5.Text = pcs.ContainsKey("自然科學") ? pcs["自然科學"].ToString() : "";
+                txtPC6.Text = pcs.ContainsKey("藝術") ? pcs["藝術"].ToString() : "";
                 txtPC7.Text = pcs.ContainsKey("健康與體育") ? pcs["健康與體育"].ToString() : "";
                 txtPC8.Text = pcs.ContainsKey("綜合活動") ? pcs["綜合活動"].ToString() : "";
                 txtPC10.Text = pcs.ContainsKey("科技") ? pcs["科技"].ToString() : "";
@@ -325,9 +325,9 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 //if (CheckDomainValid(txtPC6, txtScore6, txtScore6, txtEffort6))
                 //    newRecord.Domains.Add("自然與生活科技", GetDomainScore("自然與生活科技", txtPC6, txtScore6, txtScore6, txtEffort6, txtText6));
                 if (CheckDomainValid(txtPC5, txtScore5, txtScore5, txtEffort5))
-                    newRecord.Domains.Add("藝術", GetDomainScore("藝術", txtPC5, txtScore5, txtScore5, txtEffort5, txtText5));
+                    newRecord.Domains.Add("自然科學", GetDomainScore("自然科學", txtPC5, txtScore5, txtScore5, txtEffort5, txtText5));
                 if (CheckDomainValid(txtPC6, txtScore6, txtScore6, txtEffort6))
-                    newRecord.Domains.Add("自然科學", GetDomainScore("自然科學", txtPC6, txtScore6, txtScore6, txtEffort6, txtText6));
+                    newRecord.Domains.Add("藝術", GetDomainScore("藝術", txtPC6, txtScore6, txtScore6, txtEffort6, txtText6));
                 if (CheckDomainValid(txtPC7, txtScore7, txtScore7, txtEffort7))
                     newRecord.Domains.Add("健康與體育", GetDomainScore("健康與體育", txtPC7, txtScore7, txtScore7, txtEffort7, txtText7));
                 if (CheckDomainValid(txtPC8, txtScore8, txtScore8, txtEffort8))
