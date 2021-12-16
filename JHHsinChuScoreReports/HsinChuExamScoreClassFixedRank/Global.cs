@@ -1149,12 +1149,26 @@ namespace HsinChuExamScoreClassFixedRank
                 rankType1List.Add("低標");
                 rankType1List.Add("底標");
 
+                rankType1List.Add("新頂標");
+                rankType1List.Add("新前標");
+                rankType1List.Add("新均標");
+                rankType1List.Add("新後標");
+                rankType1List.Add("新底標");
+                rankType1List.Add("標準差");
+
                 List<string> rankType1VList = new List<string>();
                 rankType1VList.Add("avg_top_25");
                 rankType1VList.Add("avg_top_50");
                 rankType1VList.Add("avg");
                 rankType1VList.Add("avg_bottom_50");
                 rankType1VList.Add("avg_bottom_25");
+
+                rankType1VList.Add("pr_88");
+                rankType1VList.Add("pr_75");
+                rankType1VList.Add("pr_50");
+                rankType1VList.Add("pr_25");
+                rankType1VList.Add("pr_12");
+                rankType1VList.Add("std_dev_pop");
 
                 List<string> rankType2List = new List<string>();
                 rankType2List.Add("總人數");
@@ -1192,7 +1206,7 @@ namespace HsinChuExamScoreClassFixedRank
                 // 班級領域定期成績五標
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("班級、年級領域成績五標-領域成績");
+                builder.Writeln("班級、年級領域成績五標、標準差-領域成績");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
@@ -1239,7 +1253,7 @@ namespace HsinChuExamScoreClassFixedRank
                 // 班級領域定期成績五標
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("班級、年級領域定期成績五標-領域成績");
+                builder.Writeln("班級、年級領域定期成績五標、標準差-領域成績");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
@@ -1286,7 +1300,7 @@ namespace HsinChuExamScoreClassFixedRank
                 // 班級科目定期成績五標
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("班級、年級科目定期成績五標-科目成績");
+                builder.Writeln("班級、年級科目定期成績五標、標準差-科目成績");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
@@ -1335,7 +1349,7 @@ namespace HsinChuExamScoreClassFixedRank
                 // 班級科目定期成績五標
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("班級、年級科目定期成績五標-科目成績");
+                builder.Writeln("班級、年級科目定期成績五標、標準差-科目成績");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
@@ -2366,6 +2380,8 @@ namespace HsinChuExamScoreClassFixedRank
                         builder.Write("學生科目平時成績");
                         builder.InsertCell();
                         builder.Write("學生科目學分");
+                        builder.InsertCell();
+                        builder.Write("學生科目學分含括號");
                     }
                     builder.EndRow();
 
@@ -2387,6 +2403,8 @@ namespace HsinChuExamScoreClassFixedRank
                             builder.InsertField("MERGEFIELD 學生_科目_平時成績" + studCot + "_" + ss + " \\* MERGEFORMAT ", "S" + ss);
                             builder.InsertCell();
                             builder.InsertField("MERGEFIELD 學生_科目學分" + studCot + "_" + ss + " \\* MERGEFORMAT ", "C" + ss);
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD 學生_科目學分_含括號" + studCot + "_" + ss + " \\* MERGEFORMAT ", "C" + ss);
 
                         }
                         builder.EndRow();

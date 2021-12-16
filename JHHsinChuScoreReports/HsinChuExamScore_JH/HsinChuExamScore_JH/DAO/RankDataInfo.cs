@@ -31,6 +31,35 @@ namespace HsinChuExamScore_JH.DAO
         public int rank = 0;  // 排名
         public int pr = 0;  // PR
         public int percentile = 0;  // 百分比
-      
+
+        /// <summary>
+        /// 標準差
+        /// </summary>
+        public decimal std_dev_pop = 0;
+
+        /// <summary>
+        /// 新頂標
+        /// </summary>
+        public decimal pr_88 = 0;
+
+        /// <summary>
+        /// 新前標
+        /// </summary>
+        public decimal pr_75 = 0;
+
+        /// <summary>
+        /// 新均標
+        /// </summary>
+        public decimal pr_50 = 0;
+
+        /// <summary>
+        /// 新後標
+        /// </summary>
+        public decimal pr_25 = 0;
+
+        /// <summary>
+        /// 新底標
+        /// </summary>
+        public decimal pr_12 = 0;
     }
 }

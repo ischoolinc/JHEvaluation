@@ -860,7 +860,7 @@ namespace HsinChuExamScore_JH
             #region 處理排名資料
 
             // 學生排名資料索引使用
-            Dictionary<string, Dictionary<string, RankDataInfo>> StudentExamRankMatrixDict = Utility.GetStudentExamRankDict(_SelSchoolYear, _SelSemester, _SelExamID, _StudentIDList);
+            Dictionary<string, Dictionary<string, RankDataInfo>> StudentExamRankMatrixDict = Utility.GetStudentExamRankDict(_SelSchoolYear, _SelSemester, _SelExamID, _StudentIDList, parseNumber);
 
             //// debug write text file
             //using (StreamWriter sw = new StreamWriter(Application.StartupPath + "\\debug排名資料.txt", false))
@@ -877,7 +877,7 @@ namespace HsinChuExamScore_JH
 
 
             // 學生排名資料參考索引使用
-            Dictionary<string, Dictionary<string, RankDataInfo>> StudentRefExamRankMatrixDict = Utility.GetStudentExamRankDict(_SelRefSchoolYear, _SelRefSemester, _SelRefExamID, _StudentIDList);
+            Dictionary<string, Dictionary<string, RankDataInfo>> StudentRefExamRankMatrixDict = Utility.GetStudentExamRankDict(_SelRefSchoolYear, _SelRefSemester, _SelRefExamID, _StudentIDList, parseNumber);
             #endregion
 
             #endregion
@@ -978,12 +978,24 @@ namespace HsinChuExamScore_JH
             rankDataTypeList.Add("母體底標");
             rankDataTypeList.Add("母體人數");
 
+            //2121-12
+            rankDataTypeList.Add("母體新頂標");
+            rankDataTypeList.Add("母體新前標");
+            rankDataTypeList.Add("母體新均標");
+            rankDataTypeList.Add("母體新後標");
+            rankDataTypeList.Add("母體新底標");
+            rankDataTypeList.Add("母體標準差");
+
             List<string> domainLi = new List<string>();
 
             List<string> subjLi = new List<string>();
 
             subjLi.Add("科目名稱");
             subjLi.Add("科目權數");
+
+            // 2021-12 Cynthia 協同國中要求增加 含有括號的權數 ex:  (3)
+            subjLi.Add("科目權數含括號");
+
             // todo : 新增 參考 識別定期評量
             subjLi.Add("參考試別科目定期評量");
             subjLi.Add("參考試別科目平時評量");
@@ -1453,6 +1465,10 @@ namespace HsinChuExamScore_JH
                                     if (examSubjScore.Credit.HasValue)
                                         row[key] = examSubjScore.Credit.Value;
                                     break;
+                                case "科目權數含括號":    // 2021-12 Cynthia 協同國中要求增加 含有括號的權數 ex:  (3)
+                                    if (examSubjScore.Credit.HasValue)
+                                        row[key] = "("+examSubjScore.Credit.Value+")";
+                                    break;
                                 case "科目定期評量":
                                     if (examSubjScore.ScoreF.HasValue)
                                     {
@@ -1634,6 +1650,13 @@ namespace HsinChuExamScore_JH
                                     row[ddname + "_科目" + rt + "母體後標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_50;
                                     row[ddname + "_科目" + rt + "母體底標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_25;
                                     row[ddname + "_科目" + rt + "母體人數" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].matrix_count;
+
+                                    row[ddname + "_科目" + rt + "母體新頂標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_88;
+                                    row[ddname + "_科目" + rt + "母體新前標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_75;
+                                    row[ddname + "_科目" + rt + "母體新均標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_50;
+                                    row[ddname + "_科目" + rt + "母體新後標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_25;
+                                    row[ddname + "_科目" + rt + "母體新底標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_12;
+                                    row[ddname + "_科目" + rt + "母體標準差" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].std_dev_pop;
                                 }
 
                                 keyD = "定期評量_定期/科目成績" + examSubjScore.SubjectName + rt;
@@ -1648,6 +1671,13 @@ namespace HsinChuExamScore_JH
                                     row[ddname + "_科目定期" + rt + "母體後標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_50;
                                     row[ddname + "_科目定期" + rt + "母體底標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_25;
                                     row[ddname + "_科目定期" + rt + "母體人數" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].matrix_count;
+
+                                    row[ddname + "_科目定期" + rt + "母體新頂標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_88;
+                                    row[ddname + "_科目定期" + rt + "母體新前標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_75;
+                                    row[ddname + "_科目定期" + rt + "母體新均標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_50;
+                                    row[ddname + "_科目定期" + rt + "母體新後標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_25;
+                                    row[ddname + "_科目定期" + rt + "母體新底標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_12;
+                                    row[ddname + "_科目定期" + rt + "母體標準差" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].std_dev_pop;
                                 }
                             }
                         }
@@ -1846,7 +1876,7 @@ namespace HsinChuExamScore_JH
                         }
 
 
-                        // 學分
+                        // 學分/權數
                         if (eds.Credit1.HasValue)
                             row[keyc] = eds.Credit1.Value;
 
@@ -1882,6 +1912,13 @@ namespace HsinChuExamScore_JH
                                     row[eds.DomainName + "_領域" + rt + "母體後標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_50;
                                     row[eds.DomainName + "_領域" + rt + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_25;
                                     row[eds.DomainName + "_領域" + rt + "母體人數"] = StudentExamRankMatrixDict[StudRec.ID][keyD].matrix_count;
+
+                                    row[eds.DomainName + "_領域" + rt + "母體新頂標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_88;
+                                    row[eds.DomainName + "_領域" + rt + "母體新前標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_75;
+                                    row[eds.DomainName + "_領域" + rt + "母體新均標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_50;
+                                    row[eds.DomainName + "_領域" + rt + "母體新後標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_25;
+                                    row[eds.DomainName + "_領域" + rt + "母體新底標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_12;
+                                    row[eds.DomainName + "_領域" + rt + "母體標準差"] = StudentExamRankMatrixDict[StudRec.ID][keyD].std_dev_pop;
 
                                     string rowRt = "班級_";
                                     if (rt == "年排名")
@@ -1920,6 +1957,13 @@ namespace HsinChuExamScore_JH
                                     row[eds.DomainName + "_領域定期" + rt + "母體後標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_50;
                                     row[eds.DomainName + "_領域定期" + rt + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].avg_bottom_25;
                                     row[eds.DomainName + "_領域定期" + rt + "母體人數"] = StudentExamRankMatrixDict[StudRec.ID][keyD].matrix_count;
+
+                                    row[eds.DomainName + "_領域定期" + rt + "母體新頂標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_88;
+                                    row[eds.DomainName + "_領域定期" + rt + "母體新前標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_75;
+                                    row[eds.DomainName + "_領域定期" + rt + "母體新均標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_50;
+                                    row[eds.DomainName + "_領域定期" + rt + "母體新後標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_25;
+                                    row[eds.DomainName + "_領域定期" + rt + "母體新底標"] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_12;
+                                    row[eds.DomainName + "_領域定期" + rt + "母體標準差"] = StudentExamRankMatrixDict[StudRec.ID][keyD].std_dev_pop;
 
 
                                     string rowRt = "班級_";
@@ -2117,6 +2161,13 @@ namespace HsinChuExamScore_JH
                                 row["科目成績" + st + rt + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
                                 row["科目成績" + st + rt + "母體人數"] = StudentExamRankMatrixDict[StudRec.ID][key].matrix_count;
 
+                                row["科目成績" + st + rt + "母體新頂標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_88;
+                                row["科目成績" + st + rt + "母體新前標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_75;
+                                row["科目成績" + st + rt + "母體新均標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_50;
+                                row["科目成績" + st + rt + "母體新後標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_25;
+                                row["科目成績" + st + rt + "母體新底標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_12;
+                                row["科目成績" + st + rt + "母體標準差"] = StudentExamRankMatrixDict[StudRec.ID][key].std_dev_pop;
+
                                 if (st.Contains("平均"))
                                 {
                                     row["科目成績" + st + rt + "R100_u"] = StudentExamRankMatrixDict[StudRec.ID][key].level_gte100;
@@ -2145,6 +2196,13 @@ namespace HsinChuExamScore_JH
                                 row["科目定期成績" + st + rt + "母體後標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
                                 row["科目定期成績" + st + rt + "母體底標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
                                 row["科目定期成績" + st + rt + "母體人數"] = StudentExamRankMatrixDict[StudRec.ID][key].matrix_count;
+
+                                row["科目定期成績" + st + rt + "母體新頂標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_88;
+                                row["科目定期成績" + st + rt + "母體新前標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_75;
+                                row["科目定期成績" + st + rt + "母體新均標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_50;
+                                row["科目定期成績" + st + rt + "母體新後標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_25;
+                                row["科目定期成績" + st + rt + "母體新底標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_12;
+                                row["科目定期成績" + st + rt + "母體標準差"] = StudentExamRankMatrixDict[StudRec.ID][key].std_dev_pop;
 
                                 if (rt.Contains("平均"))
                                 {
@@ -2195,6 +2253,13 @@ namespace HsinChuExamScore_JH
                                     row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體後標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
                                     row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體底標"] = StudentExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
                                     row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體人數"] = StudentExamRankMatrixDict[StudRec.ID][key].matrix_count;
+
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體新頂標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_88;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體新前標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_75;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體新均標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_50;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體新後標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_25;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體新底標"] = StudentExamRankMatrixDict[StudRec.ID][key].pr_12;
+                                    row[$"{scoreType}{itemTypesMapping[itemType]}{itemName}{rankType}母體標準差"] = StudentExamRankMatrixDict[StudRec.ID][key].std_dev_pop;
 
 
                                     if (itemName.Contains("平均"))
@@ -2267,6 +2332,13 @@ namespace HsinChuExamScore_JH
                                 row["參考科目成績" + st + rt + "母體底標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
                                 row["參考科目成績" + st + rt + "母體人數"] = StudentRefExamRankMatrixDict[StudRec.ID][key].matrix_count;
 
+                                row["參考科目成績" + st + rt + "母體新頂標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr_88;
+                                row["參考科目成績" + st + rt + "母體新前標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr_75;
+                                row["參考科目成績" + st + rt + "母體新均標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr_50;
+                                row["參考科目成績" + st + rt + "母體新後標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr_25;
+                                row["參考科目成績" + st + rt + "母體新底標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr_12;
+                                row["參考科目成績" + st + rt + "母體標準差"] = StudentRefExamRankMatrixDict[StudRec.ID][key].std_dev_pop;
+
                                 if (st.Contains("平均"))
                                 {
                                     row["參考科目成績" + st + rt + "R100_u"] = StudentRefExamRankMatrixDict[StudRec.ID][key].level_gte100;
@@ -2295,6 +2367,13 @@ namespace HsinChuExamScore_JH
                                 row["參考科目定期成績" + st + rt + "母體後標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_50;
                                 row["參考科目定期成績" + st + rt + "母體底標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].avg_bottom_25;
                                 row["參考科目定期成績" + st + rt + "母體人數"] = StudentRefExamRankMatrixDict[StudRec.ID][key].matrix_count;
+
+                                row["參考科目定期成績" + st + rt + "母體新頂標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr_88;
+                                row["參考科目定期成績" + st + rt + "母體新前標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr_75;
+                                row["參考科目定期成績" + st + rt + "母體新均標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr_50;
+                                row["參考科目定期成績" + st + rt + "母體新後標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr_25;
+                                row["參考科目定期成績" + st + rt + "母體新底標"] = StudentRefExamRankMatrixDict[StudRec.ID][key].pr_12;
+                                row["參考科目定期成績" + st + rt + "母體標準差"] = StudentRefExamRankMatrixDict[StudRec.ID][key].std_dev_pop;
 
                                 if (st.Contains("平均"))
                                 {

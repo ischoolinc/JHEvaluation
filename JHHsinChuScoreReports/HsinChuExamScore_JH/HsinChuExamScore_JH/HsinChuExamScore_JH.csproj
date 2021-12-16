@@ -45,7 +45,7 @@
     </Reference>
     <Reference Include="Campus.ePaperCloud">
       <HintPath>Library\Campus.ePaperCloud.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

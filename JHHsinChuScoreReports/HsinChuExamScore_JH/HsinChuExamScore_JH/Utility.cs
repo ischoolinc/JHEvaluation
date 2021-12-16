@@ -29,7 +29,7 @@ namespace HsinChuExamScore_JH
                 string query = "select ref_student_id,occur_date,reason,hours from $k12.service.learning.record where ref_student_id in('" + string.Join("','", StudentIDList.ToArray()) + "') and occur_date >='" + beginDate.ToShortDateString() + "' and occur_date <='" + endDate.ToShortDateString() + "'order by ref_student_id,occur_date;";
                 DataTable dt = qh.Select(query);
                 foreach (DataRow dr in dt.Rows)
-                {  
+                {
                     decimal hr;
 
                     string sid = dr[0].ToString();
@@ -369,7 +369,7 @@ WHERE  name = 'JHEvaluation_Subject_Ordinal'
         }
 
 
-        public static Dictionary<string, Dictionary<string, RankDataInfo>> GetStudentExamRankDict(int SchoolYear, int Semester, string ExamID, List<string> StudentIDList)
+        public static Dictionary<string, Dictionary<string, RankDataInfo>> GetStudentExamRankDict(int SchoolYear, int Semester, string ExamID, List<string> StudentIDList, int ParseNumber)
         {
             Dictionary<string, Dictionary<string, RankDataInfo>> value = new Dictionary<string, Dictionary<string, RankDataInfo>>();
 
@@ -407,6 +407,12 @@ SELECT
     ,rank_matrix.avg
     ,rank_matrix.avg_bottom_50
     ,rank_matrix.avg_bottom_25
+    ,rank_matrix.pr_88
+    ,rank_matrix.pr_75
+    ,rank_matrix.pr_50
+    ,rank_matrix.pr_25
+    ,rank_matrix.pr_12
+    ,rank_matrix.std_dev_pop
     ,rank_detail.score
     ,rank_detail.rank
     ,rank_detail.pr
@@ -450,7 +456,7 @@ WHERE
                         if (!value[student_id].ContainsKey(type))
                         {
                             int matrix_count, level_gte100, level_90, level_80, level_70, level_60, level_50, level_40, level_30, level_20, level_10, level_lt10, rank, pr, percentile;
-                            decimal avg_top_25, avg_top_50, avg, avg_bottom_50, avg_bottom_25;
+                            decimal avg_top_25, avg_top_50, avg, avg_bottom_50, avg_bottom_25, pr_88, pr_75, pr_50, pr_25, pr_12, std_dev_pop;
 
                             RankDataInfo rdf = new RankDataInfo();
 
@@ -468,16 +474,32 @@ WHERE
                             if (int.TryParse(dr["level_lt10"].ToString(), out level_lt10)) rdf.level_lt10 = level_lt10;
 
                             // 和佳樺討論，五標 小數下第2位四捨五入
+                            //2021-12 Cynthia 改為四捨五入至使用者指定位數
                             if (decimal.TryParse(dr["avg_top_25"].ToString(), out avg_top_25))
-                                rdf.avg_top_25 = Math.Round(avg_top_25, MidpointRounding.AwayFromZero);
+                                rdf.avg_top_25 = Math.Round(avg_top_25, ParseNumber, MidpointRounding.AwayFromZero);
                             if (decimal.TryParse(dr["avg_top_50"].ToString(), out avg_top_50))
-                                rdf.avg_top_50 = Math.Round(avg_top_50, MidpointRounding.AwayFromZero);
+                                rdf.avg_top_50 = Math.Round(avg_top_50, ParseNumber, MidpointRounding.AwayFromZero);
                             if (decimal.TryParse(dr["avg"].ToString(), out avg))
-                                rdf.avg = Math.Round(avg, MidpointRounding.AwayFromZero);
+                                rdf.avg = Math.Round(avg, ParseNumber, MidpointRounding.AwayFromZero);
                             if (decimal.TryParse(dr["avg_bottom_50"].ToString(), out avg_bottom_50))
-                                rdf.avg_bottom_50 = Math.Round(avg_bottom_50, MidpointRounding.AwayFromZero);
+                                rdf.avg_bottom_50 = Math.Round(avg_bottom_50, ParseNumber, MidpointRounding.AwayFromZero);
                             if (decimal.TryParse(dr["avg_bottom_25"].ToString(), out avg_bottom_25))
-                                rdf.avg_bottom_25 = Math.Round(avg_bottom_25, MidpointRounding.AwayFromZero);
+                                rdf.avg_bottom_25 = Math.Round(avg_bottom_25, ParseNumber, MidpointRounding.AwayFromZero);
+
+                            if (decimal.TryParse(dr["std_dev_pop"].ToString(), out std_dev_pop))
+                                rdf.std_dev_pop = Math.Round(std_dev_pop, ParseNumber, MidpointRounding.AwayFromZero);
+                            if (decimal.TryParse(dr["pr_88"].ToString(), out pr_88))
+                                rdf.pr_88 = Math.Round(pr_88, ParseNumber, MidpointRounding.AwayFromZero);
+                            if (decimal.TryParse(dr["pr_75"].ToString(), out pr_75))
+                                rdf.pr_75 = Math.Round(pr_75, ParseNumber, MidpointRounding.AwayFromZero);
+                            if (decimal.TryParse(dr["pr_50"].ToString(), out pr_50))
+                                rdf.pr_50 = Math.Round(pr_50, ParseNumber, MidpointRounding.AwayFromZero);
+                            if (decimal.TryParse(dr["pr_25"].ToString(), out pr_25))
+                                rdf.pr_25 = Math.Round(pr_25, ParseNumber, MidpointRounding.AwayFromZero);
+                            if (decimal.TryParse(dr["pr_12"].ToString(), out pr_12))
+                                rdf.pr_12 = Math.Round(pr_12, ParseNumber, MidpointRounding.AwayFromZero);
+
+
 
                             if (int.TryParse(dr["rank"].ToString(), out rank)) rdf.rank = rank;
                             if (int.TryParse(dr["pr"].ToString(), out pr)) rdf.pr = pr;
@@ -497,15 +519,15 @@ WHERE
         }
 
 
-         /// <summary>
-         /// 
-         /// </summary>
-         /// <param name="studentIDs">學生ID</param>
-         /// <param name="schoolYear">學年度</param>
-         /// <param name="semester">學期</param>
-         /// <param name="examIDs">試別</param>
-         /// <returns></returns>
-        public static List<string> GetSCETakeIDsByExamID(List<string> studentIDs, int schoolYear, int semester , params string[] examIDs)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="studentIDs">學生ID</param>
+        /// <param name="schoolYear">學年度</param>
+        /// <param name="semester">學期</param>
+        /// <param name="examIDs">試別</param>
+        /// <returns></returns>
+        public static List<string> GetSCETakeIDsByExamID(List<string> studentIDs, int schoolYear, int semester, params string[] examIDs)
         {
             List<string> result = new List<string>();
 
@@ -518,9 +540,9 @@ FROM
     sc_attend   
     INNER JOIN sce_take
 ON sce_take.ref_sc_attend_id = sc_attend.id
-WHERE sc_attend.ref_student_id IN(" + string.Join(",", studentIDs.ToArray()) + @") AND sce_take.ref_exam_id IN (" + String.Join(",",examIDs) + 
+WHERE sc_attend.ref_student_id IN(" + string.Join(",", studentIDs.ToArray()) + @") AND sce_take.ref_exam_id IN (" + String.Join(",", examIDs) +
 @") AND ref_course_id in ( SELECT  id FROM course  WHERE school_year =" + schoolYear + " AND semester =" + semester + " )";
-               
+
                 QueryHelper qh = new QueryHelper();
 
                 DataTable dt = qh.Select(qry);

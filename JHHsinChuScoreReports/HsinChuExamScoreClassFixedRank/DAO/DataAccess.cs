@@ -426,6 +426,12 @@ SELECT
     , rank_matrix.avg
     , rank_matrix.avg_bottom_50
     , rank_matrix.avg_bottom_25
+    , rank_matrix.std_dev_pop
+    , rank_matrix.pr_88
+    , rank_matrix.pr_75
+    , rank_matrix.pr_50
+    , rank_matrix.pr_25
+    , rank_matrix.pr_12
     , rank_detail.score
 FROM 
 	rank_matrix
@@ -561,6 +567,12 @@ SELECT
     , rank_matrix.avg
     , rank_matrix.avg_bottom_50
     , rank_matrix.avg_bottom_25   
+    , rank_matrix.std_dev_pop
+    , rank_matrix.pr_88
+    , rank_matrix.pr_75
+    , rank_matrix.pr_50
+    , rank_matrix.pr_25
+    , rank_matrix.pr_12
 FROM 
 	rank_matrix
 	LEFT OUTER JOIN rank_detail

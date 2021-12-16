@@ -729,6 +729,9 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                     dtTable.Columns.Add("學生_科目學分" + studCot + "_" + ss);
 
+                    // 2021-12 Cynthia 協同國中要求增加 含有括號的權數 ex:  (3)
+                    dtTable.Columns.Add("學生_科目學分_含括號" + studCot + "_" + ss);
+
                     dtTable.Columns.Add("學生_領域名稱" + studCot + "_" + ss);
                     dtTable.Columns.Add("學生_領域成績" + studCot + "_" + ss);
                     dtTable.Columns.Add("學生_領域_定期成績" + studCot + "_" + ss);
@@ -773,6 +776,12 @@ namespace HsinChuExamScoreClassFixedRank.Form
             rankTypeList.Add("avg");
             rankTypeList.Add("avg_bottom_50");
             rankTypeList.Add("avg_bottom_25");
+            rankTypeList.Add("std_dev_pop");
+            rankTypeList.Add("pr_88");
+            rankTypeList.Add("pr_75");
+            rankTypeList.Add("pr_50");
+            rankTypeList.Add("pr_25");
+            rankTypeList.Add("pr_12");
 
             // 建立班級、年組距合併欄位 領域
             List<int> grList = new List<int>();
@@ -1547,6 +1556,10 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             string sa2 = "學生_科目成績" + studCot + "_" + saCount;
                             string sa3 = "學生_科目_定期成績" + studCot + "_" + saCount;
                             string sa4 = "學生_科目學分" + studCot + "_" + saCount;
+
+                            // 2021-12 Cynthia 協同國中要求增加 含有括號的權數 ex:  (3)
+                            string _sa4 = "學生_科目學分_含括號" + studCot + "_" + saCount;
+
                             string sa5 = "學生_科目_平時成績" + studCot + "_" + saCount;
 
                             if (dtTable.Columns.Contains(sa1))
@@ -1580,6 +1593,15 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 if (sia.Credit.HasValue)
                                 {
                                     row[sa4] = sia.Credit.Value;
+                                }
+                            }
+
+                            // 2021-12 Cynthia 協同國中要求增加 含有括號的權數 ex:  (3)
+                            if (dtTable.Columns.Contains(_sa4))
+                            {
+                                if (sia.Credit.HasValue)
+                                {
+                                    row[_sa4] = "("+sia.Credit.Value+")";
                                 }
                             }
 
@@ -1714,7 +1736,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 string cKey = "班級_領域成績_" + dd + "_" + rt;
                                 if (dtTable.Columns.Contains(cKey))
                                 {
-                                    if (cKey.Contains("avg"))
+                                    if (cKey.Contains("avg")|| cKey.Contains("pr_")|| cKey.Contains("std_dev_pop"))
                                         row[cKey] = parseScore1(value);
                                     else
                                         row[cKey] = value;
@@ -1734,7 +1756,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 string cKey = "班級_領域定期成績_" + dd + "_" + rt;
                                 if (dtTable.Columns.Contains(cKey))
                                 {
-                                    if (cKey.Contains("avg"))
+                                    if (cKey.Contains("avg") || cKey.Contains("pr_") || cKey.Contains("std_dev_pop"))
                                         row[cKey] = parseScore1(value);
                                     else
                                         row[cKey] = value;
@@ -1765,7 +1787,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 string cKey = "班級_科目成績_" + ss + "_" + rt;
                                 if (dtTable.Columns.Contains(cKey))
                                 {
-                                    if (cKey.Contains("avg"))
+                                    if (cKey.Contains("avg") || cKey.Contains("pr_") || cKey.Contains("std_dev_pop"))
                                         row[cKey] = parseScore1(value);
                                     else
                                         row[cKey] = value;
@@ -1785,7 +1807,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 string cKey = "班級_科目定期成績_" + ss + "_" + rt;
                                 if (dtTable.Columns.Contains(cKey))
                                 {
-                                    if (cKey.Contains("avg"))
+                                    if (cKey.Contains("avg") || cKey.Contains("pr_") || cKey.Contains("std_dev_pop"))
                                         row[cKey] = parseScore1(value);
                                     else
                                         row[cKey] = value;
@@ -1822,7 +1844,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 string cKey = "年級_領域成績_" + dd + "_" + rt;
                                 if (dtTable.Columns.Contains(cKey))
                                 {
-                                    if (cKey.Contains("avg"))
+                                    if (cKey.Contains("avg") || cKey.Contains("pr_") || cKey.Contains("std_dev_pop"))
                                         row[cKey] = parseScore1(value);
                                     else
                                         row[cKey] = value;
@@ -1842,7 +1864,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 string cKey = "年級_領域定期成績_" + dd + "_" + rt;
                                 if (dtTable.Columns.Contains(cKey))
                                 {
-                                    if (cKey.Contains("avg"))
+                                    if (cKey.Contains("avg") || cKey.Contains("pr_") || cKey.Contains("std_dev_pop"))
                                         row[cKey] = parseScore1(value);
                                     else
                                         row[cKey] = value;
@@ -1873,7 +1895,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 string cKey = "年級_科目成績_" + ss + "_" + rt;
                                 if (dtTable.Columns.Contains(cKey))
                                 {
-                                    if (cKey.Contains("avg"))
+                                    if (cKey.Contains("avg") || cKey.Contains("pr_") || cKey.Contains("std_dev_pop"))
                                         row[cKey] = parseScore1(value);
                                     else
                                         row[cKey] = value;
@@ -1893,7 +1915,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 string cKey = "年級_科目定期成績_" + ss + "_" + rt;
                                 if (dtTable.Columns.Contains(cKey))
                                 {
-                                    if (cKey.Contains("avg"))
+                                    if (cKey.Contains("avg") || cKey.Contains("pr_") || cKey.Contains("std_dev_pop"))
                                         row[cKey] = parseScore1(value);
                                     else
                                         row[cKey] = value;
@@ -2161,7 +2183,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             decimal dc;
             if (decimal.TryParse(str, out dc))
             {
-                value = Math.Round(dc, parseNumber).ToString();
+                value = Math.Round(dc, parseNumber,MidpointRounding.AwayFromZero).ToString();
             }
 
             return value;
@@ -2577,6 +2599,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 conf.BeginDate = _Configure.BeginDate;
                 conf.EndDate = _Configure.EndDate;
                 conf.ScoreEditDate = _Configure.ScoreEditDate;
+                conf.ParseNumber = _Configure.ParseNumber;
 
                 conf.Encode();
                 conf.Save();
@@ -2982,7 +3005,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         }
                     }
 
-                    Global.parseNumebr = parseNumber = _Configure.ParseNumber;
+                    cboParseNumber.SelectedIndex = Global.parseNumebr = parseNumber = _Configure.ParseNumber;
                     if (_Configure.PrintSubjectList == null)
                         _Configure.PrintSubjectList = new List<string>();
 
