@@ -1382,6 +1382,14 @@ namespace HsinChuExamScore_JH
                             row[key] = DisciplineCountDict[StudRec.ID][str];
                     }
                 }
+                else
+                {
+                    foreach (string str in Global.GetDisciplineNameList())
+                    {
+                        string key = str + "區間統計";
+                        row[key] = "0";
+                    }
+                }
 
                 int rnkSubj = 1;
                 // 處理成績套印
@@ -2401,7 +2409,7 @@ namespace HsinChuExamScore_JH
 
 
 
-                row["服務學習時數"] = "";
+                row["服務學習時數"] = "0";
                 if (ServiceLearningDict.ContainsKey(StudRec.ID))
                     row["服務學習時數"] = ServiceLearningDict[StudRec.ID];
 
