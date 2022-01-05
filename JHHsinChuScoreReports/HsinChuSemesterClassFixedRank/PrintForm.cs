@@ -251,7 +251,7 @@ namespace HsinChuSemesterClassFixedRank
                 {
                     foreach (string dName in SelDomainSubjectDict[classID].Keys)
                     {
-                        SelDomainSubjectDict[classID][dName].Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+                        SelDomainSubjectDict[classID][dName].Sort(new StringComparer("國文", "國語文", "英文", "英語文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
                     }
                 }
 
@@ -288,6 +288,7 @@ namespace HsinChuSemesterClassFixedRank
                 r2List.Add("rank");
                 r2List.Add("pr");
                 r2List.Add("percentile");
+                r2List.Add("matrix_count");
 
                 // 班級排名
                 List<string> cr2List = new List<string>();
@@ -297,6 +298,12 @@ namespace HsinChuSemesterClassFixedRank
                 cr2List.Add("avg");
                 cr2List.Add("avg_bottom_50");
                 cr2List.Add("avg_bottom_25");
+                cr2List.Add("pr_88");
+                cr2List.Add("pr_75");
+                cr2List.Add("pr_50");
+                cr2List.Add("pr_25");
+                cr2List.Add("pr_12");
+                cr2List.Add("std_dev_pop");
                 cr2List.Add("level_gte100");
                 cr2List.Add("level_90");
                 cr2List.Add("level_80");
@@ -717,9 +724,9 @@ namespace HsinChuSemesterClassFixedRank
                         }
 
                         // 排序
-                        studDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+                        studDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然科學", "自然與生活科技", "健康與體育", "藝術", "藝術與人文", "綜合活動", "科技"));
 
-                        studSubjectNameList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+                        studSubjectNameList.Sort(new StringComparer("國文", "國語文", "英文", "英語文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
 
                         SelDomainIdxDict.Clear();
                         SelSubjectIdxDict.Clear();
@@ -1188,50 +1195,50 @@ namespace HsinChuSemesterClassFixedRank
                         // 總計成績 五標、組距
                         foreach (string rk in rkList)
                         {
-                            if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績_學習領域總成績_" + rk))
+                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/總計成績_學習領域總成績_" + rk)) ///CYn
                             {
-                                // 班級_課程學習總成績_班排名_matrix_count
+                                // 班級_學習領域總成績_班排名_matrix_count
                                 foreach (string r2 in cr2List)
                                 {
-                                    if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_學習領域總成績_" + rk].ContainsKey(r2))
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/總計成績_學習領域總成績_" + rk].ContainsKey(r2))
                                     {
-                                        row["班級_課程學習總成績_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_學習領域總成績_" + rk][r2];
+                                        row["班級_學習領域總成績_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/總計成績_學習領域總成績_" + rk][r2];
                                     }
                                 }
                             }
 
-                            if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績(原始)_學習領域總成績_" + rk))
+                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/總計成績(原始)_學習領域總成績_" + rk))
                             {
-                                // 班級_課程學習總成績_班排名_matrix_count
+                                // 班級_學習領域總成績_班排名_matrix_count
                                 foreach (string r2 in cr2List)
                                 {
-                                    if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_學習領域總成績_" + rk].ContainsKey(r2))
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/總計成績(原始)_學習領域總成績_" + rk].ContainsKey(r2))
                                     {
-                                        row["班級_學習領域總成績(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_學習領域總成績_" + rk][r2];
+                                        row["班級_學習領域總成績(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/總計成績(原始)_學習領域總成績_" + rk][r2];
                                     }
                                 }
                             }
 
-                            if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績_課程學習總成績_" + rk))
+                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/總計成績_課程學習總成績_" + rk))
                             {
                                 // 班級_課程學習總成績_班排名_matrix_count
                                 foreach (string r2 in cr2List)
                                 {
-                                    if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_課程學習總成績_" + rk].ContainsKey(r2))
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/總計成績_課程學習總成績_" + rk].ContainsKey(r2))
                                     {
-                                        row["班級_課程學習總成績_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績_課程學習總成績_" + rk][r2];
+                                        row["班級_課程學習總成績_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/總計成績_課程學習總成績_" + rk][r2];
                                     }
                                 }
                             }
 
-                            if (ClassSemsScoreRankMatrixDataValueDict.ContainsKey("學期/總計成績(原始)_課程學習總成績_" + rk))
+                            if (ClassSemsScoreRankMatrixDataValueDict[class_id].ContainsKey("學期/總計成績(原始)_課程學習總成績_" + rk))
                             {
                                 // 班級_課程學習總成績_班排名_matrix_count
                                 foreach (string r2 in cr2List)
                                 {
-                                    if (ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_課程學習總成績_" + rk].ContainsKey(r2))
+                                    if (ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/總計成績(原始)_課程學習總成績_" + rk].ContainsKey(r2))
                                     {
-                                        row["班級_課程學習總成績(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict["學期/總計成績(原始)_課程學習總成績_" + rk][r2];
+                                        row["班級_課程學習總成績(原始)_" + rk + "_" + r2] = ClassSemsScoreRankMatrixDataValueDict[class_id]["學期/總計成績(原始)_課程學習總成績_" + rk][r2];
                                     }
                                 }
                             }
@@ -1572,7 +1579,7 @@ namespace HsinChuSemesterClassFixedRank
 
             List<string> tmpDomainList = CanSelectDomainSubjectDict.Keys.ToList();
             tmpDomainList.Remove("彈性課程");
-            tmpDomainList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+            tmpDomainList.Sort(new StringComparer("語文", "數學", "社會", "自然科學", "自然與生活科技", "健康與體育", "藝術", "藝術與人文", "綜合活動", "科技"));
             tmpDomainList.Add("彈性課程");
 
             foreach (string dName in tmpDomainList)
@@ -1803,7 +1810,7 @@ namespace HsinChuSemesterClassFixedRank
 
             }
 
-            tmpDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
+            tmpDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然科學", "自然與生活科技", "健康與體育", "藝術", "藝術與人文", "綜合活動", "科技"));
 
             //foreach (string name in tmpDomainNameList)
             //{
@@ -1824,7 +1831,7 @@ namespace HsinChuSemesterClassFixedRank
                     tmpSubjNameList.Add(lvi.Text);
             }
 
-            tmpSubjNameList.Sort(new StringComparer("國文", "英文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+            tmpSubjNameList.Sort(new StringComparer("國文", "國語文", "英文", "英語文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
 
 
             //foreach (string name in tmpSubjNameList)
@@ -1880,7 +1887,7 @@ namespace HsinChuSemesterClassFixedRank
             lnkViewTemplate.Enabled = false;
             #region 儲存檔案
 
-            string reportName = ParseFileName("新竹學期成績單樣板(" + _Configure.Name + ")");
+            string reportName = ParseFileName("班級學期成績單固定排名樣板(" + _Configure.Name + ")");
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
             if (!Directory.Exists(path))

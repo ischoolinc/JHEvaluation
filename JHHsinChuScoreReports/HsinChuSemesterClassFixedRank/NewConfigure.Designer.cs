@@ -52,7 +52,7 @@
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.Location = new System.Drawing.Point(13, 13);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(74, 21);
+            this.labelX1.Size = new System.Drawing.Size(92, 26);
             this.labelX1.TabIndex = 0;
             this.labelX1.Text = "樣板名稱：";
             // 
@@ -65,7 +65,7 @@
             this.txtName.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtName.Location = new System.Drawing.Point(93, 11);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(225, 25);
+            this.txtName.Size = new System.Drawing.Size(225, 35);
             this.txtName.TabIndex = 1;
             this.txtName.TextChanged += new System.EventHandler(this.checkReady);
             // 
@@ -109,10 +109,10 @@
             this.checkBoxX1.CheckBoxStyle = DevComponents.DotNetBar.eCheckBoxStyle.RadioButton;
             this.checkBoxX1.Location = new System.Drawing.Point(13, 163);
             this.checkBoxX1.Name = "checkBoxX1";
-            this.checkBoxX1.Size = new System.Drawing.Size(147, 21);
+            this.checkBoxX1.Size = new System.Drawing.Size(128, 26);
             this.checkBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.checkBoxX1.TabIndex = 4;
-            this.checkBoxX1.Text = "使用新竹國中版樣板";
+            this.checkBoxX1.Text = "使用預設樣板";
             this.checkBoxX1.CheckedChanged += new System.EventHandler(this.checkReady);
             // 
             // labelX3
@@ -126,7 +126,7 @@
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX3.Location = new System.Drawing.Point(13, 42);
             this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(74, 21);
+            this.labelX3.Size = new System.Drawing.Size(92, 26);
             this.labelX3.TabIndex = 0;
             this.labelX3.Text = "選用樣板：";
             // 
@@ -142,7 +142,7 @@
             this.checkBoxX2.CheckBoxStyle = DevComponents.DotNetBar.eCheckBoxStyle.RadioButton;
             this.checkBoxX2.Location = new System.Drawing.Point(13, 190);
             this.checkBoxX2.Name = "checkBoxX2";
-            this.checkBoxX2.Size = new System.Drawing.Size(107, 21);
+            this.checkBoxX2.Size = new System.Drawing.Size(128, 26);
             this.checkBoxX2.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.checkBoxX2.TabIndex = 4;
             this.checkBoxX2.Text = "使用自訂樣板";
@@ -170,7 +170,7 @@
             this.linkLabel1.BackColor = System.Drawing.Color.Transparent;
             this.linkLabel1.Location = new System.Drawing.Point(161, 165);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(60, 17);
+            this.linkLabel1.Size = new System.Drawing.Size(78, 22);
             this.linkLabel1.TabIndex = 6;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "檢視樣板";
@@ -182,7 +182,7 @@
             this.linkLabel2.BackColor = System.Drawing.Color.Transparent;
             this.linkLabel2.Location = new System.Drawing.Point(161, 192);
             this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(112, 17);
+            this.linkLabel2.Size = new System.Drawing.Size(146, 22);
             this.linkLabel2.TabIndex = 6;
             this.linkLabel2.TabStop = true;
             this.linkLabel2.Text = "檢視合併欄位總表";
@@ -207,7 +207,7 @@
             // NewConfigure
             // 
             this.AcceptButton = this.btnSubmit;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(330, 328);

@@ -28,7 +28,7 @@ namespace HsinChuSemesterClassFixedRank
 
         public static void ExportMappingFieldWord()
         {
-            string inputReportName = "新竹班級評量成績單合併欄位總表";
+            string inputReportName = "國中班級學期成績單合併欄位總表";
             string reportName = inputReportName;
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
@@ -93,7 +93,12 @@ namespace HsinChuSemesterClassFixedRank
             cr2aList.Add("avg");
             cr2aList.Add("avg_bottom_50");
             cr2aList.Add("avg_bottom_25");
-
+            cr2aList.Add("pr_88");
+            cr2aList.Add("pr_75");
+            cr2aList.Add("pr_50");
+            cr2aList.Add("pr_25");
+            cr2aList.Add("pr_12");
+            cr2aList.Add("std_dev_pop");
             cr2bList.Add("level_gte100");
             cr2bList.Add("level_90");
             cr2bList.Add("level_80");
@@ -128,6 +133,12 @@ namespace HsinChuSemesterClassFixedRank
             cr2aNameList.Add("均標");
             cr2aNameList.Add("低標");
             cr2aNameList.Add("底標");
+            cr2aNameList.Add("新頂標");
+            cr2aNameList.Add("新前標");
+            cr2aNameList.Add("新均標");
+            cr2aNameList.Add("新後標");
+            cr2aNameList.Add("新底標");
+            cr2aNameList.Add("標準差");
 
 
             List<string> cr2bNameList = new List<string>();
@@ -546,6 +557,18 @@ namespace HsinChuSemesterClassFixedRank
                     builder.Write("低標");
                     builder.InsertCell();
                     builder.Write("底標");
+                    builder.InsertCell();
+                    builder.Write("新頂標");
+                    builder.InsertCell();
+                    builder.Write("新前標");
+                    builder.InsertCell();
+                    builder.Write("新均標");
+                    builder.InsertCell();
+                    builder.Write("新後標");
+                    builder.InsertCell();
+                    builder.Write("新底標");
+                    builder.InsertCell();
+                    builder.Write("標準差");
                     builder.EndRow();
 
                     foreach (string ra in cr2aList)

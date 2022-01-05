@@ -256,7 +256,12 @@ namespace HsinChuSemesterScoreFixed_JH
                 m2a.Add("avg");
                 m2a.Add("avg_bottom_50");
                 m2a.Add("avg_bottom_25");
-
+                m2a.Add("pr_88");
+                m2a.Add("pr_75");
+                m2a.Add("pr_50");
+                m2a.Add("pr_25");
+                m2a.Add("pr_12");
+                m2a.Add("std_dev_pop");
                 m2b.Add("level_gte100");
                 m2b.Add("level_90");
                 m2b.Add("level_80");
@@ -298,6 +303,18 @@ namespace HsinChuSemesterScoreFixed_JH
                     builder.Write("低標");
                     builder.InsertCell();
                     builder.Write("底標");
+                    builder.InsertCell();
+                    builder.Write("新頂標");
+                    builder.InsertCell();
+                    builder.Write("新前標");
+                    builder.InsertCell();
+                    builder.Write("新均標");
+                    builder.InsertCell();
+                    builder.Write("新後標");
+                    builder.InsertCell();
+                    builder.Write("新底標");
+                    builder.InsertCell();
+                    builder.Write("標準差");
                     builder.EndRow();
                     foreach (string m in m1)
                     {
@@ -321,7 +338,7 @@ namespace HsinChuSemesterScoreFixed_JH
                 {
                     builder.Writeln();
                     builder.Writeln();
-                    string dn = dName + "領域成績原始)排名 排名、母數、五標";
+                    string dn = dName + "領域成績(原始)排名 排名、母數、五標";
                     builder.Writeln(dn);
                     builder.StartTable();
                     builder.InsertCell();
@@ -344,6 +361,18 @@ namespace HsinChuSemesterScoreFixed_JH
                     builder.Write("低標");
                     builder.InsertCell();
                     builder.Write("底標");
+                    builder.InsertCell();
+                    builder.Write("新頂標");
+                    builder.InsertCell();
+                    builder.Write("新前標");
+                    builder.InsertCell();
+                    builder.Write("新均標");
+                    builder.InsertCell();
+                    builder.Write("新後標");
+                    builder.InsertCell();
+                    builder.Write("新底標");
+                    builder.InsertCell();
+                    builder.Write("標準差");
                     builder.EndRow();
                     foreach (string m in m1)
                     {
@@ -491,6 +520,18 @@ namespace HsinChuSemesterScoreFixed_JH
                         builder.Write("低標");
                         builder.InsertCell();
                         builder.Write("底標");
+                        builder.InsertCell();
+                        builder.Write("新頂標");
+                        builder.InsertCell();
+                        builder.Write("新前標");
+                        builder.InsertCell();
+                        builder.Write("新均標");
+                        builder.InsertCell();
+                        builder.Write("新後標");
+                        builder.InsertCell();
+                        builder.Write("新底標");
+                        builder.InsertCell();
+                        builder.Write("標準差");
                         builder.EndRow();
 
                         for (int i = 1; i <= 12; i++)
@@ -543,6 +584,18 @@ namespace HsinChuSemesterScoreFixed_JH
                         builder.Write("低標");
                         builder.InsertCell();
                         builder.Write("底標");
+                        builder.InsertCell();
+                        builder.Write("新頂標");
+                        builder.InsertCell();
+                        builder.Write("新前標");
+                        builder.InsertCell();
+                        builder.Write("新均標");
+                        builder.InsertCell();
+                        builder.Write("新後標");
+                        builder.InsertCell();
+                        builder.Write("新底標");
+                        builder.InsertCell();
+                        builder.Write("標準差");
                         builder.EndRow();
 
                         for (int i = 1; i <= 12; i++)

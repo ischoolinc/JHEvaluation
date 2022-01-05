@@ -373,6 +373,12 @@ namespace HsinChuSemesterScoreFixed_JH
                 r2List.Add("avg");
                 r2List.Add("avg_bottom_50");
                 r2List.Add("avg_bottom_25");
+                r2List.Add("pr_88");
+                r2List.Add("pr_75");
+                r2List.Add("pr_50");
+                r2List.Add("pr_25");
+                r2List.Add("pr_12");
+                r2List.Add("std_dev_pop");
                 r2List.Add("level_gte100");
                 r2List.Add("level_90");
                 r2List.Add("level_80");
@@ -392,6 +398,12 @@ namespace HsinChuSemesterScoreFixed_JH
                 r2ListNP.Add("avg");
                 r2ListNP.Add("avg_bottom_50");
                 r2ListNP.Add("avg_bottom_25");
+                r2ListNP.Add("pr_88");
+                r2ListNP.Add("pr_75");
+                r2ListNP.Add("pr_50");
+                r2ListNP.Add("pr_25");
+                r2ListNP.Add("pr_12");
+                r2ListNP.Add("std_dev_pop");
 
                 // 科目排
                 for (int i = 1; i <= Global.SupportSubjectCount; i++)
@@ -1655,7 +1667,7 @@ namespace HsinChuSemesterScoreFixed_JH
             lnkViewTemplate.Enabled = false;
             #region 儲存檔案
 
-            string reportName = "新竹學期成績單樣板(" + _Configure.Name + ")";
+            string reportName = "國中學期成績單固定排名樣板(" + _Configure.Name + ")";
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
             if (!Directory.Exists(path))
