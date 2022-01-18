@@ -163,12 +163,37 @@ namespace HsinChuSemesterScoreFixed_JH
                 dt.Columns.Add("學習領域原始成績");
                 dt.Columns.Add("課程學習成績");
                 dt.Columns.Add("課程學習原始成績");
+
+                //2022-01-17 Cynthia 協同國中見安老師要求增加等第:
+                dt.Columns.Add("學習領域成績等第");
+                dt.Columns.Add("學習領域原始成績等第");
+                dt.Columns.Add("課程學習成績等第");
+                dt.Columns.Add("課程學習原始成績等第");
+
                 dt.Columns.Add("班導師");
                 dt.Columns.Add("教務主任");
                 dt.Columns.Add("校長");
                 dt.Columns.Add("服務學習時數");
                 dt.Columns.Add("文字描述");
 
+                // 2022-01-17 Cynthia 協同國中客製 [德行成績模組]
+                dt.Columns.Add("德行成績");
+                dt.Columns.Add("德行成績等第");
+
+                //2022-01-17 Cynthia 協同國中見安老師要求增加:
+                //(原始)
+                dt.Columns.Add("學期科目總分");
+                dt.Columns.Add("學期科目算術平均");
+                dt.Columns.Add("學期科目加權總分");
+                dt.Columns.Add("學期科目加權平均");
+                dt.Columns.Add("學期科目(原始)總分");
+                dt.Columns.Add("學期科目(原始)算術平均");
+                dt.Columns.Add("學期科目(原始)加權總分");
+                dt.Columns.Add("學期科目(原始)加權平均");
+                dt.Columns.Add("學習領域及格數");
+                dt.Columns.Add("學習領域不及格數");
+                dt.Columns.Add("學習領域科目及格數");
+                dt.Columns.Add("學習領域科目不及格數");
 
                 dt.Columns.Add("學校地址");
                 dt.Columns.Add("學校電話");
@@ -525,6 +550,11 @@ namespace HsinChuSemesterScoreFixed_JH
                 // 服務學習,傳入學年度學期
                 Dictionary<string, decimal> ServiceLearningDict = Utility.GetServiceLearningDetailBySemester(_StudentIDList, _SelSchoolYear, _SelSemester);
 
+                // 2022-01-17 Cynthia 協同國中客製[德行成績模組]: http://module.ischool.com.tw/module/138/Plugin/MOD_MoralConduct/app.xml
+                // 要求為了這個模組增加[德行分項成績]
+                // https://3.basecamp.com/4399967/buckets/15765350/todos/4534056880
+                Dictionary<string, decimal> EntryGroup2ScoreDict = Utility.GetEntryGroup2Score(_StudentIDList, _SelSchoolYear, _SelSemester);
+
 
                 // 取得學期成績排名、五標、分數區間
                 //Dictionary<string, Dictionary<string, DataRow>> SemsScoreRankMatrixDataDict = Utility.GetSemsScoreRankMatrixData(_Configure.SchoolYear, _Configure.Semester, _StudentIDList);
@@ -651,13 +681,19 @@ namespace HsinChuSemesterScoreFixed_JH
                         }
 
                         //學習領域成績
-
                         row["學習領域成績"] = jsr.LearnDomainScore.HasValue ? jsr.LearnDomainScore.Value + "" : string.Empty;
                         row["課程學習成績"] = jsr.CourseLearnScore.HasValue ? jsr.CourseLearnScore.Value + "" : string.Empty;
 
-
                         row["學習領域原始成績"] = jsr.LearnDomainScoreOrigin.HasValue ? jsr.LearnDomainScoreOrigin.Value + "" : string.Empty;
                         row["課程學習原始成績"] = jsr.CourseLearnScoreOrigin.HasValue ? jsr.CourseLearnScoreOrigin.Value + "" : string.Empty;
+
+                        //學習領域成績等第
+                        row["學習領域成績等第"] = jsr.LearnDomainScore.HasValue ? _ScoreMappingConfig.ParseScoreName(jsr.LearnDomainScore.Value) + "" : string.Empty;
+                        row["課程學習成績等第"] = jsr.CourseLearnScore.HasValue ? _ScoreMappingConfig.ParseScoreName(jsr.CourseLearnScore.Value) + "" : string.Empty;
+
+                        row["學習領域原始成績等第"] = jsr.LearnDomainScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreName(jsr.LearnDomainScoreOrigin.Value) + "" : string.Empty;
+                        row["課程學習原始成績等第"] = jsr.CourseLearnScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreName(jsr.CourseLearnScoreOrigin.Value) + "" : string.Empty;
+
 
                         // 收集領域科目成績給領域科目對照時使用
                         Dictionary<string, DomainScore> DomainScoreDict = new Dictionary<string, DomainScore>();
@@ -744,6 +780,25 @@ namespace HsinChuSemesterScoreFixed_JH
                         tmpScoreItemList.Add("科目成績");
                         tmpScoreItemList.Add("科目成績(原始)");
 
+                        //學期科目總分
+                        decimal subjTotalScore = 0;
+                        // 學期科目加權總分
+                        decimal subjWeightedTotalScore = 0;
+                        //學期科目(原始)總分
+                        decimal subjTotalScoreOrigin = 0;
+                        // 學期科目(原始)加權總分
+                        decimal subjWeightedTotalScoreOrigin = 0;
+                        // 總權數
+                        decimal creditTotal = 0;
+                        // 學習領域(八大)及格數
+                        int learningDomainPassCount = 0;
+                        // 學習領域(八大)不及格數
+                        int learningDomainFailCount = 0;
+                        // 學習領域科目及格數
+                        int learningSubjectPassCount = 0;
+                        // 學習領域科目不及格數
+                        int learningSubjectFailCount = 0;
+
                         foreach (SubjectScore subj in jsSubjects)
                         {
                             string ssNmae = subj.Domain;
@@ -778,6 +833,42 @@ namespace HsinChuSemesterScoreFixed_JH
                             {
                                 row["科目需補考標示" + count] = _Configure.NeeedReScoreMark;
                                 row["科目不及格標示" + count] = _Configure.FailScoreMark;
+                            }
+
+                            //2022-01-17 Cynthia 學期科目總分、加權總分
+                            decimal decimalCredit = 0;
+                            if (subj.Score.HasValue)
+                            {
+                                subjTotalScore += subj.Score.Value;
+
+                                if (decimal.TryParse(subj.Credit.ToString(), out decimalCredit))
+                                {
+                                    subjWeightedTotalScore += subj.Score.Value * decimalCredit;
+                                    creditTotal += decimalCredit;
+
+                                }
+                            }
+                            //2022-01-17 Cynthia 學期科目(原始)總分、加權總分
+                            if (subj.ScoreOrigin.HasValue)
+                            {
+                                subjTotalScoreOrigin += subj.ScoreOrigin.Value;
+
+                                if (decimal.TryParse(subj.Credit.ToString(), out decimalCredit))
+                                {
+                                    subjWeightedTotalScoreOrigin += subj.ScoreOrigin.Value * decimalCredit;
+                                }
+                            }
+
+                            // 課綱領域中的科目及格數、不及格數
+                            if (tempDomains.Contains(subj.Domain))
+                            {
+                                if (subj.Score.HasValue)
+                                {
+                                    if (subj.Score.Value >= 60)
+                                        learningSubjectPassCount++;
+                                    else
+                                        learningSubjectFailCount++;
+                                }
                             }
 
 
@@ -815,6 +906,19 @@ namespace HsinChuSemesterScoreFixed_JH
                             #endregion
 
                         }
+                        //2022-01-17 Cynthia
+                        row["學期科目總分"] = subjTotalScore;
+                        row["學期科目算術平均"] = Math.Round(subjTotalScore / count, 2, MidpointRounding.AwayFromZero);
+                        row["學期科目加權平均"] = Math.Round(subjWeightedTotalScore / creditTotal, 2, MidpointRounding.AwayFromZero); ;
+                        row["學期科目加權總分"] = subjWeightedTotalScore;
+
+                        row["學期科目(原始)總分"] = subjTotalScoreOrigin;
+                        row["學期科目(原始)算術平均"] = Math.Round(subjTotalScoreOrigin / count, 2, MidpointRounding.AwayFromZero);
+                        row["學期科目(原始)加權平均"] = Math.Round(subjWeightedTotalScoreOrigin / creditTotal, 2, MidpointRounding.AwayFromZero); ;
+                        row["學期科目(原始)加權總分"] = subjWeightedTotalScoreOrigin;
+
+                        row["學習領域科目及格數"] = learningSubjectPassCount;
+                        row["學習領域科目不及格數"] = learningSubjectFailCount;
 
                         tmpScoreItemList.Clear();
                         tmpScoreItemList.Add("科目成績");
@@ -929,7 +1033,16 @@ namespace HsinChuSemesterScoreFixed_JH
                                 if (!string.IsNullOrWhiteSpace(domain.Text))
                                     _文字描述.Add(domain.Domain + " : " + domain.Text);
 
-
+                                if (tempDomains.Contains(domain.Domain))
+                                {
+                                    if (domain.Score.HasValue)
+                                    {
+                                        if (domain.Score.Value >= 60)
+                                            learningDomainPassCount++;
+                                        else
+                                            learningDomainFailCount++;
+                                    }
+                                }
 
 
                                 #region 領域成績-固定排名相關
@@ -970,6 +1083,10 @@ namespace HsinChuSemesterScoreFixed_JH
 
                             }
                         }
+
+
+                        row["學習領域及格數"] = learningDomainPassCount;
+                        row["學習領域不及格數"] = learningDomainFailCount;
 
 
                         // 處理指定領域
@@ -1085,6 +1202,13 @@ namespace HsinChuSemesterScoreFixed_JH
 
                         row["文字描述"] = string.Join(Environment.NewLine, _文字描述);
 
+                    }
+
+                    // 德行成績 (協同國中客製-[德行成績模組])
+                    if (EntryGroup2ScoreDict.ContainsKey(student.ID))
+                    {
+                        row["德行成績"] = EntryGroup2ScoreDict[student.ID];
+                        row["德行成績等第"] = _ScoreMappingConfig.ParseScoreName(EntryGroup2ScoreDict[student.ID]);
                     }
 
 

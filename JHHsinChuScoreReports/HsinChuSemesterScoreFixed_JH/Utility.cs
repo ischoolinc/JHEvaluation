@@ -384,7 +384,53 @@ namespace HsinChuSemesterScoreFixed_JH
             return retVal;
         }
 
+        /// <summary>
+        /// 取得學生德行成績(for 協同國中客製[德行成績模組])
+        /// </summary>
+        /// <param name="StudentIDList"></param>
+        /// <param name="SchoolYear"></param>
+        /// <param name="Semester"></param>
+        /// <returns></returns>
+        public static Dictionary<string, decimal> GetEntryGroup2Score(List<string> StudentIDList, int SchoolYear, int Semester)
+        {
+            Dictionary<string, decimal> retVal = new Dictionary<string, decimal>();
+            QueryHelper qh = new QueryHelper();
 
+            if (StudentIDList.Count > 0)
+            {
+                string query = @"
+SELECT
+	sems_entry_score.*
+	, array_to_string(xpath('//SemesterEntryScore/Entry[@分項=''德行'']/@成績', xmlparse(content score_info)), '')::text AS 德行成績
+FROM
+	sems_entry_score
+	WHERE entry_group=2
+	AND school_year ={0}
+	AND semester = {1}
+    AND ref_student_id IN ({2})
+";
+
+                query = string.Format(query, SchoolYear, Semester, string.Join(",", StudentIDList));
+                DataTable dataTable = qh.Select(query);
+
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    decimal entryScore;
+
+
+                    string id = row["ref_student_id"].ToString();
+                    //string entryScore2 = row["德行成績"].ToString();
+
+                    if (!retVal.ContainsKey(id))
+                    {
+                        if (decimal.TryParse(row["德行成績"].ToString(), out entryScore))
+                            //retVal[id] = entryScore;
+                            retVal.Add(id, entryScore);
+                    }
+                }
+            }
+            return retVal;
+        }
 
     }
 }
