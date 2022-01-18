@@ -8,6 +8,7 @@ using System.Globalization;
 using K12.Data;
 using System.Drawing;
 using System.IO;
+using System.Data;
 
 namespace JHEvaluation.StudentScoreSummaryReport
 {
@@ -27,6 +28,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
             IDNumber = student.IDNumber;
             StudentStatus = student.Status;
             StudentID = student.ID;
+            nationality1 = string.Empty;
+            passport_name1 = string.Empty;
+            nationality2 = string.Empty;
+            passport_name2 = string.Empty;
+            Enationality1 = string.Empty;
+            Enationality2 = string.Empty;
         }
 
         public StudentRecord.StudentStatus StudentStatus { get; private set; }
@@ -75,6 +82,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
         /// 學生入學日期(西元格式)。
         /// </summary>
         public string EngGraduateDate { get; set; }
+
+        public string nationality1 { get; set; }
+        public string passport_name1 { get; set; }
+        public string nationality2 { get; set; }
+        public string passport_name2 { get; set; }
+        public string Enationality1 { get; set; }
+        public string Enationality2 { get; set; }
     }
 
     internal class ReportHeaderList : Dictionary<SemesterData, int>
@@ -116,6 +130,38 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
     internal static class StudentScore_Extens
     {
+        #region ReadNationalityData
+        public static void ReadNationalityData(this IEnumerable<ReportStudent> students, IStatusReporter reporter)
+        {
+            //加入護照資料
+            foreach (ReportStudent student in students)
+            {
+                FISCA.Data.QueryHelper qh1 = new FISCA.Data.QueryHelper();
+                string strSQL1 = "select nationality1, passport_name1, nat1.eng_name as nat_eng1, nationality2, passport_name2, nat2.eng_name as nat_eng2, nationality3, passport_name3, nat3.eng_name as nat_eng3 from student_info_ext  as stud_info left outer join $ischool.mapping.nationality as nat1 on nat1.name = stud_info.nationality1 left outer join $ischool.mapping.nationality as nat2 on nat2.name = stud_info.nationality2 left outer join $ischool.mapping.nationality as nat3 on nat3.name = stud_info.nationality3 WHERE ref_student_id=" + student.StudentID;
+                DataTable student_info_ext = qh1.Select(strSQL1);
+                if (student_info_ext.Rows.Count > 0)
+                {
+                    student.nationality1 = student_info_ext.Rows[0]["nationality1"].ToString();
+                    student.passport_name1 = student_info_ext.Rows[0]["passport_name1"].ToString();
+                    student.nationality2 = student_info_ext.Rows[0]["nationality2"].ToString();
+                    student.passport_name2 = student_info_ext.Rows[0]["passport_name2"].ToString();
+                    student.Enationality1 = student_info_ext.Rows[0]["nat_eng1"].ToString();
+                    student.Enationality2 = student_info_ext.Rows[0]["nat_eng2"].ToString();
+                }
+                else
+                {
+                    student.nationality1 = "";
+                    student.passport_name1 = "";
+                    student.nationality2 = "";
+                    student.passport_name2 = "";
+                    student.Enationality1 = "";
+                    student.Enationality2 = "";
+
+                }
+            }
+        }
+        #endregion
+
         #region ReadUpdateRecordDate
         public static void ReadUpdateRecordDate(this IEnumerable<ReportStudent> students, IStatusReporter reporter)
         {

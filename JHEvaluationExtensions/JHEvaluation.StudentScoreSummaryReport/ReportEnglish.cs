@@ -773,6 +773,24 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                 fieldValue = Preference.GraduateDate;
                         }
                         break;
+                    case "國籍一":
+                        fieldValue = student.nationality1;
+                        break;
+                    case "國籍一護照名":
+                        fieldValue = student.passport_name1;
+                        break;
+                    case "國籍二":
+                        fieldValue = student.nationality2;
+                        break;
+                    case "國籍二護照名":
+                        fieldValue = student.passport_name2;
+                        break;
+                    case "國籍一英文":
+                        fieldValue = student.Enationality1;
+                        break;
+                    case "國籍二英文":
+                        fieldValue = student.Enationality2;
+                        break;
                 }
 
                 return true;

@@ -137,6 +137,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             //}
             #endregion
 
+            PrintStudents.ReadNationalityData(this);
             PrintStudents.ReadUpdateRecordDate(this);
             PrintStudents.ReadGraduatePhoto(this); //讀取照片。
 
