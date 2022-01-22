@@ -330,7 +330,7 @@ namespace HsinChuSemesterScoreFixed_JH
                 {
                     foreach (string pp in plist)
                     {
-                        string key = pp + "_" + aa;
+                        string key = pp.Replace(" ", "_") + "_" + aa.Replace(" ", "_");
                         if (!paList.Contains(key))
                         {
                             dt.Columns.Add(key);
@@ -340,7 +340,11 @@ namespace HsinChuSemesterScoreFixed_JH
                     }
                 }
 
-
+                // 缺曠總計(不分節次類型)
+                foreach (string aa in alist)
+                {
+                    dt.Columns.Add(aa.Replace(" ", "_")+"總計");
+                }
 
                 //日常生活表現欄位
                 foreach (string key in Global.DLBehaviorRef.Keys)
@@ -1163,7 +1167,9 @@ namespace HsinChuSemesterScoreFixed_JH
                         // 學務相關資料
                         // 缺曠預設填0
                         foreach (string str in paList)
-                            row[str] = 0;
+                            row[str.Replace(" ", "_")] = 0;
+                        foreach (string str in alist)
+                            row[str.Replace(" ", "_") + "總計"] = 0;
 
                         if (AutoSummaryRecordDict.ContainsKey(student.ID))
                         {
@@ -1171,8 +1177,7 @@ namespace HsinChuSemesterScoreFixed_JH
                             //缺曠
                             foreach (AbsenceCountRecord acr in asr.AbsenceCounts)
                             {
-                                string key = Global.GetKey(acr.PeriodType, acr.Name);
-
+                                string key = Global.GetKey(acr.PeriodType.Replace(" ", "_"), acr.Name.Replace(" ", "_"));
                                 if (dt.Columns.Contains(key))
                                 {
                                     int counta = 0;
@@ -1180,6 +1185,17 @@ namespace HsinChuSemesterScoreFixed_JH
 
                                     counta += acr.Count;
                                     row[key] = counta;
+                                }
+
+                                //缺曠總計(不分節次類型)
+                                string keyTotal = acr.Name.Replace(" ", "_") + "總計";
+                                if (dt.Columns.Contains(keyTotal))
+                                {
+                                    int totalCount = 0;
+                                    int.TryParse(row[keyTotal] + "", out totalCount);
+
+                                    totalCount += acr.Count;
+                                    row[keyTotal] = totalCount;
                                 }
                             }
 

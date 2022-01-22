@@ -151,14 +151,31 @@ namespace HsinChuSemesterScoreFixed_JH
                     foreach (string aa in alist)
                     {
 
-                        string key = pp + "_" + aa;
+                        string key = pp.Replace(" ", "_") + "_" + aa.Replace(" ", "_");
 
+                        builder.InsertCell();
+                        builder.Write(key);
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + key + " \\* MERGEFORMAT ", "«" + key + "»");
                         builder.EndRow();
                     }
                 }
 
+                builder.EndTable();
+
+                builder.Writeln();
+                builder.Writeln("缺曠總計(不分節次類型)合併欄位");
+                builder.StartTable();
+
+                foreach (string aa in alist)
+                {
+                    string key = aa.Replace(" ","_") + "總計";
+                    builder.InsertCell();
+                    builder.Write(key);
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + key + " \\* MERGEFORMAT ", "«" + key + "»");
+                    builder.EndRow();
+                }
                 builder.EndTable();
 
 
