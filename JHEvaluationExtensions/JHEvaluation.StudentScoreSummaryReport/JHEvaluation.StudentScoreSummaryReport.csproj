@@ -65,10 +65,18 @@
       <HintPath>Library\Aspose.Cells.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Aspose.Cells_201402, Version=7.7.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Aspose.Cells_201402.dll</HintPath>
+    </Reference>
     <Reference Include="Aspose.Pdf, Version=3.7.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Aspose.Pdf.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Aspose.Pdf_201402, Version=8.8.0.0, Culture=neutral, PublicKeyToken=47b2d0fcacdd3eb6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Aspose.Pdf_201402.dll</HintPath>
     </Reference>
     <Reference Include="Aspose.Words_201402, Version=14.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -135,6 +143,9 @@
       <HintPath>Library\Framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="InternationalNumericFormatter">
+      <HintPath>Library\InternationalNumericFormatter.dll</HintPath>
+    </Reference>
     <Reference Include="JHEvaluation.ScoreCalculation, Version=1.0.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHEvaluation.ScoreCalculation.dll</HintPath>
@@ -170,6 +181,9 @@
       <HintPath>Library\K12.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ReportHelper">
+      <HintPath>Library\ReportHelper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -184,6 +198,13 @@
     <Compile Include="AbsenceTypeForm.Designer.cs">
       <DependentUpon>AbsenceTypeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Global.cs" />
+    <Compile Include="PrintForm_StudentScoreCertificattion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PrintForm_StudentScoreCertificattion.Designer.cs">
+      <DependentUpon>PrintForm_StudentScoreCertificattion.cs</DependentUpon>
+    </Compile>
     <Compile Include="LearningDomainParser.cs" />
     <Compile Include="Prc.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -196,14 +217,26 @@
     <Compile Include="PrintForm.Designer.cs">
       <DependentUpon>PrintForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PrintForm_StudentScoreCertificattion_English.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PrintForm_StudentScoreCertificattion_English.Designer.cs">
+      <DependentUpon>PrintForm_StudentScoreCertificattion_English.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Report.cs" />
     <Compile Include="ReportEnglish.cs" />
     <Compile Include="ReportPreference.cs" />
     <Compile Include="ReportStudent.cs" />
     <Compile Include="RowHeader.cs" />
     <Compile Include="SLearningDomainParser.cs" />
+    <Compile Include="StringComparer.cs" />
     <Compile Include="SubjDomainEngNameMapping.cs" />
     <Compile Include="UniqueSet.cs" />
     <Compile Include="Util.cs" />
@@ -232,9 +265,23 @@
       <DependentUpon>PrintFormEnglish.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="PrintForm_StudentScoreCertificattion.resx">
+      <DependentUpon>PrintForm_StudentScoreCertificattion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PrintForm_StudentScoreCertificattion_English.resx">
+      <DependentUpon>PrintForm_StudentScoreCertificattion_English.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Aspose.Total.lic" />
+    <None Include="Resources\在校成績證明書_2022_範本.doc" />
+    <None Include="Resources\在校成績證明書_2022功能變數.doc" />
+    <None Include="Resources\在校成績證明書_2022英文版_範本.doc" />
+    <None Include="Resources\在校成績證明書_2022英文版功能變數.doc" />
     <None Include="Resources\學生在校成績證明書.doc" />
     <None Include="Resources\學生在校成績證明書%28英文%29.doc" />
   </ItemGroup>
@@ -258,8 +305,10 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Library\Aspose.Cells.dll" />
+    <Content Include="Library\Aspose.Cells_201402.dll" />
     <Content Include="Library\Aspose.Pdf.dll" />
     <Content Include="Library\Aspose.Pdf.xml" />
+    <Content Include="Library\Aspose.Pdf_201402.dll" />
     <Content Include="Library\Aspose.Words_201402.dll" />
     <Content Include="Library\Campus.dll" />
     <Content Include="Library\Campus.Report.dll" />
@@ -274,6 +323,7 @@
     <Content Include="Library\FISCA.Presentation.dll" />
     <Content Include="Library\FISCA.UDT.dll" />
     <Content Include="Library\Framework.dll" />
+    <Content Include="Library\InternationalNumericFormatter.dll" />
     <Content Include="Library\JHEvaluation.ScoreCalculation.dll" />
     <Content Include="Library\JHSchool.Behavior.dll" />
     <Content Include="Library\JHSchool.Data.dll" />
