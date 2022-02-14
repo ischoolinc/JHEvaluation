@@ -351,94 +351,93 @@ namespace HsinChuSemesterClassFixedRank
 
             //#endregion
 
-            //#region 學生-科目成績 科目1,2,3 成績、排名、百分比
-            //for (int dd = 1; dd <= 16; dd++)
-            //{
-            //    builder.Writeln("學生-科目" + dd + "成績相關");
-            //    builder.StartTable();
-            //    builder.InsertCell(); builder.Write("座號");
-            //    builder.InsertCell(); builder.Write("姓名");
-            //    builder.InsertCell(); builder.Write("名稱");
-            //    builder.InsertCell(); builder.Write("學分");
-            //    builder.InsertCell(); builder.Write("成績");
-            //    builder.InsertCell(); builder.Write("成績(原始)");
-            //    builder.InsertCell(); builder.Write("班排名");
-            //    builder.InsertCell(); builder.Write("年排名");
-            //    builder.InsertCell(); builder.Write("類別1排名");
-            //    builder.InsertCell(); builder.Write("類別2排名");
-            //    builder.InsertCell(); builder.Write("班排名(原始)");
-            //    builder.InsertCell(); builder.Write("年排名(原始)");
-            //    builder.InsertCell(); builder.Write("類別1排名(原始)");
-            //    builder.InsertCell(); builder.Write("類別2排名(原始)");
-            //    builder.InsertCell(); builder.Write("班排名百分比");
-            //    builder.InsertCell(); builder.Write("年排名百分比");
-            //    builder.InsertCell(); builder.Write("類別1排名百分比");
-            //    builder.InsertCell(); builder.Write("類別2排名百分比");
-            //    builder.InsertCell(); builder.Write("班排名百分比(原始)");
-            //    builder.InsertCell(); builder.Write("年排名百分比(原始)");
-            //    builder.InsertCell(); builder.Write("類別1排名百分比(原始)");
-            //    builder.InsertCell(); builder.Write("類別2排名百分比(原始)");
-            //    builder.EndRow();
+            #region 學生-科目成績 科目1,2,3 成績、排名、百分比
+            for (int dd = 1; dd <= 23; dd++)
+            {
+                builder.Writeln("學生-科目" + dd + "成績相關");
+                builder.StartTable();
+                builder.InsertCell(); builder.Write("座號");
+                builder.InsertCell(); builder.Write("姓名");
+                builder.InsertCell(); builder.Write("名稱");
+                builder.InsertCell(); builder.Write("學分");
+                builder.InsertCell(); builder.Write("成績");
+                builder.InsertCell(); builder.Write("成績(原始)");
+                //builder.InsertCell(); builder.Write("班排名");
+                //builder.InsertCell(); builder.Write("年排名");
+                //builder.InsertCell(); builder.Write("類別1排名");
+                //builder.InsertCell(); builder.Write("類別2排名");
+                //builder.InsertCell(); builder.Write("班排名(原始)");
+                //builder.InsertCell(); builder.Write("年排名(原始)");
+                //builder.InsertCell(); builder.Write("類別1排名(原始)");
+                //builder.InsertCell(); builder.Write("類別2排名(原始)");
+                //builder.InsertCell(); builder.Write("班排名百分比");
+                //builder.InsertCell(); builder.Write("年排名百分比");
+                //builder.InsertCell(); builder.Write("類別1排名百分比");
+                //builder.InsertCell(); builder.Write("類別2排名百分比");
+                //builder.InsertCell(); builder.Write("班排名百分比(原始)");
+                //builder.InsertCell(); builder.Write("年排名百分比(原始)");
+                //builder.InsertCell(); builder.Write("類別1排名百分比(原始)");
+                //builder.InsertCell(); builder.Write("類別2排名百分比(原始)");
+                builder.EndRow();
 
-            //    for (int studIdx = 1; studIdx <= 50; studIdx++)
-            //    {
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "座號" + studIdx + " \\* MERGEFORMAT ", "«" + "座" + studIdx + "»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "姓名" + studIdx + " \\* MERGEFORMAT ", "«" + "姓" + studIdx + "»");
-            //        builder.InsertCell();
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_名稱" + " \\* MERGEFORMAT ", "«N»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_學分" + " \\* MERGEFORMAT ", "«C»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_成績" + " \\* MERGEFORMAT ", "«S»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_成績" + " \\* MERGEFORMAT ", "«S»");
+                for (int studIdx = 1; studIdx <= 50; studIdx++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "座號" + studIdx + " \\* MERGEFORMAT ", "«" + "座" + studIdx + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "姓名" + studIdx + " \\* MERGEFORMAT ", "«" + "姓" + studIdx + "»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_名稱" + " \\* MERGEFORMAT ", "«N»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_學分" + " \\* MERGEFORMAT ", "«C»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_成績" + " \\* MERGEFORMAT ", "«S»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_成績" + " \\* MERGEFORMAT ", "«S»");
 
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_班排名_rank" + " \\* MERGEFORMAT ", "«R»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_年排名_rank" + " \\* MERGEFORMAT ", "«R»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_類別1排名_rank" + " \\* MERGEFORMAT ", "«R»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_類別2排名_rank" + " \\* MERGEFORMAT ", "«R»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_班排名_rank" + " \\* MERGEFORMAT ", "«R»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_年排名_rank" + " \\* MERGEFORMAT ", "«R»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_類別1排名_rank" + " \\* MERGEFORMAT ", "«R»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_類別2排名_rank" + " \\* MERGEFORMAT ", "«R»");
 
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_班排名_rank" + " \\* MERGEFORMAT ", "«R»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_年排名_rank" + " \\* MERGEFORMAT ", "«R»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_類別1排名_rank" + " \\* MERGEFORMAT ", "«R»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_類別2排名_rank" + " \\* MERGEFORMAT ", "«R»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_班排名_rank" + " \\* MERGEFORMAT ", "«R»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_年排名_rank" + " \\* MERGEFORMAT ", "«R»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_類別1排名_rank" + " \\* MERGEFORMAT ", "«R»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_類別2排名_rank" + " \\* MERGEFORMAT ", "«R»");
 
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_班排名_percentile" + " \\* MERGEFORMAT ", "«P»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_年排名_percentile" + " \\* MERGEFORMAT ", "«P»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_類別1排名_percentile" + " \\* MERGEFORMAT ", "«P»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_類別2排名_percentile" + " \\* MERGEFORMAT ", "«P»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_班排名_percentile" + " \\* MERGEFORMAT ", "«P»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_年排名_percentile" + " \\* MERGEFORMAT ", "«P»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_類別1排名_percentile" + " \\* MERGEFORMAT ", "«P»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目" + dd + "_類別2排名_percentile" + " \\* MERGEFORMAT ", "«P»");
 
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_班排名_percentile" + " \\* MERGEFORMAT ", "«P»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_年排名_percentile" + " \\* MERGEFORMAT ", "«P»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_類別1排名_percentile" + " \\* MERGEFORMAT ", "«P»");
-            //        builder.InsertCell();
-            //        builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_類別2排名_percentile" + " \\* MERGEFORMAT ", "«P»");
-            //        builder.EndRow();
-            //    }
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_班排名_percentile" + " \\* MERGEFORMAT ", "«P»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_年排名_percentile" + " \\* MERGEFORMAT ", "«P»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_類別1排名_percentile" + " \\* MERGEFORMAT ", "«P»");
+                    //builder.InsertCell();
+                    //builder.InsertField("MERGEFIELD " + "學生" + studIdx + "_科目(原始)" + dd + "_類別2排名_percentile" + " \\* MERGEFORMAT ", "«P»");
+                    builder.EndRow();
+                }
 
-            //    builder.EndTable();
-            //    builder.Writeln();
-            //}
+                builder.EndTable();
+                builder.Writeln();
+            }
 
-            //#endregion
+            #endregion
 
             //#region 學生-領域科目成績 領域-科目  成績、排名、百分比
             //foreach (string dName in domainNameList)
