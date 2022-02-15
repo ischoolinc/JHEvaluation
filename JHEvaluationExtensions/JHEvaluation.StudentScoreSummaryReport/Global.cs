@@ -16,6 +16,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
 {
     public class Global
     {
+        //取得中英文對照
+        private static SubjDomainEngNameMapping _SubjDomainEngNameMapping = new SubjDomainEngNameMapping();
         /// <summary>
         /// 匯出合併欄位總表Word(新版 在校成績證明書)
         /// </summary>
@@ -154,6 +156,11 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 builder.StartTable();
                 builder.InsertCell();
                 builder.Write("領域");
+                if (doc == "英文版")
+                {
+                    builder.InsertCell();
+                    builder.Write("領域英文");
+                }
 
                 builder.InsertCell();
                 builder.Write("一上權數");
@@ -201,6 +208,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                     builder.InsertCell();
                     builder.Write(domain);
+                    if (doc == "英文版")
+                    {
+                        builder.InsertCell();
+                        builder.Write(_SubjDomainEngNameMapping.GetDomainEngName(domain));
+                    }
+
                     for (int i = 1; i <= 6; i++)
                     {
                         //領域_語文_成績_1
@@ -221,6 +234,11 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                 builder.InsertCell();
                 builder.Write("學習領域總成績");
+                if (doc == "英文版")
+                {
+                    builder.InsertCell();
+                    builder.Write("Weighted Average Score");
+                }
                 for (int i = 1; i <= 6; i++)
                 {
                     //領域_學習領域總成績_成績_1
@@ -320,6 +338,97 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                 builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_成績" + a + " \\* MERGEFORMAT ", "«S" + a + "»");
                                 builder.InsertCell();
                                 builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_等第" + a + " \\* MERGEFORMAT ", "«L" + a + "»");
+                            }
+
+                            builder.EndRow();
+
+                        }
+
+                    builder.EndTable();
+                }
+                #endregion
+
+                #region 學期科目原始成績
+                foreach (string domain in DomainList)
+                {
+                    builder.Writeln();
+                    builder.Writeln();
+                    builder.Writeln(domain + "領域科目原始成績");
+                    builder.StartTable();
+
+                    builder.InsertCell();
+                    builder.Write("科目");
+                    builder.InsertCell();
+                    builder.Write("一上權數");
+                    builder.InsertCell();
+                    builder.Write("一上成績");
+                    builder.InsertCell();
+                    builder.Write("一上等第");
+                    builder.InsertCell();
+                    builder.Write("一下權數");
+                    builder.InsertCell();
+                    builder.Write("一下成績");
+                    builder.InsertCell();
+                    builder.Write("一下等第");
+                    builder.InsertCell();
+                    builder.Write("二上權數");
+                    builder.InsertCell();
+                    builder.Write("二上成績");
+                    builder.InsertCell();
+                    builder.Write("二上等第");
+                    builder.InsertCell();
+                    builder.Write("二下權數");
+                    builder.InsertCell();
+                    builder.Write("二下成績");
+                    builder.InsertCell();
+                    builder.Write("二下等第");
+                    builder.InsertCell();
+                    builder.Write("三上權數");
+                    builder.InsertCell();
+                    builder.Write("三上成績");
+                    builder.InsertCell();
+                    builder.Write("三上等第");
+                    builder.InsertCell();
+                    builder.Write("三下權數");
+                    builder.InsertCell();
+                    builder.Write("三下成績");
+                    builder.InsertCell();
+                    builder.Write("三下等第");
+                    builder.EndRow();
+                    //1上
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        string subjectKey = domain + "_科目名稱" + i;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + subjectKey + " \\* MERGEFORMAT ", "«N" + i + "»");
+
+                        for (int a = 1; a <= 6; a++)
+                        {
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_權數" + a + " \\* MERGEFORMAT ", "«C" + a + "»");
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_原始成績" + a + " \\* MERGEFORMAT ", "«S" + a + "»");
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_原始等第" + a + " \\* MERGEFORMAT ", "«L" + a + "»");
+                        }
+                        builder.EndRow();
+                    }
+
+                    if (domain == "彈性課程")
+                        for (int i = 7; i <= 18; i++)
+                        {
+                            string subjectKey = domain + "_科目名稱" + i;
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + subjectKey + " \\* MERGEFORMAT ", "«N" + i + "»");
+
+                            for (int a = 1; a <= 6; a++)
+                            {
+                                builder.InsertCell();
+                                builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_權數" + a + " \\* MERGEFORMAT ", "«C" + a + "»");
+                                builder.InsertCell();
+                                builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_原始成績" + a + " \\* MERGEFORMAT ", "«S" + a + "»");
+                                builder.InsertCell();
+                                builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_原始等第" + a + " \\* MERGEFORMAT ", "«L" + a + "»");
                             }
 
                             builder.EndRow();

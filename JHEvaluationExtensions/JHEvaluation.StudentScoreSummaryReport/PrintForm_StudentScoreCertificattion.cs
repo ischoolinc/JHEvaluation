@@ -375,6 +375,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
                         table.Columns.Add(domain + "_科目" + a + "_權數" + i);
                         table.Columns.Add(domain + "_科目" + a + "_成績" + i);
                         table.Columns.Add(domain + "_科目" + a + "_等第" + i);
+                        table.Columns.Add(domain + "_科目" + a + "_原始成績" + i);
+                        table.Columns.Add(domain + "_科目" + a + "_原始等第" + i);
                     }
                 }
                 if (domain == "彈性課程")
@@ -386,6 +388,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             table.Columns.Add("彈性課程_科目" + a + "_權數" + i);
                             table.Columns.Add("彈性課程_科目" + a + "_成績" + i);
                             table.Columns.Add("彈性課程_科目" + a + "_等第" + i);
+                            table.Columns.Add("彈性課程_科目" + a + "_原始成績" + i);
+                            table.Columns.Add("彈性課程_科目" + a + "_原始等第" + i);
                         }
                     }
             }
@@ -633,7 +637,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
             {
                 for (int a = 1; a <= 6; a++)
                 {
-                    subjectScoreType_list.Add(domain + "_科目" + a + "_成績");
+                    subjectScoreType_list.Add(domain + "_科目" + a + "_原始成績");
+                    subjectScoreType_list.Add(domain + "_科目" + a + "_原始成績");
                 }
             }
             #endregion
@@ -643,7 +648,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
             foreach (string domain in DomainList)
                 for (int a = 1; a <= 6; a++)
                 {
-                    subjectScoreType_list.Add(domain + "_科目" + a + "_等第");
+                    subjectLevelType_list.Add(domain + "_科目" + a + "_原始等第");
+                    subjectLevelType_list.Add(domain + "_科目" + a + "_原始等第");
                 }
             #endregion
 
@@ -1219,10 +1225,22 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                     subjectScore_dict["彈性課程_科目" + AlternativeCourse + "_成績" + (grade * 2 - 1)] = subjectscore.Value.Score;
                                                 }
 
+                                                //紀錄原始成績
+                                                if (subjectScore_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_原始成績" + (grade * 2 - 1)))
+                                                {
+                                                    subjectScore_dict["彈性課程_科目" + AlternativeCourse + "_原始成績" + (grade * 2 - 1)] = subjectscore.Value.Score;
+                                                }
+
                                                 //紀錄等第
                                                 if (subjectLevel_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_等第" + (grade * 2 - 1)))
                                                 {
                                                     subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_等第" + (grade * 2 - 1)] = ScoreTolevel(subjectscore.Value.Score);
+                                                }
+
+                                                //紀錄原始等第
+                                                if (subjectLevel_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2 - 1)))
+                                                {
+                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2 - 1)] = ScoreTolevel(subjectscore.Value.Score);
                                                 }
 
                                                 //紀錄權數
@@ -1246,10 +1264,22 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                         subjectScore_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_成績" + (grade * 2 - 1)] = subjectscore.Value.Score;
                                                     }
 
+                                                    //紀錄原始成績
+                                                    if (subjectScore_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始成績" + (grade * 2 - 1)))
+                                                    {
+                                                        subjectScore_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始成績" + (grade * 2 - 1)] = subjectscore.Value.Score;
+                                                    }
+
                                                     //換算等第
                                                     if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_等第" + (grade * 2 - 1)))
                                                     {
                                                         subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_等第" + (grade * 2 - 1)] = ScoreTolevel(subjectscore.Value.Score);
+                                                    }
+
+                                                    //換算原始等第
+                                                    if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2 - 1)))
+                                                    {
+                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2 - 1)] = ScoreTolevel(subjectscore.Value.Score);
                                                     }
 
                                                     //紀錄權數
@@ -1334,10 +1364,22 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                     subjectScore_dict["彈性課程_科目" + AlternativeCourse + "_成績" + (grade * 2)] = subjectscore.Value.Score;
                                                 }
 
+                                                //紀錄原始成績
+                                                if (subjectScore_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_原始成績" + (grade * 2)))
+                                                {
+                                                    subjectScore_dict["彈性課程_科目" + AlternativeCourse + "_原始成績" + (grade * 2)] = subjectscore.Value.Score;
+                                                }
+
                                                 //紀錄等第
                                                 if (subjectLevel_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_等第" + (grade * 2)))
                                                 {
                                                     subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_等第" + (grade * 2)] = ScoreTolevel(subjectscore.Value.Score);
+                                                }
+
+                                                //紀錄原始等第
+                                                if (subjectLevel_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2)))
+                                                {
+                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2)] = ScoreTolevel(subjectscore.Value.Score);
                                                 }
 
                                                 //紀錄權數
@@ -1360,10 +1402,22 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                         subjectScore_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_成績" + (grade * 2)] = subjectscore.Value.Score;
                                                     }
 
+                                                    //紀錄原始成績
+                                                    if (subjectScore_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始成績" + (grade * 2)))
+                                                    {
+                                                        subjectScore_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始成績" + (grade * 2)] = subjectscore.Value.Score;
+                                                    }
+
                                                     //換算等第
                                                     if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_等第" + (grade * 2)))
                                                     {
                                                         subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_等第" + (grade * 2)] = ScoreTolevel(subjectscore.Value.Score);
+                                                    }
+
+                                                    //換算原始等第
+                                                    if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2)))
+                                                    {
+                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2)] = ScoreTolevel(subjectscore.Value.Score);
                                                     }
 
                                                     //紀錄權數
