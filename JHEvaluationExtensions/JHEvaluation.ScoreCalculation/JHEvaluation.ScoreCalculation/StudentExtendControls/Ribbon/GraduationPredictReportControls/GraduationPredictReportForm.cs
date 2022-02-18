@@ -13,8 +13,8 @@ using JHSchool.Evaluation.Calculation.GraduationConditions;
 using Aspose.Cells;
 using System.IO;
 using JHSchool.Data;
-using Campus.Report;
 using FISCA.Presentation;
+using Campus.Report2014;
 
 namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReportControls
 {
@@ -309,7 +309,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             _doc.Sections.Clear();
 
             if (_rc.Template == null)
-                _rc.Template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準通知單樣板, TemplateType.Word);
+                _rc.Template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準通知單樣板, TemplateType.docx);
 
             _template = _rc.Template.ToDocument();
 
@@ -858,7 +858,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             _rc = new ReportConfiguration(ReportName);
 
             if (_rc.Template == null)
-                _rc.Template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準通知單樣板, TemplateType.Word);
+                _rc.Template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準通知單樣板, TemplateType.docx);
 
             _template = _rc.Template.ToDocument();
 

@@ -6,9 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Campus.Report;
 using FISCA.Presentation.Controls;
 using System.IO;
+using Campus.Report2014;
 
 namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReportControls
 {
@@ -55,7 +55,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
         {
             if (Config.Template == null)
             {
-                ReportTemplate template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.Template2021, TemplateType.Word);
+                ReportTemplate template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.Template2021, TemplateType.docx);
                 //ReportTemplate template = new ReportTemplate(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準通知單樣板, TemplateType.Word);
                 Config.Template = template;            
             }        
@@ -116,7 +116,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             if (openDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 FileInfo fileInfo = new FileInfo(openDialog.FileName);
-                TemplateType type = TemplateType.Word;
+                TemplateType type = TemplateType.docx;
                 ReportTemplate template = new ReportTemplate(fileInfo, type);
                 Config.Template = template;
             }
