@@ -2423,11 +2423,12 @@ namespace KaoHsiungExamScore_JH
                     _builder.EndTable();
 
                     //去除表格四邊的線
-                    foreach (Cell c in table.FirstRow.Cells)
-                        c.CellFormat.Borders.Top.LineStyle = LineStyle.None;
+                    //2022/2/17 [1110102]高雄小組-要求把上下框線放出來
+                    //foreach (Cell c in table.FirstRow.Cells)
+                    //    c.CellFormat.Borders.Top.LineStyle = LineStyle.None;
 
-                    foreach (Cell c in table.LastRow.Cells)
-                        c.CellFormat.Borders.Bottom.LineStyle = LineStyle.None;
+                    //foreach (Cell c in table.LastRow.Cells)
+                    //    c.CellFormat.Borders.Bottom.LineStyle = LineStyle.None;
 
                     foreach (Row r in table.Rows)
                     {
