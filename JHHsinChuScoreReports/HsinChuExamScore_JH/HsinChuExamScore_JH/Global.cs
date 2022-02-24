@@ -2936,7 +2936,7 @@ namespace HsinChuExamScore_JH
                 }
 
                 // 科目定期
-                builder.Writeln("序列化科目定期定期資料(年排名及班排名)");
+                builder.Writeln("序列化科目定期評量資料(年排名及班排名)");
                 foreach (string domainName in DomainNameList)
                 {
                     builder.Write(domainName + "領域");
@@ -2991,7 +2991,7 @@ namespace HsinChuExamScore_JH
                     builder.Writeln();
                 }
 
-                builder.Writeln("序列化科目定期定期資料(類別1排名及類別2排名)");
+                builder.Writeln("序列化科目定期評量資料(類別1排名及類別2排名)");
                 foreach (string domainName in DomainNameList)
                 {
                     builder.Write(domainName + "領域");
@@ -3046,7 +3046,9 @@ namespace HsinChuExamScore_JH
                     builder.Writeln();
                 }
 
-                builder.Writeln("序列化科目定期定期資料五標、標準差(年排名及班排名)");
+
+                builder.Writeln("序列化科目定期評量資料五標、標準差(年排名)");
+                builder.Writeln("※Ａ++~B適用於「定期評量排名擴充功能」模組");
                 foreach (string domainName in DomainNameList)
                 {
                     builder.Write(domainName + "領域");
@@ -3080,31 +3082,20 @@ namespace HsinChuExamScore_JH
                     builder.Write("科目定期年排名母體新底標");
                     builder.InsertCell();
                     builder.Write("科目定期年排名母體標準差");
+                    builder.InsertCell();
+                    builder.Write("科目定期年排名A++");
+                    builder.InsertCell();
+                    builder.Write("科目定期年排名A+");
+                    builder.InsertCell();
+                    builder.Write("科目定期年排名A");
+                    builder.InsertCell();
+                    builder.Write("科目定期年排名B++");
+                    builder.InsertCell();
+                    builder.Write("科目定期年排名B+");
+                    builder.InsertCell();
+                    builder.Write("科目定期年排名B");
 
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體頂標");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體前標");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體平均");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體後標");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體底標");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體人數");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體新頂標");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體新前標");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體新均標");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體新後標");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體新底標");
-                    builder.InsertCell();
-                    builder.Write("科目定期班排名母體標準差");
+
                     builder.EndRow();
 
                     for (int sj = 1; sj <= 12; sj++)
@@ -3149,6 +3140,91 @@ namespace HsinChuExamScore_JH
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SYMSTD" + "»");
 
+                        mName1 = domainName + "_科目定期年排名A++" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SYA++" + "»");
+                        mName1 = domainName + "_科目定期年排名A+" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SYA+" + "»");
+                        mName1 = domainName + "_科目定期年排名A" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SYA" + "»");
+                        mName1 = domainName + "_科目定期年排名B++" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SYB++" + "»");
+                        mName1 = domainName + "_科目定期年排名B+" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SYB+" + "»");
+                        mName1 = domainName + "_科目定期年排名B" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SYB" + "»");
+
+                        builder.EndRow();
+                    }
+
+                    builder.EndTable();
+                    builder.Writeln();
+                    builder.Writeln();
+                }
+
+                builder.Writeln("序列化科目定期評量資料五標、標準差(班排名)");
+                builder.Writeln("※Ａ++~B適用於「定期評量排名擴充功能」模組");
+                foreach (string domainName in DomainNameList)
+                {
+                    builder.Write(domainName + "領域");
+                    string mName1 = "";
+
+                    builder.StartTable();
+                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                    builder.InsertCell();
+                    builder.Write("科目名稱");
+
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體頂標");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體前標");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體平均");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體後標");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體底標");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體人數");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體新頂標");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體新前標");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體新均標");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體新後標");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體新底標");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名母體標準差");
+
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名A++");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名A+");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名A");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名B++");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名B+");
+                    builder.InsertCell();
+                    builder.Write("科目定期班排名B");
+
+                    builder.EndRow();
+
+                    for (int sj = 1; sj <= 12; sj++)
+                    {
+                        mName1 = domainName + "_科目名稱" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SN" + "»");
+
                         mName1 = domainName + "_科目定期班排名母體頂標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SC25T" + "»");
@@ -3187,6 +3263,25 @@ namespace HsinChuExamScore_JH
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SCMSTD" + "»");
 
+                        mName1 = domainName + "_科目定期班排名A++" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SCA++" + "»");
+                        mName1 = domainName + "_科目定期班排名A+" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SCA+" + "»");
+                        mName1 = domainName + "_科目定期班排名A" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SCA" + "»");
+                        mName1 = domainName + "_科目定期班排名B++" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SCB++" + "»");
+                        mName1 = domainName + "_科目定期班排名B+" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SCB+" + "»");
+                        mName1 = domainName + "_科目定期班排名B" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SCB" + "»");
+
                         builder.EndRow();
                     }
 
@@ -3195,7 +3290,8 @@ namespace HsinChuExamScore_JH
                     builder.Writeln();
                 }
 
-                builder.Writeln("序列化科目定期定期資料五標、標準差(類別1排名及類別2排名)");
+                builder.Writeln("序列化科目定期評量資料五標、標準差(類別1排名)");
+                builder.Writeln("※Ａ++~B適用於「定期評量排名擴充功能」模組");
                 foreach (string domainName in DomainNameList)
                 {
                     builder.Write(domainName + "領域");
@@ -3231,29 +3327,17 @@ namespace HsinChuExamScore_JH
                     builder.Write("科目定期類別1排名母體標準差");
 
                     builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體頂標");
+                    builder.Write("科目定期類別1排名A++");
                     builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體前標");
+                    builder.Write("科目定期類別1排名A+");
                     builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體平均");
+                    builder.Write("科目定期類別1排名A");
                     builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體後標");
+                    builder.Write("科目定期類別1排名B++");
                     builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體底標");
+                    builder.Write("科目定期類別1排名B+");
                     builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體人數");
-                    builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體新頂標");
-                    builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體新前標");
-                    builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體新均標");
-                    builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體新後標");
-                    builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體新底標");
-                    builder.InsertCell();
-                    builder.Write("科目定期類別2排名母體標準差");
+                    builder.Write("科目定期類別1排名B");
                     builder.EndRow();
 
                     for (int sj = 1; sj <= 12; sj++)
@@ -3298,6 +3382,88 @@ namespace HsinChuExamScore_JH
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S1TMSTD" + "»");
 
+                        mName1 = domainName + "_科目定期類別1排名A++" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST1A++" + "»");
+                        mName1 = domainName + "_科目定期類別1排名A+" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST1A+" + "»");
+                        mName1 = domainName + "_科目定期類別1排名A" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST1A" + "»");
+                        mName1 = domainName + "_科目定期類別1排名B++" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST1B++" + "»");
+                        mName1 = domainName + "_科目定期類別1排名B+" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST1B+" + "»");
+                        mName1 = domainName + "_科目定期類別1排名B" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST1B" + "»");
+                        builder.EndRow();
+                    }
+
+                    builder.EndTable();
+                    builder.Writeln();
+                    builder.Writeln();
+                }
+
+                builder.Writeln("序列化科目定期評量資料五標、標準差(類別2排名)");
+                builder.Writeln("※Ａ++~B適用於「定期評量排名擴充功能」模組");
+                foreach (string domainName in DomainNameList)
+                {
+                    builder.Write(domainName + "領域");
+                    string mName1 = "";
+
+                    builder.StartTable();
+                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+                    builder.InsertCell();
+                    builder.Write("科目名稱");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體頂標");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體前標");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體平均");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體後標");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體底標");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體人數");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體新頂標");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體新前標");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體新均標");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體新後標");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體新底標");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名母體標準差");
+
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名A++");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名A+");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名A");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名B++");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名B+");
+                    builder.InsertCell();
+                    builder.Write("科目定期類別2排名B");
+                    builder.EndRow();
+
+                    for (int sj = 1; sj <= 12; sj++)
+                    {
+                        mName1 = domainName + "_科目名稱" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SN" + "»");
+
                         mName1 = domainName + "_科目定期類別2排名母體頂標" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S2T25T" + "»");
@@ -3334,6 +3500,25 @@ namespace HsinChuExamScore_JH
                         mName1 = domainName + "_科目定期類別2排名母體標準差" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«S2TMSTD" + "»");
+
+                        mName1 = domainName + "_科目定期類別2排名A++" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST2A++" + "»");
+                        mName1 = domainName + "_科目定期類別2排名A+" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST2A+" + "»");
+                        mName1 = domainName + "_科目定期類別2排名A" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST2A" + "»");
+                        mName1 = domainName + "_科目定期類別2排名B++" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST2B++" + "»");
+                        mName1 = domainName + "_科目定期類別2排名B+" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST2B+" + "»");
+                        mName1 = domainName + "_科目定期類別2排名B" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST2B" + "»");
 
                         builder.EndRow();
                     }
@@ -3560,6 +3745,7 @@ namespace HsinChuExamScore_JH
                 {
 
                     builder.Writeln(domainName + "領域");
+                    builder.Writeln("※「科目定期評量自訂等第」適用於「定期評量排名擴充功能」模組");
                     builder.StartTable();
                     builder.CellFormat.Borders.LineStyle = LineStyle.None;
                     builder.InsertCell();
@@ -3580,6 +3766,14 @@ namespace HsinChuExamScore_JH
                     builder.Write("科目平時評量等第");
                     builder.InsertCell();
                     builder.Write("科目總成績等第");
+                    builder.InsertCell();
+                    builder.Write("科目定期評量自訂等第(年排名)");
+                    builder.InsertCell();
+                    builder.Write("科目定期評量自訂等第(班排名)");
+                    builder.InsertCell();
+                    builder.Write("科目定期評量自訂等第(類別1排名)");
+                    builder.InsertCell();
+                    builder.Write("科目定期評量自訂等第(類別2排名)");
                     builder.InsertCell();
                     builder.Write("科目文字評量");
                     builder.InsertCell();
@@ -3630,9 +3824,6 @@ namespace HsinChuExamScore_JH
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SA" + "»");
                         mName1 = domainName + "_科目總成績" + sj;
-
-
-
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SC" + "»");
                         mName1 = domainName + "_科目定期評量等第" + sj;
@@ -3642,9 +3833,22 @@ namespace HsinChuExamScore_JH
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SA" + "»");
                         mName1 = domainName + "_科目總成績等第" + sj;
-
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SST" + "»");
+
+                        mName1 = domainName + "_科目定期評量自訂等第(年排名)" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SFY" + "»");
+                        mName1 = domainName + "_科目定期評量自訂等第(班排名)" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SFC" + "»");
+                        mName1 = domainName + "_科目定期評量自訂等第(類別1排名)" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SFG" + "»");
+                        mName1 = domainName + "_科目定期評量自訂等第(類別2排名)" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«SFP" + "»");
+
                         mName1 = domainName + "_科目文字評量" + sj;
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + mName1 + " \\* MERGEFORMAT ", "«ST" + "»");

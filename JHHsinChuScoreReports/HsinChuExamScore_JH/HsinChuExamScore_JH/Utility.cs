@@ -374,7 +374,7 @@ WHERE  name = 'JHEvaluation_Subject_Ordinal'
             Dictionary<string, Dictionary<string, RankDataInfo>> value = new Dictionary<string, Dictionary<string, RankDataInfo>>();
 
             //抓取排名資料
-            string sql = @"
+            string sql = @"WITH data AS(
 SELECT 
 	rank_matrix.id AS rank_matrix_id
 	, rank_matrix.school_year
@@ -417,6 +417,7 @@ SELECT
     ,rank_detail.rank
     ,rank_detail.pr
     ,rank_detail.percentile
+	, jsonb_array_elements(CASE WHEN rank_matrix.extension::TEXT = '[]' THEN '[null]'::JSONB ELSE rank_matrix.extension END) AS extension
 FROM 
 	rank_matrix
 	INNER JOIN rank_detail
@@ -436,7 +437,17 @@ WHERE
  ", class.grade_year" +
  ", class.display_order" +
  ", class.class_name" +
- ", student.seat_no;";
+ ", student.seat_no " +
+ @")SELECT 
+    data.*
+ , data.extension->> 'extension_name' AS extension_name "
++ ", data.extension->>'A++' AS \"A++\""
++ ", data.extension->> 'A+' AS \"A+\""
++ ", data.extension->> 'A' AS \"A\""
++ ", data.extension->> 'B++' AS \"B++\""
++ ", data.extension->> 'B+' AS \"B+\""
++ ", data.extension->> 'B' AS \"B\""
++ "FROM data"; ;
 
             try
             {
@@ -457,6 +468,7 @@ WHERE
                         {
                             int matrix_count, level_gte100, level_90, level_80, level_70, level_60, level_50, level_40, level_30, level_20, level_10, level_lt10, rank, pr, percentile;
                             decimal avg_top_25, avg_top_50, avg, avg_bottom_50, avg_bottom_25, pr_88, pr_75, pr_50, pr_25, pr_12, std_dev_pop;
+                            decimal aPP, aP, a, bPP, bP, b;
 
                             RankDataInfo rdf = new RankDataInfo();
 
@@ -473,7 +485,6 @@ WHERE
                             if (int.TryParse(dr["level_10"].ToString(), out level_10)) rdf.level_10 = level_10;
                             if (int.TryParse(dr["level_lt10"].ToString(), out level_lt10)) rdf.level_lt10 = level_lt10;
 
-                            // 和佳樺討論，五標 小數下第2位四捨五入
                             //2021-12 Cynthia 改為四捨五入至使用者指定位數
                             if (decimal.TryParse(dr["avg_top_25"].ToString(), out avg_top_25))
                                 rdf.avg_top_25 = Math.Round(avg_top_25, ParseNumber, MidpointRounding.AwayFromZero);
@@ -499,7 +510,29 @@ WHERE
                             if (decimal.TryParse(dr["pr_12"].ToString(), out pr_12))
                                 rdf.pr_12 = Math.Round(pr_12, ParseNumber, MidpointRounding.AwayFromZero);
 
+                            if (dr["A++"].ToString() != "")
+                                if (decimal.TryParse(dr["A++"].ToString(), out aPP))
+                                    rdf.A_plus_plus = Math.Round(aPP, ParseNumber, MidpointRounding.AwayFromZero);
 
+                            if (dr["A+"].ToString() != "")
+                                if (decimal.TryParse(dr["A+"].ToString(), out aP))
+                                rdf.A_plus = Math.Round(aP, ParseNumber, MidpointRounding.AwayFromZero);
+
+                            if (dr["A"].ToString() != "")
+                                if (decimal.TryParse(dr["A"].ToString(), out a))
+                                rdf.A = Math.Round(a, ParseNumber, MidpointRounding.AwayFromZero);
+
+                            if (dr["B++"].ToString() != "")
+                                if (decimal.TryParse(dr["B++"].ToString(), out bPP))
+                                rdf.B_plus_plus = Math.Round(bPP, ParseNumber, MidpointRounding.AwayFromZero);
+
+                            if (dr["B+"].ToString() != "")
+                                if (decimal.TryParse(dr["B+"].ToString(), out bP))
+                                rdf.B_plus = Math.Round(bP, ParseNumber, MidpointRounding.AwayFromZero);
+
+                            if (dr["B"].ToString() != "")
+                                if (decimal.TryParse(dr["B"].ToString(), out b))
+                                rdf.B = Math.Round(b, ParseNumber, MidpointRounding.AwayFromZero);
 
                             if (int.TryParse(dr["rank"].ToString(), out rank)) rdf.rank = rank;
                             if (int.TryParse(dr["pr"].ToString(), out pr)) rdf.pr = pr;

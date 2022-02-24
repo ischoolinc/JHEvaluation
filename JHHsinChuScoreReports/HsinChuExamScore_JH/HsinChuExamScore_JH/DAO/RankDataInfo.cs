@@ -61,5 +61,35 @@ namespace HsinChuExamScore_JH.DAO
         /// 新底標
         /// </summary>
         public decimal pr_12 = 0;
+
+        /// <summary>
+        /// A++
+        /// </summary>
+        public decimal? A_plus_plus;
+
+        /// <summary>
+        /// A+
+        /// </summary>
+        public decimal? A_plus;
+
+        /// <summary>
+        /// A
+        /// </summary>
+        public decimal? A;
+
+        /// <summary>
+        /// B++
+        /// </summary>
+        public decimal? B_plus_plus;
+
+        /// <summary>
+        /// B+
+        /// </summary>
+        public decimal? B_plus ;
+
+        /// <summary>
+        /// B
+        /// </summary>
+        public decimal? B;
     }
 }

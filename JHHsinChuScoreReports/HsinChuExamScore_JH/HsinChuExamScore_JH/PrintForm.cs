@@ -577,7 +577,7 @@ namespace HsinChuExamScore_JH
                     var UseText = each.SelectSingleNode("UseText").InnerText;
                     var AllowCalculation = bool.Parse(each.SelectSingleNode("AllowCalculation").InnerText);
                     decimal Score;
-                    decimal? NullableScore=null;
+                    decimal? NullableScore = null;
                     bool result = decimal.TryParse(each.SelectSingleNode("Score").InnerText, out Score);
                     if (result)
                     {
@@ -637,7 +637,7 @@ namespace HsinChuExamScore_JH
                     {
                         if ((rec.RefExamID == _SelExamID || rec.RefExamID == _SelRefExamID) && CourseDict.ContainsKey(rec.RefCourseID))
                         {
-                            JHCourseRecord cr = CourseDict[rec.RefCourseID];                       
+                            JHCourseRecord cr = CourseDict[rec.RefCourseID];
 
                             string SubjecName = cr.Subject;
 
@@ -940,6 +940,7 @@ namespace HsinChuExamScore_JH
 
             List<string> rankDataTypeList = new List<string>();
 
+            Dictionary<decimal, string> customizeDegreeDic = new Dictionary<decimal, string>();
 
             //socreItem1List.Add("領域成績");
             //socreItem1List.Add("領域定期成績");
@@ -986,6 +987,13 @@ namespace HsinChuExamScore_JH
             rankDataTypeList.Add("母體新底標");
             rankDataTypeList.Add("母體標準差");
 
+            rankDataTypeList.Add("A++");
+            rankDataTypeList.Add("A+");
+            rankDataTypeList.Add("A");
+            rankDataTypeList.Add("B++");
+            rankDataTypeList.Add("B+");
+            rankDataTypeList.Add("B");
+
             List<string> domainLi = new List<string>();
 
             List<string> subjLi = new List<string>();
@@ -1008,6 +1016,11 @@ namespace HsinChuExamScore_JH
             subjLi.Add("科目定期評量等第");
             subjLi.Add("科目平時評量等第");
             subjLi.Add("科目總成績等第");
+            //2022-02-16 定期評量固定排名擴充功能-自訂等第
+            subjLi.Add("科目定期評量自訂等第(年排名)");
+            subjLi.Add("科目定期評量自訂等第(班排名)");
+            subjLi.Add("科目定期評量自訂等第(類別1排名)");
+            subjLi.Add("科目定期評量自訂等第(類別2排名)");
 
             // 新增排名資訊 
             foreach (string rt in rankTypeList)
@@ -1043,6 +1056,8 @@ namespace HsinChuExamScore_JH
                 dtAtt.Clear();
                 dt.Clear();
                 dt.Columns.Clear();
+
+
 
                 dtAtt.Columns.Add("缺曠紀錄");
                 DataRow rowT = dtAtt.NewRow();
@@ -1475,7 +1490,7 @@ namespace HsinChuExamScore_JH
                                     break;
                                 case "科目權數含括號":    // 2021-12 Cynthia 協同國中要求增加 含有括號的權數 ex:  (3)
                                     if (examSubjScore.Credit.HasValue)
-                                        row[key] = "("+examSubjScore.Credit.Value+")";
+                                        row[key] = "(" + examSubjScore.Credit.Value + ")";
                                     break;
                                 case "科目定期評量":
                                     if (examSubjScore.ScoreF.HasValue)
@@ -1562,7 +1577,7 @@ namespace HsinChuExamScore_JH
                                         break;
                                     }
                                     else if (examSubjScore.RefScoreF.HasValue)
-                                    {                                        
+                                    {
                                         if (Program.ScoreValueMap.ContainsKey(examSubjScore.RefScoreF.Value))
                                         {
                                             row[key] = Program.ScoreValueMap[examSubjScore.RefScoreF.Value].UseText;
@@ -1670,6 +1685,8 @@ namespace HsinChuExamScore_JH
                                 keyD = "定期評量_定期/科目成績" + examSubjScore.SubjectName + rt;
                                 if (StudentExamRankMatrixDict[StudRec.ID].ContainsKey(keyD))
                                 {
+                                    customizeDegreeDic.Clear();
+
                                     row[ddname + "_科目定期" + rt + "名次" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].rank;
                                     row[ddname + "_科目定期" + rt + "PR值" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr;
                                     row[ddname + "_科目定期" + rt + "百分比" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].percentile;
@@ -1686,6 +1703,44 @@ namespace HsinChuExamScore_JH
                                     row[ddname + "_科目定期" + rt + "母體新後標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_25;
                                     row[ddname + "_科目定期" + rt + "母體新底標" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].pr_12;
                                     row[ddname + "_科目定期" + rt + "母體標準差" + subj] = StudentExamRankMatrixDict[StudRec.ID][keyD].std_dev_pop;
+
+                                    //2022-02-16 Cynthia 適用於「定期評量排名擴充功能」模組
+                                    decimal? aPP, aP, a, bPP, bP, b;
+                                    aPP = StudentExamRankMatrixDict[StudRec.ID][keyD].A_plus_plus;
+                                    aP = StudentExamRankMatrixDict[StudRec.ID][keyD].A_plus;
+                                    a = StudentExamRankMatrixDict[StudRec.ID][keyD].A;
+                                    bPP = StudentExamRankMatrixDict[StudRec.ID][keyD].B_plus_plus;
+                                    bP = StudentExamRankMatrixDict[StudRec.ID][keyD].B_plus;
+                                    b = StudentExamRankMatrixDict[StudRec.ID][keyD].B;
+
+                                    row[ddname + "_科目定期" + rt + "A++" + subj] = aPP;
+                                    row[ddname + "_科目定期" + rt + "A+" + subj] = aP;
+                                    row[ddname + "_科目定期" + rt + "A" + subj] = a;
+                                    row[ddname + "_科目定期" + rt + "B++" + subj] = bPP;
+                                    row[ddname + "_科目定期" + rt + "B+" + subj] = bP;
+                                    row[ddname + "_科目定期" + rt + "B" + subj] = b;
+
+                                    if (examSubjScore.ScoreF.HasValue)
+                                    {
+                                        if (Program.ScoreValueMap.ContainsKey(examSubjScore.ScoreF.Value))
+                                        {
+                                            if (Program.ScoreValueMap[examSubjScore.ScoreF.Value].AllowCalculation)
+                                            {
+                                                row[ddname + "_科目定期評量自訂等第(" + rt + ")" + subj] = ParseScoreToCustomizeDegree(examSubjScore.ScoreF.Value, aPP, aP, a, bPP, bP, b);
+                                            }
+                                            else
+                                            {
+                                                row[ddname + "_科目定期評量自訂等第(" + rt + ")" + subj] = "";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            row[ddname + "_科目定期評量自訂等第(" + rt + ")" + subj] = ParseScoreToCustomizeDegree(examSubjScore.ScoreF.Value, aPP, aP, a, bPP, bP, b);
+                                        }
+                                    }
+
+
+
                                 }
                             }
                         }
@@ -2957,7 +3012,7 @@ namespace HsinChuExamScore_JH
             }
             else
             {
-                if (cboRefSchoolYear.Text != "" && cboRefSemester.Text != "" && cboRefExam.Text != "" )
+                if (cboRefSchoolYear.Text != "" && cboRefSemester.Text != "" && cboRefExam.Text != "")
                 {
                     if (cboSchoolYear.Text != cboRefSchoolYear.Text || cboSemester.Text != cboRefSemester.Text)
                     {
@@ -3451,6 +3506,45 @@ namespace HsinChuExamScore_JH
             }
 
         }
+
+        private string ParseScoreToCustomizeDegree(decimal? score, decimal? app, decimal? aP, decimal? a, decimal? bPP, decimal? bP, decimal? b)
+        {
+            string level = "";
+            if (score >= app)
+            {
+                level = "A++";
+            }
+            else if (score >= aP && score < app)
+            {
+                level = "A+";
+            }
+            else if (score >= a && score < aP)
+            {
+                level = "A";
+            }
+            else if (score >= bPP && score < a)
+            {
+                level = "B++";
+            }
+            else if (score >= bP && score < bPP)
+            {
+                level = "B+";
+            }
+            else if (score >= b && score < bP)
+            {
+                level = "B";
+            }
+            else if (score < b)
+            {
+                level = "C";
+            }
+            else
+            {
+                level = "";
+            }
+            return level;
+        }
+
 
         private decimal doParseTransfer(decimal score)
         {
