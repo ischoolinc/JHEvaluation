@@ -8,8 +8,8 @@ using System.Windows.Forms;
 using FISCA.Presentation.Controls;
 using K12.Data.Configuration;
 using System.Xml;
-using Campus.Report;
 using System.IO;
+using Campus.Report2014;
 
 namespace KaoHsiung.StudentRecordReport.Forms
 {

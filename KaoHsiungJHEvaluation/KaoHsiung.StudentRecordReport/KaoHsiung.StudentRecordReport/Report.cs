@@ -11,11 +11,11 @@ using JHSchool.Data;
 using FISCA.Presentation;
 using K12.Data;
 using System.Xml;
-using Campus.Report;
 using KaoHsiung.StudentRecordReport.Processor;
 using JHSchool.Behavior.BusinessLogic;
 using JHSchool.Evaluation.Mapping;
 using Aspose.Words.Tables;
+using Campus.Report2014;
 
 namespace KaoHsiung.StudentRecordReport
 {
@@ -363,8 +363,15 @@ namespace KaoHsiung.StudentRecordReport
                     foreach (string each in StudentDoc.Keys)
                     {
                         //ReportSaver.SaveDocumentBatch(StudentDoc[each], fbd.SelectedPath + "\\" + each + ".doc", ReportSaver.OutputType.Word);
+                        try
+                        {
 
-                        StudentDoc[each].Save(fbd.SelectedPath + "\\" + each + ".docx");
+                            StudentDoc[each].Save(fbd.SelectedPath + "\\" + each + ".docx");
+                        }
+                        catch (Exception ex)
+                        {
+                            MsgBox.Show(ex.Message);
+                        }
                     }
                 }
 
@@ -389,10 +396,17 @@ namespace KaoHsiung.StudentRecordReport
                 }
                 else
                 {
-                    MotherForm.SetStatusBarMessage(Global.ReportName + "產生完成");
-                    //ReportSaver.SaveDocument(_doc, Global.ReportName);
-                    _doc.Save(fbd.SelectedPath + "\\" + Global.ReportName + ".docx", SaveFormat.Docx);
-                    System.Diagnostics.Process.Start(fbd.SelectedPath + "\\" + Global.ReportName + ".docx");
+                    try
+                    {
+                        MotherForm.SetStatusBarMessage(Global.ReportName + "產生完成");
+                        //ReportSaver.SaveDocument(_doc, Global.ReportName);
+                        _doc.Save(fbd.SelectedPath + "\\" + Global.ReportName + ".docx", SaveFormat.Docx);
+                        System.Diagnostics.Process.Start(fbd.SelectedPath + "\\" + Global.ReportName + ".docx");
+                    }
+                    catch (Exception ex)
+                    {
+                        MsgBox.Show(ex.Message);
+                    }
                 }
             }
 

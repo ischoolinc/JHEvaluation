@@ -75,9 +75,8 @@
       <HintPath>Library\Campus.Configuration.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Campus.Report, Version=1.0.0.11, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Campus.Report.dll</HintPath>
+    <Reference Include="Campus.Report2014">
+      <HintPath>Library\Campus.Report2014.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">

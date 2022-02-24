@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using FISCA.Presentation.Controls;
 using JHSchool.Data;
 using K12.Data.Configuration;
-using Campus.Report;
+using Campus.Report2014;
 
 namespace KaoHsiung.StudentRecordReport.Forms
 {
