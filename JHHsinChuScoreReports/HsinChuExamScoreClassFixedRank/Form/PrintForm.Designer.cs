@@ -57,6 +57,13 @@
             this.cboRefSchoolYear = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.cboRefSemester = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX8 = new DevComponents.DotNetBar.LabelX();
+            this.checkOrder = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.labelX9 = new DevComponents.DotNetBar.LabelX();
+            this.cboOrder = new DevComponents.DotNetBar.Controls.ComboBoxEx();
+            this.comboItem1 = new DevComponents.Editors.ComboItem();
+            this.comboItem2 = new DevComponents.Editors.ComboItem();
+            this.comboItem3 = new DevComponents.Editors.ComboItem();
+            this.comboItem4 = new DevComponents.Editors.ComboItem();
             this.groupPanel1.SuspendLayout();
             this.groupPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -528,11 +535,80 @@
             this.labelX8.TabIndex = 49;
             this.labelX8.Text = "若勾選領域， 總分將以領域成績計算。";
             // 
+            // checkOrder
+            // 
+            this.checkOrder.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.checkOrder.BackgroundStyle.Class = "";
+            this.checkOrder.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkOrder.Location = new System.Drawing.Point(19, 138);
+            this.checkOrder.Name = "checkOrder";
+            this.checkOrder.Size = new System.Drawing.Size(55, 23);
+            this.checkOrder.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkOrder.TabIndex = 50;
+            this.checkOrder.Text = "依照";
+            this.checkOrder.CheckedChanged += new System.EventHandler(this.checkOrder_CheckedChanged);
+            // 
+            // labelX9
+            // 
+            this.labelX9.AutoSize = true;
+            this.labelX9.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX9.BackgroundStyle.Class = "";
+            this.labelX9.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX9.Location = new System.Drawing.Point(188, 139);
+            this.labelX9.Name = "labelX9";
+            this.labelX9.Size = new System.Drawing.Size(101, 21);
+            this.labelX9.TabIndex = 51;
+            this.labelX9.Text = "班排名排序學生";
+            // 
+            // cboOrder
+            // 
+            this.cboOrder.DisplayMember = "Text";
+            this.cboOrder.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cboOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboOrder.Enabled = false;
+            this.cboOrder.FormattingEnabled = true;
+            this.cboOrder.ItemHeight = 19;
+            this.cboOrder.Items.AddRange(new object[] {
+            this.comboItem1,
+            this.comboItem2,
+            this.comboItem3,
+            this.comboItem4});
+            this.cboOrder.Location = new System.Drawing.Point(70, 137);
+            this.cboOrder.Name = "cboOrder";
+            this.cboOrder.Size = new System.Drawing.Size(118, 25);
+            this.cboOrder.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cboOrder.TabIndex = 52;
+            // 
+            // comboItem1
+            // 
+            this.comboItem1.Text = "定期_加權總分";
+            // 
+            // comboItem2
+            // 
+            this.comboItem2.Text = "定期_加權平均";
+            // 
+            // comboItem3
+            // 
+            this.comboItem3.Text = "定期_總分";
+            // 
+            // comboItem4
+            // 
+            this.comboItem4.Text = "定期_平均";
+            // 
             // PrintForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(593, 523);
+            this.Controls.Add(this.cboOrder);
+            this.Controls.Add(this.labelX9);
+            this.Controls.Add(this.checkOrder);
             this.Controls.Add(this.labelX8);
             this.Controls.Add(this.cboRefSemester);
             this.Controls.Add(this.cboRefSchoolYear);
@@ -602,5 +678,12 @@
         private DevComponents.DotNetBar.Controls.ComboBoxEx cboRefSchoolYear;
         private DevComponents.DotNetBar.Controls.ComboBoxEx cboRefSemester;
         private DevComponents.DotNetBar.LabelX labelX8;
+        private DevComponents.DotNetBar.Controls.CheckBoxX checkOrder;
+        private DevComponents.DotNetBar.LabelX labelX9;
+        private DevComponents.DotNetBar.Controls.ComboBoxEx cboOrder;
+        private DevComponents.Editors.ComboItem comboItem1;
+        private DevComponents.Editors.ComboItem comboItem2;
+        private DevComponents.Editors.ComboItem comboItem3;
+        private DevComponents.Editors.ComboItem comboItem4;
     }
 }

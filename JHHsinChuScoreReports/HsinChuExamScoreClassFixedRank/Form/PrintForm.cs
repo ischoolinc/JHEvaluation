@@ -59,6 +59,9 @@ namespace HsinChuExamScoreClassFixedRank.Form
         int parseNumber = 0;
         List<string> _StudentIDList = new List<string>();
 
+        bool CheckRankItemOrder = false;
+        string RankItemOrder = "";
+
         // 紀錄樣板設定
         List<DAO.UDT_ScoreConfig> _UDTConfigList;
         Dictionary<string, Dictionary<string, List<string>>> CanSelectExamDomainSubjectDict = new Dictionary<string, Dictionary<string, List<string>>>();
@@ -205,7 +208,14 @@ namespace HsinChuExamScoreClassFixedRank.Form
             ScorePercentageHSDict = DataAccess.GetScorePercentageHS();
 
             // 取得班級學生
-            ClassInfoList = DataAccess.GetClassStudentsByClassID(_ClassIDList);
+            //ClassInfoList = DataAccess.GetClassStudentsByClassID(_ClassIDList);
+
+            if (!CheckRankItemOrder)
+                // 取得班級學生
+                ClassInfoList = DataAccess.GetClassStudentsByClassID(_ClassIDList);
+            else
+                // 依據排名順序取得班級學生
+                ClassInfoList = DataAccess.GetClassStudentsAndRankOrderByClassID(_ClassIDList, SelSchoolYear, SelSemester, RankItemOrder, SelExamID);
 
             // 取得段考成績
             ClassInfoList = DataAccess.LoadClassStudentScore(ClassInfoList, SelSchoolYear, SelSemester, SelExamID, ScorePercentageHSDict, _ClassIDList);
@@ -915,7 +925,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             SelDomainNameList.Sort(new StringComparer(ddList.ToArray()));
 
             //SelDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然與生活科技", "健康與體育", "藝術與人文", "綜合活動"));
-            
+
             //科目排序
             SelSubjectNameList.Sort(new StringComparer(Utility.GetSubjectOrder().ToArray()));
 
@@ -1379,12 +1389,12 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                     if (Program.ScoreValueMap.ContainsKey(di.ScoreF.Value))
                                     {
                                         row[d1_1] = Program.ScoreValueMap[di.ScoreF.Value].UseText;
-                                    } 
+                                    }
                                     else
                                     {
                                         row[d1_1] = Math.Round(di.ScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
                                     }
-                                }                                    
+                                }
                             }
 
                             string d2 = di.Name + "領域學分" + studCot;
@@ -1450,7 +1460,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                                             row[s2_1Key] = subj.ScoreF.Value;
                                                         }
                                                     }
-                                                        
+
                                             }
 
                                             if (dtTable.Columns.Contains(s3Key))
@@ -1523,13 +1533,13 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 {
                                     if (Program.ScoreValueMap.ContainsKey(di.ScoreF.Value))
                                     {
-                                        row[da3] = Program.ScoreValueMap[di.ScoreF.Value].UseText; 
+                                        row[da3] = Program.ScoreValueMap[di.ScoreF.Value].UseText;
                                     }
                                     else
                                     {
                                         row[da3] = Math.Round(di.ScoreF.Value, parseNumber, MidpointRounding.AwayFromZero);
                                     }
-                                }                                    
+                                }
                             }
 
                             if (dtTable.Columns.Contains(da4))
@@ -1601,7 +1611,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                             {
                                 if (sia.Credit.HasValue)
                                 {
-                                    row[_sa4] = "("+sia.Credit.Value+")";
+                                    row[_sa4] = "(" + sia.Credit.Value + ")";
                                 }
                             }
 
@@ -1736,7 +1746,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                                 string cKey = "班級_領域成績_" + dd + "_" + rt;
                                 if (dtTable.Columns.Contains(cKey))
                                 {
-                                    if (cKey.Contains("avg")|| cKey.Contains("pr_")|| cKey.Contains("std_dev_pop"))
+                                    if (cKey.Contains("avg") || cKey.Contains("pr_") || cKey.Contains("std_dev_pop"))
                                         row[cKey] = parseScore1(value);
                                     else
                                         row[cKey] = value;
@@ -2183,7 +2193,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             decimal dc;
             if (decimal.TryParse(str, out dc))
             {
-                value = Math.Round(dc, parseNumber,MidpointRounding.AwayFromZero).ToString();
+                value = Math.Round(dc, parseNumber, MidpointRounding.AwayFromZero).ToString();
             }
 
             return value;
@@ -2576,6 +2586,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
             for (int i = 0; i <= 3; i++)
                 cboParseNumber.Items.Add(i);
 
+            cboOrder.SelectedIndex = 0;
             //cboSchoolYear.Enabled = false;
             //cboSemester.Enabled = false;
             this.MaximumSize = this.MinimumSize = this.Size;
@@ -2836,7 +2847,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
             SelSemester = cboSemester.Text;
             RefSelSchoolYear = cboRefSchoolYear.Text;
             RefSelSemester = cboRefSemester.Text;
-
+            CheckRankItemOrder = checkOrder.Checked;
+            RankItemOrder = cboOrder.SelectedItem.ToString();
             // 四捨五入進位
             if (!int.TryParse(cboParseNumber.Text, out parseNumber))
             {
@@ -2850,12 +2862,39 @@ namespace HsinChuExamScoreClassFixedRank.Form
             Global._SelSemester = SelSemester;
             Global._SelRefExamID = SelRefExamID;
 
+            // 檢查
+            if (CheckRankItemOrder)
+                if (!CheckRankExist())
+                {
+                    MsgBox.Show("未計算成績排名無法以班級排名排序產出報表。");
+                    return;
+                }
+                else
+                {
+                    MsgBox.Show("以班排排序會耗費較多時間，請耐心等候。");
+                }
             SetDomainList();
+
+            
 
             // 列印報表
             bgWorkerReport.RunWorkerAsync();
 
 
+        }
+
+        private bool CheckRankExist()
+        {
+            bool value = false;
+            QueryHelper qh = new QueryHelper();
+            string query = "SELECT * FROM rank_matrix WHERE school_year = "+ SelSchoolYear + " AND semester = "+ SelSemester + " AND ref_exam_id = "+ SelExamID + "  AND is_alive = true LIMIT 1";
+            DataTable dt = qh.Select(query);
+            if (dt.Rows.Count < 1)
+                value = false;
+            else
+                value = true;
+
+            return value;
         }
 
         private void cboExam_SelectedIndexChanged(object sender, EventArgs e)
@@ -3055,5 +3094,12 @@ namespace HsinChuExamScoreClassFixedRank.Form
             }
         }
 
+        private void checkOrder_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkOrder.Checked)
+                cboOrder.Enabled = true;
+            else
+                cboOrder.Enabled = false;
+        }
     }
 }

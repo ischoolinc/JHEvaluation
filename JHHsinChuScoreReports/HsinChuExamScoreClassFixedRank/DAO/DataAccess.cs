@@ -109,6 +109,112 @@ namespace HsinChuExamScoreClassFixedRank.DAO
             return returnData;
         }
 
+        public static List<ClassInfo> GetClassStudentsAndRankOrderByClassID(List<string> ClassIDs,string schoolYear, string semester, string rankItemOrder, string examID)
+        {
+            List<ClassInfo> value = new List<ClassInfo>();
+            Dictionary<string, ClassInfo> tmpDict = new Dictionary<string, ClassInfo>();
+            string[] arrRankItemOrder = rankItemOrder.Split('_');
+
+            if (ClassIDs.Count > 0)
+            {
+
+                QueryHelper qh = new QueryHelper();
+                string query = @"WITH student_data AS (
+	SELECT 
+		class.id AS class_id
+		, class.class_name
+		, class.grade_year
+		, class.display_order
+		, student.seat_no
+		, student.student_number
+		, student.name AS student_name
+		, student.id AS student_id
+	FROM 
+		class
+	LEFT JOIN 
+		student
+		ON class.id = student.ref_class_id
+	WHERE 
+		class.id IN (" + string.Join(",", ClassIDs.ToArray()) + @")
+), rank_data AS(
+	SELECT 
+		rank_matrix.id AS rank_matrix_id
+		, rank_matrix.school_year
+		, rank_matrix.semester
+		, rank_matrix.grade_year AS 排名年級
+		, rank_matrix.item_type
+		, rank_matrix.ref_exam_id
+		, rank_matrix.item_name
+		, rank_matrix.rank_type
+		, rank_matrix.rank_name
+		, rank_detail.ref_student_id
+		, rank_detail.rank
+		, rank_detail.score
+	FROM   rank_matrix
+		INNER  JOIN rank_detail
+			ON rank_detail.ref_matrix_id = rank_matrix.id 
+			AND rank_matrix.is_alive = true
+			AND rank_matrix.school_year ="+ schoolYear + @"
+			AND rank_matrix.semester = " + semester + @"
+			AND rank_matrix.item_type like '定期評量_定期/總計成績'
+			AND rank_matrix.ref_exam_id =" + examID + @"
+			AND rank_type ='班排名'
+			AND item_name= '" + arrRankItemOrder[1] + @"'
+)
+	SELECT 
+		student_data.*
+		, rank_data.*
+	FROM 
+		student_data
+	LEFT JOIN 
+		rank_data 
+		ON student_data.student_id=rank_data.ref_student_id
+	ORDER BY 
+		grade_year
+		, display_order
+		, class_name
+		, rank
+		, seat_no
+";
+
+                DataTable dt = qh.Select(query);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string class_id = dr["class_id"].ToString();
+
+                    if (!tmpDict.ContainsKey(class_id))
+                    {
+                        ClassInfo ci = new ClassInfo();
+                        ci.ClassID = class_id;
+                        ci.ClassName = dr["class_name"].ToString();
+                        int gr = 0;
+                        int.TryParse(dr["grade_year"].ToString(), out gr);
+                        ci.GradeYear = gr;
+                        ci.Students = new List<StudentInfo>();
+                        tmpDict.Add(class_id, ci);
+                    }
+
+                    // 加入學生
+                    StudentInfo si = new StudentInfo();
+                    si.Name = dr["student_name"].ToString();
+                    si.SeatNo = dr["seat_no"].ToString();
+                    si.StudentID = dr["student_id"].ToString();
+                    si.ClassID = class_id;
+
+                    if (tmpDict.ContainsKey(class_id))
+                    {
+                        tmpDict[class_id].Students.Add(si);
+                    }
+                }
+            }
+
+            foreach (string cid in tmpDict.Keys)
+            {
+                value.Add(tmpDict[cid]);
+            }
+            return value;
+        }
+
         public static List<ClassInfo> GetClassStudentsByClassID(List<string> ClassIDs)
         {
             List<ClassInfo> value = new List<ClassInfo>();
