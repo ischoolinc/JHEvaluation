@@ -51,7 +51,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             // [ischoolKingdom] Vicky 新增，[02-03][00]成績報表的"在校成績證明書(英文版)等第不符實際需求 項目 ，英文等地顯示BUG 假如學校沒有設定 英文對照 ，提醒視窗
             if (!Util.CheckEnglishMapping())
             {
-                MsgBox.Show("系統沒有設定英文等地對照，請至教務作業/管理/等第對照管理 設定。", "警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                MsgBox.Show("系統沒有設定英文等第對照，請至教務作業/管理/等第對照管理 設定。", "警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             }
             if (rbDomainOnly.Checked)
                 Preference.ListMethod = ListMethod.DomainOnly;

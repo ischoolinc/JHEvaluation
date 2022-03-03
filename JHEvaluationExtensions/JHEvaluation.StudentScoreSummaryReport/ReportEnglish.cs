@@ -480,7 +480,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     if (IsFlexible(header.Domain))
                         gn = "彈性課程\nAdditional Classes";
                     else
-                        gn = header.Domain;
+                        gn = header.Domain + (string.IsNullOrEmpty(_SubjDomainEngNameMapping.GetDomainEngName(header.Domain)) ? "" : "\n" + _SubjDomainEngNameMapping.GetDomainEngName(header.Domain));
 
                     string subjCName = header.Subject;
                     string subjEName = Subj.GetSubjectEnglish(header.Subject);
@@ -790,6 +790,15 @@ namespace JHEvaluation.StudentScoreSummaryReport
                         break;
                     case "國籍二英文":
                         fieldValue = student.Enationality2;
+                        break;
+                    case "校長":
+                        fieldValue = K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorChineseName").InnerText;
+                        break;
+                    case "校長英文":
+                        fieldValue = K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorEnglishName").InnerText;
+                        break;
+                    case "教務主任":
+                        fieldValue = K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("EduDirectorName").InnerText;
                         break;
                 }
 

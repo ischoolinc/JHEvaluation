@@ -1097,6 +1097,15 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     case "國籍二英文":
                         fieldValue = student.Enationality2;
                         break;
+                    case "校長":
+                        fieldValue = K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorChineseName").InnerText;
+                        break;
+                    case "校長英文":
+                        fieldValue = K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorEnglishName").InnerText;
+                        break;
+                    case "教務主任":
+                        fieldValue = K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("EduDirectorName").InnerText;
+                        break;
                 }
 
                 return true;
