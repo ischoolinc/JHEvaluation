@@ -72,13 +72,15 @@
             // 
             // gpSubject
             // 
+            this.gpSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.gpSubject.BackColor = System.Drawing.Color.Transparent;
             this.gpSubject.CanvasColor = System.Drawing.SystemColors.Control;
             this.gpSubject.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.gpSubject.Controls.Add(this.plSubject);
             this.gpSubject.Location = new System.Drawing.Point(11, 42);
             this.gpSubject.Name = "gpSubject";
-            this.gpSubject.Size = new System.Drawing.Size(266, 252);
+            this.gpSubject.Size = new System.Drawing.Size(266, 291);
             // 
             // 
             // 
@@ -120,7 +122,7 @@
             this.plSubject.Location = new System.Drawing.Point(0, 0);
             this.plSubject.Name = "plSubject";
             this.plSubject.Padding = new System.Windows.Forms.Padding(3);
-            this.plSubject.Size = new System.Drawing.Size(260, 225);
+            this.plSubject.Size = new System.Drawing.Size(260, 264);
             this.plSubject.TabIndex = 0;
             // 
             // LoadingSubject
@@ -169,7 +171,7 @@
             listViewItem5});
             this.lvSubject.Location = new System.Drawing.Point(3, 3);
             this.lvSubject.Name = "lvSubject";
-            this.lvSubject.Size = new System.Drawing.Size(254, 219);
+            this.lvSubject.Size = new System.Drawing.Size(254, 258);
             this.lvSubject.TabIndex = 0;
             this.lvSubject.Tag = "";
             this.lvSubject.UseCompatibleStateImageBehavior = false;
@@ -180,7 +182,7 @@
             this.lnConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnConfig.AutoSize = true;
             this.lnConfig.BackColor = System.Drawing.Color.Transparent;
-            this.lnConfig.Location = new System.Drawing.Point(6, 345);
+            this.lnConfig.Location = new System.Drawing.Point(6, 384);
             this.lnConfig.Name = "lnConfig";
             this.lnConfig.Size = new System.Drawing.Size(125, 17);
             this.lnConfig.TabIndex = 4;
@@ -196,7 +198,7 @@
             this.btnPrint.BackColor = System.Drawing.Color.Transparent;
             this.btnPrint.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
             this.btnPrint.Enabled = false;
-            this.btnPrint.Location = new System.Drawing.Point(299, 343);
+            this.btnPrint.Location = new System.Drawing.Point(340, 382);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
             this.btnPrint.TabIndex = 5;
@@ -210,7 +212,7 @@
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
             this.btnClose.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnClose.Location = new System.Drawing.Point(380, 343);
+            this.btnClose.Location = new System.Drawing.Point(421, 382);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(65, 23);
             this.btnClose.TabIndex = 7;
@@ -273,13 +275,16 @@
             // 
             // groupPanel1
             // 
+            this.groupPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupPanel1.BackColor = System.Drawing.Color.Transparent;
             this.groupPanel1.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.groupPanel1.Controls.Add(this.panel1);
             this.groupPanel1.Location = new System.Drawing.Point(285, 42);
             this.groupPanel1.Name = "groupPanel1";
-            this.groupPanel1.Size = new System.Drawing.Size(160, 252);
+            this.groupPanel1.Size = new System.Drawing.Size(201, 291);
             // 
             // 
             // 
@@ -321,7 +326,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(3);
-            this.panel1.Size = new System.Drawing.Size(154, 225);
+            this.panel1.Size = new System.Drawing.Size(195, 264);
             this.panel1.TabIndex = 0;
             // 
             // LoadingDomain
@@ -370,7 +375,7 @@
             listViewItem10});
             this.lvDomain.Location = new System.Drawing.Point(3, 3);
             this.lvDomain.Name = "lvDomain";
-            this.lvDomain.Size = new System.Drawing.Size(148, 219);
+            this.lvDomain.Size = new System.Drawing.Size(189, 258);
             this.lvDomain.TabIndex = 0;
             this.lvDomain.Tag = "";
             this.lvDomain.UseCompatibleStateImageBehavior = false;
@@ -378,11 +383,12 @@
             // 
             // cbxScoreType
             // 
+            this.cbxScoreType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbxScoreType.DisplayMember = "Text";
             this.cbxScoreType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cbxScoreType.FormattingEnabled = true;
             this.cbxScoreType.ItemHeight = 19;
-            this.cbxScoreType.Location = new System.Drawing.Point(49, 302);
+            this.cbxScoreType.Location = new System.Drawing.Point(49, 341);
             this.cbxScoreType.Name = "cbxScoreType";
             this.cbxScoreType.Size = new System.Drawing.Size(131, 25);
             this.cbxScoreType.TabIndex = 14;
@@ -391,6 +397,7 @@
             // 
             // labelX1
             // 
+            this.labelX1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelX1.AutoSize = true;
             this.labelX1.BackColor = System.Drawing.Color.Transparent;
             // 
@@ -399,7 +406,7 @@
             this.labelX1.BackgroundStyle.Class = "";
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.labelX1.Location = new System.Drawing.Point(9, 303);
+            this.labelX1.Location = new System.Drawing.Point(9, 342);
             this.labelX1.Name = "labelX1";
             this.labelX1.Size = new System.Drawing.Size(34, 21);
             this.labelX1.TabIndex = 13;
@@ -407,6 +414,7 @@
             // 
             // labelX4
             // 
+            this.labelX4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelX4.AutoSize = true;
             this.labelX4.BackColor = System.Drawing.Color.Transparent;
             // 
@@ -415,7 +423,7 @@
             this.labelX4.BackgroundStyle.Class = "";
             this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.labelX4.Location = new System.Drawing.Point(204, 304);
+            this.labelX4.Location = new System.Drawing.Point(204, 343);
             this.labelX4.Name = "labelX4";
             this.labelX4.Size = new System.Drawing.Size(87, 21);
             this.labelX4.TabIndex = 15;
@@ -423,18 +431,20 @@
             // 
             // txtReMark
             // 
+            this.txtReMark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             // 
             // 
             // 
             this.txtReMark.Border.Class = "TextBoxBorder";
             this.txtReMark.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtReMark.Location = new System.Drawing.Point(295, 302);
+            this.txtReMark.Location = new System.Drawing.Point(295, 341);
             this.txtReMark.Name = "txtReMark";
             this.txtReMark.Size = new System.Drawing.Size(67, 25);
             this.txtReMark.TabIndex = 16;
             // 
             // checkBoxX1
             // 
+            this.checkBoxX1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBoxX1.AutoSize = true;
             this.checkBoxX1.BackColor = System.Drawing.Color.Transparent;
             // 
@@ -442,17 +452,17 @@
             // 
             this.checkBoxX1.BackgroundStyle.Class = "";
             this.checkBoxX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.checkBoxX1.Location = new System.Drawing.Point(147, 345);
+            this.checkBoxX1.Location = new System.Drawing.Point(147, 384);
             this.checkBoxX1.Name = "checkBoxX1";
-            this.checkBoxX1.Size = new System.Drawing.Size(147, 21);
+            this.checkBoxX1.Size = new System.Drawing.Size(161, 21);
             this.checkBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.checkBoxX1.TabIndex = 17;
-            this.checkBoxX1.Text = "彈性領域不列入計算";
+            this.checkBoxX1.Text = "只將八大領域列入計算";
             // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(456, 372);
+            this.ClientSize = new System.Drawing.Size(497, 411);
             this.Controls.Add(this.checkBoxX1);
             this.Controls.Add(this.txtReMark);
             this.Controls.Add(this.labelX4);

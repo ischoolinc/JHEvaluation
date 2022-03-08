@@ -31,7 +31,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 ctlExam.ValueMember = "ID";
 
                 List<JHExamRecord> exams = JHExam.SelectAll();
-                exams.Sort(delegate(JHExamRecord x, JHExamRecord y)
+                exams.Sort(delegate (JHExamRecord x, JHExamRecord y)
                 {
                     int xx = x.DisplayOrder.HasValue ? x.DisplayOrder.Value : int.MinValue;
                     int yy = y.DisplayOrder.HasValue ? y.DisplayOrder.Value : int.MinValue;
@@ -111,14 +111,16 @@ namespace JHEvaluation.ClassSemesterScoreReport
         public static List<string> GetSelectedItemsM(this ListViewEx listView)
         {
             List<string> items = new List<string>();
+            List<string> allowedDomainList = new List<string> { "國語文", "本土語文", "本土語言", "英語", "語文", "數學", "社會", "自然科學", "自然與生活科技", "藝術與人文", "藝術", "健康與體育", "綜合活動", "科技" };
             foreach (ListViewItem each in listView.Items)
             {
                 if (each.Checked)
                 {
-                    if (each.Tag.ToString() != "彈性課程" && each.Tag.ToString() != "")
-                    {
-                        items.Add(each.Text);
-                    }
+                    if (each.Tag != null)
+                        if (allowedDomainList.Contains(each.Tag.ToString()))
+                        {
+                            items.Add(each.Text);
+                        }
                 }
             }
             return items;
@@ -139,7 +141,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
             Utility.LoadtmpScoreCalculatorDict();
             Utility.LoadtmpClassRuleIDDict();
             foreach (JHStudentRecord each in srcStudents)
-            { 
+            {
                 if (each.Status == StudentRecord.StudentStatus.一般 ||
                     each.Status == StudentRecord.StudentStatus.輟學)
                     students.Add(new ReportStudent(each));
@@ -178,6 +180,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 ListViewItem item = new ListViewItem();
                 item.Group = group;
                 item.Text = each;
+                item.Tag = each;
                 listView.Items.Add(item);
             }
             listView.ResumeLayout();
@@ -214,7 +217,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
         public static List<RatingScope<ReportStudent>> SortName(this List<RatingScope<ReportStudent>> scopes)
         {
-            scopes.Sort(new Comparison<RatingScope<ReportStudent>>(delegate(RatingScope<ReportStudent> x, RatingScope<ReportStudent> y)
+            scopes.Sort(new Comparison<RatingScope<ReportStudent>>(delegate (RatingScope<ReportStudent> x, RatingScope<ReportStudent> y)
             {
                 return x.Name.CompareTo(y.Name);
             }));

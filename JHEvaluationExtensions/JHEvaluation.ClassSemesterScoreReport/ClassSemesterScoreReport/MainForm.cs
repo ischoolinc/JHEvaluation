@@ -312,6 +312,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
             List<string> selectedSubjects = lvSubject.GetSelectedItems();
             List<string> selectedSubjectsM = lvSubject.GetSelectedItemsM();
             List<string> selectedDomains = lvDomain.GetSelectedItems();
+            List<string> selectedDomainsM = lvDomain.GetSelectedItemsM();
 
             #region 檢查選擇的科目、領域是否合理。
             //if ((selectedSubjects.Count + selectedDomains.Count + Perference.PrintItems.Count) > Report.ScoreHeaderCount)
@@ -348,7 +349,10 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
             if (checkBoxX1.Checked)
             {
-                calculator.Subjects = selectedSubjectsM;  //20210721 要求彈性課程領域不列入計算
+                //20210721 要求彈性課程領域不列入計算
+                //2022-02-19 高雄專案[1110205]要求改為「只將八大領域列入計算」
+                calculator.Subjects = selectedSubjectsM;
+                calculator.Domains = selectedDomainsM;
             }
 
             foreach (ReportStudent each in AllStudents)
