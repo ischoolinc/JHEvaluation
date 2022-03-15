@@ -423,7 +423,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                             Row row = table.Rows[header.Index + 3];
 
-                            if (previousCellDomain == row.Cells[0].ToTxt())
+                            if (previousCellDomain == header.Domain)
                                 row.Cells[0].CellFormat.VerticalMerge = CellMerge.Previous;
                             else
                                 row.Cells[0].CellFormat.VerticalMerge = CellMerge.First;
@@ -472,7 +472,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                 }
                             }
 
-                            previousCellDomain = row.Cells[0].ToTxt();
+                            previousCellDomain = header.Domain;
                         }
                         #endregion
 
