@@ -30,7 +30,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             Students = students;
             Students.Sort(delegate (ReportStudent x, ReportStudent y)
             {
-                return x.OrderString.CompareTo(y.OrderString);
+                return x.PrintOrder.CompareTo(y.PrintOrder);
             });
 
             PrintSetting = printSetting;

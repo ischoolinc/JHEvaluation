@@ -89,6 +89,19 @@ namespace JHEvaluation.StudentScoreSummaryReport
         public string passport_name2 { get; set; }
         public string Enationality1 { get; set; }
         public string Enationality2 { get; set; }
+
+        public string PrintOrder
+        {
+            // 原本OrderString的順序有問題，故改用下列方式設定列印順序
+            //年級//班級排列序號/班級名稱//座號
+            get
+            {
+                if (Class.DisplayOrder == null || Class.DisplayOrder == "")
+                    return GradeYear.ToString().PadLeft(3, '0') + Class.DisplayOrder.PadLeft(3, 'Z') + ClassName + SeatNo.PadLeft(3, '0');
+                else
+                    return GradeYear.ToString().PadLeft(3, '0') + Class.DisplayOrder.PadLeft(3, '0') + ClassName + SeatNo.PadLeft(3, '0');
+            }
+        }
     }
 
     internal class ReportHeaderList : Dictionary<SemesterData, int>
