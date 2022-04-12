@@ -13,6 +13,7 @@ using FISCA.Presentation;
 using K12.Data;
 using System.Xml;
 using JHSchool.Behavior.BusinessLogic;
+using Aspose.Words.Tables;
 
 namespace KaoHsiung.TransferReport
 {
@@ -139,7 +140,7 @@ namespace KaoHsiung.TransferReport
             }
 
             List<SubjectScore> subjectList = new List<SubjectScore>(subjectDict.Values);
-            subjectList.Sort(delegate(SubjectScore x, SubjectScore y)
+            subjectList.Sort(delegate (SubjectScore x, SubjectScore y)
             {
                 List<string> list = new List<string>(new string[] { "國語文", "國文", "英文", "英語", "數學", "歷史", "地理", "公民", "理化", "生物" });
                 int ix = list.IndexOf(x.Subject);
@@ -237,67 +238,16 @@ namespace KaoHsiung.TransferReport
                 map.SetData(semesterHistoryList);
                 #endregion
 
-                
+
                 Document each = (Document)_template.Clone(true);
 
                 builder = new DocumentBuilder(each);
 
                 #region 基本資料
                 StudentBasicInfo basic = new StudentBasicInfo();
-                basic.SetStudent(student,semesterHistoryList);
+                basic.SetStudent(student, semesterHistoryList);
 
-                each.MailMerge.MergeField += delegate(object sender1, MergeFieldEventArgs e1)
-                {
-                    #region 處理照片
-                    if (e1.FieldName == "照片粘貼處")
-                    {
-                        DocumentBuilder builder1 = new DocumentBuilder(e1.Document);
-                        builder1.MoveToField(e1.Field, true);
-
-                        byte[] photoBytes = null;
-                        try
-                        {
-                            photoBytes = Convert.FromBase64String("" + e1.FieldValue);
-                        }
-                        catch (Exception ex)
-                        {
-                            builder1.Write("照片粘貼處");
-                            e1.Field.Remove();
-                            return;
-                        }
-
-                        if (photoBytes == null || photoBytes.Length == 0)
-                        {
-                            builder1.Write("照片粘貼處");
-                            e1.Field.Remove();
-                            return;
-                        }
-
-                        e1.Field.Remove();
-
-                        Shape photoShape = new Shape(e1.Document, ShapeType.Image);
-                        photoShape.ImageData.SetImage(photoBytes);
-                        photoShape.WrapType = WrapType.Inline;
-
-                        #region AutoResize
-
-                        double origHWRate = photoShape.ImageData.ImageSize.HeightPoints / photoShape.ImageData.ImageSize.WidthPoints;
-                        double shapeHeight = (builder1.CurrentParagraph.ParentNode.ParentNode as Row).RowFormat.Height * 6;
-                        double shapeWidth = (builder1.CurrentParagraph.ParentNode as Cell).CellFormat.Width;
-                        if ((shapeHeight / shapeWidth) < origHWRate)
-                            shapeWidth = shapeHeight / origHWRate;
-                        else
-                            shapeHeight = shapeWidth * origHWRate;
-
-                        #endregion
-
-                        photoShape.Height = shapeHeight * 0.9;
-                        photoShape.Width = shapeWidth * 0.9;
-
-                        builder1.InsertNode(photoShape);
-                    }
-                    #endregion
-                };
+                each.MailMerge.FieldMergingCallback = new InsertDocumentAtMailMergeHandler();
 
                 List<string> fieldName = new List<string>();
                 fieldName.AddRange(basic.GetFieldName());
@@ -447,7 +397,66 @@ namespace KaoHsiung.TransferReport
             }
             #endregion
         }
+        public class InsertDocumentAtMailMergeHandler : IFieldMergingCallback
+        {
+            public void ImageFieldMerging(ImageFieldMergingArgs args)
+            {
+                // Do nothing.
+            }
 
+            void IFieldMergingCallback.FieldMerging(FieldMergingArgs e1)
+            {
+                #region 處理照片
+                if (e1.FieldName == "照片粘貼處")
+                {
+                    DocumentBuilder builder1 = new DocumentBuilder(e1.Document);
+                    builder1.MoveToField(e1.Field, true);
+
+                    byte[] photoBytes = null;
+                    try
+                    {
+                        photoBytes = Convert.FromBase64String("" + e1.FieldValue);
+                    }
+                    catch (Exception ex)
+                    {
+                        builder1.Write("照片粘貼處");
+                        e1.Field.Remove();
+                        return;
+                    }
+
+                    if (photoBytes == null || photoBytes.Length == 0)
+                    {
+                        builder1.Write("照片粘貼處");
+                        e1.Field.Remove();
+                        return;
+                    }
+
+                    e1.Field.Remove();
+
+                    Shape photoShape = new Shape(e1.Document, ShapeType.Image);
+                    photoShape.ImageData.SetImage(photoBytes);
+                    photoShape.WrapType = WrapType.Inline;
+
+                    #region AutoResize
+
+                    double origHWRate = photoShape.ImageData.ImageSize.HeightPoints / photoShape.ImageData.ImageSize.WidthPoints;
+                    double shapeHeight = (builder1.CurrentParagraph.ParentNode.ParentNode as Row).RowFormat.Height * 6;
+                    double shapeWidth = (builder1.CurrentParagraph.ParentNode as Cell).CellFormat.Width;
+                    if ((shapeHeight / shapeWidth) < origHWRate)
+                        shapeWidth = shapeHeight / origHWRate;
+                    else
+                        shapeHeight = shapeWidth * origHWRate;
+
+                    #endregion
+
+                    photoShape.Height = shapeHeight * 0.9;
+                    photoShape.Width = shapeWidth * 0.9;
+
+                    builder1.InsertNode(photoShape);
+                }
+                #endregion
+            }
+        }
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             MotherForm.SetStatusBarMessage(ReportName + "產生中", e.ProgressPercentage);
