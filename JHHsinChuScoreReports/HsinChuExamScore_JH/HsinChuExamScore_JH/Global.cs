@@ -283,7 +283,7 @@ namespace HsinChuExamScore_JH
                 }
 
                 // Jean增加總計成績 算術平均 算數總分
-                
+
                 string[] itemNames = new string[] { "平均", "總分" };
                 Dictionary<string, string> itemTypesMapping = new Dictionary<string, string>() {
                         {"定期評量_定期/總計成績","成績"},
@@ -292,7 +292,7 @@ namespace HsinChuExamScore_JH
                 string[] martrixCols = new string[] { "名次", "PR值", "百分比", "母體頂標", "母體前標", "母體平均", "母體後標", "母體底標", "母體人數", "母體新頂標", "母體新前標", "母體新均標", "母體新後標", "母體新底標", "母體標準差" }; // 固定排名統計值
                 string[] _rankTypes = { "班排名", "年排名", "類別1排名", "類別2排名" };
 
-            
+
                 //  原本的變數改成用迴圈寫 
 
                 string[] _itemNames = new string[] { "加權平均", "加權總分" };
@@ -300,17 +300,17 @@ namespace HsinChuExamScore_JH
                 string[] matrixColumns = new string[] { "名次", "PR值", "百分比", "母體頂標", "母體前標", "母體平均", "母體後標", "母體底標", "母體人數", "母體新頂標", "母體新前標", "母體新均標", "母體新後標", "母體新底標", "母體標準差" }; // 固定排名統計值
 
 
-             
+
 
 
                 // 科目加權平均
                 foreach (string composition in ScoreComposition) //  1. 科目成績   2.科目定期成績  3.參考科目成績  4.參考科目定期成績
                 {
-                                                         
+
                     foreach (string itemName in itemNames) //平均 總分 => 基本上這兩個 就是從科目來的
                     {
 
-                          
+
                         //if (!composition.Contains("參考"))
                         //{
                         //    builder.InsertCell();
@@ -339,11 +339,11 @@ namespace HsinChuExamScore_JH
                                     builder.EndRow();
                                 }
                             }
-                       
+
                         }
-                                                                     
+
                     }
-                    
+
                     // 加權平均
                     foreach (string itemName in _itemNames)  //"加權平均" ,  "加權總分" 
                     {
@@ -381,7 +381,7 @@ namespace HsinChuExamScore_JH
                             }
                         }
                     }
-                
+
                     // 領域加權平均
                     //    if (!rt.Contains("參考"))
                     //    {
@@ -1586,6 +1586,44 @@ namespace HsinChuExamScore_JH
                 builder.EndTable();
                 builder.Writeln();
                 builder.Writeln();
+
+
+                #region 缺曠動態產生合併欄位
+                List<string> plist = K12.Data.PeriodMapping.SelectAll().Select(x => x.Type).Distinct().ToList();
+                List<string> alist = K12.Data.AbsenceMapping.SelectAll().Select(x => x.Name).ToList();
+                builder.Writeln();
+                builder.Writeln("缺曠動態產生合併欄位");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                builder.InsertCell();
+                builder.Write("缺曠名稱");
+                foreach (string pp in plist)
+                {
+                    builder.InsertCell();
+                    builder.Write(pp);
+                }
+                builder.EndRow();
+
+
+                foreach (string aa in alist)
+                {
+                    builder.InsertCell();
+                    builder.Write(aa);
+                    foreach (string pp in plist)
+                    {
+                        string key = pp.Replace(" ", "_") + "_" + aa.Replace(" ", "_");
+
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + key + " \\* MERGEFORMAT ", "«" + key + "»");
+                    }
+                    builder.EndRow();
+                }
+
+                builder.EndTable();
+                builder.Writeln();
+                #endregion
+
 
                 // 處理領域成績
                 builder.Write("領域成績");

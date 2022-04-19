@@ -1076,7 +1076,7 @@ namespace HsinChuExamScore_JH
                 {
                     foreach (var absence in absenceList)
                     {
-                        dt.Columns.Add(type + absence);
+                        dt.Columns.Add(type.Replace(" ", "_")+"_" + absence.Replace(" ", "_"));
                     }
                 }
 
@@ -1372,7 +1372,7 @@ namespace HsinChuExamScore_JH
                 {
                     foreach (var absence in absenceList)
                     {
-                        row[type + absence] = "0";
+                        row[type.Replace(" ", "_") +"_"+ absence.Replace(" ", "_")] = "0";
                     }
                 }
                 if (_AttendanceDict.ContainsKey(StudRec.ID))
@@ -3434,15 +3434,24 @@ namespace HsinChuExamScore_JH
                     string sid = e.FieldValue.ToString();
 
                     Dictionary<string, int> dataDict = new Dictionary<string, int>();
+
+                    //畫表格column (一般曠課)
                     List<string> colNameList = new List<string>();
+
+                    //對照dic key (一般_曠課)
+                    List<string> colNameMappingList = new List<string>();
+
                     if (_AttendanceDict.ContainsKey(sid))
                         dataDict = _AttendanceDict[sid];
                     //dataDict.Keys
 
                     foreach (string name in _SelAttendanceList)
                         colNameList.Add(name.Replace("_", ""));
-
                     //colNameList.Sort();
+
+                    foreach (string name in _SelAttendanceList)
+                        colNameMappingList.Add(name.Replace(" ", "_"));
+
                     int colCount = colNameList.Count;
 
                     if (colCount > 0)
@@ -3462,6 +3471,11 @@ namespace HsinChuExamScore_JH
                         _builder.RowFormat.Height = 18.0;
                         _builder.RowFormat.LeftIndent = 0;
 
+                        //垂直置中
+                        _builder.CellFormat.VerticalAlignment = CellVerticalAlignment.Center;
+                        //水平置中
+                        _builder.ParagraphFormat.Alignment = ParagraphAlignment.Center;
+
                         // 缺曠名稱
                         foreach (string name in colNameList)
                         {
@@ -3473,7 +3487,7 @@ namespace HsinChuExamScore_JH
                         _builder.EndRow();
 
                         // 缺曠統計
-                        foreach (string name in colNameList)
+                        foreach (string name in colNameMappingList)
                         {
                             Cell c1 = _builder.InsertCell();
                             c1.CellFormat.Width = miniUnitWitdh;

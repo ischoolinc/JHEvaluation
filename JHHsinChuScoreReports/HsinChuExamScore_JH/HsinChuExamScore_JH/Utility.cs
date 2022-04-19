@@ -141,7 +141,7 @@ namespace HsinChuExamScore_JH
                     // ex.一般:曠課
                     //string key = "區間" + PeriodMappingDict[per.Period] + "_" + per.AbsenceType;
 
-                    string key = PeriodMappingDict[per.Period] + per.AbsenceType;
+                    string key = PeriodMappingDict[per.Period].Replace(" ","_") +"_"+ per.AbsenceType.Replace(" ", "_");
                     if (!retVal[rec.RefStudentID].ContainsKey(key))
                         retVal[rec.RefStudentID].Add(key, 0);
 
