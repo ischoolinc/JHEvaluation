@@ -134,7 +134,10 @@ namespace HsinChuExamScore_JH.DAO
                 }
                 else
                 {
-                    ScoreT = (ScoreT == null ? 0 : ScoreT) + ScoreF.Value * ScorePercentage;
+                    if (ScoreA.HasValue)
+                        ScoreT = (ScoreT == null ? 0 : ScoreT) + ScoreF.Value * ScorePercentage;
+                    else //有定期評量，沒有平時評量
+                        ScoreT = ScoreF.Value;
                 }
             }
             if (AssessScorePercentage > 0 && ScoreA.HasValue)
@@ -148,7 +151,10 @@ namespace HsinChuExamScore_JH.DAO
                 }
                 else
                 {
-                    ScoreT = (ScoreT == null ? 0 : ScoreT) + ScoreA.Value * AssessScorePercentage;
+                    if (ScoreF.HasValue)
+                        ScoreT = (ScoreT == null ? 0 : ScoreT) + ScoreA.Value * AssessScorePercentage;
+                    else //有平時評量，沒有定期評量
+                        ScoreT = ScoreA.Value;
                 }
             }
         }
