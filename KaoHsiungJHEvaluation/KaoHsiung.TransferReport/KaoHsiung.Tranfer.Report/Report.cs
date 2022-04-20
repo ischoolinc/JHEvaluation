@@ -13,7 +13,6 @@ using FISCA.Presentation;
 using K12.Data;
 using System.Xml;
 using JHSchool.Behavior.BusinessLogic;
-using Aspose.Words.Tables;
 
 namespace KaoHsiung.TransferReport
 {
@@ -247,7 +246,59 @@ namespace KaoHsiung.TransferReport
                 StudentBasicInfo basic = new StudentBasicInfo();
                 basic.SetStudent(student, semesterHistoryList);
 
-                each.MailMerge.FieldMergingCallback = new InsertDocumentAtMailMergeHandler();
+                each.MailMerge.MergeField += delegate (object sender1, MergeFieldEventArgs e1)
+                {
+                    #region 處理照片
+                    if (e1.FieldName == "照片粘貼處")
+                    {
+                        DocumentBuilder builder1 = new DocumentBuilder(e1.Document);
+                        builder1.MoveToField(e1.Field, true);
+
+                        byte[] photoBytes = null;
+                        try
+                        {
+                            photoBytes = Convert.FromBase64String("" + e1.FieldValue);
+                        }
+                        catch (Exception ex)
+                        {
+                            builder1.Write("照片粘貼處");
+                            e1.Field.Remove();
+                            return;
+                        }
+
+                        if (photoBytes == null || photoBytes.Length == 0)
+                        {
+                            builder1.Write("照片粘貼處");
+                            e1.Field.Remove();
+                            return;
+                        }
+
+                        e1.Field.Remove();
+
+                        Shape photoShape = new Shape(e1.Document, ShapeType.Image);
+                        photoShape.ImageData.SetImage(photoBytes);
+                        photoShape.WrapType = WrapType.Inline;
+
+                        #region AutoResize
+
+                        double origHWRate = photoShape.ImageData.ImageSize.HeightPoints / photoShape.ImageData.ImageSize.WidthPoints;
+                        double shapeHeight = (builder1.CurrentParagraph.ParentNode.ParentNode as Row).RowFormat.Height * 6;
+                        double shapeWidth = (builder1.CurrentParagraph.ParentNode as Cell).CellFormat.Width;
+                        if ((shapeHeight / shapeWidth) < origHWRate)
+                            shapeWidth = shapeHeight / origHWRate;
+                        else
+                            shapeHeight = shapeWidth * origHWRate;
+
+                        #endregion
+
+                        photoShape.Height = shapeHeight * 0.9;
+                        photoShape.Width = shapeWidth * 0.9;
+
+                        builder1.InsertNode(photoShape);
+                    }
+                    #endregion
+                };
+                //each.MailMerge.FieldMergingCallback = new InsertDocumentAtMailMergeHandler();
 
                 List<string> fieldName = new List<string>();
                 fieldName.AddRange(basic.GetFieldName());
@@ -397,66 +448,70 @@ namespace KaoHsiung.TransferReport
             }
             #endregion
         }
-        public class InsertDocumentAtMailMergeHandler : IFieldMergingCallback
-        {
-            public void ImageFieldMerging(ImageFieldMergingArgs args)
-            {
-                // Do nothing.
-            }
 
-            void IFieldMergingCallback.FieldMerging(FieldMergingArgs e1)
-            {
-                #region 處理照片
-                if (e1.FieldName == "照片粘貼處")
-                {
-                    DocumentBuilder builder1 = new DocumentBuilder(e1.Document);
-                    builder1.MoveToField(e1.Field, true);
+        #region 20220415
+        //public class InsertDocumentAtMailMergeHandler : IFieldMergingCallback
+        //{
+        //    public void ImageFieldMerging(ImageFieldMergingArgs args)
+        //    {
+        //        // Do nothing.
+        //    }
 
-                    byte[] photoBytes = null;
-                    try
-                    {
-                        photoBytes = Convert.FromBase64String("" + e1.FieldValue);
-                    }
-                    catch (Exception ex)
-                    {
-                        builder1.Write("照片粘貼處");
-                        e1.Field.Remove();
-                        return;
-                    }
+        //    void IFieldMergingCallback.FieldMerging(FieldMergingArgs e1)
+        //    {
+        //        #region 處理照片
+        //        if (e1.FieldName == "照片粘貼處")
+        //        {
+        //            DocumentBuilder builder1 = new DocumentBuilder(e1.Document);
+        //            builder1.MoveToField(e1.Field, true);
 
-                    if (photoBytes == null || photoBytes.Length == 0)
-                    {
-                        builder1.Write("照片粘貼處");
-                        e1.Field.Remove();
-                        return;
-                    }
+        //            byte[] photoBytes = null;
+        //            try
+        //            {
+        //                photoBytes = Convert.FromBase64String("" + e1.FieldValue);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                builder1.Write("照片粘貼處");
+        //                e1.Field.Remove();
+        //                return;
+        //            }
 
-                    e1.Field.Remove();
+        //            if (photoBytes == null || photoBytes.Length == 0)
+        //            {
+        //                builder1.Write("照片粘貼處");
+        //                e1.Field.Remove();
+        //                return;
+        //            }
 
-                    Shape photoShape = new Shape(e1.Document, ShapeType.Image);
-                    photoShape.ImageData.SetImage(photoBytes);
-                    photoShape.WrapType = WrapType.Inline;
+        //            e1.Field.Remove();
 
-                    #region AutoResize
+        //            Shape photoShape = new Shape(e1.Document, ShapeType.Image);
+        //            photoShape.ImageData.SetImage(photoBytes);
+        //            photoShape.WrapType = WrapType.Inline;
 
-                    double origHWRate = photoShape.ImageData.ImageSize.HeightPoints / photoShape.ImageData.ImageSize.WidthPoints;
-                    double shapeHeight = (builder1.CurrentParagraph.ParentNode.ParentNode as Row).RowFormat.Height * 6;
-                    double shapeWidth = (builder1.CurrentParagraph.ParentNode as Cell).CellFormat.Width;
-                    if ((shapeHeight / shapeWidth) < origHWRate)
-                        shapeWidth = shapeHeight / origHWRate;
-                    else
-                        shapeHeight = shapeWidth * origHWRate;
+        //            #region AutoResize
 
-                    #endregion
+        //            double origHWRate = photoShape.ImageData.ImageSize.HeightPoints / photoShape.ImageData.ImageSize.WidthPoints;
+        //            double shapeHeight = (builder1.CurrentParagraph.ParentNode.ParentNode as Row).RowFormat.Height * 6;
+        //            double shapeWidth = (builder1.CurrentParagraph.ParentNode as Cell).CellFormat.Width;
+        //            if ((shapeHeight / shapeWidth) < origHWRate)
+        //                shapeWidth = shapeHeight / origHWRate;
+        //            else
+        //                shapeHeight = shapeWidth * origHWRate;
 
-                    photoShape.Height = shapeHeight * 0.9;
-                    photoShape.Width = shapeWidth * 0.9;
+        //            #endregion
 
-                    builder1.InsertNode(photoShape);
-                }
-                #endregion
-            }
-        }
+        //            photoShape.Height = shapeHeight * 0.9;
+        //            photoShape.Width = shapeWidth * 0.9;
+
+        //            builder1.InsertNode(photoShape);
+        //        }
+        //        #endregion
+        //    }
+        //}
+        #endregion
+
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             MotherForm.SetStatusBarMessage(ReportName + "產生中", e.ProgressPercentage);

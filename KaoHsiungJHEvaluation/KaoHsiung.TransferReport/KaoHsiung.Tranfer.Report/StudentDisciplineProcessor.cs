@@ -6,7 +6,6 @@ using Aspose.Words;
 using JHSchool.Data;
 using System.Xml;
 using JHSchool.Behavior.BusinessLogic;
-using Aspose.Words.Tables;
 
 namespace KaoHsiung.TransferReport
 {

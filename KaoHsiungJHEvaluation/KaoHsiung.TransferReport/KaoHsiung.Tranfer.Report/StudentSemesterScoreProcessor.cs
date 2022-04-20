@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Aspose.Words;
-using Aspose.Words.Tables;
 using JHSchool.Data;
 
 namespace KaoHsiung.TransferReport

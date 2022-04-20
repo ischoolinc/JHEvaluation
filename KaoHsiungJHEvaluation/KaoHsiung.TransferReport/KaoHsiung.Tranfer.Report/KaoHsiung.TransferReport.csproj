@@ -58,13 +58,13 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Cells_201402">
-      <HintPath>Library\Aspose.Cells_201402.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Aspose.Cells, Version=4.3.0.0, Culture=neutral, PublicKeyToken=9a40d5a4b59e5256, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Aspose.Cells.dll</HintPath>
     </Reference>
-    <Reference Include="Aspose.Words_201402">
-      <HintPath>Library\Aspose.Words_201402.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Aspose.Words, Version=4.4.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Aspose.Words.dll</HintPath>
     </Reference>
     <Reference Include="Campus, Version=2.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -262,7 +262,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Library\Aspose.Cells.dll" />
     <Content Include="Library\Aspose.Cells_201402.dll" />
+    <Content Include="Library\Aspose.Words.dll" />
     <Content Include="Library\Aspose.Words_201402.dll" />
     <Content Include="Library\Campus.dll" />
     <Content Include="Library\Campus.Report2014.dll" />
