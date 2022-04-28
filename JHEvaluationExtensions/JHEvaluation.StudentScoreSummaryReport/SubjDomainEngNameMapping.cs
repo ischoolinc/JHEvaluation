@@ -31,40 +31,51 @@ namespace JHEvaluation.StudentScoreSummaryReport
             try
             {
                 QueryHelper qh = new QueryHelper();
-                // 取得國中領域、科目中英文對照
-                string query = "select content from list where name='JHEvaluation_Subject_Ordinal';";
-                DataTable dt = qh.Select(query);
-                string strXml = "";
-
-                if (dt.Rows.Count > 0)
+                string subjectQuery = @"
+WITH subject_mapping AS 
+(
+SELECT
+    unnest(xpath('//Subjects/Subject/@Name',  xmlparse(content replace(replace(content ,'&lt;','<'),'&gt;','>'))))::text AS subject_name
+	,unnest(xpath('//Subjects/Subject/@EnglishName',  xmlparse(content replace(replace(content ,'&lt;','<'),'&gt;','>'))))::text AS subject_english_name
+FROM  
+    list 
+WHERE name  ='JHEvaluation_Subject_Ordinal'
+)SELECT
+		replace (subject_name ,'&amp;amp;','&') AS subject_name
+		, replace (subject_english_name ,'&amp;amp;','&') AS subject_english_name
+	FROM  subject_mapping";
+                DataTable dt = qh.Select(subjectQuery);
+                
+                foreach (DataRow dr in dt.Rows)
                 {
-                    strXml = dt.Rows[0][0].ToString();
-                    strXml = strXml.Replace("&lt;", "<");
-                    strXml = strXml.Replace("&gt;", ">");
+                    string subject = dr["subject_name"].ToString();
+                    string subjectEng = dr["subject_english_name"].ToString();
+                    if (!_SubjectNameDict.ContainsKey(subject))
+                        _SubjectNameDict.Add(subject,subjectEng);
                 }
-                XElement elmRoot = XElement.Parse(strXml);
 
-                if (elmRoot != null)
+
+                string domainQuery = @"
+WITH  domain_mapping AS 
+(
+SELECT
+	unnest(xpath('//Domains/Domain/@Name',  xmlparse(content replace(replace(content ,'&lt;','<'),'&gt;','>'))))::text AS domain_name
+	, unnest(xpath('//Domains/Domain/@EnglishName',  xmlparse(content replace(replace(content ,'&lt;','<'),'&gt;','>'))))::text AS domain_EnglishName
+FROM  
+    list 
+WHERE name  ='JHEvaluation_Subject_Ordinal'
+)SELECT
+		replace (domain_name ,'&amp;amp;','&') AS domain_name
+		,replace (domain_EnglishName ,'&amp;amp;','&') AS domain_EnglishName
+	FROM  domain_mapping";
+                DataTable dt2 = qh.Select(domainQuery);
+
+                foreach (DataRow dr in dt2.Rows)
                 {
-                    foreach (XElement elm in elmRoot.Elements("Configuration"))
-                    {
-                        if (elm.Element("Subjects") != null)
-                            foreach (XElement elmS in elm.Element("Subjects").Elements("Subject"))
-                            {
-                                string key = GetAttribute("Name", elmS);
-                                if (!_SubjectNameDict.ContainsKey(key))
-                                    _SubjectNameDict.Add(key, GetAttribute("EnglishName", elmS));
-                            }
-
-                        if (elm.Element("Domains")!=null)
-                            foreach (XElement elmD in elm.Element("Domains").Elements("Domain"))
-                            {
-                                string key = GetAttribute("Name", elmD);
-
-                                if (!_DomainNameDict.ContainsKey(key))
-                                    _DomainNameDict.Add(key, GetAttribute("EnglishName", elmD));
-                            }
-                    }
+                    string domain = dr["domain_name"].ToString();
+                    string domainEng = dr["domain_EnglishName"].ToString();
+                    if (!_DomainNameDict.ContainsKey(domain))
+                        _DomainNameDict.Add(domain, domainEng);
                 }
             }
             catch (Exception ex)
