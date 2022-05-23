@@ -124,6 +124,12 @@
   <data name="班級評量成績單" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>prc\班級評量成績單.xls;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="班級評量成績單30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Prc\班級評量成績單30.xls;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="班級評量成績單30B4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Prc\班級評量成績單30B4.xls;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="班級評量成績單60" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>prc\班級評量成績單60.xls;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

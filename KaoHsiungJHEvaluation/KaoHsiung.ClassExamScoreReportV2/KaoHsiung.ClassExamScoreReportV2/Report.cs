@@ -57,18 +57,18 @@ namespace KaoHsiung.ClassExamScoreReportV2
         public Workbook Output()
         {
             // 取得班級最大人數
-            _MaxClassStudCot=0;
+            _MaxClassStudCot = 0;
 
             // 取得一般與輟學人數
             Dictionary<string, int> classStudCount = Utility.GetClassStudentCount18();
 
             // 取得所選班級最大人數
             foreach (JHClassRecord classRec in Classes)
-                if(classStudCount.ContainsKey(classRec.ID))
+                if (classStudCount.ContainsKey(classRec.ID))
                     if (classStudCount[classRec.ID] >= _MaxClassStudCot)
                         _MaxClassStudCot = classStudCount[classRec.ID];
 
-            
+
 
             OutputBook = new Workbook();
             OutputBook.Open(GetTemplateStream());
@@ -112,7 +112,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
                 //轉換成 ReportStudent。
                 List<ReportStudent> pageStudent = GetPreparedStudent(each.Students);
-                pageStudent.Sort(delegate(ReportStudent x, ReportStudent y)
+                pageStudent.Sort(delegate (ReportStudent x, ReportStudent y)
                 {//將學生按座號排序。
                     return x.OrderSeatNo.CompareTo(y.OrderSeatNo);
                 });
@@ -147,7 +147,7 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
                                 }
                             }
-                                
+
                         }
                     }
                 }
@@ -260,21 +260,42 @@ namespace KaoHsiung.ClassExamScoreReportV2
 
         private Stream GetTemplateStream()
         {
-            // 超過45人
-            if (_MaxClassStudCot > 45)
+            if (_MaxClassStudCot <= 30)
             {
                 if (Perference.PaperSize == "B4")
-                    return new MemoryStream(Prc.班級評量成績單60B4);
+                    return new MemoryStream(Prc.班級評量成績單30B4);
                 else
-                    return new MemoryStream(Prc.班級評量成績單60);            
+                    return new MemoryStream(Prc.班級評量成績單30);
             }
-            else
+            else if (_MaxClassStudCot > 30 && _MaxClassStudCot <= 45)
             {
                 if (Perference.PaperSize == "B4")
                     return new MemoryStream(Prc.班級評量成績單B4);
                 else
                     return new MemoryStream(Prc.班級評量成績單);
             }
+            else
+            {
+                if (Perference.PaperSize == "B4")
+                    return new MemoryStream(Prc.班級評量成績單60B4);
+                else
+                    return new MemoryStream(Prc.班級評量成績單60);
+            }
+            // 超過45人
+            //if (_MaxClassStudCot > 45)
+            //{
+            //    if (Perference.PaperSize == "B4")
+            //        return new MemoryStream(Prc.班級評量成績單60B4);
+            //    else
+            //        return new MemoryStream(Prc.班級評量成績單60);
+            //}
+            //else
+            //{
+            //    if (Perference.PaperSize == "B4")
+            //        return new MemoryStream(Prc.班級評量成績單B4);
+            //    else
+            //        return new MemoryStream(Prc.班級評量成績單);
+            //}
         }
 
         private List<ReportStudent> GetPreparedStudent(IEnumerable<JHStudentRecord> students)

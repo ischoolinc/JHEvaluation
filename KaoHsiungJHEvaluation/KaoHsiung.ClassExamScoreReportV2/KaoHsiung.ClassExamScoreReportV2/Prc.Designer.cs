@@ -98,5 +98,23 @@ namespace KaoHsiung.ClassExamScoreReportV2 {
                 return ((byte[])(obj));
             }
         }
+
+        internal static byte[] 班級評量成績單30
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("班級評量成績單30", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+
+        internal static byte[] 班級評量成績單30B4
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("班級評量成績單30B4", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }
