@@ -41,7 +41,6 @@
             this.gpPC = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.gpText = new DevComponents.DotNetBar.Controls.GroupPanel();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.chkText = new System.Windows.Forms.CheckBox();
             this.gpFormat = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -50,12 +49,12 @@
             this.groupPanel1 = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.checkBoxX1 = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.labelX3 = new DevComponents.DotNetBar.LabelX();
             this.gpDomainSubject.SuspendLayout();
             this.panel1.SuspendLayout();
             this.gpPC.SuspendLayout();
             this.panel2.SuspendLayout();
             this.gpText.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.gpFormat.SuspendLayout();
             this.panel6.SuspendLayout();
             this.groupPanel1.SuspendLayout();
@@ -194,7 +193,7 @@
             this.btnSave.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnSave.BackColor = System.Drawing.Color.Transparent;
             this.btnSave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSave.Location = new System.Drawing.Point(187, 432);
+            this.btnSave.Location = new System.Drawing.Point(233, 459);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 12;
@@ -206,7 +205,7 @@
             this.btnClose.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
             this.btnClose.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnClose.Location = new System.Drawing.Point(269, 432);
+            this.btnClose.Location = new System.Drawing.Point(315, 459);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(60, 23);
             this.btnClose.TabIndex = 12;
@@ -272,11 +271,12 @@
             this.gpText.BackColor = System.Drawing.Color.Transparent;
             this.gpText.CanvasColor = System.Drawing.SystemColors.Control;
             this.gpText.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
-            this.gpText.Controls.Add(this.panel3);
+            this.gpText.Controls.Add(this.labelX3);
+            this.gpText.Controls.Add(this.chkText);
             this.gpText.DrawTitleBox = false;
             this.gpText.Location = new System.Drawing.Point(7, 225);
             this.gpText.Name = "gpText";
-            this.gpText.Size = new System.Drawing.Size(372, 66);
+            this.gpText.Size = new System.Drawing.Size(372, 85);
             // 
             // 
             // 
@@ -310,21 +310,11 @@
             this.gpText.TabIndex = 11;
             this.gpText.Text = "文字評語";
             // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.Transparent;
-            this.panel3.Controls.Add(this.chkText);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 0);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(366, 39);
-            this.panel3.TabIndex = 12;
-            // 
             // chkText
             // 
             this.chkText.AutoSize = true;
             this.chkText.BackColor = System.Drawing.Color.Transparent;
-            this.chkText.Location = new System.Drawing.Point(106, 9);
+            this.chkText.Location = new System.Drawing.Point(67, 3);
             this.chkText.Name = "chkText";
             this.chkText.Size = new System.Drawing.Size(105, 21);
             this.chkText.TabIndex = 8;
@@ -338,7 +328,7 @@
             this.gpFormat.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.gpFormat.Controls.Add(this.panel6);
             this.gpFormat.DrawTitleBox = false;
-            this.gpFormat.Location = new System.Drawing.Point(7, 296);
+            this.gpFormat.Location = new System.Drawing.Point(7, 316);
             this.gpFormat.Name = "gpFormat";
             this.gpFormat.Size = new System.Drawing.Size(372, 60);
             // 
@@ -415,7 +405,7 @@
             this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.groupPanel1.Controls.Add(this.panel4);
             this.groupPanel1.DrawTitleBox = false;
-            this.groupPanel1.Location = new System.Drawing.Point(7, 362);
+            this.groupPanel1.Location = new System.Drawing.Point(7, 382);
             this.groupPanel1.Name = "groupPanel1";
             this.groupPanel1.Size = new System.Drawing.Size(372, 60);
             // 
@@ -477,10 +467,25 @@
             this.checkBoxX1.Text = "使用單檔列印(檔名：學號_身分證_班級_座號_姓名)";
             this.checkBoxX1.TextColor = System.Drawing.Color.Black;
             // 
+            // labelX3
+            // 
+            this.labelX3.AutoSize = true;
+            this.labelX3.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX3.Location = new System.Drawing.Point(85, 24);
+            this.labelX3.Name = "labelX3";
+            this.labelX3.Size = new System.Drawing.Size(141, 21);
+            this.labelX3.TabIndex = 9;
+            this.labelX3.Text = "不含彈性課程文字評量";
+            // 
             // PrintConfigForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(389, 461);
+            this.ClientSize = new System.Drawing.Size(389, 494);
             this.Controls.Add(this.groupPanel1);
             this.Controls.Add(this.gpFormat);
             this.Controls.Add(this.btnClose);
@@ -499,8 +504,7 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.gpText.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
+            this.gpText.PerformLayout();
             this.gpFormat.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
@@ -526,7 +530,6 @@
         private System.Windows.Forms.RadioButton rbDomain;
         private DevComponents.DotNetBar.LabelX labelX2;
         private DevComponents.DotNetBar.Controls.GroupPanel gpText;
-        private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.CheckBox chkText;
         private DevComponents.DotNetBar.Controls.GroupPanel gpFormat;
         private System.Windows.Forms.Panel panel6;
@@ -535,5 +538,6 @@
         private DevComponents.DotNetBar.Controls.GroupPanel groupPanel1;
         private System.Windows.Forms.Panel panel4;
         private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxX1;
+        private DevComponents.DotNetBar.LabelX labelX3;
     }
 }
