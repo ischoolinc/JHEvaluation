@@ -420,6 +420,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         // 2020/9/25，宏安與高雄王主任確認語文領域成績處理方式：
                         // 語文領域是由科目成績來，科目有(國語文與英語)補考成績，由這2個加權平均，如果只有補考其中一科目，補考成績由該科目補考成績與另一科原始成績做加權平均算出語文領域補考成績。只要有語文領域成績是有科目領域國語文與英語加權平均計算過來的結果。
 
+                        // 2022/2/22 高雄小組[1110208] 要求語文領域補考成績是採用「科目補考」，所以語文領域補考分數 是 科目的擇優「成績」加權平均計算，其他領域因都是採用「領域補考」的方式，就不須更動。
                         decimal? langScore = null, chiScore = null, engScore = null, chiScoreOrigin = null, engScoreOrigin = null, chiMakeupScore = null, engMakeupScore = null;
 
 
@@ -571,42 +572,50 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             if (engMakeupScore.HasValue && engMakeupScore.Value == 0)
                                 engMakeupScore = null;
 
-                            // 補考成績
-                            if (chiMakeupScore.HasValue && engMakeupScore.HasValue)
-                            {
-                                // 都補考
-                                dscore.ScoreMakeup = rule.ParseDomainScore((chiMakeupScore.Value + engMakeupScore.Value) / weight);
+                            #region 2020/9/25 的語文領域補考成績處理方式
+                            //// 補考成績
+                            //if (chiMakeupScore.HasValue && engMakeupScore.HasValue)
+                            //{
+                            //    // 都補考
+                            //    dscore.ScoreMakeup = rule.ParseDomainScore((chiMakeupScore.Value + engMakeupScore.Value) / weight);
 
-                                // 不會有補考
-                                if (dscore.ScoreMakeup.Value == 0 && chiMakeupScore.Value == 0 && engMakeupScore.Value == 0)
-                                {
-                                    dscore.ScoreMakeup = null;
-                                }
+                            //    // 不會有補考
+                            //    if (dscore.ScoreMakeup.Value == 0 && chiMakeupScore.Value == 0 && engMakeupScore.Value == 0)
+                            //    {
+                            //        dscore.ScoreMakeup = null;
+                            //    }
 
-                            }
-                            else if (chiMakeupScore.HasValue && (engMakeupScore.HasValue == false))
-                            {
-                                // 只有補國語文
-                                if (engScoreOrigin.HasValue)
-                                {
-                                    // 補考與原始加權平均
-                                    dscore.ScoreMakeup = rule.ParseDomainScore((chiMakeupScore.Value + engScoreOrigin.Value) / weight);
-                                }
-                            }
-                            else if (chiMakeupScore.HasValue == false && engMakeupScore.HasValue)
-                            {
-                                if (chiScoreOrigin.HasValue)
-                                {
-                                    // 補考與原始加權平均
-                                    dscore.ScoreMakeup = rule.ParseDomainScore((engMakeupScore.Value + chiScoreOrigin.Value) / weight);
-                                }
-                            }
+                            //}
+                            //else if (chiMakeupScore.HasValue && (engMakeupScore.HasValue == false))
+                            //{
+                            //    // 只有補國語文
+                            //    if (engScoreOrigin.HasValue)
+                            //    {
+                            //        // 補考與原始加權平均
+                            //        dscore.ScoreMakeup = rule.ParseDomainScore((chiMakeupScore.Value + engScoreOrigin.Value) / weight);
+                            //    }
+                            //}
+                            //else if (chiMakeupScore.HasValue == false && engMakeupScore.HasValue)
+                            //{
+                            //    if (chiScoreOrigin.HasValue)
+                            //    {
+                            //        // 補考與原始加權平均
+                            //        dscore.ScoreMakeup = rule.ParseDomainScore((engMakeupScore.Value + chiScoreOrigin.Value) / weight);
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    // dscore.ScoreMakeup = null;
+
+                            //}
+                            #endregion
+
+                            #region 2022/2/22 高雄小組[1110208] 語文領域補考成績
+                            if (chiMakeupScore.HasValue || engMakeupScore.HasValue)
+                                dscore.ScoreMakeup = langScore;
                             else
-                            {
-                                // dscore.ScoreMakeup = null;
-
-                            }
-
+                                dscore.ScoreMakeup=null;
+                            #endregion
 
                             //if (weightScoreMakeup.HasValue)
                             //    dscore.ScoreMakeup = weightScoreMakeup.Value;
