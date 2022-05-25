@@ -23,7 +23,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
         private List<JHSCAttendRecord> _scAttendRecordList;
         private string _ExamName = "";
         // Log
-        PermRecLogProcess prlp;        
+        PermRecLogProcess prlp;
 
         //記錄 StudentID 與 DataGridViewRow 的對應
         private Dictionary<string, DataGridViewRow> _studentRowDict;
@@ -76,6 +76,9 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                 }
             }
             #endregion
+
+            Campus.Windows.DataGridViewImeDecorator dec = new Campus.Windows.DataGridViewImeDecorator(this.dgv);
+
         }
 
         /// <summary>
@@ -99,7 +102,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                 XmlElement element = Framework.XmlHelper.LoadXml(cd["評量成績缺考暨免試設定"]);
 
                 foreach (XmlElement each in element.SelectNodes("Setting"))
-                {          
+                {
                     var UseText = each.SelectSingleNode("UseText").InnerText;
                     var AllowCalculation = bool.Parse(each.SelectSingleNode("AllowCalculation").InnerText);
                     decimal Score;
@@ -186,6 +189,15 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                                 {
                                     if (!PluginMain.ScoreTextMap.ContainsKey("" + cell.Value))
                                         cell.ErrorText = "分數必須為數字或「" + string.Join("、", PluginMain.ScoreTextMap.Keys) + "」";
+                                    else
+                                    {
+                                        if (PluginMain.ScoreTextMap["" + cell.Value].AllowCalculation)
+                                            cell.Style.ForeColor = Color.Purple;  //要計算(無論分數)，顯示紫色
+                                        if (PluginMain.ScoreTextMap["" + cell.Value].Score == 0 && PluginMain.ScoreTextMap["" + cell.Value].AllowCalculation)
+                                            cell.Style.ForeColor = Color.Red;  //要計算且依照0分計算，顯示紅色
+                                        if (!PluginMain.ScoreTextMap["" + cell.Value].AllowCalculation)
+                                            cell.Style.ForeColor = Color.Blue;//不要計算，顯示藍色
+                                    }
                                 }
                                 else
                                 {
@@ -314,7 +326,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
             {   // 將暫存清空
                 prlp.ClearCache();
                 _ExamName = cboExamList.Text;
-                
+
                 foreach (DataGridViewRow dgvr in dgv.Rows)
                 {
                     string strClassName = string.Empty, strSeatNo = string.Empty, strName = string.Empty, strStudentNumber = string.Empty;
@@ -338,12 +350,12 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     string Key1 = CoName + ",試別:" + _ExamName + ",班級:" + strClassName + ",座號:" + strSeatNo + ",姓名:" + strName + ",學號:" + strStudentNumber + ",定期分數:";
                     string Key2 = CoName + ",試別:" + _ExamName + ",班級:" + strClassName + ",座號:" + strSeatNo + ",姓名:" + strName + ",學號:" + strStudentNumber + ",平時分數:";
                     string Key3 = CoName + ",試別:" + _ExamName + ",班級:" + strClassName + ",座號:" + strSeatNo + ",姓名:" + strName + ",學號:" + strStudentNumber + ",文字描述:";
-                    string Value1 = string.Empty, Value2 = string.Empty,Value3=string.Empty;
+                    string Value1 = string.Empty, Value2 = string.Empty, Value3 = string.Empty;
 
                     if (dgvr.Cells[chInputScore.Index].Value != null)
                         Value1 = dgvr.Cells[chInputScore.Index].Value.ToString();
 
-                    if (dgvr.Cells[chInputAssignmentScore.Index ].Value != null)
+                    if (dgvr.Cells[chInputAssignmentScore.Index].Value != null)
                         Value2 = dgvr.Cells[chInputAssignmentScore.Index].Value.ToString();
 
                     if (dgvr.Cells[chInputText.Index].Value != null)
@@ -371,7 +383,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
         public void SetSaveDataToLog()
         {
             try
-            {                
+            {
                 foreach (DataGridViewRow dgvr in dgv.Rows)
                 {
                     string strClassName = string.Empty, strSeatNo = string.Empty, strName = string.Empty, strStudentNumber = string.Empty;
@@ -411,7 +423,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     // 平時分數
                     prlp.SetAfterSaveText(Key2, Value2);
                     // 文字描述
-                    prlp.SetAfterSaveText(Key3, Value3);                    
+                    prlp.SetAfterSaveText(Key3, Value3);
                 }
             }
             catch (Exception ex)
@@ -482,7 +494,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     DataGridViewRow row = _studentRowDict[record.RefStudentID];
                     row.Cells[chInputScore.Index].Value = record.Score;
                     row.Cells[chInputScore.Index].Tag = record.Score;
-                    if (record.Score.HasValue && record.Score.Value<0)
+                    if (record.Score.HasValue && record.Score.Value < 0)
                     {
                         if (PluginMain.ScoreValueMap.ContainsKey(record.Score.Value))
                         {
@@ -617,7 +629,7 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                     if (csf.DialogResult == DialogResult.Cancel)
                         return;
                 }
-                
+
                 if (lists.InsertList.Count > 0)
                     JHSchool.Data.JHSCETake.Insert(lists.InsertList.AsJHSCETakeRecords());
                 if (lists.UpdateList.Count > 0)
@@ -943,6 +955,15 @@ namespace HsinChu.JHEvaluation.CourseExtendControls.Ribbon
                         {
                             if (!PluginMain.ScoreTextMap.ContainsKey("" + cell.Value))
                                 cell.ErrorText = "分數必須為數字或「" + string.Join("、", PluginMain.ScoreTextMap.Keys) + "」";
+                            else
+                            {
+                                if (PluginMain.ScoreTextMap["" + cell.Value].AllowCalculation)
+                                    cell.Style.ForeColor = Color.Purple;  //要計算(無論分數)，顯示紫色
+                                if (PluginMain.ScoreTextMap["" + cell.Value].Score == 0 && PluginMain.ScoreTextMap["" + cell.Value].AllowCalculation)
+                                    cell.Style.ForeColor = Color.Red;  //要計算且依照0分計算，顯示紅色
+                                if (!PluginMain.ScoreTextMap["" + cell.Value].AllowCalculation)
+                                    cell.Style.ForeColor = Color.Blue;//不要計算，顯示藍色
+                            }
                         }
                         else
                         {
