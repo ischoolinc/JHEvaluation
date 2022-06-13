@@ -43,6 +43,18 @@ namespace HsinChu.JHEvaluation
 
             #endregion
 
+            #region 教務作業/成績作業/評量缺免成績查詢調整
+            var Permission2 = RoleAclSource.Instance["教務作業"];
+            Permission2.Add(new RibbonFeature("EduAdmin_Button_CheckCourseScoreInput", "評量缺免成績查詢調整"));
+            RibbonBarButton rbItem3 = JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["批次作業/檢視"]["成績作業"];
+            rbItem3["評量缺免成績查詢調整"].Enable = UserAcl.Current["EduAdmin_Button_CheckCourseScoreInput"].Executable;
+            rbItem3["評量缺免成績查詢調整"].Click += delegate
+            {
+                new EduAdminExtendControls.Ribbon.CheckCourseScoreInput().ShowDialog();
+            };
+
+            #endregion
+
             #endregion
         }
     }

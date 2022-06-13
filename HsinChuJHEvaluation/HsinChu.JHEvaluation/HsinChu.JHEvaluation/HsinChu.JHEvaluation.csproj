@@ -181,6 +181,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EduAdminExtendControls\Ribbon\CheckCourseScoreInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EduAdminExtendControls\Ribbon\CheckCourseScoreInput.Designer.cs">
+      <DependentUpon>CheckCourseScoreInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="ScoreMap.cs" />
     <Compile Include="ConfigControls\Ribbon\ScoreValueManager.cs">
       <SubType>Form</SubType>
@@ -289,6 +295,9 @@
     <EmbeddedResource Include="CourseExtendControls\Ribbon\CourseScoreInputForm.resx">
       <DependentUpon>CourseScoreInputForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EduAdminExtendControls\Ribbon\CheckCourseScoreInput.resx">
+      <DependentUpon>CheckCourseScoreInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EduAdminExtendControls\Ribbon\CourseScoreStatusForm.resx">
       <DependentUpon>CourseScoreStatusForm.cs</DependentUpon>
