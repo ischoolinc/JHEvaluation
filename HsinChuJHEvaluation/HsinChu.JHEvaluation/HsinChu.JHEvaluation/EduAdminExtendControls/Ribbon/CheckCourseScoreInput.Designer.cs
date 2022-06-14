@@ -29,8 +29,8 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnExport = new DevComponents.DotNetBar.ButtonX();
             this.lblSave = new DevComponents.DotNetBar.LabelX();
             this.btnClose = new DevComponents.DotNetBar.ButtonX();
@@ -38,10 +38,6 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
             this.cboExamList = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.lblExam = new DevComponents.DotNetBar.LabelX();
             this.dgv = new DevComponents.DotNetBar.Controls.DataGridViewX();
-            this.labelX1 = new DevComponents.DotNetBar.LabelX();
-            this.iptSchoolYear = new DevComponents.Editors.IntegerInput();
-            this.iptSemester = new DevComponents.Editors.IntegerInput();
-            this.labelX2 = new DevComponents.DotNetBar.LabelX();
             this.chCourseName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chTeacherName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -51,6 +47,10 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
             this.chInputScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chInputAssignmentScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chInputText = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.labelX1 = new DevComponents.DotNetBar.LabelX();
+            this.iptSchoolYear = new DevComponents.Editors.IntegerInput();
+            this.iptSemester = new DevComponents.Editors.IntegerInput();
+            this.labelX2 = new DevComponents.DotNetBar.LabelX();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).BeginInit();
@@ -145,8 +145,8 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
             // 
             this.dgv.AllowUserToAddRows = false;
             this.dgv.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.AliceBlue;
-            this.dgv.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.AliceBlue;
+            this.dgv.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -164,14 +164,14 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
             this.chInputScore,
             this.chInputAssignmentScore,
             this.chInputText});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgv.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
             this.dgv.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.dgv.Location = new System.Drawing.Point(12, 75);
@@ -183,72 +183,6 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
             this.dgv.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellClick);
             this.dgv.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
             this.dgv.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dgv_SortCompare);
-            // 
-            // labelX1
-            // 
-            this.labelX1.AutoSize = true;
-            this.labelX1.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX1.BackgroundStyle.Class = "";
-            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(12, 12);
-            this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(60, 21);
-            this.labelX1.TabIndex = 27;
-            this.labelX1.Text = "學年度：";
-            // 
-            // iptSchoolYear
-            // 
-            this.iptSchoolYear.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.iptSchoolYear.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.iptSchoolYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.iptSchoolYear.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
-            this.iptSchoolYear.Location = new System.Drawing.Point(78, 10);
-            this.iptSchoolYear.MaxValue = 300;
-            this.iptSchoolYear.MinValue = 80;
-            this.iptSchoolYear.Name = "iptSchoolYear";
-            this.iptSchoolYear.ShowUpDown = true;
-            this.iptSchoolYear.Size = new System.Drawing.Size(62, 25);
-            this.iptSchoolYear.TabIndex = 28;
-            this.iptSchoolYear.Value = 80;
-            // 
-            // iptSemester
-            // 
-            this.iptSemester.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.iptSemester.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.iptSemester.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.iptSemester.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
-            this.iptSemester.Location = new System.Drawing.Point(216, 10);
-            this.iptSemester.MaxValue = 2;
-            this.iptSemester.MinValue = 1;
-            this.iptSemester.Name = "iptSemester";
-            this.iptSemester.ShowUpDown = true;
-            this.iptSemester.Size = new System.Drawing.Size(62, 25);
-            this.iptSemester.TabIndex = 30;
-            this.iptSemester.Value = 1;
-            // 
-            // labelX2
-            // 
-            this.labelX2.AutoSize = true;
-            this.labelX2.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX2.BackgroundStyle.Class = "";
-            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(163, 12);
-            this.labelX2.Name = "labelX2";
-            this.labelX2.Size = new System.Drawing.Size(47, 21);
-            this.labelX2.TabIndex = 29;
-            this.labelX2.Text = "學期：";
             // 
             // chCourseName
             // 
@@ -306,6 +240,74 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
             this.chInputText.HeaderText = "文字描述";
             this.chInputText.Name = "chInputText";
             this.chInputText.Visible = false;
+            // 
+            // labelX1
+            // 
+            this.labelX1.AutoSize = true;
+            this.labelX1.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX1.Location = new System.Drawing.Point(12, 12);
+            this.labelX1.Name = "labelX1";
+            this.labelX1.Size = new System.Drawing.Size(60, 21);
+            this.labelX1.TabIndex = 27;
+            this.labelX1.Text = "學年度：";
+            // 
+            // iptSchoolYear
+            // 
+            this.iptSchoolYear.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.iptSchoolYear.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.iptSchoolYear.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.iptSchoolYear.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.iptSchoolYear.Enabled = false;
+            this.iptSchoolYear.Location = new System.Drawing.Point(78, 10);
+            this.iptSchoolYear.MaxValue = 300;
+            this.iptSchoolYear.MinValue = 80;
+            this.iptSchoolYear.Name = "iptSchoolYear";
+            this.iptSchoolYear.ShowUpDown = true;
+            this.iptSchoolYear.Size = new System.Drawing.Size(62, 25);
+            this.iptSchoolYear.TabIndex = 28;
+            this.iptSchoolYear.Value = 80;
+            // 
+            // iptSemester
+            // 
+            this.iptSemester.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.iptSemester.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.iptSemester.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.iptSemester.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.iptSemester.Enabled = false;
+            this.iptSemester.Location = new System.Drawing.Point(216, 10);
+            this.iptSemester.MaxValue = 2;
+            this.iptSemester.MinValue = 1;
+            this.iptSemester.Name = "iptSemester";
+            this.iptSemester.ShowUpDown = true;
+            this.iptSemester.Size = new System.Drawing.Size(62, 25);
+            this.iptSemester.TabIndex = 30;
+            this.iptSemester.Value = 1;
+            // 
+            // labelX2
+            // 
+            this.labelX2.AutoSize = true;
+            this.labelX2.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.Class = "";
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX2.Location = new System.Drawing.Point(163, 12);
+            this.labelX2.Name = "labelX2";
+            this.labelX2.Size = new System.Drawing.Size(47, 21);
+            this.labelX2.TabIndex = 29;
+            this.labelX2.Text = "學期：";
             // 
             // CheckCourseScoreInput
             // 

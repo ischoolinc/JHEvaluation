@@ -13,6 +13,7 @@ using HsinChu.JHEvaluation.Data;
 using JHSchool.Data;
 using K12.Data.Configuration;
 using FISCA.Data;
+using System.IO;
 
 namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
 {
@@ -31,6 +32,7 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
         private List<K12.Data.ExamRecord> _exams = new List<K12.Data.ExamRecord>();
         private List<JHSCAttendRecord> _scAttendRecordList;
         private string _ExamName = "";
+        private string _ExamID = "";
         private int _SchoolYear = 0;
         private int _Semester = 0;
         // Log
@@ -144,12 +146,12 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
             if (cboExamList.Items.Count < 1)
                 this.Close();
             _ExamName = cboExamList.Text;
-            string ExamID = "";
+
             foreach (K12.Data.ExamRecord ex in _exams)
             {
                 if (ex.Name == cboExamList.Text)
                 {
-                    ExamID = ex.ID;
+                    _ExamID = ex.ID;
                     break;
                 }
             }
@@ -209,8 +211,9 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
         /// <summary>
         /// 將學生填入DataGridView。
         /// </summary>
-        private void FillStudentsToDataGridView(string examID)
+        private void FillStudentsToDataGridView()
         {
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("正在尋找修課學生");
             #region 取得修課學生
             _dirtyCellList = new List<DataGridViewCell>();
             _CourseIDsList = new List<string>();
@@ -273,46 +276,53 @@ or score ='0' or AssignmentScore='0'
 or sce_take_id IS NULL
 ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_number
 ";
-
-            queryCourseIDs = string.Format(queryCourseIDs, _SchoolYear, _Semester, examID);
-            DataTable dt = queryHelper.Select(queryCourseIDs);
-            foreach (DataRow dr in dt.Rows)
+            queryCourseIDs = string.Format(queryCourseIDs, _SchoolYear, _Semester, _ExamID);
+            try
             {
-                string courseID = dr["courseID"].ToString();
-                string teacher_name = dr["teacher_name"].ToString();
-                string studentID = dr["student_id"].ToString();
-                string sc_attend_id = dr["sc_attend_id"].ToString();
-                string sce_take_id = dr["sce_take_id"].ToString();
-                string exam_ID = dr["ref_exam_id"].ToString();
-                if (!_TeacherNameDic.ContainsKey(courseID))
-                    _TeacherNameDic.Add(courseID, teacher_name);
-                if (!_CourseIDsList.Contains(courseID))
-                    _CourseIDsList.Add(courseID);
-                if (!_StudentIDsList.Contains(studentID))
-                    _StudentIDsList.Add(studentID);
-                if (!_SCAttendIDsList.Contains(sc_attend_id))
-                    _SCAttendIDsList.Add(sc_attend_id);
-                if (!_ExamList.Contains(exam_ID))
-                    _ExamList.Add(exam_ID);
-                if (!_SceTakeIDsList.Contains(sce_take_id))
-                    _SceTakeIDsList.Add(sce_take_id);
+                DataTable dt = queryHelper.Select(queryCourseIDs);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string courseID = dr["courseID"].ToString();
+                    string teacher_name = dr["teacher_name"].ToString();
+                    string studentID = dr["student_id"].ToString();
+                    string sc_attend_id = dr["sc_attend_id"].ToString();
+                    string sce_take_id = dr["sce_take_id"].ToString();
+                    string exam_ID = dr["ref_exam_id"].ToString();
+                    if (!_TeacherNameDic.ContainsKey(courseID))
+                        _TeacherNameDic.Add(courseID, teacher_name);
+                    if (!_CourseIDsList.Contains(courseID))
+                        _CourseIDsList.Add(courseID);
+                    if (!_StudentIDsList.Contains(studentID))
+                        _StudentIDsList.Add(studentID);
+                    if (!_SCAttendIDsList.Contains(sc_attend_id))
+                        _SCAttendIDsList.Add(sc_attend_id);
+                    if (!_ExamList.Contains(exam_ID))
+                        _ExamList.Add(exam_ID);
+                    if (!_SceTakeIDsList.Contains(sce_take_id))
+                        _SceTakeIDsList.Add(sce_take_id);
 
+                }
+
+                if (_StudentIDsList.Count > 0)
+                    _scAttendRecordList = (JHSCAttend.Select(_StudentIDsList, _CourseIDsList, _SCAttendIDsList, _SchoolYear.ToString(), _Semester.ToString()));
+                else
+                {
+                    MsgBox.Show("查無資料。");
+                    FISCA.Presentation.MotherForm.SetStatusBarMessage("查無資料");
+                    dgv.Rows.Clear();
+                    return;
+                }
             }
-
-            if (_StudentIDsList.Count > 0)
-                _scAttendRecordList = (JHSCAttend.Select(_StudentIDsList, _CourseIDsList, _SCAttendIDsList, _SchoolYear.ToString(), _Semester.ToString()));
-            else
+            catch (Exception ex)
             {
-                MsgBox.Show("查無資料。");
-                dgv.Rows.Clear();
-                return;
+                MsgBox.Show("尋找修課學生發生錯誤："+ex.Message);
             }
 
 
             #endregion
             _studentRowDict.Clear();
             if (_scAttendRecordList == null) return;
-            FISCA.Presentation.MotherForm.SetStatusBarMessage("正在尋找修課學生。", 100);
+
             dgv.SuspendLayout();
             dgv.Rows.Clear();
 
@@ -345,7 +355,7 @@ ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_numbe
             }
             dgv.ResumeLayout();
 
-            GetScoresAndFill(examID);
+            GetScoresAndFill();
 
             LoadDvScoreColor();
             dgv.ResumeLayout();
@@ -540,53 +550,27 @@ ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_numbe
         /// <param name="e"></param>
         private void cboExamList_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-            //1 重新找出學生
-            //2 重新填入學生
             if (cboExamList.SelectedItem == null) return;
-            K12.Data.ExamRecord exam = cboExamList.SelectedItem as K12.Data.ExamRecord;
-            string ExamID = "";
+
             foreach (K12.Data.ExamRecord ex in _exams)
             {
                 if (ex.Name == cboExamList.Text)
                 {
-                    ExamID = ex.ID;
+                    _ExamID = ex.ID;
                     break;
                 }
             }
-            //ExamComboBoxItem item = cboExamList.SelectedItem as ExamComboBoxItem;
-            //HC.JHAEIncludeRecord aeIncludeRecord = item.AEIncludeRecord;
-            //只要refExamID R
-            //dgv.SuspendLayout();
 
-            #region 依 AEIncludeRecord 決定哪些 Column 要顯示
+            FillStudentsToDataGridView();
 
-            //chInputScore.Visible = aeIncludeRecord.UseScore;
-            //chInputAssignmentScore.Visible = aeIncludeRecord.UseAssignmentScore;
-            //chInputText.Visible = aeIncludeRecord.UseText;
-
-            #endregion
-
-
-
-            // 載入分數顏色
-            //LoadDvScoreColor();
-
-
-
-            FillStudentsToDataGridView(ExamID);
-            //GetScoresAndFill(ExamID);
-
-            //LoadDvScoreColor();
-            //dgv.ResumeLayout();
-            //SetLoadDataToLog();
         }
 
         /// <summary>
         /// 取得成績並填入DataGridView
         /// </summary>
-        private void GetScoresAndFill(string examID)
+        private void GetScoresAndFill()
         {
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("正在取得評量成績");
             _dirtyCellList.Clear();
             lblSave.Visible = false;
 
@@ -663,6 +647,8 @@ ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_numbe
             }
 
             #endregion
+
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("");
         }
 
         /// <summary>
@@ -683,7 +669,7 @@ ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_numbe
         {
             if (string.IsNullOrEmpty(cboExamList.Text))
             {
-                FISCA.Presentation.Controls.MsgBox.Show("沒有試別無法儲存.");
+                FISCA.Presentation.Controls.MsgBox.Show("沒有試別無法儲存。");
                 return;
             }
 
@@ -771,22 +757,22 @@ ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_numbe
 
                 //ExamComboBoxItem item = cboExamList.SelectedItem as ExamComboBoxItem;
                 //K12.Data.ExamRecord exam = cboExamList.SelectedItem as K12.Data.ExamRecord;
-                string ExamID = "";
-                foreach (K12.Data.ExamRecord ex in _exams)
-                {
-                    if (ex.Name == cboExamList.Text)
-                    {
-                        ExamID = ex.ID;
-                        break;
-                    }
-                }
-                FillStudentsToDataGridView(ExamID);
-                //GetScoresAndFill(ExamID);
+                //string ExamID = "";
+                //foreach (K12.Data.ExamRecord ex in _exams)
+                //{
+                //    if (ex.Name == cboExamList.Text)
+                //    {
+                //        ExamID = ex.ID;
+                //        break;
+                //    }
+                //}
+                //重新取得符合條件的學生
+                FillStudentsToDataGridView();
+
             }
             catch (Exception ex)
             {
                 MsgBox.Show("儲存失敗。\n" + ex.Message);
-                //throw ex;
             }
 
             // // 載入分數顏色
@@ -815,16 +801,16 @@ ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_numbe
             RecordIUDLists lists = new RecordIUDLists();
 
             ExamComboBoxItem item = cboExamList.SelectedItem as ExamComboBoxItem;
-            //JHExamRecord exam = item.AEIncludeRecord.Exam;
-            string ExamID = "";
-            foreach (K12.Data.ExamRecord ex in _exams)
-            {
-                if (ex.Name == cboExamList.Text)
-                {
-                    ExamID = ex.ID;
-                    break;
-                }
-            }
+
+            //string ExamID = "";
+            //foreach (K12.Data.ExamRecord ex in _exams)
+            //{
+            //    if (ex.Name == cboExamList.Text)
+            //    {
+            //        ExamID = ex.ID;
+            //        break;
+            //    }
+            //}
             foreach (DataGridViewRow row in dgv.Rows)
             {
                 SCAttendTag tag = row.Tag as SCAttendTag;
@@ -883,7 +869,7 @@ ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_numbe
                     HC.JHSCETakeRecord record = new HC.JHSCETakeRecord(jh);
 
                     record.RefCourseID = tag.SCAttend.Course.ID;
-                    record.RefExamID = ExamID;
+                    record.RefExamID = _ExamID;
                     record.RefSCAttendID = tag.SCAttend.ID;
                     record.RefStudentID = tag.SCAttend.Student.ID;
 
@@ -1149,8 +1135,23 @@ ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_numbe
         /// <param name="e"></param>
         private void btnExport_Click(object sender, EventArgs e)
         {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.FileName = "匯出評量缺免成績";
+            saveFileDialog1.Filter = "Excel (*.xls)|*.xls";
+            //指定路徑在Reports
+            string path = Path.Combine(Application.StartupPath, "Reports");
+            saveFileDialog1.InitialDirectory = path;
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            path = Path.Combine(path, saveFileDialog1.FileName + ".xls");
+            //
 
+            if (saveFileDialog1.ShowDialog() != DialogResult.OK) return;
+
+            DataGridViewExport export = new DataGridViewExport(dgv);
+            export.Save(saveFileDialog1.FileName);
         }
+
 
     }
 }
