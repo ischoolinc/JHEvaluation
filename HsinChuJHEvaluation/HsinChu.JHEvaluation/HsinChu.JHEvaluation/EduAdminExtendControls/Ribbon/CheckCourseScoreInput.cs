@@ -276,10 +276,135 @@ or score ='0' or AssignmentScore='0'
 or sce_take_id IS NULL
 ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_number
 ";
-            queryCourseIDs = string.Format(queryCourseIDs, _SchoolYear, _Semester, _ExamID);
+
+            string query = @"WITH exam_template AS(
+SELECT
+	id
+	, ref_exam_template_id
+	, ref_exam_id
+	, array_to_string(xpath('//UseAssignmentScore/text()', extensionELE), '') AS UseAssignmentScore
+FROM
+	(
+		SELECT
+		*
+			, unnest(xpath('//Extension/UseAssignmentScore', xmlparse(content Extension))) as extensionELE
+		FROM
+			te_include
+	) AS Extension
+)
+, student_score1 AS(
+    SELECT 
+        student.id AS student_id
+		, class.id AS classID
+		, class.class_name
+		, class.grade_year
+		, class.display_order
+        ,student.student_number
+        ,student.name
+        ,student.seat_no
+        ,school_year
+        ,semester
+        ,sc_attend.id AS sc_attend_id
+        , sce_take.id AS sce_take_id
+		, course.id AS courseID
+        ,course.course_name
+        ,exam_name
+        ,  teacher_name
+        , (array_to_string(xpath('//Extension/Score/text()', xmlparse(content sce_take.extension)), '')::text) as Score
+		, (array_to_string(xpath('//Extension/AssignmentScore/text()', xmlparse(content sce_take.extension)), '')::text) as AssignmentScore
+        , exam_template.ref_exam_id
+		, exam_template.UseAssignmentScore
+    FROM student 
+	LEFT JOIN class 
+	ON student.ref_class_id=class.id
+    LEFT JOIN sc_attend 
+        ON sc_attend.ref_student_id=student.id
+    INNER JOIN ( SELECT * FROM course WHERE school_year ={0} AND semester={1} ) AS course 
+        ON sc_attend.ref_course_id=course.id 
+	INNER JOIN exam_template
+        ON course.ref_exam_template_id = exam_template.ref_exam_template_id
+    LEFT JOIN   (SELECT * FROM  sce_take WHERE  ref_exam_id={2} )   AS  sce_take 
+        ON  sce_take.ref_sc_attend_id=sc_attend.id
+    LEFT JOIN exam
+        ON exam.id=sce_take.ref_exam_id 
+	LEFT JOIN 
+    tc_instruct ON tc_instruct.ref_course_id = course.id AND sequence = 1
+	LEFT JOIN 
+    teacher ON teacher.id = tc_instruct.ref_teacher_id
+    WHERE  exam_template.ref_exam_id ={2} AND student.status=1
+)
+, student_score_with_AssignmentScore AS (
+SELECT * FROM student_score1
+WHERE
+(score ='' or AssignmentScore='' 
+or score='-2147483648' or score ='-2147483647' 
+or AssignmentScore='-2147483648' or AssignmentScore ='-2147483647'
+or score ='0' or AssignmentScore='0' 
+or sce_take_id IS NULL)
+AND UseAssignmentScore='是'
+)
+, student_score2 AS(
+    SELECT 
+        student.id AS student_id
+		, class.id AS classID
+		, class.class_name
+		, class.grade_year
+		, class.display_order
+        ,student.student_number
+        ,student.name
+        ,student.seat_no
+        ,school_year
+        ,semester
+        ,sc_attend.id AS sc_attend_id
+        , sce_take.id AS sce_take_id
+		, course.id AS courseID
+        ,course.course_name
+        ,exam_name
+        ,  teacher_name
+        , (array_to_string(xpath('//Extension/Score/text()', xmlparse(content sce_take.extension)), '')::text) as Score
+		, (array_to_string(xpath('//Extension/AssignmentScore/text()', xmlparse(content sce_take.extension)), '')::text) as AssignmentScore
+        , exam_template.ref_exam_id
+		, exam_template.UseAssignmentScore
+    FROM student 
+	LEFT JOIN class 
+	ON student.ref_class_id=class.id
+    LEFT JOIN sc_attend 
+        ON sc_attend.ref_student_id=student.id
+    INNER JOIN ( SELECT * FROM course WHERE school_year ={0} AND semester={1} ) AS course 
+        ON sc_attend.ref_course_id=course.id 
+	INNER JOIN exam_template
+        ON course.ref_exam_template_id = exam_template.ref_exam_template_id
+    LEFT JOIN   (SELECT * FROM  sce_take WHERE  ref_exam_id={2} )   AS  sce_take 
+        ON  sce_take.ref_sc_attend_id=sc_attend.id
+    LEFT JOIN exam
+        ON exam.id=sce_take.ref_exam_id 
+	LEFT JOIN 
+    tc_instruct ON tc_instruct.ref_course_id = course.id AND sequence = 1
+	LEFT JOIN 
+    teacher ON teacher.id = tc_instruct.ref_teacher_id
+    WHERE  exam_template.ref_exam_id ={2} AND student.status=1
+) , student_score_without_AssignmentScore AS (
+SELECT * FROM student_score2
+WHERE
+(score ='' --or AssignmentScore='' 
+or score='-2147483648' or score ='-2147483647' 
+--or AssignmentScore='-2147483648' or AssignmentScore ='-2147483647'
+or score ='0' --or AssignmentScore='0' 
+or sce_take_id IS NULL)
+AND UseAssignmentScore='否'
+--ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_number
+)
+SELECT * FROM student_score_without_AssignmentScore
+UNION ALL
+SELECT * FROM student_score_with_AssignmentScore
+
+
+";
+            query= string.Format(query, _SchoolYear, _Semester, _ExamID);
+            //queryCourseIDs = string.Format(queryCourseIDs, _SchoolYear, _Semester, _ExamID);
             try
             {
-                DataTable dt = queryHelper.Select(queryCourseIDs);
+                DataTable dt = queryHelper.Select(query);
                 foreach (DataRow dr in dt.Rows)
                 {
                     string courseID = dr["courseID"].ToString();
@@ -349,8 +474,8 @@ ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_numbe
                 row.Tag = tag;
 
                 //加入 StudentID 與 Row 的對應
-                if (!_studentRowDict.ContainsKey(student.ID))
-                    _studentRowDict.Add(student.ID, row);
+                if (!_studentRowDict.ContainsKey(student.ID + "_" +record.RefCourseID))
+                    _studentRowDict.Add(student.ID + "_" + record.RefCourseID, row);
 
             }
             dgv.ResumeLayout();
@@ -589,9 +714,9 @@ ORDER BY courseID, grade_year, display_order, class_name, seat_no, student_numbe
             //List<HC.JHSCETakeRecord> list = JHSchool.Data.JHSCETake.SelectByCourseAndExam(_CourseIDsList, examID).AsHCJHSCETakeRecords();
             foreach (var record in list)
             {
-                if (_studentRowDict.ContainsKey(record.RefStudentID))
+                if (_studentRowDict.ContainsKey(record.RefStudentID+"_"+record.RefCourseID))
                 {
-                    DataGridViewRow row = _studentRowDict[record.RefStudentID];
+                    DataGridViewRow row = _studentRowDict[record.RefStudentID + "_" + record.RefCourseID];
                     row.Cells[chInputScore.Index].Value = record.Score;
                     row.Cells[chInputScore.Index].Tag = record.Score;
                     if (record.Score.HasValue && record.Score.Value < 0)

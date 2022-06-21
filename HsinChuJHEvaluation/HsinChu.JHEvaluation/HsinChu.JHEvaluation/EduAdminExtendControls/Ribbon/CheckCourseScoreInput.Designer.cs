@@ -38,19 +38,19 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
             this.cboExamList = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.lblExam = new DevComponents.DotNetBar.LabelX();
             this.dgv = new DevComponents.DotNetBar.Controls.DataGridViewX();
-            this.chCourseName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chTeacherName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chSeatNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chStudentNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chInputScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chInputAssignmentScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chInputText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.iptSchoolYear = new DevComponents.Editors.IntegerInput();
             this.iptSemester = new DevComponents.Editors.IntegerInput();
             this.labelX2 = new DevComponents.DotNetBar.LabelX();
+            this.chInputText = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chInputAssignmentScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chInputScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chStudentNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chSeatNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chTeacherName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chCourseName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iptSchoolYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iptSemester)).BeginInit();
@@ -184,63 +184,6 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
             this.dgv.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellEndEdit);
             this.dgv.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dgv_SortCompare);
             // 
-            // chCourseName
-            // 
-            this.chCourseName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.chCourseName.FillWeight = 250F;
-            this.chCourseName.HeaderText = "課程名稱";
-            this.chCourseName.Name = "chCourseName";
-            this.chCourseName.ReadOnly = true;
-            // 
-            // chTeacherName
-            // 
-            this.chTeacherName.HeaderText = "授課教師";
-            this.chTeacherName.Name = "chTeacherName";
-            this.chTeacherName.ReadOnly = true;
-            // 
-            // chClassName
-            // 
-            this.chClassName.HeaderText = "班級";
-            this.chClassName.Name = "chClassName";
-            this.chClassName.ReadOnly = true;
-            // 
-            // chSeatNo
-            // 
-            this.chSeatNo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.chSeatNo.HeaderText = "座號";
-            this.chSeatNo.Name = "chSeatNo";
-            this.chSeatNo.ReadOnly = true;
-            this.chSeatNo.Width = 59;
-            // 
-            // chName
-            // 
-            this.chName.HeaderText = "姓名";
-            this.chName.Name = "chName";
-            this.chName.ReadOnly = true;
-            // 
-            // chStudentNumber
-            // 
-            this.chStudentNumber.HeaderText = "學號";
-            this.chStudentNumber.Name = "chStudentNumber";
-            this.chStudentNumber.ReadOnly = true;
-            // 
-            // chInputScore
-            // 
-            this.chInputScore.HeaderText = "定期分數";
-            this.chInputScore.Name = "chInputScore";
-            // 
-            // chInputAssignmentScore
-            // 
-            this.chInputAssignmentScore.HeaderText = "平時分數";
-            this.chInputAssignmentScore.Name = "chInputAssignmentScore";
-            // 
-            // chInputText
-            // 
-            this.chInputText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.chInputText.HeaderText = "文字描述";
-            this.chInputText.Name = "chInputText";
-            this.chInputText.Visible = false;
-            // 
             // labelX1
             // 
             this.labelX1.AutoSize = true;
@@ -308,6 +251,63 @@ namespace HsinChu.JHEvaluation.EduAdminExtendControls.Ribbon
             this.labelX2.Size = new System.Drawing.Size(47, 21);
             this.labelX2.TabIndex = 29;
             this.labelX2.Text = "學期：";
+            // 
+            // chInputText
+            // 
+            this.chInputText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.chInputText.HeaderText = "文字描述";
+            this.chInputText.Name = "chInputText";
+            this.chInputText.Visible = false;
+            // 
+            // chInputAssignmentScore
+            // 
+            this.chInputAssignmentScore.HeaderText = "平時分數";
+            this.chInputAssignmentScore.Name = "chInputAssignmentScore";
+            // 
+            // chInputScore
+            // 
+            this.chInputScore.HeaderText = "定期分數";
+            this.chInputScore.Name = "chInputScore";
+            // 
+            // chStudentNumber
+            // 
+            this.chStudentNumber.HeaderText = "學號";
+            this.chStudentNumber.Name = "chStudentNumber";
+            this.chStudentNumber.ReadOnly = true;
+            // 
+            // chName
+            // 
+            this.chName.HeaderText = "姓名";
+            this.chName.Name = "chName";
+            this.chName.ReadOnly = true;
+            // 
+            // chSeatNo
+            // 
+            this.chSeatNo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.chSeatNo.HeaderText = "座號";
+            this.chSeatNo.Name = "chSeatNo";
+            this.chSeatNo.ReadOnly = true;
+            this.chSeatNo.Width = 59;
+            // 
+            // chClassName
+            // 
+            this.chClassName.HeaderText = "班級";
+            this.chClassName.Name = "chClassName";
+            this.chClassName.ReadOnly = true;
+            // 
+            // chTeacherName
+            // 
+            this.chTeacherName.HeaderText = "授課教師";
+            this.chTeacherName.Name = "chTeacherName";
+            this.chTeacherName.ReadOnly = true;
+            // 
+            // chCourseName
+            // 
+            this.chCourseName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.chCourseName.FillWeight = 250F;
+            this.chCourseName.HeaderText = "課程名稱";
+            this.chCourseName.Name = "chCourseName";
+            this.chCourseName.ReadOnly = true;
             // 
             // CheckCourseScoreInput
             // 
