@@ -119,11 +119,12 @@ namespace JHEvaluation.ScoreCalculation
                 }
 
                 // 計算畢業成績
-                foreach(string key in sumScoreDict.Keys)
+                foreach (string key in sumScoreDict.Keys)
                 {
-                    if(sumCreditDict.ContainsKey(key))
+                    if (sumCreditDict.ContainsKey(key))
                     {
-                        GradeScoreList.Add(sumScoreDict[key] / sumCreditDict[key]);
+                        if (sumCreditDict[key] != 0)
+                            GradeScoreList.Add(sumScoreDict[key] / sumCreditDict[key]);
                     }
                 }
 
@@ -162,8 +163,8 @@ namespace JHEvaluation.ScoreCalculation
             //}
 
             foreach (StudentScore ss in Students)
-            { 
-                if(StudDomainNullScore.ContainsKey(ss.Id ))
+            {
+                if (StudDomainNullScore.ContainsKey(ss.Id))
                 {
                     //2017/5/9 穎驊修正 ，因應 高雄 [08-05][03] 畢業資格判斷成績及格標準調整 項目，
                     // 領域 分數超過60分 ，以 四捨五入取到小數第二位 ， 低於60分 採用 無條件進位至整數 (EX : 59.01 =60)
@@ -196,7 +197,7 @@ namespace JHEvaluation.ScoreCalculation
                     }
                     else
                     {
-                        GraduateScore gs = new GraduateScore ();
+                        GraduateScore gs = new GraduateScore();
                         gs.Value = score;
                         ss.GraduateScore.Add("彈性課程", gs);
                     }
