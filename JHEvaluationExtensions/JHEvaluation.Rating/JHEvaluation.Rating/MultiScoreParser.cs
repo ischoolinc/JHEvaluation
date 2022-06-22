@@ -50,7 +50,7 @@ namespace JHEvaluation.Rating
             if (count <= 0)
                 return null;
             else
-                return Math.Round(sum / count, 2, MidpointRounding.AwayFromZero);
+                return Math.Round(sum / count, 3, MidpointRounding.AwayFromZero);
         }
 
         #endregion
