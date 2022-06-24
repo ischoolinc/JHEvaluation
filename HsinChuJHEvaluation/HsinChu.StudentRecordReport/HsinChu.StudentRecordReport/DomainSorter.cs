@@ -7,7 +7,7 @@ namespace HsinChu.StudentRecordReport
 {
     public class DomainSorter
     {
-        private static List<string> _list = new List<string>(new string[] { "語文","數學","社會","藝術與人文","自然與生活科技","健康與體育","綜合活動","彈性課程"});
+        private static List<string> _list = new List<string>(new string[] { "語文","數學","社會", "自然科學", "自然與生活科技", "藝術", "藝術與人文","健康與體育","綜合活動", "科技", "彈性課程"});
 
         public static int Sort1(string x, string y)
         {

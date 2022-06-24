@@ -35,7 +35,7 @@ namespace HsinChu.StudentRecordReport
         private Cell _cell;
         private Run _run;
 
-        public StudentSemesterScoreProcessor(DocumentBuilder builder, SemesterMap map,string type, Dictionary<string, bool> domains,K12.Data.GradScoreRecord StudGradScore)
+        public StudentSemesterScoreProcessor(DocumentBuilder builder, SemesterMap map, string type, Dictionary<string, bool> domains, K12.Data.GradScoreRecord StudGradScore)
         {
             builder.MoveToMergeField("成績");
             _builder = builder;
@@ -98,8 +98,8 @@ namespace HsinChu.StudentRecordReport
                 {
                     if (domainRow.Scores.Count <= 0) continue;
 
-                    table.Rows.Add(row.Clone(true));     
-                    Row tempRow = table.LastRow;                    
+                    table.Rows.Add(row.Clone(true));
+                    Row tempRow = table.LastRow;
                     WordHelper.MergeHorizontalCell(tempRow.Cells[0], 2);
                     WordHelper.Write(tempRow.Cells[0], (string.IsNullOrEmpty(domainRow.Domain) ? "彈性課程" : domainRow.Domain), _builder);
                     WriteDomain(tempRow.Cells[1], domainRow);
@@ -107,7 +107,7 @@ namespace HsinChu.StudentRecordReport
                 // 展開，列印科目
                 else
                 {
-                    
+
                     int subjectCount = 0;
                     foreach (string subject in domainRow.SubjectScores.Keys)
                     {
@@ -120,7 +120,7 @@ namespace HsinChu.StudentRecordReport
                         WriteSubject(tempRow.Cells[1], domainRow.SubjectScores[subject]);
                     }
                     SubjCount = subjectCount;
-                    
+
                     // 當只有領域成績沒有科目成績時
                     if (subjectCount > 0)
                     {
@@ -145,20 +145,20 @@ namespace HsinChu.StudentRecordReport
                         WordHelper.MergeVerticalCell(tmpRow.Cells[21], SubjCount);
                     }
                     else
-                        tmpRow =table.LastRow ;
+                        tmpRow = table.LastRow;
 
 
-                        //Row tmpRow = table.LastRow;
-                        if (_StudGradScore.Domains[domainRow.Domain].Score.HasValue)
-                        {
-                            // 分數
-                            WordHelper.Write(tmpRow.Cells[20], _StudGradScore.Domains[domainRow.Domain].Score.Value.ToString(), _builder);
-                            // 等第
-                            WordHelper.Write(tmpRow.Cells[21], DegreeMapper.GetDegreeByScore(_StudGradScore.Domains[domainRow.Domain].Score.Value), _builder);
-                        }
+                    //Row tmpRow = table.LastRow;
+                    if (_StudGradScore.Domains[domainRow.Domain].Score.HasValue)
+                    {
+                        // 分數
+                        WordHelper.Write(tmpRow.Cells[20], _StudGradScore.Domains[domainRow.Domain].Score.Value.ToString(), _builder);
+                        // 等第
+                        WordHelper.Write(tmpRow.Cells[21], DegreeMapper.GetDegreeByScore(_StudGradScore.Domains[domainRow.Domain].Score.Value), _builder);
+                    }
                 }
             }
-            
+
             table.Rows[deleteIndex].Remove();
 
             // 畫底出線
@@ -276,7 +276,7 @@ namespace HsinChu.StudentRecordReport
                 return DegreeMapper.GetDegreeByScore(d);
             else
                 return p;
-        }    
+        }
 
 
         /// <summary>
@@ -422,7 +422,7 @@ namespace HsinChu.StudentRecordReport
         private Dictionary<string, DomainRow> _domains;
 
         private string _type;
-
+        public List<string> subjectOrderList = Utility.GetSubjectOrder();
         public DomainRowManager(string type)
         {
             _domains = new Dictionary<string, DomainRow>();
@@ -469,7 +469,15 @@ namespace HsinChu.StudentRecordReport
                 row.Add(new SemesterData("" + record.SchoolYear, "" + record.Semester), domain);
             }
 
-            foreach (K12.Data.SubjectScore subject in record.Subjects.Values)
+            // 2022-06-24 為了處理科目排序
+            List<K12.Data.SubjectScore> jsSubjects = new List<K12.Data.SubjectScore>(record.Subjects.Values);
+            jsSubjects.Sort(delegate (K12.Data.SubjectScore r1, K12.Data.SubjectScore r2)
+            {
+                return StringComparer.Comparer(r1.Subject, r2.Subject, subjectOrderList.ToArray());
+            });
+
+            //foreach (K12.Data.SubjectScore subject in record.Subjects.Values)
+            foreach (K12.Data.SubjectScore subject in jsSubjects)
             {
                 //if (!_config.ContainsKey(subject.Domain)) continue;
                 //if (_type == "Domain")
