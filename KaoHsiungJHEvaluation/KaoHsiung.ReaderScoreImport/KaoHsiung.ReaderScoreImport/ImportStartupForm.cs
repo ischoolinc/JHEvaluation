@@ -194,7 +194,7 @@ namespace KaoHsiung.ReaderScoreImport
                 #region 取得學生的評量成績
                 _deleteScoreList.Clear();
                 _addScoreList.Clear();
-
+                
                 //var student_ids = from student in scCreator.StudentNumberDictionary.Values select student.ID;
                 //List<string> course_ids = scCreator.AttendCourseIDs;
 
@@ -227,15 +227,25 @@ namespace KaoHsiung.ReaderScoreImport
                         scaTable.Add(key, sca);
                 }
 
+                List<string> chkCourseIDList = new List<string>();
                 foreach (DataRecord dr in drCollection)
                 {
                     JHStudentRecord student = student = scCreator.StudentNumberDictionary[dr.StudentNumber];
                     JHExamRecord exam = examTable[dr.Exam];
                     List<JHCourseRecord> courses = new List<JHCourseRecord>();
+                    // 判斷課程是否重複加入
+                    chkCourseIDList.Clear();
+
                     foreach (JHCourseRecord course in scCreator.StudentCourseInfo.GetCourses(dr.StudentNumber))
                     {
                         if (dr.Subjects.Contains(course.Subject))
-                            courses.Add(course);
+                        {
+                            if (!chkCourseIDList.Contains(course.ID))
+                            {
+                                courses.Add(course);
+                                chkCourseIDList.Add(course.ID);
+                            }
+                        }                            
                     }
 
                     foreach (JHCourseRecord course in courses)
@@ -244,7 +254,7 @@ namespace KaoHsiung.ReaderScoreImport
 
                         if (sceList.ContainsKey(key))
                             _deleteScoreList.Add(sceList[key]);
-
+                        
                         JHSCETakeRecord jh = new JHSCETakeRecord();
                         KH.JHSCETakeRecord sceNew = new KH.JHSCETakeRecord(jh);
                         sceNew.RefCourseID = course.ID;
