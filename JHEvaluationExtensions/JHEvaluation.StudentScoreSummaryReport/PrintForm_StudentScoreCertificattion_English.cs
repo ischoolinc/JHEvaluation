@@ -67,7 +67,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
         //取得中英文對照
         private static SubjDomainEngNameMapping _SubjDomainEngNameMapping = new SubjDomainEngNameMapping();
-        
+
         /// <summary>
         /// 等第對照表
         /// </summary>
@@ -797,7 +797,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 //row["校長"] = K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorChineseName").InnerText;
                 row["校長"] = K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorEnglishName").InnerText;
                 row["教務主任"] = K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("EduDirectorName").InnerText;
-                
+
                 #region 學生照片，若沒有畢業照，則印出入學照
                 string graduatePhoto = K12.Data.Photo.SelectGraduatePhoto(stuID);
                 string freshmanPhoto = K12.Data.Photo.SelectFreshmanPhoto(stuID);
@@ -996,45 +996,46 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             }
                         }
 
-                        foreach (var item in Util._SLRDict[stuID])
-                        {
-                            // 第一學期
-                            if (item.Key == schoolyear_grade_dict[grade] + "_1")
+                        if (Util._SLRDict.ContainsKey(stuID))
+                            foreach (var item in Util._SLRDict[stuID])
                             {
-                                //decimal hours = 0;
-                                //if (decimal.TryParse(item.Value, out hours))
-                                serviceLearning_dic["服務學習時數_" + (grade * 2 - 1)] = item.Value;
-                            }
-                            // 第二學期
-                            if (item.Key == schoolyear_grade_dict[grade] + "_2")
-                            {
-                                //decimal hours = 0;
-                                //if (decimal.TryParse(item.Value, out hours))
-                                serviceLearning_dic["服務學習時數_" + (grade * 2)] = item.Value;
-                            }
-                        }
-
-
-                        foreach (var item in Util._DisciplineDict[stuID])
-                        {
-                            // 第一學期
-                            if (item.Key == schoolyear_grade_dict[grade] + "_1")
-                            {
-                                foreach (var dis in item.Value)
+                                // 第一學期
+                                if (item.Key == schoolyear_grade_dict[grade] + "_1")
                                 {
-                                    discipline_dic[dis.Key + "_" + (grade * 2 - 1)] = dis.Value;
+                                    //decimal hours = 0;
+                                    //if (decimal.TryParse(item.Value, out hours))
+                                    serviceLearning_dic["服務學習時數_" + (grade * 2 - 1)] = item.Value;
                                 }
-
-                            }
-                            // 第二學期
-                            if (item.Key == schoolyear_grade_dict[grade] + "_2")
-                            {
-                                foreach (var dis in item.Value)
+                                // 第二學期
+                                if (item.Key == schoolyear_grade_dict[grade] + "_2")
                                 {
-                                    discipline_dic[dis.Key + "_" + (grade * 2)] = dis.Value;
+                                    //decimal hours = 0;
+                                    //if (decimal.TryParse(item.Value, out hours))
+                                    serviceLearning_dic["服務學習時數_" + (grade * 2)] = item.Value;
                                 }
                             }
-                        }
+
+                        if (Util._DisciplineDict.ContainsKey(stuID))
+                            foreach (var item in Util._DisciplineDict[stuID])
+                            {
+                                // 第一學期
+                                if (item.Key == schoolyear_grade_dict[grade] + "_1")
+                                {
+                                    foreach (var dis in item.Value)
+                                    {
+                                        discipline_dic[dis.Key + "_" + (grade * 2 - 1)] = dis.Value;
+                                    }
+
+                                }
+                                // 第二學期
+                                if (item.Key == schoolyear_grade_dict[grade] + "_2")
+                                {
+                                    foreach (var dis in item.Value)
+                                    {
+                                        discipline_dic[dis.Key + "_" + (grade * 2)] = dis.Value;
+                                    }
+                                }
+                            }
                     }
 
                     //foreach (string key in arStatistic_dict.Keys)
@@ -1065,29 +1066,35 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
 
                 //一般科目 科目名稱與科目編號對照表
-                Dictionary<string, Dictionary<string, int>> SubjectCourseDict = new Dictionary<string, Dictionary<string, int>>()
+                Dictionary<string, Dictionary<string, int>> SubjectCourseDict = new Dictionary<string, Dictionary<string, int>>();
+                //{
+                //    { "語文", new Dictionary<string, int>() }
+                //    , { "國語文", new Dictionary<string, int>() }
+                //    , { "英語文", new Dictionary<string, int>() }
+                //    , { "數學", new Dictionary<string, int>() }
+                //    , { "社會", new Dictionary<string, int>() }
+                //    , { "自然科學", new Dictionary<string, int>() }
+                //    , { "自然與生活科技", new Dictionary<string, int>() }
+                //    , { "藝術", new Dictionary<string, int>() }
+                //    , { "藝術與人文", new Dictionary<string, int>() }
+                //    , { "健康與體育", new Dictionary<string, int>() }
+                //    , { "綜合活動", new Dictionary<string, int>() }
+                //    , { "科技", new Dictionary<string, int>() }
+                //    , { "實用語文", new Dictionary<string, int>() }
+                //    , { "實用數學", new Dictionary<string, int>() }
+                //    , { "社會適應", new Dictionary<string, int>() }
+                //    , { "生活教育", new Dictionary<string, int>() }
+                //    , { "休閒教育", new Dictionary<string, int>() }
+                //    , { "職業教育", new Dictionary<string, int>() }
+                //    , { "體育專業", new Dictionary<string, int>() }
+                //    , { "藝術才能專長", new Dictionary<string, int>() }
+                //};
+
+                foreach (string domain in DomainList)
                 {
-                    { "語文", new Dictionary<string, int>() }
-                    , { "國語文", new Dictionary<string, int>() }
-                    , { "英語文", new Dictionary<string, int>() }
-                    , { "數學", new Dictionary<string, int>() }
-                    , { "社會", new Dictionary<string, int>() }
-                    , { "自然科學", new Dictionary<string, int>() }
-                    , { "自然與生活科技", new Dictionary<string, int>() }
-                    , { "藝術", new Dictionary<string, int>() }
-                    , { "藝術與人文", new Dictionary<string, int>() }
-                    , { "健康與體育", new Dictionary<string, int>() }
-                    , { "綜合活動", new Dictionary<string, int>() }
-                    , { "科技", new Dictionary<string, int>() }
-                    , { "實用語文", new Dictionary<string, int>() }
-                    , { "實用數學", new Dictionary<string, int>() }
-                    , { "社會適應", new Dictionary<string, int>() }
-                    , { "生活教育", new Dictionary<string, int>() }
-                    , { "休閒教育", new Dictionary<string, int>() }
-                    , { "職業教育", new Dictionary<string, int>() }
-                    , { "體育專業", new Dictionary<string, int>() }
-                    , { "藝術才能專長", new Dictionary<string, int>() }
-                };
+                    if (!SubjectCourseDict.ContainsKey(domain))
+                        SubjectCourseDict.Add(domain, new Dictionary<string, int>());
+                }
                 // 彈性課程 科目名稱 與彈性課程編號的對照
                 Dictionary<string, int> AlternativeCourseDict = new Dictionary<string, int>();
 
@@ -1249,13 +1256,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                 //紀錄等第
                                                 if (subjectLevel_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_等第" + (grade * 2 - 1)))
                                                 {
-                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_等第" + (grade * 2 - 1)] =  _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_等第" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
                                                 }
 
                                                 //紀錄原始等第
                                                 if (subjectLevel_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2 - 1)))
                                                 {
-                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2 - 1)] =  _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
                                                 }
 
                                                 //紀錄權數
@@ -1288,13 +1295,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                     //換算等第
                                                     if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_等第" + (grade * 2 - 1)))
                                                     {
-                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_等第" + (grade * 2 - 1)] =  _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_等第" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
                                                     }
 
                                                     //換算原始等第
                                                     if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2 - 1)))
                                                     {
-                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2 - 1)] =  _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
                                                     }
 
                                                     //紀錄權數
@@ -1320,7 +1327,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     //換算等第
                                     if (domainLevel_dict.ContainsKey("領域_學習領域總成績_等第_" + (grade * 2 - 1)))
                                     {
-                                        domainLevel_dict["領域_學習領域總成績_等第_" + (grade * 2 - 1)] =  _ScoreMappingConfig.ParseScoreEngName(jssr.LearnDomainScore);
+                                        domainLevel_dict["領域_學習領域總成績_等第_" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreEngName(jssr.LearnDomainScore);
                                     }
 
                                     //課程學習成績(包括彈性課程成績)
@@ -1333,7 +1340,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     //換算等第
                                     if (domainLevel_dict.ContainsKey("領域_課程學習成績_等第_" + (grade * 2 - 1)))
                                     {
-                                        domainLevel_dict["領域_課程學習成績_等第_" + (grade * 2 - 1)] =  _ScoreMappingConfig.ParseScoreEngName(jssr.CourseLearnScore);
+                                        domainLevel_dict["領域_課程學習成績_等第_" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreEngName(jssr.CourseLearnScore);
                                     }
 
 
@@ -1351,7 +1358,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                         //換算等第
                                         if (domainLevel_dict.ContainsKey("領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2)))
                                         {
-                                            domainLevel_dict["領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2)] =  _ScoreMappingConfig.ParseScoreEngName(domainscore.Value.Score);
+                                            domainLevel_dict["領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2)] = _ScoreMappingConfig.ParseScoreEngName(domainscore.Value.Score);
                                         }
 
                                         if (domainCredit_dict.ContainsKey("領域_" + domainscore.Value.Domain + "_權數_" + (grade * 2)))
@@ -1388,13 +1395,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                 //紀錄等第
                                                 if (subjectLevel_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_等第" + (grade * 2)))
                                                 {
-                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_等第" + (grade * 2)] =  _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_等第" + (grade * 2)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
                                                 }
 
                                                 //紀錄原始等第
                                                 if (subjectLevel_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2)))
                                                 {
-                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2)] =  _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
                                                 }
 
                                                 //紀錄權數
@@ -1426,13 +1433,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                     //換算等第
                                                     if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_等第" + (grade * 2)))
                                                     {
-                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_等第" + (grade * 2)] =  _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_等第" + (grade * 2)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
                                                     }
 
                                                     //換算原始等第
                                                     if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2)))
                                                     {
-                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2)] =  _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
                                                     }
 
                                                     //紀錄權數
@@ -1456,7 +1463,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     //換算等第
                                     if (domainLevel_dict.ContainsKey("領域_學習領域總成績_等第_" + (grade * 2)))
                                     {
-                                        domainLevel_dict["領域_學習領域總成績_等第_" + (grade * 2)] =  _ScoreMappingConfig.ParseScoreEngName(jssr.LearnDomainScore);
+                                        domainLevel_dict["領域_學習領域總成績_等第_" + (grade * 2)] = _ScoreMappingConfig.ParseScoreEngName(jssr.LearnDomainScore);
                                     }
 
                                     //課程學習成績(包括彈性課程成績)
@@ -1469,7 +1476,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     //換算等第
                                     if (domainLevel_dict.ContainsKey("領域_課程學習成績_等第_" + (grade * 2)))
                                     {
-                                        domainLevel_dict["領域_課程學習成績_等第_" + (grade * 2)] =  _ScoreMappingConfig.ParseScoreEngName(jssr.CourseLearnScore);
+                                        domainLevel_dict["領域_課程學習成績_等第_" + (grade * 2)] = _ScoreMappingConfig.ParseScoreEngName(jssr.CourseLearnScore);
                                     }
 
 

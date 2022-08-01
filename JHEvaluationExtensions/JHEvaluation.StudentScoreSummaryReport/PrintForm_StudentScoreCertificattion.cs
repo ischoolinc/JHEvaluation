@@ -670,7 +670,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             Dictionary<string, decimal?> domainScore_dict = new Dictionary<string, decimal?>();
             Dictionary<string, string> domainLevel_dict = new Dictionary<string, string>();
             Dictionary<string, decimal?> domainCredit_dict = new Dictionary<string, decimal?>();
-            
+
             // 科目分數、等第、權數 的對照
             Dictionary<string, decimal?> subjectScore_dict = new Dictionary<string, decimal?>();
             Dictionary<string, string> subjectLevel_dict = new Dictionary<string, string>();
@@ -990,41 +990,42 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             }
                         }
 
-                        foreach (var item in Util._SLRDict[stuID])
-                        {
-                            // 第一學期
-                            if (item.Key == schoolyear_grade_dict[grade] + "_1")
+                        if (Util._SLRDict.ContainsKey(stuID))
+                            foreach (var item in Util._SLRDict[stuID])
                             {
-                                serviceLearning_dic["服務學習時數_" + (grade * 2 - 1)] = item.Value;
-                            }
-                            // 第二學期
-                            if (item.Key == schoolyear_grade_dict[grade] + "_2")
-                            {
-                                serviceLearning_dic["服務學習時數_" + (grade * 2)] = item.Value;
-                            }
-                        }
-
-
-                        foreach (var item in Util._DisciplineDict[stuID])
-                        {
-                            // 第一學期
-                            if (item.Key == schoolyear_grade_dict[grade] + "_1")
-                            {
-                                foreach (var dis in item.Value)
+                                // 第一學期
+                                if (item.Key == schoolyear_grade_dict[grade] + "_1")
                                 {
-                                    discipline_dic[dis.Key + "_" + (grade * 2 - 1)] = dis.Value;
+                                    serviceLearning_dic["服務學習時數_" + (grade * 2 - 1)] = item.Value;
                                 }
-
-                            }
-                            // 第二學期
-                            if (item.Key == schoolyear_grade_dict[grade] + "_2")
-                            {
-                                foreach (var dis in item.Value)
+                                // 第二學期
+                                if (item.Key == schoolyear_grade_dict[grade] + "_2")
                                 {
-                                    discipline_dic[dis.Key + "_" + (grade * 2)] = dis.Value;
+                                    serviceLearning_dic["服務學習時數_" + (grade * 2)] = item.Value;
                                 }
                             }
-                        }
+
+                        if (Util._DisciplineDict.ContainsKey(stuID))
+                            foreach (var item in Util._DisciplineDict[stuID])
+                            {
+                                // 第一學期
+                                if (item.Key == schoolyear_grade_dict[grade] + "_1")
+                                {
+                                    foreach (var dis in item.Value)
+                                    {
+                                        discipline_dic[dis.Key + "_" + (grade * 2 - 1)] = dis.Value;
+                                    }
+
+                                }
+                                // 第二學期
+                                if (item.Key == schoolyear_grade_dict[grade] + "_2")
+                                {
+                                    foreach (var dis in item.Value)
+                                    {
+                                        discipline_dic[dis.Key + "_" + (grade * 2)] = dis.Value;
+                                    }
+                                }
+                            }
                     }
 
                     //foreach (string key in arStatistic_dict.Keys)
@@ -1055,29 +1056,35 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
 
                 //一般科目 科目名稱與科目編號對照表
-                Dictionary<string, Dictionary<string, int>> SubjectCourseDict = new Dictionary<string, Dictionary<string, int>>()
+                Dictionary<string, Dictionary<string, int>> SubjectCourseDict = new Dictionary<string, Dictionary<string, int>>();
+                //{
+                //    { "語文", new Dictionary<string, int>() }
+                //    , { "國語文", new Dictionary<string, int>() }
+                //    , { "英語文", new Dictionary<string, int>() }
+                //    , { "數學", new Dictionary<string, int>() }
+                //    , { "社會", new Dictionary<string, int>() }
+                //    , { "自然科學", new Dictionary<string, int>() }
+                //    , { "自然與生活科技", new Dictionary<string, int>() }
+                //    , { "藝術", new Dictionary<string, int>() }
+                //    , { "藝術與人文", new Dictionary<string, int>() }
+                //    , { "健康與體育", new Dictionary<string, int>() }
+                //    , { "綜合活動", new Dictionary<string, int>() }
+                //    , { "科技", new Dictionary<string, int>() }
+                //    , { "實用語文", new Dictionary<string, int>() }
+                //    , { "實用數學", new Dictionary<string, int>() }
+                //    , { "社會適應", new Dictionary<string, int>() }
+                //    , { "生活教育", new Dictionary<string, int>() }
+                //    , { "休閒教育", new Dictionary<string, int>() }
+                //    , { "職業教育", new Dictionary<string, int>() }
+                //    , { "體育專業", new Dictionary<string, int>() }
+                //    , { "藝術才能專長", new Dictionary<string, int>() }
+                //};
+
+                foreach (string domain in DomainList)
                 {
-                    { "語文", new Dictionary<string, int>() }
-                    , { "國語文", new Dictionary<string, int>() }
-                    , { "英語文", new Dictionary<string, int>() }
-                    , { "數學", new Dictionary<string, int>() }
-                    , { "社會", new Dictionary<string, int>() }
-                    , { "自然科學", new Dictionary<string, int>() }
-                    , { "自然與生活科技", new Dictionary<string, int>() }
-                    , { "藝術", new Dictionary<string, int>() }
-                    , { "藝術與人文", new Dictionary<string, int>() }
-                    , { "健康與體育", new Dictionary<string, int>() }
-                    , { "綜合活動", new Dictionary<string, int>() }
-                    , { "科技", new Dictionary<string, int>() }
-                    , { "實用語文", new Dictionary<string, int>() }
-                    , { "實用數學", new Dictionary<string, int>() }
-                    , { "社會適應", new Dictionary<string, int>() }
-                    , { "生活教育", new Dictionary<string, int>() }
-                    , { "休閒教育", new Dictionary<string, int>() }
-                    , { "職業教育", new Dictionary<string, int>() }
-                    , { "體育專業", new Dictionary<string, int>() }
-                    , { "藝術才能專長", new Dictionary<string, int>() }
-                };
+                    if (!SubjectCourseDict.ContainsKey(domain))
+                        SubjectCourseDict.Add(domain, new Dictionary<string, int>());
+                }
                 // 彈性課程 科目名稱 與彈性課程編號的對照
                 Dictionary<string, int> AlternativeCourseDict = new Dictionary<string, int>();
 

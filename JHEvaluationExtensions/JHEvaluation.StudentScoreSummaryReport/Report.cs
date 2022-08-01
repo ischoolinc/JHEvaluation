@@ -422,7 +422,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             string groupName = Subj.GetDomainGroup(header.Domain);
 
                             Row row = table.Rows[header.Index + 3];
-
+                            //row.Cells[0].ToTxt()
                             if (previousCellDomain == header.Domain)
                                 row.Cells[0].CellFormat.VerticalMerge = CellMerge.Previous;
                             else
@@ -471,7 +471,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     }
                                 }
                             }
-
+                            //row.Cells[0].ToTxt()
                             previousCellDomain = header.Domain;
                         }
                         #endregion
