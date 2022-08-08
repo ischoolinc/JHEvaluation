@@ -1709,7 +1709,7 @@ namespace HsinChu.StudentRecordReportVer2
                         if (urr.UpdateCode == "2")
                         {
                             row["異動紀錄" + updateRecordCount + "_日期"] = urr.UpdateDate;
-                            row["異動紀錄" + updateRecordCount + "_校名"] = "";
+                            row["異動紀錄" + updateRecordCount + "_校名"] = K12.Data.School.ChineseName;
                             row["異動紀錄" + updateRecordCount + "_類別"] = "畢業";
                             row["異動紀錄" + updateRecordCount + "_核准日期"] = urr.ADDate;
                             row["異動紀錄" + updateRecordCount + "_核准文號"] = urr.ADNumber;
