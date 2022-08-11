@@ -373,6 +373,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         decimal totalEffort = 0;
                         int chiHasMakupCount = 0;
                         int engHasMakupCount = 0;
+                        int localHasMakupCount = 0;
 
                         decimal weight = 0;
                         decimal period = 0;
@@ -380,7 +381,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         // 先計算國語文與英語有幾個
                         foreach (string key in jscores)
                         {
-                            if (jscores[key].Domain == "國語文" || jscores[key].Domain == "英語")
+                            if (jscores[key].Domain == "國語文" || jscores[key].Domain == "英語" || jscores[key].Domain == "本土語文")
                             {
                                 var subScore = jscores[key];
 
@@ -393,6 +394,10 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                     if (subScore.Domain == "英語")
                                     {
                                         engHasMakupCount++;
+                                    }
+                                    if (subScore.Domain == "本土語文")
+                                    {
+                                        localHasMakupCount++;
                                     }
                                 }
                             }
@@ -421,12 +426,14 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         // 語文領域是由科目成績來，科目有(國語文與英語)補考成績，由這2個加權平均，如果只有補考其中一科目，補考成績由該科目補考成績與另一科原始成績做加權平均算出語文領域補考成績。只要有語文領域成績是有科目領域國語文與英語加權平均計算過來的結果。
 
                         // 2022/2/22 高雄小組[1110208] 要求語文領域補考成績是採用「科目補考」，所以語文領域補考分數 是 科目的擇優「成績」加權平均計算，其他領域因都是採用「領域補考」的方式，就不須更動。
-                        decimal? langScore = null, chiScore = null, engScore = null, chiScoreOrigin = null, engScoreOrigin = null, chiMakeupScore = null, engMakeupScore = null;
+                        // 2022/8/1 高雄小組要求將「本土語文」也納入語文領域。
 
+                        decimal? langScore = null, chiScore = null, engScore = null, chiScoreOrigin = null, engScoreOrigin = null, chiMakeupScore = null, engMakeupScore = null;
+                        decimal? localScore = null, localScoreOrigin = null, localMakeupScore = null;
 
                         foreach (string key in jscores)
                         {
-                            if (jscores[key].Domain == "國語文" || jscores[key].Domain == "英語")
+                            if (jscores[key].Domain == "國語文" || jscores[key].Domain == "英語" || jscores[key].Domain == "本土語文")
                             {
                                 var subScore = jscores[key];
 
@@ -516,6 +523,47 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                         }
                                     }
 
+                                    if (subScore.Domain == "本土語文")
+                                    {
+                                        if (subScore.Value.HasValue)
+                                        {
+                                            if (localScore.HasValue == false)
+                                                localScore = 0;
+
+                                            localScore += subScore.Value.Value * subScore.Weight.Value;
+                                        }
+
+
+                                        if (subScore.ScoreOrigin.HasValue)
+                                        {
+                                            if (localScoreOrigin.HasValue == false)
+                                                localScoreOrigin = 0;
+
+                                            localScoreOrigin += subScore.ScoreOrigin.Value * subScore.Weight.Value;
+                                        }
+
+
+                                        // 有補考，有補考值使用補考，沒有使用原始
+                                        if (localHasMakupCount > 0)
+                                        {
+                                            if (localMakeupScore.HasValue == false)
+                                                localMakeupScore = 0;
+
+                                            if (subScore.ScoreMakeup.HasValue)
+                                                localMakeupScore += subScore.ScoreMakeup.Value * subScore.Weight.Value;
+                                            else
+                                                localMakeupScore += subScore.ScoreOrigin.Value * subScore.Weight.Value;
+                                        }
+                                        else
+                                        {
+                                            if (localMakeupScore.HasValue == false)
+                                                localMakeupScore = 0;
+
+                                            if (subScore.ScoreMakeup.HasValue)
+                                                localMakeupScore += subScore.ScoreMakeup.Value * subScore.Weight.Value;
+                                        }
+                                    }
+
                                     if (subScore.Effort.HasValue)
                                         totalEffort += subScore.Effort.Value * subScore.Weight.Value;
                                 }
@@ -531,8 +579,12 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             decimal weightValueAvg = rule.ParseDomainScore(total / weight);
                             //     decimal weightOriginAvg = rule.ParseDomainScore(totalOrigin / weight);
 
+
+                            // 領域成績 國語文、英語、本土語文擇優
+                            if (chiScore.HasValue && engScore.HasValue && localScore.HasValue)
+                                langScore = rule.ParseDomainScore((chiScore.Value + engScore.Value + localScore.Value) / weight);
                             // 領域成績國語文英語擇優
-                            if (chiScore.HasValue && engScore.HasValue)
+                            else if (chiScore.HasValue && engScore.HasValue)
                                 langScore = rule.ParseDomainScore((chiScore.Value + engScore.Value) / weight);
 
 
@@ -556,7 +608,11 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             }
 
                             //先將算好的成績帶入領域成績,後面的擇優判斷才不會有問題
-                            if (chiScoreOrigin.HasValue && engScoreOrigin.HasValue)
+                            if (chiScoreOrigin.HasValue && engScoreOrigin.HasValue && localScoreOrigin.HasValue)
+                            {
+                                dscore.ScoreOrigin = rule.ParseDomainScore((chiScoreOrigin.Value + engScoreOrigin.Value + localScoreOrigin.Value) / weight);
+                            }
+                            else if (chiScoreOrigin.HasValue && engScoreOrigin.HasValue)
                             {
                                 dscore.ScoreOrigin = rule.ParseDomainScore((chiScoreOrigin.Value + engScoreOrigin.Value) / weight);
                             }
@@ -571,6 +627,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                             if (engMakeupScore.HasValue && engMakeupScore.Value == 0)
                                 engMakeupScore = null;
+
+                            if (localMakeupScore.HasValue && localMakeupScore.Value == 0)
+                                localMakeupScore = null;
 
                             #region 2020/9/25 的語文領域補考成績處理方式
                             //// 補考成績
@@ -611,7 +670,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             #endregion
 
                             #region 2022/2/22 高雄小組[1110208] 語文領域補考成績
-                            if (chiMakeupScore.HasValue || engMakeupScore.HasValue)
+                            if (chiMakeupScore.HasValue || engMakeupScore.HasValue || localMakeupScore.HasValue)
                                 dscore.ScoreMakeup = langScore;
                             else
                                 dscore.ScoreMakeup=null;
@@ -703,6 +762,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
 
                     }
                     #endregion
+
+
                     //清除不應該存在領域成績
                     //if (clearDomainScore)
                     if (setting.DomainScoreClear)
