@@ -91,6 +91,7 @@ namespace KaoHsiungExamScore_JH
                 // 預設
                 DomainNameList.Add("國語文");
                 DomainNameList.Add("英語");
+                DomainNameList.Add("本土語文");
                 DomainNameList.Add("數學");
                 DomainNameList.Add("社會");
                 DomainNameList.Add("自然與生活科技");
@@ -461,7 +462,114 @@ namespace KaoHsiungExamScore_JH
                     builder.EndTable();
                     builder.Writeln();
                     builder.Writeln();
-                }   
+                }
+
+                // 領域_定期年級組
+                {
+                    builder.Writeln("領域年級組距(定期)");
+
+                    builder.StartTable();
+                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                    builder.InsertCell();
+                    builder.Write("領域名稱");
+                    builder.InsertCell();
+                    builder.Write("<10");
+                    builder.InsertCell();
+                    builder.Write("≧10, <19");
+                    builder.InsertCell();
+                    builder.Write("≧20, <29");
+                    builder.InsertCell();
+                    builder.Write("≧30, <39");
+                    builder.InsertCell();
+                    builder.Write("≧40, <49");
+                    builder.InsertCell();
+                    builder.Write("≧50, <59");
+                    builder.InsertCell();
+                    builder.Write("≧60, <69");
+                    builder.InsertCell();
+                    builder.Write("≧70, <79");
+                    builder.InsertCell();
+                    builder.Write("≧80, <89");
+                    builder.InsertCell();
+                    builder.Write("≧90, <99");
+                    builder.InsertCell();
+                    builder.Write("≧100");
+                    builder.EndRow();
+
+                    foreach (string domainName in DomainNameList)
+                    {
+                        string sName1 = domainName;
+                        builder.InsertCell();
+                        builder.Write(sName1);
+
+                        foreach (string level in new string[] { "R0_9", "R10_19", "R20_29", "R30_39", "R40_49", "R50_59", "R60_69", "R70_79", "R80_89", "R90_99", "R100_u", })
+                        {
+                            sName1 = domainName +  "_定期年級＿" + level;
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + sName1 + " \\* MERGEFORMAT ", "«SR" + "»");
+                        }
+                        builder.EndRow();
+                    }
+                    builder.EndTable();
+                    builder.Writeln();
+                    builder.Writeln();
+                }
+
+                // 領域_科目定期年級組距
+                foreach (string domainName in DomainNameList)
+                {
+                    builder.StartTable();
+                    builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+                    builder.Writeln(domainName + "領域科目年級組距(定期)");
+                    builder.InsertCell();
+                    builder.Write("科目名稱");
+                    builder.InsertCell();
+                    builder.Write("<10");
+                    builder.InsertCell();
+                    builder.Write("≧10, <19");
+                    builder.InsertCell();
+                    builder.Write("≧20, <29");
+                    builder.InsertCell();
+                    builder.Write("≧30, <39");
+                    builder.InsertCell();
+                    builder.Write("≧40, <49");
+                    builder.InsertCell();
+                    builder.Write("≧50, <59");
+                    builder.InsertCell();
+                    builder.Write("≧60, <69");
+                    builder.InsertCell();
+                    builder.Write("≧70, <79");
+                    builder.InsertCell();
+                    builder.Write("≧80, <89");
+                    builder.InsertCell();
+                    builder.Write("≧90, <99");
+                    builder.InsertCell();
+                    builder.Write("≧100");
+                    builder.EndRow();
+                    // 科目數
+                    for (int sj = 1; sj <= 10; sj++)
+                    {
+                        string sName1 = domainName + "_科目名稱" + sj;
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + sName1 + " \\* MERGEFORMAT ", "«SN" + "»");
+
+                        foreach (string level in new string[] { "R0_9", "R10_19", "R20_29", "R30_39", "R40_49", "R50_59", "R60_69", "R70_79", "R80_89", "R90_99", "R100_u", })
+                        {
+                            sName1 = domainName + "_科目" + sj + "_定期年級＿"+ level;
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + sName1 + " \\* MERGEFORMAT ", "«SR" + "»");
+                        }
+
+                        builder.EndRow();
+                    }
+                    builder.EndTable();
+                    builder.Writeln();
+                    builder.Writeln();
+                }
+
+
                 tempDoc.Save(path, SaveFormat.Doc);
                 #endregion
 

@@ -982,7 +982,8 @@ namespace KaoHsiungExamScore_JH
             subjLi.Add("科目平時成績");
             subjLi.Add("科目文字描述");
 
-
+            List<string> subjLevelColList = new List<string>();
+            List<string> domainLevelColList = new List<string>();
             List<string> subjColList = new List<string>();
             foreach (string dName in Global.DomainNameList)
             {
@@ -993,6 +994,16 @@ namespace KaoHsiungExamScore_JH
                         string key = dName + "_" + sName + i;
                         subjColList.Add(key);
                     }
+
+                    foreach (string level in li2)
+                    {
+                        subjLevelColList.Add(dName + "_科目" + i + "_定期年級＿" + level);
+                    }
+                }
+
+                foreach (string level in li2)
+                {
+                    domainLevelColList.Add(dName + "_定期年級＿" + level);
                 }
             }
 
@@ -1075,6 +1086,7 @@ namespace KaoHsiungExamScore_JH
             Document doc = new Document();
             DataTable dtAtt = new DataTable();
             List<Document> docList = new List<Document>();
+
             // 填值
             foreach (StudentRecord StudRec in StudRecList)
             {
@@ -1221,6 +1233,15 @@ namespace KaoHsiungExamScore_JH
                 foreach (string colName in subjColList)
                     dt.Columns.Add(colName);
 
+                // 新增科目年級組距欄位
+                foreach (string colName in subjLevelColList)
+                    dt.Columns.Add(colName);
+
+                // 新增領域年級組距欄位
+                foreach (string colName in domainLevelColList)
+                    dt.Columns.Add(colName);
+
+
                 // 新增領域成績欄位
                 foreach (string dName in Global.DomainNameList)
                 {
@@ -1308,7 +1329,7 @@ namespace KaoHsiungExamScore_JH
                     foreach (string str in Global.GetDisciplineNameList())
                     {
                         string key = str + "區間統計";
-                            row[key] = 0;
+                        row[key] = 0;
                     }
                 }
 
@@ -1376,6 +1397,37 @@ namespace KaoHsiungExamScore_JH
                                     break;
                             }
                         }
+
+                        // 科目組距用
+                        List<DAO.SubjectRangeCount.SubjectRangeType> subjectRankLevelList = new List<DAO.SubjectRangeCount.SubjectRangeType>();
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R100_u);
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R90_99);
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R80_89);
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R70_79);
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R60_69);
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R50_59);
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R40_49);
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R30_39);
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R20_29);
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R10_19);
+                        subjectRankLevelList.Add(DAO.SubjectRangeCount.SubjectRangeType.R0_9);
+
+                        if (StudRec.Class.GradeYear.HasValue)
+                        {
+                            if (subjGradeDict.ContainsKey(StudRec.Class.GradeYear.Value))
+                                foreach (KeyValuePair<string, DAO.SubjectRangeCount> data in subjGradeDict[StudRec.Class.GradeYear.Value])
+                                {
+                                    if (ess.SubjectName == data.Key)
+                                        foreach (DAO.SubjectRangeCount.SubjectRangeType dtType in subjectRankLevelList)
+                                        {
+                                            if (StudRec.Class.GradeYear.HasValue)
+                                            {
+                                                string key = ddname + "_科目" + subj + "_定期年級＿" + dtType.ToString();
+                                                row[key] = data.Value.GetRankCount(dtType);
+                                            }
+                                        }
+                                }
+                        }
                     }
 
                     // 領域
@@ -1407,6 +1459,37 @@ namespace KaoHsiungExamScore_JH
                         if (eds.AssignmentScore.HasValue)
                             row[keya] = eds.AssignmentScore.Value;
 
+
+                        //領域組距用
+                        List<DAO.DomainRangeCount.DomainRangeType> domainRankLevelList = new List<DAO.DomainRangeCount.DomainRangeType>();
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R100_u);
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R90_99);
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R80_89);
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R70_79);
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R60_69);
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R50_59);
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R40_49);
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R30_39);
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R20_29);
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R10_19);
+                        domainRankLevelList.Add(DAO.DomainRangeCount.DomainRangeType.R0_9);
+
+                        if (StudRec.Class.GradeYear.HasValue)
+                        {
+                            if (dmGradeDict.ContainsKey(StudRec.Class.GradeYear.Value))
+                                foreach (KeyValuePair<string, DAO.DomainRangeCount> data in dmGradeDict[StudRec.Class.GradeYear.Value])
+                                {
+                                    if (eds.DomainName == data.Key)
+                                        foreach (DAO.DomainRangeCount.DomainRangeType dtType in domainRankLevelList)
+                                        {
+                                            if (StudRec.Class.GradeYear.HasValue)
+                                            {
+                                                string levelKey = eds.DomainName + "_定期年級＿" + dtType.ToString();
+                                                row[levelKey] = data.Value.GetRankCount(dtType);
+                                            }
+                                        }
+                                }
+                        }
                     }
                 }
 
@@ -2393,7 +2476,7 @@ namespace KaoHsiungExamScore_JH
                     //(table.ParentNode.ParentNode as Row).RowFormat.LeftIndent = 0;
                     double p = _builder.RowFormat.LeftIndent;
                     _builder.RowFormat.HeightRule = HeightRule.Auto; // [ischoolkingdom] Vicky新增，個人評量成績單建議能增加可列印數量(高雄國中)，調整 缺曠紀錄表格外觀
-                  //  _builder.RowFormat.Height = 34.0;
+                                                                     //  _builder.RowFormat.Height = 34.0;
                     _builder.RowFormat.Alignment = RowAlignment.Center;
                     _builder.RowFormat.LeftIndent = 0;
 
