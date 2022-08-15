@@ -860,12 +860,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     PrintStudents.Add(sr_dict[stuID]);
                 }
 
-                //學期歷程
+                //學期歷程 //相容7、8、9
                 if (shr_dict.ContainsKey(stuID))
                 {
                     foreach (var item in shr_dict[stuID].SemesterHistoryItems)
                     {
-                        if (item.GradeYear == 1)
+                        if (item.GradeYear == 1 || item.GradeYear == 7)
                         {
                             row["學年度1"] = item.SchoolYear;
                             row["年級1_班級"] = item.ClassName;
@@ -885,7 +885,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             }
 
                         }
-                        if (item.GradeYear == 2)
+                        if (item.GradeYear == 2 || item.GradeYear == 8)
                         {
                             row["學年度2"] = item.SchoolYear;
                             row["年級2_班級"] = item.ClassName;
@@ -904,7 +904,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                             }
                         }
-                        if (item.GradeYear == 3)
+                        if (item.GradeYear == 3 || item.GradeYear == 9)
                         {
                             row["學年度3"] = item.SchoolYear;
                             row["年級3_班級"] = item.ClassName;
