@@ -198,7 +198,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 builder.Write("三下成績");
                 builder.InsertCell();
                 builder.Write("三下等第");
+                builder.InsertCell();
+                builder.Write("平均成績");
+                builder.InsertCell();
+                builder.Write("平均成績等第");
                 builder.EndRow();
+
                 foreach (string domain in DomainList)
                 {
                     if (domain == "彈性課程")
@@ -228,6 +233,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
                         builder.InsertCell();
                         builder.InsertField("MERGEFIELD " + levelKey + " \\* MERGEFORMAT ", "«D" + i + "»");
                     }
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "領域_" + domain + "_平均成績" + " \\* MERGEFORMAT ", "«SA»");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD " + "領域_" + domain + "_平均成績等第" + " \\* MERGEFORMAT ", "«LA»");
 
                     builder.EndRow();
                 }
@@ -253,6 +262,11 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     builder.InsertField("MERGEFIELD " + levelKey + " \\* MERGEFORMAT ", "«D" + i + "»");
 
                 }
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + "領域_" + "學習領域總平均成績" + "_成績" + " \\* MERGEFORMAT ", "«SA»");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD " + "領域_" + "學習領域總平均成績" + "_等第" + " \\* MERGEFORMAT ", "«LA»");
+
                 builder.EndRow();
                 builder.EndTable();
                 #endregion
@@ -303,7 +317,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     builder.Write("三下成績");
                     builder.InsertCell();
                     builder.Write("三下等第");
+                    builder.InsertCell();
+                    builder.Write("平均成績");
+                    builder.InsertCell();
+                    builder.Write("平均成績等第");
                     builder.EndRow();
+
                     //1上
                     for (int i = 1; i <= 6; i++)
                     {
@@ -320,6 +339,11 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             builder.InsertCell();
                             builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_等第" + a + " \\* MERGEFORMAT ", "«L" + a + "»");
                         }
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_平均成績" + " \\* MERGEFORMAT ", "«SA»");
+                        builder.InsertCell();
+                        builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_平均成績等第" + " \\* MERGEFORMAT ", "«LA»");
+
                         builder.EndRow();
                     }
 
@@ -339,6 +363,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                 builder.InsertCell();
                                 builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_等第" + a + " \\* MERGEFORMAT ", "«L" + a + "»");
                             }
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_平均成績" + " \\* MERGEFORMAT ", "«SA»");
+                            builder.InsertCell();
+                            builder.InsertField("MERGEFIELD " + domain + "_科目" + i + "_平均成績等第" + " \\* MERGEFORMAT ", "«LA»");
 
                             builder.EndRow();
 

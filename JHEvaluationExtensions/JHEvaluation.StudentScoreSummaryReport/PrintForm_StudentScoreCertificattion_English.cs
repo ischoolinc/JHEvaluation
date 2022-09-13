@@ -347,6 +347,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     table.Columns.Add("領域_" + domain + "_等第_" + i);
                     table.Columns.Add("領域_" + domain + "_權數_" + i);
                 }
+                table.Columns.Add("領域_" + domain + "_平均成績");
+                table.Columns.Add("領域_" + domain + "_平均成績等第");
             }
 
             for (int i = 1; i <= 6; i++)
@@ -354,6 +356,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 table.Columns.Add("領域_學習領域總成績_成績_" + i);
                 table.Columns.Add("領域_學習領域總成績_等第_" + i);
             }
+            table.Columns.Add("領域_學習領域總平均成績_成績");
+            table.Columns.Add("領域_學習領域總平均成績_等第");
             #endregion
 
             #region 科目成績
@@ -371,6 +375,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
                         table.Columns.Add(domain + "_科目" + a + "_原始成績" + i);
                         table.Columns.Add(domain + "_科目" + a + "_原始等第" + i);
                     }
+                    table.Columns.Add(domain + "_科目" + a + "_平均成績");
+                    table.Columns.Add(domain + "_科目" + a + "_平均成績等第");
                 }
                 if (domain == "彈性課程")
                     for (int a = 7; a <= 18; a++)
@@ -384,6 +390,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             table.Columns.Add("彈性課程_科目" + a + "_原始成績" + i);
                             table.Columns.Add("彈性課程_科目" + a + "_原始等第" + i);
                         }
+                        table.Columns.Add("彈性課程_科目" + a + "_平均成績");
+                        table.Columns.Add("彈性課程_科目" + a + "_平均成績等第");
                     }
             }
             #endregion
@@ -573,6 +581,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 if (domain == "彈性課程")
                     continue;
                 domainScoreType_list.Add("領域_" + domain + "_成績_");
+                domainScoreType_list.Add("領域_" + domain + "_平均成績");
             }
             //domainScoreType_list.Add("領域_語文_成績_");
             //domainScoreType_list.Add("領域_數學_成績_");
@@ -584,6 +593,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             //domainScoreType_list.Add("領域_健康與體育_成績_");
             //domainScoreType_list.Add("領域_綜合活動_成績_");
             domainScoreType_list.Add("領域_學習領域總成績_成績_");
+            domainScoreType_list.Add("領域_學習領域總平均成績_成績");
             #endregion
 
             #region 整理所有的領域_OO_等第
@@ -594,6 +604,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 if (domain == "彈性課程")
                     continue;
                 domainLevelType_list.Add("領域_" + domain + "_等第_");
+                domainLevelType_list.Add("領域_" + domain + "_平均成績等第");
             }
             //domainLevelType_list.Add("領域_語文_等第_");
             //domainLevelType_list.Add("領域_數學_等第_");
@@ -605,6 +616,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             //domainLevelType_list.Add("領域_健康與體育_等第_");
             //domainLevelType_list.Add("領域_綜合活動_等第_");
             domainLevelType_list.Add("領域_學習領域總成績_等第_");
+            domainLevelType_list.Add("領域_學習領域總平均成績_等第");
             #endregion
 
             #region 整理所有的領域_OO_權數
@@ -628,6 +640,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 {
                     subjectScoreType_list.Add(domain + "_科目" + a + "_成績");
                     subjectScoreType_list.Add(domain + "_科目" + a + "_原始成績");
+                    subjectScoreType_list.Add(domain + "_科目" + a + "_平均成績");
                 }
             }
             #endregion
@@ -639,6 +652,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 {
                     subjectLevelType_list.Add(domain + "_科目" + a + "_等第");
                     subjectLevelType_list.Add(domain + "_科目" + a + "_原始等第");
+                    subjectLevelType_list.Add(domain + "_科目" + a + "_平均成績等第");
                 }
             #endregion
 
@@ -724,6 +738,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 // 建立領域成績 對照字典
                 foreach (string dst in domainScoreType_list)
                 {
+                    if (dst.Contains("平均成績"))
+                    {
+                        domainScore_dict.Add(dst, null);
+                        continue;
+                    }
+
                     for (int i = 1; i <= 6; i++)
                     {
                         domainScore_dict.Add(dst + i, null);
@@ -733,6 +753,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 // 建立領域等第 對照字典
                 foreach (string dlt in domainLevelType_list)
                 {
+                    if (dlt.Contains("平均成績"))
+                    {
+                        domainLevel_dict.Add(dlt, null);
+                        continue;
+                    }
+
                     for (int i = 1; i <= 6; i++)
                     {
                         domainLevel_dict.Add(dlt + i, null);
@@ -751,6 +777,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 // 建立科目成績 對照字典
                 foreach (string sst in subjectScoreType_list)
                 {
+                    if (sst.Contains("平均成績"))
+                    {
+                        subjectScore_dict.Add(sst, null);
+                        continue;
+                    }
+
                     for (int i = 1; i <= 6; i++)
                     {
                         subjectScore_dict.Add(sst + i, null);
@@ -760,6 +792,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 // 建立科目等第 對照字典
                 foreach (string slt in subjectLevelType_list)
                 {
+                    if (slt.Contains("平均成績"))
+                    {
+                        subjectLevel_dict.Add(slt, null);
+                        continue;
+                    }
+
                     for (int i = 1; i <= 6; i++)
                     {
                         subjectLevel_dict.Add(slt + i, null);
@@ -1193,6 +1231,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     }
                 }
 
+                Dictionary<string, List<decimal>> domainScoreDic = new Dictionary<string, List<decimal>>();
+                Dictionary<string, List<decimal>> subjectScoreDic = new Dictionary<string, List<decimal>>();
+                Dictionary<string, List<decimal>> learmingDomainScoreDic = new Dictionary<string, List<decimal>>();
+
                 if (jssr_dict.ContainsKey(stuID))
                 {
                     for (int grade = 1; grade <= 3; grade++)
@@ -1206,6 +1248,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     //領域
                                     foreach (var domainscore in jssr.Domains)
                                     {
+                                        // 紀錄成績以計算平均成績
+                                        if (!domainScoreDic.ContainsKey("領域_" + domainscore.Value.Domain))
+                                        {
+                                            domainScoreDic.Add("領域_" + domainscore.Value.Domain, new List<decimal>());
+                                        }
+                                        domainScoreDic["領域_" + domainscore.Value.Domain].Add(domainscore.Value.Score.Value);
+
                                         //紀錄成績
                                         if (domainScore_dict.ContainsKey("領域_" + domainscore.Value.Domain + "_成績_" + (grade * 2 - 1)))
                                         {
@@ -1239,6 +1288,14 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                             if (AlternativeCourseDict.ContainsKey(subjectscore.Value.Subject))
                                             {
                                                 AlternativeCourse = AlternativeCourseDict[subjectscore.Value.Subject];
+
+                                                // 紀錄成績以計算平均成績
+                                                if (!subjectScoreDic.ContainsKey("彈性課程_科目" + AlternativeCourse))
+                                                {
+                                                    subjectScoreDic.Add("彈性課程_科目" + AlternativeCourse, new List<decimal>());
+                                                }
+                                                subjectScoreDic["彈性課程_科目" + AlternativeCourse].Add(subjectscore.Value.Score.Value);
+
 
                                                 //紀錄成績//彈性課程_科目4_成績3
                                                 if (subjectScore_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_成績" + (grade * 2 - 1)))
@@ -1280,6 +1337,14 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                 {
                                                     SubjectCourseNum = SubjectCourseDict[subjectscore.Value.Domain][subjectscore.Value.Subject];
 
+                                                    // 紀錄成績以計算平均成績
+                                                    if (!subjectScoreDic.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum))
+                                                    {
+                                                        subjectScoreDic.Add(subjectscore.Value.Domain + "_科目" + SubjectCourseNum, new List<decimal>());
+                                                    }
+                                                    subjectScoreDic[subjectscore.Value.Domain + "_科目" + SubjectCourseNum].Add(subjectscore.Value.Score.Value);
+
+
                                                     //紀錄成績
                                                     if (subjectScore_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_成績" + (grade * 2 - 1)))
                                                     {
@@ -1318,6 +1383,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     }
 
                                     //學期學習領域(七大)成績(不包括彈性課程成績)
+                                    // 紀錄成績以計算平均成績
+                                    if (!learmingDomainScoreDic.ContainsKey("領域_學習領域總平均成績"))
+                                    {
+                                        learmingDomainScoreDic.Add("領域_學習領域總平均成績", new List<decimal>());
+                                    }
+                                    learmingDomainScoreDic["領域_學習領域總平均成績"].Add(jssr.LearnDomainScore.Value);
+
                                     //紀錄成績
                                     if (domainScore_dict.ContainsKey("領域_學習領域總成績_成績_" + (grade * 2 - 1)))
                                     {
@@ -1350,6 +1422,14 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     //領域
                                     foreach (var domainscore in jssr.Domains)
                                     {
+                                        // 紀錄成績以計算平均成績
+                                        if (!domainScoreDic.ContainsKey("領域_" + domainscore.Value.Domain))
+                                        {
+                                            domainScoreDic.Add("領域_" + domainscore.Value.Domain, new List<decimal>());
+                                        }
+                                        domainScoreDic["領域_" + domainscore.Value.Domain].Add(domainscore.Value.Score.Value);
+
+                                        //紀錄成績
                                         if (domainScore_dict.ContainsKey("領域_" + domainscore.Value.Domain + "_成績_" + (grade * 2)))
                                         {
                                             domainScore_dict["領域_" + domainscore.Value.Domain + "_成績_" + (grade * 2)] = domainscore.Value.Score;
@@ -1380,6 +1460,14 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                             if (AlternativeCourseDict.ContainsKey(subjectscore.Value.Subject))
                                             {
                                                 AlternativeCourse = AlternativeCourseDict[subjectscore.Value.Subject];
+
+                                                // 紀錄成績以計算平均成績
+                                                if (!subjectScoreDic.ContainsKey("彈性課程_科目" + AlternativeCourse))
+                                                {
+                                                    subjectScoreDic.Add("彈性課程_科目" + AlternativeCourse, new List<decimal>());
+                                                }
+                                                subjectScoreDic["彈性課程_科目" + AlternativeCourse].Add(subjectscore.Value.Score.Value);
+
                                                 //紀錄成績
                                                 if (subjectScore_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_成績" + (grade * 2)))
                                                 {
@@ -1418,6 +1506,14 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                 if (SubjectCourseDict[subjectscore.Value.Domain].ContainsKey(subjectscore.Value.Subject))
                                                 {
                                                     SubjectCourseNum = SubjectCourseDict[subjectscore.Value.Domain][subjectscore.Value.Subject];
+
+                                                    // 紀錄成績以計算平均成績
+                                                    if (!subjectScoreDic.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum))
+                                                    {
+                                                        subjectScoreDic.Add(subjectscore.Value.Domain + "_科目" + SubjectCourseNum, new List<decimal>());
+                                                    }
+                                                    subjectScoreDic[subjectscore.Value.Domain + "_科目" + SubjectCourseNum].Add(subjectscore.Value.Score.Value);
+
                                                     //紀錄成績
                                                     if (subjectScore_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_成績" + (grade * 2)))
                                                     {
@@ -1454,6 +1550,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     }
 
                                     //學期學習領域(七大)成績
+                                    // 紀錄成績以計算平均成績
+                                    if (!learmingDomainScoreDic.ContainsKey("領域_學習領域總平均成績"))
+                                    {
+                                        learmingDomainScoreDic.Add("領域_學習領域總平均成績", new List<decimal>());
+                                    }
+                                    learmingDomainScoreDic["領域_學習領域總平均成績"].Add(jssr.LearnDomainScore.Value);
+
                                     //紀錄成績
                                     if (domainScore_dict.ContainsKey("領域_學習領域總成績_成績_" + (grade * 2)))
                                     {
@@ -1484,6 +1587,27 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             }
                         }
 
+                    }
+
+                    foreach (var domainScore in domainScoreDic)
+                    {
+                        decimal avgScore = Math.Round((domainScore.Value.Sum(x => x) / domainScore.Value.Count), 2);
+                        domainScore_dict[domainScore.Key + "_平均成績"] = avgScore;
+                        domainLevel_dict[domainScore.Key + "_平均成績等第"] = _ScoreMappingConfig.ParseScoreName(avgScore);
+                    }
+
+                    foreach (var subjetScore in subjectScoreDic)
+                    {
+                        decimal avgScore = Math.Round((subjetScore.Value.Sum(x => x) / subjetScore.Value.Count), 2);
+                        subjectScore_dict[subjetScore.Key + "_平均成績"] = avgScore;
+                        subjectLevel_dict[subjetScore.Key + "_平均成績等第"] = _ScoreMappingConfig.ParseScoreName(avgScore);
+                    }
+
+                    foreach (var learningDomainScore in learmingDomainScoreDic)
+                    {
+                        decimal avgScore = Math.Round((learningDomainScore.Value.Sum(x => x) / learningDomainScore.Value.Count), 2);
+                        subjectScore_dict[learningDomainScore.Key + "_成績"] = avgScore;
+                        subjectLevel_dict[learningDomainScore.Key + "_等第"] = _ScoreMappingConfig.ParseScoreName(avgScore);
                     }
 
                     // 填領域分數

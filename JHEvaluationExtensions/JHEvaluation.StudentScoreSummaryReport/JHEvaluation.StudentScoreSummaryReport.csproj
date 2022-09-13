@@ -147,6 +147,7 @@
     </Reference>
     <Reference Include="InternationalNumericFormatter">
       <HintPath>Library\InternationalNumericFormatter.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JHEvaluation.ScoreCalculation, Version=1.0.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -185,6 +186,7 @@
     </Reference>
     <Reference Include="ReportHelper">
       <HintPath>Library\ReportHelper.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
