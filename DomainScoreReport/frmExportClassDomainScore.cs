@@ -58,8 +58,6 @@ namespace DomainScoreReport
 
         private void frmExportClassDomainScore_Load(object sender, EventArgs e)
         {
-
-
             // 讀取樣板
             Stream stream = new MemoryStream(Properties.Resources.ClassDomainScore_template);
             docTemplate = new Document(stream);
@@ -89,6 +87,8 @@ namespace DomainScoreReport
                 data.ClassIDs = string.Join(",", listClassID);
 
                 bgWorker.RunWorkerAsync(data);
+
+                this.Close();
             }
         }
 
@@ -496,7 +496,10 @@ namespace DomainScoreReport
                     sr.OriginScore = "" + row["原始成績"];
                     sr.Power = "" + row["權數"];
 
-                    dicClassStuDomainScore[classID][studentID].Add(domain, sr);
+                    if (!dicClassStuDomainScore[classID][studentID].ContainsKey(domain))
+                    {
+                        dicClassStuDomainScore[classID][studentID].Add(domain, sr);
+                    }
                     // 班級資料
                     if (!dicClassNameByID.ContainsKey(classID))
                     {

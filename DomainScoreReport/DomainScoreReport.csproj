@@ -44,6 +44,12 @@
     <Compile Include="frmExportSchoolDomainScore.Designer.cs">
       <DependentUpon>frmExportSchoolDomainScore.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmExportStudentDomainScore.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmExportStudentDomainScore.Designer.cs">
+      <DependentUpon>frmExportStudentDomainScore.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -150,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmExportSchoolDomainScore.resx">
       <DependentUpon>frmExportSchoolDomainScore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmExportStudentDomainScore.resx">
+      <DependentUpon>frmExportStudentDomainScore.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

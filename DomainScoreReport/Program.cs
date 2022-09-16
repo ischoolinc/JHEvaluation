@@ -20,7 +20,7 @@ namespace DomainScoreReport
                 {
                     if (NLDPanels.Student.SelectedSource.Count > 0)
                     {
-                        (new ExportStudentDomainScore(NLDPanels.Student.SelectedSource)).Export();
+                        (new frmExportStudentDomainScore(NLDPanels.Student.SelectedSource)).Show();
                     }
                     else
                     {

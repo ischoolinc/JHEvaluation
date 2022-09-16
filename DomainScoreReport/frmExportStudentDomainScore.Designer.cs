@@ -1,6 +1,6 @@
 ﻿namespace DomainScoreReport
 {
-    partial class frmExportClassDomainScore
+    partial class frmExportStudentDomainScore
     {
         /// <summary>
         /// Required designer variable.
@@ -28,36 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnExport = new DevComponents.DotNetBar.ButtonX();
             this.btnLeave = new DevComponents.DotNetBar.ButtonX();
+            this.btnExport = new DevComponents.DotNetBar.ButtonX();
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.SuspendLayout();
-            // 
-            // btnExport
-            // 
-            this.btnExport.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnExport.BackColor = System.Drawing.Color.Transparent;
-            this.btnExport.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExport.Location = new System.Drawing.Point(62, 72);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(75, 23);
-            this.btnExport.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnExport.TabIndex = 2;
-            this.btnExport.Text = "列印";
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // btnLeave
             // 
             this.btnLeave.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnLeave.BackColor = System.Drawing.Color.Transparent;
             this.btnLeave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnLeave.Location = new System.Drawing.Point(159, 72);
+            this.btnLeave.Location = new System.Drawing.Point(163, 70);
             this.btnLeave.Name = "btnLeave";
             this.btnLeave.Size = new System.Drawing.Size(75, 23);
             this.btnLeave.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnLeave.TabIndex = 3;
+            this.btnLeave.TabIndex = 5;
             this.btnLeave.Text = "取消";
             this.btnLeave.Click += new System.EventHandler(this.btnLeave_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnExport.BackColor = System.Drawing.Color.Transparent;
+            this.btnExport.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnExport.Location = new System.Drawing.Point(56, 70);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(75, 23);
+            this.btnExport.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.btnExport.TabIndex = 4;
+            this.btnExport.Text = "列印";
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // labelX1
             // 
@@ -69,36 +69,35 @@
             this.labelX1.BackgroundStyle.Class = "";
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX1.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.labelX1.Location = new System.Drawing.Point(12, 18);
+            this.labelX1.Location = new System.Drawing.Point(12, 20);
             this.labelX1.Name = "labelX1";
             this.labelX1.Size = new System.Drawing.Size(276, 36);
-            this.labelX1.TabIndex = 4;
+            this.labelX1.TabIndex = 6;
             this.labelX1.Text = "※本功能為多學期合計之成績。只印出八大領域。\r\n※領域平均成績依照畢業成績計算規則計算";
             this.labelX1.TextAlignment = System.Drawing.StringAlignment.Center;
             // 
-            // frmExportClassDomainScore
+            // frmExportStudentDomainScore
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(302, 107);
+            this.ClientSize = new System.Drawing.Size(300, 105);
             this.Controls.Add(this.labelX1);
             this.Controls.Add(this.btnLeave);
             this.Controls.Add(this.btnExport);
             this.DoubleBuffered = true;
-            this.MaximumSize = new System.Drawing.Size(380, 180);
-            this.MinimumSize = new System.Drawing.Size(254, 146);
-            this.Name = "frmExportClassDomainScore";
+            this.Name = "frmExportStudentDomainScore";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "班級多學期成績預警通知單";
-            this.Load += new System.EventHandler(this.frmExportClassDomainScore_Load);
+            this.Text = "學生成績預警通知單";
+            this.Load += new System.EventHandler(this.frmExportStudentDomainScore_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private DevComponents.DotNetBar.ButtonX btnExport;
+
         private DevComponents.DotNetBar.ButtonX btnLeave;
+        private DevComponents.DotNetBar.ButtonX btnExport;
         private DevComponents.DotNetBar.LabelX labelX1;
     }
 }
