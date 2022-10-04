@@ -670,10 +670,11 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             #endregion
 
                             #region 2022/2/22 高雄小組[1110208] 語文領域補考成績
+                            //2022/09/13 高雄小組會議 語文領域會有科目補考、領域補考兩種情形，所以註解else那段會把語文領域補考清空的程式碼
                             if (chiMakeupScore.HasValue || engMakeupScore.HasValue || localMakeupScore.HasValue)
                                 dscore.ScoreMakeup = langScore;
-                            else
-                                dscore.ScoreMakeup=null;
+                            //else
+                            //    dscore.ScoreMakeup=null;
                             #endregion
 
                             //if (weightScoreMakeup.HasValue)
