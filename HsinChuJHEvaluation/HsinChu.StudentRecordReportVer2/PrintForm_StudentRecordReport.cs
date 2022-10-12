@@ -74,6 +74,9 @@ namespace HsinChu.StudentRecordReportVer2
         //日常生活表現、校內外特殊表現 [studentID, List<Data>]
         Dictionary<string, List<K12.Data.MoralScoreRecord>> _MoralScoreRecordDic = new Dictionary<string, List<K12.Data.MoralScoreRecord>>();
 
+        // 獎懲  // id ,107_1 , 大過 ,int 
+        Dictionary<string, Dictionary<string, Dictionary<string, int>>> _DisciplineRecordDict = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+
         //單檔列印時的資料夾路徑
         private string _FileBrowserDialogPath = "";
 
@@ -123,6 +126,7 @@ namespace HsinChu.StudentRecordReportVer2
             _GraduateScoreRecordDic.Clear();
             _UpdateRecordRecordDic.Clear();
             _MoralScoreRecordDic.Clear();
+            _DisciplineRecordDict.Clear();
             #endregion
 
             #region 抓取資料
@@ -163,6 +167,8 @@ namespace HsinChu.StudentRecordReportVer2
 
             //日常生活表現、校內外特殊表現
             List<K12.Data.MoralScoreRecord> moralScoreRecordList = K12.Data.MoralScore.SelectByStudentIDs(_StudentIDs);
+
+            List<K12.Data.DisciplineRecord> disciplineRecordsList = K12.Data.Discipline.SelectByStudentIDs(_StudentIDs);
             #endregion
 
             #region 整理資料
@@ -292,6 +298,66 @@ namespace HsinChu.StudentRecordReportVer2
                 else
                 {
                     _MoralScoreRecordDic[moralScoreRecord.RefStudentID].Add(moralScoreRecord);
+                }
+            }
+
+            //整理獎懲資料
+            foreach (DisciplineRecord disciplineRecord in disciplineRecordsList)
+            {
+                // 獎懲  // id ,107_1 , 大過 ,int 
+                if (disciplineRecord.Cleared == "是") //略過銷過
+                    continue;
+                if (!_DisciplineRecordDict.ContainsKey(disciplineRecord.RefStudentID))
+                {
+                    _DisciplineRecordDict.Add(disciplineRecord.RefStudentID, new Dictionary<string, Dictionary<string, int>>());
+                    _DisciplineRecordDict[disciplineRecord.RefStudentID].Add(disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester, new Dictionary<string, int> { { "MeritA", 0 }, { "MeritB", 0 }, { "MeritC", 0 }, { "DemeritA", 0 }, { "DemeritB", 0 }, { "DemeritC", 0 } });
+                    if (disciplineRecord.MeritFlag == "1") // 獎勵
+                    {
+                        _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["MeritA"] += disciplineRecord.MeritA.Value;
+                        _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["MeritB"] += disciplineRecord.MeritB.Value;
+                        _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["MeritC"] += disciplineRecord.MeritC.Value;
+                    }
+                    else //懲戒
+                    {
+                        _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["DemeritA"] += disciplineRecord.DemeritA.Value;
+                        _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["DemeritB"] += disciplineRecord.DemeritB.Value;
+                        _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["DemeritC"] += disciplineRecord.DemeritC.Value;
+                    }
+                }
+                else
+                {
+                    if (!_DisciplineRecordDict[disciplineRecord.RefStudentID].ContainsKey(disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester))
+                    {
+                        _DisciplineRecordDict[disciplineRecord.RefStudentID].Add(disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester, new Dictionary<string, int> { { "MeritA", 0 }, { "MeritB", 0 }, { "MeritC", 0 }, { "DemeritA", 0 }, { "DemeritB", 0 }, { "DemeritC", 0 } });
+                        if (disciplineRecord.MeritFlag == "1") // 獎勵
+                        {
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["MeritA"] += disciplineRecord.MeritA.Value;
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["MeritB"] += disciplineRecord.MeritB.Value;
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["MeritC"] += disciplineRecord.MeritC.Value;
+                        }
+                        else //懲戒
+                        {
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["DemeritA"] += disciplineRecord.DemeritA.Value;
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["DemeritB"] += disciplineRecord.DemeritB.Value;
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["DemeritC"] += disciplineRecord.DemeritC.Value;
+                        }
+                    }
+                    else
+                    {
+                        //累計
+                        if (disciplineRecord.MeritFlag == "1") // 獎勵
+                        {
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["MeritA"] += disciplineRecord.MeritA.Value;
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["MeritB"] += disciplineRecord.MeritB.Value;
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["MeritC"] += disciplineRecord.MeritC.Value;
+                        }
+                        else //懲戒
+                        {
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["DemeritA"] += disciplineRecord.DemeritA.Value;
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["DemeritB"] += disciplineRecord.DemeritB.Value;
+                            _DisciplineRecordDict[disciplineRecord.RefStudentID][disciplineRecord.SchoolYear + "_" + disciplineRecord.Semester]["DemeritC"] += disciplineRecord.DemeritC.Value;
+                        }
+                    }
                 }
             }
             #endregion
@@ -466,6 +532,18 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("缺席總日數_4");
             table.Columns.Add("缺席總日數_5");
             table.Columns.Add("缺席總日數_6");
+            #endregion
+
+            #region 獎懲紀錄
+            for (int i = 1; i <= 6; i++)
+            {
+                table.Columns.Add("大功_" + i);
+                table.Columns.Add("小功_" + i);
+                table.Columns.Add("嘉獎_" + i);
+                table.Columns.Add("大過_" + i);
+                table.Columns.Add("小過_" + i);
+                table.Columns.Add("警告_" + i);
+            }
             #endregion
 
             #region 領域成績
@@ -1031,6 +1109,8 @@ namespace HsinChu.StudentRecordReportVer2
             //文字評量(日常生活表現及具體建議、校內外特殊表現)的對照
             Dictionary<string, string> textScore_dict = new Dictionary<string, string>();
 
+
+
             //上課節次設定(列數、不列入)
             foreach (K12.Data.PeriodMappingInfo var in _PeriodMappingInfos)
             {
@@ -1180,7 +1260,7 @@ namespace HsinChu.StudentRecordReportVer2
                 {
                     foreach (var item in _SemesterHistoryRecordDic[stuID].SemesterHistoryItems)
                     {
-                        if (item.GradeYear == 1|| item.GradeYear==7)
+                        if (item.GradeYear == 1 || item.GradeYear == 7)
                         {
                             row["學年度1"] = item.SchoolYear;
 
@@ -1202,7 +1282,7 @@ namespace HsinChu.StudentRecordReportVer2
                                 row["班導師2"] = item.Teacher;
                             }
                         }
-                        if (item.GradeYear == 2|| item.GradeYear == 8)
+                        if (item.GradeYear == 2 || item.GradeYear == 8)
                         {
                             row["學年度2"] = item.SchoolYear;
 
@@ -1224,7 +1304,7 @@ namespace HsinChu.StudentRecordReportVer2
                                 row["班導師4"] = item.Teacher;
                             }
                         }
-                        if (item.GradeYear == 3|| item.GradeYear == 9)
+                        if (item.GradeYear == 3 || item.GradeYear == 9)
                         {
                             row["學年度3"] = item.SchoolYear;
 
@@ -1792,7 +1872,7 @@ namespace HsinChu.StudentRecordReportVer2
                     }
                 }
 
-                // 日常生活表現、校內外特殊表現
+                // 日常生活表現、校內外特殊表現、非明細獎懲
                 if (_MoralScoreRecordDic.ContainsKey(stuID))
                 {
                     for (int grade = 1; grade <= 3; grade++)
@@ -1801,6 +1881,97 @@ namespace HsinChu.StudentRecordReportVer2
                         {
                             if (msr.SchoolYear == schoolyear_grade_dict[grade])
                             {
+                                #region 非明細獎懲
+                                if (!_DisciplineRecordDict.ContainsKey(stuID))
+                                {
+                                    _DisciplineRecordDict.Add(stuID, new Dictionary<string, Dictionary<string, int>>());
+                                    _DisciplineRecordDict[stuID].Add(msr.SchoolYear + "_" + msr.Semester, new Dictionary<string, int> { { "MeritA", 0 }, { "MeritB", 0 }, { "MeritC", 0 }, { "DemeritA", 0 }, { "DemeritB", 0 }, { "DemeritC", 0 } });
+                                    if (msr.InitialSummary.SelectSingleNode("DisciplineStatistics") != null)
+                                    {
+                                        if (msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit") != null)
+                                        {
+                                            int a, b, c = 0;
+                                            if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit").Attributes["A"].InnerText, out a))
+                                                _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["MeritA"] += a;
+                                            if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit").Attributes["B"].InnerText, out a))
+                                                _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["MeritB"] += a;
+                                            if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit").Attributes["C"].InnerText, out a))
+                                                _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["MeritC"] += a;
+                                        }
+
+                                        if (msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit") != null)
+                                        {
+                                            int a, b, c = 0;
+                                            if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit").Attributes["A"].InnerText, out a))
+                                                _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["DemeritA"] += a;
+                                            if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit").Attributes["B"].InnerText, out a))
+                                                _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["DemeritB"] += a;
+                                            if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit").Attributes["C"].InnerText, out a))
+                                                _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["DemeritC"] += a;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (!_DisciplineRecordDict[stuID].ContainsKey(msr.SchoolYear + "_" + msr.Semester))
+                                    {
+                                        _DisciplineRecordDict[stuID].Add(msr.SchoolYear + "_" + msr.Semester, new Dictionary<string, int> { { "MeritA", 0 }, { "MeritB", 0 }, { "MeritC", 0 }, { "DemeritA", 0 }, { "DemeritB", 0 }, { "DemeritC", 0 } });
+
+                                        if (msr.InitialSummary.SelectSingleNode("DisciplineStatistics") != null)
+                                        {
+                                            if (msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit") != null)
+                                            {
+                                                int a, b, c = 0;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit").Attributes["A"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["MeritA"] += a;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit").Attributes["B"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["MeritB"] += a;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit").Attributes["C"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["MeritC"] += a;
+                                            }
+
+                                            if (msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit") != null)
+                                            {
+                                                int a, b, c = 0;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit").Attributes["A"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["DemeritA"] += a;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit").Attributes["B"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["DemeritB"] += a;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit").Attributes["C"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["DemeritC"] += a;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (msr.InitialSummary.SelectSingleNode("DisciplineStatistics") != null)
+                                        {
+                                            if (msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit") != null)
+                                            {
+                                                int a, b, c = 0;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit").Attributes["A"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["MeritA"] += a;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit").Attributes["B"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["MeritB"] += a;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Merit").Attributes["C"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["MeritC"] += a;
+                                            }
+
+                                            if (msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit") != null)
+                                            {
+                                                int a, b, c = 0;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit").Attributes["A"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["DemeritA"] += a;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit").Attributes["B"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["DemeritB"] += a;
+                                                if (int.TryParse(msr.InitialSummary.SelectSingleNode("DisciplineStatistics").SelectSingleNode("Demerit").Attributes["C"].InnerText, out a))
+                                                    _DisciplineRecordDict[stuID][msr.SchoolYear + "_" + msr.Semester]["DemeritC"] += a;
+                                            }
+                                        }
+                                    }
+                                }
+                                #endregion
+
                                 if (msr.Semester == 1)
                                 {
                                     if (textScore_dict.ContainsKey("日常生活表現及具體建議_" + (grade * 2 - 1)))
@@ -1823,6 +1994,8 @@ namespace HsinChu.StudentRecordReportVer2
                                             }
                                         }
                                     }
+
+
                                 }
                                 else
                                 {
@@ -1856,6 +2029,47 @@ namespace HsinChu.StudentRecordReportVer2
                         row[key] = textScore_dict[key];
                     }
                 }
+
+                // 獎懲 預設0
+                for (int i = 1; i <= 6; i++)
+                {
+                    row["大功_" + i] = "0";
+                    row["小功_" + i] = "0";
+                    row["嘉獎_" + i] = "0";
+                    row["大過_" + i] = "0";
+                    row["小過_" + i] = "0";
+                    row["警告_" + i] = "0";
+                }
+
+                //填入實際獎懲統計資料
+                if (_DisciplineRecordDict.ContainsKey(stuID))
+                {
+                    for (int grade = 1; grade <= 3; grade++)
+                    {
+                        foreach (var dis in _DisciplineRecordDict[stuID])
+                        {
+                            if (_DisciplineRecordDict[stuID].ContainsKey(schoolyear_grade_dict[grade] + "_1"))
+                            {
+                                row["大功_" + (grade * 2 - 1)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_1"]["MeritA"];
+                                row["小功_" + (grade * 2 - 1)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_1"]["MeritB"];
+                                row["嘉獎_" + (grade * 2 - 1)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_1"]["MeritC"];
+                                row["大過_" + (grade * 2 - 1)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_1"]["DemeritA"];
+                                row["小過_" + (grade * 2 - 1)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_1"]["DemeritB"];
+                                row["警告_" + (grade * 2 - 1)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_1"]["DemeritC"];
+                            }
+                            if (_DisciplineRecordDict[stuID].ContainsKey(schoolyear_grade_dict[grade] + "_2"))
+                            {
+                                row["大功_" + (grade * 2)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_2"]["MeritA"];
+                                row["小功_" + (grade * 2)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_2"]["MeritB"];
+                                row["嘉獎_" + (grade * 2)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_2"]["MeritC"];
+                                row["大過_" + (grade * 2)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_2"]["DemeritA"];
+                                row["小過_" + (grade * 2)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_2"]["DemeritB"];
+                                row["警告_" + (grade * 2)] = _DisciplineRecordDict[stuID][schoolyear_grade_dict[grade] + "_2"]["DemeritC"];
+                            }
+                        }
+                    }
+                }
+
 
                 table.Rows.Add(row);
 
