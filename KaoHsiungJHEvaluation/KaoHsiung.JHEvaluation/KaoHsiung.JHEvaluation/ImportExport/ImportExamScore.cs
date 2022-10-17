@@ -731,8 +731,8 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                     threadInsertSemesterSubjectScore2.Join();
                     #endregion
                 }
-
                 FISCA.LogAgent.ApplicationLog.Log("成績系統.匯入匯出", "匯入評量成績", "總共匯入" + (insertList.Count + updateList.Count) + "筆評量成績。");
+                MsgBox.Show("匯入完成。","匯入評量成績");
                 #endregion
             };
         }
