@@ -91,7 +91,7 @@ namespace HsinChuExamScore_JH.DAO
                 aedata = new AEIncludeData(IRecord);
             }
             ScorePercentage = AssessScorePercentage = 0;
-            if (ScorePercentageHSDict.ContainsKey(IRecord.RefAssessmentSetupID))
+            if (IRecord != null && ScorePercentageHSDict.ContainsKey(IRecord.RefAssessmentSetupID))
             {
                 ScorePercentage = ScorePercentageHSDict[IRecord.RefAssessmentSetupID] * 0.01M;
                 AssessScorePercentage = (100 - ScorePercentageHSDict[IRecord.RefAssessmentSetupID]) * 0.01M;
@@ -170,7 +170,8 @@ namespace HsinChuExamScore_JH.DAO
                 aedata = new AEIncludeData(IRecord);
             }
             ScorePercentage = AssessScorePercentage = 0;
-            if (ScorePercentageHSDict.ContainsKey(IRecord.RefAssessmentSetupID))
+
+            if (IRecord != null && ScorePercentageHSDict.ContainsKey(IRecord.RefAssessmentSetupID))
             {
                 ScorePercentage = ScorePercentageHSDict[IRecord.RefAssessmentSetupID] * 0.01M;
                 AssessScorePercentage = (100 - ScorePercentageHSDict[IRecord.RefAssessmentSetupID]) * 0.01M;
