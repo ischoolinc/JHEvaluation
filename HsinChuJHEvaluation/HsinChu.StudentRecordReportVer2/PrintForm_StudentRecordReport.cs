@@ -1,10 +1,13 @@
 ﻿using Aspose.Words;
+using Aspose.Words.Drawing;
+using Aspose.Words.Reporting;
 using Campus.Report;
 using FISCA.Presentation;
 using FISCA.Presentation.Controls;
 using JHSchool.Data;
 using JHScoreReportDAL;
 using K12.Data;
+using ReportHelper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +18,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace HsinChu.StudentRecordReportVer2
 {
@@ -30,6 +35,11 @@ namespace HsinChu.StudentRecordReportVer2
 
         private BackgroundWorker _ConvertToPDF_Worker = new BackgroundWorker();
 
+        /// <summary>
+        /// 等第對照表
+        /// </summary>
+        ScoreMappingConfig _ScoreMappingConfig = new ScoreMappingConfig();
+
         //領域科目資料管理設定的資料
         JHScoreReportDAL.Config _DomainSubjectConfig = new Config();
         List<string> _SubjectTemplateList = new List<string>();
@@ -42,6 +52,9 @@ namespace HsinChu.StudentRecordReportVer2
 
         //學生清單
         private List<K12.Data.StudentRecord> _PrintStudents = new List<K12.Data.StudentRecord>();
+
+        // 照片
+        Dictionary<string, string> _PhotoPDict = new Dictionary<string, string>();
 
         //學生基本資料 [studentID, Data]
         Dictionary<string, K12.Data.StudentRecord> _StudentRecordDic = new Dictionary<string, K12.Data.StudentRecord>();
@@ -73,6 +86,16 @@ namespace HsinChu.StudentRecordReportVer2
 
         //日常生活表現、校內外特殊表現 [studentID, List<Data>]
         Dictionary<string, List<K12.Data.MoralScoreRecord>> _MoralScoreRecordDic = new Dictionary<string, List<K12.Data.MoralScoreRecord>>();
+
+        /// <summary>
+        /// 日常生活表現名稱對照使用
+        /// </summary>
+        private static Dictionary<string, string> _DLBehaviorConfigNameDict = new Dictionary<string, string>();
+        /// <summary>
+        /// 日常生活表現子項目名稱,呼叫GetDLBehaviorConfigNameDict 一同取得
+        /// </summary>
+        private static Dictionary<string, List<string>> _DLBehaviorConfigItemNameDict = new Dictionary<string, List<string>>();
+
 
         // 獎懲  // id ,107_1 , 大過 ,int 
         Dictionary<string, Dictionary<string, Dictionary<string, int>>> _DisciplineRecordDict = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
@@ -110,11 +133,14 @@ namespace HsinChu.StudentRecordReportVer2
 
             //是否要單檔列印
             OneFileSave.Checked = _Preference.OneFileSave;
+
+            _ScoreMappingConfig.LoadData();
         }
 
         private void MasterWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             #region 清除字典資料
+            _PrintStudents.Clear();
             _SubjectTemplateList.Clear();
             _StudentRecordDic.Clear();
             _StudentParentRecordDic.Clear();
@@ -127,6 +153,7 @@ namespace HsinChu.StudentRecordReportVer2
             _UpdateRecordRecordDic.Clear();
             _MoralScoreRecordDic.Clear();
             _DisciplineRecordDict.Clear();
+            _DLBehaviorConfigNameDict = GetDLBehaviorConfigNameDict();
             #endregion
 
             #region 抓取資料
@@ -301,6 +328,7 @@ namespace HsinChu.StudentRecordReportVer2
                 }
             }
 
+
             //整理獎懲資料
             foreach (DisciplineRecord disciplineRecord in disciplineRecordsList)
             {
@@ -375,6 +403,7 @@ namespace HsinChu.StudentRecordReportVer2
             table.Columns.Add("入學年月");
             table.Columns.Add("學生身分證字號");
             table.Columns.Add("學號");
+            table.Columns.Add("照片", typeof(byte[]));
             table.Columns.Add("戶籍地址");
             table.Columns.Add("戶籍電話");
             table.Columns.Add("聯絡地址");
@@ -401,137 +430,40 @@ namespace HsinChu.StudentRecordReportVer2
 
             #region 學期歷程 班級、座號、班導師資料
             //班級座號資料
-            table.Columns.Add("班級1");
-            table.Columns.Add("座號1");
-            table.Columns.Add("班導師1");
-
-            table.Columns.Add("班級2");
-            table.Columns.Add("座號2");
-            table.Columns.Add("班導師2");
-
-            table.Columns.Add("班級3");
-            table.Columns.Add("座號3");
-            table.Columns.Add("班導師3");
-
-            table.Columns.Add("班級4");
-            table.Columns.Add("座號4");
-            table.Columns.Add("班導師4");
-
-            table.Columns.Add("班級5");
-            table.Columns.Add("座號5");
-            table.Columns.Add("班導師5");
-
-            table.Columns.Add("班級6");
-            table.Columns.Add("座號6");
-            table.Columns.Add("班導師6");
+            for (int i = 1; i <= 6; i++)
+            {
+                table.Columns.Add("班級" + i);
+                table.Columns.Add("座號" + i);
+                table.Columns.Add("班導師" + i);
+            }
             #endregion
 
             #region 異動紀錄
             //異動紀錄
-            table.Columns.Add("異動紀錄1_日期");
-            table.Columns.Add("異動紀錄1_校名");
-            table.Columns.Add("異動紀錄1_類別");
-            table.Columns.Add("異動紀錄1_核准日期");
-            table.Columns.Add("異動紀錄1_核准文號");
-            table.Columns.Add("異動紀錄2_日期");
-            table.Columns.Add("異動紀錄2_校名");
-            table.Columns.Add("異動紀錄2_類別");
-            table.Columns.Add("異動紀錄2_核准日期");
-            table.Columns.Add("異動紀錄2_核准文號");
-            table.Columns.Add("異動紀錄3_日期");
-            table.Columns.Add("異動紀錄3_校名");
-            table.Columns.Add("異動紀錄3_類別");
-            table.Columns.Add("異動紀錄3_核准日期");
-            table.Columns.Add("異動紀錄3_核准文號");
-            table.Columns.Add("異動紀錄4_日期");
-            table.Columns.Add("異動紀錄4_校名");
-            table.Columns.Add("異動紀錄4_類別");
-            table.Columns.Add("異動紀錄4_核准日期");
-            table.Columns.Add("異動紀錄4_核准文號");
-            table.Columns.Add("異動紀錄5_日期");
-            table.Columns.Add("異動紀錄5_校名");
-            table.Columns.Add("異動紀錄5_類別");
-            table.Columns.Add("異動紀錄5_核准日期");
-            table.Columns.Add("異動紀錄5_核准文號");
-            table.Columns.Add("異動紀錄6_日期");
-            table.Columns.Add("異動紀錄6_校名");
-            table.Columns.Add("異動紀錄6_類別");
-            table.Columns.Add("異動紀錄6_核准日期");
-            table.Columns.Add("異動紀錄6_核准文號");
-            table.Columns.Add("異動紀錄7_日期");
-            table.Columns.Add("異動紀錄7_校名");
-            table.Columns.Add("異動紀錄7_類別");
-            table.Columns.Add("異動紀錄7_核准日期");
-            table.Columns.Add("異動紀錄7_核准文號");
-            table.Columns.Add("異動紀錄8_日期");
-            table.Columns.Add("異動紀錄8_校名");
-            table.Columns.Add("異動紀錄8_類別");
-            table.Columns.Add("異動紀錄8_核准日期");
-            table.Columns.Add("異動紀錄8_核准文號");
-            table.Columns.Add("異動紀錄9_日期");
-            table.Columns.Add("異動紀錄9_校名");
-            table.Columns.Add("異動紀錄9_類別");
-            table.Columns.Add("異動紀錄9_核准日期");
-            table.Columns.Add("異動紀錄9_核准文號");
-            table.Columns.Add("異動紀錄10_日期");
-            table.Columns.Add("異動紀錄10_校名");
-            table.Columns.Add("異動紀錄10_類別");
-            table.Columns.Add("異動紀錄10_核准日期");
-            table.Columns.Add("異動紀錄10_核准文號");
+            for (int i = 1; i <= 10; i++)
+            {
+                table.Columns.Add("異動紀錄" + i + "_日期");
+                table.Columns.Add("異動紀錄" + i + "_校名");
+                table.Columns.Add("異動紀錄" + i + "_類別");
+                table.Columns.Add("異動紀錄" + i + "_核准日期");
+                table.Columns.Add("異動紀錄" + i + "_核准文號");
+            }
+
             #endregion
 
-            #region 缺曠紀錄
+            #region 缺曠「日數」紀錄(寫死的缺曠名稱)
             //缺曠紀錄
-            table.Columns.Add("應出席日數_1");
-            table.Columns.Add("應出席日數_2");
-            table.Columns.Add("應出席日數_3");
-            table.Columns.Add("應出席日數_4");
-            table.Columns.Add("應出席日數_5");
-            table.Columns.Add("應出席日數_6");
+            for (int i = 1; i <= 6; i++)
+            {
+                table.Columns.Add("應出席日數_" + i);
+                table.Columns.Add("事假日數_" + i);
+                table.Columns.Add("病假日數_" + i);
+                table.Columns.Add("公假日數_" + i);
+                table.Columns.Add("喪假日數_" + i);
+                table.Columns.Add("曠課日數_" + i);
+                table.Columns.Add("缺席總日數_" + i);
+            }
 
-
-            table.Columns.Add("事假日數_1");
-            table.Columns.Add("事假日數_2");
-            table.Columns.Add("事假日數_3");
-            table.Columns.Add("事假日數_4");
-            table.Columns.Add("事假日數_5");
-            table.Columns.Add("事假日數_6");
-
-
-            table.Columns.Add("病假日數_1");
-            table.Columns.Add("病假日數_2");
-            table.Columns.Add("病假日數_3");
-            table.Columns.Add("病假日數_4");
-            table.Columns.Add("病假日數_5");
-            table.Columns.Add("病假日數_6");
-
-            table.Columns.Add("公假日數_1");
-            table.Columns.Add("公假日數_2");
-            table.Columns.Add("公假日數_3");
-            table.Columns.Add("公假日數_4");
-            table.Columns.Add("公假日數_5");
-            table.Columns.Add("公假日數_6");
-
-            table.Columns.Add("喪假日數_1");
-            table.Columns.Add("喪假日數_2");
-            table.Columns.Add("喪假日數_3");
-            table.Columns.Add("喪假日數_4");
-            table.Columns.Add("喪假日數_5");
-            table.Columns.Add("喪假日數_6");
-
-            table.Columns.Add("曠課日數_1");
-            table.Columns.Add("曠課日數_2");
-            table.Columns.Add("曠課日數_3");
-            table.Columns.Add("曠課日數_4");
-            table.Columns.Add("曠課日數_5");
-            table.Columns.Add("曠課日數_6");
-
-            table.Columns.Add("缺席總日數_1");
-            table.Columns.Add("缺席總日數_2");
-            table.Columns.Add("缺席總日數_3");
-            table.Columns.Add("缺席總日數_4");
-            table.Columns.Add("缺席總日數_5");
-            table.Columns.Add("缺席總日數_6");
             #endregion
 
             #region 獎懲紀錄
@@ -546,310 +478,45 @@ namespace HsinChu.StudentRecordReportVer2
             }
             #endregion
 
+            List<string> domainList = new List<string> { "語文", "數學", "自然科學", "科技", "藝術", "自然與生活科技", "藝術與人文", "社會", "健康與體育", "綜合活動" };
             #region 領域成績
             //領域成績
-            table.Columns.Add("領域_語文_成績_1");
-            table.Columns.Add("領域_語文_成績_2");
-            table.Columns.Add("領域_語文_成績_3");
-            table.Columns.Add("領域_語文_成績_4");
-            table.Columns.Add("領域_語文_成績_5");
-            table.Columns.Add("領域_語文_成績_6");
+            foreach (string domain in domainList)
+            {
+                for (int i = 1; i <= 6; i++)
+                {
+                    table.Columns.Add("領域_" + domain + "_成績_" + i);
+                    table.Columns.Add("領域_" + domain + "_等第_" + i);
+                }
+            }
 
+            for (int i = 1; i <= 6; i++)
+            {
+                table.Columns.Add("領域_彈性課程_成績_" + i);
+                table.Columns.Add("領域_彈性課程_等第_" + i);
 
-            table.Columns.Add("領域_語文_等第_1");
-            table.Columns.Add("領域_語文_等第_2");
-            table.Columns.Add("領域_語文_等第_3");
-            table.Columns.Add("領域_語文_等第_4");
-            table.Columns.Add("領域_語文_等第_5");
-            table.Columns.Add("領域_語文_等第_6");
+                table.Columns.Add("領域_學習領域總成績_成績_" + i);
+                table.Columns.Add("領域_學習領域總成績_等第_" + i);
 
-
-            table.Columns.Add("領域_數學_成績_1");
-            table.Columns.Add("領域_數學_成績_2");
-            table.Columns.Add("領域_數學_成績_3");
-            table.Columns.Add("領域_數學_成績_4");
-            table.Columns.Add("領域_數學_成績_5");
-            table.Columns.Add("領域_數學_成績_6");
-
-
-            table.Columns.Add("領域_數學_等第_1");
-            table.Columns.Add("領域_數學_等第_2");
-            table.Columns.Add("領域_數學_等第_3");
-            table.Columns.Add("領域_數學_等第_4");
-            table.Columns.Add("領域_數學_等第_5");
-            table.Columns.Add("領域_數學_等第_6");
-
-
-            table.Columns.Add("領域_生活課程_成績_1");
-            table.Columns.Add("領域_生活課程_成績_2");
-            table.Columns.Add("領域_生活課程_成績_3");
-            table.Columns.Add("領域_生活課程_成績_4");
-            table.Columns.Add("領域_生活課程_成績_5");
-            table.Columns.Add("領域_生活課程_成績_6");
-
-
-            table.Columns.Add("領域_生活課程_等第_1");
-            table.Columns.Add("領域_生活課程_等第_2");
-            table.Columns.Add("領域_生活課程_等第_3");
-            table.Columns.Add("領域_生活課程_等第_4");
-            table.Columns.Add("領域_生活課程_等第_5");
-            table.Columns.Add("領域_生活課程_等第_6");
-
-
-            table.Columns.Add("領域_自然科學_成績_1");
-            table.Columns.Add("領域_自然科學_成績_2");
-            table.Columns.Add("領域_自然科學_成績_3");
-            table.Columns.Add("領域_自然科學_成績_4");
-            table.Columns.Add("領域_自然科學_成績_5");
-            table.Columns.Add("領域_自然科學_成績_6");
-
-
-            table.Columns.Add("領域_自然科學_等第_1");
-            table.Columns.Add("領域_自然科學_等第_2");
-            table.Columns.Add("領域_自然科學_等第_3");
-            table.Columns.Add("領域_自然科學_等第_4");
-            table.Columns.Add("領域_自然科學_等第_5");
-            table.Columns.Add("領域_自然科學_等第_6");
-
-
-            table.Columns.Add("領域_科技_成績_1");
-            table.Columns.Add("領域_科技_成績_2");
-            table.Columns.Add("領域_科技_成績_3");
-            table.Columns.Add("領域_科技_成績_4");
-            table.Columns.Add("領域_科技_成績_5");
-            table.Columns.Add("領域_科技_成績_6");
-
-
-            table.Columns.Add("領域_科技_等第_1");
-            table.Columns.Add("領域_科技_等第_2");
-            table.Columns.Add("領域_科技_等第_3");
-            table.Columns.Add("領域_科技_等第_4");
-            table.Columns.Add("領域_科技_等第_5");
-            table.Columns.Add("領域_科技_等第_6");
-
-
-            table.Columns.Add("領域_藝術_成績_1");
-            table.Columns.Add("領域_藝術_成績_2");
-            table.Columns.Add("領域_藝術_成績_3");
-            table.Columns.Add("領域_藝術_成績_4");
-            table.Columns.Add("領域_藝術_成績_5");
-            table.Columns.Add("領域_藝術_成績_6");
-
-
-            table.Columns.Add("領域_藝術_等第_1");
-            table.Columns.Add("領域_藝術_等第_2");
-            table.Columns.Add("領域_藝術_等第_3");
-            table.Columns.Add("領域_藝術_等第_4");
-            table.Columns.Add("領域_藝術_等第_5");
-            table.Columns.Add("領域_藝術_等第_6");
-
-
-            table.Columns.Add("領域_自然與生活科技_成績_1");
-            table.Columns.Add("領域_自然與生活科技_成績_2");
-            table.Columns.Add("領域_自然與生活科技_成績_3");
-            table.Columns.Add("領域_自然與生活科技_成績_4");
-            table.Columns.Add("領域_自然與生活科技_成績_5");
-            table.Columns.Add("領域_自然與生活科技_成績_6");
-
-
-            table.Columns.Add("領域_自然與生活科技_等第_1");
-            table.Columns.Add("領域_自然與生活科技_等第_2");
-            table.Columns.Add("領域_自然與生活科技_等第_3");
-            table.Columns.Add("領域_自然與生活科技_等第_4");
-            table.Columns.Add("領域_自然與生活科技_等第_5");
-            table.Columns.Add("領域_自然與生活科技_等第_6");
-
-
-            table.Columns.Add("領域_藝術與人文_成績_1");
-            table.Columns.Add("領域_藝術與人文_成績_2");
-            table.Columns.Add("領域_藝術與人文_成績_3");
-            table.Columns.Add("領域_藝術與人文_成績_4");
-            table.Columns.Add("領域_藝術與人文_成績_5");
-            table.Columns.Add("領域_藝術與人文_成績_6");
-
-
-            table.Columns.Add("領域_藝術與人文_等第_1");
-            table.Columns.Add("領域_藝術與人文_等第_2");
-            table.Columns.Add("領域_藝術與人文_等第_3");
-            table.Columns.Add("領域_藝術與人文_等第_4");
-            table.Columns.Add("領域_藝術與人文_等第_5");
-            table.Columns.Add("領域_藝術與人文_等第_6");
-
-
-
-            table.Columns.Add("領域_社會_成績_1");
-            table.Columns.Add("領域_社會_成績_2");
-            table.Columns.Add("領域_社會_成績_3");
-            table.Columns.Add("領域_社會_成績_4");
-            table.Columns.Add("領域_社會_成績_5");
-            table.Columns.Add("領域_社會_成績_6");
-
-
-            table.Columns.Add("領域_社會_等第_1");
-            table.Columns.Add("領域_社會_等第_2");
-            table.Columns.Add("領域_社會_等第_3");
-            table.Columns.Add("領域_社會_等第_4");
-            table.Columns.Add("領域_社會_等第_5");
-            table.Columns.Add("領域_社會_等第_6");
-
-
-            table.Columns.Add("領域_健康與體育_成績_1");
-            table.Columns.Add("領域_健康與體育_成績_2");
-            table.Columns.Add("領域_健康與體育_成績_3");
-            table.Columns.Add("領域_健康與體育_成績_4");
-            table.Columns.Add("領域_健康與體育_成績_5");
-            table.Columns.Add("領域_健康與體育_成績_6");
-
-
-            table.Columns.Add("領域_健康與體育_等第_1");
-            table.Columns.Add("領域_健康與體育_等第_2");
-            table.Columns.Add("領域_健康與體育_等第_3");
-            table.Columns.Add("領域_健康與體育_等第_4");
-            table.Columns.Add("領域_健康與體育_等第_5");
-            table.Columns.Add("領域_健康與體育_等第_6");
-
-
-            table.Columns.Add("領域_綜合活動_成績_1");
-            table.Columns.Add("領域_綜合活動_成績_2");
-            table.Columns.Add("領域_綜合活動_成績_3");
-            table.Columns.Add("領域_綜合活動_成績_4");
-            table.Columns.Add("領域_綜合活動_成績_5");
-            table.Columns.Add("領域_綜合活動_成績_6");
-
-
-            table.Columns.Add("領域_綜合活動_等第_1");
-            table.Columns.Add("領域_綜合活動_等第_2");
-            table.Columns.Add("領域_綜合活動_等第_3");
-            table.Columns.Add("領域_綜合活動_等第_4");
-            table.Columns.Add("領域_綜合活動_等第_5");
-            table.Columns.Add("領域_綜合活動_等第_6");
-
-            table.Columns.Add("領域_彈性課程_成績_1");
-            table.Columns.Add("領域_彈性課程_成績_2");
-            table.Columns.Add("領域_彈性課程_成績_3");
-            table.Columns.Add("領域_彈性課程_成績_4");
-            table.Columns.Add("領域_彈性課程_成績_5");
-            table.Columns.Add("領域_彈性課程_成績_6");
-
-
-            table.Columns.Add("領域_彈性課程_等第_1");
-            table.Columns.Add("領域_彈性課程_等第_2");
-            table.Columns.Add("領域_彈性課程_等第_3");
-            table.Columns.Add("領域_彈性課程_等第_4");
-            table.Columns.Add("領域_彈性課程_等第_5");
-            table.Columns.Add("領域_彈性課程_等第_6");
-
-
-            table.Columns.Add("領域_學習領域總成績_成績_1");
-            table.Columns.Add("領域_學習領域總成績_成績_2");
-            table.Columns.Add("領域_學習領域總成績_成績_3");
-            table.Columns.Add("領域_學習領域總成績_成績_4");
-            table.Columns.Add("領域_學習領域總成績_成績_5");
-            table.Columns.Add("領域_學習領域總成績_成績_6");
-
-
-            table.Columns.Add("領域_學習領域總成績_等第_1");
-            table.Columns.Add("領域_學習領域總成績_等第_2");
-            table.Columns.Add("領域_學習領域總成績_等第_3");
-            table.Columns.Add("領域_學習領域總成績_等第_4");
-            table.Columns.Add("領域_學習領域總成績_等第_5");
-            table.Columns.Add("領域_學習領域總成績_等第_6");
-
-            table.Columns.Add("領域_課程學習成績_成績_1");
-            table.Columns.Add("領域_課程學習成績_成績_2");
-            table.Columns.Add("領域_課程學習成績_成績_3");
-            table.Columns.Add("領域_課程學習成績_成績_4");
-            table.Columns.Add("領域_課程學習成績_成績_5");
-            table.Columns.Add("領域_課程學習成績_成績_6");
-
-
-            table.Columns.Add("領域_課程學習成績_等第_1");
-            table.Columns.Add("領域_課程學習成績_等第_2");
-            table.Columns.Add("領域_課程學習成績_等第_3");
-            table.Columns.Add("領域_課程學習成績_等第_4");
-            table.Columns.Add("領域_課程學習成績_等第_5");
-            table.Columns.Add("領域_課程學習成績_等第_6");
+                table.Columns.Add("領域_課程學習成績_成績_" + i);
+                table.Columns.Add("領域_課程學習成績_等第_" + i);
+            }
             #endregion
 
             #region 科目成績
             //科目成績
-            table.Columns.Add("語文1_科目名稱");
-            table.Columns.Add("語文2_科目名稱");
-            table.Columns.Add("語文3_科目名稱");
-            table.Columns.Add("語文4_科目名稱");
-            table.Columns.Add("語文5_科目名稱");
-            table.Columns.Add("語文6_科目名稱");
-            table.Columns.Add("數學1_科目名稱");
-            table.Columns.Add("數學2_科目名稱");
-            table.Columns.Add("數學3_科目名稱");
-            table.Columns.Add("數學4_科目名稱");
-            table.Columns.Add("數學5_科目名稱");
-            table.Columns.Add("數學6_科目名稱");
-            table.Columns.Add("生活課程1_科目名稱");
-            table.Columns.Add("生活課程2_科目名稱");
-            table.Columns.Add("生活課程3_科目名稱");
-            table.Columns.Add("生活課程4_科目名稱");
-            table.Columns.Add("生活課程5_科目名稱");
-            table.Columns.Add("生活課程6_科目名稱");
-            table.Columns.Add("自然科學1_科目名稱");
-            table.Columns.Add("自然科學2_科目名稱");
-            table.Columns.Add("自然科學3_科目名稱");
-            table.Columns.Add("自然科學4_科目名稱");
-            table.Columns.Add("自然科學5_科目名稱");
-            table.Columns.Add("自然科學6_科目名稱");
-            table.Columns.Add("科技1_科目名稱");
-            table.Columns.Add("科技2_科目名稱");
-            table.Columns.Add("科技3_科目名稱");
-            table.Columns.Add("科技4_科目名稱");
-            table.Columns.Add("科技5_科目名稱");
-            table.Columns.Add("科技6_科目名稱");
-            table.Columns.Add("社會1_科目名稱");
-            table.Columns.Add("社會2_科目名稱");
-            table.Columns.Add("社會3_科目名稱");
-            table.Columns.Add("社會4_科目名稱");
-            table.Columns.Add("社會5_科目名稱");
-            table.Columns.Add("社會6_科目名稱");
-            table.Columns.Add("藝術1_科目名稱");
-            table.Columns.Add("藝術2_科目名稱");
-            table.Columns.Add("藝術3_科目名稱");
-            table.Columns.Add("藝術4_科目名稱");
-            table.Columns.Add("藝術5_科目名稱");
-            table.Columns.Add("藝術6_科目名稱");
-            table.Columns.Add("健康與體育1_科目名稱");
-            table.Columns.Add("健康與體育2_科目名稱");
-            table.Columns.Add("健康與體育3_科目名稱");
-            table.Columns.Add("健康與體育4_科目名稱");
-            table.Columns.Add("健康與體育5_科目名稱");
-            table.Columns.Add("健康與體育6_科目名稱");
-            table.Columns.Add("綜合活動1_科目名稱");
-            table.Columns.Add("綜合活動2_科目名稱");
-            table.Columns.Add("綜合活動3_科目名稱");
-            table.Columns.Add("綜合活動4_科目名稱");
-            table.Columns.Add("綜合活動5_科目名稱");
-            table.Columns.Add("綜合活動6_科目名稱");
-            table.Columns.Add("藝術與人文1_科目名稱");
-            table.Columns.Add("藝術與人文2_科目名稱");
-            table.Columns.Add("藝術與人文3_科目名稱");
-            table.Columns.Add("藝術與人文4_科目名稱");
-            table.Columns.Add("藝術與人文5_科目名稱");
-            table.Columns.Add("藝術與人文6_科目名稱");
-            table.Columns.Add("自然與生活科技1_科目名稱");
-            table.Columns.Add("自然與生活科技2_科目名稱");
-            table.Columns.Add("自然與生活科技3_科目名稱");
-            table.Columns.Add("自然與生活科技4_科目名稱");
-            table.Columns.Add("自然與生活科技5_科目名稱");
-            table.Columns.Add("自然與生活科技6_科目名稱");
+            foreach (string domain in domainList)
+            {
+                for (int i = 1; i <= 6; i++)
+                {
+                    table.Columns.Add(domain + i + "_科目名稱");
+                }
+            }
 
-            table.Columns.Add("彈性課程1_科目名稱");
-            table.Columns.Add("彈性課程2_科目名稱");
-            table.Columns.Add("彈性課程3_科目名稱");
-            table.Columns.Add("彈性課程4_科目名稱");
-            table.Columns.Add("彈性課程5_科目名稱");
-            table.Columns.Add("彈性課程6_科目名稱");
-            table.Columns.Add("彈性課程7_科目名稱");
-            table.Columns.Add("彈性課程8_科目名稱");
-            table.Columns.Add("彈性課程9_科目名稱");
-            table.Columns.Add("彈性課程10_科目名稱");
+            for (int i = 1; i <= 10; i++)
+            {
+                table.Columns.Add("彈性課程" + i + "_科目名稱");
+            }
             #endregion
 
             #region 畢業總成績
@@ -862,23 +529,48 @@ namespace HsinChu.StudentRecordReportVer2
 
             #region 日常生活表現及具體建議
             //日常生活表現及具體建議
-            table.Columns.Add("日常生活表現及具體建議_1");
-            table.Columns.Add("日常生活表現及具體建議_2");
-            table.Columns.Add("日常生活表現及具體建議_3");
-            table.Columns.Add("日常生活表現及具體建議_4");
-            table.Columns.Add("日常生活表現及具體建議_5");
-            table.Columns.Add("日常生活表現及具體建議_6");
+            for (int i = 1; i <= 6; i++)
+            {
+                table.Columns.Add("日常生活表現及具體建議_" + i);
+            }
             #endregion
 
             #region 校內外特殊表現
             //校內外特殊表現
-            table.Columns.Add("校內外特殊表現_1");
-            table.Columns.Add("校內外特殊表現_2");
-            table.Columns.Add("校內外特殊表現_3");
-            table.Columns.Add("校內外特殊表現_4");
-            table.Columns.Add("校內外特殊表現_5");
-            table.Columns.Add("校內外特殊表現_6");
-            #endregion 
+            for (int i = 1; i <= 6; i++)
+            {
+                table.Columns.Add("校內外特殊表現_" + i);
+            }
+            #endregion
+
+            //日常生活表現欄位
+            //foreach (string key in Global.DLBehaviorRef.Keys)
+            //{
+            //    table.Columns.Add(key + "_Name");
+            //    table.Columns.Add(key + "_Description");
+            //}
+
+            //日常生活表現子項目欄位
+            foreach (string key in _DLBehaviorConfigNameDict.Keys)
+            {
+                int itemIndex = 0;
+
+                if (_DLBehaviorConfigItemNameDict.ContainsKey(key))
+                {
+                    foreach (string item in _DLBehaviorConfigItemNameDict[key])
+                    {
+                        itemIndex++;
+                        for (int a = 1; a <= 6; a++)
+                        {
+                            table.Columns.Add(key + "_Item_Name" + itemIndex + "_" + a);
+                            table.Columns.Add(key + "_Item_Degree" + itemIndex + "_" + a);
+                            table.Columns.Add(key + "_Item_Index" + itemIndex + "_" + a);
+                        }
+                    }
+                }
+            }
+
+
             #endregion
 
             Aspose.Words.Document document = new Document();
@@ -899,17 +591,11 @@ namespace HsinChu.StudentRecordReportVer2
             #region 整理所有的領域_OO_成績
             //整理所有的領域_OO_成績
             List<string> domainScoreType_list = new List<string>();
-            domainScoreType_list.Add("領域_語文_成績_");
-            domainScoreType_list.Add("領域_數學_成績_");
-            domainScoreType_list.Add("領域_生活課程_成績_");
-            domainScoreType_list.Add("領域_自然科學_成績_");
-            domainScoreType_list.Add("領域_科技_成績_");
-            domainScoreType_list.Add("領域_藝術_成績_");
-            domainScoreType_list.Add("領域_自然與生活科技_成績_");
-            domainScoreType_list.Add("領域_藝術與人文_成績_");
-            domainScoreType_list.Add("領域_社會_成績_");
-            domainScoreType_list.Add("領域_健康與體育_成績_");
-            domainScoreType_list.Add("領域_綜合活動_成績_");
+            foreach (string domain in domainList)
+            {
+                domainScoreType_list.Add("領域_" + domain + "_成績_");
+            }
+
             domainScoreType_list.Add("領域_學習領域總成績_成績_");
             domainScoreType_list.Add("領域_課程學習成績_成績_");
             #endregion
@@ -917,17 +603,10 @@ namespace HsinChu.StudentRecordReportVer2
             #region 整理所有的領域_OO_等第
             //整理所有的領域_OO_等第
             List<string> domainLevelType_list = new List<string>();
-            domainLevelType_list.Add("領域_語文_等第_");
-            domainLevelType_list.Add("領域_數學_等第_");
-            domainLevelType_list.Add("領域_生活課程_等第_");
-            domainLevelType_list.Add("領域_自然科學_等第_");
-            domainLevelType_list.Add("領域_科技_等第_");
-            domainLevelType_list.Add("領域_藝術_等第_");
-            domainLevelType_list.Add("領域_自然與生活科技_等第_");
-            domainLevelType_list.Add("領域_藝術與人文_等第_");
-            domainLevelType_list.Add("領域_社會_等第_");
-            domainLevelType_list.Add("領域_健康與體育_等第_");
-            domainLevelType_list.Add("領域_綜合活動_等第_");
+            foreach (string domain in domainList)
+            {
+                domainLevelType_list.Add("領域_" + domain + "_等第_");
+            }
             domainLevelType_list.Add("領域_學習領域總成績_等第_");
             domainLevelType_list.Add("領域_課程學習成績_等第_");
             #endregion
@@ -935,163 +614,34 @@ namespace HsinChu.StudentRecordReportVer2
             #region 整理科目_OO_成績
             //整理科目_OO_成績
             List<string> subjectScoreType_list = new List<string>();
-            subjectScoreType_list.Add("語文1_科目成績_");
-            subjectScoreType_list.Add("語文2_科目成績_");
-            subjectScoreType_list.Add("語文3_科目成績_");
-            subjectScoreType_list.Add("語文4_科目成績_");
-            subjectScoreType_list.Add("語文5_科目成績_");
-            subjectScoreType_list.Add("語文6_科目成績_");
-            subjectScoreType_list.Add("數學1_科目成績_");
-            subjectScoreType_list.Add("數學2_科目成績_");
-            subjectScoreType_list.Add("數學3_科目成績_");
-            subjectScoreType_list.Add("數學4_科目成績_");
-            subjectScoreType_list.Add("數學5_科目成績_");
-            subjectScoreType_list.Add("數學6_科目成績_");
-            subjectScoreType_list.Add("生活課程1_科目成績_");
-            subjectScoreType_list.Add("生活課程2_科目成績_");
-            subjectScoreType_list.Add("生活課程3_科目成績_");
-            subjectScoreType_list.Add("生活課程4_科目成績_");
-            subjectScoreType_list.Add("生活課程5_科目成績_");
-            subjectScoreType_list.Add("生活課程6_科目成績_");
-            subjectScoreType_list.Add("自然科學1_科目成績_");
-            subjectScoreType_list.Add("自然科學2_科目成績_");
-            subjectScoreType_list.Add("自然科學3_科目成績_");
-            subjectScoreType_list.Add("自然科學4_科目成績_");
-            subjectScoreType_list.Add("自然科學5_科目成績_");
-            subjectScoreType_list.Add("自然科學6_科目成績_");
-            subjectScoreType_list.Add("科技1_科目成績_");
-            subjectScoreType_list.Add("科技2_科目成績_");
-            subjectScoreType_list.Add("科技3_科目成績_");
-            subjectScoreType_list.Add("科技4_科目成績_");
-            subjectScoreType_list.Add("科技5_科目成績_");
-            subjectScoreType_list.Add("科技6_科目成績_");
-            subjectScoreType_list.Add("社會1_科目成績_");
-            subjectScoreType_list.Add("社會2_科目成績_");
-            subjectScoreType_list.Add("社會3_科目成績_");
-            subjectScoreType_list.Add("社會4_科目成績_");
-            subjectScoreType_list.Add("社會5_科目成績_");
-            subjectScoreType_list.Add("社會6_科目成績_");
-            subjectScoreType_list.Add("藝術1_科目成績_");
-            subjectScoreType_list.Add("藝術2_科目成績_");
-            subjectScoreType_list.Add("藝術3_科目成績_");
-            subjectScoreType_list.Add("藝術4_科目成績_");
-            subjectScoreType_list.Add("藝術5_科目成績_");
-            subjectScoreType_list.Add("藝術6_科目成績_");
-            subjectScoreType_list.Add("健康與體育1_科目成績_");
-            subjectScoreType_list.Add("健康與體育2_科目成績_");
-            subjectScoreType_list.Add("健康與體育3_科目成績_");
-            subjectScoreType_list.Add("健康與體育4_科目成績_");
-            subjectScoreType_list.Add("健康與體育5_科目成績_");
-            subjectScoreType_list.Add("健康與體育6_科目成績_");
-            subjectScoreType_list.Add("綜合活動1_科目成績_");
-            subjectScoreType_list.Add("綜合活動2_科目成績_");
-            subjectScoreType_list.Add("綜合活動3_科目成績_");
-            subjectScoreType_list.Add("綜合活動4_科目成績_");
-            subjectScoreType_list.Add("綜合活動5_科目成績_");
-            subjectScoreType_list.Add("綜合活動6_科目成績_");
-            subjectScoreType_list.Add("藝術與人文1_科目成績_");
-            subjectScoreType_list.Add("藝術與人文2_科目成績_");
-            subjectScoreType_list.Add("藝術與人文3_科目成績_");
-            subjectScoreType_list.Add("藝術與人文4_科目成績_");
-            subjectScoreType_list.Add("藝術與人文5_科目成績_");
-            subjectScoreType_list.Add("藝術與人文6_科目成績_");
-            subjectScoreType_list.Add("自然與生活科技1_科目成績_");
-            subjectScoreType_list.Add("自然與生活科技2_科目成績_");
-            subjectScoreType_list.Add("自然與生活科技3_科目成績_");
-            subjectScoreType_list.Add("自然與生活科技4_科目成績_");
-            subjectScoreType_list.Add("自然與生活科技5_科目成績_");
-            subjectScoreType_list.Add("自然與生活科技6_科目成績_");
-            subjectScoreType_list.Add("彈性課程1_科目成績_");
-            subjectScoreType_list.Add("彈性課程2_科目成績_");
-            subjectScoreType_list.Add("彈性課程3_科目成績_");
-            subjectScoreType_list.Add("彈性課程4_科目成績_");
-            subjectScoreType_list.Add("彈性課程5_科目成績_");
-            subjectScoreType_list.Add("彈性課程6_科目成績_");
-            subjectScoreType_list.Add("彈性課程7_科目成績_");
-            subjectScoreType_list.Add("彈性課程8_科目成績_");
-            subjectScoreType_list.Add("彈性課程9_科目成績_");
-            subjectScoreType_list.Add("彈性課程10_科目成績_");
+            foreach (string domain in domainList)
+            {
+                for (int i = 1; i <= 6; i++)
+                {
+                    subjectScoreType_list.Add(domain + i + "_科目成績_");
+                }
+            }
+            for (int i = 1; i <= 10; i++)
+            {
+                subjectScoreType_list.Add("彈性課程" + i + "_科目成績_");
+            }
             #endregion
 
             #region 整理科目_OO_等第
             //整理科目_OO_等第
             List<string> subjectLevelType_list = new List<string>();
-            subjectLevelType_list.Add("語文1_科目等第_");
-            subjectLevelType_list.Add("語文2_科目等第_");
-            subjectLevelType_list.Add("語文3_科目等第_");
-            subjectLevelType_list.Add("語文4_科目等第_");
-            subjectLevelType_list.Add("語文5_科目等第_");
-            subjectLevelType_list.Add("語文6_科目等第_");
-            subjectLevelType_list.Add("數學1_科目等第_");
-            subjectLevelType_list.Add("數學2_科目等第_");
-            subjectLevelType_list.Add("數學3_科目等第_");
-            subjectLevelType_list.Add("數學4_科目等第_");
-            subjectLevelType_list.Add("數學5_科目等第_");
-            subjectLevelType_list.Add("數學6_科目等第_");
-            subjectLevelType_list.Add("生活課程1_科目等第_");
-            subjectLevelType_list.Add("生活課程2_科目等第_");
-            subjectLevelType_list.Add("生活課程3_科目等第_");
-            subjectLevelType_list.Add("生活課程4_科目等第_");
-            subjectLevelType_list.Add("生活課程5_科目等第_");
-            subjectLevelType_list.Add("生活課程6_科目等第_");
-            subjectLevelType_list.Add("自然科學1_科目等第_");
-            subjectLevelType_list.Add("自然科學2_科目等第_");
-            subjectLevelType_list.Add("自然科學3_科目等第_");
-            subjectLevelType_list.Add("自然科學4_科目等第_");
-            subjectLevelType_list.Add("自然科學5_科目等第_");
-            subjectLevelType_list.Add("自然科學6_科目等第_");
-            subjectLevelType_list.Add("科技1_科目等第_");
-            subjectLevelType_list.Add("科技2_科目等第_");
-            subjectLevelType_list.Add("科技3_科目等第_");
-            subjectLevelType_list.Add("科技4_科目等第_");
-            subjectLevelType_list.Add("科技5_科目等第_");
-            subjectLevelType_list.Add("科技6_科目等第_");
-            subjectLevelType_list.Add("社會1_科目等第_");
-            subjectLevelType_list.Add("社會2_科目等第_");
-            subjectLevelType_list.Add("社會3_科目等第_");
-            subjectLevelType_list.Add("社會4_科目等第_");
-            subjectLevelType_list.Add("社會5_科目等第_");
-            subjectLevelType_list.Add("社會6_科目等第_");
-            subjectLevelType_list.Add("藝術1_科目等第_");
-            subjectLevelType_list.Add("藝術2_科目等第_");
-            subjectLevelType_list.Add("藝術3_科目等第_");
-            subjectLevelType_list.Add("藝術4_科目等第_");
-            subjectLevelType_list.Add("藝術5_科目等第_");
-            subjectLevelType_list.Add("藝術6_科目等第_");
-            subjectLevelType_list.Add("健康與體育1_科目等第_");
-            subjectLevelType_list.Add("健康與體育2_科目等第_");
-            subjectLevelType_list.Add("健康與體育3_科目等第_");
-            subjectLevelType_list.Add("健康與體育4_科目等第_");
-            subjectLevelType_list.Add("健康與體育5_科目等第_");
-            subjectLevelType_list.Add("健康與體育6_科目等第_");
-            subjectLevelType_list.Add("綜合活動1_科目等第_");
-            subjectLevelType_list.Add("綜合活動2_科目等第_");
-            subjectLevelType_list.Add("綜合活動3_科目等第_");
-            subjectLevelType_list.Add("綜合活動4_科目等第_");
-            subjectLevelType_list.Add("綜合活動5_科目等第_");
-            subjectLevelType_list.Add("綜合活動6_科目等第_");
-            subjectLevelType_list.Add("藝術與人文1_科目等第_");
-            subjectLevelType_list.Add("藝術與人文2_科目等第_");
-            subjectLevelType_list.Add("藝術與人文3_科目等第_");
-            subjectLevelType_list.Add("藝術與人文4_科目等第_");
-            subjectLevelType_list.Add("藝術與人文5_科目等第_");
-            subjectLevelType_list.Add("藝術與人文6_科目等第_");
-            subjectLevelType_list.Add("自然與生活科技1_科目等第_");
-            subjectLevelType_list.Add("自然與生活科技2_科目等第_");
-            subjectLevelType_list.Add("自然與生活科技3_科目等第_");
-            subjectLevelType_list.Add("自然與生活科技4_科目等第_");
-            subjectLevelType_list.Add("自然與生活科技5_科目等第_");
-            subjectLevelType_list.Add("自然與生活科技6_科目等第_");
-            subjectLevelType_list.Add("彈性課程1_科目等第_");
-            subjectLevelType_list.Add("彈性課程2_科目等第_");
-            subjectLevelType_list.Add("彈性課程3_科目等第_");
-            subjectLevelType_list.Add("彈性課程4_科目等第_");
-            subjectLevelType_list.Add("彈性課程5_科目等第_");
-            subjectLevelType_list.Add("彈性課程6_科目等第_");
-            subjectLevelType_list.Add("彈性課程7_科目等第_");
-            subjectLevelType_list.Add("彈性課程8_科目等第_");
-            subjectLevelType_list.Add("彈性課程9_科目等第_");
-            subjectLevelType_list.Add("彈性課程10_科目等第_");
+
+            foreach (string domain in domainList)
+            {
+                for (int i = 1; i <= 6; i++)
+                {
+                    subjectLevelType_list.Add(domain + i + "_科目等第_");
+                }
+            }
+            for (int i = 1; i <= 10; i++)
+            {
+                subjectLevelType_list.Add("彈性課程" + i + "_科目等第_");
+            }
             #endregion
 
             // 領域分數、等第 的對照
@@ -1108,7 +658,6 @@ namespace HsinChu.StudentRecordReportVer2
 
             //文字評量(日常生活表現及具體建議、校內外特殊表現)的對照
             Dictionary<string, string> textScore_dict = new Dictionary<string, string>();
-
 
 
             //上課節次設定(列數、不列入)
@@ -1201,6 +750,21 @@ namespace HsinChu.StudentRecordReportVer2
 
                 DataRow row = table.NewRow();
 
+                row["學校名稱"] = K12.Data.School.ChineseName;
+
+                #region 學生照片，若沒有畢業照，則印出入學照
+                string graduatePhoto = K12.Data.Photo.SelectGraduatePhoto(stuID);
+                string freshmanPhoto = K12.Data.Photo.SelectFreshmanPhoto(stuID);
+                if (!_PhotoPDict.ContainsKey(stuID))
+                {
+                    if (string.IsNullOrEmpty(graduatePhoto))
+                        graduatePhoto = freshmanPhoto;
+                    _PhotoPDict.Add(stuID, graduatePhoto);
+                }
+                if (_PhotoPDict.ContainsKey(stuID))
+                    row["照片"] = _PhotoPDict[stuID].FromBase64StringToByte();
+                #endregion
+
                 //學生基本資料
                 if (_StudentRecordDic.ContainsKey(stuID))
                 {
@@ -1224,7 +788,6 @@ namespace HsinChu.StudentRecordReportVer2
                     row["入學年月"] = "";
                     row["學生身分證字號"] = _StudentRecordDic[stuID].IDNumber;
                     row["學號"] = _StudentRecordDic[stuID].StudentNumber;
-                    row["學校名稱"] = K12.Data.School.ChineseName;
 
                     _PrintStudents.Add(_StudentRecordDic[stuID]);
                 }
@@ -1406,20 +969,28 @@ namespace HsinChu.StudentRecordReportVer2
 
                 // 學期成績(包含領域、科目)
                 //一般科目 科目名稱與科目編號對照表
-                Dictionary<string, Dictionary<string, int>> SubjectCourseDict = new Dictionary<string, Dictionary<string, int>>()
+                //Dictionary<string, Dictionary<string, int>> SubjectCourseDict = new Dictionary<string, Dictionary<string, int>>()
+                //{
+                //    { "語文", new Dictionary<string, int>() }
+                //    , { "數學", new Dictionary<string, int>() }
+                //    , { "生活課程", new Dictionary<string, int>() }
+                //    , { "自然科學", new Dictionary<string, int>() }
+                //    , { "科技", new Dictionary<string, int>() }
+                //    , { "社會", new Dictionary<string, int>() }
+                //    , { "藝術", new Dictionary<string, int>() }
+                //    , { "健康與體育", new Dictionary<string, int>() }
+                //    , { "綜合活動", new Dictionary<string, int>() }
+                //    , { "藝術與人文", new Dictionary<string, int>() }
+                //    , { "自然與生活科技", new Dictionary<string, int>() }
+                //};
+
+                Dictionary<string, Dictionary<string, int>> SubjectCourseDict = new Dictionary<string, Dictionary<string, int>>();
+                foreach (string domain in domainList)
                 {
-                    { "語文", new Dictionary<string, int>() }
-                    , { "數學", new Dictionary<string, int>() }
-                    , { "生活課程", new Dictionary<string, int>() }
-                    , { "自然科學", new Dictionary<string, int>() }
-                    , { "科技", new Dictionary<string, int>() }
-                    , { "社會", new Dictionary<string, int>() }
-                    , { "藝術", new Dictionary<string, int>() }
-                    , { "健康與體育", new Dictionary<string, int>() }
-                    , { "綜合活動", new Dictionary<string, int>() }
-                    , { "藝術與人文", new Dictionary<string, int>() }
-                    , { "自然與生活科技", new Dictionary<string, int>() }
-                };
+                    if (!SubjectCourseDict.ContainsKey(domain))
+                        SubjectCourseDict.Add(domain, new Dictionary<string, int>());
+                }
+
 
                 if (_SemesterScoreRecordDic.ContainsKey(stuID))
                 {
@@ -1538,7 +1109,8 @@ namespace HsinChu.StudentRecordReportVer2
                                         //換算等第
                                         if (domainLevel_dict.ContainsKey("領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2 - 1)))
                                         {
-                                            domainLevel_dict["領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2 - 1)] = ScoreToLevel(domainscore.Value.Score);
+                                            //domainLevel_dict["領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2 - 1)] = ScoreToLevel(domainscore.Value.Score);
+                                            domainLevel_dict["領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreName(domainscore.Value.Score);
                                         }
                                     }
 
@@ -1566,7 +1138,8 @@ namespace HsinChu.StudentRecordReportVer2
                                                 //紀錄等第
                                                 if (subjectLevel_dict.ContainsKey("彈性課程" + AlternativeCourse + "_科目等第_" + (grade * 2 - 1)))
                                                 {
-                                                    subjectLevel_dict["彈性課程" + AlternativeCourse + "_科目等第_" + (grade * 2 - 1)] = ScoreToLevel(subjectscore.Value.Score);
+                                                    //subjectLevel_dict["彈性課程" + AlternativeCourse + "_科目等第_" + (grade * 2 - 1)] = ScoreToLevel(subjectscore.Value.Score);
+                                                    subjectLevel_dict["彈性課程" + AlternativeCourse + "_科目等第_" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreName(subjectscore.Value.Score);
                                                 }
                                             }
                                         }
@@ -1587,7 +1160,8 @@ namespace HsinChu.StudentRecordReportVer2
                                                     //換算等第
                                                     if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + SubjectCourseNum + "_科目等第_" + (grade * 2 - 1)))
                                                     {
-                                                        subjectLevel_dict[subjectscore.Value.Domain + SubjectCourseNum + "_科目等第_" + (grade * 2 - 1)] = ScoreToLevel(subjectscore.Value.Score);
+                                                        //subjectLevel_dict[subjectscore.Value.Domain + SubjectCourseNum + "_科目等第_" + (grade * 2 - 1)] = ScoreToLevel(subjectscore.Value.Score);
+                                                        subjectLevel_dict[subjectscore.Value.Domain + SubjectCourseNum + "_科目等第_" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreName(subjectscore.Value.Score);
                                                     }
                                                 }
                                             }
@@ -1606,7 +1180,8 @@ namespace HsinChu.StudentRecordReportVer2
                                     //換算等第
                                     if (domainLevel_dict.ContainsKey("領域_學習領域總成績_等第_" + (grade * 2 - 1)))
                                     {
-                                        domainLevel_dict["領域_學習領域總成績_等第_" + (grade * 2 - 1)] = ScoreToLevel(semesterScoreRecord.LearnDomainScore);
+                                        //domainLevel_dict["領域_學習領域總成績_等第_" + (grade * 2 - 1)] = ScoreToLevel(semesterScoreRecord.LearnDomainScore);
+                                        domainLevel_dict["領域_學習領域總成績_等第_" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreName(semesterScoreRecord.LearnDomainScore);
                                     }
 
                                     //課程學習成績(包括彈性課程成績)
@@ -1619,7 +1194,9 @@ namespace HsinChu.StudentRecordReportVer2
                                     //換算等第
                                     if (domainLevel_dict.ContainsKey("領域_課程學習成績_等第_" + (grade * 2 - 1)))
                                     {
-                                        domainLevel_dict["領域_課程學習成績_等第_" + (grade * 2 - 1)] = ScoreToLevel(semesterScoreRecord.CourseLearnScore);
+                                        //domainLevel_dict["領域_課程學習成績_等第_" + (grade * 2 - 1)] = ScoreToLevel(semesterScoreRecord.CourseLearnScore);
+                                        domainLevel_dict["領域_課程學習成績_等第_" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreName(semesterScoreRecord.CourseLearnScore);
+
                                     }
 
 
@@ -1637,7 +1214,8 @@ namespace HsinChu.StudentRecordReportVer2
                                         //換算等第
                                         if (domainLevel_dict.ContainsKey("領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2)))
                                         {
-                                            domainLevel_dict["領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2)] = ScoreToLevel(domainscore.Value.Score);
+                                            //domainLevel_dict["領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2)] = ScoreToLevel(domainscore.Value.Score);
+                                            domainLevel_dict["領域_" + domainscore.Value.Domain + "_等第_" + (grade * 2)] = _ScoreMappingConfig.ParseScoreName(domainscore.Value.Score);
                                         }
                                     }
 
@@ -1663,7 +1241,8 @@ namespace HsinChu.StudentRecordReportVer2
                                                 //紀錄等第
                                                 if (subjectLevel_dict.ContainsKey("彈性課程" + AlternativeCourse + "_科目等第_" + (grade * 2)))
                                                 {
-                                                    subjectLevel_dict["彈性課程" + AlternativeCourse + "_科目等第_" + (grade * 2)] = ScoreToLevel(subjectscore.Value.Score);
+                                                    //subjectLevel_dict["彈性課程" + AlternativeCourse + "_科目等第_" + (grade * 2)] = ScoreToLevel(subjectscore.Value.Score);
+                                                    subjectLevel_dict["彈性課程" + AlternativeCourse + "_科目等第_" + (grade * 2)] = _ScoreMappingConfig.ParseScoreName(subjectscore.Value.Score);
                                                 }
                                             }
                                         }
@@ -1683,7 +1262,8 @@ namespace HsinChu.StudentRecordReportVer2
                                                     //換算等第
                                                     if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + SubjectCourseNum + "_科目等第_" + (grade * 2)))
                                                     {
-                                                        subjectLevel_dict[subjectscore.Value.Domain + SubjectCourseNum + "_科目等第_" + (grade * 2)] = ScoreToLevel(subjectscore.Value.Score);
+                                                        //subjectLevel_dict[subjectscore.Value.Domain + SubjectCourseNum + "_科目等第_" + (grade * 2)] = ScoreToLevel(subjectscore.Value.Score);
+                                                        subjectLevel_dict[subjectscore.Value.Domain + SubjectCourseNum + "_科目等第_" + (grade * 2)] = _ScoreMappingConfig.ParseScoreName(subjectscore.Value.Score);
                                                     }
                                                 }
                                             }
@@ -1701,7 +1281,8 @@ namespace HsinChu.StudentRecordReportVer2
                                     //換算等第
                                     if (domainLevel_dict.ContainsKey("領域_學習領域總成績_等第_" + (grade * 2)))
                                     {
-                                        domainLevel_dict["領域_學習領域總成績_等第_" + (grade * 2)] = ScoreToLevel(semesterScoreRecord.LearnDomainScore);
+                                        //domainLevel_dict["領域_學習領域總成績_等第_" + (grade * 2)] = ScoreToLevel(semesterScoreRecord.LearnDomainScore);
+                                        domainLevel_dict["領域_學習領域總成績_等第_" + (grade * 2)] = _ScoreMappingConfig.ParseScoreName(semesterScoreRecord.LearnDomainScore);
                                     }
 
                                     //課程學習成績(包括彈性課程成績)
@@ -1714,7 +1295,8 @@ namespace HsinChu.StudentRecordReportVer2
                                     //換算等第
                                     if (domainLevel_dict.ContainsKey("領域_課程學習成績_等第_" + (grade * 2)))
                                     {
-                                        domainLevel_dict["領域_課程學習成績_等第_" + (grade * 2)] = ScoreToLevel(semesterScoreRecord.CourseLearnScore);
+                                        //domainLevel_dict["領域_課程學習成績_等第_" + (grade * 2)] = ScoreToLevel(semesterScoreRecord.CourseLearnScore);
+                                        domainLevel_dict["領域_課程學習成績_等第_" + (grade * 2)] = _ScoreMappingConfig.ParseScoreName(semesterScoreRecord.CourseLearnScore);
                                     }
                                 }
                             }
@@ -1751,7 +1333,8 @@ namespace HsinChu.StudentRecordReportVer2
                 if (_GraduateScoreRecordDic.ContainsKey(stuID))
                 {
                     row["畢業總成績_平均"] = _GraduateScoreRecordDic[stuID].LearnDomainScore;
-                    row["畢業總成績_等第"] = ScoreToLevel(_GraduateScoreRecordDic[stuID].LearnDomainScore);
+                    //row["畢業總成績_等第"] = ScoreToLevel(_GraduateScoreRecordDic[stuID].LearnDomainScore);
+                    row["畢業總成績_等第"] = _ScoreMappingConfig.ParseScoreName(_GraduateScoreRecordDic[stuID].LearnDomainScore);
 
                     // 60 分 就可以 准予畢業
                     row["准予畢業"] = _GraduateScoreRecordDic[stuID].LearnDomainScore >= 60 ? "■" : "□";
@@ -1974,6 +1557,11 @@ namespace HsinChu.StudentRecordReportVer2
 
                                 if (msr.Semester == 1)
                                 {
+                                    XmlElement textScore = (msr != null && msr.TextScore != null) ? msr.TextScore : K12.Data.XmlHelper.LoadXml("<TextScore/>");
+
+                                    foreach (string key in Global.DLBehaviorRef.Keys)
+                                        SetDLBehaviorData(key, Global.DLBehaviorRef[key], textScore, row, (grade * 2 - 1));
+
                                     if (textScore_dict.ContainsKey("日常生活表現及具體建議_" + (grade * 2 - 1)))
                                     {
                                         if (msr.TextScore.SelectSingleNode("DailyLifeRecommend") != null)
@@ -1999,6 +1587,11 @@ namespace HsinChu.StudentRecordReportVer2
                                 }
                                 else
                                 {
+                                    XmlElement textScore = (msr != null && msr.TextScore != null) ? msr.TextScore : K12.Data.XmlHelper.LoadXml("<TextScore/>");
+
+                                    foreach (string key in Global.DLBehaviorRef.Keys)
+                                        SetDLBehaviorData(key, Global.DLBehaviorRef[key], textScore, row, (grade * 2));
+
                                     if (textScore_dict.ContainsKey("日常生活表現及具體建議_" + (grade * 2)))
                                     {
                                         if (msr.TextScore.SelectSingleNode("DailyLifeRecommend") != null)
@@ -2086,6 +1679,7 @@ namespace HsinChu.StudentRecordReportVer2
             //document = Preference.Template.ToDocument();
 
             //執行 合併列印
+            document.MailMerge.FieldMergingCallback = new InsertDocumentAtMailMergeHandler();
             document.MailMerge.Execute(table);
 
             // 最終產物 .doc
@@ -2166,8 +1760,6 @@ namespace HsinChu.StudentRecordReportVer2
 
                     fileName = _PrintStudents[i].StudentNumber;
 
-                    fileName = _PrintStudents[i].StudentNumber;
-
                     fileName += "_" + _PrintStudents[i].IDNumber;
 
                     if (!string.IsNullOrEmpty(_PrintStudents[i].RefClassID))
@@ -2183,36 +1775,17 @@ namespace HsinChu.StudentRecordReportVer2
 
                     fileName += "_" + _PrintStudents[i].Name;
 
-                    //document.Save(fbd.SelectedPath + "\\" +fileName+ ".doc");
-
                     if (_Preference.ConvertToPDF)
                     {
-                        //string fPath = fbd.SelectedPath + "\\" + fileName + ".pdf";
-
                         string fPath = _FileBrowserDialogPath + "\\" + fileName + ".pdf";
 
                         FileInfo fi = new FileInfo(fPath);
 
-                        DirectoryInfo folder = new DirectoryInfo(Path.Combine(fi.DirectoryName, Path.GetRandomFileName()));
-                        if (!folder.Exists) folder.Create();
+                        DirectoryInfo folder = new DirectoryInfo(Path.Combine(fi.DirectoryName));
+                        if (!folder.Exists) 
+                            folder.Create();
 
-                        FileInfo fileinfo = new FileInfo(Path.Combine(folder.FullName, fi.Name));
-
-                        string XmlFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".xml";
-                        string PDFFileName = fileinfo.FullName.Substring(0, fileinfo.FullName.Length - fileinfo.Extension.Length) + ".pdf";
-
-                        document.Save(XmlFileName, Aspose.Words.SaveFormat.Pdf);
-
-                        Aspose.Pdf.Generator.Pdf pdf1 = new Aspose.Pdf.Generator.Pdf();
-
-                        pdf1.BindXML(XmlFileName, null);
-                        pdf1.Save(PDFFileName);
-
-                        if (File.Exists(fPath))
-                            File.Delete(Path.Combine(fi.DirectoryName, fi.Name));
-
-                        File.Move(PDFFileName, fPath);
-                        folder.Delete(true);
+                        document.Save(fPath, SaveFormat.Pdf);
 
                         int percent = (((i + 1) * 100 / doc.Sections.Count));
 
@@ -2285,27 +1858,31 @@ namespace HsinChu.StudentRecordReportVer2
         //供使用者下載學籍表合併欄位總表
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Aspose.Words.Document document = new Aspose.Words.Document();
-            document = new Aspose.Words.Document(new MemoryStream(Resources.新竹國中學籍表功能變數));
+            Global.ExportMappingFieldWord();
 
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Title = "另存新檔";
-            saveFileDialog.FileName = "學籍表合併欄位總表" + ".doc";
-            saveFileDialog.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+            #region 2022/12/26 Cyntthia 註解
+            //Aspose.Words.Document document = new Aspose.Words.Document();
+            //document = new Aspose.Words.Document(new MemoryStream(Resources.新竹國中學籍表功能變數));
 
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    document.Save(saveFileDialog.FileName, Aspose.Words.SaveFormat.Doc);
-                    System.Diagnostics.Process.Start(saveFileDialog.FileName);
-                }
-                catch
-                {
-                    MessageBox.Show("指定路徑無法存取", "建立檔案失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
+            //SaveFileDialog saveFileDialog = new SaveFileDialog();
+            //saveFileDialog.Title = "另存新檔";
+            //saveFileDialog.FileName = "學籍表合併欄位總表" + ".doc";
+            //saveFileDialog.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+
+            //if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            //{
+            //    try
+            //    {
+            //        document.Save(saveFileDialog.FileName, Aspose.Words.SaveFormat.Doc);
+            //        System.Diagnostics.Process.Start(saveFileDialog.FileName);
+            //    }
+            //    catch
+            //    {
+            //        MessageBox.Show("指定路徑無法存取", "建立檔案失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        return;
+            //    }
+            //}
+            #endregion
         }
 
         ///<summary>
@@ -2340,6 +1917,166 @@ namespace HsinChu.StudentRecordReportVer2
             }
 
             return level;
+        }
+
+
+
+        /// <summary>
+        /// 填寫日常生活表現資料
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="path"></param>
+        /// <param name="textScore"></param>
+        /// <param name="row"></param>
+
+        private static void SetDLBehaviorData(string name, string path, XmlElement textScore, DataRow row, int semester)
+        {
+            //row[name + "_Name"] = _DLBehaviorConfigNameDict.ContainsKey(name) ? _DLBehaviorConfigNameDict[name] : string.Empty;
+
+            if (_DLBehaviorConfigItemNameDict.ContainsKey(name))
+            {
+                int index = 0;
+                foreach (string itemName in _DLBehaviorConfigItemNameDict[name])
+                {
+                    foreach (XmlElement item in textScore.SelectNodes(path))
+                    {
+                        if (itemName == item.GetAttribute("Name"))
+                        {
+                            index++;
+                            row[name + "_Item_Name" + index+"_"+ semester] = itemName;
+                            row[name + "_Item_Index" + index + "_" + semester] = item.GetAttribute("Index");
+                            row[name + "_Item_Degree" + index + "_" + semester] = item.GetAttribute("Degree");
+                        }
+                    }
+                }
+            }
+            //else if (_DLBehaviorConfigNameDict.ContainsKey(name))
+            //{
+            //    string value = _DLBehaviorConfigNameDict[name];
+
+            //    foreach (XmlElement item in textScore.SelectNodes(path))
+            //    {
+            //        if (value == item.GetAttribute("Name"))
+            //            row[name + "_Description"] = item.GetAttribute("Description");
+            //    }
+            //}
+        }
+
+        /// <summary>
+        /// 取得日常生活表現設定名稱
+        /// </summary>
+        /// <returns></returns>
+        private static Dictionary<string, string> GetDLBehaviorConfigNameDict()
+        {
+            Dictionary<string, string> retVal = new Dictionary<string, string>();
+            try
+            {
+                _DLBehaviorConfigItemNameDict.Clear();
+
+                K12.Data.Configuration.ConfigData cd = K12.Data.School.Configuration["DLBehaviorConfig"];
+                if (!string.IsNullOrEmpty(cd["DailyBehavior"]))
+                {
+                    string key = "日常生活表現程度";
+                    //日常行為表現
+                    XElement e1 = XElement.Parse(cd["DailyBehavior"]);
+                    string name = e1.Attribute("Name").Value;
+                    retVal.Add(key, name);
+
+                    // 日常生活表現子項目
+                    List<string> items = ParseItems(e1);
+                    if (items.Count > 0)
+                        _DLBehaviorConfigItemNameDict.Add(key, items);
+                }
+
+                if (!string.IsNullOrEmpty(cd["OtherRecommend"]))
+                {
+                    //其他表現
+                    XElement e2 = XElement.Parse(cd["OtherRecommend"]);
+                    string name = e2.Attribute("Name").Value;
+                    retVal.Add("團體活動表現", name);
+                }
+
+                if (!string.IsNullOrEmpty(cd["DailyLifeRecommend"]))
+                {
+                    //日常生活表現具體建議
+                    XElement e3 = XElement.Parse(cd["DailyLifeRecommend"]);
+                    string name = e3.Attribute("Name").Value;
+
+                    retVal.Add("日常生活表現具體建議", name);  // 新竹
+                }
+            }
+            catch (Exception ex)
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("日常生活表現設定檔解析失敗!" + ex.Message);
+            }
+
+            return retVal;
+        }
+
+        /// <summary>
+        /// XML 內解析子項目名稱
+        /// </summary>
+        /// <param name="elm"></param>
+        /// <returns></returns>
+        private static List<string> ParseItems(XElement elm)
+        {
+            List<string> retVal = new List<string>();
+
+            foreach (XElement subElm in elm.Elements("Item"))
+            {
+                // 因為社團功能，所以要將"社團活動" 字不放入
+                string name = subElm.Attribute("Name").Value;
+                if (name != "社團活動")
+                    retVal.Add(name);
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// 處理照片
+        /// </summary>
+        private class InsertDocumentAtMailMergeHandler : IFieldMergingCallback
+        {
+            void IFieldMergingCallback.FieldMerging(FieldMergingArgs e)
+            {
+                if (e.FieldName == "照片")
+                {
+                    byte[] photo = e.FieldValue as byte[];
+                    if (photo == null)
+                        return;
+                    DocumentBuilder photoBuilder = new DocumentBuilder(e.Document);
+                    photoBuilder.MoveToField(e.Field, true);
+                    e.Field.Remove();
+
+                    Shape photoShape = new Shape(e.Document, ShapeType.Image);
+                    photoShape.ImageData.SetImage(photo);
+                    double shapeHeight = 0;
+                    double shapeWidth = 0;
+                    photoShape.WrapType = WrapType.TopBottom;//設定文繞圖
+
+                    //resize
+
+                    //double origSizeRatio = photoShape.ImageData.ImageSize.HeightPoints / photoShape.ImageData.ImageSize.WidthPoints;
+                    //Cell curCell = photoBuilder.CurrentParagraph.ParentNode as Cell;
+                    //shapeHeight = (curCell.ParentNode as Row).RowFormat.Height;
+                    //shapeWidth = curCell.CellFormat.Width;
+                    //photoShape.Height = shapeHeight;
+                    //photoShape.Width = shapeWidth;
+
+                    // 目前先固定為1吋大小，原本上面動態一表格大小填滿的方法，在在校成績證明書的樣板會被壓縮，暫時不處理。
+                    // 1吋
+                    photoShape.Width = ConvertUtil.MillimeterToPoint(25);
+                    photoShape.Height = ConvertUtil.MillimeterToPoint(35);
+
+                    photoBuilder.InsertNode(photoShape);
+                }
+
+            }
+
+            void IFieldMergingCallback.ImageFieldMerging(ImageFieldMergingArgs args)
+            {
+                // Do nothing.
+            }
         }
     }
 }

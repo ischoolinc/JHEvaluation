@@ -228,7 +228,6 @@
             // 
             this.OneFileSave.BackgroundStyle.Class = "";
             this.OneFileSave.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.OneFileSave.Enabled = false;
             this.OneFileSave.Location = new System.Drawing.Point(3, 3);
             this.OneFileSave.Name = "OneFileSave";
             this.OneFileSave.Size = new System.Drawing.Size(327, 21);
@@ -251,7 +250,7 @@
             this.linkLabel1.Text = "檢視合併欄位總表";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // PrintForm_StudentReport
+            // PrintForm_StudentRecordReport
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(374, 184);
@@ -265,7 +264,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximumSize = new System.Drawing.Size(390, 223);
             this.MinimumSize = new System.Drawing.Size(390, 223);
-            this.Name = "PrintForm_StudentReport";
+            this.Name = "PrintForm_StudentRecordReport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "學籍表列印設定";
             this.gpFormat.ResumeLayout(false);
@@ -276,6 +275,7 @@
             this.panel4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
