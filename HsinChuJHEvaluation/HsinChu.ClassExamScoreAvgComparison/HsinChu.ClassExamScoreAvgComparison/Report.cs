@@ -38,17 +38,21 @@ namespace HsinChu.ClassExamScoreAvgComparison
         //科目資料管理
         List<string> subjectNameList = new List<string>();
 
-
+        public Dictionary<decimal, DAL.ScoreMap> _ScoreValueMap = new Dictionary<decimal, DAL.ScoreMap>();
+        public string _ScoreSource;
 
         //public Report(List<ClassExamScoreData> data, Dictionary<string, JHCourseRecord> courseDict, JHExamRecord exam, List<ComputeMethod> methods)
         //{
-        public Report(List<ClassExamScoreData> data, Dictionary<string, JHCourseRecord> courseDict, JHExamRecord exam, List<string> domains)
+        public Report(List<ClassExamScoreData> data, Dictionary<string, JHCourseRecord> courseDict, JHExamRecord exam, List<string> domains, Dictionary<decimal, DAL.ScoreMap> scoreMapDic, string scoreSource)
         {
             _data = data;
             _courseDict = courseDict;
             _exam = exam;
             _domains = domains;
             _calc = new JHSchool.Evaluation.Calculation.ScoreCalculator(null);
+            _ScoreValueMap = scoreMapDic;
+            _ScoreSource = scoreSource;
+
             //_methods = methods;
 
             InitializeWorker();
@@ -264,12 +268,36 @@ namespace HsinChu.ClassExamScoreAvgComparison
                 Dictionary<string, decimal?> subjectScores = new Dictionary<string, decimal?>();
                 Dictionary<string, int> subjectCount = new Dictionary<string, int>();
 
+                Dictionary<string, decimal?> subjectCredits = new Dictionary<string, decimal?>();
+
+
                 foreach (StudentRow row in ced.Rows.Values)
                 {
                     foreach (var sce in row.RawScoreList)
                     {
+                        List<string> asIDs = new List<string>();
+                        Dictionary<string, JHAEIncludeRecord> aeDict = new Dictionary<string, JHAEIncludeRecord>();
                         if (sce.RefExamID != _exam.ID) continue;
                         JHCourseRecord course = _courseDict[sce.RefCourseID];
+
+
+                        if (!subjectCredits.ContainsKey(GetDomainSubjectKey(course.Domain, course.Subject)))
+                            subjectCredits.Add(GetDomainSubjectKey(course.Domain, course.Subject), course.Credit);
+
+                            string asID = _courseDict[sce.RefCourseID].RefAssessmentSetupID;
+                        if (_ScoreSource != "定期")
+                        {
+                            asIDs.Add(asID);
+
+                            foreach (JHAEIncludeRecord record in JHAEInclude.SelectByAssessmentSetupIDs(asIDs))
+                            {
+                                if (record.RefExamID != _exam.ID)
+                                    continue;
+                                aeDict.Add(record.RefAssessmentSetupID, record);
+                            }
+
+                        }
+
 
                         //if (!headers.Contains(GetTaggedDomain(course.Domain)))
                         //{
@@ -292,15 +320,118 @@ namespace HsinChu.ClassExamScoreAvgComparison
                             subjectScores.Add(ds, 0);
                             subjectCount.Add(ds, 0);
                         }
-                        if (sce.Score.HasValue)
+                        if (_ScoreSource == "定期")
                         {
-                            subjectCount[ds]++;
-                            decimal value = decimal.Zero;
-                            if (row.StudentScore.CalculationRule != null)
-                                value = row.StudentScore.CalculationRule.ParseSubjectScore(sce.Score.Value);
-                            else
-                                value = _calc.ParseSubjectScore(sce.Score.Value);
-                            subjectScores[ds] += value;
+                            if (sce.Score.HasValue)
+                            {
+                                decimal? score = null;
+                                if (_ScoreValueMap.ContainsKey(sce.Score.Value))
+                                {
+                                    if (_ScoreValueMap[sce.Score.Value].AllowCalculation) //可以被計算 ex缺考0分
+                                    {
+                                        score = _ScoreValueMap[sce.Score.Value].Score.Value;
+                                    }
+                                    else  //不能被計算 ex 免試
+                                    {
+
+                                    }
+                                }
+                                else
+                                {
+                                    score = sce.Score.Value;
+                                }
+
+                                if (score != null)
+                                {
+                                    subjectCount[ds]++;
+                                    //decimal value = decimal.Zero;
+                                    //if (row.StudentScore.CalculationRule != null)
+                                    //    value = row.StudentScore.CalculationRule.ParseSubjectScore(score.Value);
+                                    //else
+                                    //    value = _calc.ParseSubjectScore(score.Value);
+
+                                    //subjectScores[ds] += value;
+
+                                    //2023-01-30 Cynthia 以原始評量分數去計算
+                                    subjectScores[ds] += score;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            decimal? score = null;
+
+                            //對照後的 定期評量分數
+                            decimal? scoreA = null;
+                            //對照後的 平時評量分數
+                            decimal? assignmentScore = null;
+
+                            //找對照
+                            if (sce.Score.HasValue)
+                            {
+                                if (_ScoreValueMap.ContainsKey(sce.Score.Value))
+                                {
+                                    if (_ScoreValueMap[sce.Score.Value].AllowCalculation) //可以被計算 ex缺考0分
+                                        scoreA = _ScoreValueMap[sce.Score.Value].Score.Value;
+                                    else  //不能被計算 ex 免試
+                                    {
+                                        scoreA = null;
+                                    }
+                                }
+                                else
+                                {
+                                    scoreA = sce.Score.Value;
+                                }
+                            }
+                            if (sce.AssignmentScore.HasValue)
+                            {
+                                if (_ScoreValueMap.ContainsKey(sce.AssignmentScore.Value))
+                                {
+                                    if (_ScoreValueMap[sce.AssignmentScore.Value].AllowCalculation) //可以被計算 ex缺考0分
+                                        assignmentScore = _ScoreValueMap[sce.AssignmentScore.Value].Score.Value;
+                                    else  //不能被計算 ex 免試
+                                    {
+                                        assignmentScore = null;
+                                    }
+                                }
+                                else
+                                {
+                                    assignmentScore = sce.AssignmentScore.Value;
+                                }
+                            }
+
+                            if (scoreA != null && assignmentScore != null)
+                            {
+                                if (Global.ScorePercentageHSDict.ContainsKey(aeDict[asID].RefAssessmentSetupID))
+                                {
+                                    decimal ff = Global.ScorePercentageHSDict[aeDict[asID].RefAssessmentSetupID];
+                                    decimal f = scoreA.Value * ff * 0.01M;
+                                    decimal a = assignmentScore.Value * (100 - ff) * 0.01M;
+
+                                    score = f + a;
+                                }
+                                else
+                                    score = scoreA.Value * 0.5M + assignmentScore.Value * 0.5M;
+
+
+                            }
+                            else if (scoreA != null)
+                                score = scoreA;
+                            else if (assignmentScore != null)
+                                score = assignmentScore;
+
+
+                            if (score != null)
+                            {
+                                subjectCount[ds]++;
+                                //decimal value = decimal.Zero;
+                                //if (row.StudentScore.CalculationRule != null)
+                                //    value = row.StudentScore.CalculationRule.ParseSubjectScore(score.Value);
+                                //else
+                                //    value = _calc.ParseSubjectScore(score.Value);
+                                //subjectScores[ds] += value;
+                                subjectScores[ds] += score;
+                            }
                         }
                     }
                 }
@@ -314,22 +445,51 @@ namespace HsinChu.ClassExamScoreAvgComparison
                 Dictionary<string, decimal?> domainScores = new Dictionary<string, decimal?>();
                 Dictionary<string, int> domainCount = new Dictionary<string, int>();
 
+                Dictionary<string, decimal?> domainCredits = new Dictionary<string, decimal?>();
+
+                //foreach (string ds in subjectScores.Keys)
+                //{
+                //    string domain = GetOnlyDomain(ds);
+                //    if (!domainScores.ContainsKey(domain))
+                //    {
+                //        domainScores.Add(domain, 0);
+                //        domainCount.Add(domain, 0);
+                //    }
+                //    domainCount[domain]++;
+                //    domainScores[domain] += subjectScores[ds];
+                //}
+
                 foreach (string ds in subjectScores.Keys)
                 {
                     string domain = GetOnlyDomain(ds);
+
                     if (!domainScores.ContainsKey(domain))
-                    {
                         domainScores.Add(domain, 0);
-                        domainCount.Add(domain, 0);
+
+                    if (subjectCredits.ContainsKey(ds))
+                    {
+                        domainScores[domain] += subjectScores[ds] * subjectCredits[ds];
                     }
-                    domainCount[domain]++;
-                    domainScores[domain] += subjectScores[ds];
+                }
+
+
+                foreach (string d in subjectCredits.Keys)
+                {
+                    string domain = GetOnlyDomain(d);
+                    if (!domainCredits.ContainsKey(domain))
+                    {
+                        domainCredits.Add(domain, 0);
+                    }
+                    domainCredits[domain] += subjectCredits[d];
                 }
 
                 foreach (string domain in new List<string>(domainScores.Keys))
                 {
-                    if (domainScores[domain].HasValue && domainCount[domain] > 0)
-                        domainScores[domain] = domainScores[domain].Value / (decimal)domainCount[domain];
+                    //if (domainScores[domain].HasValue && domainCount[domain] > 0)
+                    //    domainScores[domain] = domainScores[domain].Value / (decimal)domainCount[domain];
+                    if(domainScores[domain].HasValue && domainCredits.ContainsKey(domain) && domainCredits[domain].HasValue)
+                        domainScores[domain] = domainScores[domain].Value / (decimal)domainCredits[domain];
+                    
                 }
 
                 #region 填入班級平均
@@ -357,12 +517,13 @@ namespace HsinChu.ClassExamScoreAvgComparison
                             {
                                 cca.ClassID = stud.Class.ID;
                                 cca.ClassName = stud.Class.Name;
-                                decimal value = decimal.Zero;
-                                if (srow.StudentScore.CalculationRule != null)
-                                    value = srow.StudentScore.CalculationRule.ParseSubjectScore(cs.Score.Value);
-                                else
-                                    value = _calc.ParseSubjectScore(cs.Score.Value);
-                                cca.AddSubjectScore(_courseDict[cs.CourseID].Subject, value);
+                                //decimal value = decimal.Zero;
+                                //if (srow.StudentScore.CalculationRule != null)
+                                //    value = srow.StudentScore.CalculationRule.ParseSubjectScore(cs.Score.Value);
+                                //else
+                                //    value = _calc.ParseSubjectScore(cs.Score.Value);
+                                //cca.AddSubjectScore(_courseDict[cs.CourseID].Subject, value);
+                                cca.AddSubjectScore(_courseDict[cs.CourseID].Subject, cs.Score.Value);
                             }
                             //decimal? s = GetRoundScore(cs.Score);
                             //if (s.HasValue)
@@ -460,7 +621,7 @@ namespace HsinChu.ClassExamScoreAvgComparison
             if (p.StartsWith("領域")) return true;
             else return false;
         }
-       
+
         /// <summary>
         /// 取得科目資料管理
         /// </summary>
@@ -512,7 +673,7 @@ WHERE name  ='JHEvaluation_Subject_Ordinal'
         private int Sort(string x, string y)
         {
 
-            List<string> list = new List<string>(new string[] { "國語文", "國文", "英語文", "英文", "英語", "領域語文", "數學", "領域數學", "歷史", "公民", "地理", "領域社會","理化", "生物", "地球科學", "領域自然與生活科技", "領域自然科學", "音樂", "視覺藝術", "表演藝術", "領域藝術與人文", "領域藝術", "健康教育", "體育", "領域健康與體育", "家政", "童軍", "輔導", "領域綜合活動", "資訊科技", "生活科技", "領域科技" });
+            List<string> list = new List<string>(new string[] { "國語文", "國文", "英語文", "英文", "英語", "領域語文", "數學", "領域數學", "歷史", "公民", "地理", "領域社會", "理化", "生物", "地球科學", "領域自然與生活科技", "領域自然科學", "音樂", "視覺藝術", "表演藝術", "領域藝術與人文", "領域藝術", "健康教育", "體育", "領域健康與體育", "家政", "童軍", "輔導", "領域綜合活動", "資訊科技", "生活科技", "領域科技" });
 
             int ix = list.IndexOf(x);
             int iy = list.IndexOf(y);

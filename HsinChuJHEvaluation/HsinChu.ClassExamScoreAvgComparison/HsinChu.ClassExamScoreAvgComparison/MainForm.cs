@@ -13,6 +13,7 @@ using JHSchool.Evaluation.Ranking;
 using K12.Data;
 using FISCA.Data;
 using HsinChu.ClassExamScoreAvgComparison.DAL;
+using System.Xml;
 
 namespace HsinChu.ClassExamScoreAvgComparison
 {
@@ -32,6 +33,8 @@ namespace HsinChu.ClassExamScoreAvgComparison
         private int _runningSchoolYear;
         private int _runningSemester;
 
+        public  Dictionary<string, DAL.ScoreMap> ScoreTextMap = new Dictionary<string, DAL.ScoreMap>();
+        public  Dictionary<decimal, DAL.ScoreMap> ScoreValueMap = new Dictionary<decimal, DAL.ScoreMap>();
         public static void Run()
         {
             new MainForm().ShowDialog();
@@ -141,6 +144,58 @@ namespace HsinChu.ClassExamScoreAvgComparison
                     }
                 }
                 //}
+                #endregion
+
+                ScoreTextMap.Clear();
+                ScoreValueMap.Clear();
+                #region 取得評量成績缺考暨免試設定
+                Framework.ConfigData cd = JHSchool.School.Configuration["評量成績缺考暨免試設定"];
+                if (!string.IsNullOrEmpty(cd["評量成績缺考暨免試設定"]))
+                {
+                    XmlElement element = Framework.XmlHelper.LoadXml(cd["評量成績缺考暨免試設定"]);
+
+                    foreach (XmlElement each in element.SelectNodes("Setting"))
+                    {
+                        var UseText = each.SelectSingleNode("UseText").InnerText;
+                        var AllowCalculation = bool.Parse(each.SelectSingleNode("AllowCalculation").InnerText);
+                        decimal Score;
+                        decimal? NullableScore = null;
+                        bool result = decimal.TryParse(each.SelectSingleNode("Score").InnerText, out Score);
+                        if (result)
+                        {
+                            NullableScore = Score;
+                        }
+                        var Active = bool.Parse(each.SelectSingleNode("Active").InnerText);
+                        var UseValue = decimal.Parse(each.SelectSingleNode("UseValue").InnerText);
+
+                        if (Active)
+                        {
+                            if (!ScoreTextMap.ContainsKey(UseText))
+                            {
+                                ScoreTextMap.Add(UseText, new ScoreMap
+                                {
+                                    UseText = UseText,  //「缺」或「免」
+                                    AllowCalculation = AllowCalculation,  //是否計算成績
+                                    Score = NullableScore,  //計算成績時，應以多少分來計算
+                                    Active = Active, //此設定是否啟用
+                                    UseValue = UseValue, //代表「缺」或「免」的負數
+                                });
+                            }
+                            if (!ScoreValueMap.ContainsKey(UseValue))
+                            {
+                                ScoreValueMap.Add(UseValue, new ScoreMap
+                                {
+                                    UseText = UseText,
+                                    AllowCalculation = AllowCalculation,
+                                    Score = NullableScore,
+                                    Active = Active,
+                                    UseValue = UseValue,
+                                });
+                            }
+                        }
+                    }
+                }
+
                 #endregion
             };
             _worker.RunWorkerCompleted += delegate
@@ -339,7 +394,7 @@ namespace HsinChu.ClassExamScoreAvgComparison
                     {
                         string asID = asMapping[courseScore.CourseID];
                         if (aeDict.ContainsKey(asID))
-                            courseScore.CalculateScore(new HC.JHAEIncludeRecord(aeDict[asID]), "" + cbSource.SelectedItem);
+                            courseScore.CalculateScore(new HC.JHAEIncludeRecord(aeDict[asID]), "" + cbSource.SelectedItem, ScoreValueMap);
                     }
                 }
 
@@ -350,7 +405,7 @@ namespace HsinChu.ClassExamScoreAvgComparison
 
             #region 產生報表
             //Report report = new Report(_data, _courseDict, exam, methods);
-            Report report = new Report(_data, _courseDict, exam, domains);
+            Report report = new Report(_data, _courseDict, exam, domains, ScoreValueMap, cbSource.SelectedItem.ToString());
             report.GenerateCompleted += new EventHandler(report_GenerateCompleted);
             report.GenerateError += new EventHandler(report_GenerateError);
             report.Generate();
