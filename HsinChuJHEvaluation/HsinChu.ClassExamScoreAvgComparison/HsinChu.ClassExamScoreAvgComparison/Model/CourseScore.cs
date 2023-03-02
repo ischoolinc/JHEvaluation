@@ -22,34 +22,103 @@ namespace HsinChu.ClassExamScoreAvgComparison.Model
             CourseID = courseID;
         }
 
-        public void CalculateScore(HC.JHAEIncludeRecord ae, string type)
+        public void CalculateScore(HC.JHAEIncludeRecord ae, string type, Dictionary<decimal, DAL.ScoreMap> scoreMapDic)
         {
             //if (ae.UseScore) Score = _score;
 
             if (type == "定期")
             {
-                if (ae.UseScore) Score = _score;
+                if (ae.UseScore)
+                {
+                    if (_score.HasValue)
+                    {
+                        if (scoreMapDic.ContainsKey(_score.Value))
+                        {
+                            if (scoreMapDic[_score.Value].AllowCalculation) //可以被計算 ex缺考0分
+                            {
+                                Score = scoreMapDic[_score.Value].Score.Value;
+                            }
+                            else  //不能被計算 ex 免試
+                            {
+
+                            }
+
+                        }
+                        else
+                        {
+                            Score = _score;
+                        }
+                    }
+                    else
+                    {
+                        Score = _score;
+                    }
+                }
             }
             else if (type == "定期加平時")
             {
                 if (ae.UseScore && ae.UseAssignmentScore)
                 {
-                    if (_score.HasValue && _assignment_score.HasValue)
+                    //對照後的 定期評量分數
+                    decimal? score = null;
+
+                    //對照後的 平時評量分數
+                    decimal? assignmentScore = null;
+
+                    //找對照
+                    if (_score.HasValue)
+                    {
+                        if (scoreMapDic.ContainsKey(_score.Value))
+                        {
+                            if (scoreMapDic[_score.Value].AllowCalculation) //可以被計算 ex缺考0分
+                                score = scoreMapDic[_score.Value].Score.Value;
+                            else  //不能被計算 ex 免試
+                            {
+                                score = null;
+                            }
+                        }
+                        else
+                        {
+                            score = _score.Value;
+                        }
+                    }
+                    if (_assignment_score.HasValue)
+                    {
+                        if (scoreMapDic.ContainsKey(_assignment_score.Value))
+                        {
+                            if (scoreMapDic[_assignment_score.Value].AllowCalculation) //可以被計算 ex缺考0分
+                                assignmentScore = scoreMapDic[_assignment_score.Value].Score.Value;
+                            else  //不能被計算 ex 免試
+                            {
+                                assignmentScore = null;
+                            }
+                        }
+                        else
+                        {
+                            assignmentScore = _assignment_score.Value;
+                        }
+                    }
+
+                    //
+                    if (score != null && assignmentScore != null)
                     {
                         if (Global.ScorePercentageHSDict.ContainsKey(ae.RefAssessmentSetupID))
                         {
-                            decimal ff =Global.ScorePercentageHSDict[ae.RefAssessmentSetupID];
-                            decimal f = _score.Value * ff * 0.01M;
-                            decimal a = _assignment_score.Value * (100 - ff) * 0.01M;
+                            decimal ff = Global.ScorePercentageHSDict[ae.RefAssessmentSetupID];
+                            decimal f = score.Value * ff * 0.01M;
+                            decimal a = assignmentScore.Value * (100 - ff) * 0.01M;
+
                             Score = f + a;
                         }
                         else
                             Score = _score.Value * 0.5M + _assignment_score.Value * 0.5M;
 
-                        //Score = (_score.Value + _assignment_score.Value) / 2m;
+
                     }
-                    else if (_score.HasValue) Score = _score;
-                    else if (_assignment_score.HasValue) Score = _assignment_score;
+                    else if (score != null)
+                        Score = score;
+                    else if (assignmentScore != null)
+                        Score = assignmentScore;
                 }
                 else if (ae.UseScore)
                     Score = _score;
