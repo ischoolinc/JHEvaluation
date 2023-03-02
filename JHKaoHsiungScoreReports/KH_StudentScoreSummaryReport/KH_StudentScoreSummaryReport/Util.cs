@@ -608,5 +608,24 @@ namespace KH_StudentScoreSummaryReport
 
             
         }
+
+        /// <summary>
+        /// 判斷是否是特殊字(罕見字)
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool IsSurrogatePairString(string str)
+        {
+            bool value = false;
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                bool chr = char.IsSurrogatePair(str, i);
+                if (chr)
+                    value = true;
+            }
+            return value;
+        }
+
     }
 }

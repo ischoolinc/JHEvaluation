@@ -65,11 +65,11 @@ namespace KH_StudentScoreSummaryReport
         public Report(List<ReportStudent> students, ReportPreference printSetting)
         {
             Students = students;
-            Students.Sort(delegate(ReportStudent x, ReportStudent y)
+            Students.Sort(delegate (ReportStudent x, ReportStudent y)
             {
                 //return x.OrderString.CompareTo(y.OrderString);
                 return x.PrintOrder.CompareTo(y.PrintOrder);
-                
+
             });
             List<string> studenIDList = new List<string>();
             foreach (ReportStudent stud in students)
@@ -131,7 +131,7 @@ namespace KH_StudentScoreSummaryReport
             doc.MailMerge.Execute(new MergeDataSource(Students, PrintSetting));
 
             // 上傳電子報表
-            if(PrintSetting.isUploadEPaper)
+            if (PrintSetting.isUploadEPaper)
             {
                 try
                 {
@@ -145,12 +145,13 @@ namespace KH_StudentScoreSummaryReport
                         document.Save(ms, SaveFormat.Doc);
                         TempData._ePaperMemStreamList.Add(ms);
                     }
-                    
-                }catch(Exception ex)
-                {
-                    
+
                 }
-                
+                catch (Exception ex)
+                {
+
+                }
+
             }
 
             return doc;
@@ -1216,7 +1217,7 @@ namespace KH_StudentScoreSummaryReport
                     //List<RowHeader> sortedHeaders = SortHeader(RowIndexs.ToList());
                     List<RowHeader> sortedHeaders = RowIndexs.ToList();
 
-                    sortedHeaders.Sort(delegate(RowHeader x, RowHeader y)
+                    sortedHeaders.Sort(delegate (RowHeader x, RowHeader y)
                     {
                         Subj xx = new JHSchool.Evaluation.Subject(x.Subject, x.Domain);
                         Subj yy = new JHSchool.Evaluation.Subject(y.Subject, y.Domain);
@@ -1849,7 +1850,7 @@ namespace KH_StudentScoreSummaryReport
                     subjects.Add(each);
 
             }
-            domains.Sort(delegate(RowHeader x, RowHeader y)
+            domains.Sort(delegate (RowHeader x, RowHeader y)
             {
                 Subj xx = new JHSchool.Evaluation.Subject(x.Subject, x.Domain);
                 Subj yy = new JHSchool.Evaluation.Subject(y.Subject, y.Domain);
@@ -2000,7 +2001,11 @@ namespace KH_StudentScoreSummaryReport
                         fieldValue = student.SeatNo;
                         break;
                     case "姓名":
-                        fieldValue = student.Name;
+                        //  處理特殊字元
+                        if (Util.IsSurrogatePairString(student.Name))
+                            fieldValue = "";
+                        else
+                            fieldValue = student.Name;
                         break;
                     case "性別":
                         fieldValue = student.Gender;
@@ -2051,7 +2056,7 @@ namespace KH_StudentScoreSummaryReport
                             fieldValue = student.TransUpdateDateStr;
                         break;
 
-                        
+
                     case "最後計算日期":
                         fieldValue = Preference.FinalComputeDate;
                         break;
