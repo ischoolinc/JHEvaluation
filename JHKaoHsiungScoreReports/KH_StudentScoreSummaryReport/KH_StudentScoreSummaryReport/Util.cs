@@ -66,7 +66,7 @@ namespace KH_StudentScoreSummaryReport
             }
             // 取得學生類別List
             List<StudentTagRecord> StudTagRecList = StudentTag.SelectByStudentIDs(StudentIDList);
-            
+
             // 取得特種身分學生,加分比
             Dictionary<string, decimal> StudAddWeightDict = DALTransfer.GetStudentAddWeightFormUDTByStudentTag(StudTagRecList, DALTransfer.SchoolType.高中);
             // 取得特種身分學生名稱
@@ -92,7 +92,7 @@ namespace KH_StudentScoreSummaryReport
 
                         if (DateTime.TryParse(studUpdateRec[rs.StudentID].UpdateDate, out dt))
                         {
-                            rs.TransUpdateDateStr=(dt.Year-1911).ToString ()+"/"+dt.Month+"/"+dt.Day;
+                            rs.TransUpdateDateStr = (dt.Year - 1911).ToString() + "/" + dt.Month + "/" + dt.Day;
                         }
                         else
                             rs.TransUpdateDateStr = "";
@@ -188,13 +188,13 @@ namespace KH_StudentScoreSummaryReport
                         rs.LastEnterSchoolyear = studUpdateRec[rs.StudentID].SchoolYear;
                         rs.LastEnterSemester = studUpdateRec[rs.StudentID].Semester;
                         int gr;
-                        if(int.TryParse(studUpdateRec[rs.StudentID].GradeYear,out gr))
-                            rs.LastEnterGradeYear =gr;
-                    }                
+                        if (int.TryParse(studUpdateRec[rs.StudentID].GradeYear, out gr))
+                            rs.LastEnterGradeYear = gr;
+                    }
                 }
 
             }
-            return students;        
+            return students;
         }
 
         /// <summary>
@@ -518,14 +518,14 @@ namespace KH_StudentScoreSummaryReport
             if (StudentIDList.Count > 0)
             {
                 AccessHelper accessHelper = new AccessHelper();
-                string query="ref_student_id in('"+string.Join("','",StudentIDList.ToArray())+"')";
+                string query = "ref_student_id in('" + string.Join("','", StudentIDList.ToArray()) + "')";
                 List<SLRecord> SLRecordList = accessHelper.Select<SLRecord>(query);
                 foreach (SLRecord rec in SLRecordList)
                 {
                     if (!retVal.ContainsKey(rec.RefStudentID))
                         retVal.Add(rec.RefStudentID, new List<SLRecord>());
 
-                    retVal[rec.RefStudentID].Add(rec);                
+                    retVal[rec.RefStudentID].Add(rec);
                 }
             }
             return retVal;
@@ -542,11 +542,11 @@ namespace KH_StudentScoreSummaryReport
             if (StudentIDList.Count > 0)
             {
                 QueryHelper qh = new QueryHelper();
-                string query = "select ref_student_id,school_year,semester,count(id) as count from discipline where ref_student_id in("+string.Join(",",StudentIDList.ToArray())+") and reason like '%[幹部]%' group by ref_student_id,school_year,semester";
+                string query = "select ref_student_id,school_year,semester,count(id) as count from discipline where ref_student_id in(" + string.Join(",", StudentIDList.ToArray()) + ") and reason like '%[幹部]%' group by ref_student_id,school_year,semester";
                 DataTable dt = qh.Select(query);
                 foreach (DataRow dr in dt.Rows)
-                { 
-                    string key=dr["ref_student_id"].ToString();
+                {
+                    string key = dr["ref_student_id"].ToString();
 
                     if (!retVal.ContainsKey(key))
                         retVal.Add(key, new List<itemCount>());
@@ -567,7 +567,7 @@ namespace KH_StudentScoreSummaryReport
         /// </summary>
         /// <param name="StudentIDList"></param>
         /// <returns></returns>
-        public static Dictionary<string,List<JHMeritRecord>> GetStudentMeritRecordDict(List<string> StudentIDList)
+        public static Dictionary<string, List<JHMeritRecord>> GetStudentMeritRecordDict(List<string> StudentIDList)
         {
             Dictionary<string, List<JHMeritRecord>> retVal = new Dictionary<string, List<JHMeritRecord>>();
             if (StudentIDList.Count > 0)
@@ -602,27 +602,33 @@ namespace KH_StudentScoreSummaryReport
                         retVal.Add(rec.StudentID, new List<StudentFitnessRecord>());
 
                     retVal[rec.StudentID].Add(rec);
-                }                
+                }
             }
             return retVal;
 
-            
+
         }
 
         /// <summary>
-        /// 判斷是否是特殊字(罕見字)
+        /// 將特殊字用空白表示
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public static bool IsSurrogatePairString(string str)
+        public static string SurrogatePairString(string input)
         {
-            bool value = false;
-
-            for (int i = 0; i < str.Length; i++)
+            string value = "";
+            int idx = 0;
+            foreach (char c in input)
             {
-                bool chr = char.IsSurrogatePair(str, i);
-                if (chr)
-                    value = true;
+                if (char.IsSurrogatePair(input, idx) || char.IsSurrogate(c))
+                {
+                    value += " ";
+                }
+                else
+                {
+                    value += c;
+                }
+                idx++;
             }
             return value;
         }

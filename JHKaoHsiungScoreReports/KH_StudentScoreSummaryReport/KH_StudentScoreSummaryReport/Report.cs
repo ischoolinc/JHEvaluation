@@ -2001,11 +2001,13 @@ namespace KH_StudentScoreSummaryReport
                         fieldValue = student.SeatNo;
                         break;
                     case "姓名":
-                        //  處理特殊字元
-                        if (Util.IsSurrogatePairString(student.Name))
-                            fieldValue = "";
-                        else
-                            fieldValue = student.Name;
+                        fieldValue = Util.SurrogatePairString(student.Name);
+
+                        ////  處理特殊字元
+                        //if (Util.IsSurrogatePairString(student.Name))
+                        //    fieldValue = "";
+                        //else
+                        //    fieldValue = student.Name;
                         break;
                     case "性別":
                         fieldValue = student.Gender;
