@@ -154,9 +154,20 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                         //跑一遍領域成績
                         foreach (K12.Data.DomainScore domain in record.Domains.Values)
                         {
-                            // 不符合108課綱白名單先剔除
-                            if (!JHEvaluation.ScoreCalculation.Util.DomainMap108List.Contains(domain.Domain))
+                            // 2023-03-13 高雄小組要求把國語文、英語、本土語文成績也顯示，但不列入"不及格數"計算
+                            if (JHEvaluation.ScoreCalculation.Program.Mode == JHEvaluation.ScoreCalculation.ModuleMode.KaoHsiung)
+                            {
+                                // 不符合108課綱白名單先剔除
+                                if (!JHEvaluation.ScoreCalculation.Util.DomainMap108List.Contains(domain.Domain) && !JHEvaluation.ScoreCalculation.Util.KHSpecialDomainMapList.Contains(domain.Domain))
+                                    continue;
+                            }
+                            else
+                            {
+                                // 不符合108課綱白名單先剔除
+                                if (!JHEvaluation.ScoreCalculation.Util.DomainMap108List.Contains(domain.Domain))
                                 continue;
+
+                            }
 
                             if (domain.SchoolYear <108)
                             {
@@ -272,7 +283,7 @@ namespace JHSchool.Evaluation.Calculation.GraduationConditions
                             }
 
                                                         
-                            if(grScore >= _score)
+                            if(grScore >= _score && JHEvaluation.ScoreCalculation.Util.DomainMap108List.Contains(domainName))
                                 passScoreList.Add(grScore);
 
                             StudentDomainResult.AddDomain(each.ID, domainName, grScore, grScore >= _score);

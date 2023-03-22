@@ -120,7 +120,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 viewer.ShowDialog();
                 return;
             }
-            else if(_ruleErrorList.Count > 0)
+            else if (_ruleErrorList.Count > 0)
             {
                 btnExit.Enabled = true;
 
@@ -128,7 +128,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                 viewer.SetHeader("學生");
                 foreach (StudentRecord student in _ruleErrorList)
                     viewer.SetMessage(student, new List<string>(new string[] { "計算規則沒有設定 核可節次別，請至教務作業/成績計算規則 設定" }));
-                viewer.ShowDialog();                
+                viewer.ShowDialog();
                 return;
 
             }
@@ -1124,12 +1124,19 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
             SetStudentDomainCell(cells, rowIndex, columnIndex++, "學號", styleNormal);
             SetStudentDomainCell(cells, rowIndex, columnIndex++, "姓名", styleNormal);
             // 領域名稱
+            StudentDomainResult.OrderDomainNameList();
+
             foreach (string domainName in StudentDomainResult._DomainNameList)
             {
-                SetStudentDomainCell(cells, rowIndex, columnIndex++, domainName, styleNormal);
+                if (!JHEvaluation.ScoreCalculation.Util.KHSpecialDomainMapList.Contains(domainName))
+                    SetStudentDomainCell(cells, rowIndex, columnIndex++, domainName, styleNormal);
             }
             SetStudentDomainCell(cells, rowIndex, columnIndex++, "不及格數", styleNormal);
-
+            foreach (string domainName in StudentDomainResult._DomainNameList)
+            {
+                if (JHEvaluation.ScoreCalculation.Util.KHSpecialDomainMapList.Contains(domainName))
+                    SetStudentDomainCell(cells, rowIndex, columnIndex++, domainName, styleNormal);
+            }
             // 當有國語文、英語
             if (TempData.tmpStudDomainCreditDict.Count > 0)
             {
@@ -1155,22 +1162,50 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictRepo
                     int failCnt = 0;
                     foreach (string domainName in StudentDomainResult._DomainNameList)
                     {
-                        if (StudentDomainResult._DomainResult[student.ID].ContainsKey(domainName))
+                        //非高雄國中特殊領域
+                        if (!JHEvaluation.ScoreCalculation.Util.KHSpecialDomainMapList.Contains(domainName))
                         {
-                            if (StudentDomainResult._DomainResult[student.ID][domainName].isPass)
+                            if (StudentDomainResult._DomainResult[student.ID].ContainsKey(domainName))
                             {
-                                SetStudentDomainCell(cells, rowIndex, columnIndex++, StudentDomainResult._DomainResult[student.ID][domainName].domainScore, styleNormal);
+                                if (StudentDomainResult._DomainResult[student.ID][domainName].isPass)
+                                {
+                                    SetStudentDomainCell(cells, rowIndex, columnIndex++, StudentDomainResult._DomainResult[student.ID][domainName].domainScore, styleNormal);
+                                }
+                                else
+                                {
+                                    SetStudentDomainCell(cells, rowIndex, columnIndex++, StudentDomainResult._DomainResult[student.ID][domainName].domainScore, styleRed);
+                                    failCnt++;
+                                }
                             }
                             else
-                            {
-                                SetStudentDomainCell(cells, rowIndex, columnIndex++, StudentDomainResult._DomainResult[student.ID][domainName].domainScore, styleRed);
-                                failCnt++;
-                            }
+                                SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
                         }
-                        else
-                            SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
+
                     }
+                    //不及格數
                     SetStudentDomainCell(cells, rowIndex, columnIndex++, "" + failCnt, styleNormal);
+
+                    foreach (string domainName in StudentDomainResult._DomainNameList)
+                    {
+                        if (JHEvaluation.ScoreCalculation.Util.KHSpecialDomainMapList.Contains(domainName))
+                        {
+                            //高雄國中領域
+                            if (StudentDomainResult._DomainResult[student.ID].ContainsKey(domainName))
+                            {
+                                if (StudentDomainResult._DomainResult[student.ID][domainName].isPass)
+                                {
+                                    SetStudentDomainCell(cells, rowIndex, columnIndex++, StudentDomainResult._DomainResult[student.ID][domainName].domainScore, styleNormal);
+                                }
+                                else
+                                {
+                                    SetStudentDomainCell(cells, rowIndex, columnIndex++, StudentDomainResult._DomainResult[student.ID][domainName].domainScore, styleRed);
+                                }
+                            }
+                            else
+                                SetStudentDomainCell(cells, rowIndex, columnIndex++, "", styleNormal);
+                        }
+                    }
+
 
                     if (TempData.tmpStudDomainCreditDict.Count > 0)
                     {

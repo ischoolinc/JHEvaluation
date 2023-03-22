@@ -268,7 +268,9 @@ namespace JHEvaluation.ScoreCalculation
             DomainMap108List.Clear();
             DomainMap108List = new List<string>(new string[] { "語文", "數學", "自然科學", "科技", "社會", "藝術", "健康與體育", "綜合活動", "藝術與人文", "自然與生活科技" });
 
-         
+            KHSpecialDomainMapList.Clear();
+            KHSpecialDomainMapList = new List<string>(new string[] { "國語文", "英語", "本土語文" });
+
         }
 
         /// <summary>
@@ -276,6 +278,10 @@ namespace JHEvaluation.ScoreCalculation
         /// </summary>
         public static List<string> DomainMap108List = new List<string>();
 
+        /// <summary>
+        ///  高雄國中特殊領域對照
+        /// </summary>
+        public static List<string> KHSpecialDomainMapList = new List<string>();
 
         /// <summary>
         /// 使用SQL傳入學年度、學期、學生系統編號，取得學生修課紀錄，目的在處理 K12 無法透過這條件，需要SelectAll學生修課造成記憶體不足。
