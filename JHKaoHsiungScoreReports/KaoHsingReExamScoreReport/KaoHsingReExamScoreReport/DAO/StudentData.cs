@@ -64,9 +64,10 @@ namespace KaoHsingReExamScoreReport.DAO
         {
             int retVal = 0;
             // 01-06 小組會議討論，國語文、英語 屬語文，只有看語文領域，共7大領域 (2016-2-18 均泰)
+            //2023-03 Cynthia 本土語文 也加入語文領域
             foreach (string name in DomainScorePassDict.Keys)
             {
-                if (name == "國語文" || name == "英語")
+                if (name == "國語文" || name == "英語" || name == "本土語文")
                     continue;
 
                 if (DomainScorePassDict[name] == false)

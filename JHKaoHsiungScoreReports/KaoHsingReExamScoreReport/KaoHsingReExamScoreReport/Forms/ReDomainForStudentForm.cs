@@ -152,7 +152,7 @@ namespace KaoHsingReExamScoreReport.Forms
 
 
 
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= 30; i++)
             {
                 ColumnList.Add("領域名稱" + i);
                 ColumnList.Add("原始成績" + i);

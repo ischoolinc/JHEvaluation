@@ -72,6 +72,10 @@ namespace KaoHsingReExamScoreReport
                                     {
                                         sd.DomainScorePassDict["英語"] = true; //英語也當成及格，就不會被印出來
                                     }
+                                    if (sd.DomainScorePassDict.ContainsKey("本土語文")) //2023-03 新增本土語文
+                                    {
+                                        sd.DomainScorePassDict["本土語文"] = true; 
+                                    }
                                 }
                             }
                         }
