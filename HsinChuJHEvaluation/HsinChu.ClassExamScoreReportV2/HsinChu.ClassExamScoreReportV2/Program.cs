@@ -23,12 +23,12 @@ namespace HsinChu.ClassExamScoreReportV2
         {
             //註冊權限管理項目。
             Catalog detail = RoleAclSource.Instance["班級"]["報表"];
-            detail.Add(new ReportFeature(PermissionCode, "班級評量成績單"));
+            detail.Add(new ReportFeature(PermissionCode, "班級評量成績單--即將下架"));
 
             //DeployParameters dparams = ModuleLoader.GetDeployParametsers(typeof(Program), "Mode=KaoHsiung");
 
             //註冊報表功能項目。
-            MenuButton mb = NLDPanels.Class.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["班級評量成績單"];
+            MenuButton mb = NLDPanels.Class.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["班級評量成績單--即將下架"];
             mb.Enable = false;
             mb.Click += delegate
             {
