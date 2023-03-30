@@ -18,6 +18,8 @@ namespace HsinChu.JHEvaluation.ConfigControls.Ribbon
         private bool _has_deleted;
         private ErrorProvider errorProvider1;
 
+        private Dictionary<string, ScoreValueMapping> _OriginalScoreValueMapping;
+
         public ScoreValueManager()
         {
             InitializeComponent();
@@ -138,6 +140,7 @@ namespace HsinChu.JHEvaluation.ConfigControls.Ribbon
 
         private void ScoreValueManager_Load(object sender, EventArgs e)
         {
+            _OriginalScoreValueMapping = new Dictionary<string, ScoreValueMapping>();
             errorProvider1 = new ErrorProvider();
 
             //  DataGridView 事件
@@ -183,6 +186,16 @@ namespace HsinChu.JHEvaluation.ConfigControls.Ribbon
                     sources.Add(UseValue);
                     sources.Add(ReportValue);
 
+                    _OriginalScoreValueMapping.Add(UseValue,
+                        new ScoreValueMapping
+                        {
+                            UseValue = UseValue
+                            , UseText = UseText
+                            , Active = Active.ToUpper() == "TRUE" ? true : false
+                            , AllowCalculation = AllowCalculation.ToUpper() == "TRUE" ? true : false
+                            , Score = Score
+                        });
+
                     int idx = this.dgvScoreConfig.Rows.Add(sources.ToArray());
                     if (AllowCalculation.ToLower() == "true")
                     {
@@ -199,7 +212,7 @@ namespace HsinChu.JHEvaluation.ConfigControls.Ribbon
                     this.dgvScoreConfig.Rows[idx].Cells[4].Tag = UseValue;
                     this.dgvScoreConfig.Rows[idx].Cells[6].Tag = ReportValue;
                 }
-            } 
+            }
             else
             {
                 {
@@ -235,7 +248,7 @@ namespace HsinChu.JHEvaluation.ConfigControls.Ribbon
                     int idx = this.dgvScoreConfig.Rows.Add(sources.ToArray());
                     this.dgvScoreConfig.Rows[idx].Cells[0].Tag = "免";
                     this.dgvScoreConfig.Rows[idx].Cells[1].Tag = false;
-                    this.dgvScoreConfig.Rows[idx].Cells[2].Tag = ""; 
+                    this.dgvScoreConfig.Rows[idx].Cells[2].Tag = "";
                     this.dgvScoreConfig.Rows[idx].Cells[2].ReadOnly = true;
                     this.dgvScoreConfig.Rows[idx].Cells[3].Tag = false;
                     this.dgvScoreConfig.Rows[idx].Cells[4].Tag = (int.MinValue + 1);
@@ -324,6 +337,22 @@ namespace HsinChu.JHEvaluation.ConfigControls.Ribbon
                 return;
             }
 
+            string message = IsActiveChangeFalse();
+            if (message != "")
+            {
+                message += "\r\n請問是否要繼續儲存？";
+                DialogResult result = MessageBox.Show(message, "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    // 繼續執行
+                }
+                else if (result == DialogResult.No)
+                {
+                    // 停止執行並返回
+                    return;
+                }
+            }
+
             ConfigData cd = School.Configuration["評量成績缺考暨免試設定"];
             StringBuilder sb = new StringBuilder("<Settings>");
             foreach (DataGridViewRow row in dgvScoreConfig.Rows)
@@ -343,8 +372,110 @@ namespace HsinChu.JHEvaluation.ConfigControls.Ribbon
 
             cd["評量成績缺考暨免試設定"] = sb.ToString();
             cd.Save();
+            InsertLog();
 
-            MessageBox.Show("儲存成功");
+            MessageBox.Show("儲存成功。");
+            this.Close();
         }
+
+        /// <summary>
+        /// 檢查，若原先「啟用」被取消，需要警告
+        /// </summary>
+        /// <returns></returns>
+        private string IsActiveChangeFalse()
+        {
+            string message = "";
+            foreach (DataGridViewRow row in dgvScoreConfig.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                if (_OriginalScoreValueMapping.ContainsKey(row.Cells["colUseValue"].Value + ""))
+                    if (_OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].Active)
+                        if ((row.Cells["colActive"].Value + "").ToUpper() != "TRUE")
+                            message += "取消「" + row.Cells["colUseText"].Value + "」的啟用狀態可能會使已輸入「" + row.Cells["colUseText"].Value + "」的評量成績不正確。\r\n";
+            }
+
+            return message;
+        }
+
+        private void InsertLog()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            //如果使用文字沒有變更
+            foreach (DataGridViewRow row in dgvScoreConfig.Rows)
+            {
+                string message = "";
+                if (row.IsNewRow) continue;
+                //文字//是否計算//計算幾分//啟用
+                if (_OriginalScoreValueMapping.ContainsKey(row.Cells["colUseValue"].Value + ""))
+                {
+                    //如果變更使用文字
+                    if (_OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].UseText != row.Cells["colUseText"].Value + "")
+                    {
+                        message += "使用文字「" + _OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].UseText + "」變更為「" + row.Cells["colUseText"].Value + "」\r\n";
+
+                        if (_OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].AllowCalculation.ToString().ToLower() != row.Cells["colAllowCalculation"].Value.ToString().ToLower())
+                            message += "是否計算「" + _OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].AllowCalculation + "」變更為「" + row.Cells["colAllowCalculation"].Value + "」\r\n";
+
+                        if (_OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].Score != row.Cells["colScore"].Value + "")
+                            message += "計算分數「" + _OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].Score + "」變更為「" + row.Cells["colScore"].Value + "」\r\n";
+
+                        if (_OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].Active.ToString().ToLower() != row.Cells["colActive"].Value.ToString().ToLower())
+                            message += "啟用狀態「" + _OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].Active + "」變更為「" + row.Cells["colActive"].Value + "」。\r\n";
+
+                        if (message != "")
+                            stringBuilder.AppendLine(message);
+                    }
+                    else //使用文字沒有變更
+                    {
+                        string useText = "「" + _OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].UseText + "」：\r\n";
+
+                        if (_OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].AllowCalculation.ToString().ToLower() != row.Cells["colAllowCalculation"].Value.ToString().ToLower())
+                            message += "是否計算「" + _OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].AllowCalculation + "」變更為「" + row.Cells["colAllowCalculation"].Value + "」\r\n";
+
+                        if (_OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].Score != row.Cells["colScore"].Value + "")
+                            message += "計算分數「" + _OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].Score + "」變更為「" + row.Cells["colScore"].Value + "」\r\n";
+
+                        if (_OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].Active.ToString().ToLower() != row.Cells["colActive"].Value.ToString().ToLower())
+                            message += "啟用狀態「" + _OriginalScoreValueMapping[row.Cells["colUseValue"].Value + ""].Active + "」變更為「" + row.Cells["colActive"].Value + "」\r\n";
+
+                        if (message != "")
+                            stringBuilder.AppendLine(string.Concat(useText, message));
+                    }
+                }
+            }
+
+            if (stringBuilder.Length > 0)
+                FISCA.LogAgent.ApplicationLog.Log("設定評量成績缺考/免試", "變更", stringBuilder.ToString());
+        }
+    }
+
+    public class ScoreValueMapping
+    {
+        /// <summary>
+        /// 代碼
+        /// </summary>
+        public string UseValue { get; set; }
+
+        /// <summary>
+        /// 使用文字
+        /// </summary>
+        public string UseText { get; set; }
+
+        /// <summary>
+        /// 啟用
+        /// </summary>
+        public bool Active { get; set; }
+
+        /// <summary>
+        /// 計算
+        /// </summary>
+        public bool AllowCalculation { get; set; }
+
+        /// <summary>
+        /// 計算分數string
+        /// </summary>
+        public string Score { get; set; }
     }
 }
