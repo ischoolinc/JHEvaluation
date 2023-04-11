@@ -47,9 +47,16 @@ namespace JHEvaluation.Rating
             rbButton["評量成績排名"].Enable = true;
             rbButton["評量成績排名"].Click += delegate
             {
-                FormRating form = new FormExamRating();
-                form.SetRatingStudents(NLDPanels.Student.SelectedSource);
-                form.ShowDialog();
+                try
+                {
+                    FormRating form = new FormExamRating();
+                    form.SetRatingStudents(NLDPanels.Student.SelectedSource);
+                    form.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             };
 
 
@@ -79,6 +86,7 @@ namespace JHEvaluation.Rating
                 Mode = ModuleMode.KaoHsiung; //高雄。
             else
                 Mode = ModuleMode.HsinChu;  //新竹。
+        
         }
 
         private static void TestProject()

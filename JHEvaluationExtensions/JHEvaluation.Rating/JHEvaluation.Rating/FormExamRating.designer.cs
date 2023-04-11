@@ -31,14 +31,11 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgv = new DevComponents.DotNetBar.Controls.DataGridViewX();
-            this.chCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.chPeriod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chScoreItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cboSchoolYear = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.labelX3 = new DevComponents.DotNetBar.LabelX();
@@ -85,6 +82,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.checkBoxAllDomanin = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.checkBoxAllSubject = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.chCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.chPeriod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chScoreItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupPanel1.SuspendLayout();
@@ -104,7 +104,7 @@
             this.dgv.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -117,13 +117,14 @@
             this.chScoreItem});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgv.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgv.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(215)))), ((int)(((byte)(229)))));
+            this.dgv.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.dgv.Location = new System.Drawing.Point(7, 81);
             this.dgv.Name = "dgv";
             this.dgv.RowHeadersVisible = false;
@@ -131,27 +132,6 @@
             this.dgv.Size = new System.Drawing.Size(323, 389);
             this.dgv.TabIndex = 0;
             this.dgv.Tag = "StatusVarying";
-            // 
-            // chCheck
-            // 
-            this.chCheck.HeaderText = "";
-            this.chCheck.Name = "chCheck";
-            this.chCheck.Width = 30;
-            // 
-            // chPeriod
-            // 
-            this.chPeriod.HeaderText = "計算比例";
-            this.chPeriod.Name = "chPeriod";
-            this.chPeriod.Width = 80;
-            // 
-            // chScoreItem
-            // 
-            this.chScoreItem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.chScoreItem.DefaultCellStyle = dataGridViewCellStyle2;
-            this.chScoreItem.HeaderText = "名稱";
-            this.chScoreItem.Name = "chScoreItem";
-            this.chScoreItem.ReadOnly = true;
             // 
             // panel1
             // 
@@ -728,7 +708,7 @@
             // 
             this.checkBoxAllDomanin.BackgroundStyle.Class = "";
             this.checkBoxAllDomanin.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.checkBoxAllDomanin.Location = new System.Drawing.Point(7, 476);
+            this.checkBoxAllDomanin.Location = new System.Drawing.Point(7, 467);
             this.checkBoxAllDomanin.Name = "checkBoxAllDomanin";
             this.checkBoxAllDomanin.Size = new System.Drawing.Size(80, 21);
             this.checkBoxAllDomanin.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -746,13 +726,35 @@
             // 
             this.checkBoxAllSubject.BackgroundStyle.Class = "";
             this.checkBoxAllSubject.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.checkBoxAllSubject.Location = new System.Drawing.Point(87, 476);
+            this.checkBoxAllSubject.Location = new System.Drawing.Point(87, 467);
             this.checkBoxAllSubject.Name = "checkBoxAllSubject";
             this.checkBoxAllSubject.Size = new System.Drawing.Size(80, 21);
             this.checkBoxAllSubject.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.checkBoxAllSubject.TabIndex = 7;
             this.checkBoxAllSubject.Text = "全選科目";
             this.checkBoxAllSubject.CheckedChanged += new System.EventHandler(this.checkBoxAllSubject_CheckedChanged);
+            // 
+            // chCheck
+            // 
+            this.chCheck.HeaderText = "";
+            this.chCheck.Name = "chCheck";
+            this.chCheck.Width = 30;
+            // 
+            // chPeriod
+            // 
+            this.chPeriod.HeaderText = "計算比例";
+            this.chPeriod.Name = "chPeriod";
+            this.chPeriod.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.chPeriod.Width = 80;
+            // 
+            // chScoreItem
+            // 
+            this.chScoreItem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.chScoreItem.DefaultCellStyle = dataGridViewCellStyle2;
+            this.chScoreItem.HeaderText = "名稱";
+            this.chScoreItem.Name = "chScoreItem";
+            this.chScoreItem.ReadOnly = true;
             // 
             // FormExamRating
             // 
@@ -832,9 +834,6 @@
         private System.Windows.Forms.Label lblPercentage;
         private System.Windows.Forms.RadioButton rbPercentage;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn chCheck;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chPeriod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn chScoreItem;
         private DevComponents.DotNetBar.Controls.TextBoxX txtLastRank;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RadioButton rbLastRank;
@@ -843,5 +842,8 @@
         private System.Windows.Forms.RadioButton rbLastPercentage;
         private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxAllDomanin;
         private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxAllSubject;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn chCheck;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chPeriod;
+        private System.Windows.Forms.DataGridViewTextBoxColumn chScoreItem;
     }
 }
