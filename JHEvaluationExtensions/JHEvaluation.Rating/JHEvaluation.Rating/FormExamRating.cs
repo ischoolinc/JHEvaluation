@@ -7,6 +7,7 @@ using Campus.Windows;
 using System.Drawing;
 using Campus;
 using JHSchool.Evaluation;
+using System.IO;
 
 namespace JHEvaluation.Rating
 {
@@ -246,7 +247,7 @@ namespace JHEvaluation.Rating
         protected override void PrepareDataBackground()
         {
             FunctionSpliter<string, JHSCETakeRecord> selectData = new FunctionSpliter<string, JHSCETakeRecord>(500, 5);
-            selectData.Function = delegate(List<string> ps)
+            selectData.Function = delegate (List<string> ps)
             {
                 return JHSCETake.SelectByCourseAndExam(ps, ExamId);
             };
@@ -448,10 +449,10 @@ namespace JHEvaluation.Rating
             else if (rbTopRank.Checked)
             {
                 // 排名
-                param.Mode = FilterMode.Place;                
-                    param.Top = int.Parse(txtTopRank.Text);                
+                param.Mode = FilterMode.Place;
+                param.Top = int.Parse(txtTopRank.Text);
             }
-            else if(rbLastRank.Checked)
+            else if (rbLastRank.Checked)
             {
                 // 後排名
                 param.Mode = FilterMode.PlaceL;
@@ -573,6 +574,11 @@ namespace JHEvaluation.Rating
             Dictionary<string, int> subjectCount = new Dictionary<string, int>();
             Dictionary<string, decimal> subjectWeight = new Dictionary<string, decimal>();
 
+            // 處理領域
+            Dictionary<string, decimal> domainWeight = new Dictionary<string, decimal>();
+            // 檢查領域科目名稱是否存在
+            List<string> DomainSubejctName = new List<string>();
+
             foreach (JHSCAttendRecord record in SCAttends.Values)
             {
                 JHCourseRecord course = Courses[record.RefCourseID];
@@ -580,13 +586,26 @@ namespace JHEvaluation.Rating
                 if (!IncludeQuery.Contains(course.RefAssessmentSetupID, examid)) continue;
 
                 string subject = course.Subject.Trim();
+                string domain = course.Domain.Trim();
+                string domainSubject = domain + "_" + subject;
+                if (!domainWeight.ContainsKey(domain))
+                {
+                    domainWeight.Add(domain, 0);
+                }
 
+                if (!DomainSubejctName.Contains(domainSubject))
+                {
+                    domainWeight[domain] += course.Credit.HasValue ? course.Credit.Value : 0;
+                    DomainSubejctName.Add(domainSubject);
+                }
+                
                 //隨機取得一個課程的 Credit 當作是 Subject 的比重。
                 if (!subjectWeight.ContainsKey(subject))
                 {
                     subjectWeight.Add(subject, 0);
                     subjectWeight[subject] = course.Credit.HasValue ? course.Credit.Value : 0;
                 }
+
 
                 //計算科目的修習人數。
                 if (!subjectCount.ContainsKey(subject))
@@ -610,7 +629,17 @@ namespace JHEvaluation.Rating
             foreach (string each in NameMapping.Keys)
             {
                 DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(dgv, false, 1, each);
+
+                //row.CreateCells(dgv, false, 1, each);
+                if (domainWeight.ContainsKey(each))
+                {
+                    row.CreateCells(dgv, false, domainWeight[each], each);
+                }
+                else
+                {
+                    row.CreateCells(dgv, false, 1, each);
+                }
+
                 row.Cells[chScoreItem.Index].Style.ForeColor = Color.Blue;
                 row.Tag = new ScoreItem(each, ScoreType.Domain);
                 dgv.Rows.Add(row);
@@ -709,7 +738,7 @@ namespace JHEvaluation.Rating
         {
             for (int i = 0; i < dgv.Rows.Count; i++)
             {
-                if(checkBoxAllDomanin.Checked == true)
+                if (checkBoxAllDomanin.Checked == true)
                 {
                     if (dgv.Rows[i].Cells[chScoreItem.Index].Style.ForeColor == Color.Blue) //領域
                         dgv.Rows[i].Cells[0].Value = true;
@@ -719,7 +748,7 @@ namespace JHEvaluation.Rating
                     if (dgv.Rows[i].Cells[chScoreItem.Index].Style.ForeColor == Color.Blue) //領域
                         dgv.Rows[i].Cells[0].Value = false;
                 }
-                    
+
             }
         }
 
@@ -740,5 +769,6 @@ namespace JHEvaluation.Rating
 
             }
         }
+              
     }
 }
