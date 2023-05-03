@@ -1236,7 +1236,7 @@ namespace HsinChuExamScore_JH
                     }
 
                     // 領域-科目1,2,3 組距
-                    for (int subjIdx = 1; subjIdx <= 7; subjIdx++)
+                    for (int subjIdx = 1; subjIdx <= 20; subjIdx++)
                     {
                         foreach (string rt in rankDSTypeList)
                         {
