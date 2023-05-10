@@ -108,6 +108,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     break;
                 }
             }
+
+            if (!score.HasValue)
+                value = "";
+
             return value;
         }
 
@@ -123,6 +127,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     break;
                 }
             }
+
+            if (!score.HasValue)
+                value = "";
             return value;
         }
     }

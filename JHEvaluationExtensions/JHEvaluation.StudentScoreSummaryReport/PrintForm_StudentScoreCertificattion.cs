@@ -1415,7 +1415,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                             domainScoreDic.Add("領域_" + domainscore.Value.Domain, new List<decimal>());
                                         }
                                         domainScoreDic["領域_" + domainscore.Value.Domain].Add(domainscore.Value.Score.Value);
-                                        
+
                                         //紀錄成績
                                         if (domainScore_dict.ContainsKey("領域_" + domainscore.Value.Domain + "_成績_" + (grade * 2)))
                                         {
@@ -1542,7 +1542,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     {
                                         learmingDomainScoreDic.Add("領域_學習領域總平均成績", new List<decimal>());
                                     }
-                                    learmingDomainScoreDic["領域_學習領域總平均成績"].Add(jssr.LearnDomainScore.Value);
+                                    if (jssr.LearnDomainScore.HasValue)
+                                        learmingDomainScoreDic["領域_學習領域總平均成績"].Add(jssr.LearnDomainScore.Value);
 
                                     //紀錄成績
                                     if (domainScore_dict.ContainsKey("領域_學習領域總成績_成績_" + (grade * 2)))
