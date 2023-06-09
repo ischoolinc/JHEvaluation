@@ -29,7 +29,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
         public GraduationInspectWizard(string type)
         {
             InitializeComponent();
-            
+
             pic_loading.Visible = false;
 
             #region 判斷是在學生身上選還是在教務作業上選
@@ -42,7 +42,20 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
             }
             else if (type.Equals("EduAdmin"))
             {
+                int maxGrYear = 3;
+                //  照出最高年級
+                foreach (ClassRecord cr in Class.Instance.Items)
+                {
+                    int gr;
+                    if (int.TryParse(cr.GradeYear, out gr))
+                        if (gr > maxGrYear)
+                            maxGrYear = gr;
+                }
+
                 lblGradeYear.Visible = true;
+                if (maxGrYear <= intGradeYear.MaxValue)
+                    intGradeYear.Value = maxGrYear;
+
                 intGradeYear.Visible = true;
                 _students = new List<StudentRecord>();
             }
@@ -66,7 +79,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
 
         private void InitializeMessage(int count)
         {
-            lblMessage.Text = "系統即將依您設定之畢業條件進行畢業資格審查，目前系統內準畢業生(九年級學生)人數為 " + count + " 人，請您選按「下一步」進行審查作業。";
+            lblMessage.Text = "系統即將依您設定之畢業條件進行畢業資格審查，目前系統內選取學生人數為 " + count + " 人，請您選按「下一步」進行審查作業。";
         }
 
         /// <summary>
@@ -157,13 +170,13 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
         {
             #region 寫入離校資訊
             try
-            {                
+            {
                 List<JHLeaveInfoRecord> leaveInfoRecordList = new List<JHLeaveInfoRecord>();
                 foreach (JHLeaveInfoRecord record in JHLeaveIfno.SelectByStudentIDs(_students.AsKeyList()))
                 {
                     if (!_passList.ContainsKey(record.RefStudentID)) continue;
 
-                    leaveInfoRecordList.Add(record);                                       
+                    leaveInfoRecordList.Add(record);
 
                     if (_passList[record.RefStudentID] == true)
                     {
@@ -187,12 +200,12 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
                         }
                         record.Memo = builder.ToString();
                     }
-                    
+
                     // 系統目前預設學年度
                     int SchoolYear;
                     int.TryParse(JHSchool.School.DefaultSchoolYear, out SchoolYear);
                     record.SchoolYear = SchoolYear;
-                                    }                
+                }
                 JHLeaveIfno.Update(leaveInfoRecordList);
             }
             catch (Exception ex)
@@ -294,7 +307,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
 
                             foreach (JHTagConfigRecord record in tagList)
                             {
-                                if (record.FullName == fullname )
+                                if (record.FullName == fullname)
                                 {
                                     JHStudentTagRecord r = new JHStudentTagRecord();
                                     r.RefTagID = record.ID;
@@ -309,7 +322,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
 
                 JHStudentTag.Delete(deleteList);
                 JHStudentTag.Insert(studentTagsList);
-                
+
                 #endregion
             }
             catch (Exception ex)
@@ -533,15 +546,25 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
             }
             else
             {
-                lblMessage.Visible = false;
-                lblProgress.Visible = true;
-                progressBar.Visible = true;
-                lblProgress.Text = "檢查學期歷程…";
-                btnNext.Enabled = false;
-                btnNext.Visible = false;
-                btnExit.Enabled = false;
-                pic_loading.Visible = true;
-                _historyWorker.RunWorkerAsync();
+                // 檢查學生人數如果沒人不執行
+                if (_students.Count > 0)
+                {
+                    lblMessage.Visible = false;
+                    lblProgress.Visible = true;
+                    progressBar.Visible = true;
+                    lblProgress.Text = "檢查學期歷程…";
+                    btnNext.Enabled = false;
+                    btnNext.Visible = false;
+                    btnExit.Enabled = false;
+                    pic_loading.Visible = true;
+                    _historyWorker.RunWorkerAsync();
+                }
+                else
+                {
+                    FISCA.Presentation.Controls.MsgBox.Show("沒有" + intGradeYear.Value + "年級學生資料，無法審查。");
+                    return;
+                }
+
             }
         }
 
@@ -562,12 +585,12 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
             sd.FileName = "未達畢業標準學生名冊";
             sd.Filter = "Excel檔案(*.xls)|*.xls";
             if (sd.ShowDialog() != DialogResult.OK) return;
-            
+
             Workbook template = new Workbook();
             template.Open(new MemoryStream(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準學生名冊template));
             Worksheet tempsheet = template.Worksheets[0];
             Worksheet tempsheet2 = template.Worksheets[1];
-            
+
             Workbook book = new Workbook();
             book.Open(new MemoryStream(JHEvaluation.ScoreCalculation.Properties.Resources.未達畢業標準學生名冊template));
             //Worksheet sheet = book.Worksheets[0];
@@ -586,7 +609,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
                 sorted.Add(Student.Instance.Items[id]);
             sorted.Sort();
 
-            
+
             foreach (StudentRecord stu in sorted)
             {
                 if (!_result.ContainsKey(stu.ID)) continue;
@@ -634,7 +657,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
                         string details = string.Empty;
                         details += string.Join(",", rd.Details);
                         //foreach (string detail in rd.Details)
-                            //details += detail + ",";
+                        //details += detail + ",";
                         //if (details.EndsWith(",")) details = details.Substring(0, details.Length - 1);
                         sheet.Cells[rowIndex, index + 3].PutValue(details);
                     }
@@ -642,7 +665,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
                     rowIndex++;
                 }
 
-                if(zeroGrades.Count > 0)
+                if (zeroGrades.Count > 0)
                 {
                     //處理年級為0的result
                     foreach (ResultDetail rd in zeroGrades)
@@ -672,7 +695,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
 
                     sheet2_Index++;
                 }
-                
+
 
                 //foreach (ResultDetail rd in _result[stu.ID])
                 //{
@@ -684,7 +707,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
                 //        zeroGrades.Add(rd);
                 //        continue;
                 //    }
-                        
+
                 //    if (gradeYear > 6) gradeYear -= 6;
 
                 //    int index = (gradeYear - 1) * 2 + int.Parse(rd.Semester);
@@ -696,7 +719,7 @@ namespace JHSchool.Evaluation.StudentExtendControls.Ribbon
                 //    sheet.Cells[rowIndex, index + 3].PutValue(details);
                 //}
 
-                
+
             }
 
             //sheet.AutoFitColumns();
