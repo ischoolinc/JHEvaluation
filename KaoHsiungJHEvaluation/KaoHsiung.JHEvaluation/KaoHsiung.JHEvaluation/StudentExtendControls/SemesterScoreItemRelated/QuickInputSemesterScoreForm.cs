@@ -89,6 +89,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 txtPC9, txtScore9, txtEffort9, txtText9,
                 txtPC1, txtScore1, txtEffort1, txtText1,
                 txtPC2, txtScore2, txtEffort2, txtText2,
+                txtPC11, txtScore11, txtEffort11, txtText11,
                 txtPC3, txtScore3, txtEffort3, txtText3,
                 txtPC4, txtScore4, txtEffort4, txtText4,
                 txtPC5, txtScore5, txtEffort5, txtText5,
@@ -100,6 +101,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             _manager.AddEffortTextBoxMapping(txtScore9, txtEffort9);
             _manager.AddEffortTextBoxMapping(txtScore1, txtEffort1);
             _manager.AddEffortTextBoxMapping(txtScore2, txtEffort2);
+            _manager.AddEffortTextBoxMapping(txtScore11, txtEffort11);
             _manager.AddEffortTextBoxMapping(txtScore3, txtEffort3);
             _manager.AddEffortTextBoxMapping(txtScore4, txtEffort4);
             _manager.AddEffortTextBoxMapping(txtScore5, txtEffort5);
@@ -195,6 +197,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
 
                 txtPC1.Text = pcs.ContainsKey("國語文") ? pcs["國語文"].ToString() : "";
                 txtPC2.Text = pcs.ContainsKey("英語") ? pcs["英語"].ToString() : "";
+                txtPC11.Text = pcs.ContainsKey("本土語文") ? pcs["本土語文"].ToString() : "";
                 txtPC3.Text = pcs.ContainsKey("數學") ? pcs["數學"].ToString() : "";
                 txtPC4.Text = pcs.ContainsKey("社會") ? pcs["社會"].ToString() : "";
                 //txtPC5.Text = pcs.ContainsKey("藝術與人文") ? pcs["藝術與人文"].ToString() : "";
@@ -209,11 +212,14 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                 // 討論過後， 確認 語文領域的權數 為 國語文、 英文 加總
                 int chinesesPeriodCredit = 0;
                 int englishPeriodCredit = 0;
+                int cPeriodCredit = 0;
 
                 chinesesPeriodCredit = pcs.ContainsKey("國語文") ? int.Parse(pcs["國語文"].ToString()) : 0;
                 englishPeriodCredit = pcs.ContainsKey("英語") ? int.Parse(pcs["英語"].ToString()) : 0;
 
-                txtPC9.Text = "" + (chinesesPeriodCredit + englishPeriodCredit);
+                cPeriodCredit = pcs.ContainsKey("本土語文") ? int.Parse(pcs["本土語文"].ToString()) : 0;
+
+                txtPC9.Text = "" + (chinesesPeriodCredit + englishPeriodCredit + cPeriodCredit);
             }
             #endregion
         }
@@ -316,6 +322,9 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
                     newRecord.Domains.Add("國語文", GetDomainScore("國語文", txtPC1, txtScore1, txtScore1, txtEffort1, txtText1));
                 if (CheckDomainValid(txtPC2, txtScore2, txtScore2, txtEffort2))
                     newRecord.Domains.Add("英語", GetDomainScore("英語", txtPC2, txtScore2, txtScore2, txtEffort2, txtText2));
+                if (CheckDomainValid(txtPC11, txtScore11, txtScore11, txtEffort11))
+                    newRecord.Domains.Add("本土語文", GetDomainScore("本土語文", txtPC11, txtScore11, txtScore11, txtEffort11, txtText11));
+
                 if (CheckDomainValid(txtPC3, txtScore3, txtScore3, txtEffort3))
                     newRecord.Domains.Add("數學", GetDomainScore("數學", txtPC3, txtScore3, txtScore3, txtEffort3, txtText3));
                 if (CheckDomainValid(txtPC4, txtScore4, txtScore4, txtEffort4))
@@ -511,6 +520,7 @@ namespace KaoHsiung.JHEvaluation.StudentExtendControls.SemesterScoreItemRelated
             EvalDomainScore(ref pc, ref total, txtScore7, txtPC7);
             EvalDomainScore(ref pc, ref total, txtScore8, txtPC8);
             EvalDomainScore(ref pc, ref total, txtScore10, txtPC10);
+            EvalDomainScore(ref pc, ref total, txtScore11, txtPC11);
             if (pc.Credit > 0)
             {
                 txtLearnDomain.Text = "" + _calculator.ParseLearnDomainScore(total / pc.Credit);
