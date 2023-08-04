@@ -385,12 +385,15 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 if (sscore.ScoreOrigin.HasValue)
                                     score = sscore.ScoreOrigin.Value;
 
-                                // 補考成績(擇優後成績)
-                                if (sscore.Value.HasValue)
+                                if (sscore.ScoreMakeup.HasValue)
                                 {
                                     if (!hasDomainSubjectMakeupHasScoreList.Contains(sscore.Domain))
                                         hasDomainSubjectMakeupHasScoreList.Add(sscore.Domain);
+                                }
 
+                                // 補考成績(擇優後成績)
+                                if (sscore.Value.HasValue)
+                                {
                                     if (sscore.Value.Value > score)
                                         score = sscore.Value.Value;
                                 }
