@@ -192,8 +192,8 @@ namespace JHEvaluation.ScoreCalculation
             else
                 Mode = ModuleMode.HsinChu;  //新竹。
 
-            // debug 開發完後要把這段註解!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            ////Mode = ModuleMode.KaoHsiung;
+            //// debug 開發完後要把這段註解!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //Mode = ModuleMode.KaoHsiung;
         }
 
         //private static void TestMode(DeployParameters dparams)

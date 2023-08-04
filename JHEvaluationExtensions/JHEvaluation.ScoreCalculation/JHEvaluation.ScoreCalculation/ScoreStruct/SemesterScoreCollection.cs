@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JHSchool.Evaluation.CourseExtendControls.Ribbon.SubjectCombinationRelated;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -129,9 +130,9 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
                 {
                     //if (!this[sems].LearnDomainScore.HasValue) continue;//判斷該學期是否有該科目。
 
-                    if(this[sems].LearnDomainScore.HasValue)
+                    if (this[sems].LearnDomainScore.HasValue)
                         sum += this[sems].LearnDomainScore.Value;
-                    
+
                     count++;
                 }
             }
@@ -141,7 +142,65 @@ namespace JHEvaluation.ScoreCalculation.ScoreStruct
             return sum / count;
         }
 
+        /// <summary>
+        /// 計算指定科目的加權平均，不進位處理。
+        /// </summary>
+        /// <param name="semesters">要平均的學期。</param>
+        /// <param name="subjName">科目名稱。</param>
+        public decimal? AvgSubjectScoreA(IEnumerable<SemesterData> semesters, string subjName)
+        {
+            decimal sum = 0, credit = 0;
 
+            foreach (SemesterData sems in semesters)
+            {
+                if (Contains(sems)) //判斷是否包含此學期的成績。
+                {
+                    if (!this[sems].SubjectScoreExists(subjName)) continue;//判斷該學期是否有該科目。
+
+                    // 判斷是否有權數
+                    if (this[sems].Subject[subjName].Weight.HasValue)
+                    {
+                        sum += this[sems].GetSubjectScore(subjName) * this[sems].Subject[subjName].Weight.Value;
+                        credit += this[sems].Subject[subjName].Weight.Value;
+                    }
+
+                }
+            }
+
+            if (credit <= 0) return null;
+
+            return sum / credit;
+        }
+
+        /// <summary>
+        /// 計算領域加權平均。
+        /// </summary>
+        /// <param name="semesters">要平均的學期。</param>
+        /// <param name="domainName">領域名稱。</param>
+        public decimal? AvgDomainScoreA(IEnumerable<SemesterData> semesters, string domainName)
+        {
+            decimal sum = 0, credit = 0;
+
+            foreach (SemesterData sems in semesters)
+            {
+                if (Contains(sems)) //判斷是否包含此學期的成績。
+                {
+                    if (!this[sems].DomainScoreExists(domainName)) continue;//判斷該學期是否有該科目。
+
+                    // 判斷是否有權數
+                    if (this[sems].Domain[domainName].Weight.HasValue)
+                    {
+                        sum += this[sems].GetDomainScore(domainName) * this[sems].Domain[domainName].Weight.Value;
+                        credit += this[sems].Domain[domainName].Weight.Value;
+                    }
+                }
+            }
+
+            if (credit <= 0) return null;
+
+            return sum / credit;
+        }
+             
         public void Clear()
         {
             SemsScore.Clear();

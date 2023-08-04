@@ -356,9 +356,66 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                     #endregion
 
 
+                    // 2023/8/4，高雄國中特有領域使用科目補可計算方式，當領域有科目補考成績，該領域補考成績來自所屬科目原始與補考成績擇優後的成績處理，並非用補考成績直接加權。
+                    if (Program.Mode == ModuleMode.KaoHsiung)
+                    {
+                        // 加權平均
+                        Dictionary<string, decimal> DomainSubjectMakeupScoreDict = new Dictionary<string, decimal>();
+                        // 權數加總
+                        Dictionary<string, decimal> DomainSubjectMakeupWeightDict = new Dictionary<string, decimal>();
+                        // 有科目補考領域
+                        List<string> hasDomainSubjectMakeupHasScoreList = new List<string>();
 
+                        // 計算
+                        foreach (string key in jscores)
+                        {
+                            SemesterSubjectScore sscore = jscores[key];
+                            if (!DomainSubjectMakeupScoreDict.ContainsKey(sscore.Domain))
+                                DomainSubjectMakeupScoreDict.Add(sscore.Domain, 0);
 
+                            if (!DomainSubjectMakeupWeightDict.ContainsKey(sscore.Domain))
+                                DomainSubjectMakeupWeightDict.Add(sscore.Domain, 0);
 
+                            if (sscore.Weight.HasValue)
+                            {
+                                DomainSubjectMakeupWeightDict[sscore.Domain] += sscore.Weight.Value;
+
+                                decimal score = 0;
+                                // 原始成績
+                                if (sscore.ScoreOrigin.HasValue)
+                                    score = sscore.ScoreOrigin.Value;
+
+                                // 補考成績(擇優後成績)
+                                if (sscore.Value.HasValue)
+                                {
+                                    if (!hasDomainSubjectMakeupHasScoreList.Contains(sscore.Domain))
+                                        hasDomainSubjectMakeupHasScoreList.Add(sscore.Domain);
+
+                                    if (sscore.Value.Value > score)
+                                        score = sscore.Value.Value;
+                                }
+
+                                DomainSubjectMakeupScoreDict[sscore.Domain] += score * sscore.Weight.Value;
+                            }
+                        }
+
+                        // 檢查是否有科目補考，有再回寫領域補考成績
+                        foreach (string strDomain in domainTotal.Keys)
+                        {
+                            // 領域是否有科目補考
+                            if (hasDomainSubjectMakeupHasScoreList.Contains(strDomain))
+                            {
+                                SemesterDomainScore dscore = dscores[strDomain];
+                                // 覆蓋領域補考
+                                dscore.ScoreMakeup = rule.ParseDomainScore(DomainSubjectMakeupScoreDict[strDomain] / DomainSubjectMakeupWeightDict[strDomain]);
+
+                                if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)
+                                    dscore.BetterScoreSelection(setting.DomainScoreLimit);
+                            }
+
+                        }
+
+                    }
 
 
 
@@ -698,7 +755,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                     {
                                         if (langScore.Value > 60)
                                             langScore = 60;
-                                    }                                   
+                                    }
 
                                 }
 
@@ -719,7 +776,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 // 補考
                                 if (dscore.ScoreMakeup.HasValue)
                                 {
-                                    decimal SCMScore =dscore.ScoreMakeup.Value;
+                                    decimal SCMScore = dscore.ScoreMakeup.Value;
 
                                     // 當有勾補考不能超過60分
                                     if (setting.DomainScoreLimit)
