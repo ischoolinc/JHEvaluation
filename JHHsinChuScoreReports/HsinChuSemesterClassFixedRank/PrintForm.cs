@@ -71,6 +71,9 @@ namespace HsinChuSemesterClassFixedRank
         // 紀錄樣板設定
         List<DAO.UDT_ScoreConfig> _UDTConfigList;
 
+        // 取得科目管理對照
+        List<string> SubjTableList = new List<string>();
+
 
         public PrintForm()
         {
@@ -251,7 +254,8 @@ namespace HsinChuSemesterClassFixedRank
                 {
                     foreach (string dName in SelDomainSubjectDict[classID].Keys)
                     {
-                        SelDomainSubjectDict[classID][dName].Sort(new StringComparer("國文", "國語文", "英文", "英語文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+                        //   SelDomainSubjectDict[classID][dName].Sort(new StringComparer("國文", "國語文", "英文", "英語文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+                        SelDomainSubjectDict[classID][dName].Sort(new StringComparer(SubjTableList.ToArray()));
                     }
                 }
 
@@ -726,7 +730,10 @@ namespace HsinChuSemesterClassFixedRank
                         // 排序
                         studDomainNameList.Sort(new StringComparer("語文", "數學", "社會", "自然科學", "自然與生活科技", "健康與體育", "藝術", "藝術與人文", "綜合活動", "科技"));
 
-                        studSubjectNameList.Sort(new StringComparer("國文", "國語文", "英文", "英語文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+                        // studSubjectNameList.Sort(new StringComparer("國文", "國語文", "英文", "英語文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+
+                        studSubjectNameList.Sort(new StringComparer(SubjTableList.ToArray()));
+
 
                         SelDomainIdxDict.Clear();
                         SelSubjectIdxDict.Clear();
@@ -1644,6 +1651,9 @@ namespace HsinChuSemesterClassFixedRank
 
             bgWorkerLoadTemplate.ReportProgress(50);
 
+            // 讀取科別管理對照
+            SubjTableList = DataAccess.GetSubjectList();
+
             bgWorkerLoadTemplate.ReportProgress(80);
             // 取的設定資料
             _ConfigureList = _AccessHelper.Select<Configure>();
@@ -1831,8 +1841,8 @@ namespace HsinChuSemesterClassFixedRank
                     tmpSubjNameList.Add(lvi.Text);
             }
 
-            tmpSubjNameList.Sort(new StringComparer("國文", "國語文", "英文", "英語文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
-
+            //tmpSubjNameList.Sort(new StringComparer("國文", "國語文", "英文", "英語文", "數學", "理化", "生物", "社會", "物理", "化學", "歷史", "地理", "公民"));
+            tmpSubjNameList.Sort(new StringComparer(SubjTableList.ToArray()));
 
             //foreach (string name in tmpSubjNameList)
             //{
