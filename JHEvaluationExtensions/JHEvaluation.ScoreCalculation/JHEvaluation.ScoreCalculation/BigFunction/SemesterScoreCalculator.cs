@@ -29,6 +29,8 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
         /// </summary>
         public void CalculateSubjectScore()
         {
+            EffortMap effortmap = new EffortMap(); //努力程度對照表。
+
             foreach (StudentScore student in Students)
             {
                 if (student.CalculationRule == null) continue; //沒有成績計算規則就不計算。
@@ -49,6 +51,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                         //有原始或補考成績才做擇優
                         if (sss.ScoreOrigin.HasValue || sss.ScoreMakeup.HasValue)
                             sss.BetterScoreSelection();
+
+                        if (sss.Value.HasValue)
+                            sss.Effort = effortmap.GetCodeByScore(sss.Value.Value);
                     }
                 }
 
@@ -399,6 +404,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                 }
 
                                 DomainSubjectMakeupScoreDict[sscore.Domain] += score * sscore.Weight.Value;
+
+                                if (sscore.Value.HasValue)
+                                    sscore.Effort = effortmap.GetCodeByScore(sscore.Value.Value);
                             }
                         }
 
@@ -624,6 +632,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                         }
                                     }
 
+                                    if (subScore.Value.HasValue)
+                                        subScore.Effort = effortmap.GetCodeByScore(subScore.Value.Value);
+
                                     if (subScore.Effort.HasValue)
                                         totalEffort += subScore.Effort.Value * subScore.Weight.Value;
                                 }
@@ -680,7 +691,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             dscore.Weight = weight;
                             dscore.Period = period;
                             dscore.Text = "";
-                            dscore.Effort = effortAvg;
+                            //dscore.Effort = effortAvg;
+                            if (dscore.Value.HasValue)
+                                dscore.Effort = effortmap.GetCodeByScore(dscore.Value.Value);
 
                             if (chiMakeupScore.HasValue && chiMakeupScore.Value == 0)
                                 chiMakeupScore = null;
