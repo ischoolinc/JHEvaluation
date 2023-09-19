@@ -691,7 +691,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             dscore.Weight = weight;
                             dscore.Period = period;
                             dscore.Text = "";
-                            //dscore.Effort = effortAvg;
+                            dscore.Effort = effortAvg;
                             if (dscore.Value.HasValue)
                                 dscore.Effort = effortmap.GetCodeByScore(dscore.Value.Value);
 
