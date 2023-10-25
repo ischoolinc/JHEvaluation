@@ -633,7 +633,10 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                     }
 
                                     if (subScore.Value.HasValue)
+                                    {
+                                        total += subScore.Value.Value * subScore.Weight.Value;
                                         subScore.Effort = effortmap.GetCodeByScore(subScore.Value.Value);
+                                    }
 
                                     if (subScore.Effort.HasValue)
                                         totalEffort += subScore.Effort.Value * subScore.Weight.Value;
@@ -679,14 +682,47 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             }
 
                             //先將算好的成績帶入領域成績,後面的擇優判斷才不會有問題
+                            // 2023/10/25，因2023 9月高雄小組會議討論語文需要計算支援只有單領域時也可以計算出語文領域成績
+                            // 國語文、英語、本土語言
                             if (chiScoreOrigin.HasValue && engScoreOrigin.HasValue && localScoreOrigin.HasValue)
                             {
                                 dscore.ScoreOrigin = rule.ParseDomainScore((chiScoreOrigin.Value + engScoreOrigin.Value + localScoreOrigin.Value) / weight);
                             }
-                            else if (chiScoreOrigin.HasValue && engScoreOrigin.HasValue)
-                            {
+                            else if (chiScoreOrigin.HasValue && engScoreOrigin.HasValue && localScoreOrigin.HasValue == false)
+                            { // 國語文、英語
                                 dscore.ScoreOrigin = rule.ParseDomainScore((chiScoreOrigin.Value + engScoreOrigin.Value) / weight);
                             }
+                            else if (chiScoreOrigin.HasValue && localScoreOrigin.HasValue && engScoreOrigin.HasValue == false)
+                            {
+                                // 國語文、本土語言
+                                dscore.ScoreOrigin = rule.ParseDomainScore((chiScoreOrigin.Value + localScoreOrigin.Value) / weight);
+                            }
+                            else if (engScoreOrigin.HasValue && localScoreOrigin.HasValue && chiScoreOrigin.HasValue == false)
+                            {
+                                // 英語、本土語言
+                                dscore.ScoreOrigin = rule.ParseDomainScore((engScoreOrigin.Value + localScoreOrigin.Value) / weight);
+                            }
+                            else if (chiScoreOrigin.HasValue && engScoreOrigin.HasValue == false && localScoreOrigin.HasValue == false)
+                            {
+                                // 國語文
+                                dscore.ScoreOrigin = rule.ParseDomainScore((chiScoreOrigin.Value) / weight);
+                            }
+                            else if (chiScoreOrigin.HasValue == false && engScoreOrigin.HasValue && localScoreOrigin.HasValue == false)
+                            {
+                                // 英語
+                                dscore.ScoreOrigin = rule.ParseDomainScore((engScoreOrigin.Value) / weight);
+                            }
+                            else if (chiScoreOrigin.HasValue == false && engScoreOrigin.HasValue == false && localScoreOrigin.HasValue)
+                            {
+                                // 本土語言
+                                dscore.ScoreOrigin = rule.ParseDomainScore((localScoreOrigin.Value) / weight);
+                            }
+                            else
+                            {
+
+                            }
+
+
 
                             dscore.Weight = weight;
                             dscore.Period = period;
