@@ -284,7 +284,7 @@ namespace HsinChu.ClassExamScoreAvgComparison
                         if (!subjectCredits.ContainsKey(GetDomainSubjectKey(course.Domain, course.Subject)))
                             subjectCredits.Add(GetDomainSubjectKey(course.Domain, course.Subject), course.Credit);
 
-                            string asID = _courseDict[sce.RefCourseID].RefAssessmentSetupID;
+                        string asID = _courseDict[sce.RefCourseID].RefAssessmentSetupID;
                         if (_ScoreSource != "定期")
                         {
                             asIDs.Add(asID);
@@ -487,9 +487,13 @@ namespace HsinChu.ClassExamScoreAvgComparison
                 {
                     //if (domainScores[domain].HasValue && domainCount[domain] > 0)
                     //    domainScores[domain] = domainScores[domain].Value / (decimal)domainCount[domain];
-                    if(domainScores[domain].HasValue && domainCredits.ContainsKey(domain) && domainCredits[domain].HasValue)
-                        domainScores[domain] = domainScores[domain].Value / (decimal)domainCredits[domain];
-                    
+                    if (domainScores[domain].HasValue && domainCredits.ContainsKey(domain) && domainCredits[domain].HasValue)
+                    {
+                        // 判斷當權數不為0才計算
+                        if ((decimal)domainCredits[domain] > 0)
+                            domainScores[domain] = domainScores[domain].Value / (decimal)domainCredits[domain];
+                    }
+
                 }
 
                 #region 填入班級平均
