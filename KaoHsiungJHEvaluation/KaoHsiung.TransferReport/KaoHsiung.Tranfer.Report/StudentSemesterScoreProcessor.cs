@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Aspose.Words;
 using JHSchool.Data;
+using JHSchool.Evaluation;
 
 namespace KaoHsiung.TransferReport
 {
@@ -95,11 +96,26 @@ namespace KaoHsiung.TransferReport
 
             foreach (DomainRow domainRow in _manager.DomainRows)
             {
+                if (domainRow.Domain == "語文")
+                {
+
+                    table.Rows.Add(row.Clone(true));
+                    Row tempRow = table.LastRow;
+                    WordHelper.MergeHorizontalCell(tempRow.Cells[0], 2);
+                    Write(tempRow.Cells[0], (string.IsNullOrEmpty(domainRow.Domain) ? "彈性課程" : domainRow.Domain));
+
+                    // 當使用者選科目時，不列印領領域成績                    
+                    WriteDomain(tempRow.Cells[1], domainRow);
+                }
+
                 // 當有領域沒有科目成績
                 if (domainRow.SubjectScores.Count <= 0)
                 {
                     // 沒有領域成績
                     if (domainRow.Scores.Count <= 0) continue;
+
+                    if (domainRow.Domain == "語文")
+                        continue;
 
                     // 當使用者選擇科目又沒科目成績
                     if (_config.DomainSubjectSetup == "Subject" && domainRow.SubjectScores.Count == 0)
@@ -116,6 +132,7 @@ namespace KaoHsiung.TransferReport
                 }
                 else
                 {
+
                     int subjectCount = 0;
                     foreach (string subject in domainRow.SubjectScores.Keys)
                     {
@@ -237,6 +254,12 @@ namespace KaoHsiung.TransferReport
             get
             {
                 List<DomainRow> rows = new List<DomainRow>();
+                // 加入語文
+                if (_domains.ContainsKey("語文"))
+                    rows.Add(_domains["語文"]);
+                else
+                    rows.Add(new DomainRow("語文"));
+
                 foreach (string key in _config.PrintSubjects.Keys)
                 {
                     if (_domains.ContainsKey(key))
@@ -244,15 +267,26 @@ namespace KaoHsiung.TransferReport
                     else
                         rows.Add(new DomainRow(key));
                 }
+
+
+
                 return rows;
             }
         }
 
         public void Add(JHSemesterScoreRecord record)
         {
+            if (!_domains.ContainsKey("語文"))
+                _domains.Add("語文", new DomainRow("語文"));
+
             foreach (K12.Data.DomainScore domain in record.Domains.Values)
             {
-                if (!_config.PrintSubjects.ContainsKey(domain.Domain)) continue;
+                if (domain.Domain != "語文")
+                    if (!_config.PrintSubjects.ContainsKey(domain.Domain)) continue;
+                    else
+                    {
+                     //   _domains["語文"] = new DomainRow("語文");
+                    }
 
                 if (!_domains.ContainsKey(domain.Domain))
                     _domains.Add(domain.Domain, new DomainRow(domain.Domain));

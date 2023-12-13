@@ -160,16 +160,25 @@ namespace KaoHsiung.TransferReport
             Dictionary<string, bool> domains = new Dictionary<string, bool>();
             Dictionary<string, List<string>> subjects = new Dictionary<string, List<string>>();
 
+         
+
             if (_config.DomainSubjectSetup == "Domain")
             {
+                // 加入要列印語文領域
+                if (!domains.ContainsKey("語文")) domains["語文"] = true;
+
                 foreach (var domain in JHSchool.Evaluation.Subject.Domains)
                     domains.Add(domain, true);
-                if (domains.ContainsKey("語文")) domains["語文"] = false;
+                //if (domains.ContainsKey("語文")) domains["語文"] = false;
+                
                 if (domains.ContainsKey("彈性課程")) domains["彈性課程"] = false;
                 if (!domains.ContainsKey("")) domains.Add("", false);
             }
             else if (_config.DomainSubjectSetup == "Subject")
             {
+                // 加入要列印語文領域
+                if (!domains.ContainsKey("語文")) domains["語文"] = true;
+
                 foreach (var domain in JHSchool.Evaluation.Subject.Domains)
                     domains.Add(domain, false);
                 if (!domains.ContainsKey("")) domains.Add("", false);
