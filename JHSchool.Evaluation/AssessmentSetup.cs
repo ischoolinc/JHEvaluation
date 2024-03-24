@@ -44,8 +44,10 @@ namespace JHSchool.Evaluation
         }
         #endregion
 
+        private static Dictionary<string, string> TempNameDic { get; set; }
+
         private static AssessmentSetup _Instance = null;
-        public static AssessmentSetup Instance { get { if (_Instance == null)_Instance = new AssessmentSetup(); return _Instance; } }
+        public static AssessmentSetup Instance { get { if (_Instance == null) _Instance = new AssessmentSetup(); return _Instance; } }
         private AssessmentSetup()
         {
             this.ItemUpdated += delegate
@@ -62,9 +64,15 @@ namespace JHSchool.Evaluation
         protected override Dictionary<string, AssessmentSetupRecord> GetAllData()
         {
             Dictionary<string, AssessmentSetupRecord> records = new Dictionary<string, AssessmentSetupRecord>();
-
+            TempNameDic = new Dictionary<string, string>();
             foreach (AssessmentSetupRecord each in QueryAssessmentSetup.GetAllAssessmentSetup())
+            {
                 records.Add(each.ID, each);
+
+                if (!TempNameDic.ContainsKey(each.ID))
+                    TempNameDic.Add(each.ID, each.Name);
+
+            }
 
             return records;
         }
@@ -74,7 +82,9 @@ namespace JHSchool.Evaluation
             Dictionary<string, AssessmentSetupRecord> records = new Dictionary<string, AssessmentSetupRecord>();
 
             foreach (AssessmentSetupRecord each in QueryAssessmentSetup.GetAssessmentSetups(primaryKeys))
+            {
                 records.Add(each.ID, each);
+            }
 
             return records;
         }
@@ -92,7 +102,7 @@ namespace JHSchool.Evaluation
         {
             if (_initialize) return;
 
-            _assessmentSetupField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            _assessmentSetupField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 AssessmentSetupRecord record = Course.Instance.Items[e.Key].GetAssessmentSetup();
                 if (record != null)
@@ -102,11 +112,11 @@ namespace JHSchool.Evaluation
             };
             Course.Instance.AddListPaneField(_assessmentSetupField);
 
-            K12.Data.Course.AfterChange += delegate(object s, K12.Data.DataChangedEventArgs arg)
+            K12.Data.Course.AfterChange += delegate (object s, K12.Data.DataChangedEventArgs arg)
             {
                 Course.Instance.SyncDataBackground(arg.PrimaryKeys);
             };
-            Course.Instance.ItemUpdated += delegate(object s, ItemUpdatedEventArgs arg)
+            Course.Instance.ItemUpdated += delegate (object s, ItemUpdatedEventArgs arg)
             {
                 _assessmentSetupField.Reload();
             };
@@ -139,6 +149,7 @@ namespace JHSchool.Evaluation
 
             foreach (var item in AssessmentSetup.Instance.Items)
             {
+
                 MenuButton mb = e.VirtualButtons[item.Name];
                 mb.Tag = item.ID;
                 mb.Click += new EventHandler(MenuButton_Click);
@@ -154,16 +165,43 @@ namespace JHSchool.Evaluation
         private static void ChangeAssessmentSetup(string id)
         {
             List<CourseRecordEditor> editors = new List<CourseRecordEditor>();
+
+            string name = "";
+            if (TempNameDic.ContainsKey(id))
+                name = TempNameDic[id];
+
+            StringBuilder sb_log = new StringBuilder();
+            sb_log.AppendLine(string.Format("課程評分樣版「{0}」已指定給以下課程", name));
+            sb_log.AppendLine("");
+
             foreach (var course in Course.Instance.SelectedList)
             {
                 CourseRecordEditor editor = course.GetEditor();
+
+                sb_log.Append(string.Format("課程名稱「{0}」", editor.Name));
+                sb_log.Append(string.Format("學年度「{0}」", editor.SchoolYear));
+                sb_log.Append(string.Format("學期「{0}」", editor.Semester));
+
+                if (TempNameDic.ContainsKey("" + editor.RefAssessmentSetupID))
+                {
+                    name = TempNameDic["" + editor.RefAssessmentSetupID];
+                    sb_log.AppendLine(string.Format("(原課程評分樣版「{0}」)", name));
+                }
+                else
+                {
+                    sb_log.AppendLine("原評量名稱「未設定」");
+                }
+
                 editor.RefAssessmentSetupID = id;
                 if (string.IsNullOrEmpty(id))
                     editor.CalculationFlag = "2"; //無評量，則不列入成績
                 editors.Add(editor);
             }
             if (editors.Count > 0)
+            {
                 editors.SaveAllEditors();
+                FISCA.LogAgent.ApplicationLog.Log("課程評分樣版", "指定", sb_log.ToString());
+            }
         }
     }
 
