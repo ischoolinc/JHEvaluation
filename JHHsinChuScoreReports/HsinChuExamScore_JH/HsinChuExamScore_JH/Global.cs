@@ -8,6 +8,7 @@ using FISCA.Data;
 using System.Data;
 using Aspose.Words;
 using HsinChuExamScore_JH.DAO;
+using System.Xml.Linq;
 
 namespace HsinChuExamScore_JH
 {
@@ -155,12 +156,26 @@ namespace HsinChuExamScore_JH
         {
 
             List<string> UserDefineFields = new List<string>();
-            QueryHelper qh = new QueryHelper();
-            DataTable dt = qh.Select("SELECT fieldname FROM $stud.userdefinedata GROUP BY fieldname");
-            foreach (DataRow dr in dt.Rows)
+            try
             {
-                UserDefineFields.Add(dr["fieldname"].ToString());
+                QueryHelper qh = new QueryHelper();
+
+                // 2024/5/30 CT，先檢查UDT是否存在，因為有學校沒有使用自訂欄位
+                DataTable dt = qh.Select("SELECT name FROM _udt_table where name = 'stud.userdefinedata'");
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    dt = qh.Select("SELECT fieldname FROM $stud.userdefinedata GROUP BY fieldname");
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        UserDefineFields.Add(dr["fieldname"].ToString());
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
             return UserDefineFields;
         }
 
