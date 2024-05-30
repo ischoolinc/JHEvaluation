@@ -141,7 +141,7 @@ namespace HsinChuExamScore_JH
                     // ex.一般:曠課
                     //string key = "區間" + PeriodMappingDict[per.Period] + "_" + per.AbsenceType;
 
-                    string key = PeriodMappingDict[per.Period].Replace(" ","_") +"_"+ per.AbsenceType.Replace(" ", "_");
+                    string key = PeriodMappingDict[per.Period].Replace(" ", "_") + "_" + per.AbsenceType.Replace(" ", "_");
                     if (!retVal[rec.RefStudentID].ContainsKey(key))
                         retVal[rec.RefStudentID].Add(key, 0);
 
@@ -516,23 +516,23 @@ WHERE
 
                             if (dr["A+"].ToString() != "")
                                 if (decimal.TryParse(dr["A+"].ToString(), out aP))
-                                rdf.A_plus = Math.Round(aP, ParseNumber, MidpointRounding.AwayFromZero);
+                                    rdf.A_plus = Math.Round(aP, ParseNumber, MidpointRounding.AwayFromZero);
 
                             if (dr["A"].ToString() != "")
                                 if (decimal.TryParse(dr["A"].ToString(), out a))
-                                rdf.A = Math.Round(a, ParseNumber, MidpointRounding.AwayFromZero);
+                                    rdf.A = Math.Round(a, ParseNumber, MidpointRounding.AwayFromZero);
 
                             if (dr["B++"].ToString() != "")
                                 if (decimal.TryParse(dr["B++"].ToString(), out bPP))
-                                rdf.B_plus_plus = Math.Round(bPP, ParseNumber, MidpointRounding.AwayFromZero);
+                                    rdf.B_plus_plus = Math.Round(bPP, ParseNumber, MidpointRounding.AwayFromZero);
 
                             if (dr["B+"].ToString() != "")
                                 if (decimal.TryParse(dr["B+"].ToString(), out bP))
-                                rdf.B_plus = Math.Round(bP, ParseNumber, MidpointRounding.AwayFromZero);
+                                    rdf.B_plus = Math.Round(bP, ParseNumber, MidpointRounding.AwayFromZero);
 
                             if (dr["B"].ToString() != "")
                                 if (decimal.TryParse(dr["B"].ToString(), out b))
-                                rdf.B = Math.Round(b, ParseNumber, MidpointRounding.AwayFromZero);
+                                    rdf.B = Math.Round(b, ParseNumber, MidpointRounding.AwayFromZero);
 
                             if (int.TryParse(dr["rank"].ToString(), out rank)) rdf.rank = rank;
                             if (int.TryParse(dr["pr"].ToString(), out pr)) rdf.pr = pr;
@@ -600,24 +600,36 @@ WHERE sc_attend.ref_student_id IN(" + string.Join(",", studentIDs.ToArray()) + @
         {
             Dictionary<string, Dictionary<string, string>> userDefineInfo = new Dictionary<string, Dictionary<string, string>>();
             QueryHelper qh = new QueryHelper();
-            string sql = $"SELECT * FROM $stud.userdefinedata WHERE refid IN ('{String.Join("','", studentIDs)}')";
-            DataTable dt = qh.Select(sql);
-
-            foreach (DataRow dr in dt.Rows)
+            try
             {
-                string studentID = dr["refid"] + "";
-                string fieldName = dr["fieldname"] + "";
-                string value = dr["value"] + "";
-
-                if (!userDefineInfo.ContainsKey(studentID))
+                // 2024/5/30 CT，先檢查UDT是否存在，因為有學校沒有使用自訂欄位
+                DataTable dt = qh.Select("SELECT name FROM _udt_table where name = 'stud.userdefinedata'");
+                if (dt != null && dt.Rows.Count > 0)
                 {
-                    userDefineInfo.Add(studentID, new Dictionary<string, string>());
-                }
-                if (!userDefineInfo[studentID].ContainsKey(fieldName))
-                {
-                    userDefineInfo[studentID].Add(fieldName, value);
-                }
+                    string sql = $"SELECT * FROM $stud.userdefinedata WHERE refid IN ('{String.Join("','", studentIDs)}')";
+                    dt = qh.Select(sql);
 
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string studentID = dr["refid"] + "";
+                        string fieldName = dr["fieldname"] + "";
+                        string value = dr["value"] + "";
+
+                        if (!userDefineInfo.ContainsKey(studentID))
+                        {
+                            userDefineInfo.Add(studentID, new Dictionary<string, string>());
+                        }
+                        if (!userDefineInfo[studentID].ContainsKey(fieldName))
+                        {
+                            userDefineInfo[studentID].Add(fieldName, value);
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
 
             return userDefineInfo;
