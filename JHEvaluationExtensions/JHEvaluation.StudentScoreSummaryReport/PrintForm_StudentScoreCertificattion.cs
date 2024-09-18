@@ -966,7 +966,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 schoolyear_grade_dict.Add(2, schoolyear_grade2);
                 schoolyear_grade_dict.Add(3, schoolyear_grade3);
 
-                //出缺勤
+
+                // 缺曠
                 if (ar_dict.ContainsKey(stuID))
                 {
                     for (int grade = 1; grade <= 3; grade++)
@@ -989,16 +990,6 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                                             }
                                         }
-                                        //if (arStatistic_dict.ContainsKey(detail.AbsenceType + "日數_" + (grade * 2 - 1)))
-                                        //{
-
-                                        //    //加一節，整學期節次與日數的關係，再最後再結算
-                                        //    arStatistic_dict[detail.AbsenceType + "日數_" + (grade * 2 - 1)] += 1;
-
-                                        //    // 不管是啥缺席，缺席總日數都加一節
-                                        //    arStatistic_dict["缺席總日數_" + (grade * 2 - 1)] += 1;
-
-                                        //}
                                     }
                                 }
                                 else
@@ -1015,83 +1006,204 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                                             }
                                         }
-                                        //if (arStatistic_dict.ContainsKey(detail.AbsenceType + "日數_" + grade * 2))
-                                        //{
 
-                                        //    //加一節，整學期節次與日數的關係，再最後再結算
-                                        //    arStatistic_dict[detail.AbsenceType + "日數_" + grade * 2] += 1;
-
-                                        //    // 不管是啥缺席，缺席總日數都加一節
-                                        //    arStatistic_dict["缺席總日數_" + (grade * 2)] += 1;
-                                        //}
                                     }
                                 }
                             }
                         }
-
-                        if (Util._SLRDict.ContainsKey(stuID))
-                            foreach (var item in Util._SLRDict[stuID])
-                            {
-                                // 第一學期
-                                if (item.Key == schoolyear_grade_dict[grade] + "_1")
-                                {
-                                    serviceLearning_dic["服務學習時數_" + (grade * 2 - 1)] = item.Value;
-                                }
-                                // 第二學期
-                                if (item.Key == schoolyear_grade_dict[grade] + "_2")
-                                {
-                                    serviceLearning_dic["服務學習時數_" + (grade * 2)] = item.Value;
-                                }
-                            }
-
-                        if (Util._DisciplineDict.ContainsKey(stuID))
-                            foreach (var item in Util._DisciplineDict[stuID])
-                            {
-                                // 第一學期
-                                if (item.Key == schoolyear_grade_dict[grade] + "_1")
-                                {
-                                    foreach (var dis in item.Value)
-                                    {
-                                        discipline_dic[dis.Key + "_" + (grade * 2 - 1)] = dis.Value;
-                                    }
-
-                                }
-                                // 第二學期
-                                if (item.Key == schoolyear_grade_dict[grade] + "_2")
-                                {
-                                    foreach (var dis in item.Value)
-                                    {
-                                        discipline_dic[dis.Key + "_" + (grade * 2)] = dis.Value;
-                                    }
-                                }
-                            }
-                    }
-
-                    //foreach (string key in arStatistic_dict.Keys)
-                    //{
-                    //    arStatistic_dict_days.Add(key, arStatistic_dict[key]);
-                    //}
-
-                    ////真正的填值，填日數，所以要做節次轉換
-                    //foreach (string key in arStatistic_dict_days.Keys)
-                    //{
-                    //    //康橋一日有九節，多一節缺曠 = 多1/9 日缺曠，先暫時寫死九節設定，日後要去學務作業每日節次抓取
-                    //    row[key] = Math.Round(arStatistic_dict_days[key] / 9, 2);
-                    //}
-
-                    foreach (string key in absence_dic.Keys)
-                    {
-                        row[key] = absence_dic[key];
-                    }
-                    foreach (string key in serviceLearning_dic.Keys)
-                    {
-                        row[key] = serviceLearning_dic[key];
-                    }
-                    foreach (string key in discipline_dic.Keys)
-                    {
-                        row[key] = discipline_dic[key];
                     }
                 }
+
+                // 獎懲
+                if (Util._DisciplineDict.ContainsKey(stuID))
+                    for (int grade = 1; grade <= 3; grade++)
+                    {
+                        foreach (var item in Util._DisciplineDict[stuID])
+                        {
+                            // 第一學期
+                            if (item.Key == schoolyear_grade_dict[grade] + "_1")
+                            {
+                                foreach (var dis in item.Value)
+                                {
+                                    discipline_dic[dis.Key + "_" + (grade * 2 - 1)] = dis.Value;
+                                }
+
+                            }
+                            // 第二學期
+                            if (item.Key == schoolyear_grade_dict[grade] + "_2")
+                            {
+                                foreach (var dis in item.Value)
+                                {
+                                    discipline_dic[dis.Key + "_" + (grade * 2)] = dis.Value;
+                                }
+                            }
+                        }
+                    }
+
+                // 服務學習
+                if (Util._SLRDict.ContainsKey(stuID))
+                    for (int grade = 1; grade <= 3; grade++)
+                    {
+                        foreach (var item in Util._SLRDict[stuID])
+                        {
+                            // 第一學期
+                            if (item.Key == schoolyear_grade_dict[grade] + "_1")
+                            {
+                                serviceLearning_dic["服務學習時數_" + (grade * 2 - 1)] = item.Value;
+                            }
+                            // 第二學期
+                            if (item.Key == schoolyear_grade_dict[grade] + "_2")
+                            {
+                                serviceLearning_dic["服務學習時數_" + (grade * 2)] = item.Value;
+                            }
+                        }
+                    }
+
+                // 填入
+                foreach (string key in absence_dic.Keys)
+                {
+                    row[key] = absence_dic[key];
+                }
+                foreach (string key in serviceLearning_dic.Keys)
+                {
+                    row[key] = serviceLearning_dic[key];
+                }
+                foreach (string key in discipline_dic.Keys)
+                {
+                    row[key] = discipline_dic[key];
+                }
+
+
+
+                ////出缺勤
+                //if (ar_dict.ContainsKey(stuID))
+                //{
+                //    for (int grade = 1; grade <= 3; grade++)
+                //    {
+                //        foreach (var ar in ar_dict[stuID])
+                //        {
+                //            if (ar.SchoolYear == schoolyear_grade_dict[grade])
+                //            {
+                //                if (ar.Semester == 1)
+                //                {
+                //                    foreach (var detail in ar.PeriodDetail)
+                //                    {
+                //                        //"一般_產假1" 
+                //                        if (PeriodMappingDic.ContainsKey(detail.Period))
+                //                        {
+                //                            string key = PeriodMappingDic[detail.Period] + "_" + detail.AbsenceType + (grade * 2 - 1);
+                //                            if (absence_dic.ContainsKey(key))
+                //                            {
+                //                                absence_dic[key] += 1;
+
+                //                            }
+                //                        }
+                //                        //if (arStatistic_dict.ContainsKey(detail.AbsenceType + "日數_" + (grade * 2 - 1)))
+                //                        //{
+
+                //                        //    //加一節，整學期節次與日數的關係，再最後再結算
+                //                        //    arStatistic_dict[detail.AbsenceType + "日數_" + (grade * 2 - 1)] += 1;
+
+                //                        //    // 不管是啥缺席，缺席總日數都加一節
+                //                        //    arStatistic_dict["缺席總日數_" + (grade * 2 - 1)] += 1;
+
+                //                        //}
+                //                    }
+                //                }
+                //                else
+                //                {
+                //                    foreach (var detail in ar.PeriodDetail)
+                //                    {
+                //                        //"一般_產假1" 
+                //                        if (PeriodMappingDic.ContainsKey(detail.Period))
+                //                        {
+                //                            string key = PeriodMappingDic[detail.Period] + "_" + detail.AbsenceType + (grade * 2);
+                //                            if (absence_dic.ContainsKey(key))
+                //                            {
+                //                                absence_dic[key] += 1;
+
+                //                            }
+                //                        }
+                //                        //if (arStatistic_dict.ContainsKey(detail.AbsenceType + "日數_" + grade * 2))
+                //                        //{
+
+                //                        //    //加一節，整學期節次與日數的關係，再最後再結算
+                //                        //    arStatistic_dict[detail.AbsenceType + "日數_" + grade * 2] += 1;
+
+                //                        //    // 不管是啥缺席，缺席總日數都加一節
+                //                        //    arStatistic_dict["缺席總日數_" + (grade * 2)] += 1;
+                //                        //}
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //    if (Util._SLRDict.ContainsKey(stuID))
+                //        for (int grade = 1; grade <= 3; grade++)
+                //        {
+                //            foreach (var item in Util._SLRDict[stuID])
+                //            {
+                //                // 第一學期
+                //                if (item.Key == schoolyear_grade_dict[grade] + "_1")
+                //                {
+                //                    serviceLearning_dic["服務學習時數_" + (grade * 2 - 1)] = item.Value;
+                //                }
+                //                // 第二學期
+                //                if (item.Key == schoolyear_grade_dict[grade] + "_2")
+                //                {
+                //                    serviceLearning_dic["服務學習時數_" + (grade * 2)] = item.Value;
+                //                }
+                //            }
+
+                //            if (Util._DisciplineDict.ContainsKey(stuID))
+                //                foreach (var item in Util._DisciplineDict[stuID])
+                //                {
+                //                    // 第一學期
+                //                    if (item.Key == schoolyear_grade_dict[grade] + "_1")
+                //                    {
+                //                        foreach (var dis in item.Value)
+                //                        {
+                //                            discipline_dic[dis.Key + "_" + (grade * 2 - 1)] = dis.Value;
+                //                        }
+
+                //                    }
+                //                    // 第二學期
+                //                    if (item.Key == schoolyear_grade_dict[grade] + "_2")
+                //                    {
+                //                        foreach (var dis in item.Value)
+                //                        {
+                //                            discipline_dic[dis.Key + "_" + (grade * 2)] = dis.Value;
+                //                        }
+                //                    }
+                //                }
+                //        }
+
+
+                //    //foreach (string key in arStatistic_dict.Keys)
+                //    //{
+                //    //    arStatistic_dict_days.Add(key, arStatistic_dict[key]);
+                //    //}
+
+                //    ////真正的填值，填日數，所以要做節次轉換
+                //    //foreach (string key in arStatistic_dict_days.Keys)
+                //    //{
+                //    //    //康橋一日有九節，多一節缺曠 = 多1/9 日缺曠，先暫時寫死九節設定，日後要去學務作業每日節次抓取
+                //    //    row[key] = Math.Round(arStatistic_dict_days[key] / 9, 2);
+                //    //}
+
+                //    foreach (string key in absence_dic.Keys)
+                //    {
+                //        row[key] = absence_dic[key];
+                //    }
+                //    foreach (string key in serviceLearning_dic.Keys)
+                //    {
+                //        row[key] = serviceLearning_dic[key];
+                //    }
+                //    foreach (string key in discipline_dic.Keys)
+                //    {
+                //        row[key] = discipline_dic[key];
+                //    }
+                //}
 
 
                 //一般科目 科目名稱與科目編號對照表
@@ -1284,7 +1396,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                 {
                                                     subjectScoreDic.Add("彈性課程_科目" + AlternativeCourse, new List<decimal>());
                                                 }
-                                                subjectScoreDic["彈性課程_科目" + AlternativeCourse].Add(subjectscore.Value.Score.Value);
+
+                                                if (subjectscore.Value.Score.HasValue)
+                                                    subjectScoreDic["彈性課程_科目" + AlternativeCourse].Add(subjectscore.Value.Score.Value);
 
                                                 //紀錄成績//彈性課程_科目4_成績3
                                                 if (subjectScore_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_成績" + (grade * 2 - 1)))
@@ -1331,7 +1445,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                     {
                                                         subjectScoreDic.Add(subjectscore.Value.Domain + "_科目" + SubjectCourseNum, new List<decimal>());
                                                     }
-                                                    subjectScoreDic[subjectscore.Value.Domain + "_科目" + SubjectCourseNum].Add(subjectscore.Value.Score.Value);
+
+                                                    if (subjectscore.Value.Score.HasValue)
+                                                        subjectScoreDic[subjectscore.Value.Domain + "_科目" + SubjectCourseNum].Add(subjectscore.Value.Score.Value);
 
                                                     //紀錄成績
                                                     if (subjectScore_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_成績" + (grade * 2 - 1)))
@@ -1453,7 +1569,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                 {
                                                     subjectScoreDic.Add("彈性課程_科目" + AlternativeCourse, new List<decimal>());
                                                 }
-                                                subjectScoreDic["彈性課程_科目" + AlternativeCourse].Add(subjectscore.Value.Score.Value);
+
+                                                if (subjectscore.Value.Score.HasValue)
+                                                    subjectScoreDic["彈性課程_科目" + AlternativeCourse].Add(subjectscore.Value.Score.Value);
 
                                                 //紀錄成績
                                                 if (subjectScore_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_成績" + (grade * 2)))
@@ -1499,7 +1617,8 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                     {
                                                         subjectScoreDic.Add(subjectscore.Value.Domain + "_科目" + SubjectCourseNum, new List<decimal>());
                                                     }
-                                                    subjectScoreDic[subjectscore.Value.Domain + "_科目" + SubjectCourseNum].Add(subjectscore.Value.Score.Value);
+                                                    if (subjectscore.Value.Score.HasValue)
+                                                        subjectScoreDic[subjectscore.Value.Domain + "_科目" + SubjectCourseNum].Add(subjectscore.Value.Score.Value);
 
                                                     //紀錄成績
                                                     if (subjectScore_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_成績" + (grade * 2)))
@@ -1577,23 +1696,32 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                     foreach (var domainScore in domainScoreDic)
                     {
-                        decimal avgScore = Math.Round((domainScore.Value.Sum(x => x) / domainScore.Value.Count), 2);
-                        domainScore_dict[domainScore.Key + "_平均成績"] = avgScore;
-                        domainLevel_dict[domainScore.Key + "_平均成績等第"] = _ScoreMappingConfig.ParseScoreName(avgScore);
+                        if (domainScore.Value.Count > 0)
+                        {
+                            decimal avgScore = Math.Round((domainScore.Value.Sum(x => x) / domainScore.Value.Count), 2);
+                            domainScore_dict[domainScore.Key + "_平均成績"] = avgScore;
+                            domainLevel_dict[domainScore.Key + "_平均成績等第"] = _ScoreMappingConfig.ParseScoreName(avgScore);
+                        }
                     }
 
                     foreach (var subjetScore in subjectScoreDic)
                     {
-                        decimal avgScore = Math.Round((subjetScore.Value.Sum(x => x) / subjetScore.Value.Count), 2);
-                        subjectScore_dict[subjetScore.Key + "_平均成績"] = avgScore;
-                        subjectLevel_dict[subjetScore.Key + "_平均成績等第"] = _ScoreMappingConfig.ParseScoreName(avgScore);
+                        if (subjetScore.Value.Count > 0)
+                        {
+                            decimal avgScore = Math.Round((subjetScore.Value.Sum(x => x) / subjetScore.Value.Count), 2);
+                            subjectScore_dict[subjetScore.Key + "_平均成績"] = avgScore;
+                            subjectLevel_dict[subjetScore.Key + "_平均成績等第"] = _ScoreMappingConfig.ParseScoreName(avgScore);
+                        }
                     }
 
                     foreach (var learningDomainScore in learmingDomainScoreDic)
                     {
-                        decimal avgScore = Math.Round((learningDomainScore.Value.Sum(x => x) / learningDomainScore.Value.Count), 2);
-                        subjectScore_dict[learningDomainScore.Key + "_成績"] = avgScore;
-                        subjectLevel_dict[learningDomainScore.Key + "_等第"] = _ScoreMappingConfig.ParseScoreName(avgScore);
+                        if (learningDomainScore.Value.Count > 0)
+                        {
+                            decimal avgScore = Math.Round((learningDomainScore.Value.Sum(x => x) / learningDomainScore.Value.Count), 2);
+                            subjectScore_dict[learningDomainScore.Key + "_成績"] = avgScore;
+                            subjectLevel_dict[learningDomainScore.Key + "_等第"] = _ScoreMappingConfig.ParseScoreName(avgScore);
+                        }
                     }
 
                     // 填領域分數
