@@ -1702,6 +1702,8 @@ namespace KH_StudentScoreSummaryReport
                     Row FitnessRowB = FitnessRowA.NextSibling as Row;
                     Row FitnessRowC = FitnessRowB.NextSibling as Row;
                     Row FitnessRowD = FitnessRowC.NextSibling as Row;
+                    Row FitnessRowE = FitnessRowD.NextSibling as Row;
+                    Row FitnessRowF = FitnessRowE.NextSibling as Row;
 
                     Dictionary<int, List<int>> schoolYearDic = new Dictionary<int, List<int>>();
                     schoolYearDic.Add(1, new List<int>());
@@ -1750,6 +1752,10 @@ namespace KH_StudentScoreSummaryReport
                                 FitnessRowB.Cells[count / 2 + offset].Write(builder, rec.StandingLongJumpDegree);
                                 FitnessRowC.Cells[count / 2 + offset].Write(builder, rec.SitUpDegree);
                                 FitnessRowD.Cells[count / 2 + offset].Write(builder, rec.CardiorespiratoryDegree);
+                                FitnessRowE.Cells[count / 2 + offset].Write(builder, rec.CurlDegree);
+                                FitnessRowF.Cells[count / 2 + offset].Write(builder, rec.PacerDegree);
+
+
                                 usedAlready.Add(schoolYear);
                             }
                         }

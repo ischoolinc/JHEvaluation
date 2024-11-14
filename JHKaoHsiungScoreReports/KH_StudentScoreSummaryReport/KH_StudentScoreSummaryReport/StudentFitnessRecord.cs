@@ -109,5 +109,29 @@ namespace KH_StudentScoreSummaryReport
         [Field(Field = "cardiorespiratory_degree", Indexed = false)]
         public string CardiorespiratoryDegree { get; set; }
 
+        /// <summary>
+        ///  仰臥捲腹
+        /// </summary>
+        [Field(Field = "curl", Indexed = false)]
+        public string Curl { get; set; }
+
+        /// <summary>
+        ///  仰臥捲腹常模
+        /// </summary>
+        [Field(Field = "curl_degree", Indexed = false)]
+        public string CurlDegree { get; set; }
+
+        /// <summary>
+        ///  漸速耐力跑
+        /// </summary>
+        [Field(Field = "pacer", Indexed = false)]
+        public string Pacer { get; set; }
+
+        /// <summary>
+        ///  漸速耐力跑常模
+        /// </summary>
+        [Field(Field = "pacer_degree", Indexed = false)]
+        public string PacerDegree { get; set; }
+
     }
 }
