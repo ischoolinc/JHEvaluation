@@ -51,11 +51,11 @@ namespace KaoHsiung.StudentRecordReport
             {
                 if ((d.Year - 1911) > 99)
                 {
-                    return "○○○/○○/○○";
+                    return "○○○年○○月○○日";
                 }
                 else
                 {
-                    return "○○/○○/○○";
+                    return "○○年○○月○○日";
                 }
 
             }
