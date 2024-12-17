@@ -32,6 +32,9 @@ namespace KaoHsiung.StudentRecordReport
 
         private List<JHStudentRecord> _students;
 
+        // 機敏遮罩資料
+        private DAO.chkMaskInfo maskInfo;
+
         public Report()
         {
             _degreeMapper = new JHSchool.Evaluation.Mapping.DegreeMapper();
@@ -194,6 +197,14 @@ namespace KaoHsiung.StudentRecordReport
                 templateBuilder.Write(pcDisplay);
             #endregion
 
+            // 讀取機敏資料設定
+            DAO.chkMaskInfo maskInfo = new DAO.chkMaskInfo();
+            maskInfo.isMaskName = Config.GetBoolean("遮罩姓名", false);
+            maskInfo.isMaskIDNumber = Config.GetBoolean("遮罩身分證號", false);
+            maskInfo.isMaskBirthday = Config.GetBoolean("遮罩生日", false);
+            maskInfo.isMaskPhone = Config.GetBoolean("遮罩電話", false);
+            maskInfo.isMaskAddress = Config.GetBoolean("遮罩地址", false);
+
             #region 文字評語是否列印
             bool printText = Config.GetBoolean("列印文字評語", true);
             if (printText == false)
@@ -228,7 +239,7 @@ namespace KaoHsiung.StudentRecordReport
                 #endregion
 
                 #region 學生基本資料
-                StudentBasicInfo basicInfo = new StudentBasicInfo(builder);
+                StudentBasicInfo basicInfo = new StudentBasicInfo(builder, maskInfo);
                 basicInfo.SetStudent(student, semesterHistoryList);
                 #endregion
 
@@ -290,18 +301,34 @@ namespace KaoHsiung.StudentRecordReport
                     each.MailMerge.Execute(globalFieldName.ToArray(), globalFieldValue.ToArray());
 
                     string fileName = "";
-                    fileName = student.StudentNumber;
 
-                    fileName += "_" + student.IDNumber;
+                    //  原寫法
+                    //fileName = student.StudentNumber;
+
+                    //fileName += "_" + student.IDNumber;
+
+                    //if (!string.IsNullOrEmpty(student.RefClassID))
+                    //    fileName += "_" + student.Class.Name;
+                    //else
+                    //    fileName += "_";
+
+                    //fileName += "_" + (student.SeatNo.HasValue ? student.SeatNo.Value.ToString() : "");
+                    //fileName += "_" + student.Name;
+
+                    //if (!StudentDoc.ContainsKey(fileName))
+                    //{
+                    //    StudentDoc.Add(fileName, each);
+                    //}
+
+                    // 新討論寫法：學號_班級_座號
+                    fileName = student.StudentNumber;                    
 
                     if (!string.IsNullOrEmpty(student.RefClassID))
                         fileName += "_" + student.Class.Name;
                     else
                         fileName += "_";
 
-                    fileName += "_" + (student.SeatNo.HasValue ? student.SeatNo.Value.ToString() : "");
-                    fileName += "_" + student.Name;
-
+                    fileName += "_" + (student.SeatNo.HasValue ? student.SeatNo.Value.ToString() : "");                   
                     if (!StudentDoc.ContainsKey(fileName))
                     {
                         StudentDoc.Add(fileName, each);

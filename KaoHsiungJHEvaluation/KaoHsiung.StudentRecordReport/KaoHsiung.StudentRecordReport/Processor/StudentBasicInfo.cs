@@ -16,11 +16,15 @@ namespace KaoHsiung.StudentRecordReport.Processor
         private Dictionary<string, string> _data;
         private DocumentBuilder _builder;
         private List<SemesterHistoryItem> _semesterHistoryList;
-        public StudentBasicInfo(DocumentBuilder builder)
+
+        private DAO.chkMaskInfo _maskInfo;
+
+        public StudentBasicInfo(DocumentBuilder builder, DAO.chkMaskInfo maskInfo)
         {
             InitializeField();
 
             _builder = builder;
+            _maskInfo = maskInfo;
             _builder.Document.MailMerge.FieldMergingCallback = new MailMerge_MergeField();
         }
 
@@ -119,24 +123,123 @@ namespace KaoHsiung.StudentRecordReport.Processor
 
 
             _data["姓名"] = student.Name;
-            _data["性別"] = student.Gender;
+            _data["家長或監護人"] = (parent != null) ? parent.Custodian.Name : "";
+
+            if (_data["姓名"] != null && _maskInfo.isMaskName)
+            {
+                int len = _data["姓名"].Length;
+                if (len > 1)
+                {
+                    string mask = new String('○', len - 1);
+                    _data["姓名"] = _data["姓名"].Substring(0, 1) + mask;
+                }
+            }
+
+            if (_data["家長或監護人"] != null && _maskInfo.isMaskName)
+            {
+                int len = _data["家長或監護人"].Length;
+                if (len > 1)
+                {
+                    string mask = new String('○', len - 1);
+                    _data["家長或監護人"] = _data["家長或監護人"].Substring(0, 1) + mask;
+                }
+            }
+            
             _data["身分證字號"] = student.IDNumber;
+            if (_data["身分證字號"] != null && _maskInfo.isMaskIDNumber)
+            {
+                int len = _data["身分證字號"].Length;
+                if (len > 1)
+                {
+                    string mask = new String('○', len - 1);
+                    _data["身分證字號"] = _data["身分證字號"].Substring(0, 1) + mask;
+                }
+            }
+
+
+            _data["性別"] = student.Gender;
+            
             _data["學號"] = student.StudentNumber;
             _data["班級"] = (student.Class != null ? student.Class.Name : "");
             _data["座號"] = "" + student.SeatNo;
-            _data["出生"] = DateConvert.ChineseUnitDate(DateConvert.CDate(student.Birthday.HasValue ? student.Birthday.Value.ToShortDateString() : ""));
+
+            if (_maskInfo.isMaskBirthday)
+            {
+                _data["出生"] = DateConvert.ChineseUnitDate(DateConvert.CDateM(student.Birthday.HasValue ? student.Birthday.Value.ToShortDateString() : ""));
+            }
+            else
+            {
+                _data["出生"] = DateConvert.ChineseUnitDate(DateConvert.CDate(student.Birthday.HasValue ? student.Birthday.Value.ToShortDateString() : ""));
+            }
+            
             _data["出生地"] = student.BirthPlace;
-            _data["家長或監護人"] = (parent != null) ? parent.Custodian.Name : "";
+            
             _data["關係"] = (parent != null) ? parent.Custodian.Relationship : "";
+            
             _data["聯絡電話"] = (phone != null) ? "" + phone.Contact : "";
+            if (_data["聯絡電話"] != null && _maskInfo.isMaskPhone)
+            {
+                int len = _data["聯絡電話"].Length;
+                if (len > 0)
+                {
+                    string mask = new String('○', len);
+                    _data["聯絡電話"] =  mask;
+                }
+            }
+
             _data["戶籍電話"] = (phone != null) ? "" + phone.Permanent : "";
+            if (_data["戶籍電話"] != null && _maskInfo.isMaskPhone)
+            {
+                int len = _data["戶籍電話"].Length;
+                if (len > 0)
+                {
+                    string mask = new String('○', len);
+                    _data["戶籍電話"] = mask;
+                }
+            }
+
             _data["戶籍地址"] = (address != null) ? address.Permanent.ToString() : "";
+            if (_data["戶籍地址"] != null && _maskInfo.isMaskAddress)
+            {
+                int len = _data["戶籍地址"].Length;
+                if (len > 0)
+                {
+                    string mask = new String('○', len);
+                    _data["戶籍地址"] = mask;
+                }
+            }
+
             _data["通訊處"] = (address != null) ? address.Mailing.ToString() : "";
+            if (_data["通訊處"] != null && _maskInfo.isMaskAddress)
+            {
+                int len = _data["通訊處"].Length;
+                if (len > 0)
+                {
+                    string mask = new String('○', len);
+                    _data["通訊處"] = mask;
+                }
+            }
+
             _data["行動電話"] = (phone != null) ? "" + phone.Cell : "";
+            if (_data["行動電話"] != null && _maskInfo.isMaskPhone)
+            {
+                int len = _data["行動電話"].Length;
+                if (len > 0)
+                {
+                    string mask = new String('○', len);
+                    _data["行動電話"] = mask;
+                }
+            }
+
             _data["畢業證書字號"] = number1;
             _data["修業證明書字號"] = number2;
             _data["照片"] = base64;
             _data["簽呈"] = "承辦人員:" + Global.TransferName + tmpStr + "註冊組長:" + Global.RegManagerName + tmpStr + "教務主任:" + JHSchoolInfo.EduDirectorName + tmpStr + "校長:" + JHSchoolInfo.ChancellorChineseName;
+
+            // 處理機敏資料
+
+
+
             // 處理服務學習時數
             if (Global._SLRDict.ContainsKey(student.ID))
             {

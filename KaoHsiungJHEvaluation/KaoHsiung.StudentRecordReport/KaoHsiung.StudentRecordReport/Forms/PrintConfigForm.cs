@@ -58,6 +58,14 @@ namespace KaoHsiung.StudentRecordReport.Forms
 
             checkBoxX1.Checked = _Dylanconfig.GetBoolean("單檔儲存", false);
 
+            // 處理機敏資料，使用原本 config
+            cbxName.Checked = _config.GetBoolean("遮罩姓名", false);
+            cbxIDNumber.Checked = _config.GetBoolean("遮罩身分證號", false);
+            cbxBirthday.Checked = _config.GetBoolean("遮罩生日", false);
+            cbxPhone.Checked = _config.GetBoolean("遮罩電話", false);
+            cbxAddress.Checked = _config.GetBoolean("遮罩地址", false);
+
+
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -67,6 +75,11 @@ namespace KaoHsiung.StudentRecordReport.Forms
             _config.SetBoolean("列印權數", chkCredit.Checked);
             _config.SetBoolean("列印文字評語", chkText.Checked);
             _config.SetBoolean("輸出成PDF格式", rtnPDF.Checked);
+            _config.SetBoolean("遮罩姓名", cbxName.Checked);
+            _config.SetBoolean("遮罩身分證號", cbxIDNumber.Checked);
+            _config.SetBoolean("遮罩生日", cbxBirthday.Checked);
+            _config.SetBoolean("遮罩電話", cbxPhone.Checked);
+            _config.SetBoolean("遮罩地址", cbxAddress.Checked);
             _config.Save();
 
             _Dylanconfig.SetBoolean("單檔儲存", checkBoxX1.Checked);

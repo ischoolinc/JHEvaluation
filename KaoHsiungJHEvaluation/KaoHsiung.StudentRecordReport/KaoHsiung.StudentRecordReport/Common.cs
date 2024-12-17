@@ -43,6 +43,25 @@ namespace KaoHsiung.StudentRecordReport
             else
                 return "";
         }
+        // 遮罩使用
+        internal static string CDateM(string p)
+        {
+            DateTime d = DateTime.Now;
+            if (p != "" && DateTime.TryParse(p, out d))
+            {
+                if ((d.Year - 1911) > 99)
+                {
+                    return "○○○/○○/○○";
+                }
+                else
+                {
+                    return "○○/○○/○○";
+                }
+
+            }
+            else
+                return "";
+        }
 
         internal static string ChineseUnitDate(string p)
         {

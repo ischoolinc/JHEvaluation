@@ -41,15 +41,20 @@
             this.gpPC = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.gpText = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.labelX3 = new DevComponents.DotNetBar.LabelX();
             this.chkText = new System.Windows.Forms.CheckBox();
             this.gpFormat = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.checkBoxX1 = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.rtnPDF = new System.Windows.Forms.RadioButton();
             this.rtnWord = new System.Windows.Forms.RadioButton();
             this.groupPanel1 = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.checkBoxX1 = new DevComponents.DotNetBar.Controls.CheckBoxX();
-            this.labelX3 = new DevComponents.DotNetBar.LabelX();
+            this.cbxName = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.cbxIDNumber = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.cbxBirthday = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.cbxPhone = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.cbxAddress = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.gpDomainSubject.SuspendLayout();
             this.panel1.SuspendLayout();
             this.gpPC.SuspendLayout();
@@ -92,7 +97,7 @@
             this.gpDomainSubject.DrawTitleBox = false;
             this.gpDomainSubject.Location = new System.Drawing.Point(7, 8);
             this.gpDomainSubject.Name = "gpDomainSubject";
-            this.gpDomainSubject.Size = new System.Drawing.Size(372, 139);
+            this.gpDomainSubject.Size = new System.Drawing.Size(502, 139);
             // 
             // 
             // 
@@ -136,7 +141,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(366, 112);
+            this.panel1.Size = new System.Drawing.Size(496, 112);
             this.panel1.TabIndex = 12;
             // 
             // rbSubject
@@ -193,7 +198,7 @@
             this.btnSave.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnSave.BackColor = System.Drawing.Color.Transparent;
             this.btnSave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSave.Location = new System.Drawing.Point(233, 459);
+            this.btnSave.Location = new System.Drawing.Point(363, 609);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 12;
@@ -205,7 +210,7 @@
             this.btnClose.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
             this.btnClose.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnClose.Location = new System.Drawing.Point(315, 459);
+            this.btnClose.Location = new System.Drawing.Point(445, 609);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(60, 23);
             this.btnClose.TabIndex = 12;
@@ -221,7 +226,7 @@
             this.gpPC.DrawTitleBox = false;
             this.gpPC.Location = new System.Drawing.Point(7, 153);
             this.gpPC.Name = "gpPC";
-            this.gpPC.Size = new System.Drawing.Size(372, 66);
+            this.gpPC.Size = new System.Drawing.Size(502, 66);
             // 
             // 
             // 
@@ -263,7 +268,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(366, 39);
+            this.panel2.Size = new System.Drawing.Size(496, 39);
             this.panel2.TabIndex = 12;
             // 
             // gpText
@@ -276,7 +281,7 @@
             this.gpText.DrawTitleBox = false;
             this.gpText.Location = new System.Drawing.Point(7, 225);
             this.gpText.Name = "gpText";
-            this.gpText.Size = new System.Drawing.Size(372, 85);
+            this.gpText.Size = new System.Drawing.Size(502, 85);
             // 
             // 
             // 
@@ -310,6 +315,21 @@
             this.gpText.TabIndex = 11;
             this.gpText.Text = "文字評語";
             // 
+            // labelX3
+            // 
+            this.labelX3.AutoSize = true;
+            this.labelX3.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX3.Location = new System.Drawing.Point(85, 24);
+            this.labelX3.Name = "labelX3";
+            this.labelX3.Size = new System.Drawing.Size(141, 21);
+            this.labelX3.TabIndex = 9;
+            this.labelX3.Text = "不含彈性課程文字評量";
+            // 
             // chkText
             // 
             this.chkText.AutoSize = true;
@@ -330,7 +350,7 @@
             this.gpFormat.DrawTitleBox = false;
             this.gpFormat.Location = new System.Drawing.Point(7, 316);
             this.gpFormat.Name = "gpFormat";
-            this.gpFormat.Size = new System.Drawing.Size(372, 60);
+            this.gpFormat.Size = new System.Drawing.Size(502, 90);
             // 
             // 
             // 
@@ -367,13 +387,30 @@
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.Color.Transparent;
+            this.panel6.Controls.Add(this.checkBoxX1);
             this.panel6.Controls.Add(this.rtnPDF);
             this.panel6.Controls.Add(this.rtnWord);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(366, 33);
+            this.panel6.Size = new System.Drawing.Size(496, 63);
             this.panel6.TabIndex = 0;
+            // 
+            // checkBoxX1
+            // 
+            this.checkBoxX1.AutoSize = true;
+            // 
+            // 
+            // 
+            this.checkBoxX1.BackgroundStyle.Class = "";
+            this.checkBoxX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkBoxX1.Location = new System.Drawing.Point(42, 30);
+            this.checkBoxX1.Name = "checkBoxX1";
+            this.checkBoxX1.Size = new System.Drawing.Size(248, 21);
+            this.checkBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkBoxX1.TabIndex = 0;
+            this.checkBoxX1.Text = "使用單檔列印(檔名：學號_班級_座號)";
+            this.checkBoxX1.TextColor = System.Drawing.Color.Black;
             // 
             // rtnPDF
             // 
@@ -405,9 +442,9 @@
             this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.groupPanel1.Controls.Add(this.panel4);
             this.groupPanel1.DrawTitleBox = false;
-            this.groupPanel1.Location = new System.Drawing.Point(7, 382);
+            this.groupPanel1.Location = new System.Drawing.Point(7, 412);
             this.groupPanel1.Name = "groupPanel1";
-            this.groupPanel1.Size = new System.Drawing.Size(372, 60);
+            this.groupPanel1.Size = new System.Drawing.Size(502, 187);
             // 
             // 
             // 
@@ -439,53 +476,106 @@
             this.groupPanel1.StyleMouseOver.Class = "";
             this.groupPanel1.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel1.TabIndex = 16;
-            this.groupPanel1.Text = "單檔列印";
+            this.groupPanel1.Text = "機敏資料遮罩規則";
             // 
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.Transparent;
-            this.panel4.Controls.Add(this.checkBoxX1);
+            this.panel4.Controls.Add(this.cbxAddress);
+            this.panel4.Controls.Add(this.cbxPhone);
+            this.panel4.Controls.Add(this.cbxBirthday);
+            this.panel4.Controls.Add(this.cbxIDNumber);
+            this.panel4.Controls.Add(this.cbxName);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(366, 33);
+            this.panel4.Size = new System.Drawing.Size(496, 160);
             this.panel4.TabIndex = 0;
             // 
-            // checkBoxX1
+            // cbxName
             // 
-            this.checkBoxX1.AutoSize = true;
-            // 
-            // 
-            // 
-            this.checkBoxX1.BackgroundStyle.Class = "";
-            this.checkBoxX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.checkBoxX1.Location = new System.Drawing.Point(18, 5);
-            this.checkBoxX1.Name = "checkBoxX1";
-            this.checkBoxX1.Size = new System.Drawing.Size(327, 21);
-            this.checkBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.checkBoxX1.TabIndex = 0;
-            this.checkBoxX1.Text = "使用單檔列印(檔名：學號_身分證_班級_座號_姓名)";
-            this.checkBoxX1.TextColor = System.Drawing.Color.Black;
-            // 
-            // labelX3
-            // 
-            this.labelX3.AutoSize = true;
-            this.labelX3.BackColor = System.Drawing.Color.Transparent;
+            this.cbxName.AutoSize = true;
             // 
             // 
             // 
-            this.labelX3.BackgroundStyle.Class = "";
-            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX3.Location = new System.Drawing.Point(85, 24);
-            this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(141, 21);
-            this.labelX3.TabIndex = 9;
-            this.labelX3.Text = "不含彈性課程文字評量";
+            this.cbxName.BackgroundStyle.Class = "";
+            this.cbxName.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.cbxName.Location = new System.Drawing.Point(13, 14);
+            this.cbxName.Name = "cbxName";
+            this.cbxName.Size = new System.Drawing.Size(357, 21);
+            this.cbxName.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cbxName.TabIndex = 1;
+            this.cbxName.Text = "遮罩姓名(包含學生姓名及家長監護人姓名，如：林○○)";
+            this.cbxName.TextColor = System.Drawing.Color.Black;
+            // 
+            // cbxIDNumber
+            // 
+            this.cbxIDNumber.AutoSize = true;
+            // 
+            // 
+            // 
+            this.cbxIDNumber.BackgroundStyle.Class = "";
+            this.cbxIDNumber.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.cbxIDNumber.Location = new System.Drawing.Point(13, 41);
+            this.cbxIDNumber.Name = "cbxIDNumber";
+            this.cbxIDNumber.Size = new System.Drawing.Size(272, 21);
+            this.cbxIDNumber.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cbxIDNumber.TabIndex = 2;
+            this.cbxIDNumber.Text = "遮罩身分證號(如：A○○○○○○○○○)";
+            this.cbxIDNumber.TextColor = System.Drawing.Color.Black;
+            // 
+            // cbxBirthday
+            // 
+            this.cbxBirthday.AutoSize = true;
+            // 
+            // 
+            // 
+            this.cbxBirthday.BackgroundStyle.Class = "";
+            this.cbxBirthday.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.cbxBirthday.Location = new System.Drawing.Point(13, 68);
+            this.cbxBirthday.Name = "cbxBirthday";
+            this.cbxBirthday.Size = new System.Drawing.Size(236, 21);
+            this.cbxBirthday.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cbxBirthday.TabIndex = 3;
+            this.cbxBirthday.Text = "遮罩生日(如：○○年○○月○○日)";
+            this.cbxBirthday.TextColor = System.Drawing.Color.Black;
+            // 
+            // cbxPhone
+            // 
+            this.cbxPhone.AutoSize = true;
+            // 
+            // 
+            // 
+            this.cbxPhone.BackgroundStyle.Class = "";
+            this.cbxPhone.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.cbxPhone.Location = new System.Drawing.Point(13, 95);
+            this.cbxPhone.Name = "cbxPhone";
+            this.cbxPhone.Size = new System.Drawing.Size(477, 21);
+            this.cbxPhone.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cbxPhone.TabIndex = 4;
+            this.cbxPhone.Text = "遮罩電話(包含聯絡電話、戶籍電話及行動電話，如：○○○○○○○○○○)";
+            this.cbxPhone.TextColor = System.Drawing.Color.Black;
+            // 
+            // cbxAddress
+            // 
+            this.cbxAddress.AutoSize = true;
+            // 
+            // 
+            // 
+            this.cbxAddress.BackgroundStyle.Class = "";
+            this.cbxAddress.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.cbxAddress.Location = new System.Drawing.Point(13, 122);
+            this.cbxAddress.Name = "cbxAddress";
+            this.cbxAddress.Size = new System.Drawing.Size(383, 21);
+            this.cbxAddress.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.cbxAddress.TabIndex = 5;
+            this.cbxAddress.Text = "遮罩地址(包含戶籍地址及通訊處，如：○○○○○○○○○)";
+            this.cbxAddress.TextColor = System.Drawing.Color.Black;
             // 
             // PrintConfigForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(389, 494);
+            this.ClientSize = new System.Drawing.Size(518, 644);
             this.Controls.Add(this.groupPanel1);
             this.Controls.Add(this.gpFormat);
             this.Controls.Add(this.btnClose);
@@ -494,7 +584,7 @@
             this.Controls.Add(this.gpPC);
             this.Controls.Add(this.gpDomainSubject);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "PrintConfigForm";
             this.Text = "列印設定";
             this.gpDomainSubject.ResumeLayout(false);
@@ -539,5 +629,10 @@
         private System.Windows.Forms.Panel panel4;
         private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxX1;
         private DevComponents.DotNetBar.LabelX labelX3;
+        private DevComponents.DotNetBar.Controls.CheckBoxX cbxAddress;
+        private DevComponents.DotNetBar.Controls.CheckBoxX cbxPhone;
+        private DevComponents.DotNetBar.Controls.CheckBoxX cbxBirthday;
+        private DevComponents.DotNetBar.Controls.CheckBoxX cbxIDNumber;
+        private DevComponents.DotNetBar.Controls.CheckBoxX cbxName;
     }
 }
