@@ -82,7 +82,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             InitializeComponent();
 
             StudentIDs = studentIds;
-            Preference = new ReportPreference(ConfigName, Properties.Resources.在校成績證明書_2022英文版_範本);
+            Preference = new ReportPreference(ConfigName, Properties.Resources.在校成績證明書_2025_範本);
             MasterWorker.DoWork += new DoWorkEventHandler(MasterWorker_DoWork);
             MasterWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(MasterWorker_RunWorkerCompleted);
             MasterWorker.WorkerReportsProgress = true;

@@ -99,5 +99,15 @@ namespace JHEvaluation.StudentScoreSummaryReport.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] 在校成績證明書_2025_範本 {
+            get {
+                object obj = ResourceManager.GetObject("在校成績證明書_2025_範本", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

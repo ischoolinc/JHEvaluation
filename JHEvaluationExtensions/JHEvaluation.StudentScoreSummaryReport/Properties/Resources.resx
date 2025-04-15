@@ -130,4 +130,7 @@
   <data name="在校成績證明書_2022英文版功能變數" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\在校成績證明書_2022英文版功能變數.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="在校成績證明書_2025_範本" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\在校成績證明書_2025_範本.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

@@ -289,6 +289,7 @@
     <None Include="Resources\在校成績證明書_2022功能變數.doc" />
     <None Include="Resources\在校成績證明書_2022英文版_範本.doc" />
     <None Include="Resources\在校成績證明書_2022英文版功能變數.doc" />
+    <None Include="Resources\在校成績證明書_2025_範本.doc" />
     <None Include="Resources\學生在校成績證明書.doc" />
     <None Include="Resources\學生在校成績證明書%28英文%29.doc" />
   </ItemGroup>
