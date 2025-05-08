@@ -43,7 +43,10 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 rbA4.Checked = true;
             else if (config.PaperSize == "B4")
                 rbB4.Checked = true;
-            RefreshCheckState();
+            else if (config.PaperSize == "A3")
+                rbA3.Checked = true;
+
+                RefreshCheckState();
         }
 
 
@@ -90,8 +93,12 @@ namespace JHEvaluation.ClassSemesterScoreReport
             }
             if (rbA4.Checked)
                 config.PaperSize = "A4";
-            else
+            
+            if (rbB4.Checked)
                 config.PaperSize = "B4";
+
+            if (rbA3.Checked)
+                config.PaperSize = "A3";
 
             config.Save();
             DialogResult = DialogResult.OK;

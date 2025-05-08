@@ -113,6 +113,46 @@ namespace JHEvaluation.ClassSemesterScoreReport {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] 班級學期成績單A3 {
+            get {
+                object obj = ResourceManager.GetObject("班級學期成績單A3", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] 班級學期成績單A3_60 {
+            get {
+                object obj = ResourceManager.GetObject("班級學期成績單A3_60", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] 班級學期成績單A3_60_kh {
+            get {
+                object obj = ResourceManager.GetObject("班級學期成績單A3_60_kh", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] 班級學期成績單A3_kh {
+            get {
+                object obj = ResourceManager.GetObject("班級學期成績單A3_kh", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] 班級學期成績單B4 {
             get {
                 object obj = ResourceManager.GetObject("班級學期成績單B4", resourceCulture);

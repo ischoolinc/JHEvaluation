@@ -43,6 +43,7 @@
             this.groupPanel1 = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.rbB4 = new System.Windows.Forms.RadioButton();
             this.rbA4 = new System.Windows.Forms.RadioButton();
+            this.rbA3 = new System.Windows.Forms.RadioButton();
             this.gpItem.SuspendLayout();
             this.gpRank.SuspendLayout();
             this.groupPanel1.SuspendLayout();
@@ -144,10 +145,21 @@
             this.gpItem.Style.BorderRightWidth = 1;
             this.gpItem.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
             this.gpItem.Style.BorderTopWidth = 1;
+            this.gpItem.Style.Class = "";
             this.gpItem.Style.CornerDiameter = 4;
             this.gpItem.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
             this.gpItem.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
             this.gpItem.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.gpItem.StyleMouseDown.Class = "";
+            this.gpItem.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.gpItem.StyleMouseOver.Class = "";
+            this.gpItem.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.gpItem.TabIndex = 3;
             this.gpItem.Text = "列印項目";
             // 
@@ -179,10 +191,21 @@
             this.gpRank.Style.BorderRightWidth = 1;
             this.gpRank.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
             this.gpRank.Style.BorderTopWidth = 1;
+            this.gpRank.Style.Class = "";
             this.gpRank.Style.CornerDiameter = 4;
             this.gpRank.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
             this.gpRank.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
             this.gpRank.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.gpRank.StyleMouseDown.Class = "";
+            this.gpRank.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.gpRank.StyleMouseOver.Class = "";
+            this.gpRank.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.gpRank.TabIndex = 3;
             this.gpRank.Text = "排名依據";
             // 
@@ -239,6 +262,7 @@
             this.groupPanel1.BackColor = System.Drawing.Color.Transparent;
             this.groupPanel1.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.groupPanel1.Controls.Add(this.rbA3);
             this.groupPanel1.Controls.Add(this.rbB4);
             this.groupPanel1.Controls.Add(this.rbA4);
             this.groupPanel1.DrawTitleBox = false;
@@ -260,17 +284,28 @@
             this.groupPanel1.Style.BorderRightWidth = 1;
             this.groupPanel1.Style.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
             this.groupPanel1.Style.BorderTopWidth = 1;
+            this.groupPanel1.Style.Class = "";
             this.groupPanel1.Style.CornerDiameter = 4;
             this.groupPanel1.Style.CornerType = DevComponents.DotNetBar.eCornerType.Rounded;
             this.groupPanel1.Style.TextColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
             this.groupPanel1.Style.TextLineAlignment = DevComponents.DotNetBar.eStyleTextAlignment.Near;
+            // 
+            // 
+            // 
+            this.groupPanel1.StyleMouseDown.Class = "";
+            this.groupPanel1.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.groupPanel1.StyleMouseOver.Class = "";
+            this.groupPanel1.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel1.TabIndex = 5;
             this.groupPanel1.Text = "紙張尺寸";
             // 
             // rbB4
             // 
             this.rbB4.AutoSize = true;
-            this.rbB4.Location = new System.Drawing.Point(112, 0);
+            this.rbB4.Location = new System.Drawing.Point(90, 0);
             this.rbB4.Name = "rbB4";
             this.rbB4.Size = new System.Drawing.Size(42, 21);
             this.rbB4.TabIndex = 0;
@@ -281,13 +316,23 @@
             // 
             this.rbA4.AutoSize = true;
             this.rbA4.Checked = true;
-            this.rbA4.Location = new System.Drawing.Point(57, 0);
+            this.rbA4.Location = new System.Drawing.Point(22, 0);
             this.rbA4.Name = "rbA4";
             this.rbA4.Size = new System.Drawing.Size(43, 21);
             this.rbA4.TabIndex = 0;
             this.rbA4.TabStop = true;
             this.rbA4.Text = "A4";
             this.rbA4.UseVisualStyleBackColor = true;
+            // 
+            // rbA3
+            // 
+            this.rbA3.AutoSize = true;
+            this.rbA3.Location = new System.Drawing.Point(154, 0);
+            this.rbA3.Name = "rbA3";
+            this.rbA3.Size = new System.Drawing.Size(43, 21);
+            this.rbA3.TabIndex = 1;
+            this.rbA3.Text = "A3";
+            this.rbA3.UseVisualStyleBackColor = true;
             // 
             // ConfigForm
             // 
@@ -298,7 +343,8 @@
             this.Controls.Add(this.gpItem);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnSave);
-            this.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DoubleBuffered = true;
+            this.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(240, 270);
             this.Name = "ConfigForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -330,5 +376,6 @@
         private DevComponents.DotNetBar.Controls.GroupPanel groupPanel1;
         private System.Windows.Forms.RadioButton rbB4;
         private System.Windows.Forms.RadioButton rbA4;
+        private System.Windows.Forms.RadioButton rbA3;
     }
 }

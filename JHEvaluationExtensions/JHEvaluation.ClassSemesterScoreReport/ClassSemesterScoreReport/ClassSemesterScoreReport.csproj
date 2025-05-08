@@ -195,6 +195,10 @@
   <ItemGroup>
     <None Include="Prc\班級學期成績單60.xls" />
     <None Include="Prc\班級學期成績單60_kh.xls" />
+    <None Include="Prc\班級學期成績單A3.xls" />
+    <None Include="Prc\班級學期成績單A3_60.xls" />
+    <None Include="Prc\班級學期成績單A3_60_kh.xls" />
+    <None Include="Prc\班級學期成績單A3_kh.xls" />
     <None Include="Prc\班級學期成績單B4.xls" />
     <None Include="Prc\班級學期成績單B4_60.xls" />
     <None Include="Prc\班級學期成績單B4_60_kh.xls" />

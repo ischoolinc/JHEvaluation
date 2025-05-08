@@ -130,6 +130,18 @@
   <data name="班級學期成績單60_kh" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>prc\班級學期成績單60_kh.xls;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="班級學期成績單A3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>prc\班級學期成績單a3.xls;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="班級學期成績單A3_60" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>prc\班級學期成績單a3_60.xls;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="班級學期成績單A3_60_kh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>prc\班級學期成績單a3_60_kh.xls;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="班級學期成績單A3_kh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>prc\班級學期成績單a3_kh.xls;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="班級學期成績單B4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>prc\班級學期成績單b4.xls;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

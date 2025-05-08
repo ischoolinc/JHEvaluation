@@ -58,7 +58,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
             {
                 isFeedbackVisible = true;
             }
-          
+
             #endregion
         }
 
@@ -71,6 +71,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 {
                     if (Perference.PaperSize == "B4")
                         return new MemoryStream(Prc.班級學期成績單B4_60);
+                    else if (Perference.PaperSize == "A3")
+                        return new MemoryStream(Prc.班級學期成績單A3_60);
                     else
                         return new MemoryStream(Prc.班級學期成績單60);
                 }
@@ -78,6 +80,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 {
                     if (Perference.PaperSize == "B4")
                         return new MemoryStream(Prc.班級學期成績單B4);
+                    else if (Perference.PaperSize == "A3")
+                        return new MemoryStream(Prc.班級學期成績單A3);
                     else
                         return new MemoryStream(Prc.班級學期成績單);
 
@@ -90,6 +94,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 {
                     if (Perference.PaperSize == "B4")
                         return new MemoryStream(Prc.班級學期成績單B4_60_kh);
+                    else if (Perference.PaperSize == "A3")
+                        return new MemoryStream(Prc.班級學期成績單A3_60_kh);
                     else
                         return new MemoryStream(Prc.班級學期成績單60_kh);
                 }
@@ -97,11 +103,13 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 {
                     if (Perference.PaperSize == "B4")
                         return new MemoryStream(Prc.班級學期成績單B4_kh);
+                    else if (Perference.PaperSize == "A3")
+                        return new MemoryStream(Prc.班級學期成績單A3_kh);
                     else
                         return new MemoryStream(Prc.班級學期成績單_kh);
 
                 }
-            }          
+            }
         }
 
         public Workbook Output()
@@ -125,7 +133,14 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
             Template.Open(GetTemplateStream());
 
-            int ScoreHeaderCount = (Perference.PaperSize == "B4") ? 32 : 18;
+            // 預設A4欄位數 18
+            int ScoreHeaderCount = 18;
+
+            if (Perference.PaperSize == "B4")
+                ScoreHeaderCount = 32;
+
+            if (Perference.PaperSize == "A3")
+                ScoreHeaderCount = 38;
 
             int ClassOffset = 0; //整個班級的 Offset。
             int RowOffset = 0;
@@ -142,7 +157,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
             Range all = Template.Worksheets.GetRangeByName("All");
 
-            Range printDate = null; 
+            Range printDate = null;
 
             Range title = Template.Worksheets.GetRangeByName("Title");
             Range feedback = null;
@@ -152,7 +167,7 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 printDate = Template.Worksheets.GetRangeByName("PrintDate");
                 printDate[0, 0].PutValue(DateTime.Today.ToString("yyyy/MM/dd"));
             }
-          
+
             Range rowHeaders = Template.Worksheets.GetRangeByName("RowHeaders");
             Range columnHeaders = Template.Worksheets.GetRangeByName("ColumnHeaders");
             Range rankColumnHeader = Template.Worksheets.GetRangeByName("RankColumnHeader");
@@ -415,8 +430,8 @@ namespace JHEvaluation.ClassSemesterScoreReport
                 if (isFeedbackVisible)
                 {
                     OutputSheet.Cells[feedback.FirstRow + ClassOffset, feedback.FirstColumn].PutValue(string.Format("{0} 班級學期成績單回條  (家長意見欄)", each.Name));
-                }              
-                
+                }
+
                 #endregion
 
                 ClassOffset += RowNumber;

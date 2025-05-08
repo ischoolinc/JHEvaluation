@@ -316,7 +316,15 @@ namespace JHEvaluation.ClassSemesterScoreReport
 
             #region 檢查選擇的科目、領域是否合理。
             //if ((selectedSubjects.Count + selectedDomains.Count + Perference.PrintItems.Count) > Report.ScoreHeaderCount)
-            int ScoreHeaderCount = (Perference.PaperSize == "B4") ? 32 : 18;
+            //int ScoreHeaderCount = (Perference.PaperSize == "B4") ? 32 : 18;
+            int ScoreHeaderCount = 18;
+
+            if (Perference.PaperSize == "B4")
+                ScoreHeaderCount = 32;
+
+            if (Perference.PaperSize == "A3")
+                ScoreHeaderCount = 38;
+            
             if ((selectedSubjects.Count + selectedDomains.Count + Perference.PrintItems.Count) > ScoreHeaderCount)
             {
                 MsgBox.Show("選擇的成績項目超過，無法列印報表。");
