@@ -426,6 +426,47 @@ namespace HsinChuExamScoreClassFixedRank.DAO
 
 
         /// <summary>
+        /// 總分班PR(定期)
+        /// </summary>
+        public int? ClassSumPRF { get; set; }
+
+        /// <summary>
+        /// 加權總分班PR(定期)
+        /// </summary>
+        public int? ClassSumAPRF { get; set; }
+
+        /// <summary>
+        /// 平均班PR(定期)
+        /// </summary>
+        public int? ClassAvgPRF { get; set; }
+
+        /// <summary>
+        /// 加權平均班PR(定期)
+        /// </summary>
+        public int? ClassAvgAPRF { get; set; }
+
+        /// <summary>
+        /// 總分班百分比(定期)
+        /// </summary>
+        public decimal? ClassSumPercentileF { get; set; }
+
+        /// <summary>
+        /// 加權總分班百分比(定期)
+        /// </summary>
+        public decimal? ClassSumAPercentileF { get; set; }
+
+        /// <summary>
+        /// 平均班百分比(定期)
+        /// </summary>
+        public decimal? ClassAvgPercentileF { get; set; }
+
+        /// <summary>
+        /// 加權平均班百分比(定期)
+        /// </summary>
+        public decimal? ClassAvgAPercentileF { get; set; }
+
+
+        /// <summary>
         /// 計算成績
         /// </summary>
         public void CalScore()

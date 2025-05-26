@@ -255,7 +255,7 @@ namespace HsinChuExamScoreClassFixedRank
 
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("總計分數與總計班排名,年排名");
+                builder.Writeln("總計分數與總計班排名、年排名。");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
@@ -286,7 +286,8 @@ namespace HsinChuExamScoreClassFixedRank
                 builder.InsertCell();
                 builder.Write("平均年排名");
                 builder.InsertCell();
-                builder.Write("加權平均年排名");
+                builder.Write("加權平均年排名");              
+
                 builder.EndRow();
 
 
@@ -320,6 +321,7 @@ namespace HsinChuExamScoreClassFixedRank
                     builder.InsertField("MERGEFIELD 平均年排名" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD 加權平均年排名" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+                                        
 
                     builder.EndRow();
                 }
@@ -327,7 +329,7 @@ namespace HsinChuExamScoreClassFixedRank
 
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("總計分數與總計班排名,年排名(定期)");
+                builder.Writeln("總計分數與總計班排名(定期)、年排名(定期)、班PR(定期)、班百分比(定期)");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
@@ -359,6 +361,25 @@ namespace HsinChuExamScoreClassFixedRank
                 builder.Write("平均(定期)年排名");
                 builder.InsertCell();
                 builder.Write("加權平均(定期)年排名");
+
+                // PR、百分比欄位(定期)
+                builder.InsertCell();
+                builder.Write("總分班PR(定期)");
+                builder.InsertCell();
+                builder.Write("總分班百分比(定期)");
+                builder.InsertCell();
+                builder.Write("加權總分班PR(定期)");
+                builder.InsertCell();
+                builder.Write("加權總分班百分比(定期)");
+                builder.InsertCell();
+                builder.Write("平均班PR(定期)");
+                builder.InsertCell();
+                builder.Write("平均班百分比(定期)");
+                builder.InsertCell();
+                builder.Write("加權平均班PR(定期)");
+                builder.InsertCell();
+                builder.Write("加權平均班百分比(定期)");
+
                 builder.EndRow();
 
 
@@ -392,6 +413,23 @@ namespace HsinChuExamScoreClassFixedRank
                     builder.InsertField("MERGEFIELD 平均_定期年排名" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD 加權平均_定期年排名" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分班PR_定期" + studCot + " \\* MERGEFORMAT ", "SPR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分班百分比_定期" + studCot + " \\* MERGEFORMAT ", "SPCT" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分班PR_定期" + studCot + " \\* MERGEFORMAT ", "SAPR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分班百分比_定期" + studCot + " \\* MERGEFORMAT ", "SAPCT" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均班PR_定期" + studCot + " \\* MERGEFORMAT ", "APR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均班百分比_定期" + studCot + " \\* MERGEFORMAT ", "APCT" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均班PR_定期" + studCot + " \\* MERGEFORMAT ", "AAPR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均班百分比_定期" + studCot + " \\* MERGEFORMAT ", "AAPCT" + studCot + "");
 
                     builder.EndRow();
                 }

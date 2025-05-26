@@ -149,12 +149,14 @@ namespace HsinChuExamScoreClassFixedRank.DAO
 		, rank_matrix.rank_name
 		, rank_detail.ref_student_id
 		, rank_detail.rank
+        , rank_detail.pr
+        , rank_detail.percentile
 		, rank_detail.score
 	FROM   rank_matrix
 		INNER  JOIN rank_detail
 			ON rank_detail.ref_matrix_id = rank_matrix.id 
 			AND rank_matrix.is_alive = true
-			AND rank_matrix.school_year ="+ schoolYear + @"
+			AND rank_matrix.school_year =" + schoolYear + @"
 			AND rank_matrix.semester = " + semester + @"
 			AND rank_matrix.item_type like '定期評量_定期/總計成績'
 			AND rank_matrix.ref_exam_id =" + examID + @"

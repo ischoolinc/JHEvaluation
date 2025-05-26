@@ -235,6 +235,10 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
             Dictionary<string, Dictionary<string, int>> StudentExamRankMatrixDict = new Dictionary<string, Dictionary<string, int>>();
 
+            // PR 與 百分比索引
+            Dictionary<string, Dictionary<string, int>> StudentExamPRDict = new Dictionary<string, Dictionary<string, int>>();
+            Dictionary<string, Dictionary<string, decimal>> StudentExamPercentileDict = new Dictionary<string, Dictionary<string, decimal>>();
+
 
             // 班級五標與組距
             Dictionary<string, Dictionary<string, DataRow>> ClassExamRankMatrixDict = new Dictionary<string, Dictionary<string, DataRow>>();
@@ -257,6 +261,22 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         int rank = 0;
                         int.TryParse(dr["rank"].ToString(), out rank);
                         StudentExamRankMatrixDict[student_id].Add(type, rank);
+
+                        // PR
+                        int pr = 0;
+                        int.TryParse(dr["pr"].ToString(), out pr);
+                        if (!StudentExamPRDict.ContainsKey(student_id))
+                            StudentExamPRDict.Add(student_id, new Dictionary<string, int>());
+                        if (!StudentExamPRDict[student_id].ContainsKey(type))
+                            StudentExamPRDict[student_id].Add(type, pr);
+
+                        // 百分比
+                        decimal percentile = 0;
+                        decimal.TryParse(dr["percentile"].ToString(), out percentile);
+                        if (!StudentExamPercentileDict.ContainsKey(student_id))
+                            StudentExamPercentileDict.Add(student_id, new Dictionary<string, decimal>());
+                        if (!StudentExamPercentileDict[student_id].ContainsKey(type))
+                            StudentExamPercentileDict[student_id].Add(type, percentile);
                     }
                 }
             }
@@ -534,6 +554,48 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         #endregion
                     }
 
+                    // -- 新增 (定期)
+                    // 總分班PR(定期)
+                    if (StudentExamPRDict.ContainsKey(si.StudentID) &&
+                        StudentExamPRDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分班排名"))
+                        si.ClassSumPRF = StudentExamPRDict[si.StudentID]["定期評量_定期/總計成績總分班排名"];
+
+                    // 總分班百分比(定期)
+                    if (StudentExamPercentileDict.ContainsKey(si.StudentID) &&
+                        StudentExamPercentileDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分班排名"))
+                        si.ClassSumPercentileF = StudentExamPercentileDict[si.StudentID]["定期評量_定期/總計成績總分班排名"];
+
+                    // 加權總分班PR(定期)
+                    if (StudentExamPRDict.ContainsKey(si.StudentID) &&
+                        StudentExamPRDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分班排名"))
+                        si.ClassSumAPRF = StudentExamPRDict[si.StudentID]["定期評量_定期/總計成績加權總分班排名"];
+
+                    // 加權總分班百分比(定期)
+                    if (StudentExamPercentileDict.ContainsKey(si.StudentID) &&
+                        StudentExamPercentileDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分班排名"))
+                        si.ClassSumAPercentileF = StudentExamPercentileDict[si.StudentID]["定期評量_定期/總計成績加權總分班排名"];
+
+                    // 平均班PR(定期)
+                    if (StudentExamPRDict.ContainsKey(si.StudentID) &&
+                        StudentExamPRDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均班排名"))
+                        si.ClassAvgPRF = StudentExamPRDict[si.StudentID]["定期評量_定期/總計成績平均班排名"];
+
+                    // 平均班百分比(定期)
+                    if (StudentExamPercentileDict.ContainsKey(si.StudentID) &&
+                        StudentExamPercentileDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均班排名"))
+                        si.ClassAvgPercentileF = StudentExamPercentileDict[si.StudentID]["定期評量_定期/總計成績平均班排名"];
+
+                    // 加權平均班PR(定期)
+                    if (StudentExamPRDict.ContainsKey(si.StudentID) &&
+                        StudentExamPRDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均班排名"))
+                        si.ClassAvgAPRF = StudentExamPRDict[si.StudentID]["定期評量_定期/總計成績加權平均班排名"];
+
+                    // 加權平均班百分比(定期)
+                    if (StudentExamPercentileDict.ContainsKey(si.StudentID) &&
+                        StudentExamPercentileDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均班排名"))
+                        si.ClassAvgAPercentileF = StudentExamPercentileDict[si.StudentID]["定期評量_定期/總計成績加權平均班排名"];
+
+
 
                 }
 
@@ -614,6 +676,16 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 dtTable.Columns.Add("加權總分年排名" + studCot);
                 dtTable.Columns.Add("平均年排名" + studCot);
                 dtTable.Columns.Add("加權平均年排名" + studCot);
+
+                dtTable.Columns.Add("總分班PR_定期" + studCot);
+                dtTable.Columns.Add("總分班百分比_定期" + studCot);
+                dtTable.Columns.Add("加權總分班PR_定期" + studCot);
+                dtTable.Columns.Add("加權總分班百分比_定期" + studCot);
+                dtTable.Columns.Add("平均班PR_定期" + studCot);
+                dtTable.Columns.Add("平均班百分比_定期" + studCot);
+                dtTable.Columns.Add("加權平均班PR_定期" + studCot);
+                dtTable.Columns.Add("加權平均班百分比_定期" + studCot);
+
 
                 dtTable.Columns.Add("總分_定期班排名" + studCot);
                 dtTable.Columns.Add("加權總分_定期班排名" + studCot);
@@ -1360,6 +1432,29 @@ namespace HsinChuExamScoreClassFixedRank.Form
 
                     if (si.ClassType2AvgRefRankAF.HasValue && si.ClassType2AvgRankAF.HasValue)
                         row["加權平均_定期類別2排名_進退步" + studCot] = si.ClassType2AvgRefRankAF.Value - si.ClassType2AvgRankAF.Value;
+
+                    // -- 新增
+                    // (定期) PR/百分比欄位，如有需要可補上
+                    if (si.ClassSumPRF.HasValue)
+                        row["總分班PR_定期" + studCot] = si.ClassSumPRF.Value;
+                    if (si.ClassSumPercentileF.HasValue)
+                        row["總分班百分比_定期" + studCot] = Math.Round(si.ClassSumPercentileF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.ClassSumAPRF.HasValue)
+                        row["加權總分班PR_定期" + studCot] = si.ClassSumAPRF.Value;
+                    if (si.ClassSumAPercentileF.HasValue)
+                        row["加權總分班百分比_定期" + studCot] = Math.Round(si.ClassSumAPercentileF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.ClassAvgPRF.HasValue)
+                        row["平均班PR_定期" + studCot] = si.ClassAvgPRF.Value;
+                    if (si.ClassAvgPercentileF.HasValue)
+                        row["平均班百分比_定期" + studCot] = Math.Round(si.ClassAvgPercentileF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.ClassAvgAPRF.HasValue)
+                        row["加權平均班PR_定期" + studCot] = si.ClassAvgAPRF.Value;
+                    if (si.ClassAvgAPercentileF.HasValue)
+                        row["加權平均班百分比_定期" + studCot] = Math.Round(si.ClassAvgAPercentileF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
                     #endregion
 
                     tmpDomainInfoDict.Clear();
