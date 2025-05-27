@@ -51,64 +51,71 @@ namespace HsinChuExamScoreClassFixedRank
             DomainNameList.Clear();
             DomainSubjectDict.Clear();
 
-            // 從學生修課動態取得科目領域名稱
-            if (_SelClassIDList.Count > 0 && _SelSchoolYear != "" && _SelSemester != "" && _SelExamID != "")
+            try
             {
-                QueryHelper qh = new QueryHelper();
-                string strSQL = "SELECT DISTINCT " +
-                    "domain" +
-                    ",subject " +
-                    "FROM " +
-                    "sc_attend " +
-                    "INNER JOIN " +
-                    "course " +
-                    "ON sc_attend.ref_course_id=course.id " +
-                    "INNER JOIN te_include " +
-                    "ON course.ref_exam_template_id = te_include.ref_exam_template_id" +
-                    " INNER JOIN student" +
-                    " ON sc_attend.ref_student_id = student.id " +
-                    "WHERE student.ref_class_id IN(" + string.Join(",", _SelClassIDList.ToArray()) + ") " +
-                    "AND student.status = 1" +
-                    "AND course.school_year=" + _SelSchoolYear + " " +
-                    "AND course.semester=" + _SelSemester + " " +
-                    "AND te_include.ref_exam_id = " + _SelExamID + " AND domain <>'';";
-                DataTable dt = qh.Select(strSQL);
-
-                foreach (DataRow dr in dt.Rows)
+                // 從學生修課動態取得科目領域名稱
+                if (_SelClassIDList.Count > 0 && _SelSchoolYear != "" && _SelSemester != "" && _SelExamID != "")
                 {
-                    string domain = dr["domain"].ToString();
-                    string subject = dr["subject"].ToString();
-                    if (!DomainNameList.Contains(domain))
-                        DomainNameList.Add(domain);
+                    QueryHelper qh = new QueryHelper();
+                    string strSQL = "SELECT DISTINCT " +
+                        "domain" +
+                        ",subject " +
+                        "FROM " +
+                        "sc_attend " +
+                        "INNER JOIN " +
+                        "course " +
+                        "ON sc_attend.ref_course_id=course.id " +
+                        "INNER JOIN te_include " +
+                        "ON course.ref_exam_template_id = te_include.ref_exam_template_id" +
+                        " INNER JOIN student" +
+                        " ON sc_attend.ref_student_id = student.id " +
+                        "WHERE student.ref_class_id IN(" + string.Join(",", _SelClassIDList.ToArray()) + ") " +
+                        "AND student.status = 1 " +
+                        "AND course.school_year=" + _SelSchoolYear + " " +
+                        "AND course.semester=" + _SelSemester + " " +
+                        "AND te_include.ref_exam_id = " + _SelExamID + " AND domain <>'';";
+                    DataTable dt = qh.Select(strSQL);
 
-                    if (!DomainSubjectDict.ContainsKey(domain))
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        DomainSubjectDict.Add(domain, new List<string>());
+                        string domain = dr["domain"].ToString();
+                        string subject = dr["subject"].ToString();
+                        if (!DomainNameList.Contains(domain))
+                            DomainNameList.Add(domain);
+
+                        if (!DomainSubjectDict.ContainsKey(domain))
+                        {
+                            DomainSubjectDict.Add(domain, new List<string>());
+                        }
+
+                        if (!DomainSubjectDict[domain].Contains(subject))
+                            DomainSubjectDict[domain].Add(subject);
                     }
-
-                    if (!DomainSubjectDict[domain].Contains(subject))
-                        DomainSubjectDict[domain].Add(subject);
                 }
-            }
-            else
-            {
-                // 預設
-                DomainNameList.Add("語文");
-                DomainNameList.Add("數學");
-                DomainNameList.Add("社會");
-                DomainNameList.Add("自然與生活科技");
-                DomainNameList.Add("自然科學");
-                DomainNameList.Add("藝術");
-                DomainNameList.Add("健康與體育");
-                DomainNameList.Add("藝術與人文");
-                DomainNameList.Add("綜合活動");
-                DomainNameList.Add("彈性課程");
-                DomainNameList.Add("科技");
-                DomainNameList.Add("特殊需求");
-            }
+                else
+                {
+                    // 預設
+                    DomainNameList.Add("語文");
+                    DomainNameList.Add("數學");
+                    DomainNameList.Add("社會");
+                    DomainNameList.Add("自然與生活科技");
+                    DomainNameList.Add("自然科學");
+                    DomainNameList.Add("藝術");
+                    DomainNameList.Add("健康與體育");
+                    DomainNameList.Add("藝術與人文");
+                    DomainNameList.Add("綜合活動");
+                    DomainNameList.Add("彈性課程");
+                    DomainNameList.Add("科技");
+                    DomainNameList.Add("特殊需求");
+                }
 
-            if (!DomainNameList.Contains("彈性課程"))
-                DomainNameList.Add("彈性課程");
+                if (!DomainNameList.Contains("彈性課程"))
+                    DomainNameList.Add("彈性課程");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("設定領域名稱失敗: " + ex.Message);
+            }            
         }
 
         /// <summary>
@@ -286,7 +293,7 @@ namespace HsinChuExamScoreClassFixedRank
                 builder.InsertCell();
                 builder.Write("平均年排名");
                 builder.InsertCell();
-                builder.Write("加權平均年排名");              
+                builder.Write("加權平均年排名");
 
                 builder.EndRow();
 
@@ -321,7 +328,7 @@ namespace HsinChuExamScoreClassFixedRank
                     builder.InsertField("MERGEFIELD 平均年排名" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD 加權平均年排名" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
-                                        
+
 
                     builder.EndRow();
                 }
