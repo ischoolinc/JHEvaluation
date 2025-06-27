@@ -82,7 +82,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
             InitializeComponent();
 
             StudentIDs = studentIds;
-            Preference = new ReportPreference(ConfigName, Properties.Resources.在校成績證明書_2025_範本);
+            Preference = new ReportPreference(ConfigName, Properties.Resources.在校成績證明書_2025_New_範本);
             MasterWorker.DoWork += new DoWorkEventHandler(MasterWorker_DoWork);
             MasterWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(MasterWorker_RunWorkerCompleted);
             MasterWorker.WorkerReportsProgress = true;
@@ -1972,7 +1972,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
         // 日後有時間再改新寫法
         private void lnkTemplate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            ReportTemplate defaultTemplate = new ReportTemplate(Properties.Resources.在校成績證明書_2025_範本, TemplateType.Word);
+            ReportTemplate defaultTemplate = new ReportTemplate(Properties.Resources.在校成績證明書_2025_New_範本, TemplateType.Word);
             TemplateSettingForm form = new TemplateSettingForm(Preference.Template, defaultTemplate);
             form.DefaultFileName = "在校成績證明書(英文)(樣版).doc";
 
