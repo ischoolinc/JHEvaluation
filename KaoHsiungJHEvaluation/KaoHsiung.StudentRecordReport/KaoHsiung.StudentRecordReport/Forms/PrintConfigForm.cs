@@ -57,6 +57,7 @@ namespace KaoHsiung.StudentRecordReport.Forms
             rtnPDF.Checked = _config.GetBoolean("輸出成PDF格式", false);
 
             checkBoxX1.Checked = _Dylanconfig.GetBoolean("單檔儲存", false);
+            checkBoxIDNumberFormat.Checked = _Dylanconfig.GetBoolean("使用身分證號格式", false);
 
             // 處理機敏資料，使用原本 config
             cbxName.Checked = _config.GetBoolean("遮罩姓名", false);
@@ -82,7 +83,9 @@ namespace KaoHsiung.StudentRecordReport.Forms
             _config.SetBoolean("遮罩地址", cbxAddress.Checked);
             _config.Save();
 
-            _Dylanconfig.SetBoolean("單檔儲存", checkBoxX1.Checked);
+            // 儲存單檔列印設定
+            _Dylanconfig.SetBoolean("單檔儲存", checkBoxX1.Checked || checkBoxIDNumberFormat.Checked);
+            _Dylanconfig.SetBoolean("使用身分證號格式", checkBoxIDNumberFormat.Checked);
             _Dylanconfig.Save();
 
             this.DialogResult = DialogResult.OK;
@@ -91,6 +94,24 @@ namespace KaoHsiung.StudentRecordReport.Forms
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void checkBoxX1_CheckedChanged(object sender, EventArgs e)
+        {
+            // 如果選擇了學號_班級_座號格式，取消身分證號_姓名格式
+            if (checkBoxX1.Checked)
+            {
+                checkBoxIDNumberFormat.Checked = false;
+            }
+        }
+
+        private void checkBoxIDNumberFormat_CheckedChanged(object sender, EventArgs e)
+        {
+            // 如果選擇了身分證號_姓名格式，取消學號_班級_座號格式
+            if (checkBoxIDNumberFormat.Checked)
+            {
+                checkBoxX1.Checked = false;
+            }
         }
     }
 }

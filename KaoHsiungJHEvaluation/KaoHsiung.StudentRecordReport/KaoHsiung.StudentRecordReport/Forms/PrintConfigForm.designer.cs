@@ -46,6 +46,7 @@
             this.gpFormat = new DevComponents.DotNetBar.Controls.GroupPanel();
             this.panel6 = new System.Windows.Forms.Panel();
             this.checkBoxX1 = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.checkBoxIDNumberFormat = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.rtnPDF = new System.Windows.Forms.RadioButton();
             this.rtnWord = new System.Windows.Forms.RadioButton();
             this.groupPanel1 = new DevComponents.DotNetBar.Controls.GroupPanel();
@@ -196,9 +197,10 @@
             // btnSave
             // 
             this.btnSave.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.BackColor = System.Drawing.Color.Transparent;
             this.btnSave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSave.Location = new System.Drawing.Point(363, 550);
+            this.btnSave.Location = new System.Drawing.Point(363, 581);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 12;
@@ -208,9 +210,10 @@
             // btnClose
             // 
             this.btnClose.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
             this.btnClose.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnClose.Location = new System.Drawing.Point(445, 550);
+            this.btnClose.Location = new System.Drawing.Point(445, 581);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(60, 23);
             this.btnClose.TabIndex = 12;
@@ -350,7 +353,7 @@
             this.gpFormat.DrawTitleBox = false;
             this.gpFormat.Location = new System.Drawing.Point(7, 254);
             this.gpFormat.Name = "gpFormat";
-            this.gpFormat.Size = new System.Drawing.Size(502, 90);
+            this.gpFormat.Size = new System.Drawing.Size(502, 120);
             // 
             // 
             // 
@@ -388,12 +391,13 @@
             // 
             this.panel6.BackColor = System.Drawing.Color.Transparent;
             this.panel6.Controls.Add(this.checkBoxX1);
+            this.panel6.Controls.Add(this.checkBoxIDNumberFormat);
             this.panel6.Controls.Add(this.rtnPDF);
             this.panel6.Controls.Add(this.rtnWord);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(496, 63);
+            this.panel6.Size = new System.Drawing.Size(496, 93);
             this.panel6.TabIndex = 0;
             // 
             // checkBoxX1
@@ -411,6 +415,24 @@
             this.checkBoxX1.TabIndex = 0;
             this.checkBoxX1.Text = "使用單檔列印(檔名：學號_班級_座號)";
             this.checkBoxX1.TextColor = System.Drawing.Color.Black;
+            this.checkBoxX1.CheckedChanged += new System.EventHandler(this.checkBoxX1_CheckedChanged);
+            // 
+            // checkBoxIDNumberFormat
+            // 
+            this.checkBoxIDNumberFormat.AutoSize = true;
+            // 
+            // 
+            // 
+            this.checkBoxIDNumberFormat.BackgroundStyle.Class = "";
+            this.checkBoxIDNumberFormat.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkBoxIDNumberFormat.Location = new System.Drawing.Point(13, 57);
+            this.checkBoxIDNumberFormat.Name = "checkBoxIDNumberFormat";
+            this.checkBoxIDNumberFormat.Size = new System.Drawing.Size(242, 21);
+            this.checkBoxIDNumberFormat.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkBoxIDNumberFormat.TabIndex = 1;
+            this.checkBoxIDNumberFormat.Text = "使用單檔列印(檔名：身分證號_姓名)";
+            this.checkBoxIDNumberFormat.TextColor = System.Drawing.Color.Black;
+            this.checkBoxIDNumberFormat.CheckedChanged += new System.EventHandler(this.checkBoxIDNumberFormat_CheckedChanged);
             // 
             // rtnPDF
             // 
@@ -442,7 +464,7 @@
             this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.groupPanel1.Controls.Add(this.panel4);
             this.groupPanel1.DrawTitleBox = false;
-            this.groupPanel1.Location = new System.Drawing.Point(7, 353);
+            this.groupPanel1.Location = new System.Drawing.Point(7, 383);
             this.groupPanel1.Name = "groupPanel1";
             this.groupPanel1.Size = new System.Drawing.Size(502, 187);
             // 
@@ -575,7 +597,7 @@
             // PrintConfigForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(518, 581);
+            this.ClientSize = new System.Drawing.Size(518, 611);
             this.Controls.Add(this.groupPanel1);
             this.Controls.Add(this.gpFormat);
             this.Controls.Add(this.btnClose);
@@ -628,6 +650,7 @@
         private DevComponents.DotNetBar.Controls.GroupPanel groupPanel1;
         private System.Windows.Forms.Panel panel4;
         private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxX1;
+        private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxIDNumberFormat;
         private DevComponents.DotNetBar.LabelX labelX3;
         private DevComponents.DotNetBar.Controls.CheckBoxX cbxAddress;
         private DevComponents.DotNetBar.Controls.CheckBoxX cbxPhone;
