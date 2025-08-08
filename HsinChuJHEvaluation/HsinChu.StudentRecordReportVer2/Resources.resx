@@ -118,8 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="新竹國中學籍表_樣板_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\新竹國中學籍表(樣板).doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="新竹國中學籍表_樣板_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\新竹國中學籍表(樣板)2.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="新竹國中學籍表功能變數" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\新竹國中學籍表功能變數.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

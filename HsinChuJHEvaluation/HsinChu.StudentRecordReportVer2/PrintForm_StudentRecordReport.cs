@@ -110,7 +110,7 @@ namespace HsinChu.StudentRecordReportVer2
             InitializeComponent();
 
             _StudentIDs = studentIDs;
-            _Preference = new ReportPreference(_ConfigName, Resources.新竹國中學籍表_樣板_);
+            _Preference = new ReportPreference(_ConfigName, Resources.新竹國中學籍表_樣板_2);
 
             _MasterWorker.DoWork += new DoWorkEventHandler(MasterWorker_DoWork);
             _MasterWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(MasterWorker_RunWorkerCompleted);
@@ -1844,7 +1844,7 @@ namespace HsinChu.StudentRecordReportVer2
 
         private void lnkTemplate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            ReportTemplate defaultTemplate = new ReportTemplate(Resources.新竹國中學籍表_樣板_, TemplateType.Word);
+            ReportTemplate defaultTemplate = new ReportTemplate(Resources.新竹國中學籍表_樣板_2, TemplateType.Word);
             TemplateSettingForm templateForm = new TemplateSettingForm(_Preference.Template, defaultTemplate);
             templateForm.DefaultFileName = "學籍表(樣板).doc";
 

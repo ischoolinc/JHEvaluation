@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HsinChu.StudentRecordReportVer2</RootNamespace>
     <AssemblyName>HsinChu.StudentRecordReportVer2</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -142,7 +143,7 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\新竹國中學籍表%28樣板%29.doc" />
+    <None Include="Resources\新竹國中學籍表%28樣板%292.doc" />
     <None Include="Resources\新竹國中學籍表功能變數.doc" />
   </ItemGroup>
   <ItemGroup>
