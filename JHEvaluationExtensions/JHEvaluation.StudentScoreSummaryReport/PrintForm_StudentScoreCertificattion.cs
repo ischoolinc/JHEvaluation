@@ -303,6 +303,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
             table.Columns.Add("民國畢業日期");
             table.Columns.Add("民國入學日期_數字");
             table.Columns.Add("民國畢業日期_數字");
+            table.Columns.Add("入學日期民國年");
+            table.Columns.Add("畢業日期民國年");
+            table.Columns.Add("出生日期民國年");
             table.Columns.Add("學生身分證字號");
             table.Columns.Add("學號");
             table.Columns.Add("照片", typeof(byte[]));
@@ -883,6 +886,11 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     row["出生日期_民國年"] = @"民國" + EastAsiaNumericFormatter.FormatWithCulture("Ln", (birthday.Year - 1911), null, new CultureInfo("zh-tw")) + "年"
                        + EastAsiaNumericFormatter.FormatWithCulture("Ln", (birthday.Month), null, new CultureInfo("zh-tw")) + "月"
                         + EastAsiaNumericFormatter.FormatWithCulture("Ln", (birthday.Day), null, new CultureInfo("zh-tw")) + "日";
+
+                    // 出生日期民國年 (新增格式：民國YYY年M月D日)
+                    row["出生日期民國年"] = @"民國" + (birthday.Year - 1911) + "年" 
+                        + birthday.Month + "月" 
+                        + birthday.Day + "日";
 
                     row["入學年月"] = "";
                     row["學生身分證字號"] = sr_dict[stuID].IDNumber;
@@ -1790,6 +1798,11 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             row["民國入學日期"] = @"民國" + EastAsiaNumericFormatter.FormatWithCulture("Ln", (enterday.Year - 1911), null, new CultureInfo("zh-tw")) + "年"
                        + EastAsiaNumericFormatter.FormatWithCulture("Ln", (enterday.Month), null, new CultureInfo("zh-tw")) + "月"
                         + EastAsiaNumericFormatter.FormatWithCulture("Ln", (enterday.Day), null, new CultureInfo("zh-tw")) + "日";
+
+                            // 入學日期民國年 (新增格式：民國YYY年M月D日)
+                            row["入學日期民國年"] = @"民國" + (enterday.Year - 1911) + "年" 
+                                + enterday.Month + "月" 
+                                + enterday.Day + "日";
                         }
 
                         if (urr.UpdateCode == "2")
@@ -1803,6 +1816,11 @@ namespace JHEvaluation.StudentScoreSummaryReport
                             row["民國畢業日期"] = @"民國" + EastAsiaNumericFormatter.FormatWithCulture("Ln", (enterday.Year - 1911), null, new CultureInfo("zh-tw")) + "年"
                        + EastAsiaNumericFormatter.FormatWithCulture("Ln", (enterday.Month), null, new CultureInfo("zh-tw")) + "月"
                         + EastAsiaNumericFormatter.FormatWithCulture("Ln", (enterday.Day), null, new CultureInfo("zh-tw")) + "日";
+
+                            // 畢業日期民國年 (新增格式：民國YYY年M月D日)
+                            row["畢業日期民國年"] = @"民國" + (enterday.Year - 1911) + "年" 
+                                + enterday.Month + "月" 
+                                + enterday.Day + "日";
                         }
                     }
                 }

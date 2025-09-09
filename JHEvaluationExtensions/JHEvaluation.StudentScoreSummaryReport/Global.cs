@@ -143,7 +143,39 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 //    builder.EndRow();
                 //}
 
-                //builder.EndTable();
+                //                builder.EndTable();
+                #endregion
+
+                #region 基本資料（日期）
+                // === 新增：基本資料（日期）欄位 ===
+                builder.Writeln();
+                builder.Writeln();
+                builder.Writeln("基本資料（日期）");
+                builder.StartTable();
+
+                // 欄位：出生日期民國年
+                builder.InsertCell();
+                builder.Write("出生日期民國年");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 出生日期民國年 \\* MERGEFORMAT ", "«出生日期民國年»");
+                builder.EndRow();
+
+                // 欄位：入學日期民國年
+                builder.InsertCell();
+                builder.Write("入學日期民國年");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 入學日期民國年 \\* MERGEFORMAT ", "«入學日期民國年»");
+                builder.EndRow();
+
+                // 欄位：畢業日期民國年
+                builder.InsertCell();
+                builder.Write("畢業日期民國年");
+                builder.InsertCell();
+                builder.InsertField("MERGEFIELD 畢業日期民國年 \\* MERGEFORMAT ", "«畢業日期民國年»");
+                builder.EndRow();
+
+                builder.EndTable();
+                // === 基本資料（日期）欄位：結束 ===
                 #endregion
 
                 //List<string> DomainList = new List<string> { "語文", "數學", "社會", "自然科學", "自然與生活科技", "藝術", "藝術與人文", "健康與體育", "綜合活動", "科技", "彈性課程" };
