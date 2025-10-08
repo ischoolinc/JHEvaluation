@@ -465,6 +465,46 @@ namespace HsinChuExamScoreClassFixedRank.DAO
         /// </summary>
         public decimal? ClassAvgAPercentileF { get; set; }
 
+        /// <summary>
+        /// 總分年PR(定期)
+        /// </summary>
+        public int? YearSumPRF { get; set; }
+
+        /// <summary>
+        /// 加權總分年PR(定期)
+        /// </summary>
+        public int? YearSumAPRF { get; set; }
+
+        /// <summary>
+        /// 平均年PR(定期)
+        /// </summary>
+        public int? YearAvgPRF { get; set; }
+
+        /// <summary>
+        /// 加權平均年PR(定期)
+        /// </summary>
+        public int? YearAvgAPRF { get; set; }
+
+        /// <summary>
+        /// 總分年百分比(定期)
+        /// </summary>
+        public decimal? YearSumPercentileF { get; set; }
+
+        /// <summary>
+        /// 加權總分年百分比(定期)
+        /// </summary>
+        public decimal? YearSumAPercentileF { get; set; }
+
+        /// <summary>
+        /// 平均年百分比(定期)
+        /// </summary>
+        public decimal? YearAvgPercentileF { get; set; }
+
+        /// <summary>
+        /// 加權平均年百分比(定期)
+        /// </summary>
+        public decimal? YearAvgAPercentileF { get; set; }
+
 
         /// <summary>
         /// 計算成績

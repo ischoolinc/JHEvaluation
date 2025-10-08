@@ -336,7 +336,7 @@ namespace HsinChuExamScoreClassFixedRank
 
                 builder.Writeln("");
                 builder.Writeln("");
-                builder.Writeln("總計分數與總計班排名(定期)、年排名(定期)、班PR(定期)、班百分比(定期)");
+                builder.Writeln("總計分數與總計班排名(定期)、班PR(定期)、班百分比(定期)");
                 builder.StartTable();
                 builder.CellFormat.Borders.LineStyle = LineStyle.None;
 
@@ -359,15 +359,7 @@ namespace HsinChuExamScoreClassFixedRank
                 builder.InsertCell();
                 builder.Write("平均(定期)班排名");
                 builder.InsertCell();
-                builder.Write("加權平均(定期)班排名");
-                builder.InsertCell();
-                builder.Write("總分(定期)年排名");
-                builder.InsertCell();
-                builder.Write("加權總分(定期)年排名");
-                builder.InsertCell();
-                builder.Write("平均(定期)年排名");
-                builder.InsertCell();
-                builder.Write("加權平均(定期)年排名");
+                builder.Write("加權平均(定期)班排名");                
 
                 // PR、百分比欄位(定期)
                 builder.InsertCell();
@@ -411,15 +403,7 @@ namespace HsinChuExamScoreClassFixedRank
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD 平均_定期班排名" + studCot + " \\* MERGEFORMAT ", "ACR" + studCot + "");
                     builder.InsertCell();
-                    builder.InsertField("MERGEFIELD 加權平均_定期班排名" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD 總分_定期年排名" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD 加權總分_定期年排名" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD 平均_定期年排名" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
-                    builder.InsertCell();
-                    builder.InsertField("MERGEFIELD 加權平均_定期年排名" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+                    builder.InsertField("MERGEFIELD 加權平均_定期班排名" + studCot + " \\* MERGEFORMAT ", "AACR" + studCot + "");                    
 
                     builder.InsertCell();
                     builder.InsertField("MERGEFIELD 總分班PR_定期" + studCot + " \\* MERGEFORMAT ", "SPR" + studCot + "");
@@ -439,6 +423,100 @@ namespace HsinChuExamScoreClassFixedRank
                     builder.InsertField("MERGEFIELD 加權平均班百分比_定期" + studCot + " \\* MERGEFORMAT ", "AAPCT" + studCot + "");
 
                     builder.EndRow();
+                }
+                builder.EndTable();
+
+
+                builder.Writeln("");
+                builder.Writeln("");
+                builder.Writeln("總計年排名(定期)、年百分比(定期)、年PR(定期)");
+                builder.StartTable();
+                builder.CellFormat.Borders.LineStyle = LineStyle.None;
+
+// 需要調整年排名 start 
+
+                builder.InsertCell();
+                builder.Write("姓名");
+                builder.InsertCell();
+                builder.Write("座號");
+
+                // 總分(定期)
+                builder.InsertCell();
+                builder.Write("總分(定期)年排名");
+                builder.InsertCell();
+                builder.Write("總分年百分比(定期)");
+                builder.InsertCell();
+                builder.Write("總分年PR(定期)");
+
+                // 加權總分(定期)
+                builder.InsertCell();
+                builder.Write("加權總分(定期)年排名");
+                builder.InsertCell();
+                builder.Write("加權總分年百分比(定期)");
+                builder.InsertCell();
+                builder.Write("加權總分年PR(定期)");
+
+                // 平均(定期)
+                builder.InsertCell();
+                builder.Write("平均(定期)年排名");
+                builder.InsertCell();
+                builder.Write("平均年百分比(定期)");
+                builder.InsertCell();
+                builder.Write("平均年PR(定期)");
+
+                // 加權平均(定期)
+                builder.InsertCell();
+                builder.Write("加權平均(定期)年排名");
+                builder.InsertCell();
+                builder.Write("加權平均年百分比(定期)");
+                builder.InsertCell();
+                builder.Write("加權平均年PR(定期)");
+
+                builder.EndRow();
+
+
+                for (int studCot = 1; studCot <= 50; studCot++)
+                {
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 姓名" + studCot + " \\* MERGEFORMAT ", "姓" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 座號" + studCot + " \\* MERGEFORMAT ", "座" + studCot + "");
+
+                    // 總分(定期)
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分_定期年排名" + studCot + " \\* MERGEFORMAT ", "SYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分年百分比_定期" + studCot + " \\* MERGEFORMAT ", "SPCT" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 總分年PR_定期" + studCot + " \\* MERGEFORMAT ", "SPR" + studCot + "");
+
+                    // 加權總分(定期)
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分_定期年排名" + studCot + " \\* MERGEFORMAT ", "SAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分年百分比_定期" + studCot + " \\* MERGEFORMAT ", "SAPCT" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權總分年PR_定期" + studCot + " \\* MERGEFORMAT ", "SAPR" + studCot + "");
+
+                    // 平均(定期)
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均_定期年排名" + studCot + " \\* MERGEFORMAT ", "AYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均年百分比_定期" + studCot + " \\* MERGEFORMAT ", "APCT" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 平均年PR_定期" + studCot + " \\* MERGEFORMAT ", "APR" + studCot + "");
+
+                    // 加權平均(定期)
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均_定期年排名" + studCot + " \\* MERGEFORMAT ", "AAYR" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均年百分比_定期" + studCot + " \\* MERGEFORMAT ", "AAPCT" + studCot + "");
+                    builder.InsertCell();
+                    builder.InsertField("MERGEFIELD 加權平均年PR_定期" + studCot + " \\* MERGEFORMAT ", "AAPR" + studCot + "");
+
+                    builder.EndRow();
+
+                    // 需要調整年排名 end
                 }
                 builder.EndTable();
 

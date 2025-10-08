@@ -554,6 +554,7 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         #endregion
                     }
 
+                    // 定期班PR百分比 start
                     // -- 新增 (定期)
                     // 總分班PR(定期)
                     if (StudentExamPRDict.ContainsKey(si.StudentID) &&
@@ -594,7 +595,50 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     if (StudentExamPercentileDict.ContainsKey(si.StudentID) &&
                         StudentExamPercentileDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均班排名"))
                         si.ClassAvgAPercentileF = StudentExamPercentileDict[si.StudentID]["定期評量_定期/總計成績加權平均班排名"];
+                    // 定期班PR百分比 end
 
+                    // 定期年PR百分比 start
+                    // -- 新增 (定期)
+                    // 總分年PR(定期)
+                    if (StudentExamPRDict.ContainsKey(si.StudentID) &&
+                        StudentExamPRDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分年排名"))
+                        si.YearSumPRF = StudentExamPRDict[si.StudentID]["定期評量_定期/總計成績總分年排名"];
+
+                    // 總分年百分比(定期)
+                    if (StudentExamPercentileDict.ContainsKey(si.StudentID) &&
+                        StudentExamPercentileDict[si.StudentID].ContainsKey("定期評量_定期/總計成績總分年排名"))
+                        si.YearSumPercentileF = StudentExamPercentileDict[si.StudentID]["定期評量_定期/總計成績總分年排名"];
+
+                    // 加權總分年PR(定期)
+                    if (StudentExamPRDict.ContainsKey(si.StudentID) &&
+                        StudentExamPRDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分年排名"))
+                        si.YearSumAPRF = StudentExamPRDict[si.StudentID]["定期評量_定期/總計成績加權總分年排名"];
+
+                    // 加權總分年百分比(定期)
+                    if (StudentExamPercentileDict.ContainsKey(si.StudentID) &&
+                        StudentExamPercentileDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權總分年排名"))
+                        si.YearSumAPercentileF = StudentExamPercentileDict[si.StudentID]["定期評量_定期/總計成績加權總分年排名"];
+
+                    // 平均年PR(定期)
+                    if (StudentExamPRDict.ContainsKey(si.StudentID) &&
+                        StudentExamPRDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均年排名"))
+                        si.YearAvgPRF = StudentExamPRDict[si.StudentID]["定期評量_定期/總計成績平均年排名"];
+
+                    // 平均年百分比(定期)
+                    if (StudentExamPercentileDict.ContainsKey(si.StudentID) &&
+                        StudentExamPercentileDict[si.StudentID].ContainsKey("定期評量_定期/總計成績平均年排名"))
+                        si.YearAvgPercentileF = StudentExamPercentileDict[si.StudentID]["定期評量_定期/總計成績平均年排名"];
+
+                    // 加權平均年PR(定期)
+                    if (StudentExamPRDict.ContainsKey(si.StudentID) &&
+                        StudentExamPRDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均年排名"))
+                        si.YearAvgAPRF = StudentExamPRDict[si.StudentID]["定期評量_定期/總計成績加權平均年排名"];
+
+                    // 加權平均年百分比(定期)
+                    if (StudentExamPercentileDict.ContainsKey(si.StudentID) &&
+                        StudentExamPercentileDict[si.StudentID].ContainsKey("定期評量_定期/總計成績加權平均年排名"))
+                        si.YearAvgAPercentileF = StudentExamPercentileDict[si.StudentID]["定期評量_定期/總計成績加權平均年排名"];
+                    // 定期年PR百分比 end
 
 
                 }
@@ -685,6 +729,15 @@ namespace HsinChuExamScoreClassFixedRank.Form
                 dtTable.Columns.Add("平均班百分比_定期" + studCot);
                 dtTable.Columns.Add("加權平均班PR_定期" + studCot);
                 dtTable.Columns.Add("加權平均班百分比_定期" + studCot);
+
+                dtTable.Columns.Add("總分年PR_定期" + studCot);
+                dtTable.Columns.Add("總分年百分比_定期" + studCot);
+                dtTable.Columns.Add("加權總分年PR_定期" + studCot);
+                dtTable.Columns.Add("加權總分年百分比_定期" + studCot);
+                dtTable.Columns.Add("平均年PR_定期" + studCot);
+                dtTable.Columns.Add("平均年百分比_定期" + studCot);
+                dtTable.Columns.Add("加權平均年PR_定期" + studCot);
+                dtTable.Columns.Add("加權平均年百分比_定期" + studCot);
 
 
                 dtTable.Columns.Add("總分_定期班排名" + studCot);
@@ -1433,7 +1486,8 @@ namespace HsinChuExamScoreClassFixedRank.Form
                     if (si.ClassType2AvgRefRankAF.HasValue && si.ClassType2AvgRankAF.HasValue)
                         row["加權平均_定期類別2排名_進退步" + studCot] = si.ClassType2AvgRefRankAF.Value - si.ClassType2AvgRankAF.Value;
 
-                    // -- 新增
+                    // 定期班PR百分比填值 start
+                    // -- 新增 (定期)
                     // (定期) PR/百分比欄位，如有需要可補上
                     if (si.ClassSumPRF.HasValue)
                         row["總分班PR_定期" + studCot] = si.ClassSumPRF.Value;
@@ -1454,6 +1508,35 @@ namespace HsinChuExamScoreClassFixedRank.Form
                         row["加權平均班PR_定期" + studCot] = si.ClassAvgAPRF.Value;
                     if (si.ClassAvgAPercentileF.HasValue)
                         row["加權平均班百分比_定期" + studCot] = Math.Round(si.ClassAvgAPercentileF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    // 定期班PR百分比填值 end
+
+                    // 定期年PR百分比填值 start
+                    // -- 新增 (定期)
+                    // (定期) PR/百分比欄位，如有需要可補上
+                    if (si.YearSumPRF.HasValue)
+                        row["總分年PR_定期" + studCot] = si.YearSumPRF.Value;
+                    if (si.YearSumPercentileF.HasValue)
+                        row["總分年百分比_定期" + studCot] = Math.Round(si.YearSumPercentileF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.YearSumAPRF.HasValue)
+                        row["加權總分年PR_定期" + studCot] = si.YearSumAPRF.Value;
+                    if (si.YearSumAPercentileF.HasValue)
+                        row["加權總分年百分比_定期" + studCot] = Math.Round(si.YearSumAPercentileF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.YearAvgPRF.HasValue)
+                        row["平均年PR_定期" + studCot] = si.YearAvgPRF.Value;
+                    if (si.YearAvgPercentileF.HasValue)
+                        row["平均年百分比_定期" + studCot] = Math.Round(si.YearAvgPercentileF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    if (si.YearAvgAPRF.HasValue)
+                        row["加權平均年PR_定期" + studCot] = si.YearAvgAPRF.Value;
+                    if (si.YearAvgAPercentileF.HasValue)
+                        row["加權平均年百分比_定期" + studCot] = Math.Round(si.YearAvgAPercentileF.Value, parseNumber, MidpointRounding.AwayFromZero);
+
+                    // 定期年PR百分比填值 end
+
+
 
                     #endregion
 
