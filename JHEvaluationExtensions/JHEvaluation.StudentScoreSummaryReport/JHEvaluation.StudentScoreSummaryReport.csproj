@@ -281,14 +281,15 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Aspose.Total.lic" />
     <None Include="Resources\在校成績證明書%28樣版%29202510.doc" />
+    <None Include="Resources\在校成績證明書%28英文%29%28樣版%29_2025.doc" />
     <None Include="Resources\在校成績證明書_2022_範本.doc" />
     <None Include="Resources\在校成績證明書_2022功能變數.doc" />
-    <None Include="Resources\在校成績證明書_2022英文版_範本.doc" />
     <None Include="Resources\在校成績證明書_2022英文版功能變數.doc" />
     <None Include="Resources\在校成績證明書_2025_New_範本.doc" />
     <None Include="Resources\學生在校成績證明書.doc" />

@@ -83,16 +83,6 @@ namespace JHEvaluation.StudentScoreSummaryReport.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] 在校成績證明書_2022英文版_範本 {
-            get {
-                object obj = ResourceManager.GetObject("在校成績證明書_2022英文版_範本", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] 在校成績證明書_2022英文版功能變數 {
             get {
                 object obj = ResourceManager.GetObject("在校成績證明書_2022英文版功能變數", resourceCulture);
@@ -116,6 +106,16 @@ namespace JHEvaluation.StudentScoreSummaryReport.Properties {
         internal static byte[] 在校成績證明書_樣版_202510 {
             get {
                 object obj = ResourceManager.GetObject("在校成績證明書_樣版_202510", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] 在校成績證明書_英文__樣版__2025 {
+            get {
+                object obj = ResourceManager.GetObject("在校成績證明書_英文__樣版__2025", resourceCulture);
                 return ((byte[])(obj));
             }
         }

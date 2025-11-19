@@ -124,9 +124,6 @@
   <data name="在校成績證明書_2022功能變數" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\在校成績證明書_2022功能變數.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="在校成績證明書_2022英文版_範本" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\在校成績證明書_2022英文版_範本.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="在校成績證明書_2022英文版功能變數" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\在校成績證明書_2022英文版功能變數.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -135,5 +132,8 @@
   </data>
   <data name="在校成績證明書_樣版_202510" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\在校成績證明書(樣版)202510.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="在校成績證明書_英文__樣版__2025" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\在校成績證明書(英文)(樣版)_2025.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
