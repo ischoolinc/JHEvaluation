@@ -422,6 +422,17 @@ namespace JHSchool.Evaluation
                         courseIDList.Add(r.ID);
                     }
 
+                    // 檢查調代課對應資料
+                    int dcBindCount = GetDcBindKeyCountByCourseIDs(courseIDList);
+                    if (dcBindCount > 0)
+                    {
+                        string dcBindMessage = string.Format("發現所選課程中，尚有 {0} 筆「調代課對應資料」。\n刪除課程將一併刪除調代課資料，是否繼續？", dcBindCount);
+                        if (MsgBox.Show(dcBindMessage, "刪除調代課確認", MessageBoxButtons.YesNo) == DialogResult.No)
+                        {
+                            return;
+                        }
+                    }
+
                     // 學生參與課堂紀錄
                     List<JHSchool.Data.JHSCAttendRecord> scattendList = JHSchool.Data.JHSCAttend.SelectByStudentIDAndCourseID(new List<string>() { }, courseIDList);
 
@@ -908,6 +919,15 @@ namespace JHSchool.Evaluation
 
             string sql = string.Format(@"WITH course_data_row AS(
 			 {0}
+) ,delete_dc_bind_key AS(
+	DELETE
+	FROM
+		dc_bind_key
+	WHERE dc_bind_key.ref_course_id IN (
+		SELECT course_data_row.id
+		FROM course_data_row
+		)
+	RETURNING dc_bind_key.*
 ) ,delete_sc_attend_data AS(
 	SELECT 
 		sc_attend.id AS sc_attend_id
@@ -982,6 +1002,30 @@ FROM
 	LEFT OUTER JOIN course ON course.id = sc_attend.ref_course_id 	
 	LEFT OUTER JOIN student ON student.id = sc_attend.ref_student_id
 
+),insert_dc_bind_key_log AS(
+INSERT INTO log(
+	actor
+	, action_type
+	, action
+	, target_category
+	, target_id
+	, server_time
+	, client_info
+	, action_by
+	, description
+)
+SELECT 
+	'{1}'::TEXT AS actor
+	, 'Record' AS action_type
+	, '課程_刪除' AS action
+	, 'course'::TEXT AS target_category
+	, delete_dc_bind_key.ref_course_id AS target_id
+	, now() AS server_time
+	, '{2}' AS client_info
+	, '刪除_課程_調代課'AS action_by   
+	, '課程調代課資料刪除，課程ID「'|| delete_dc_bind_key.ref_course_id ||'」，使用者「{1}」' AS description 
+FROM
+	delete_dc_bind_key
 )INSERT INTO log(
 	actor
 	, action_type
@@ -1035,6 +1079,56 @@ FROM
             //選到本次被刪除的課程會造成系統當機
             // 加這主要是重新整理
             Course.Instance.SyncDataBackground(Course.Instance.SelectedKeys);
+        }
+
+        /// <summary>
+        /// 取得指定課程ID列表的調代課對應資料筆數
+        /// </summary>
+        /// <param name="courseIDList">課程ID列表</param>
+        /// <returns>調代課對應資料筆數</returns>
+        private static int GetDcBindKeyCountByCourseIDs(List<string> courseIDList)
+        {
+            if (courseIDList == null || courseIDList.Count == 0)
+            {
+                return 0;
+            }
+
+            // 組成 course_data_row（沿用既有 UNION ALL 產生資料列的風格）
+            List<string> dataList = new List<string>();
+            foreach (string id in courseIDList)
+            {
+                string data = string.Format(@"
+                SELECT
+                    {0}::BIGINT AS id
+                ", id);
+                dataList.Add(data);
+            }
+
+            string Data = string.Join(" UNION ALL", dataList);
+
+            // 查詢 dc_bind_key 筆數
+            string sql = string.Format(@"WITH course_data_row AS(
+			 {0}
+)
+SELECT COUNT(*) AS count
+FROM 
+	course_data_row
+	INNER JOIN dc_bind_key
+		ON dc_bind_key.ref_course_id = course_data_row.id", Data);
+
+            QueryHelper qh = new QueryHelper();
+            System.Data.DataTable dt = qh.Select(sql);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                object countObj = dt.Rows[0]["count"];
+                if (countObj != null && countObj != DBNull.Value)
+                {
+                    return Convert.ToInt32(countObj);
+                }
+            }
+
+            return 0;
         }
 
     }
