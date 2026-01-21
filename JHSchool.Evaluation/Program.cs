@@ -1014,18 +1014,27 @@ INSERT INTO log(
 	, action_by
 	, description
 )
-SELECT 
+SELECT
 	'{1}'::TEXT AS actor
 	, 'Record' AS action_type
 	, '課程_刪除' AS action
 	, 'course'::TEXT AS target_category
-	, delete_dc_bind_key.ref_course_id AS target_id
+	, d.ref_course_id AS target_id
 	, now() AS server_time
 	, '{2}' AS client_info
-	, '刪除_課程_調代課'AS action_by   
-	, '課程調代課資料刪除，課程ID「'|| delete_dc_bind_key.ref_course_id ||'」，使用者「{1}」' AS description 
-FROM
-	delete_dc_bind_key
+	, '刪除_課程_調代課' AS action_by
+	, '課程調代課資料刪除，課程ID「'
+	  || d.ref_course_id
+	  || '」，共刪除 '
+	  || d.del_cnt
+	  || ' 筆，使用者「{1}」' AS description
+FROM (
+	SELECT
+		delete_dc_bind_key.ref_course_id,
+		COUNT(*) AS del_cnt
+	FROM delete_dc_bind_key
+	GROUP BY delete_dc_bind_key.ref_course_id
+) d
 )INSERT INTO log(
 	actor
 	, action_type
