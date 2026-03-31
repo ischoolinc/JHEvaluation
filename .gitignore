@@ -5,7 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
-
+*/.vs/*
 # Build results
 
 [Dd]ebug/
@@ -177,3 +177,4 @@ obj
 /JHHsinChuScoreReports/HsinChuExamScore_JH/HsinChuExamScore_JH/obj
 HsinChuJHEvaluation/HsinChu.JHEvaluation/.vs/HsinChu.JHEvaluation/v15/Server/sqlite3/db.lock
 HsinChuJHEvaluation/HsinChu.JHEvaluation/.vs/HsinChu.JHEvaluation/v15/Server/sqlite3/storage.ide
+JHSchool.Evaluation/.vs/JHSchool.Evaluation.slnx/v18/.wsuo

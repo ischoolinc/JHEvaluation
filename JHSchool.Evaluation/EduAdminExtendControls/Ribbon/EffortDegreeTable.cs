@@ -79,12 +79,15 @@ namespace JHSchool.Evaluation.EduAdminExtendControls.Ribbon
 
         public static void CheckDefault()
         {
-            ConfigData cd = School.Configuration["努力程度對照表"];
-            if (string.IsNullOrEmpty(cd["xml"]))
+            System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
-                cd["xml"] = XmlHelper.LoadXml(Properties.Resources.預設努力程度對照表).OuterXml;
-                cd.Save();
-            }
+                ConfigData cd = School.Configuration["努力程度對照表"];
+                if (string.IsNullOrEmpty(cd["xml"]))
+                {
+                    cd["xml"] = XmlHelper.LoadXml(Properties.Resources.預設努力程度對照表).OuterXml;
+                    cd.Save();
+                }
+            });
         }
 
         private void btnClose_Click(object sender, EventArgs e)
