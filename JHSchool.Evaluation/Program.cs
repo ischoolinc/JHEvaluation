@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using FISCA;
 using FISCA.Presentation;
@@ -25,16 +25,18 @@ namespace JHSchool.Evaluation
         public static void Main()
         {
             #region SyncAllBackground
+            // 2026/3/31 穎驊註記： 為了優化啟動效能，將原先在啟動時立即同步所有資料的行為改為延遲同步
+            // 資料將在各功能模組首次使用時自行觸發同步
+            /*
             //授課教師
             if (!TCInstruct.Instance.Loaded) TCInstruct.Instance.SyncAllBackground();
-            //修課記錄
-            //if (!SCAttend.Instance.Loaded) SCAttend.Instance.SyncAllBackground();
             //課程規劃
             if (!ProgramPlan.Instance.Loaded) ProgramPlan.Instance.SyncAllBackground();
             //計算規則
             if (!ScoreCalcRule.Instance.Loaded) ScoreCalcRule.Instance.SyncAllBackground();
             //評量設定
             if (!AssessmentSetup.Instance.Loaded) AssessmentSetup.Instance.SyncAllBackground();
+            */
             #endregion
 
             #region SetupPresentation
@@ -51,12 +53,12 @@ namespace JHSchool.Evaluation
             #endregion
 
 
-            // 當授課教師變更
+            // 當授課教師變更 (加上 Debounce)
             FISCA.InteractionService.SubscribeEvent("JH_CourseTeacherChange", (sender, args) =>
             {
-                TCInstruct.Instance.SyncAllBackground();
+                _tcSyncTimer.Stop();
+                _tcSyncTimer.Start();
             });
-
 
             #region ContentItem 資料項目
             //學期成績
@@ -383,14 +385,6 @@ namespace JHSchool.Evaluation
                 //        {
                 //            #region 自動刪除非一般學生的修課記錄
                 //            List<JHSchool.Data.JHSCAttendRecord> deleteSCAttendList = new List<JHSchool.Data.JHSCAttendRecord>();
-                //            foreach (JHSchool.Data.JHSCAttendRecord scattend in scattendList)
-                //            {
-                //                JHSchool.Data.JHStudentRecord stuRecord = JHSchool.Data.JHStudent.SelectByID(scattend.RefStudentID);
-                //                if (stuRecord == null) continue;
-                //                if (stuRecord.Status != K12.Data.StudentRecord.StudentStatus.一般)
-                //                    deleteSCAttendList.Add(scattend);
-                //            }
-                //            List<string> studentIDs = new List<string>();
                 //            foreach (JHSchool.Data.JHSCAttendRecord scattend in deleteSCAttendList)
                 //                studentIDs.Add(scattend.RefStudentID);
                 //            List<JHSchool.Data.JHSCETakeRecord> sceList = JHSchool.Data.JHSCETake.SelectByStudentAndCourse(studentIDs, new List<string>() { record.ID });
@@ -515,12 +509,12 @@ namespace JHSchool.Evaluation
 
 
 
-            //2018/3/26 穎驊註解，將此功能一併併入刪除處理
-            //////2018/3/9 穎驊註解，此為因應高雄小組項目 [09-05][04] 批次刪除課程功能 所新增的功能
+            //2018/3/26 穎驊註記，將此功能一併併入刪除處理
+            //////2018/3/9 穎驊註記，此為因應高雄小組項目 [09-05][04] 批次刪除課程功能 所新增的功能
             //rbButton = rbItem["批次刪除修課學生"];
             //rbButton.Size = RibbonBarButton.MenuButtonSize.Large;
             //rbButton.Image = JHSchool.Evaluation.CourseExtendControls.Ribbon.Resources.btnDeleteStudent_Image;
-            ////2018/3/9 穎驊註解，暫時找不到期註冊開放權限的Code，先跟隨 刪除課程的設定
+            ////2018/3/9 穎驊註記，暫時找不到期註冊開放權限的Code，先跟隨 刪除課程的設定
             //rbButton.Enable = false;
             //rbButton.Click += delegate
             //{
@@ -903,21 +897,9 @@ namespace JHSchool.Evaluation
             string _client_info = ClientInfo.GetCurrentClientInfo().OutputResult().OuterXml;
 
             // 兜資料
-            List<string> dataList = new List<string>();
-            foreach (string id in Course.Instance.SelectedKeys)
-            {                
-                string data = string.Format(@"
-                SELECT
-                    {0}::BIGINT AS id
-                ", id);
+            string Data = string.Format("VALUES ({0})", string.Join("), (", Course.Instance.SelectedKeys));
 
-                dataList.Add(data);
-            }
-
-            string Data = string.Join(" UNION ALL", dataList);
-
-
-            string sql = string.Format(@"WITH course_data_row AS(
+            string sql = string.Format(@"WITH course_data_row(id) AS(
 			 {0}
 ) ,delete_dc_bind_key AS(
 	DELETE
@@ -1059,9 +1041,9 @@ SELECT
 FROM
 	course_data_row
 	LEFT OUTER JOIN course ON course.id = course_data_row.id
-                ", Data,_actor,_client_info);
+                ", Data, _actor, _client_info);
 
-            
+
             UpdateHelper uh = new UpdateHelper();
 
             //執行sql
@@ -1102,21 +1084,11 @@ FROM
                 return 0;
             }
 
-            // 組成 course_data_row（沿用既有 UNION ALL 產生資料列的風格）
-            List<string> dataList = new List<string>();
-            foreach (string id in courseIDList)
-            {
-                string data = string.Format(@"
-                SELECT
-                    {0}::BIGINT AS id
-                ", id);
-                dataList.Add(data);
-            }
-
-            string Data = string.Join(" UNION ALL", dataList);
+            // 組成 course_data_row（使用 VALUES 提高效能）
+            string Data = string.Format("VALUES ({0})", string.Join("), (", courseIDList));
 
             // 查詢 dc_bind_key 筆數
-            string sql = string.Format(@"WITH course_data_row AS(
+            string sql = string.Format(@"WITH course_data_row(id) AS(
 			 {0}
 )
 SELECT COUNT(*) AS count
@@ -1140,5 +1112,18 @@ FROM
             return 0;
         }
 
+        private static System.Windows.Forms.Timer _tcSyncTimer = InitTcSyncTimer();
+
+        private static System.Windows.Forms.Timer InitTcSyncTimer()
+        {
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+            timer.Interval = 2000; // 2秒內沒有新變更才執行同步
+            timer.Tick += (sender, e) =>
+            {
+                _tcSyncTimer.Stop();
+                TCInstruct.Instance.SyncAllBackground();
+            };
+            return timer;
+        }
     }
 }

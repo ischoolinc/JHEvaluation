@@ -80,30 +80,29 @@ namespace JHSchool.Evaluation
 
             _classProgramPlanField.GetVariable += delegate(object sender, GetVariableEventArgs e)
             {
-                JHProgramPlanRecord record = GetProgramPlan(JHClass.SelectByID(e.Key));
-
-                if (record != null)
-                    e.Value = record.Name;
+                var classRec = Class.Instance.Items[e.Key];
+                if (classRec != null && !string.IsNullOrEmpty(classRec.RefProgramPlanID))
+                {
+                    var plan = ProgramPlan.Instance.Items[classRec.RefProgramPlanID];
+                    if (plan != null) e.Value = plan.Name;
+                }
                 else
                     e.Value = "";
             };
             K12.Presentation.NLDPanels.Class.AddListPaneField(_classProgramPlanField);
 
-            _studentProgramPlanField.PreloadVariableBackground += delegate
-            {
-                foreach (JHProgramPlanRecord record in JHProgramPlan.SelectAll())
-                {
-                    if (!programPlanCache.ContainsKey(record.ID))
-                        programPlanCache.Add(record.ID, record);
-                }
-            };
-
             _studentProgramPlanField.GetVariable += delegate(object sender, GetVariableEventArgs e)
             {
-                JHStudentRecord stu = JHStudent.SelectByID(e.Key);
-                JHProgramPlanRecord record = GetProgramPlan(stu);
-                if (record != null)
-                    e.Value = string.IsNullOrEmpty(stu.OverrideProgramPlanID) ? record.Name : "(指定)" + record.Name;
+                var stu = Student.Instance.Items[e.Key];
+                if (stu != null)
+                {
+                    string planID = string.IsNullOrEmpty(stu.OverrideProgramPlanID) ? (stu.Class != null ? stu.Class.RefProgramPlanID : "") : stu.OverrideProgramPlanID;
+                    var plan = ProgramPlan.Instance.Items[planID];
+                    if (plan != null)
+                        e.Value = string.IsNullOrEmpty(stu.OverrideProgramPlanID) ? plan.Name : "(指定)" + plan.Name;
+                    else
+                        e.Value = "";
+                }
                 else
                     e.Value = "";
             };

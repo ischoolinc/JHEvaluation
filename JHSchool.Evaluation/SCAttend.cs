@@ -158,9 +158,29 @@ namespace JHSchool.Evaluation
         }
 
         /// <summary>
-        /// 重新載入修課人數資訊。
+        /// 重新載入修課人數資訊（加上 Debounce 避免頻繁呼叫）。
         /// </summary>
         public static void ReloadCourseStudentCount()
+        {
+            _reloadTimer.Stop();
+            _reloadTimer.Start();
+        }
+
+        private static System.Windows.Forms.Timer _reloadTimer = InitTimer();
+
+        private static System.Windows.Forms.Timer InitTimer()
+        {
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+            timer.Interval = 1000; // 1秒內沒有新請求才執行
+            timer.Tick += (sender, e) =>
+            {
+                _reloadTimer.Stop();
+                DoReload();
+            };
+            return timer;
+        }
+
+        private static void DoReload()
         {
             System.Threading.ThreadPool.QueueUserWorkItem(x =>
             {
@@ -180,7 +200,12 @@ namespace JHSchool.Evaluation
                     {
                         CSCount = new Dictionary<string, int>();
                         foreach (XmlElement each in rsp.GetContent().GetElements("Course"))
-                            CSCount.Add(each.GetAttribute("ID"), int.Parse(each.SelectSingleNode("StudentCount").InnerText));
+                        {
+                            string id = each.GetAttribute("ID");
+                            string countStr = each.SelectSingleNode("StudentCount")?.InnerText;
+                            if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(countStr))
+                                CSCount.Add(id, int.Parse(countStr));
+                        }
                     }
                 }
                 catch (FISCA.DSAUtil.DSAServerException ex)

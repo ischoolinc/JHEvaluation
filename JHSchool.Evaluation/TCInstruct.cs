@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using Framework;
 using FISCA.DSAUtil;
 using JHSchool.Evaluation.Editor;
@@ -16,18 +17,6 @@ namespace JHSchool.Evaluation
     /// </summary>
     public class TCInstruct : CacheManager<TCInstructRecord>
     {
-        //public static void TestProgram()
-        //{
-        //    TCInstruct.Instance.ItemLoaded += delegate
-        //    {
-        //        TCInstructRecordEditor editor = Course.Instance.SelectedList[0].SetSecondTeacher(Teacher.Instance.TemporaList[0]);
-        //        editor.Save();
-        //    };
-
-        //    if (!TCInstruct.Instance.Loaded)
-        //        TCInstruct.Instance.SyncAllBackground();
-        //}
-
         private static TCInstruct _Instance = null;
         public static TCInstruct Instance { get { if (_Instance == null) _Instance = new TCInstruct(); return _Instance; } }
 
@@ -35,78 +24,54 @@ namespace JHSchool.Evaluation
         {
             ItemLoaded += delegate
             {
-                #region 重建課程及學生修課反查表
-                _course_teachers.Clear();
-                _teacher_courses.Clear();
-                foreach (var item in Items)
-                {
-                    if (!_course_teachers.ContainsKey(item.RefCourseID))
-                        _course_teachers.Add(item.RefCourseID, new List<string>());
-
-                    if (!_teacher_courses.ContainsKey(item.RefTeacherID))
-                        _teacher_courses.Add(item.RefTeacherID, new List<string>());
-
-                    _teacher_courses[item.RefTeacherID].Add(item.ID);
-                    _course_teachers[item.RefCourseID].Add(item.ID);
-                }
-                #endregion
-
                 teacherField.Reload();
             };
 
             ItemUpdated += delegate(object sender, ItemUpdatedEventArgs e)
             {
-                #region 更新(課成)及(教師)修課反查表
-                List<string> keys = new List<string>(e.PrimaryKeys);
-                keys.Sort(); //排序後的資料才可以進行 BinarySearch。
-
-                #region 掃描每一個(課程)的(所有授課教師)是否有在(e.PrimaryKeys)中出現。
-                foreach (var cid in _course_teachers.Keys)
+                #region 更新(課程)及(教師)修課反查表
+                // 2026/3/31 穎驊註記： 使用更精確的方式更新，只針對受影響的 ID 進行移除與重新加入
+                foreach (var id in e.PrimaryKeys)
                 {
-                    List<string> removeItems = new List<string>();
-                    foreach (var eachInstruct in _course_teachers[cid])
+                    // 移除舊的關聯
+                    if (_id_course.ContainsKey(id))
                     {
-                        if (keys.BinarySearch(eachInstruct) >= 0)
-                            removeItems.Add(eachInstruct);
+                        string oldCourseID = _id_course[id];
+                        if (_course_teachers.ContainsKey(oldCourseID))
+                            _course_teachers[oldCourseID].Remove(id);
                     }
 
-                    foreach (var eachInstruct in removeItems)
-                        _course_teachers[cid].Remove(eachInstruct);
-                }
-                #endregion
-
-                #region 掃描每一個(教師)的(所有課程)是否有在(e.PrimaryKeys)中出現。
-                foreach (var cid in _teacher_courses.Keys)
-                {
-                    List<string> removeItems = new List<string>();
-                    foreach (var eachInstruct in _teacher_courses[cid])
+                    if (_id_teacher.ContainsKey(id))
                     {
-                        if (keys.BinarySearch(eachInstruct) >= 0)
-                            removeItems.Add(eachInstruct);
+                        string oldTeacherID = _id_teacher[id];
+                        if (_teacher_courses.ContainsKey(oldTeacherID))
+                            _teacher_courses[oldTeacherID].Remove(id);
                     }
 
-                    foreach (var item in removeItems)
-                        _teacher_courses[cid].Remove(item);
-                }
-                #endregion
-
-                #region 將新資料加入到原有的集合中。
-                foreach (var key in e.PrimaryKeys)
-                {
-                    var item = Items[key];
+                    // 加入新的關聯
+                    var item = Items[id];
                     if (item != null)
                     {
                         if (!_course_teachers.ContainsKey(item.RefCourseID))
                             _course_teachers.Add(item.RefCourseID, new List<string>());
+                        if (!_course_teachers[item.RefCourseID].Contains(id))
+                            _course_teachers[item.RefCourseID].Add(id);
 
                         if (!_teacher_courses.ContainsKey(item.RefTeacherID))
                             _teacher_courses.Add(item.RefTeacherID, new List<string>());
+                        if (!_teacher_courses[item.RefTeacherID].Contains(id))
+                            _teacher_courses[item.RefTeacherID].Add(id);
 
-                        _course_teachers[item.RefCourseID].Add(item.ID);
-                        _teacher_courses[item.RefTeacherID].Add(item.ID);
+                        _id_course[id] = item.RefCourseID;
+                        _id_teacher[id] = item.RefTeacherID;
+                    }
+                    else
+                    {
+                        // 如果 item 為 null，表示是被刪除
+                        _id_course.Remove(id);
+                        _id_teacher.Remove(id);
                     }
                 }
-                #endregion
 
                 teacherField.Reload();
                 #endregion
@@ -194,35 +159,6 @@ namespace JHSchool.Evaluation
         {
             TeacherRecord teacher = (sender as MenuButton).Tag as TeacherRecord;
 
-            //List<string> courseIDs = new List<string>(K12.Presentation.NLDPanels.Course.SelectedSource);
-
-            //List<JHTCInstructRecord> insertList = new List<JHTCInstructRecord>();
-            //List<JHTCInstructRecord> updateList = new List<JHTCInstructRecord>();
-
-            //foreach (JHTCInstructRecord tc in JHTCInstruct.SelectByTeacherIDAndCourseID(new string[] { }, K12.Presentation.NLDPanels.Course.SelectedSource))
-            //{
-            //    if (tc.Sequence == 1) //評分教師
-            //    {
-            //        courseIDs.Remove(tc.RefCourseID);
-            //        tc.RefTeacherID = teacher.ID;
-            //        updateList.Add(tc);
-            //    }
-            //}
-            //foreach (string courseID in courseIDs)
-            //{
-            //    JHTCInstructRecord newTCInstruct = new JHTCInstructRecord();
-            //    newTCInstruct.RefCourseID = courseID;
-            //    newTCInstruct.RefTeacherID = teacher.ID;
-            //    newTCInstruct.Sequence = 1;
-            //    insertList.Add(newTCInstruct);
-            //}
-
-            //if (insertList.Count > 0)
-            //    JHTCInstruct.Insert(insertList);
-            //if (updateList.Count > 0)
-            //    JHTCInstruct.Update(updateList);
-            //MsgBox.Show("指定評分教師完成");
-
             List<TCInstructRecordEditor> editors = new List<TCInstructRecordEditor>();
             foreach (var item in Course.Instance.SelectedList)
                 editors.Add(item.SetFirstTeacher(teacher));
@@ -252,17 +188,44 @@ namespace JHSchool.Evaluation
             DSRequest dsreq = new DSRequest(helper);
             Dictionary<string, TCInstructRecord> result = new Dictionary<string, TCInstructRecord>();
             string srvname = "SmartSchool.Course.GetTCInstruct";
+
+            var course_teachers = new Dictionary<string, List<string>>();
+            var teacher_courses = new Dictionary<string, List<string>>();
+            var id_course = new Dictionary<string, string>();
+            var id_teacher = new Dictionary<string, string>();
+
             foreach (var item in FISCA.Authentication.DSAServices.CallService(srvname, dsreq).GetContent().GetElements("TCInstruct"))
             {
-                helper = new DSXmlHelper(item);
-                var teacherid = helper.GetText("RefTeacherID");
-                var courseid = helper.GetText("RefCourseID");
+                var teacherid = item.SelectSingleNode("RefTeacherID")?.InnerText;
+                var courseid = item.SelectSingleNode("RefCourseID")?.InnerText;
                 var id = item.GetAttribute("ID");
-                var sequence = helper.GetText("Sequence");
+                var sequence = item.SelectSingleNode("Sequence")?.InnerText;
 
                 TCInstructRecord record = new TCInstructRecord(teacherid, courseid, id, sequence);
                 result.Add(record.ID, record);
+
+                if (!string.IsNullOrEmpty(courseid))
+                {
+                    if (!course_teachers.ContainsKey(courseid))
+                        course_teachers.Add(courseid, new List<string>());
+                    course_teachers[courseid].Add(id);
+                    id_course[id] = courseid;
+                }
+
+                if (!string.IsNullOrEmpty(teacherid))
+                {
+                    if (!teacher_courses.ContainsKey(teacherid))
+                        teacher_courses.Add(teacherid, new List<string>());
+                    teacher_courses[teacherid].Add(id);
+                    id_teacher[id] = teacherid;
+                }
             }
+
+            _course_teachers = course_teachers;
+            _teacher_courses = teacher_courses;
+            _id_course = id_course;
+            _id_teacher = id_teacher;
+
             return result;
         }
 
@@ -291,11 +254,10 @@ namespace JHSchool.Evaluation
 
                 foreach (var item in FISCA.Authentication.DSAServices.CallService(srvname, dsreq).GetContent().GetElements("TCInstruct"))
                 {
-                    helper = new DSXmlHelper(item);
-                    var teacherid = helper.GetText("RefTeacherID");
-                    var courseid = helper.GetText("RefCourseID");
+                    var teacherid = item.SelectSingleNode("RefTeacherID")?.InnerText;
+                    var courseid = item.SelectSingleNode("RefCourseID")?.InnerText;
                     var id = item.GetAttribute("ID");
-                    var sequence = helper.GetText("Sequence");
+                    var sequence = item.SelectSingleNode("Sequence")?.InnerText;
 
                     TCInstructRecord record = new TCInstructRecord(teacherid, courseid, id, sequence);
                     result.Add(record.ID, record);
@@ -309,6 +271,21 @@ namespace JHSchool.Evaluation
         /// 從(課程)查詢授課教師。
         /// </summary>
         private Dictionary<string, List<string>> _course_teachers = new Dictionary<string, List<string>>();
+
+        /// <summary>
+        /// 從(教師)查詢教授課程。
+        /// </summary>
+        private Dictionary<string, List<string>> _teacher_courses = new Dictionary<string, List<string>>();
+
+        /// <summary>
+        /// 記錄 ID 與課程 ID 的對照表。
+        /// </summary>
+        private Dictionary<string, string> _id_course = new Dictionary<string, string>();
+
+        /// <summary>
+        /// 記錄 ID 與教師 ID 的對照表。
+        /// </summary>
+        private Dictionary<string, string> _id_teacher = new Dictionary<string, string>();
 
         /// <summary>
         /// 取得課程的所有授課教師。
@@ -329,11 +306,6 @@ namespace JHSchool.Evaluation
             }
             return result;
         }
-
-        /// <summary>
-        /// 從(教師)查詢教授課程。
-        /// </summary>
-        private Dictionary<string, List<string>> _teacher_courses = new Dictionary<string, List<string>>();
 
         /// <summary>
         /// 取得教師所授教的課程。
