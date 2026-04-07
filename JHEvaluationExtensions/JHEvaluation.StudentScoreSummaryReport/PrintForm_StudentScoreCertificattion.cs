@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -663,6 +663,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     subjectScoreType_list.Add(domain + "_科目" + a + "_平均成績");
                 }
             }
+            for (int a = 7; a <= 18; a++)
+            {
+                subjectScoreType_list.Add("彈性課程_科目" + a + "_成績");
+                subjectScoreType_list.Add("彈性課程_科目" + a + "_原始成績");
+                subjectScoreType_list.Add("彈性課程_科目" + a + "_平均成績");
+            }
             #endregion
 
             #region 整理所有的科目等第
@@ -674,6 +680,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     subjectLevelType_list.Add(domain + "_科目" + a + "_原始等第");
                     subjectLevelType_list.Add(domain + "_科目" + a + "_平均成績等第");
                 }
+            for (int a = 7; a <= 18; a++)
+            {
+                subjectLevelType_list.Add("彈性課程_科目" + a + "_等第");
+                subjectLevelType_list.Add("彈性課程_科目" + a + "_原始等第");
+                subjectLevelType_list.Add("彈性課程_科目" + a + "_平均成績等第");
+            }
             #endregion
 
             #region 整理所有的科目權數
@@ -683,6 +695,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 {
                     subjectCredit_list.Add(domain + "_科目" + a + "_權數");
                 }
+            for (int a = 7; a <= 18; a++)
+            {
+                subjectCredit_list.Add("彈性課程_科目" + a + "_權數");
+            }
             #endregion
 
             // 領域分數、等第、權數 的對照
