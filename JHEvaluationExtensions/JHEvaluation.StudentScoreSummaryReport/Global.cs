@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +16,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
 {
     public class Global
     {
+        const int EnglishDomainSubjectMax = 10;
+        const int DefaultDomainSubjectMax = 6;
+
         //取得中英文對照
         private static SubjDomainEngNameMapping _SubjDomainEngNameMapping = new SubjDomainEngNameMapping();
         /// <summary>
@@ -25,7 +28,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
         {
 
             #region 儲存檔案
-            string inputReportName = "在校成績證明書合併欄位總表";
+            string inputReportName = "在校成績證明書合併欄位總表_中文版";
+
+            if (doc == "英文版")
+            {
+                inputReportName = "在校成績證明書合併欄位總表_英文版";
+            }
+
             string reportName = inputReportName;
 
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "Reports");
@@ -57,6 +66,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 // 讀取總表檔案並動態加入合併欄位
                 Aspose.Words.DocumentBuilder builder = new Aspose.Words.DocumentBuilder(tempDoc);
                 builder.MoveToDocumentEnd();
+
+                int subjectMax = DefaultDomainSubjectMax;
+
+                if (doc == "英文版")
+                {
+                    subjectMax = EnglishDomainSubjectMax;
+                }
 
                 #region 缺曠動態產生合併欄位
                 List<string> plist = K12.Data.PeriodMapping.SelectAll().Select(x => x.Type).Distinct().ToList();
@@ -356,7 +372,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     builder.EndRow();
 
                     //1上
-                    for (int i = 1; i <= 6; i++)
+                    int domainSubjectMax = (doc == "英文版" && domain != "彈性課程") ? subjectMax : DefaultDomainSubjectMax;
+
+                    for (int i = 1; i <= domainSubjectMax; i++)
                     {
                         string subjectKey = domain + "_科目名稱" + i;
                         builder.InsertCell();
@@ -456,7 +474,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     builder.Write("三下等第");
                     builder.EndRow();
                     //1上
-                    for (int i = 1; i <= 6; i++)
+                    int domainSubjectMax = (doc == "英文版" && domain != "彈性課程") ? subjectMax : DefaultDomainSubjectMax;
+
+                    for (int i = 1; i <= domainSubjectMax; i++)
                     {
                         string subjectKey = domain + "_科目名稱" + i;
                         builder.InsertCell();

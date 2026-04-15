@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -24,6 +24,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
     public partial class PrintForm_StudentScoreCertificattion_English : BaseForm, IStatusReporter
     {
         internal const string ConfigName = "StudentScoreSummaryReportEnglish2022";
+        const int NormalDomainSubjectMax = 10;
 
         private List<string> StudentIDs { get; set; }
 
@@ -364,7 +365,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
             //OO領域 科目成績
             foreach (string domain in DomainList)
             {
-                for (int a = 1; a <= 6; a++)
+                int subjectMax =
+                    domain == "彈性課程" ? 6 :
+                    NormalDomainSubjectMax;
+                for (int a = 1; a <= subjectMax; a++)
                 {
                     table.Columns.Add(domain + "_科目名稱" + a);
                     for (int i = 1; i <= 6; i++)
@@ -636,7 +640,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
             List<string> subjectScoreType_list = new List<string>();
             foreach (string domain in DomainList)
             {
-                for (int a = 1; a <= 6; a++)
+                int subjectMax =
+                    domain == "彈性課程" ? 6 :
+                    NormalDomainSubjectMax;
+                for (int a = 1; a <= subjectMax; a++)
                 {
                     subjectScoreType_list.Add(domain + "_科目" + a + "_成績");
                     subjectScoreType_list.Add(domain + "_科目" + a + "_原始成績");
@@ -648,21 +655,31 @@ namespace JHEvaluation.StudentScoreSummaryReport
             #region 整理所有的科目等第
             List<string> subjectLevelType_list = new List<string>();
             foreach (string domain in DomainList)
-                for (int a = 1; a <= 6; a++)
+            {
+                int subjectMax =
+                    domain == "彈性課程" ? 6 :
+                    NormalDomainSubjectMax;
+                for (int a = 1; a <= subjectMax; a++)
                 {
                     subjectLevelType_list.Add(domain + "_科目" + a + "_等第");
                     subjectLevelType_list.Add(domain + "_科目" + a + "_原始等第");
                     subjectLevelType_list.Add(domain + "_科目" + a + "_平均成績等第");
                 }
+            }
             #endregion
 
             #region 整理所有的科目權數
             List<string> subjectCredit_list = new List<string>();
             foreach (string domain in DomainList)
-                for (int a = 1; a <= 6; a++)
+            {
+                int subjectMax =
+                    domain == "彈性課程" ? 6 :
+                    NormalDomainSubjectMax;
+                for (int a = 1; a <= subjectMax; a++)
                 {
                     subjectCredit_list.Add(domain + "_科目" + a + "_權數");
                 }
+            }
             #endregion
 
             // 領域分數、等第、權數 的對照
@@ -1146,8 +1163,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                                             subjectCourseCount++;
 
-                                            // 目前僅支援 一個學生六學年之中同一領域僅能有 6個科目
-                                            if (subjectCourseCount > 6)
+                                            int subjectCourseMax = NormalDomainSubjectMax;
+
+                                            // 目前僅支援 一個學生六學年之中同一領域僅能有 subjectCourseMax 個科目
+                                            if (subjectCourseCount > subjectCourseMax)
                                             {
                                                 isExceed = true;
                                                 continue;
@@ -1606,39 +1625,47 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     }
 
                     // 填領域分數
+                    // 保守安全處理：避免實際成績資料中的欄位名稱
+                    // 與 DataTable 已建立欄位不一致時，發生「資料行不屬於資料表」例外。
                     foreach (string key in domainScore_dict.Keys)
                     {
-                        row[key] = domainScore_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = domainScore_dict[key];
                     }
 
                     // 填領域等第
                     foreach (string key in domainLevel_dict.Keys)
                     {
-                        row[key] = domainLevel_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = domainLevel_dict[key];
                     }
 
                     // 填領域權數
                     foreach (string key in domainCredit_dict.Keys)
                     {
-                        row[key] = domainCredit_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = domainCredit_dict[key];
                     }
 
                     // 填科目分數
                     foreach (string key in subjectScore_dict.Keys)
                     {
-                        row[key] = subjectScore_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = subjectScore_dict[key];
                     }
 
                     // 填科目等第
                     foreach (string key in subjectLevel_dict.Keys)
                     {
-                        row[key] = subjectLevel_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = subjectLevel_dict[key];
                     }
 
                     // 填科目權數
                     foreach (string key in subjectCredit_dict.Keys)
                     {
-                        row[key] = subjectCredit_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = subjectCredit_dict[key];
                     }
 
                 }
