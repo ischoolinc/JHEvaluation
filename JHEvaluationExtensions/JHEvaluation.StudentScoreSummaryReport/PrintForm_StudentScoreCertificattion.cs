@@ -128,6 +128,18 @@ namespace JHEvaluation.StudentScoreSummaryReport
             MasterWorker.RunWorkerAsync();
         }
 
+        private void ClearReportCache()
+        {
+            sr_dict.Clear();
+            _PhotoPDict.Clear();
+            shr_dict.Clear();
+            ar_dict.Clear();
+            jssr_dict.Clear();
+            gsr_dict.Clear();
+            urr_dict.Clear();
+            msr_dict.Clear();
+        }
+
         private void MasterWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             if (StudentIDs.Count <= 0)
@@ -135,6 +147,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 Feedback("", -1);  //把 Status bar Reset...
                 throw new ArgumentException("沒有任何學生資料可列印。");
             }
+
+            // Clear cached report data before loading data for this print job.
+            // This prevents duplicated data when printing multiple times from the same form instance.
+            ClearReportCache();
 
             #region 抓取學生資料 
             //抓取學生資料 
