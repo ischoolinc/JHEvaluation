@@ -309,18 +309,18 @@ namespace HsinChuExamScore_JH
                     switch (name)
                     {
                         case "領域成績單":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_領域成績單));
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.國中評量成績單樣板_領域成績單));
                             break;
 
                         case "科目成績單":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_科目成績單));
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.國中評量成績單樣板_科目成績單));
                             break;
 
                         case "科目及領域成績單_領域組距":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_科目及領域成績單_領域組距));
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.國中評量成績單樣板_科目及領域成績單_領域組距));
                             break;
                         case "科目及領域成績單_科目組距":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_科目及領域成績單_科目組距));
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.國中評量成績單樣板_科目及領域成績單_科目組距));
                             break;
                     }
 

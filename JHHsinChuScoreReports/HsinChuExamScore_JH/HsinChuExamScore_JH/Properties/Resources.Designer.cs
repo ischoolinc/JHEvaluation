@@ -63,9 +63,9 @@ namespace HsinChuExamScore_JH.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] 新竹_科目及領域成績單_科目組距 {
+        internal static byte[] 國中評量成績單樣板_科目及領域成績單_科目組距 {
             get {
-                object obj = ResourceManager.GetObject("新竹_科目及領域成績單_科目組距", resourceCulture);
+                object obj = ResourceManager.GetObject("國中評量成績單樣板_科目及領域成績單_科目組距", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace HsinChuExamScore_JH.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] 新竹_科目及領域成績單_領域組距 {
+        internal static byte[] 國中評量成績單樣板_科目及領域成績單_領域組距 {
             get {
-                object obj = ResourceManager.GetObject("新竹_科目及領域成績單_領域組距", resourceCulture);
+                object obj = ResourceManager.GetObject("國中評量成績單樣板_科目及領域成績單_領域組距", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace HsinChuExamScore_JH.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] 新竹_科目成績單 {
+        internal static byte[] 國中評量成績單樣板_科目成績單 {
             get {
-                object obj = ResourceManager.GetObject("新竹_科目成績單", resourceCulture);
+                object obj = ResourceManager.GetObject("國中評量成績單樣板_科目成績單", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace HsinChuExamScore_JH.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] 新竹_領域成績單 {
+        internal static byte[] 國中評量成績單樣板_領域成績單 {
             get {
-                object obj = ResourceManager.GetObject("新竹_領域成績單", resourceCulture);
+                object obj = ResourceManager.GetObject("國中評量成績單樣板_領域成績單", resourceCulture);
                 return ((byte[])(obj));
             }
         }

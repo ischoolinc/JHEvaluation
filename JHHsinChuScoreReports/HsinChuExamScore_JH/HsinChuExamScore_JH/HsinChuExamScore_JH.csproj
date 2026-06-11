@@ -221,6 +221,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Template\國中評量成績單樣板%28科目及領域成績單_科目組距%29.doc" />
+    <None Include="Template\國中評量成績單樣板%28科目及領域成績單_領域組距%29.doc" />
+    <None Include="Template\國中評量成績單樣板%28科目成績單%29.doc" />
+    <None Include="Template\國中評量成績單樣板%28領域成績單%29.doc" />
     <None Include="Template\新竹_科目及領域成績單_科目組距.doc" />
     <None Include="Template\新竹_科目及領域成績單_領域組距.doc" />
     <None Include="Template\新竹_科目成績單.doc" />
