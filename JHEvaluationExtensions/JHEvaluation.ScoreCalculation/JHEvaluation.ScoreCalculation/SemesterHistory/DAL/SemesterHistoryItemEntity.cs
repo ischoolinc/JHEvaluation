@@ -56,9 +56,9 @@ namespace JHEvaluation.ScoreCalculation.SemesterHistory.DAL
         public string TeacherName { get; set; }
 
         /// <summary>
-        /// 上課天數
+        /// 上課天數，查無上課日設定時為 null(不指定)
         /// </summary>
-        public int SchoolDayCount { get; set; }
+        public int? SchoolDayCount { get; set; }
 
         /// <summary>
         /// 姓名

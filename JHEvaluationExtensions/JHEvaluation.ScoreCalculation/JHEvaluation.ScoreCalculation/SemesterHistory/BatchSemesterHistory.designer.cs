@@ -37,10 +37,16 @@
             // 
             // labelX1
             // 
+            this.labelX1.AutoSize = true;
             this.labelX1.BackColor = System.Drawing.Color.Transparent;
-            this.labelX1.Location = new System.Drawing.Point(22, 12);
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX1.Location = new System.Drawing.Point(16, 15);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(186, 23);
+            this.labelX1.Size = new System.Drawing.Size(47, 21);
             this.labelX1.TabIndex = 0;
             this.labelX1.Text = "學年度";
             // 
@@ -49,9 +55,9 @@
             this.btnRun.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnRun.BackColor = System.Drawing.Color.Transparent;
             this.btnRun.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnRun.Location = new System.Drawing.Point(83, 168);
+            this.btnRun.Location = new System.Drawing.Point(108, 189);
             this.btnRun.Name = "btnRun";
-            this.btnRun.Size = new System.Drawing.Size(58, 23);
+            this.btnRun.Size = new System.Drawing.Size(75, 25);
             this.btnRun.TabIndex = 4;
             this.btnRun.Text = "產生";
             this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
@@ -61,9 +67,9 @@
             this.btnExit.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnExit.BackColor = System.Drawing.Color.Transparent;
             this.btnExit.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnExit.Location = new System.Drawing.Point(154, 168);
+            this.btnExit.Location = new System.Drawing.Point(189, 189);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(55, 23);
+            this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.TabIndex = 5;
             this.btnExit.Text = "離開";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
@@ -74,21 +80,29 @@
             // 
             // 
             this.lstGradeYear.Border.Class = "ListViewBorder";
+            this.lstGradeYear.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lstGradeYear.CheckBoxes = true;
             this.lstGradeYear.FullRowSelect = true;
-            this.lstGradeYear.Location = new System.Drawing.Point(22, 66);
+            this.lstGradeYear.HideSelection = false;
+            this.lstGradeYear.Location = new System.Drawing.Point(16, 67);
             this.lstGradeYear.Name = "lstGradeYear";
-            this.lstGradeYear.Size = new System.Drawing.Size(186, 87);
+            this.lstGradeYear.Size = new System.Drawing.Size(248, 116);
             this.lstGradeYear.TabIndex = 6;
             this.lstGradeYear.UseCompatibleStateImageBehavior = false;
             this.lstGradeYear.View = System.Windows.Forms.View.List;
             // 
             // labelX3
             // 
+            this.labelX3.AutoSize = true;
             this.labelX3.BackColor = System.Drawing.Color.Transparent;
-            this.labelX3.Location = new System.Drawing.Point(22, 37);
+            // 
+            // 
+            // 
+            this.labelX3.BackgroundStyle.Class = "";
+            this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX3.Location = new System.Drawing.Point(16, 40);
             this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(186, 23);
+            this.labelX3.Size = new System.Drawing.Size(74, 21);
             this.labelX3.TabIndex = 7;
             this.labelX3.Text = "請選擇年級";
             // 
@@ -96,18 +110,18 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(217, 203);
+            this.ClientSize = new System.Drawing.Size(282, 223);
             this.Controls.Add(this.labelX3);
             this.Controls.Add(this.lstGradeYear);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnRun);
             this.Controls.Add(this.labelX1);
-            this.MaximumSize = new System.Drawing.Size(225, 237);
-            this.MinimumSize = new System.Drawing.Size(225, 237);
+            this.DoubleBuffered = true;
             this.Name = "BatchSemesterHistory";
-            this.Text = "產生學期歷程";
+            this.Text = "批次產生學期歷程";
             this.Load += new System.EventHandler(this.BatchSemesterHistory_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

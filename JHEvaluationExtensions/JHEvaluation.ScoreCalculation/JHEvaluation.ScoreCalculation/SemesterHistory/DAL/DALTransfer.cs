@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using JHSchool.Data;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using FISCA.Data;
 using K12.Data;
-using K12.Data.Configuration;
 using System.Data;
 
 namespace JHEvaluation.ScoreCalculation.SemesterHistory.DAL
@@ -17,73 +14,66 @@ namespace JHEvaluation.ScoreCalculation.SemesterHistory.DAL
 
 
         /// <summary>
-        /// 取得年級的上課天數
+        /// 取得年級的上課天數，資料來源為排課模組的上課日設定(UDT:school_dates_config)
+        /// 查無設定的年級不會出現在回傳的 Dictionary 中
         /// </summary>
+        /// <param name="schoolYear">學年度</param>
+        /// <param name="semester">學期</param>
         /// <returns></returns>
-        public static Dictionary<int, int> GetInSchoolDayByGardeYear()
+        public static Dictionary<int, int> GetInSchoolDayByGardeYear(int schoolYear, int semester)
         {
-                string SchoolHodidayConfigString = "SCHOOL_HOLIDAY_CONFIG_STRING";
-                string configString = "CONFIG_STRING";   
-
-        ConfigData _CD;
-        DateTime _OldStartDate;
-        DateTime _OldEndDate;
-
             Dictionary<int, int> _InSchoolDay = new Dictionary<int, int>();
-            
-            // 因為 K12.Data 有 Bug 改寫
-            //K12.Data.SchoolHolidayRecord shr = K12.Data.SchoolHoliday.SelectSchoolHolidayRecord();
-            //if (shr != null)
-            //{
-            //    if (shr.SchoolDayCountG1 != null)
-            //    {
-            //        _InSchoolDay.Add(1, shr.SchoolDayCountG1);
-            //        _InSchoolDay.Add(7, shr.SchoolDayCountG1);
-            //    }
 
-            //    if (shr.SchoolDayCountG2 != null)
-            //    {
-            //        _InSchoolDay.Add(2, shr.SchoolDayCountG2);
-            //        _InSchoolDay.Add(8, shr.SchoolDayCountG2);
-            //    }
-            //    if (shr.SchoolDayCountG3 != null)
-            //    {
-            //        _InSchoolDay.Add(3, shr.SchoolDayCountG3);
-            //        _InSchoolDay.Add(9, shr.SchoolDayCountG3);
-            //    }
-            //}
+            string strSQL = string.Format(@"
+select school_dates_year1, school_dates_year2, school_dates_year3
+from $onecampus.schedule_management.school_dates_config
+where school_year = {0} and semester = {1}", schoolYear, semester);
 
-            _CD = School.Configuration[SchoolHodidayConfigString];
-
-
-            //取得之前設定設定
-            XElement rootXml = null;
-            string xmlContent = _CD[configString];
-
-            if (!string.IsNullOrWhiteSpace(xmlContent))
-                rootXml = XElement.Parse(xmlContent);
-            else
-                rootXml = new XElement("SchoolHolidays");
-
-            // 國中讀取年級 1,2,3,7,8,9
-
-            for (int gr = 1; gr <= 9; gr++)
+            try
             {
-                string key = "SchoolDayCountG" + gr;
-                if (rootXml.Element(key) != null)
+                QueryHelper qh = new QueryHelper();
+                DataTable dt = qh.Select(strSQL);
+
+                if (dt.Rows.Count > 0)
                 {
-                    int days;
-                    if (int.TryParse(rootXml.Element(key).Value, out days))
-                    {
-                        if (!_InSchoolDay.ContainsKey(gr))
-                        {
-                            _InSchoolDay.Add(gr, days);
-                        }
-                    }
+                    DataRow row = dt.Rows[0];
+
+                    // 國中讀取年級 1,2,3,7,8,9，設定值只有 1~3 年級，需同時對應 7,8,9
+                    AddInSchoolDay(_InSchoolDay, row["school_dates_year1"], 1, 7);
+                    AddInSchoolDay(_InSchoolDay, row["school_dates_year2"], 2, 8);
+                    AddInSchoolDay(_InSchoolDay, row["school_dates_year3"], 3, 9);
                 }
             }
+            catch
+            {
+                // 學校未安裝排課模組(UDT 不存在)時，視為未設定上課日
+                _InSchoolDay.Clear();
+            }
 
-                return _InSchoolDay;
+            return _InSchoolDay;
+        }
+
+        /// <summary>
+        /// 將上課天數填入對應年級，沒有設定值(null)則不填入
+        /// </summary>
+        /// <param name="inSchoolDay"></param>
+        /// <param name="value">上課日設定值</param>
+        /// <param name="gradeYear">年級</param>
+        /// <param name="altGradeYear">對應年級(國中 7,8,9)</param>
+        private static void AddInSchoolDay(Dictionary<int, int> inSchoolDay, object value, int gradeYear, int altGradeYear)
+        {
+            if (value == null || value == DBNull.Value)
+                return;
+
+            int days;
+            if (!int.TryParse(value.ToString(), out days))
+                return;
+
+            if (!inSchoolDay.ContainsKey(gradeYear))
+                inSchoolDay.Add(gradeYear, days);
+
+            if (!inSchoolDay.ContainsKey(altGradeYear))
+                inSchoolDay.Add(altGradeYear, days);
         }
 
         /// <summary>
@@ -95,7 +85,7 @@ namespace JHEvaluation.ScoreCalculation.SemesterHistory.DAL
         /// <returns></returns>
         public static List<SemesterHistoryItemEntity> GetSemesterHistoryItemEntityList(int SchoolYear, int Semester, List<string> StudentIDList)
         {
-            Dictionary<int, int> SchoolDays = GetInSchoolDayByGardeYear();
+            Dictionary<int, int> SchoolDays = GetInSchoolDayByGardeYear(SchoolYear, Semester);
             List<SemesterHistoryItemEntity> SemesterHistoryItemEntityList = new List<SemesterHistoryItemEntity>();
             Dictionary<string, JHSemesterHistoryRecord> studSemesterHistoryRecordDic = new Dictionary<string, JHSemesterHistoryRecord>();
             foreach (JHSemesterHistoryRecord shr in JHSemesterHistory.SelectByStudentIDs(StudentIDList))
