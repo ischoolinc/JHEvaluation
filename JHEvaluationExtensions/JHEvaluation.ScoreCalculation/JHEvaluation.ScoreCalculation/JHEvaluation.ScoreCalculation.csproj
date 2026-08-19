@@ -329,6 +329,7 @@
     <Compile Include="EffortMap.cs" />
     <Compile Include="IStatusReporter.cs" />
     <Compile Include="LogData.cs" />
+    <Compile Include="ModuleLoadDiagnostics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FunctionSpliter.cs" />

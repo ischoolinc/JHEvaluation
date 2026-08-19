@@ -17,6 +17,10 @@ namespace JHEvaluation.ScoreCalculation
 {
     public static class Program
     {
+        private static readonly object InitializationSync = new object();
+        private static bool _initializationCompleted;
+        private static Exception _initializationFailure;
+
         internal static ModuleMode Mode { get; private set; }
 
         //權限代碼。
@@ -37,146 +41,168 @@ namespace JHEvaluation.ScoreCalculation
             TestMode(dparams);
             return;
 # else
+            InitializeModule();
+#endif
+        }
 
+        private static void InitializeModule()
+        {
+            lock (InitializationSync)
+            {
+                if (_initializationCompleted)
+                    return;
 
+                if (_initializationFailure != null)
+                    throw new InvalidOperationException("The score calculation module previously failed to initialize.", _initializationFailure);
 
-            DeployModeSetup();
+                ModuleLoadDiagnostics diagnostics = ModuleLoadDiagnostics.Start();
+                try
+                {
+                    RegistrationContext context = null;
 
-            //2017/5/9 穎驊 自JHSchool.Evaluation 搬過來
-            //畢業成績
+                    diagnostics.Measure("deploy-mode", DeployModeSetup);
+                    diagnostics.SetDeploymentMode(Mode);
+                    diagnostics.Measure("student-detail-builder", RegisterGraduationDetailBuilder);
+                    diagnostics.Measure("score-menus", delegate { context = RegisterScoreMenus(); });
+                    diagnostics.Measure("graduation-reports", delegate { RegisterGraduationAndReports(context); });
+                    diagnostics.Measure("acl-selection-events", delegate { RegisterAclAndSelectionEvents(context); });
+                    diagnostics.Measure("detail-items", RegisterDetailItems);
+                    diagnostics.Measure("data-rationality", RegisterDataRationalityCheck);
+
+                    _initializationCompleted = true;
+                    diagnostics.Complete(true, null);
+                }
+                catch (Exception ex)
+                {
+                    _initializationFailure = ex;
+                    diagnostics.Complete(false, ex);
+                    throw;
+                }
+                finally
+                {
+                    diagnostics.Flush();
+                }
+            }
+        }
+
+        private static void RegisterGraduationDetailBuilder()
+        {
+            //2017/5/9 穎驊 自JHSchool.Evaluation 搬過來：畢業成績。
             Student.Instance.AddDetailBulider(new DetailBulider<GraduationScoreItem>());
+        }
 
-            #region 教務作業
-            //學期歷程。
-            MenuButton btnSemsHistory = JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["批次作業/檢視"]["成績作業"]["產生學期歷程"];
-            btnSemsHistory.Enable = Framework.User.Acl[BatchSHistoryCode].Executable;
-            btnSemsHistory.Click += delegate
+        private static RegistrationContext RegisterScoreMenus()
+        {
+            RegistrationContext context = new RegistrationContext();
+
+            MenuButton adminScoreMenu = JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["批次作業/檢視"]["成績作業"];
+            MenuButton semesterHistoryButton = adminScoreMenu["產生學期歷程"];
+            semesterHistoryButton.Enable = Framework.User.Acl[BatchSHistoryCode].Executable;
+            semesterHistoryButton.Click += delegate
             {
                 new JHEvaluation.ScoreCalculation.SemesterHistory.BatchSemesterHistory().ShowDialog();
             };
-            #endregion
 
-            //註冊成績計算功能項目。
-            MenuButton mb = NLDPanels.Student.RibbonBarItems["教務"]["成績作業"];
-            mb.Enable = false;
-
-            mb["計算科目成績"].Click += delegate { new SubjectScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog(); };
-
-            mb["計算領域成績"].Click += delegate { new DomainScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog(); };
-
-            mb["計算學習領域成績"].Click += delegate { new LearningDomainScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog(); };
-
-            mb["加總學習領域文字描述"].Click += delegate { new DomainTextScoreSum(NLDPanels.Student.SelectedSource).ShowDialog(); };
+            MenuButton studentScoreMenu = NLDPanels.Student.RibbonBarItems["教務"]["成績作業"];
+            studentScoreMenu.Enable = false;
+            studentScoreMenu["計算科目成績"].Click += delegate { new SubjectScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog(); };
+            studentScoreMenu["計算領域成績"].Click += delegate { new DomainScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog(); };
+            studentScoreMenu["計算學習領域成績"].Click += delegate { new LearningDomainScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog(); };
+            studentScoreMenu["加總學習領域文字描述"].Click += delegate { new DomainTextScoreSum(NLDPanels.Student.SelectedSource).ShowDialog(); };
 
             JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["批次作業/檢視"]["成績作業"].Size = RibbonBarButton.MenuButtonSize.Large;
-            MenuButton mbAdmin = JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["批次作業/檢視"]["成績作業"];
-            mbAdmin.Image = Properties.Resources.calc_save_64;
-            mbAdmin["批次計算科目成績"].Click += delegate
-            { new SubjectScoreCalculateByGradeyear().ShowDialog(); };
+            adminScoreMenu.Image = Properties.Resources.calc_save_64;
+            adminScoreMenu["批次計算科目成績"].Click += delegate { new SubjectScoreCalculateByGradeyear().ShowDialog(); };
+            adminScoreMenu["批次計算領域成績"].Click += delegate { new DomainScoreCalculateByGradeyear().ShowDialog(); };
+            adminScoreMenu["批次計算學習領域成績"].Click += delegate { new LearningDomainScoreCalculateByGradeyear().ShowDialog(); };
+            adminScoreMenu["批次加總學習領域文字描述"].Click += delegate { new DomainTextScoreSumByGradeyear().ShowDialog(); };
 
-            mbAdmin["批次計算領域成績"].Click += delegate
-            { new DomainScoreCalculateByGradeyear().ShowDialog(); };
+            context.StudentScoreMenu = studentScoreMenu;
+            context.AdminScoreMenu = adminScoreMenu;
+            return context;
+        }
 
-            mbAdmin["批次計算學習領域成績"].Click += delegate
-            { new LearningDomainScoreCalculateByGradeyear().ShowDialog(); };
-
-            mbAdmin["批次加總學習領域文字描述"].Click += delegate
-            { new DomainTextScoreSumByGradeyear().ShowDialog(); };
-
-            /** 學生「畢業作業」。 **/
-            RibbonBarButton rbItem = K12.Presentation.NLDPanels.Student.RibbonBarItems["教務"]["畢業作業"];
-            //學生->計算畢業成績。
-            rbItem["計算畢業成績"].Enable = User.Acl[CalcStudentCode].Executable;
-            rbItem["計算畢業成績"].Click += delegate
+        private static void RegisterGraduationAndReports(RegistrationContext context)
+        {
+            RibbonBarButton studentGraduation = NLDPanels.Student.RibbonBarItems["教務"]["畢業作業"];
+            MenuButton calculateGraduation = studentGraduation["計算畢業成績"];
+            calculateGraduation.Enable = User.Acl[CalcStudentCode].Executable;
+            calculateGraduation.Click += delegate
             {
                 new GraduateScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog();
             };
 
-            //2017/5/9 穎驊 自JHSchool.Evaluation 搬過來
-            #region 學生/資料統計/報表
-            RibbonBarButton rbButton = Student.Instance.RibbonBarItems["資料統計"]["報表"];
-            rbButton["成績相關報表"]["畢業預警報表"].Enable = User.Acl["JHSchool.Student.Report0010"].Executable;
-            rbButton["成績相關報表"]["畢業預警報表"].Click += delegate
-            {
-                if (Student.Instance.SelectedList.Count <= 0) return;
-                JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport report = new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport(Student.Instance.SelectedList);
-            };
-            rbButton["學務相關報表"]["畢業預警報表"].Enable = User.Acl["JHSchool.Student.Report0010"].Executable;
-            rbButton["學務相關報表"]["畢業預警報表"].Click += delegate
-            {
-                if (Student.Instance.SelectedList.Count <= 0) return;
-                JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport report = new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport(Student.Instance.SelectedList);
-            };
-            #endregion
+            RibbonBarButton reportMenu = Student.Instance.RibbonBarItems["資料統計"]["報表"];
+            MenuButton scoreWarningReport = reportMenu["成績相關報表"]["畢業預警報表"];
+            MenuButton behaviorWarningReport = reportMenu["學務相關報表"]["畢業預警報表"];
+            bool canRunWarningReport = User.Acl["JHSchool.Student.Report0010"].Executable;
+            scoreWarningReport.Enable = canRunWarningReport;
+            scoreWarningReport.Click += delegate { RunGraduationPredictReport(); };
+            behaviorWarningReport.Enable = canRunWarningReport;
+            behaviorWarningReport.Click += delegate { RunGraduationPredictReport(); };
 
-            //註冊「畢業資格審查」。
-            rbItem["畢業資格審查"].Enable = User.Acl[GradFilteStudentCode].Executable;
-            //rbItem["畢業資格審查"].Image = JHSchool.Evaluation.CourseExtendControls.Ribbon.Resources.graduation_64;
-            rbItem["畢業資格審查"].Click += delegate
+            MenuButton studentGraduationFilter = studentGraduation["畢業資格審查"];
+            studentGraduationFilter.Enable = User.Acl[GradFilteStudentCode].Executable;
+            studentGraduationFilter.Click += delegate
             {
-                if (K12.Presentation.NLDPanels.Student.SelectedSource.Count == 0) return;
+                if (NLDPanels.Student.SelectedSource.Count == 0) return;
                 Form form = new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationInspectWizard("Student");
                 form.ShowDialog();
             };
 
-            /** 教務「畢業作業」。 **/
-            rbItem = JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["批次作業/檢視"]["畢業作業"];
-            JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["批次作業/檢視"]["畢業作業"].Size = RibbonBarButton.MenuButtonSize.Large;
-            //rbItem.Image = Properties.Resources.graduation_write_64;
-            //rbItem.Size = RibbonBarButton.MenuButtonSize.Large;
-            //教務->計算畢業成績
-            rbItem["計算畢業成績"].Enable = User.Acl[CalcAdminCode].Executable;
-            rbItem["計算畢業成績"].Visible = false; //先不要出來。
-            rbItem["計算畢業成績"].Click += delegate
-            {
-            };
+            RibbonBarButton adminGraduation = JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["批次作業/檢視"]["畢業作業"];
+            adminGraduation.Size = RibbonBarButton.MenuButtonSize.Large;
+            MenuButton adminCalculateGraduation = adminGraduation["計算畢業成績"];
+            bool canCalculateAdmin = User.Acl[CalcAdminCode].Executable;
+            adminCalculateGraduation.Enable = canCalculateAdmin;
+            adminCalculateGraduation.Visible = false;
+            adminCalculateGraduation.Click += delegate { };
 
-            //註冊「畢業資格審查」。
-            rbItem["畢業資格審查"].Enable = User.Acl[GradFilteAdminCode].Executable;
-            //rbItem["畢業資格審查"].Image = JHSchool.Evaluation.CourseExtendControls.Ribbon.Resources.graduation_64;
-            rbItem["畢業資格審查"].Click += delegate
+            MenuButton adminGraduationFilter = adminGraduation["畢業資格審查"];
+            adminGraduationFilter.Enable = User.Acl[GradFilteAdminCode].Executable;
+            adminGraduationFilter.Click += delegate
             {
                 Form form = new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationInspectWizard("EduAdmin");
                 form.ShowDialog();
             };
 
-            //註冊學期歷程的權限管理。
-            Catalog catalog11 = RoleAclSource.Instance["教務作業"];
-            catalog11.Add(new RibbonFeature(BatchSHistoryCode, "批次產生學期歷程"));
+            context.StudentCalculateGraduation = calculateGraduation;
+            context.StudentGraduationFilter = studentGraduationFilter;
+            context.CanCalculateAdmin = canCalculateAdmin;
+        }
 
-            //權限判斷。
-            //權限註冊的部份還是留在成績系統內。
-            mbAdmin.Enable = Framework.User.Acl[CalcAdminCode].Executable;
+        private static void RegisterAclAndSelectionEvents(RegistrationContext context)
+        {
+            Catalog academicCatalog = RoleAclSource.Instance["教務作業"];
+            academicCatalog.Add(new RibbonFeature(BatchSHistoryCode, "批次產生學期歷程"));
+            context.AdminScoreMenu.Enable = context.CanCalculateAdmin;
 
-            K12.Presentation.NLDPanels.Student.SelectedSourceChanged += delegate
+            NLDPanels.Student.SelectedSourceChanged += delegate
             {
-                //學生學期成績計算。
-                mb.Enable = (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0) &&
-                    User.Acl[CalcStudentCode].Executable;
-
-                //學生計算畢業成績。
-                K12.Presentation.NLDPanels.Student.RibbonBarItems["教務"]["畢業作業"]["計算畢業成績"].Enable =
-                    (NLDPanels.Student.SelectedSource.Count > 0) &&
-                    User.Acl[CalcStudentCode].Executable;
-
-                //學生畢業資格審查。
-                K12.Presentation.NLDPanels.Student.RibbonBarItems["教務"]["畢業作業"]["畢業資格審查"].Enable =
-                    (NLDPanels.Student.SelectedSource.Count > 0) &&
-                    User.Acl[GradFilteStudentCode].Executable;
+                bool hasSelectedStudents = NLDPanels.Student.SelectedSource.Count > 0;
+                context.StudentScoreMenu.Enable = hasSelectedStudents && User.Acl[CalcStudentCode].Executable;
+                context.StudentCalculateGraduation.Enable = hasSelectedStudents && User.Acl[CalcStudentCode].Executable;
+                context.StudentGraduationFilter.Enable = hasSelectedStudents && User.Acl[GradFilteStudentCode].Executable;
             };
-#endif
+        }
 
-            //2017/5/9 穎驊 自JHSchool.Evaluation 搬過來
-            //學生
+        private static void RegisterDetailItems()
+        {
             Catalog detail = RoleAclSource.Instance["學生"]["資料項目"];
             detail.Add(new DetailItemFeature(typeof(SemesterScoreItem)));
             detail.Add(new DetailItemFeature(typeof(GraduationScoreItem)));
             detail.Add(new DetailItemFeature(typeof(CourseScoreItem)));
+        }
 
-
-            //2017/5/9 穎驊 自JHSchool.Evaluation 搬過來
-            // 學生學期歷程與學期成績學年度學期檢查
+        private static void RegisterDataRationalityCheck()
+        {
             DataRationalityManager.Checks.Add(new JHSchool.Evaluation.StudentExtendControls.Ribbon.CheckStudentSemHistoryScoreRAT());
+        }
+
+        private static void RunGraduationPredictReport()
+        {
+            if (Student.Instance.SelectedList.Count <= 0) return;
+            new JHSchool.Evaluation.StudentExtendControls.Ribbon.GraduationPredictReport(Student.Instance.SelectedList);
         }
 
         private static void DeployModeSetup()
@@ -203,6 +229,15 @@ namespace JHEvaluation.ScoreCalculation
 
         //    new CalculationTest(dparams["Mode"]).ShowDialog();
         //}
+
+        private sealed class RegistrationContext
+        {
+            internal MenuButton StudentScoreMenu { get; set; }
+            internal MenuButton AdminScoreMenu { get; set; }
+            internal MenuButton StudentCalculateGraduation { get; set; }
+            internal MenuButton StudentGraduationFilter { get; set; }
+            internal bool CanCalculateAdmin { get; set; }
+        }
     }
 
     internal enum ModuleMode
