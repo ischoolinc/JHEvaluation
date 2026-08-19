@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using JHEvaluation.ScoreCalculation.ScoreStruct;
@@ -555,7 +555,7 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                                             if (engScore.HasValue == false)
                                                 engScore = 0;
 
-                                            engScore = +subScore.Value.Value * subScore.Weight.Value;
+                                            engScore += subScore.Value.Value * subScore.Weight.Value;
                                         }
 
 
@@ -654,12 +654,35 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             //     decimal weightOriginAvg = rule.ParseDomainScore(totalOrigin / weight);
 
 
-                            // 領域成績 國語文、英語、本土語文擇優
+                            // 領域成績 國語文、英語、本土語文（可單科或任意組合）
                             if (chiScore.HasValue && engScore.HasValue && localScore.HasValue)
+                            {
                                 langScore = rule.ParseDomainScore((chiScore.Value + engScore.Value + localScore.Value) / weight);
-                            // 領域成績國語文英語擇優
-                            else if (chiScore.HasValue && engScore.HasValue)
+                            }
+                            else if (chiScore.HasValue && engScore.HasValue && localScore.HasValue == false)
+                            {
                                 langScore = rule.ParseDomainScore((chiScore.Value + engScore.Value) / weight);
+                            }
+                            else if (chiScore.HasValue && localScore.HasValue && engScore.HasValue == false)
+                            {
+                                langScore = rule.ParseDomainScore((chiScore.Value + localScore.Value) / weight);
+                            }
+                            else if (engScore.HasValue && localScore.HasValue && chiScore.HasValue == false)
+                            {
+                                langScore = rule.ParseDomainScore((engScore.Value + localScore.Value) / weight);
+                            }
+                            else if (chiScore.HasValue && engScore.HasValue == false && localScore.HasValue == false)
+                            {
+                                langScore = rule.ParseDomainScore((chiScore.Value) / weight);
+                            }
+                            else if (chiScore.HasValue == false && engScore.HasValue && localScore.HasValue == false)
+                            {
+                                langScore = rule.ParseDomainScore((engScore.Value) / weight);
+                            }
+                            else if (chiScore.HasValue == false && engScore.HasValue == false && localScore.HasValue)
+                            {
+                                langScore = rule.ParseDomainScore((localScore.Value) / weight);
+                            }
 
 
                             decimal? weightScoreMakeup = null;
@@ -790,7 +813,9 @@ namespace JHEvaluation.ScoreCalculation.BigFunction
                             //    dscore.ScoreMakeup = weightScoreMakeup.Value;
 
                             // 語文成績
-                            if (chiMakeupScore.HasValue == false && engMakeupScore.HasValue == false)
+                            if (chiMakeupScore.HasValue == false
+                                && engMakeupScore.HasValue == false
+                                && localMakeupScore.HasValue == false)
                             {
                                 //// 語文領域補考直接輸入補考
                                 if (dscore.ScoreOrigin.HasValue || dscore.ScoreMakeup.HasValue)

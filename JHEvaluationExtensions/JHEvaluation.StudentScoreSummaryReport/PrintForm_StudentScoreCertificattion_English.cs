@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -24,6 +24,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
     public partial class PrintForm_StudentScoreCertificattion_English : BaseForm, IStatusReporter
     {
         internal const string ConfigName = "StudentScoreSummaryReportEnglish2022";
+        const int NormalDomainSubjectMax = 10;
 
         private List<string> StudentIDs { get; set; }
 
@@ -124,6 +125,18 @@ namespace JHEvaluation.StudentScoreSummaryReport
             MasterWorker.RunWorkerAsync();
         }
 
+        private void ClearReportCache()
+        {
+            sr_dict.Clear();
+            _PhotoPDict.Clear();
+            shr_dict.Clear();
+            ar_dict.Clear();
+            jssr_dict.Clear();
+            gsr_dict.Clear();
+            urr_dict.Clear();
+            msr_dict.Clear();
+        }
+
         private void MasterWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             if (StudentIDs.Count <= 0)
@@ -131,6 +144,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 Feedback("", -1);  //把 Status bar Reset...
                 throw new ArgumentException("沒有任何學生資料可列印。");
             }
+
+            // Clear cached report data before loading data for this print job.
+            // This prevents duplicated data when printing multiple times from the same form instance.
+            ClearReportCache();
 
             #region 抓取學生資料 
             //抓取學生資料 
@@ -364,7 +381,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
             //OO領域 科目成績
             foreach (string domain in DomainList)
             {
-                for (int a = 1; a <= 6; a++)
+                int subjectMax =
+                    domain == "彈性課程" ? 18 :
+                    NormalDomainSubjectMax;
+                for (int a = 1; a <= subjectMax; a++)
                 {
                     table.Columns.Add(domain + "_科目名稱" + a);
                     for (int i = 1; i <= 6; i++)
@@ -378,21 +398,6 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     table.Columns.Add(domain + "_科目" + a + "_平均成績");
                     table.Columns.Add(domain + "_科目" + a + "_平均成績等第");
                 }
-                if (domain == "彈性課程")
-                    for (int a = 7; a <= 18; a++)
-                    {
-                        table.Columns.Add(domain + "_科目名稱" + a);
-                        for (int i = 1; i <= 6; i++)
-                        {
-                            table.Columns.Add("彈性課程_科目" + a + "_權數" + i);
-                            table.Columns.Add("彈性課程_科目" + a + "_成績" + i);
-                            table.Columns.Add("彈性課程_科目" + a + "_等第" + i);
-                            table.Columns.Add("彈性課程_科目" + a + "_原始成績" + i);
-                            table.Columns.Add("彈性課程_科目" + a + "_原始等第" + i);
-                        }
-                        table.Columns.Add("彈性課程_科目" + a + "_平均成績");
-                        table.Columns.Add("彈性課程_科目" + a + "_平均成績等第");
-                    }
             }
             #endregion
 
@@ -636,7 +641,10 @@ namespace JHEvaluation.StudentScoreSummaryReport
             List<string> subjectScoreType_list = new List<string>();
             foreach (string domain in DomainList)
             {
-                for (int a = 1; a <= 6; a++)
+                int subjectMax =
+                    domain == "彈性課程" ? 18 :
+                    NormalDomainSubjectMax;
+                for (int a = 1; a <= subjectMax; a++)
                 {
                     subjectScoreType_list.Add(domain + "_科目" + a + "_成績");
                     subjectScoreType_list.Add(domain + "_科目" + a + "_原始成績");
@@ -648,21 +656,31 @@ namespace JHEvaluation.StudentScoreSummaryReport
             #region 整理所有的科目等第
             List<string> subjectLevelType_list = new List<string>();
             foreach (string domain in DomainList)
-                for (int a = 1; a <= 6; a++)
+            {
+                int subjectMax =
+                    domain == "彈性課程" ? 18 :
+                    NormalDomainSubjectMax;
+                for (int a = 1; a <= subjectMax; a++)
                 {
                     subjectLevelType_list.Add(domain + "_科目" + a + "_等第");
                     subjectLevelType_list.Add(domain + "_科目" + a + "_原始等第");
                     subjectLevelType_list.Add(domain + "_科目" + a + "_平均成績等第");
                 }
+            }
             #endregion
 
             #region 整理所有的科目權數
             List<string> subjectCredit_list = new List<string>();
             foreach (string domain in DomainList)
-                for (int a = 1; a <= 6; a++)
+            {
+                int subjectMax =
+                    domain == "彈性課程" ? 18 :
+                    NormalDomainSubjectMax;
+                for (int a = 1; a <= subjectMax; a++)
                 {
                     subjectCredit_list.Add(domain + "_科目" + a + "_權數");
                 }
+            }
             #endregion
 
             // 領域分數、等第、權數 的對照
@@ -1086,6 +1104,9 @@ namespace JHEvaluation.StudentScoreSummaryReport
 
                 //一般科目 科目名稱與科目編號對照表
                 Dictionary<string, Dictionary<string, int>> SubjectCourseDict = new Dictionary<string, Dictionary<string, int>>();
+                Dictionary<string, int> subjectOrdinalDict = Util.GetSubjectOrdinalDict();
+                Dictionary<string, string> subjectEnglishNameDict = Util.GetSubjectEnglishNameDict();
+                Dictionary<string, List<string>> subjectNameListByDomain = new Dictionary<string, List<string>>();
                 //{
                 //    { "語文", new Dictionary<string, int>() }
                 //    , { "國語文", new Dictionary<string, int>() }
@@ -1113,9 +1134,12 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 {
                     if (!SubjectCourseDict.ContainsKey(domain))
                         SubjectCourseDict.Add(domain, new Dictionary<string, int>());
+                    if (!subjectNameListByDomain.ContainsKey(domain))
+                        subjectNameListByDomain.Add(domain, new List<string>());
                 }
                 // 彈性課程 科目名稱 與彈性課程編號的對照
                 Dictionary<string, int> AlternativeCourseDict = new Dictionary<string, int>();
+                List<string> alternativeSubjectNameList = new List<string>();
 
 
                 // 學期成績(包含領域、科目)
@@ -1135,27 +1159,21 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     // 領域為彈性課程 、或是沒有領域的科目成績 算到彈性課程科目處理
                                     if (subjectscore.Value.Domain != "彈性課程" && subjectscore.Value.Domain != "彈性學習" && subjectscore.Value.Domain != "")
                                     {
-                                        if (SubjectCourseDict.ContainsKey(subjectscore.Value.Domain))
+                                        if (subjectNameListByDomain.ContainsKey(subjectscore.Value.Domain))
                                         {
-                                            int subjectCourseCount = SubjectCourseDict[subjectscore.Value.Domain].Count;
-
-                                            if (SubjectCourseDict[subjectscore.Value.Domain].ContainsKey(subjectscore.Value.Subject))
-                                            {
+                                            if (subjectNameListByDomain[subjectscore.Value.Domain].Contains(subjectscore.Value.Subject))
                                                 continue;
-                                            }
 
-                                            subjectCourseCount++;
+                                            int subjectCourseCount = subjectNameListByDomain[subjectscore.Value.Domain].Count + 1;
+                                            int subjectCourseMax = NormalDomainSubjectMax;
 
-                                            // 目前僅支援 一個學生六學年之中同一領域僅能有 6個科目
-                                            if (subjectCourseCount > 6)
+                                            // 目前僅支援 一個學生六學年之中同一領域僅能有 subjectCourseMax 個科目
+                                            if (subjectCourseCount > subjectCourseMax)
                                             {
                                                 isExceed = true;
                                                 continue;
                                             }
-
-                                            row[subjectscore.Value.Domain + "_科目名稱" + subjectCourseCount] = _SubjDomainEngNameMapping.GetSubjectEngName(subjectscore.Value.Subject);
-
-                                            SubjectCourseDict[subjectscore.Value.Domain].Add(subjectscore.Value.Subject, subjectCourseCount);
+                                            subjectNameListByDomain[subjectscore.Value.Domain].Add(subjectscore.Value.Subject);
                                         }
                                     }
                                 }
@@ -1173,9 +1191,6 @@ namespace JHEvaluation.StudentScoreSummaryReport
                 // 先統計 該學生 在全學年間 有的 彈性課程科目
                 if (jssr_dict.ContainsKey(stuID))
                 {
-                    // 彈性課程記數
-                    int AlternativeCourse = 0;
-
                     for (int grade = 1; grade <= 3; grade++)
                     {
                         foreach (JHSemesterScoreRecord jssr in jssr_dict[stuID])
@@ -1187,27 +1202,99 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                     // 領域為彈性課程 、或是沒有領域的科目成績 算到彈性課程科目處理
                                     if (subjectscore.Value.Domain == "彈性課程" || subjectscore.Value.Domain == "彈性學習" || subjectscore.Value.Domain == "")
                                     {
-                                        // 對照科目名稱如果已經有，跳過
-                                        if (AlternativeCourseDict.ContainsKey(subjectscore.Value.Subject))
-                                        {
+                                        if (alternativeSubjectNameList.Contains(subjectscore.Value.Subject))
                                             continue;
-                                        }
-
-                                        AlternativeCourse++;
 
                                         // 目前僅先支援 一個學生在六年之中有 18個 彈性課程
-                                        if (AlternativeCourse > 18)
+                                        if (alternativeSubjectNameList.Count + 1 > 18)
                                         {
                                             MessageBox.Show("彈性科目數超過可支援數量，超過的將不會顯示在在校成績證明書中");
                                             break;
                                         }
 
-                                        row["彈性課程_科目名稱" + AlternativeCourse] = _SubjDomainEngNameMapping.GetSubjectEngName(subjectscore.Value.Subject);
-
-                                        AlternativeCourseDict.Add(subjectscore.Value.Subject, AlternativeCourse);
+                                        alternativeSubjectNameList.Add(subjectscore.Value.Subject);
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+
+                // 依 SubjectOrdinal 排序（若無設定則維持原本的首次出現順序）
+                if (subjectOrdinalDict.Count > 0)
+                {
+                    foreach (string domain in new List<string>(subjectNameListByDomain.Keys))
+                    {
+                        subjectNameListByDomain[domain].Sort(delegate (string x, string y)
+                        {
+                            int xOrder = subjectOrdinalDict.ContainsKey(x) ? subjectOrdinalDict[x] : int.MaxValue;
+                            int yOrder = subjectOrdinalDict.ContainsKey(y) ? subjectOrdinalDict[y] : int.MaxValue;
+
+                            int result = xOrder.CompareTo(yOrder);
+                            if (result == 0)
+                                result = x.CompareTo(y);
+
+                            return result;
+                        });
+                    }
+
+                    alternativeSubjectNameList.Sort(delegate (string x, string y)
+                    {
+                        int xOrder = subjectOrdinalDict.ContainsKey(x) ? subjectOrdinalDict[x] : int.MaxValue;
+                        int yOrder = subjectOrdinalDict.ContainsKey(y) ? subjectOrdinalDict[y] : int.MaxValue;
+
+                        int result = xOrder.CompareTo(yOrder);
+                        if (result == 0)
+                            result = x.CompareTo(y);
+
+                        return result;
+                    });
+                }
+
+                // 建立對照並填入科目名稱欄位（英文名稱優先取 subjectEnglishNameDict，找不到則維持原本 fallback）
+                foreach (string domain in DomainList)
+                {
+                    int subjectMax =
+                        domain == "彈性課程" ? 18 :
+                        NormalDomainSubjectMax;
+
+                    if (domain == "彈性課程")
+                    {
+                        for (int i = 0; i < alternativeSubjectNameList.Count && i < subjectMax; i++)
+                        {
+                            string subjectName = alternativeSubjectNameList[i];
+                            int idx = i + 1;
+
+                            string englishName = "";
+                            if (subjectEnglishNameDict.ContainsKey(subjectName))
+                                englishName = subjectEnglishNameDict[subjectName];
+                            if (string.IsNullOrEmpty(englishName))
+                                englishName = _SubjDomainEngNameMapping.GetSubjectEngName(subjectName);
+
+                            row["彈性課程_科目名稱" + idx] = englishName;
+                            if (!AlternativeCourseDict.ContainsKey(subjectName))
+                                AlternativeCourseDict.Add(subjectName, idx);
+                        }
+                    }
+                    else
+                    {
+                        if (!subjectNameListByDomain.ContainsKey(domain))
+                            continue;
+
+                        for (int i = 0; i < subjectNameListByDomain[domain].Count && i < subjectMax; i++)
+                        {
+                            string subjectName = subjectNameListByDomain[domain][i];
+                            int idx = i + 1;
+
+                            string englishName = "";
+                            if (subjectEnglishNameDict.ContainsKey(subjectName))
+                                englishName = subjectEnglishNameDict[subjectName];
+                            if (string.IsNullOrEmpty(englishName))
+                                englishName = _SubjDomainEngNameMapping.GetSubjectEngName(subjectName);
+
+                            row[domain + "_科目名稱" + idx] = englishName;
+                            if (!SubjectCourseDict[domain].ContainsKey(subjectName))
+                                SubjectCourseDict[domain].Add(subjectName, idx);
                         }
                     }
                 }
@@ -1289,7 +1376,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                 //紀錄原始成績
                                                 if (subjectScore_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_原始成績" + (grade * 2 - 1)))
                                                 {
-                                                    subjectScore_dict["彈性課程_科目" + AlternativeCourse + "_原始成績" + (grade * 2 - 1)] = subjectscore.Value.Score;
+                                                    subjectScore_dict["彈性課程_科目" + AlternativeCourse + "_原始成績" + (grade * 2 - 1)] = subjectscore.Value.ScoreOrigin.HasValue ? subjectscore.Value.ScoreOrigin.Value : (decimal?)null;
                                                 }
 
                                                 //紀錄等第
@@ -1301,7 +1388,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                 //紀錄原始等第
                                                 if (subjectLevel_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2 - 1)))
                                                 {
-                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2 - 1)] = subjectscore.Value.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.ScoreOrigin.Value) : "";
                                                 }
 
                                                 //紀錄權數
@@ -1337,7 +1424,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                     //紀錄原始成績
                                                     if (subjectScore_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始成績" + (grade * 2 - 1)))
                                                     {
-                                                        subjectScore_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始成績" + (grade * 2 - 1)] = subjectscore.Value.Score;
+                                                        subjectScore_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始成績" + (grade * 2 - 1)] = subjectscore.Value.ScoreOrigin.HasValue ? subjectscore.Value.ScoreOrigin.Value : (decimal?)null;
                                                     }
 
                                                     //換算等第
@@ -1349,7 +1436,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                     //換算原始等第
                                                     if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2 - 1)))
                                                     {
-                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2 - 1)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2 - 1)] = subjectscore.Value.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.ScoreOrigin.Value) : "";
                                                     }
 
                                                     //紀錄權數
@@ -1461,7 +1548,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                 //紀錄原始成績
                                                 if (subjectScore_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_原始成績" + (grade * 2)))
                                                 {
-                                                    subjectScore_dict["彈性課程_科目" + AlternativeCourse + "_原始成績" + (grade * 2)] = subjectscore.Value.Score;
+                                                    subjectScore_dict["彈性課程_科目" + AlternativeCourse + "_原始成績" + (grade * 2)] = subjectscore.Value.ScoreOrigin.HasValue ? subjectscore.Value.ScoreOrigin.Value : (decimal?)null;
                                                 }
 
                                                 //紀錄等第
@@ -1473,7 +1560,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                 //紀錄原始等第
                                                 if (subjectLevel_dict.ContainsKey("彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2)))
                                                 {
-                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                    subjectLevel_dict["彈性課程_科目" + AlternativeCourse + "_原始等第" + (grade * 2)] = subjectscore.Value.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.ScoreOrigin.Value) : "";
                                                 }
 
                                                 //紀錄權數
@@ -1508,7 +1595,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                     //紀錄原始成績
                                                     if (subjectScore_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始成績" + (grade * 2)))
                                                     {
-                                                        subjectScore_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始成績" + (grade * 2)] = subjectscore.Value.Score;
+                                                        subjectScore_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始成績" + (grade * 2)] = subjectscore.Value.ScoreOrigin.HasValue ? subjectscore.Value.ScoreOrigin.Value : (decimal?)null;
                                                     }
 
                                                     //換算等第
@@ -1520,7 +1607,7 @@ namespace JHEvaluation.StudentScoreSummaryReport
                                                     //換算原始等第
                                                     if (subjectLevel_dict.ContainsKey(subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2)))
                                                     {
-                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2)] = _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.Score);
+                                                        subjectLevel_dict[subjectscore.Value.Domain + "_科目" + SubjectCourseNum + "_原始等第" + (grade * 2)] = subjectscore.Value.ScoreOrigin.HasValue ? _ScoreMappingConfig.ParseScoreEngName(subjectscore.Value.ScoreOrigin.Value) : "";
                                                     }
 
                                                     //紀錄權數
@@ -1606,39 +1693,47 @@ namespace JHEvaluation.StudentScoreSummaryReport
                     }
 
                     // 填領域分數
+                    // 保守安全處理：避免實際成績資料中的欄位名稱
+                    // 與 DataTable 已建立欄位不一致時，發生「資料行不屬於資料表」例外。
                     foreach (string key in domainScore_dict.Keys)
                     {
-                        row[key] = domainScore_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = domainScore_dict[key];
                     }
 
                     // 填領域等第
                     foreach (string key in domainLevel_dict.Keys)
                     {
-                        row[key] = domainLevel_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = domainLevel_dict[key];
                     }
 
                     // 填領域權數
                     foreach (string key in domainCredit_dict.Keys)
                     {
-                        row[key] = domainCredit_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = domainCredit_dict[key];
                     }
 
                     // 填科目分數
                     foreach (string key in subjectScore_dict.Keys)
                     {
-                        row[key] = subjectScore_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = subjectScore_dict[key];
                     }
 
                     // 填科目等第
                     foreach (string key in subjectLevel_dict.Keys)
                     {
-                        row[key] = subjectLevel_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = subjectLevel_dict[key];
                     }
 
                     // 填科目權數
                     foreach (string key in subjectCredit_dict.Keys)
                     {
-                        row[key] = subjectCredit_dict[key];
+                        if (table.Columns.Contains(key))
+                            row[key] = subjectCredit_dict[key];
                     }
 
                 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
@@ -18,6 +18,13 @@ namespace JHEvaluation.StudentScoreSummaryReport
 {
     internal static class Util
     {
+        public class SubjectOrdinalInfo
+        {
+            public int SubjectOrdinal { get; set; }
+            public string SubjectName { get; set; }
+            public string EnglishName { get; set; }
+        }
+
         /// <summary>
         /// 英文日期格式。
         /// </summary>
@@ -667,6 +674,110 @@ FROM(
 
             }
             catch (Exception ex) { }
+
+            return value;
+        }
+
+        /// <summary>
+        /// 取得科目排序與英文名稱對照。
+        /// 來源：list.name = 'JHEvaluation_Subject_Ordinal'
+        /// </summary>
+        /// <returns></returns>
+        public static List<SubjectOrdinalInfo> GetSubjectOrdinalList()
+        {
+            List<SubjectOrdinalInfo> value = new List<SubjectOrdinalInfo>();
+
+            try
+            {
+                QueryHelper qh = new QueryHelper();
+                string query = @"
+WITH src AS (
+    SELECT xmlparse(document content) AS outer_xml
+    FROM list
+    WHERE name = 'JHEvaluation_Subject_Ordinal'
+),
+raw_txt AS (
+    SELECT
+        (xpath('/Configurations/Configuration[@Name=""SubjectOrdinal""]/text()', outer_xml))[1]::text AS txt
+    FROM src
+),
+decoded_xml AS (
+    SELECT xmlparse(document
+        replace(
+            replace(
+                replace(
+                    replace(txt, '&lt;', '<'),
+                '&gt;', '>'),
+            '&quot;', '""'),
+        '&amp;', '&')
+    ) AS inner_xml
+    FROM raw_txt
+)
+SELECT
+    u.ordinal AS subject_ordinal,
+    COALESCE((xpath('@Name', u.node))[1]::text, '') AS subject_name,
+    COALESCE((xpath('@EnglishName', u.node))[1]::text, '') AS english_name
+FROM decoded_xml d
+CROSS JOIN LATERAL unnest(xpath('/Subjects/Subject', d.inner_xml))
+    WITH ORDINALITY AS u(node, ordinal)
+ORDER BY u.ordinal;
+";
+
+                DataTable dt = qh.Select(query);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    SubjectOrdinalInfo info = new SubjectOrdinalInfo();
+
+                    int ordinal;
+                    if (!int.TryParse(dr["subject_ordinal"].ToString(), out ordinal))
+                        ordinal = 0;
+
+                    info.SubjectOrdinal = ordinal;
+                    info.SubjectName = dr["subject_name"].ToString();
+                    info.EnglishName = dr["english_name"].ToString();
+
+                    value.Add(info);
+                }
+            }
+            catch (Exception ex)
+            {
+                // 讀取科目排序設定失敗時，回傳空集合，讓呼叫端可自行 fallback。
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// 取得科目名稱 -> 排序 的對照表
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, int> GetSubjectOrdinalDict()
+        {
+            Dictionary<string, int> value = new Dictionary<string, int>();
+
+            foreach (SubjectOrdinalInfo info in GetSubjectOrdinalList())
+            {
+                if (!string.IsNullOrEmpty(info.SubjectName) && !value.ContainsKey(info.SubjectName))
+                    value.Add(info.SubjectName, info.SubjectOrdinal);
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// 取得科目名稱 -> 英文名稱 的對照表
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> GetSubjectEnglishNameDict()
+        {
+            Dictionary<string, string> value = new Dictionary<string, string>();
+
+            foreach (SubjectOrdinalInfo info in GetSubjectOrdinalList())
+            {
+                if (!string.IsNullOrEmpty(info.SubjectName) && !value.ContainsKey(info.SubjectName))
+                    value.Add(info.SubjectName, info.EnglishName);
+            }
 
             return value;
         }

@@ -74,6 +74,7 @@ namespace KaoHsiung.StudentRecordReport
 
             ReportConfiguration _Dylanconfig = new ReportConfiguration(Global.OneFileSave);
             OneFileSave = _Dylanconfig.GetBoolean("單檔儲存", false);
+            bool useIDNumberFormat = _Dylanconfig.GetBoolean("使用身分證號格式", false);
             StudentDoc = new Dictionary<string, Document>();
 
             double total = _students.Count;
@@ -302,33 +303,24 @@ namespace KaoHsiung.StudentRecordReport
 
                     string fileName = "";
 
-                    //  原寫法
-                    //fileName = student.StudentNumber;
-
-                    //fileName += "_" + student.IDNumber;
-
-                    //if (!string.IsNullOrEmpty(student.RefClassID))
-                    //    fileName += "_" + student.Class.Name;
-                    //else
-                    //    fileName += "_";
-
-                    //fileName += "_" + (student.SeatNo.HasValue ? student.SeatNo.Value.ToString() : "");
-                    //fileName += "_" + student.Name;
-
-                    //if (!StudentDoc.ContainsKey(fileName))
-                    //{
-                    //    StudentDoc.Add(fileName, each);
-                    //}
-
-                    // 新討論寫法：學號_班級_座號
-                    fileName = student.StudentNumber;                    
-
-                    if (!string.IsNullOrEmpty(student.RefClassID))
-                        fileName += "_" + student.Class.Name;
+                    if (useIDNumberFormat)
+                    {
+                        // 使用身分證號_姓名格式
+                        fileName = student.IDNumber + "_" + student.Name;
+                    }
                     else
-                        fileName += "_";
+                    {
+                        // 使用學號_班級_座號格式
+                        fileName = student.StudentNumber;                    
 
-                    fileName += "_" + (student.SeatNo.HasValue ? student.SeatNo.Value.ToString() : "");                   
+                        if (!string.IsNullOrEmpty(student.RefClassID))
+                            fileName += "_" + student.Class.Name;
+                        else
+                            fileName += "_";
+
+                        fileName += "_" + (student.SeatNo.HasValue ? student.SeatNo.Value.ToString() : "");
+                    }
+
                     if (!StudentDoc.ContainsKey(fileName))
                     {
                         StudentDoc.Add(fileName, each);

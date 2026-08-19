@@ -12,6 +12,7 @@ using JHSchool.Data;
 using System.IO;
 using HsinChu.JHEvaluation.Data;
 using Aspose.Words;
+using Aspose.Words.Fields;
 using JHSchool.Evaluation.Calculation;
 using Aspose.Words.Reporting;
 using Aspose.Words.Tables;
@@ -309,18 +310,18 @@ namespace HsinChuExamScore_JH
                     switch (name)
                     {
                         case "領域成績單":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_領域成績單));
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.國中評量成績單樣板_領域成績單));
                             break;
 
                         case "科目成績單":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_科目成績單));
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.國中評量成績單樣板_科目成績單));
                             break;
 
                         case "科目及領域成績單_領域組距":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_科目及領域成績單_領域組距));
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.國中評量成績單樣板_科目及領域成績單_領域組距));
                             break;
                         case "科目及領域成績單_科目組距":
-                            cn.Template = new Document(new MemoryStream(Properties.Resources.新竹_科目及領域成績單_科目組距));
+                            cn.Template = new Document(new MemoryStream(Properties.Resources.國中評量成績單樣板_科目及領域成績單_科目組距));
                             break;
                     }
 
@@ -335,6 +336,11 @@ namespace HsinChuExamScore_JH
             bkw.ReportProgress(20);
             // 取的設定資料
             _ConfigureList = _AccessHelper.Select<Configure>();
+
+            foreach (Configure conf in _ConfigureList)
+            {
+                SyncDefaultTemplateFromResource(conf);
+            }
 
             bkw.ReportProgress(40);
             // 缺曠資料
@@ -3564,6 +3570,113 @@ namespace HsinChuExamScore_JH
         {
             var transferScore = Math.Round(score, parseNumber, MidpointRounding.AwayFromZero);
             return transferScore;
+        }
+
+        private Document GetDefaultResourceTemplate(string configName)
+        {
+            byte[] resourceBytes = null;
+            switch (configName)
+            {
+                case "領域成績單":
+                    resourceBytes = Properties.Resources.國中評量成績單樣板_領域成績單;
+                    break;
+                case "科目成績單":
+                    resourceBytes = Properties.Resources.國中評量成績單樣板_科目成績單;
+                    break;
+                case "科目及領域成績單_領域組距":
+                    resourceBytes = Properties.Resources.國中評量成績單樣板_科目及領域成績單_領域組距;
+                    break;
+                case "科目及領域成績單_科目組距":
+                    resourceBytes = Properties.Resources.國中評量成績單樣板_科目及領域成績單_科目組距;
+                    break;
+            }
+
+            if (resourceBytes == null)
+                return null;
+
+            return new Document(new MemoryStream(resourceBytes));
+        }
+
+        private List<string> GetTemplateMergeFieldNames(Document document)
+        {
+            List<string> fieldNames = new List<string>();
+            if (document == null)
+                return fieldNames;
+
+            foreach (Field field in document.Range.Fields)
+            {
+                if (field.Type == FieldType.FieldMergeField)
+                {
+                    fieldNames.Add(ParseMergeFieldName(field.GetFieldCode()));
+                }
+            }
+
+            return fieldNames;
+        }
+
+        private string ParseMergeFieldName(string fieldCode)
+        {
+            if (string.IsNullOrEmpty(fieldCode))
+                return string.Empty;
+
+            string code = fieldCode.Trim();
+            if (code.StartsWith("MERGEFIELD", StringComparison.OrdinalIgnoreCase))
+                code = code.Substring("MERGEFIELD".Length).Trim();
+
+            int switchIndex = code.IndexOf('\\');
+            if (switchIndex >= 0)
+                code = code.Substring(0, switchIndex);
+
+            return code.Trim().Trim('"');
+        }
+
+        private bool IsSameTemplateMergeFields(Document currentTemplate, Document resourceTemplate)
+        {
+            List<string> currentFields = GetTemplateMergeFieldNames(currentTemplate);
+            List<string> resourceFields = GetTemplateMergeFieldNames(resourceTemplate);
+
+            if (currentFields.Count != resourceFields.Count)
+                return false;
+
+            currentFields.Sort((a, b) => string.CompareOrdinal(a, b));
+            resourceFields.Sort((a, b) => string.CompareOrdinal(a, b));
+
+            for (int i = 0; i < currentFields.Count; i++)
+            {
+                if (currentFields[i] != resourceFields[i])
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool SyncDefaultTemplateFromResource(Configure conf)
+        {
+            Document resourceTemplate = GetDefaultResourceTemplate(conf.Name);
+            if (resourceTemplate == null)
+                return false;
+
+            if (conf.Template == null)
+            {
+                try
+                {
+                    conf.Decode();
+                }
+                catch
+                {
+                    // 無法解碼時視為缺少樣板
+                }
+            }
+
+            if (conf.Template == null || !IsSameTemplateMergeFields(conf.Template, resourceTemplate))
+            {
+                conf.Template = GetDefaultResourceTemplate(conf.Name);
+                conf.Encode();
+                conf.Save();
+                return true;
+            }
+
+            return false;
         }
 
         void IFieldMergingCallback.ImageFieldMerging(ImageFieldMergingArgs args)

@@ -103,9 +103,9 @@ namespace JHEvaluation.ScoreCalculation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Template2021 {
+        internal static byte[] Template2026 {
             get {
-                object obj = ResourceManager.GetObject("Template2021", resourceCulture);
+                object obj = ResourceManager.GetObject("Template2026", resourceCulture);
                 return ((byte[])(obj));
             }
         }

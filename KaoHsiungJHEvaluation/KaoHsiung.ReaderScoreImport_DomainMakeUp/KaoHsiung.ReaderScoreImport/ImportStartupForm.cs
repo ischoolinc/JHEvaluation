@@ -99,7 +99,7 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
             {
                 //將錯誤訊息刪光，以便重新統計
                 msgList.Clear();
-
+                msg_DuplicatedDict.Clear();
 
                 #region Worker DoWork
                 _worker.ReportProgress(0, "檢查讀卡文字格式…");
@@ -139,9 +139,8 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                         studentNumberToStudentIDs.Add(sn, student.ID);                    
                 }
 
-                //紀錄現在所有txt 上 的學號，以處理重覆學號學號問題
-                List<string> s_numbers = new List<string>();
-
+                // 紀錄同一匯入檔內已出現的「學號 + 領域」，以處理重覆資料（同學號同領域不允許）
+                HashSet<string> studentDomainKeys = new HashSet<string>();
 
                 foreach (var dr in drCollection)
                 {
@@ -156,14 +155,21 @@ namespace KaoHsiung.ReaderScoreImport_DomainMakeUp
                     }
 
                     //2017/1/8 穎驊註解， 原本的程式碼並沒有驗證學號重覆的問題，且無法在他Validator 的處理邏輯加入，故在此驗證
-                    if (!s_numbers.Contains(dr.StudentNumber))
+                    // 同一檔案內，允許相同學號匯入不同領域。唯一值改為：學號 + 領域名稱。
+                    string studentNumber = dr.StudentNumber == null ? "" : dr.StudentNumber.Trim();
+                    string domainName = dr.Domain == null ? "" : dr.Domain.Trim();
+                    string studentDomainKey = studentNumber + "_" + domainName;
+
+                    if (!studentDomainKeys.Contains(studentDomainKey))
                     {
-                        s_numbers.Add(dr.StudentNumber);
+                        studentDomainKeys.Add(studentDomainKey);
                     }
                     else
                     {
-                        msgList.Add("學號:"+dr.StudentNumber+"，資料重覆，請檢察資料來源txt是否有重覆填寫的學號資料。");
-
+                        msgList.Add(
+                            "學號:" + studentNumber +
+                            "，領域:" + domainName +
+                            "，資料重覆，請檢查資料來源 txt 是否有重覆填寫相同學號與領域的資料。");
                     }
                 }
 
