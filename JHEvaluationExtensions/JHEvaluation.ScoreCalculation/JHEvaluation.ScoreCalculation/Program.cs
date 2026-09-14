@@ -66,7 +66,8 @@ namespace JHEvaluation.ScoreCalculation
 
             mb["計算學習領域成績"].Click += delegate { new LearningDomainScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog(); };
 
-            mb["加總學習領域文字描述"].Click += delegate { new DomainTextScoreSum(NLDPanels.Student.SelectedSource).ShowDialog(); };
+            // 暫停使用：加總學習領域文字描述
+            //mb["加總學習領域文字描述"].Click += delegate { new DomainTextScoreSum(NLDPanels.Student.SelectedSource).ShowDialog(); };
 
             JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["批次作業/檢視"]["成績作業"].Size = RibbonBarButton.MenuButtonSize.Large;
             MenuButton mbAdmin = JHSchool.Affair.EduAdmin.Instance.RibbonBarItems["批次作業/檢視"]["成績作業"];
@@ -77,11 +78,13 @@ namespace JHEvaluation.ScoreCalculation
             mbAdmin["批次計算領域成績"].Click += delegate
             { new DomainScoreCalculateByGradeyear().ShowDialog(); };
 
-            mbAdmin["批次計算學習領域成績"].Click += delegate
-            { new LearningDomainScoreCalculateByGradeyear().ShowDialog(); };
+            // 暫停使用：批次計算學習領域成績
+            //mbAdmin["批次計算學習領域成績"].Click += delegate
+            //{ new LearningDomainScoreCalculateByGradeyear().ShowDialog(); };
 
-            mbAdmin["批次加總學習領域文字描述"].Click += delegate
-            { new DomainTextScoreSumByGradeyear().ShowDialog(); };
+            // 暫停使用：批次加總學習領域文字描述
+            //mbAdmin["批次加總學習領域文字描述"].Click += delegate
+            //{ new DomainTextScoreSumByGradeyear().ShowDialog(); };
 
             /** 學生「畢業作業」。 **/
             RibbonBarButton rbItem = K12.Presentation.NLDPanels.Student.RibbonBarItems["教務"]["畢業作業"];
