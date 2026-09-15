@@ -64,7 +64,8 @@ namespace JHEvaluation.ScoreCalculation
 
             mb["計算領域成績"].Click += delegate { new DomainScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog(); };
 
-            mb["計算學習領域成績"].Click += delegate { new LearningDomainScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog(); };
+            // 暫停使用：計算學習領域成績
+            //mb["計算學習領域成績"].Click += delegate { new LearningDomainScoreCalculate(NLDPanels.Student.SelectedSource).ShowDialog(); };
 
             // 暫停使用：加總學習領域文字描述
             //mb["加總學習領域文字描述"].Click += delegate { new DomainTextScoreSum(NLDPanels.Student.SelectedSource).ShowDialog(); };
