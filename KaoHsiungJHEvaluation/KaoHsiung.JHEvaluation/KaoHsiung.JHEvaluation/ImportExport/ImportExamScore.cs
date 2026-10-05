@@ -307,38 +307,46 @@ namespace KaoHsiung.JHEvaluation.ImportExport
                     else if (attendCourse != null)
                     {
                         #region 驗證評量是否存在
-                        if (string.IsNullOrEmpty(attendCourse.RefAssessmentSetupID))
+
+                        // 平時評量不需要課程的段考評量設定。
+                        // 只要學生有修習該課程，即允許匯入平時評量。
+                        if (examName != "平時評量")
                         {
-                            if (!e.ErrorFields.ContainsKey("無評量設定"))
-                                e.ErrorFields.Add("無評量設定", "課程(" + attendCourse.Name + ")無評量設定");
-                        }
-                        else
-                        {
-                            if (!courseAe.ContainsKey(attendCourse.RefAssessmentSetupID))
+                            if (string.IsNullOrEmpty(attendCourse.RefAssessmentSetupID))
                             {
                                 if (!e.ErrorFields.ContainsKey("無評量設定"))
                                     e.ErrorFields.Add("無評量設定", "課程(" + attendCourse.Name + ")無評量設定");
                             }
                             else
                             {
-                                bool examValid = false;
-                                foreach (JHAEIncludeRecord ae in courseAe[attendCourse.RefAssessmentSetupID])
+                                if (!courseAe.ContainsKey(attendCourse.RefAssessmentSetupID))
                                 {
-                                    if (!exams.ContainsKey(ae.RefExamID)) continue;
-
-                                    // 2016/7/26，穎驊新增，由於高雄國中希望可以加入匯出匯入"平時評量的功能"，因此必須要在原本的Exam.Name驗證
-                                    // 加上 ||examName =="平時評量" ，避免平時評量的欄位被擋掉
-                                    if (exams[ae.RefExamID].Name == examName || examName == "平時評量")
-                                        examValid = true;
+                                    if (!e.ErrorFields.ContainsKey("無評量設定"))
+                                        e.ErrorFields.Add("無評量設定", "課程(" + attendCourse.Name + ")無評量設定");
                                 }
-
-                                if (!examValid)
+                                else
                                 {
-                                    if (!e.ErrorFields.ContainsKey("評量名稱無效"))
-                                        e.ErrorFields.Add("評量名稱無效", "評量名稱(" + examName + ")不存在系統中");
+                                    bool examValid = false;
+                                    foreach (JHAEIncludeRecord ae in courseAe[attendCourse.RefAssessmentSetupID])
+                                    {
+                                        if (!exams.ContainsKey(ae.RefExamID)) continue;
+
+                                        if (exams[ae.RefExamID].Name == examName)
+                                        {
+                                            examValid = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (!examValid)
+                                    {
+                                        if (!e.ErrorFields.ContainsKey("評量名稱無效"))
+                                            e.ErrorFields.Add("評量名稱無效", "評量名稱(" + examName + ")不存在系統中");
+                                    }
                                 }
                             }
                         }
+
                         #endregion
                     }
                     #endregion
