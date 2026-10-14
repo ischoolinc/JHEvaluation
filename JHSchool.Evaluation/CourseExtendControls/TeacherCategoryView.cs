@@ -56,7 +56,39 @@ namespace JHSchool.Evaluation.CourseExtendControls
             NavViewNode NoPrefixCategoryNode = new NavViewNode();
             NavViewNode NoPrefixNoCategoryNode = new NavViewNode();
 
-            TeacherTag.Instance.SyncData(PrimaryKeys);
+            #region 批次同步教師類別與類別定義（避免逐位教師 GetTags 造成 N+1 查詢）
+            List<string> teacherIDs = new List<string>();
+            Dictionary<string, bool> teacherIDSet = new Dictionary<string, bool>();
+            foreach (var key in PrimaryKeys)
+            {
+                foreach (TeacherRecord Tea in Course.Instance.Items[key].GetInstructTeachers())
+                {
+                    if (!teacherIDSet.ContainsKey(Tea.ID))
+                    {
+                        teacherIDSet.Add(Tea.ID, true);
+                        teacherIDs.Add(Tea.ID);
+                    }
+                }
+            }
+            if (teacherIDs.Count > 0)
+                TeacherTag.Instance.SyncData(teacherIDs);
+
+            List<string> tagIDs = new List<string>();
+            Dictionary<string, bool> tagIDSet = new Dictionary<string, bool>();
+            foreach (string teacherID in teacherIDs)
+            {
+                foreach (TeacherTagRecord TagRecord in TeacherTag.Instance[teacherID])
+                {
+                    if (!tagIDSet.ContainsKey(TagRecord.RefTagID))
+                    {
+                        tagIDSet.Add(TagRecord.RefTagID, true);
+                        tagIDs.Add(TagRecord.RefTagID);
+                    }
+                }
+            }
+            if (tagIDs.Count > 0)
+                JHSchool.Tag.Instance.SyncData(tagIDs);
+            #endregion
 
 
 
